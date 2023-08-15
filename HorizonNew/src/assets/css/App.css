@@ -1,0 +1,62 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap");
+
+body {
+  font-family: "DM Sans", sans-serif;
+}
+
+option {
+  color: black;
+}
+
+* {
+  letter-spacing: .3px;
+}
+
+::-webkit-scrollbar {
+  height: 0px !important;
+  width: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #b9b9b9;
+  border-radius: 20px;
+}
+
+.table-container {
+  min-height: auto;
+  max-height: 23vh;
+  overflow-y: auto;
+}
+
+.table-container-property {
+  min-height: auto;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.fc-bg-event {
+  opacity: 1 !important;
+}
+
+.p0 {
+  margin-top: 0;
+}
+
+.table-container thead {
+  position: sticky;
+  top: 0;
+  height: 25px;
+  background: #ffffff;
+}
+
+.table-container-property thead {
+  /* position: sticky; */
+  top: 0;
+  height: 25px;
+  background: #ffffff;
+}
+
+.css-70fard,
+.apexcharts-toolbar {
+  z-index: 0 !important;
+}
