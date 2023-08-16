@@ -41,12 +41,11 @@ function SignIn() {
     username: '',
     password: ''
   }
-  const { errors, values, touched, handleBlur, handleChange, handleSubmit } = useFormik({
+  const { errors, values, touched, handleBlur, handleChange, resetForm, handleSubmit } = useFormik({
     initialValues: initialValues,
     validationSchema: loginSchema,
     onSubmit: (values, { resetForm }) => {
       login()
-      resetForm();
     }
   })
   const navigate = useNavigate()
@@ -55,6 +54,7 @@ function SignIn() {
     let response = await postApi('api/user/login', values)
     if (response && response.status === 200) {
       navigate('/admin')
+      resetForm();
     } else {
       alert(response.response.data?.error)
     }
