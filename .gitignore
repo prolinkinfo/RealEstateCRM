@@ -6,7 +6,7 @@ build
 # dependencies
 HorizonNew/node_modules
 server/node_modules
-server/env
+server/.env
 
 /.pnp
 .pnp.js
