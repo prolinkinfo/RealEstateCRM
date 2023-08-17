@@ -50,7 +50,7 @@ const property = new mongoose.Schema({
     },
     createBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
+        ref: 'User',
         required: true
     },
     //9. Custom Fields
