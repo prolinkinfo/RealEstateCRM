@@ -10,6 +10,8 @@ const index = async (req, res) => {
         if (query.createBy) {
             query.createBy = new mongoose.Types.ObjectId(query.createBy);
         }
+        
+        
         const result = await DocumentSchema.aggregate([
             { $unwind: '$file' },
             { $match: { 'file.deleted': false } },
