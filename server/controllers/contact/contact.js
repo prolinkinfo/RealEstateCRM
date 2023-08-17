@@ -7,8 +7,7 @@ const TextMsg = require('../../model/schema/textMsg')
 const index = async (req, res) => {
     const query = req.query
     query.deleted = false;
-
-
+    
     let allData = await Contact.find(query).populate({
         path: 'createBy',
         match: { deleted: false } // Populate only if createBy.deleted is false
