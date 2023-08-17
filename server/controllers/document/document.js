@@ -10,8 +10,8 @@ const index = async (req, res) => {
         if (query.createBy) {
             query.createBy = new mongoose.Types.ObjectId(query.createBy);
         }
-        
-        
+
+
         const result = await DocumentSchema.aggregate([
             { $unwind: '$file' },
             { $match: { 'file.deleted': false } },
@@ -25,6 +25,7 @@ const index = async (req, res) => {
                 }
             },
             { $unwind: { path: '$creatorInfo', preserveNullAndEmptyArrays: true } },
+            { $match: { 'creatorInfo.deleted': false } },
             {
                 $group: {
                     _id: '$_id',  // Group by the document _id (folder's _id)

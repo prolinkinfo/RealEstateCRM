@@ -19,7 +19,7 @@ const add = async (req, res) => {
 
 const index = async (req, res) => {
     try {
-  
+
 
         const query = req.query
         if (query.sender) {
@@ -90,7 +90,7 @@ const view = async (req, res) => {
             },
             { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
             { $unwind: '$contact' },
-            { $match: { 'contact.deleted': false } },
+            { $match: { 'contact.deleted': false, 'users.deleted': false } },
             {
                 $addFields: {
                     senderName: { $concat: ['$users.firstName', ' ', '$users.lastName'] },

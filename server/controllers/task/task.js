@@ -8,6 +8,7 @@ const index = async (req, res) => {
     if (query.createBy) {
         query.createBy = new mongoose.Types.ObjectId(query.createBy);
     }
+    // { $match: { 'contact.deleted': false, 'users.deleted': false } },
 
     try {
         let result = await Task.aggregate([
@@ -20,7 +21,17 @@ const index = async (req, res) => {
                     as: 'contact'
                 }
             },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'createBy',
+                    foreignField: '_id',
+                    as: 'users'
+                }
+            },
+            { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
             { $unwind: { path: '$contact', preserveNullAndEmptyArrays: true } },
+            { $match: { 'users.deleted': false } },
             {
                 $addFields: {
                     assignmentToName: '$contact.email',

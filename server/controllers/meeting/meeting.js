@@ -38,6 +38,7 @@ const index = async (req, res) => {
                 }
             },
             { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
+            { $match: { 'users.deleted': false } },
             {
                 $addFields: {
                     attendesArray: '$contact.email',

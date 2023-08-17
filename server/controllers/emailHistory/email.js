@@ -93,7 +93,7 @@ const view = async (req, res) => {
             },
             { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
             { $unwind: '$contact' },
-            { $match: { 'contact.deleted': false } },
+            { $match: { 'contact.deleted': false, 'users.deleted': false } },
             {
                 $addFields: {
                     senderEmail: '$users.username',
