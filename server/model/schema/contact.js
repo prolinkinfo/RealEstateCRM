@@ -51,7 +51,7 @@ const Contact = new mongoose.Schema({
     internalNotesOrComments: String,
     createBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
+        ref: 'User',
         required: true
     },
     deleted: {
