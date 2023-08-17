@@ -8,22 +8,13 @@ const index = async (req, res) => {
     const query = req.query
     query.deleted = false;
 
-    // const userIds = [
-    //     '64d331c3d6ef194198190339',
-    //     '64d33173fd7ff3fa0924a109',
-    //     '64d9bc8ec39372db0da04926',
-    //     '64d9bca7c39372db0da0492b',
-    //     '64d9bcd1c39372db0da04930',
-    // ];
+    let allData = await Contact.find(query).populate({
+        path: 'createBy',
+        match: { deleted: false } // Populate only if createBy.deleted is false
+    }).exec()
 
-    // const allData = await Contact.find();
-    // for (const data of allData) {
-    //     const randomItem = userIds[Math.floor(Math.random() * userIds.length)];
-    //     await Contact.updateOne({ _id: data._id }, { $set: { createBy: randomItem } });
-    // }
+    const result = allData.filter(item => item.createBy !== null);
 
-    let result = await Contact.find(query)
-    console.log(result.createBy)
     try {
         res.send(result)
     } catch (error) {
