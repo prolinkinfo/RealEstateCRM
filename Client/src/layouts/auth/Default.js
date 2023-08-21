@@ -2,6 +2,7 @@
 import { Box, Flex } from "@chakra-ui/react";
 import Footer from "components/footer/FooterAuth";
 import FixedPlugin from "components/fixedPlugin/FixedPlugin";
+import { Link } from "react-router-dom";
 // Custom components
 // Assets
 
@@ -39,17 +40,17 @@ function AuthIllustration(props) {
           // bg={'black'}
           overflow={'hidden'}
           right='0px'>
-          <Flex
-            bg={`url(${illustrationBackground})`}
-            justify='center'
-            align='center'
-            w='50%'
-            h='50%'
-            // bgColor={'yellow'}
-            bgSize='cover'
-            bgPosition='50%'
-          // position='absolute'
-          />
+          <Link to="https://prolinkinfotech.com/" target="_blank" style={{ height: '50%', width: '50%' }} >
+            <Flex
+              bg={`url(${illustrationBackground})`}
+              justify='center'
+              align='center'
+              w='100%'
+              h='100%'
+              bgSize='cover'
+              bgPosition='50%'
+            />
+          </Link>
         </Box>
         <Footer />
       </Flex>
