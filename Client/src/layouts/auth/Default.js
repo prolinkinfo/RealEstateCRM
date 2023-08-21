@@ -36,6 +36,7 @@ function AuthIllustration(props) {
           borderBottomLeftRadius={{ lg: "120px", xl: "200px" }}
           justifyContent='center'
           position='absolute'
+          flexDirection={'column'}
           alignItems={'center'}
           // bg={'black'}
           overflow={'hidden'}
@@ -51,6 +52,13 @@ function AuthIllustration(props) {
               bgPosition='50%'
             />
           </Link>
+          {/* <Box
+            border={'1px solid'}
+            p={4}
+            borderRadius={10}
+          >
+            Hi
+          </Box> */}
         </Box>
         <Footer />
       </Flex>
