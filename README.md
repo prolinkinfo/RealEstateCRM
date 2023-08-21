@@ -2,7 +2,7 @@
 
 Real Estate CRM is an innovative Customer Relationship Management (CRM) solution designed exclusively for Real Estate Agents. Streamline your workflow, enhance client interactions, and boost your business with our feature-packed CRM.
 
-## **Explore our repository to discover:**
+## **Explore our repository to discover**
 
 1. Intuitive Interface: A user-friendly dashboard tailored to the needs of Real Estate professionals.
 2. MERN Stack Powered: Built on the robust MERN (MongoDB, Express, ReactJS, Node.js) stack for high performance.
@@ -12,7 +12,7 @@ Real Estate CRM is an innovative Customer Relationship Management (CRM) solution
 
 Ready to revolutionize your Real Estate business? Dive into our documentation below and take the first step towards enhancing your productivity.
 
-## **Demo:**
+## **Demo**
 
 Here are the demo link credentials.
 
@@ -28,7 +28,7 @@ Password: user123
 
 ## **Installation**
 
-Getting started with EstateSphere is a breeze. Follow our comprehensive installation guide to set up the CRM in your local environment. Whether you're an experienced developer or new to the stack, our step-by-step instructions will have you up and running in no time.
+Getting started with RealEstateCRM is a breeze. Follow our comprehensive installation guide to set up the CRM in your local environment. Whether you're an experienced developer or new to the stack, our step-by-step instructions will have you up and running in no time.
 
 [Installation Guide](https://github.com/prolinkinfo/RealEstateCRM/discussions/2)
 
