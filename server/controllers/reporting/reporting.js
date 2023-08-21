@@ -53,6 +53,25 @@ const data = async (req, res) => {
 
         let EmailDetails = await EmailHistory.aggregate([
             { $match: matchFilter },
+            {
+                $lookup: {
+                    from: 'contacts',
+                    localField: 'createBy',
+                    foreignField: '_id',
+                    as: 'contact'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'sender',
+                    foreignField: '_id',
+                    as: 'users'
+                }
+            },
+            { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
+            { $unwind: '$contact' },
+            { $match: { 'contact.deleted': false, 'users.deleted': false } },
             { $group: { _id: groupFields, Emailcount: { $sum: 1 }, id: { $first: "$_id" } } },
             { $sort: { "_id.year": -1, "_id.month": 1, "_id.day": -1 } },
             { $group: { _id: "$_id.week", emails: { $push: "$$ROOT" }, totalEmails: { $sum: "$Emailcount" } } },
@@ -107,6 +126,25 @@ const data = async (req, res) => {
 
         let outboundcall = await PhoneCall.aggregate([
             { $match: matchFilter },
+            {
+                $lookup: {
+                    from: 'contacts',
+                    localField: 'createBy',
+                    foreignField: '_id',
+                    as: 'contact'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'sender',
+                    foreignField: '_id',
+                    as: 'users'
+                }
+            },
+            { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
+            { $unwind: '$contact' },
+            { $match: { 'contact.deleted': false, 'users.deleted': false } },
             { $group: { _id: groupFields, Callcount: { $sum: 1 }, id: { $first: "$_id" } } },
             { $sort: { "_id.year": -1, "_id.month": 1, "_id.day": -1 } },
             { $group: { _id: "$_id.week", calls: { $push: "$$ROOT" }, totalCall: { $sum: "$Callcount" } } },
@@ -160,6 +198,25 @@ const data = async (req, res) => {
 
         let TextSent = await TextMsg.aggregate([
             { $match: matchFilter },
+            {
+                $lookup: {
+                    from: 'contacts',
+                    localField: 'createFor',
+                    foreignField: '_id',
+                    as: 'contact'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'sender',
+                    foreignField: '_id',
+                    as: 'users'
+                }
+            },
+            { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
+            { $unwind: '$contact' },
+            { $match: { 'contact.deleted': false, 'users.deleted': false } },
             { $group: { _id: groupFields, TextSentCount: { $sum: 1 }, id: { $first: "$_id" } } },
             { $sort: { "_id.year": -1, "_id.month": 1, "_id.day": -1 } },
             { $group: { _id: "$_id.week", textMsgs: { $push: "$$ROOT" }, totalTextSent: { $sum: "$TextSentCount" } } },
