@@ -41,6 +41,7 @@ export default function Footer() {
           <Link
             fontWeight='500'
             color={textColor}
+            target="_blank"
             href='https://prolinkinfotech.com/'> Prolink Infotech.</Link> All Rights Reserved.
         </Text>
       </Text>
