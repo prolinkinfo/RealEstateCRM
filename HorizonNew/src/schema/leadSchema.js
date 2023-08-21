@@ -4,7 +4,7 @@ export const leadSchema = yup.object({
     // Lead Information:
     leadName: yup.string().required(),
     leadEmail: yup.string().email().required(),
-    leadPhoneNumber: yup.string().required(),
+    leadPhoneNumber: yup.string().min(8).max(15).required(),
     leadAddress: yup.string().required(),
     // Lead Source and Details:
     leadSource: yup.string(),
