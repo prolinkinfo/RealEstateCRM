@@ -6,27 +6,25 @@ import {
   List,
   ListItem,
   Text,
-  Button,
-  useColorMode,
   useColorModeValue,
 } from "@chakra-ui/react";
 
 export default function Footer() {
-  const textColor = useColorModeValue("gray.400", "white");
-  const { toggleColorMode } = useColorMode();
+  let textColor = useColorModeValue("gray.400", "white");
+  let linkColor = useColorModeValue({ base: "gray.400", lg: "white" }, "white");
   return (
     <Flex
       zIndex='3'
       flexDirection={{
         base: "column",
-        xl: "row",
+        lg: "row",
       }}
       alignItems={{
         base: "center",
         xl: "start",
       }}
       justifyContent='space-between'
-      px={{ base: "30px", md: "50px" }}
+      px={{ base: "30px", md: "0px" }}
       pb='30px'>
       <Text
         color={textColor}
@@ -34,11 +32,14 @@ export default function Footer() {
           base: "center",
           xl: "start",
         }}
-        mb={{ base: "20px", xl: "0px" }}>
+        mb={{ base: "20px", lg: "0px" }}>
         {" "}
         &copy; {1900 + new Date().getYear()}
         <Text as='span' fontWeight='500' ms='4px'>
-          Prolink Infotech. All Rights Reserved.
+          <Link
+            fontWeight='500'
+            color={textColor}
+            href='https://prolinkinfotech.com/'> Prolink Infotech.</Link> All Rights Reserved.
         </Text>
       </Text>
       {/* <List display='flex'>
@@ -49,8 +50,8 @@ export default function Footer() {
           }}>
           <Link
             fontWeight='500'
-            color={textColor}
-            href='mailto:hello@simmmple.com'>
+            color={linkColor}
+            href='mailto:hello@simmmple.com?ref=horizon-chakra-free'>
             Support
           </Link>
         </ListItem>
@@ -61,7 +62,7 @@ export default function Footer() {
           }}>
           <Link
             fontWeight='500'
-            color={textColor}
+            color={linkColor}
             href='https://www.simmmple.com/licenses?ref=horizon-chakra-free'>
             License
           </Link>
@@ -73,7 +74,7 @@ export default function Footer() {
           }}>
           <Link
             fontWeight='500'
-            color={textColor}
+            color={linkColor}
             href='https://simmmple.com/terms-of-service?ref=horizon-chakra-free'>
             Terms of Use
           </Link>
@@ -81,7 +82,7 @@ export default function Footer() {
         <ListItem>
           <Link
             fontWeight='500'
-            color={textColor}
+            color={linkColor}
             href='https://www.blog.simmmple.com/?ref=horizon-chakra-free'>
             Blog
           </Link>

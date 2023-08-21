@@ -4,7 +4,7 @@ yarn.lock
 build
 
 # dependencies
-HorizonNew/node_modules
+Client/node_modules
 server/node_modules
 server/.env
 
