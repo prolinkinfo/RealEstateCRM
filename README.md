@@ -30,7 +30,7 @@ Password: user123
 
 Getting started with EstateSphere is a breeze. Follow our comprehensive installation guide to set up the CRM in your local environment. Whether you're an experienced developer or new to the stack, our step-by-step instructions will have you up and running in no time.
 
-Installation Guide
+[Installation Guide] (https://github.com/prolinkinfo/RealEstateCRM/discussions/2)
 
 ## **Contributing**
 
