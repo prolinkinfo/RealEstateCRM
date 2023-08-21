@@ -9,30 +9,8 @@ function AuthIllustration(props) {
   const { children, illustrationBackground } = props;
   // Chakra color mode
   return (
-    <Flex position='relative' h='max-content'>
-      <Box
-        display={{ base: "none", md: "flex" }}
-        h='100%'
-        minH='100vh'
+    <Flex h='max-content'>
 
-        w={{ lg: "50vw", "2xl": "44vw" }}
-        borderBottomLeftRadius={{ lg: "120px", xl: "200px" }}
-        justifyContent='center'
-        position='absolute'
-        overflow={'hidden'}
-        right='0px'>
-        <Flex
-          bg={`url(${illustrationBackground})`}
-          justify='center'
-          align='end'
-          w='50%'
-          h='50%'
-          // bgColor={'black'}
-          bgSize='cover'
-          bgPosition='50%'
-          position='absolute'
-        />
-      </Box>
       <Flex
         h={{
           sm: "initial",
@@ -46,16 +24,38 @@ function AuthIllustration(props) {
         pt={{ sm: "50px", md: "0px" }}
         px={{ lg: "30px", xl: "0px" }}
         ps={{ xl: "70px" }}
-        justifyContent='start'
+        justifyContent='center'
         direction='column'>
-
-
         {children}
+        <Box
+          display={{ base: "none", md: "flex" }}
+          h='100%'
+          minH='100vh'
+          w={{ lg: "50vw", "2xl": "44vw" }}
+          borderBottomLeftRadius={{ lg: "120px", xl: "200px" }}
+          justifyContent='center'
+          position='absolute'
+          alignItems={'center'}
+          // bg={'black'}
+          overflow={'hidden'}
+          right='0px'>
+          <Flex
+            bg={`url(${illustrationBackground})`}
+            justify='center'
+            align='center'
+            w='50%'
+            h='50%'
+            // bgColor={'yellow'}
+            bgSize='cover'
+            bgPosition='50%'
+          // position='absolute'
+          />
+        </Box>
         <Footer />
       </Flex>
       {/* CHANGE THEME COLOR BUTTON */}
       {/* <FixedPlugin /> */}
-    </Flex >
+    </Flex>
   );
 }
 // PROPS
