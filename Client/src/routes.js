@@ -137,7 +137,15 @@ const routes = [
   // },
   // ------------- Task Routes ------------------------
   {
-    name: "Calender & Task",
+    name: " Task",
+    layout: "/admin",
+    both: true,
+    path: "/task",
+    icon: <Icon as={FaTasks} width='20px' height='20px' color='inherit' />,
+    component: Task,
+  },
+  {
+    name: "Calender",
     layout: "/admin",
     both: true,
     path: "/task",
