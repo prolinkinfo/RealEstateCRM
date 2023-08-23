@@ -73,7 +73,7 @@ const AddMeeting = (props) => {
     const countriesWithEmailAsLabel = data?.map((item) => ({
         ...item,
         value: item._id,
-        label: item.email,
+        label: `${item.firstName} ${item.lastName}`,
     }));
 
     return (
