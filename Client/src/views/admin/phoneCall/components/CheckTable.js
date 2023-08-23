@@ -93,7 +93,7 @@ export default function CheckTable(props) {
           fontWeight="700"
           lineHeight="100%"
         >
-          Phone Call History  (<CountUpComponent targetNumber={data?.length} />)
+          Phone Call (<CountUpComponent targetNumber={data?.length} />)
         </Text>
       </Flex>
 

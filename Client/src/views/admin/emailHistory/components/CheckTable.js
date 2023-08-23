@@ -93,7 +93,7 @@ export default function CheckTable(props) {
           fontWeight="700"
           lineHeight="100%"
         >
-          Email History Table  (<CountUpComponent targetNumber={data?.length} />)
+          Emails (<CountUpComponent targetNumber={data?.length} />)
         </Text>
       </Flex>
 

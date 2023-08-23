@@ -141,7 +141,7 @@ const AddTask = (props) => {
                             >
                                 <option value="">None</option>
                                 {contactData?.map((item) => {
-                                    return <option value={item._id} key={item._id}>{item.email}</option>
+                                    return <option value={item._id} key={item._id}>{`${item.firstName} ${item.lastName}`}</option>
                                 })}
                             </Select>
                             <Text mb='10px' color={'red'}> {errors.assignmentTo && touched.assignmentTo && errors.assignmentTo}</Text>

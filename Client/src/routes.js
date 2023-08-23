@@ -189,75 +189,75 @@ const routes = [
     component: UserView,
   },
   // ========================== History ==========================
-  // ------------- Email History Routes ------------------------
-  // {
-  //   // separator: 'History',
-  //   name: "Email History",
-  //   layout: "/admin",
-  //   both: true,
-  //   path: "/email-history",
-  //   icon: <Icon as={AiOutlineMail} width='20px' height='20px' color='inherit' />,
-  //   component: EmailHistory,
-  // },
-  // {
-  //   name: "Email View",
-  //   layout: "/admin",
-  //   both: true,
-  //   under: "email-history",
-  //   path: "/EmailHistory/:id",
-  //   component: EmailHistoryView,
-  // },
-  // // ------------- Phone History Routes ------------------------
-  // {
-  //   name: "Phone History",
-  //   layout: "/admin",
-  //   both: true,
-  //   path: "/phone-call-history",
-  //   icon: <Icon as={PiPhoneCallBold} width='20px' height='20px' color='inherit' />,
-  //   component: PhoneCall,
-  // },
-  // {
-  //   name: "Phone Call View",
-  //   layout: "/admin",
-  //   both: true,
-  //   under: "phone-call-history",
-  //   path: "/phone-call/:id",
-  //   component: PhoneCallView,
-  // },
-  // // ------------- Text message History Routes ------------------------
-  // {
-  //   name: "Text Msg History",
-  //   layout: "/admin",
-  //   both: true,
-  //   path: "/text-msg-history",
-  //   icon: <Icon as={MdOutlineMessage} width='20px' height='20px' color='inherit' />,
-  //   component: TextMsg,
-  // },
-  // {
-  //   name: "Text Msg View",
-  //   layout: "/admin",
-  //   both: true,
-  //   under: "text-msg-history",
-  //   path: "/text-msg/:id",
-  //   component: TextMsgView,
-  // },
-  // // ------------- Metting History Routes ------------------------
-  // {
-  //   name: "Metting History",
-  //   layout: "/admin",
-  //   both: true,
-  //   path: "/metting-history",
-  //   icon: <Icon as={SiGooglemeet} width='20px' height='20px' color='inherit' />,
-  //   component: Metting,
-  // },
-  // {
-  //   name: "Metting View",
-  //   layout: "/admin",
-  //   both: true,
-  //   under: "metting-history",
-  //   path: "/metting/:id",
-  //   component: MettingView,
-  // },
+  // ------------- Email Routes------------------------
+  {
+    // separator: 'History',
+    name: "Email",
+    layout: "/admin",
+    both: true,
+    path: "/email",
+    icon: <Icon as={AiOutlineMail} width='20px' height='20px' color='inherit' />,
+    component: EmailHistory,
+  },
+  {
+    name: "Email View",
+    layout: "/admin",
+    both: true,
+    under: "email",
+    path: "/Email/:id",
+    component: EmailHistoryView,
+  },
+  // ------------- Phone Routes ------------------------
+  {
+    name: "Phone",
+    layout: "/admin",
+    both: true,
+    path: "/phone-call",
+    icon: <Icon as={PiPhoneCallBold} width='20px' height='20px' color='inherit' />,
+    component: PhoneCall,
+  },
+  {
+    name: "Phone Call View",
+    layout: "/admin",
+    both: true,
+    under: "phone-call",
+    path: "/phone-call/:id",
+    component: PhoneCallView,
+  },
+  // ------------- Text message Routes ------------------------
+  {
+    name: "Text Msg",
+    layout: "/admin",
+    both: true,
+    path: "/text-msg",
+    icon: <Icon as={MdOutlineMessage} width='20px' height='20px' color='inherit' />,
+    component: TextMsg,
+  },
+  {
+    name: "Text Msg View",
+    layout: "/admin",
+    both: true,
+    under: "text-msg",
+    path: "/text-msg/:id",
+    component: TextMsgView,
+  },
+  // ------------- Metting Routes ------------------------
+  {
+    name: "Metting",
+    layout: "/admin",
+    both: true,
+    path: "/metting",
+    icon: <Icon as={SiGooglemeet} width='20px' height='20px' color='inherit' />,
+    component: Metting,
+  },
+  {
+    name: "Metting View",
+    layout: "/admin",
+    both: true,
+    under: "metting",
+    path: "/metting/:id",
+    component: MettingView,
+  },
   // ========================== User layout ==========================
 
   // ========================== auth layout ==========================

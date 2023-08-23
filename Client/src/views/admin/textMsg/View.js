@@ -45,7 +45,7 @@ const View = () => {
                         {/* <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem> */}
                         {/* </MenuList> */}
                         {/* </Menu> */}
-                        <Link to="/text-msg-history">
+                        <Link to="/text-msg">
                             <Button leftIcon={<IoIosArrowBack />} variant="brand">
                                 Back
                             </Button>

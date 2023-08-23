@@ -117,7 +117,7 @@ const View = () => {
                     sx={{ '& button:focus': { boxShadow: 'none', }, }}
                 >
                     <Tab>Information</Tab>
-                    <Tab>Communication History</Tab>
+                    <Tab>Activity</Tab>
                     <Tab>Social Media</Tab>
                 </TabList>
 
@@ -425,27 +425,27 @@ const View = () => {
                                     <GridItem colSpan={2}>
                                         <Box>
                                             <Heading size="md" mb={3}>
-                                                Communication History
+                                                Communication
                                             </Heading>
                                             <HSeparator />
                                         </Box>
                                     </GridItem>
                                     <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                         <GridItem colSpan={{ base: 2 }}>
-                                            {data?.EmailHistory.length > 0 ? <ColumnsTable fetchData={fetchData} columnsData={columnsDataColumns} tableData={data?.EmailHistory} title={'Email History'} /> : <Button onClick={() => setAddEmailHistory(true)} leftIcon={<BsFillSendFill />} colorScheme="gray" >Send Email </Button>}
+                                            {data?.EmailHistory.length > 0 ? <ColumnsTable fetchData={fetchData} columnsData={columnsDataColumns} tableData={data?.EmailHistory} title={'Email '} /> : <Button onClick={() => setAddEmailHistory(true)} leftIcon={<BsFillSendFill />} colorScheme="gray" >Send Email </Button>}
                                             <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} id={param.id} />
                                         </GridItem>
                                         <GridItem colSpan={{ base: 2 }}>
-                                            {data?.phoneCallHistory?.length > 0 ? <PhoneCall fetchData={fetchData} columnsData={columnsDataColumns} tableData={data?.phoneCallHistory} title={'Phone Call History'} /> : <Button onClick={() => setAddPhoneCall(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" > Call </Button>}
+                                            {data?.phoneCallHistory?.length > 0 ? <PhoneCall fetchData={fetchData} columnsData={columnsDataColumns} tableData={data?.phoneCallHistory} title={'Phone Call '} /> : <Button onClick={() => setAddPhoneCall(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" > Call </Button>}
                                             <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param.id} />
                                         </GridItem>
                                         <GridItem colSpan={{ base: 2 }}>
                                             <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>
-                                            {data?.meetingHistory.length > 0 && <MeetingTable fetchData={fetchData} columnsData={MeetingColumns} data={data?.meetingHistory} title={'meeting History'} />}
+                                            {data?.meetingHistory.length > 0 && <MeetingTable fetchData={fetchData} columnsData={MeetingColumns} data={data?.meetingHistory} title={'meeting '} />}
                                             <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} id={param.id} />
                                         </GridItem>
                                         <GridItem colSpan={{ base: 2 }}>
-                                            {data?.textMsg?.length > 0 ? <PhoneCall text='true' fetchData={fetchData} columnsData={textColumnsDataColumns} tableData={data?.textMsg} title={'Text Msg History'} /> : <Button onClick={() => navigate('/communication-integration')} leftIcon={<MdOutlineMessage />} colorScheme="gray" >send text Msg</Button>}
+                                            {data?.textMsg?.length > 0 ? <PhoneCall text='true' fetchData={fetchData} columnsData={textColumnsDataColumns} tableData={data?.textMsg} title={'Text Msg '} /> : <Button onClick={() => navigate('/communication-integration')} leftIcon={<MdOutlineMessage />} colorScheme="gray" >send text Msg</Button>}
                                         </GridItem>
                                         <GridItem colSpan={{ base: 2 }}>
                                             <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Notes and Comments </Text>

@@ -79,7 +79,7 @@ export default function CheckTable(props) {
           fontWeight="700"
           lineHeight="100%"
         >
-          Metting History  (<CountUpComponent targetNumber={data?.length} />)
+          Metting (<CountUpComponent targetNumber={data?.length} />)
         </Text>
       </Flex>
 

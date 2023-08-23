@@ -35,7 +35,7 @@ const View = () => {
             <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
                 <GridItem colStart={6} >
                     <Flex justifyContent={'right'} >
-                        <Link to={"/email-history"}>
+                        <Link to={"/email"}>
                             <Button leftIcon={<IoIosArrowBack />} variant="brand">
                                 Back
                             </Button>
