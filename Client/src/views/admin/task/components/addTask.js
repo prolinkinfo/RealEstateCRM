@@ -65,7 +65,7 @@ const AddTask = (props) => {
     }, [props])
 
     return (
-        <Modal isOpen={isOpen} size={'xl'} isCentered={useBreakpointValue({ base: false, md: true })}>
+        <Modal isOpen={isOpen} size={'xl'} >
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader justifyContent='space-between' display='flex' >
