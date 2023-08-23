@@ -93,7 +93,7 @@ const routes = [
   },
   // --------------- contact Routes --------------------
   {
-    name: "Contact Info",
+    name: "Contacts",
     layout: "/admin",
     both: true,
     path: "/contacts",
