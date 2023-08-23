@@ -20,6 +20,7 @@ import { FaEthereum } from 'react-icons/fa';
 import routes from 'routes.js';
 import { useNavigate } from 'react-router-dom';
 import { getApi } from 'services/api';
+import { toast } from 'react-toastify';
 
 export default function HeaderLinks(props) {
 	const { secondary } = props;
@@ -57,6 +58,7 @@ export default function HeaderLinks(props) {
 	const logOut = () => {
 		localStorage.clear()
 		navigate('/auth')
+		toast.success('Log out Successfully')
 	}
 
 
