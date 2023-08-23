@@ -40,22 +40,11 @@ const Task = (props) => {
 
     return (
         <div>
-            <Card display={'flex'} mb={3} >
-                <Flex alignItems={'center'} justifyContent={"space-between"} flexWrap={'wrap'}>
-                    <Text
-                        color={'secondaryGray.900'}
-                        fontSize="22px"
-                        fontWeight="700"
-                        lineHeight="100%"
-                    >
-                        Task Table (<CountUpComponent targetNumber={data?.length} />)
-                    </Text>
-                    <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Create Task</Button>
-                </Flex>
-            </Card>
-
-            <AddTask isOpen={isOpen} fetchData={fetchData} onClose={onClose} />
+            <Flex alignItems={'center'} justifyContent={"right"} flexWrap={'wrap'} mb={3}>
+                <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Create Task</Button>
+            </Flex>
             <CheckTable columnsData={columns} data={data} />
+            <AddTask isOpen={isOpen} fetchData={fetchData} onClose={onClose} />
         </div>
     )
 }

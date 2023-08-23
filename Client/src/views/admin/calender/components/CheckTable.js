@@ -21,7 +21,6 @@ import Card from "components/card/Card";
 import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import EventView from "../eventView";
-import CountUpComponent from "components/countUpComponent/countUpComponent";
 
 export default function CheckTable(props) {
   const { columnsData, data } = props;
@@ -91,16 +90,6 @@ export default function CheckTable(props) {
       overflowX={{ sm: "scroll", lg: "scroll" }}
     >
       <EventView isOpen={eventView} onClose={setEventView} info={id} />
-      <Flex px="25px" justify="space-between" mb="20px" align="center">
-        <Text
-          color={'secondaryGray.900'}
-          fontSize="22px"
-          fontWeight="700"
-          lineHeight="100%"
-        >
-          Task Table (<CountUpComponent targetNumber={data?.length} />)
-        </Text>
-      </Flex>
 
 
       <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">

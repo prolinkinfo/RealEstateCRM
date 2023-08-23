@@ -13,7 +13,7 @@ import { AiFillFolderOpen, AiOutlineMail } from "react-icons/ai";
 import { PiPhoneCallBold } from "react-icons/pi";
 import { LuBuilding2 } from "react-icons/lu";
 import { GiSatelliteCommunication } from "react-icons/gi";
-import { FaTasks } from "react-icons/fa";
+import { FaCalendarAlt, FaTasks } from "react-icons/fa";
 import { SiGooglemeet } from "react-icons/si";
 import React from "react";
 
@@ -37,6 +37,7 @@ const LeadView = React.lazy(() => import("views/admin/lead/View"));
 const Communication = React.lazy(() => import("views/admin/communication"));
 
 const Task = React.lazy(() => import("views/admin/task"));
+const Calender = React.lazy(() => import("views/admin/calender"));
 
 const Document = React.lazy(() => import("views/admin/document"));
 
@@ -148,9 +149,9 @@ const routes = [
     name: "Calender",
     layout: "/admin",
     both: true,
-    path: "/task",
-    icon: <Icon as={FaTasks} width='20px' height='20px' color='inherit' />,
-    component: Task,
+    path: "/calender",
+    icon: <Icon as={FaCalendarAlt} width='20px' height='20px' color='inherit' />,
+    component: Calender,
   },
   // ------------- Document Routes ------------------------
   {

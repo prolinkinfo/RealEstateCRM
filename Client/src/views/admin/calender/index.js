@@ -1,4 +1,4 @@
-import Task from "./task";
+import Calender from './components/calender';
 import { useEffect, useState } from "react";
 import { getApi } from "services/api";
 
@@ -12,7 +12,6 @@ const Index = () => {
     const fetchData = async () => {
         let result = await getApi(user.role === 'admin' ? 'api/task/' : `api/task/?createBy=${user._id}`);
         // let result = await getApi('api/task/');
-
         setData(result.data);
     }
 
@@ -22,7 +21,7 @@ const Index = () => {
 
 
     return (
-        <Task fetchData={fetchData} data={data} />
+        <Calender fetchData={fetchData} data={data} />
     )
 }
 
