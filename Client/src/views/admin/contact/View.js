@@ -41,22 +41,10 @@ const View = () => {
     const navigate = useNavigate()
 
     const columnsDataColumns = [
-        {
-            Header: "sender",
-            accessor: "sender",
-        },
-        {
-            Header: "recipient",
-            accessor: "recipient",
-        },
-        {
-            Header: "time stamp",
-            accessor: "timestamp",
-        },
-        {
-            Header: "create at",
-            accessor: "createBy",
-        },
+        { Header: "sender", accessor: "sender", },
+        { Header: "recipient", accessor: "recipient", },
+        { Header: "time stamp", accessor: "timestamp", },
+        { Header: "create at", accessor: "createBy", },
     ];
 
     const PropertyColumn = [
@@ -67,37 +55,20 @@ const View = () => {
         { Header: "year Built", accessor: "yearBuilt", },
     ];
     const textColumnsDataColumns = [
-        {
-            Header: "sender",
-            accessor: "sender",
-        },
-        {
-            Header: "recipient",
-            accessor: "to",
-        },
-        {
-            Header: "time stamp",
-            accessor: "timestamp",
-        },
-        {
-            Header: "create at",
-            accessor: "createBy",
-        },
+        { Header: "sender", accessor: "sender", },
+        { Header: "recipient", accessor: "to", },
+        { Header: "time stamp", accessor: "timestamp", },
+        { Header: "create at", accessor: "createBy", },
     ];
 
     const MeetingColumns = [
-        {
-            Header: "#",
-            accessor: "_id",
-            isSortable: false,
-            width: 10
-        },
+        { Header: "#", accessor: "_id", isSortable: false, width: 10 },
         { Header: 'agenda', accessor: 'agenda' },
         { Header: "date Time", accessor: "dateTime", },
         { Header: "times tamp", accessor: "timestamp", },
         { Header: "create By", accessor: "createdByName", },
-
     ];
+
     const [addEmailHistory, setAddEmailHistory] = useState(false);
     const [addPhoneCall, setAddPhoneCall] = useState(false);
     const [addMeeting, setMeeting] = useState(false);
@@ -170,43 +141,43 @@ const View = () => {
                                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
                                                     First Name
                                                 </Text>
-                                                <Text>{data?.contact?.firstName}</Text>
+                                                <Text>{data?.contact?.firstName ? data?.contact?.firstName : 'N/A'}</Text>
                                             </GridItem>
                                             <GridItem colSpan={{ base: 2, md: 1 }}>
                                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
                                                     Last Name
                                                 </Text>
-                                                <Text>{data?.contact?.lastName}</Text>
+                                                <Text>{data?.contact?.lastName ? data?.contact?.lastName : 'N/A'}</Text>
                                             </GridItem>
                                             <GridItem colSpan={{ base: 2, md: 1 }}>
                                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
                                                     Title
                                                 </Text>
-                                                <Text>{data?.contact?.title}</Text>
+                                                <Text>{data?.contact?.title ? data?.contact?.title : 'N/A'}</Text>
                                             </GridItem>
                                             <GridItem colSpan={{ base: 2, md: 1 }}>
                                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
                                                     Phone Number
                                                 </Text>
-                                                <Text onClick={() => setAddPhoneCall(true)} color='green.400' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.contact?.phoneNumber}</Text>
+                                                <Text onClick={() => setAddPhoneCall(true)} color='green.400' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.contact?.phoneNumber ? data?.contact?.phoneNumber : 'N/A'}</Text>
                                             </GridItem>
                                             <GridItem colSpan={{ base: 2, md: 1 }}>
                                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
                                                     Mobile Number
                                                 </Text>
-                                                <Text>{data?.contact?.mobileNumber ? data?.contact?.mobileNumber : 'Same As Phone Number'}</Text>
+                                                <Text>{data?.contact?.mobileNumber ? data?.contact?.mobileNumber : 'N/A'}</Text>
                                             </GridItem>
                                             <GridItem colSpan={{ base: 2, md: 1 }}>
                                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
                                                     Email Address
                                                 </Text>
-                                                <Text onClick={() => setAddEmailHistory(true)} color='green.400' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.contact?.email}</Text>
+                                                <Text onClick={() => setAddEmailHistory(true)} color='green.400' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.contact?.email ? data?.contact?.email : 'N/A'}</Text>
                                             </GridItem>
                                             <GridItem colSpan={{ base: 2 }}>
                                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
                                                     Physical Address
                                                 </Text>
-                                                <Text>{data?.contact?.physicalAddress}</Text>
+                                                <Text>{data?.contact?.physicalAddress ? data?.contact?.physicalAddress : 'N/A'}</Text>
                                             </GridItem>
                                             <GridItem colSpan={{ base: 2 }}>
                                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
@@ -218,7 +189,7 @@ const View = () => {
                                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
                                                     Preferred Contact Method
                                                 </Text>
-                                                <Text>{data?.contact?.preferredContactMethod}</Text>
+                                                <Text>{data?.contact?.preferredContactMethod ? data?.contact?.preferredContactMethod : 'N/A'}</Text>
                                             </GridItem>
                                         </Grid>
                                     </Grid>
