@@ -74,6 +74,23 @@ const routes = [
     component: UserDashboard,
   },
   // ========================== Admin Layout ==========================
+  // ------------- lead Routes ------------------------
+  {
+    name: "Lead",
+    layout: "/admin",
+    both: true,
+    path: "/lead",
+    icon: <Icon as={MdLeaderboard} width='20px' height='20px' color='inherit' />,
+    component: Lead,
+  },
+  {
+    name: "Lead View",
+    layout: "/admin",
+    both: true,
+    under: "lead",
+    path: "/leadView/:id",
+    component: LeadView,
+  },
   // --------------- contact Routes --------------------
   {
     name: "Contact Info",
@@ -109,32 +126,15 @@ const routes = [
     component: PropertyView,
   },
 
-  // ------------- lead Routes ------------------------
-  {
-    name: "Lead",
-    layout: "/admin",
-    both: true,
-    path: "/lead",
-    icon: <Icon as={MdLeaderboard} width='20px' height='20px' color='inherit' />,
-    component: Lead,
-  },
-  {
-    name: "Lead View",
-    layout: "/admin",
-    both: true,
-    under: "lead",
-    path: "/leadView/:id",
-    component: LeadView,
-  },
-  // ------------- Communication Integration Routes ------------------------
-  {
-    name: "Communication Integration",
-    layout: "/admin",
-    both: true,
-    path: "/communication-integration",
-    icon: <Icon as={GiSatelliteCommunication} width='20px' height='20px' color='inherit' />,
-    component: Communication,
-  },
+  // // ------------- Communication Integration Routes ------------------------
+  // {
+  //   name: "Communication Integration",
+  //   layout: "/admin",
+  //   both: true,
+  //   path: "/communication-integration",
+  //   icon: <Icon as={GiSatelliteCommunication} width='20px' height='20px' color='inherit' />,
+  //   component: Communication,
+  // },
   // ------------- Task Routes ------------------------
   {
     name: "Calender & Task",
@@ -180,74 +180,74 @@ const routes = [
   },
   // ========================== History ==========================
   // ------------- Email History Routes ------------------------
-  {
-    separator: 'History',
-    name: "Email History",
-    layout: "/admin",
-    both: true,
-    path: "/email-history",
-    icon: <Icon as={AiOutlineMail} width='20px' height='20px' color='inherit' />,
-    component: EmailHistory,
-  },
-  {
-    name: "Email View",
-    layout: "/admin",
-    both: true,
-    under: "email-history",
-    path: "/EmailHistory/:id",
-    component: EmailHistoryView,
-  },
-  // ------------- Phone History Routes ------------------------
-  {
-    name: "Phone History",
-    layout: "/admin",
-    both: true,
-    path: "/phone-call-history",
-    icon: <Icon as={PiPhoneCallBold} width='20px' height='20px' color='inherit' />,
-    component: PhoneCall,
-  },
-  {
-    name: "Phone Call View",
-    layout: "/admin",
-    both: true,
-    under: "phone-call-history",
-    path: "/phone-call/:id",
-    component: PhoneCallView,
-  },
-  // ------------- Text message History Routes ------------------------
-  {
-    name: "Text Msg History",
-    layout: "/admin",
-    both: true,
-    path: "/text-msg-history",
-    icon: <Icon as={MdOutlineMessage} width='20px' height='20px' color='inherit' />,
-    component: TextMsg,
-  },
-  {
-    name: "Text Msg View",
-    layout: "/admin",
-    both: true,
-    under: "text-msg-history",
-    path: "/text-msg/:id",
-    component: TextMsgView,
-  },
-  // ------------- Metting History Routes ------------------------
-  {
-    name: "Metting History",
-    layout: "/admin",
-    both: true,
-    path: "/metting-history",
-    icon: <Icon as={SiGooglemeet} width='20px' height='20px' color='inherit' />,
-    component: Metting,
-  },
-  {
-    name: "Metting View",
-    layout: "/admin",
-    both: true,
-    under: "metting-history",
-    path: "/metting/:id",
-    component: MettingView,
-  },
+  // {
+  //   // separator: 'History',
+  //   name: "Email History",
+  //   layout: "/admin",
+  //   both: true,
+  //   path: "/email-history",
+  //   icon: <Icon as={AiOutlineMail} width='20px' height='20px' color='inherit' />,
+  //   component: EmailHistory,
+  // },
+  // {
+  //   name: "Email View",
+  //   layout: "/admin",
+  //   both: true,
+  //   under: "email-history",
+  //   path: "/EmailHistory/:id",
+  //   component: EmailHistoryView,
+  // },
+  // // ------------- Phone History Routes ------------------------
+  // {
+  //   name: "Phone History",
+  //   layout: "/admin",
+  //   both: true,
+  //   path: "/phone-call-history",
+  //   icon: <Icon as={PiPhoneCallBold} width='20px' height='20px' color='inherit' />,
+  //   component: PhoneCall,
+  // },
+  // {
+  //   name: "Phone Call View",
+  //   layout: "/admin",
+  //   both: true,
+  //   under: "phone-call-history",
+  //   path: "/phone-call/:id",
+  //   component: PhoneCallView,
+  // },
+  // // ------------- Text message History Routes ------------------------
+  // {
+  //   name: "Text Msg History",
+  //   layout: "/admin",
+  //   both: true,
+  //   path: "/text-msg-history",
+  //   icon: <Icon as={MdOutlineMessage} width='20px' height='20px' color='inherit' />,
+  //   component: TextMsg,
+  // },
+  // {
+  //   name: "Text Msg View",
+  //   layout: "/admin",
+  //   both: true,
+  //   under: "text-msg-history",
+  //   path: "/text-msg/:id",
+  //   component: TextMsgView,
+  // },
+  // // ------------- Metting History Routes ------------------------
+  // {
+  //   name: "Metting History",
+  //   layout: "/admin",
+  //   both: true,
+  //   path: "/metting-history",
+  //   icon: <Icon as={SiGooglemeet} width='20px' height='20px' color='inherit' />,
+  //   component: Metting,
+  // },
+  // {
+  //   name: "Metting View",
+  //   layout: "/admin",
+  //   both: true,
+  //   under: "metting-history",
+  //   path: "/metting/:id",
+  //   component: MettingView,
+  // },
   // ========================== User layout ==========================
 
   // ========================== auth layout ==========================

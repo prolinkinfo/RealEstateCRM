@@ -173,17 +173,6 @@ export default function CheckTable(props) {
                     );
                   } else if (cell?.column.Header === "Lead Name") {
                     data = (
-                      <Text
-                        me="10px"
-                        color={textColor}
-                        fontSize="sm"
-                        fontWeight="700"
-                      >
-                        {cell?.value}
-                      </Text>
-                    );
-                  } else if (cell?.column.Header === "Lead Email") {
-                    data = (
                       <Link to={user?.role !== 'admin' ? `/leadView/${cell?.row?.values._id}` : `/admin/leadView/${cell?.row?.values._id}`}>
                         <Text
                           me="10px"
@@ -195,6 +184,17 @@ export default function CheckTable(props) {
                           {cell?.value}
                         </Text>
                       </Link>
+                    );
+                  } else if (cell?.column.Header === "Lead Email") {
+                    data = (
+                      <Text
+                        me="10px"
+                        color={textColor}
+                        fontSize="sm"
+                        fontWeight="700"
+                      >
+                        {cell?.value}
+                      </Text>
                     );
                   } else if (cell?.column.Header === "Lead PhoneNumber") {
                     data = (
