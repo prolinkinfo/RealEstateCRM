@@ -145,6 +145,58 @@ const routes = [
     icon: <Icon as={FaTasks} width='20px' height='20px' color='inherit' />,
     component: Task,
   },
+  // ------------- Metting Routes ------------------------
+  {
+    name: "Metting",
+    layout: "/admin",
+    both: true,
+    path: "/metting",
+    icon: <Icon as={SiGooglemeet} width='20px' height='20px' color='inherit' />,
+    component: Metting,
+  },
+  {
+    name: "Metting View",
+    layout: "/admin",
+    both: true,
+    under: "metting",
+    path: "/metting/:id",
+    component: MettingView,
+  },
+  // ------------- Phone Routes ------------------------
+  {
+    name: "Phone",
+    layout: "/admin",
+    both: true,
+    path: "/phone-call",
+    icon: <Icon as={PiPhoneCallBold} width='20px' height='20px' color='inherit' />,
+    component: PhoneCall,
+  },
+  {
+    name: "Phone Call View",
+    layout: "/admin",
+    both: true,
+    under: "phone-call",
+    path: "/phone-call/:id",
+    component: PhoneCallView,
+  },
+  // ------------- Email Routes------------------------
+  {
+    // separator: 'History',
+    name: "Email",
+    layout: "/admin",
+    both: true,
+    path: "/email",
+    icon: <Icon as={AiOutlineMail} width='20px' height='20px' color='inherit' />,
+    component: EmailHistory,
+  },
+  {
+    name: "Email View",
+    layout: "/admin",
+    both: true,
+    under: "email",
+    path: "/Email/:id",
+    component: EmailHistoryView,
+  },
   // ------------- Calender Routes ------------------------
   {
     name: "Calender",
@@ -154,6 +206,23 @@ const routes = [
     icon: <Icon as={FaCalendarAlt} width='20px' height='20px' color='inherit' />,
     component: Calender,
   },
+  // // ------------- Text message Routes ------------------------
+  // {
+  //   name: "Text Msg",
+  //   layout: "/admin",
+  //   both: true,
+  //   path: "/text-msg",
+  //   icon: <Icon as={MdOutlineMessage} width='20px' height='20px' color='inherit' />,
+  //   component: TextMsg,
+  // },
+  // {
+  //   name: "Text Msg View",
+  //   layout: "/admin",
+  //   both: true,
+  //   under: "text-msg",
+  //   path: "/text-msg/:id",
+  //   component: TextMsgView,
+  // },
   // ------------- Document Routes ------------------------
   {
     name: "Documents",
@@ -187,76 +256,6 @@ const routes = [
     under: "user",
     path: "/userView/:id",
     component: UserView,
-  },
-  // ========================== History ==========================
-  // ------------- Email Routes------------------------
-  {
-    // separator: 'History',
-    name: "Email",
-    layout: "/admin",
-    both: true,
-    path: "/email",
-    icon: <Icon as={AiOutlineMail} width='20px' height='20px' color='inherit' />,
-    component: EmailHistory,
-  },
-  {
-    name: "Email View",
-    layout: "/admin",
-    both: true,
-    under: "email",
-    path: "/Email/:id",
-    component: EmailHistoryView,
-  },
-  // ------------- Phone Routes ------------------------
-  {
-    name: "Phone",
-    layout: "/admin",
-    both: true,
-    path: "/phone-call",
-    icon: <Icon as={PiPhoneCallBold} width='20px' height='20px' color='inherit' />,
-    component: PhoneCall,
-  },
-  {
-    name: "Phone Call View",
-    layout: "/admin",
-    both: true,
-    under: "phone-call",
-    path: "/phone-call/:id",
-    component: PhoneCallView,
-  },
-  // ------------- Text message Routes ------------------------
-  {
-    name: "Text Msg",
-    layout: "/admin",
-    both: true,
-    path: "/text-msg",
-    icon: <Icon as={MdOutlineMessage} width='20px' height='20px' color='inherit' />,
-    component: TextMsg,
-  },
-  {
-    name: "Text Msg View",
-    layout: "/admin",
-    both: true,
-    under: "text-msg",
-    path: "/text-msg/:id",
-    component: TextMsgView,
-  },
-  // ------------- Metting Routes ------------------------
-  {
-    name: "Metting",
-    layout: "/admin",
-    both: true,
-    path: "/metting",
-    icon: <Icon as={SiGooglemeet} width='20px' height='20px' color='inherit' />,
-    component: Metting,
-  },
-  {
-    name: "Metting View",
-    layout: "/admin",
-    both: true,
-    under: "metting",
-    path: "/metting/:id",
-    component: MettingView,
   },
   // ========================== User layout ==========================
 
