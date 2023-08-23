@@ -7,9 +7,10 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import interactionPlugin from "@fullcalendar/interaction";
 import multiMonthPlugin from '@fullcalendar/multimonth';
-import EventView from '../eventView';
+// import EventView from '../eventView';
 import { useBreakpointValue, useDisclosure } from '@chakra-ui/react';
-import AddTask from './addTask';
+import AddTask from 'views/admin/task/components/addTask';
+import EventView from 'views/admin/task/eventView';
 
 
 
@@ -46,6 +47,7 @@ const Calender = (props) => {
         // Set the initial view to 'dayGridMonth' when the component mounts
         setCurrentView('dayGridMonth');
     }, []);
+
     return (
         <div>
             <Card >

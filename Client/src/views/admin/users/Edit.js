@@ -6,6 +6,7 @@ import { CloseIcon, PhoneIcon } from '@chakra-ui/icons';
 import { getApi } from 'services/api';
 import { useParams } from 'react-router-dom';
 import { putApi } from 'services/api';
+import { toast } from 'react-toastify';
 
 
 const Edit = (props) => {
@@ -36,7 +37,7 @@ const Edit = (props) => {
                 props.onClose();
                 fetchData()
             } else {
-                alert(response.response.data?.message)
+                toast.error(response.response.data?.message)
             }
         } catch (e) {
             console.log(e);

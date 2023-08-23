@@ -2,6 +2,7 @@ import { Button, FormLabel, Grid, GridItem, Heading, Input, List, ListItem, Text
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { BsFillTelephoneFill } from 'react-icons/bs';
+import { toast } from 'react-toastify';
 import { phoneCallSchema } from 'schema';
 import { getApi } from 'services/api';
 import { postApi } from 'services/api';
@@ -31,7 +32,8 @@ const Call = () => {
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
 
     if (touched.recipient && errors.createBy) {
-        alert('Please select an authorized recipient');
+
+        toast.error('Please select an authorized recipient');
         formik.resetForm();
 
     }
@@ -40,7 +42,8 @@ const Call = () => {
         try {
             let response = await postApi('api/phoneCall/add', values)
             if (response.status === 200) {
-                alert(`Call ${values.recipient} successfully`)
+
+                toast.success(`Call ${values.recipient} successfully`)
                 formik.resetForm();
             }
         } catch (e) {

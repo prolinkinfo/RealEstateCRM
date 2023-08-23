@@ -27,6 +27,7 @@ import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
 import { postApi } from "services/api";
 import { loginSchema } from "schema";
+import { toast } from "react-toastify";
 
 function SignIn() {
   // Chakra color mode
@@ -55,8 +56,9 @@ function SignIn() {
     if (response && response.status === 200) {
       navigate('/admin')
       resetForm();
+      toast.success("Logout Success")
     } else {
-      alert(response.response.data?.error)
+      toast.error(response.response.data?.error)
     }
   }
 

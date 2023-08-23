@@ -2,6 +2,7 @@ import { Button, FormLabel, Grid, GridItem, Heading, Input, List, ListItem, Text
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { BsFillSendFill } from 'react-icons/bs';
+import { toast } from 'react-toastify';
 import { emailSchema } from 'schema';
 import { getApi } from 'services/api';
 import { postApi } from 'services/api';
@@ -34,7 +35,7 @@ const Email = () => {
 
 
     if (touched.recipient && errors.createBy) {
-        alert('Please select an authorized recipient');
+        toast.error('Please select an authorized recipient');
         formik.resetForm();
 
     }
@@ -43,7 +44,7 @@ const Email = () => {
         try {
             let response = await postApi('api/email/add', values)
             if (response.status === 200) {
-                alert('Email Send successfully')
+                toast.success('Email Send successfully')
                 formik.resetForm();
             }
         } catch (e) {

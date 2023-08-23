@@ -6,6 +6,7 @@ import { postApi } from 'services/api';
 import { RiEyeCloseLine } from 'react-icons/ri';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { CloseIcon, PhoneIcon } from '@chakra-ui/icons';
+import { toast } from 'react-toastify';
 
 
 const AddUser = (props) => {
@@ -39,7 +40,7 @@ const AddUser = (props) => {
                 props.onClose();
                 // fetchData()
             } else {
-                alert(response.response.data?.message)
+                toast.error(response.response.data?.message)
             }
         } catch (e) {
             console.log(e);

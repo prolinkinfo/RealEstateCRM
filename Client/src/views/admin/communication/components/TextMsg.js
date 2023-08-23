@@ -2,6 +2,7 @@ import { Button, FormLabel, Grid, GridItem, Heading, Input, List, ListItem, Text
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { MdOutlineMessage } from 'react-icons/md';
+import { toast } from 'react-toastify';
 import { textMsgSchema } from 'schema';
 import { getApi } from 'services/api';
 import { postApi } from 'services/api';
@@ -30,7 +31,7 @@ const TextMsg = () => {
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
 
     if (touched.to && errors.createFor) {
-        alert('Please select an authorized to');
+        toast.error('Please select an authorized to');
         formik.resetForm();
 
     }
@@ -39,7 +40,7 @@ const TextMsg = () => {
         try {
             let response = await postApi('api/text-msg/add', values)
             if (response.status === 200) {
-                alert(`Text Msg send successfully to ${values.to} `)
+                toast.success(`Text Msg send successfully to ${values.to} `)
                 formik.resetForm();
             }
         } catch (e) {

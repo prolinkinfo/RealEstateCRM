@@ -104,7 +104,6 @@ const AddTask = (props) => {
                                 placeholder={'Select Category'}
                                 borderColor={errors.category && touched.category ? "red.300" : null}
                             >
-                                <option value="None">None</option>
                                 <option value="call">Call</option>
                                 <option value="email">Email</option>
                                 <option value="meeting">Meeting</option>

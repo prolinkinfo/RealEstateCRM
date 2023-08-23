@@ -8,6 +8,8 @@ import UserLayout from 'layouts/user';
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from 'theme/theme';
 import { ThemeEditorProvider } from '@hypertheme-editor/chakra-ui';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 
@@ -16,17 +18,20 @@ function App() {
 	useNavigate()
 
 	return (
-		<Routes>
-			{token && user?.role ? (
-				user?.role == 'user' ?
-					<Route path="/*" element={<UserLayout />} />
-					: user?.role === 'admin' ?
-						<Route path="/*" element={<AdminLayout />} />
-						: ''
-			) : (
-				<Route path="/*" element={<AuthLayout />} />
-			)}
-		</Routes>
+		<>
+			<ToastContainer />
+			<Routes>
+				{token && user?.role ? (
+					user?.role == 'user' ?
+						<Route path="/*" element={<UserLayout />} />
+						: user?.role === 'admin' ?
+							<Route path="/*" element={<AdminLayout />} />
+							: ''
+				) : (
+					<Route path="/*" element={<AuthLayout />} />
+				)}
+			</Routes>
+		</>
 	);
 }
 
