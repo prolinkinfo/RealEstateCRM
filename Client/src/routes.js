@@ -145,6 +145,7 @@ const routes = [
     icon: <Icon as={FaTasks} width='20px' height='20px' color='inherit' />,
     component: Task,
   },
+  // ------------- Calender Routes ------------------------
   {
     name: "Calender",
     layout: "/admin",
