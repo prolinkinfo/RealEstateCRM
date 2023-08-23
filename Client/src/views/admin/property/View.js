@@ -113,39 +113,39 @@ const View = () => {
                                         </GridItem>
                                         <GridItem colSpan={{ base: 12, md: 6 }}>
                                             <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Property Type</Text>
-                                            <Text>{data?.propertyType ? data?.propertyType : 'null'}</Text>
+                                            <Text>{data?.propertyType ? data?.propertyType : 'N/A'}</Text>
                                         </GridItem>
                                         <GridItem colSpan={{ base: 12, md: 6 }}>
                                             <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Year Built</Text>
-                                            <Text>{data?.yearBuilt ? data?.yearBuilt : 'null'}</Text>
+                                            <Text>{data?.yearBuilt ? data?.yearBuilt : 'N/A'}</Text>
                                         </GridItem>
                                         <GridItem colSpan={{ base: 12, md: 6 }}>
                                             <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Listing Price</Text>
-                                            <Text>{data?.listingPrice ? data?.listingPrice : 'null'}</Text>
+                                            <Text>{data?.listingPrice ? data?.listingPrice : 'N/A'}</Text>
                                         </GridItem>
                                         <GridItem colSpan={{ base: 12, md: 6 }}>
                                             <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Square Footage</Text>
-                                            <Text>{data?.squareFootage ? data?.squareFootage : 'null'}</Text>
+                                            <Text>{data?.squareFootage ? data?.squareFootage : 'N/A'}</Text>
                                         </GridItem>
                                         <GridItem colSpan={{ base: 12, md: 6 }}>
                                             <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Number Of Bedrooms</Text>
-                                            <Text>{data?.numberofBedrooms ? data?.numberofBedrooms : 'null'}</Text>
+                                            <Text>{data?.numberofBedrooms ? data?.numberofBedrooms : 'N/A'}</Text>
                                         </GridItem>
                                         <GridItem colSpan={{ base: 12, md: 6 }}>
                                             <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Number Of Bathrooms</Text>
-                                            <Text>{data?.numberofBathrooms ? data?.numberofBathrooms : 'null'}</Text>
+                                            <Text>{data?.numberofBathrooms ? data?.numberofBathrooms : 'N/A'}</Text>
                                         </GridItem>
                                         <GridItem colSpan={{ base: 12, md: 6 }}>
                                             <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Previous Owners</Text>
-                                            <Text>{data?.previousOwners ? data?.previousOwners : 'null'}</Text>
+                                            <Text>{data?.previousOwners ? data?.previousOwners : 'N/A'}</Text>
                                         </GridItem>
                                         <GridItem colSpan={{ base: 12, md: 6 }}>
                                             <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Property Address</Text>
-                                            <Text>{data?.propertyAddress ? data?.propertyAddress : 'null'}</Text>
+                                            <Text>{data?.propertyAddress ? data?.propertyAddress : 'N/A'}</Text>
                                         </GridItem>
                                         <GridItem colSpan={{ base: 12 }}>
                                             <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Property Description </Text>
-                                            <Text>{data?.propertyDescription ? data?.propertyDescription : 'null'}</Text>
+                                            <Text>{data?.propertyDescription ? data?.propertyDescription : 'N/A'}</Text>
                                         </GridItem>
                                     </Grid>
                                 </Card>
@@ -165,31 +165,31 @@ const View = () => {
                                         </GridItem>
                                         <GridItem colSpan={{ base: 12, md: 6 }} >
                                             <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lot Size </Text>
-                                            <Text>{data?.lotSize ? data?.lotSize : 'null'}</Text>
+                                            <Text>{data?.lotSize ? data?.lotSize : 'N/A'}</Text>
                                         </GridItem>
                                         <GridItem colSpan={{ base: 12, md: 6 }} >
                                             <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Parking Availability </Text>
-                                            <Text>{data?.parkingAvailability ? data?.parkingAvailability : 'null'}</Text>
+                                            <Text>{data?.parkingAvailability ? data?.parkingAvailability : 'N/A'}</Text>
                                         </GridItem>
                                         <GridItem colSpan={{ base: 12, md: 6 }} >
                                             <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Heating And Cooling Systems </Text>
-                                            <Text>{data?.heatingAndCoolingSystems ? data?.heatingAndCoolingSystems : 'null'}</Text>
+                                            <Text>{data?.heatingAndCoolingSystems ? data?.heatingAndCoolingSystems : 'N/A'}</Text>
                                         </GridItem>
                                         <GridItem colSpan={{ base: 12, md: 6 }} >
                                             <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Flooring Type </Text>
-                                            <Text>{data?.flooringType ? data?.flooringType : 'null'}</Text>
+                                            <Text>{data?.flooringType ? data?.flooringType : 'N/A'}</Text>
                                         </GridItem>
                                         <GridItem colSpan={{ base: 12, md: 6 }} >
                                             <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Exterior Features </Text>
-                                            <Text>{data?.exteriorFeatures ? data?.exteriorFeatures : 'null'}</Text>
+                                            <Text>{data?.exteriorFeatures ? data?.exteriorFeatures : 'N/A'}</Text>
                                         </GridItem>
                                         <GridItem colSpan={{ base: 12, md: 6 }} >
                                             <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Community Amenities </Text>
-                                            <Text>{data?.communityAmenities ? data?.communityAmenities : 'null'}</Text>
+                                            <Text>{data?.communityAmenities ? data?.communityAmenities : 'N/A'}</Text>
                                         </GridItem>
                                         <GridItem colSpan={{ base: 12 }} >
                                             <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Appliances Included </Text>
-                                            <Text>{data?.appliancesIncluded ? data?.appliancesIncluded : 'null'}</Text>
+                                            <Text>{data?.appliancesIncluded ? data?.appliancesIncluded : 'N/A'}</Text>
                                         </GridItem>
                                     </Grid>
                                 </Card>
@@ -207,19 +207,19 @@ const View = () => {
                                         </GridItem>
                                         <GridItem colSpan={{ base: 12, md: 6 }} >
                                             <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Sellers </Text>
-                                            <Text>{data?.sellers ? data?.sellers : 'null'}</Text>
+                                            <Text>{data?.sellers ? data?.sellers : 'N/A'}</Text>
                                         </GridItem>
                                         <GridItem colSpan={{ base: 12, md: 6 }} >
                                             <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Buyers </Text>
-                                            <Text>{data?.buyers ? data?.buyers : 'null'}</Text>
+                                            <Text>{data?.buyers ? data?.buyers : 'N/A'}</Text>
                                         </GridItem>
                                         <GridItem colSpan={{ base: 12, md: 6 }} >
                                             <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Property Managers </Text>
-                                            <Text>{data?.propertyManagers ? data?.propertyManagers : 'null'}</Text>
+                                            <Text>{data?.propertyManagers ? data?.propertyManagers : 'N/A'}</Text>
                                         </GridItem>
                                         <GridItem colSpan={{ base: 12, md: 6 }} >
                                             <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Contractors Or Service Providers </Text>
-                                            <Text>{data?.contractorsOrServiceProviders ? data?.contractorsOrServiceProviders : 'null'}</Text>
+                                            <Text>{data?.contractorsOrServiceProviders ? data?.contractorsOrServiceProviders : 'N/A'}</Text>
                                         </GridItem>
                                     </Grid>
                                 </Card>
@@ -297,7 +297,7 @@ const View = () => {
                                         </GridItem>
                                         <GridItem colSpan={{ base: 12 }} >
                                             <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Internal Notes Or Comments </Text>
-                                            <Text>{data?.internalNotesOrComments ? data?.internalNotesOrComments : 'null'}</Text>
+                                            <Text>{data?.internalNotesOrComments ? data?.internalNotesOrComments : 'N/A'}</Text>
                                         </GridItem>
                                     </Grid>
                                 </Card>

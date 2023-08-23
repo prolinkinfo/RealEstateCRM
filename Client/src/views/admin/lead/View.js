@@ -79,19 +79,19 @@ const View = () => {
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Name</Text>
-                                <Text>{data?.leadName ? data?.leadName : 'null'}</Text>
+                                <Text>{data?.leadName ? data?.leadName : 'N/A'}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Email</Text>
-                                <Text>{data?.leadEmail ? data?.leadEmail : 'null'}</Text>
+                                <Text>{data?.leadEmail ? data?.leadEmail : 'N/A'}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead PhoneNumber</Text>
-                                <Text>{data?.leadPhoneNumber ? data?.leadPhoneNumber : 'null'}</Text>
+                                <Text>{data?.leadPhoneNumber ? data?.leadPhoneNumber : 'N/A'}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Address</Text>
-                                <Text>{data?.leadAddress ? data?.leadAddress : 'null'}</Text>
+                                <Text>{data?.leadAddress ? data?.leadAddress : 'N/A'}</Text>
                             </GridItem>
                         </Grid>
                     </Card>
@@ -109,15 +109,15 @@ const View = () => {
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Assigned Agent</Text>
-                                <Text>{data?.leadAssignedAgent ? data?.leadAssignedAgent : 'null'}</Text>
+                                <Text>{data?.leadAssignedAgent ? data?.leadAssignedAgent : 'N/A'}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Assigned Agent</Text>
-                                <Text>{data?.leadAssignedAgent ? data?.leadAssignedAgent : 'null'}</Text>
+                                <Text>{data?.leadAssignedAgent ? data?.leadAssignedAgent : 'N/A'}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12 }} >
                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Communication Preferences</Text>
-                                <Text>{data?.leadCommunicationPreferences ? data?.leadCommunicationPreferences : 'null'}</Text>
+                                <Text>{data?.leadCommunicationPreferences ? data?.leadCommunicationPreferences : 'N/A'}</Text>
                             </GridItem>
                         </Grid>
                     </Card>
@@ -135,35 +135,35 @@ const View = () => {
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Source </Text>
-                                <Text>{data?.leadSource ? data?.leadSource : 'null'}</Text>
+                                <Text>{data?.leadSource ? data?.leadSource : 'N/A'}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Status </Text>
-                                <Text>{data?.leadStatus ? data?.leadStatus : 'null'}</Text>
+                                <Text>{data?.leadStatus ? data?.leadStatus : 'N/A'}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Source Details </Text>
-                                <Text>{data?.leadSourceDetails ? data?.leadSourceDetails : 'null'}</Text>
+                                <Text>{data?.leadSourceDetails ? data?.leadSourceDetails : 'N/A'}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Campaign </Text>
-                                <Text>{data?.leadCampaign ? data?.leadCampaign : 'null'}</Text>
+                                <Text>{data?.leadCampaign ? data?.leadCampaign : 'N/A'}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Source Channel </Text>
-                                <Text>{data?.leadSourceChannel ? data?.leadSourceChannel : 'null'}</Text>
+                                <Text>{data?.leadSourceChannel ? data?.leadSourceChannel : 'N/A'}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Source Medium </Text>
-                                <Text>{data?.leadSourceMedium ? data?.leadSourceMedium : 'null'}</Text>
+                                <Text>{data?.leadSourceMedium ? data?.leadSourceMedium : 'N/A'}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Source Campaign </Text>
-                                <Text>{data?.leadSourceCampaign ? data?.leadSourceCampaign : 'null'}</Text>
+                                <Text>{data?.leadSourceCampaign ? data?.leadSourceCampaign : 'N/A'}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Sourc eReferral </Text>
-                                <Text>{data?.leadSourceReferral ? data?.leadSourceReferral : 'null'}</Text>
+                                <Text>{data?.leadSourceReferral ? data?.leadSourceReferral : 'N/A'}</Text>
                             </GridItem>
                         </Grid>
                     </Card>
@@ -181,7 +181,7 @@ const View = () => {
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead FollowUp Status </Text>
-                                <Text>{data?.leadFollowUpStatus ? data?.leadFollowUpStatus : 'null'}</Text>
+                                <Text>{data?.leadFollowUpStatus ? data?.leadFollowUpStatus : 'N/A'}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Creation Date </Text>
@@ -211,27 +211,27 @@ const View = () => {
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Score </Text>
-                                <Text>{data?.leadScore ? data?.leadScore : 'null'}</Text>
+                                <Text>{data?.leadScore ? data?.leadScore : 'N/A'}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Nurturing Workflow </Text>
-                                <Text>{data?.leadNurturingWorkflow ? data?.leadNurturingWorkflow : 'null'}</Text>
+                                <Text>{data?.leadNurturingWorkflow ? data?.leadNurturingWorkflow : 'N/A'}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Engagement Level </Text>
-                                <Text>{data?.leadEngagementLevel ? data?.leadEngagementLevel : 'null'}</Text>
+                                <Text>{data?.leadEngagementLevel ? data?.leadEngagementLevel : 'N/A'}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Conversion Rate </Text>
-                                <Text>{data?.leadConversionRate ? data?.leadConversionRate : 'null'}</Text>
+                                <Text>{data?.leadConversionRate ? data?.leadConversionRate : 'N/A'}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Nurturing Stage </Text>
-                                <Text>{data?.leadNurturingStage ? data?.leadNurturingStage : 'null'}</Text>
+                                <Text>{data?.leadNurturingStage ? data?.leadNurturingStage : 'N/A'}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Next Action </Text>
-                                <Text>{data?.leadNextAction ? data?.leadNextAction : 'null'}</Text>
+                                <Text>{data?.leadNextAction ? data?.leadNextAction : 'N/A'}</Text>
                             </GridItem>
                         </Grid>
                     </Card>

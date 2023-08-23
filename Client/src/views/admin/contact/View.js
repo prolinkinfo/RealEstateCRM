@@ -239,15 +239,15 @@ const View = () => {
                                         <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                             <GridItem colSpan={{ base: 2, md: 1 }}>
                                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Lead Source </Text>
-                                                <Text>{data?.contact?.leadSource ? data?.contact?.leadSource : 'null'}</Text>
+                                                <Text>{data?.contact?.leadSource ? data?.contact?.leadSource : 'N/A'}</Text>
                                             </GridItem>
                                             <GridItem colSpan={{ base: 2, md: 1 }}>
                                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Referral Source </Text>
-                                                <Text>{data?.contact?.referralSource ? data?.contact?.referralSource : 'null'}</Text>
+                                                <Text>{data?.contact?.referralSource ? data?.contact?.referralSource : 'N/A'}</Text>
                                             </GridItem>
                                             <GridItem colSpan={{ base: 2, md: 1 }}>
                                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Campaing Source </Text>
-                                                <Text>{data?.contact?.campaignSource ? data?.contact?.campaignSource : 'null'}</Text>
+                                                <Text>{data?.contact?.campaignSource ? data?.contact?.campaignSource : 'N/A'}</Text>
                                             </GridItem>
                                         </Grid>
                                     </Grid>
@@ -268,7 +268,7 @@ const View = () => {
                                         <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                             <GridItem colSpan={{ base: 2, md: 1 }}>
                                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Lead Status </Text>
-                                                <Text>{data?.contact?.leadStatus ? data?.contact?.leadStatus : 'null'}</Text>
+                                                <Text>{data?.contact?.leadStatus ? data?.contact?.leadStatus : 'N/A'}</Text>
                                             </GridItem>
                                             <GridItem colSpan={{ base: 2, md: 1 }}>
                                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Lead Rating </Text>
@@ -279,7 +279,7 @@ const View = () => {
                                             </GridItem>
                                             <GridItem colSpan={{ base: 2, md: 1 }}>
                                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Lead Conversion Probability </Text>
-                                                <Text>{data?.contact?.leadConversionProbability ? data?.contact?.leadConversionProbability : 'null'}</Text>
+                                                <Text>{data?.contact?.leadConversionProbability ? data?.contact?.leadConversionProbability : 'N/A'}</Text>
                                             </GridItem>
                                         </Grid>
                                     </Grid>
@@ -302,7 +302,7 @@ const View = () => {
                                         <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                             <GridItem colSpan={{ base: 2 }}>
                                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Tags Or Labels For Categorizing Contacts </Text>
-                                                <Text>{data?.contact?.tagsOrLabelsForcategorizingcontacts ? data?.contact?.tagsOrLabelsForcategorizingcontacts : 'null'}</Text>
+                                                <Text>{data?.contact?.tagsOrLabelsForcategorizingcontacts ? data?.contact?.tagsOrLabelsForcategorizingcontacts : 'N/A'}</Text>
                                             </GridItem>
                                         </Grid>
                                     </Grid>
@@ -323,15 +323,15 @@ const View = () => {
                                         <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                             <GridItem colSpan={{ base: 2, md: 1 }}>
                                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Birthday </Text>
-                                                <Text>{data?.contact?.birthday ? moment(data?.contact?.birthday).format('LL') : 'null'}</Text>
+                                                <Text>{data?.contact?.birthday ? moment(data?.contact?.birthday).format('LL') : 'N/A'}</Text>
                                             </GridItem>
                                             <GridItem colSpan={{ base: 2, md: 1 }}>
                                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Anniversary </Text>
-                                                <Text>{data?.contact?.anniversary ? moment(data?.contact?.anniversary).format('LL') : 'null'}</Text>
+                                                <Text>{data?.contact?.anniversary ? moment(data?.contact?.anniversary).format('LL') : 'N/A'}</Text>
                                             </GridItem>
                                             <GridItem colSpan={{ base: 2 }}>
                                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Key Milestones </Text>
-                                                <Text>{data?.contact?.keyMilestones ? data?.contact?.keyMilestones : 'null'}</Text>
+                                                <Text>{data?.contact?.keyMilestones ? data?.contact?.keyMilestones : 'N/A'}</Text>
                                             </GridItem>
                                         </Grid>
                                     </Grid>
@@ -351,19 +351,19 @@ const View = () => {
                                         <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                             <GridItem colSpan={{ base: 2 }}>
                                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Date Of Birth </Text>
-                                                <Text>{data?.contact?.dob ? moment(data?.contact?.dob).format('LL') : 'null'}</Text>
+                                                <Text>{data?.contact?.dob ? moment(data?.contact?.dob).format('LL') : 'N/A'}</Text>
                                             </GridItem>
                                             <GridItem colSpan={{ base: 2 }}>
                                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Gender </Text>
-                                                <Text>{data?.contact?.gender ? data?.contact?.gender : 'null'}</Text>
+                                                <Text>{data?.contact?.gender ? data?.contact?.gender : 'N/A'}</Text>
                                             </GridItem>
                                             <GridItem colSpan={{ base: 2 }}>
                                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Occupation </Text>
-                                                <Text>{data?.contact?.occupation ? data?.contact?.occupation : 'null'}</Text>
+                                                <Text>{data?.contact?.occupation ? data?.contact?.occupation : 'N/A'}</Text>
                                             </GridItem>
                                             <GridItem colSpan={{ base: 2 }}>
                                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Interests Or Hobbies </Text>
-                                                <Text>{data?.contact?.interestsOrHobbies ? data?.contact?.interestsOrHobbies : 'null'}</Text>
+                                                <Text>{data?.contact?.interestsOrHobbies ? data?.contact?.interestsOrHobbies : 'N/A'}</Text>
                                             </GridItem>
                                         </Grid>
                                     </Grid>
@@ -383,11 +383,11 @@ const View = () => {
                                         <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                             <GridItem colSpan={{ base: 2 }}>
                                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Agent Or TeamMember </Text>
-                                                <Text>{data?.contact?.agentOrTeamMember ? data?.contact?.agentOrTeamMember : 'null'}</Text>
+                                                <Text>{data?.contact?.agentOrTeamMember ? data?.contact?.agentOrTeamMember : 'N/A'}</Text>
                                             </GridItem>
                                             <GridItem colSpan={{ base: 2 }}>
                                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> InternalNotes Or Comments </Text>
-                                                <Text>{data?.contact?.internalNotesOrComments ? data?.contact?.internalNotesOrComments : 'null'}</Text>
+                                                <Text>{data?.contact?.internalNotesOrComments ? data?.contact?.internalNotesOrComments : 'N/A'}</Text>
                                             </GridItem>
                                         </Grid>
                                     </Grid>
@@ -407,11 +407,11 @@ const View = () => {
                                         <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                             <GridItem colSpan={{ base: 2, md: 1 }}>
                                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Communication Frequency </Text>
-                                                <Text>{data?.contact?.communicationFrequency ? data?.contact?.communicationFrequency : 'null'}</Text>
+                                                <Text>{data?.contact?.communicationFrequency ? data?.contact?.communicationFrequency : 'N/A'}</Text>
                                             </GridItem>
                                             <GridItem colSpan={{ base: 2, md: 1 }}>
                                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Preferences </Text>
-                                                <Text>{data?.contact?.preferences ? data?.contact?.preferences : 'null'}</Text>
+                                                <Text>{data?.contact?.preferences ? data?.contact?.preferences : 'N/A'}</Text>
                                             </GridItem>
                                         </Grid>
                                     </Grid>
@@ -478,7 +478,7 @@ const View = () => {
                                         </GridItem>
                                         <GridItem colSpan={{ base: 2 }}>
                                             <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Notes and Comments </Text>
-                                            <Text>{data?.contact?.notesandComments ? data?.contact?.notesandComments : 'null'}</Text>
+                                            <Text>{data?.contact?.notesandComments ? data?.contact?.notesandComments : 'N/A'}</Text>
                                         </GridItem>
                                     </Grid>
                                 </Grid>
