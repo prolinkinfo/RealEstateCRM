@@ -62,9 +62,9 @@ export default function Auth({ setIsLogin }) {
           transitionTimingFunction='linear, linear, ease'
         >
           {getRoute() ? (
-            <Box mx='auto' minH='100vh'>
+            <Box mx='auto' minH='100vh' >
               <Suspense fallback={
-                <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
+                <Flex justifyContent={'center'} alignItems={'center'} width="100%" height={'100vh'}>
                   <Spinner />
                 </Flex>
               }>
