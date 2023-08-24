@@ -1,9 +1,10 @@
 // Chakra imports
-import { Portal, Box, useDisclosure } from '@chakra-ui/react';
+import { Portal, Box, useDisclosure, Flex } from '@chakra-ui/react';
 import Footer from 'components/footer/FooterAdmin.js';
 // Layout components
 import Navbar from 'components/navbar/NavbarAdmin.js';
 import Sidebar from 'components/sidebar/Sidebar.js';
+import Spinner from 'components/spinner/Spinner';
 import { SidebarContext } from 'contexts/SidebarContext';
 import { Suspense } from 'react';
 import { useState } from 'react';
@@ -165,7 +166,11 @@ export default function Dashboard(props) {
 						<Box pt={{ base: "150px", md: "95px", xl: "95px" }}>
 							{getRoute() ? (
 								<Box mx='auto' p={{ base: '20px', md: '30px' }} pe='20px' minH='100vh' pt='50px'>
-									<Suspense fallback={<div>Loading...</div>}>
+									<Suspense fallback={
+										<Flex justifyContent={'center'} alignItems={'center'} width="100%" >
+											<Spinner />
+										</Flex>
+									}>
 										<Routes>
 											{getRoutes(routes)}
 											<Route path="/*" element={<Navigate to="/admin/default" />} />

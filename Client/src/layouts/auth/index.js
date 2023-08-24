@@ -3,10 +3,11 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import routes from "routes.js";
 
 // Chakra imports
-import { Box, useColorModeValue } from "@chakra-ui/react";
+import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 
 // Layout components
 import { SidebarContext } from "contexts/SidebarContext";
+import Spinner from "components/spinner/Spinner";
 
 // Custom Chakra theme
 export default function Auth({ setIsLogin }) {
@@ -62,7 +63,11 @@ export default function Auth({ setIsLogin }) {
         >
           {getRoute() ? (
             <Box mx='auto' minH='100vh'>
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={
+                <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
+                  <Spinner />
+                </Flex>
+              }>
                 <Routes>
                   {getRoutes(routes)}
                   <Route path="/*" element={<Navigate to="/auth/sign-in" />} />
