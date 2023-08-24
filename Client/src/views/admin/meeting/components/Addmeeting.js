@@ -18,6 +18,7 @@ const AddMeeting = (props) => {
     const initialValues = {
         agenda: '',
         attendes: [],
+        attendesLead: [],
         location: '',
         related: '',
         dateTime: '',
@@ -131,10 +132,10 @@ const AddMeeting = (props) => {
                                 placeholder="Type a Name"
                                 name="attendes"
                                 items={countriesWithEmailAsLabel}
-                                selectedItems={countriesWithEmailAsLabel?.filter((item) => values?.attendes.includes(item._id))}
+                                selectedItems={countriesWithEmailAsLabel?.filter((item) => values.related === "contact" ? values?.attendes.includes(item._id) : values.related === "lead" && values?.attendesLead.includes(item._id))}
                                 onSelectedItemsChange={(changes) => {
                                     const selectedLabels = extractLabels(changes.selectedItems);
-                                    setFieldValue('attendes', selectedLabels);
+                                    values.related === "contact" ? setFieldValue('attendes', selectedLabels) : values.related === "lead" && setFieldValue('attendesLead', selectedLabels)
                                 }}
                             />
                             <Text color={'red'}> {errors.attendes && touched.attendes && errors.attendes}</Text>

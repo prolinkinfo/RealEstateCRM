@@ -97,10 +97,16 @@ const View = () => {
                                 </GridItem>
                                 <GridItem colSpan={{ base: 2, md: 1 }}>
                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Attendes </Text>
-                                    {data?.attendes ? data?.attendes.map((item) => {
+                                    {data?.related === 'contact' ? data?.attendes && data?.attendes.map((item) => {
                                         return (
                                             <Link to={user?.role !== 'admin' ? `/contactView/${item._id}` : `/admin/contactView/${item._id}`}>
-                                                <Text color='green.400' sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{item.email}</Text>
+                                                <Text color='green.400' sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{item.firstName + ' ' + item.lastName}</Text>
+                                            </Link>
+                                        )
+                                    }) : data?.related === 'lead' ? data?.attendesLead && data?.attendesLead.map((item) => {
+                                        return (
+                                            <Link to={user?.role !== 'admin' ? `/leadView/${item._id}` : `/admin/leadView/${item._id}`}>
+                                                <Text color='green.400' sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{item.leadName}</Text>
                                             </Link>
                                         )
                                     }) : '-'}

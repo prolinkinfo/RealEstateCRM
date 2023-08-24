@@ -7,6 +7,11 @@ const meetingHistory = new mongoose.Schema({
         ref: 'contacts',
         required: true
     }],
+    attendesLead: [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'leads',
+        required: true
+    }],
     location: String,
     related: String,
     dateTime: String,

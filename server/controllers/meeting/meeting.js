@@ -78,6 +78,14 @@ const view = async (req, res) => {
             },
             {
                 $lookup: {
+                    from: 'leads',
+                    localField: 'attendesLead',
+                    foreignField: '_id',
+                    as: 'attendesLead'
+                }
+            },
+            {
+                $lookup: {
                     from: 'users',
                     localField: 'createdBy',
                     foreignField: '_id',
@@ -98,7 +106,8 @@ const view = async (req, res) => {
                 }
             },
         ])
-
+        console.log(response[0])
+        console.log("result", result)
         res.status(200).json(response[0])
     } catch (err) {
         console.error('Failed :', err);
