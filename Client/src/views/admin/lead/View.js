@@ -22,6 +22,7 @@ import AddEmailHistory from "../emailHistory/components/AddEmailHistory";
 import { BsFillSendFill, BsFillTelephoneFill } from "react-icons/bs";
 import PhoneCall from "../contact/components/phonCall";
 import AddPhoneCall from "../phoneCall/components/AddPhoneCall";
+import AddTask from "../task/components/addTask";
 
 
 const View = () => {
@@ -34,6 +35,7 @@ const View = () => {
     const [edit, setEdit] = useState(false);
     const [deleteModel, setDelete] = useState(false);
     const [isLoding, setIsLoding] = useState(false)
+    const [taskModel, setTaskModel] = useState(false);
 
     const size = "lg";
 
@@ -148,7 +150,7 @@ const View = () => {
                                                     <Text>{data?.leadEmail ? data?.leadEmail : 'N/A'}</Text>
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12, md: 6 }} >
-                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead PhoneNumber</Text>
+                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Phone Number</Text>
                                                     <Text>{data?.leadPhoneNumber ? data?.leadPhoneNumber : 'N/A'}</Text>
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12, md: 6 }} >
@@ -326,9 +328,9 @@ const View = () => {
                                                     <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param.id} lead='true' />
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 2 }}>
-                                                    {/* <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button> */}
-                                                    {/* {data?.meetingHistory.length > 0 && <MeetingTable fetchData={fetchData} columnsData={MeetingColumns} data={data?.meetingHistory} title={'meeting '} />} */}
-                                                    {/* <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} id={param.id} /> */}
+                                                    <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>
+                                                    {allData?.phoneCall?.length > 0 && <PhoneCall fetchData={fetchData} columnsData={columnsDataColumns} lead='true' tableData={allData?.phoneCall} title={'Task'} />}
+                                                    <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="lead" id={param.id} />
                                                 </GridItem>
                                             </Grid>
                                         </Grid>

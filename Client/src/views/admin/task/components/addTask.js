@@ -17,10 +17,10 @@ const AddTask = (props) => {
 
     const initialValues = {
         title: '',
-        category: 'None',
+        category: props.from === 'contact' ? 'contact' : props.from === 'lead' ? 'lead' : 'None',
         description: '',
         notes: '',
-        assignmentTo: '',
+        assignmentTo: props.id ? props.id : '',
         reminder: '',
         start: '',
         end: '',
@@ -81,7 +81,7 @@ const AddTask = (props) => {
             <ModalContent>
                 <ModalHeader justifyContent='space-between' display='flex' >
                     Create Task
-                    <IconButton onClick={onClose} icon={<CloseIcon />} />
+                    <IconButton onClick={() => props.from ? onClose(false) : onClose()} icon={<CloseIcon />} />
                 </ModalHeader>
                 <ModalBody>
 

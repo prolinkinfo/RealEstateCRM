@@ -26,6 +26,7 @@ import { LuBuilding2 } from "react-icons/lu";
 import PropertyModel from "./components/propertyModel";
 import PropertyTable from "./components/propertyTable";
 import Spinner from "components/spinner/Spinner";
+import AddTask from "../task/components/addTask";
 
 
 const View = () => {
@@ -38,6 +39,7 @@ const View = () => {
     const [deleteModel, setDelete] = useState(false);
     const [propertyModel, setPropertyModel] = useState(false);
     const [isLoding, setIsLoding] = useState(false)
+    const [taskModel, setTaskModel] = useState(false);
 
     const size = "lg";
     const navigate = useNavigate()
@@ -452,6 +454,11 @@ const View = () => {
                                                     <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>
                                                     {data?.meetingHistory.length > 0 && <MeetingTable fetchData={fetchData} columnsData={MeetingColumns} data={data?.meetingHistory} title={'meeting '} />}
                                                     <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} id={param.id} />
+                                                </GridItem>
+                                                <GridItem colSpan={{ base: 2 }}>
+                                                    <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>
+                                                    {data?.meetingHistory.length > 0 && <MeetingTable fetchData={fetchData} columnsData={MeetingColumns} data={data?.meetingHistory} title={'Task '} />}
+                                                    <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="contact" id={param.id} />
                                                 </GridItem>
                                                 {/* <GridItem colSpan={{ base: 2 }}>
                                                     {data?.textMsg?.length > 0 ? <PhoneCall text='true' fetchData={fetchData} columnsData={textColumnsDataColumns} tableData={data?.textMsg} title={'Text Msg '} /> : <Button onClick={() => navigate('/communication-integration')} leftIcon={<MdOutlineMessage />} colorScheme="gray" >send text Msg</Button>}
