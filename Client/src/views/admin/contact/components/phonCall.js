@@ -77,7 +77,7 @@ export default function PhoneCall(props) {
         </Text>
         {/* <Menu /> */}
         {!props.text ? <Button onClick={() => setAddModel(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" >Call</Button> : <Button onClick={() => navigate('/communication-integration')} leftIcon={<MdOutlineMessage />} colorScheme="gray" >send text Msg</Button>}
-        <AddPhoneCall fetchData={fetchData} isOpen={addModel} onClose={setAddModel} id={param.id} />
+        <AddPhoneCall lead={props.lead} fetchData={fetchData} isOpen={addModel} onClose={setAddModel} id={param.id} />
       </Flex>
       <Box overflowY={'auto'} className="table-container" >
         <Table  {...getTableProps()} variant='simple' color='gray.500' mb='24px'>

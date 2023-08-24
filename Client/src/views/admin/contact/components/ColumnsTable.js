@@ -76,7 +76,7 @@ export default function ColumnsTable(props) {
         </Text>
         {/* <Menu /> */}
         <Button onClick={() => setAddEmailHistory(true)} rightIcon={<BsFillSendFill />} colorScheme="gray" >Send Email</Button>
-        <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} />
+        <AddEmailHistory lead={props.lead} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} />
       </Flex>
       <Box overflowY={'auto'} className="table-container p0" >
         <Table {...getTableProps()} variant='simple' color='gray.500' mb='24px'>

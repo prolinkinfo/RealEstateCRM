@@ -163,7 +163,7 @@ export default function CheckTable(props) {
                     );
                   } else if (cell?.column.Header === "recipient") {
                     data = (
-                      <Link to={user?.role !== 'admin' ? `/EmailHistory/${cell?.row?.values._id}` : `/admin/EmailHistory/${cell?.row?.values._id}`}>
+                      <Link to={user?.role !== 'admin' ? `/Email/${cell?.row?.values._id}` : `/admin/Email/${cell?.row?.values._id}`}>
                         <Text
                           me="10px"
                           sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}

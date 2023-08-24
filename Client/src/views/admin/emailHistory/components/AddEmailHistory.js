@@ -48,12 +48,19 @@ const AddEmailHistory = (props) => {
     };
 
     const fetchDataR = async () => {
-        if (props.id) {
+        if (props.id && props.lead !== 'true') {
             let response = await getApi('api/contact/view/', props.id)
             if (response?.status === 200) {
                 setFieldValue('recipient', response?.data?.contact?.email);
                 setFieldValue('createBy', props.id);
                 values.recipient = response?.data?.contact?.email
+            }
+        } else if (props.id && props.lead === 'true') {
+            let response = await getApi('api/lead/view/', props.id)
+            if (response?.status === 200) {
+                setFieldValue('recipient', response?.data?.lead?.leadEmail);
+                setFieldValue('createBy', props.id);
+                values.recipient = response?.data?.lead?.leadEmail
             }
         }
     }
