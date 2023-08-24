@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, FormLabel, Textarea, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
+import { Button, FormLabel, Textarea, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, RadioGroup, Stack, Radio } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { postApi } from 'services/api';
 import { getApi } from 'services/api';
@@ -19,6 +19,7 @@ const AddMeeting = (props) => {
         agenda: '',
         attendes: [],
         location: '',
+        related: '',
         dateTime: '',
         notes: '',
         createFor: '',
@@ -30,7 +31,6 @@ const AddMeeting = (props) => {
         validationSchema: MeetingSchema,
         onSubmit: (values, { resetForm }) => {
             AddData();
-            resetForm();
         },
     });
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue } = formik
@@ -40,6 +40,7 @@ const AddMeeting = (props) => {
             setIsLoding(true)
             let response = await postApi('api/meeting/add', values)
             if (response.status === 200) {
+                formik.resetForm();
                 props.onClose();
                 fetchData()
             }
@@ -61,25 +62,30 @@ const AddMeeting = (props) => {
     }
 
     const fetchContactAllData = async () => {
-        let response = await getApi(user.role === 'admin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`);
-        if (response?.status === 200) {
-            setData(response?.data);
+        let result
+        if (values.related === "contact") {
+            result = await getApi(user.role === 'admin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
+        } else if (values.related === "lead") {
+            result = await getApi(user.role === 'admin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
         }
+
+        setData(result?.data);
+
     }
 
     useEffect(() => {
         fetchContactData()
         fetchContactAllData()
-    }, [props.id])
-
+    }, [props.id, values.related])
 
     const extractLabels = (selectedItems) => {
         return selectedItems.map((item) => item._id);
     };
+
     const countriesWithEmailAsLabel = data?.map((item) => ({
         ...item,
         value: item._id,
-        label: `${item.firstName} ${item.lastName}`,
+        label: values.related === "contact" ? `${item.firstName} ${item.lastName}` : item.leadName,
     }));
 
     return (
@@ -107,13 +113,25 @@ const AddMeeting = (props) => {
                             />
                             <Text mb='10px' color={'red'}> {errors.agenda && touched.agenda && errors.agenda}</Text>
                         </GridItem>
-                        <GridItem colSpan={{ base: 12 }}>
+                        <GridItem colSpan={{ base: 12 }} >
+                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                related To
+                            </FormLabel>
+                            <RadioGroup onChange={(e) => setFieldValue('related', e)} value={values.related}>
+                                <Stack direction='row'>
+                                    <Radio value='contact'>Contact</Radio>
+                                    <Radio value='lead'>Lead</Radio>
+                                </Stack>
+                            </RadioGroup>
+                            <Text mb='10px' color={'red'}> {errors.related && touched.related && errors.related}</Text>
+                        </GridItem>
+                        {data?.length > 0 && values.related && <GridItem colSpan={{ base: 12 }}>
                             <CUIAutoComplete
-                                label="Choose preferred attendes"
-                                placeholder="Type a Contact Email"
+                                label={`Choose preferred attendes ${values.related === "contact" ? "Contact" : values.related === "lead" && "Lead"}`}
+                                placeholder="Type a Name"
                                 name="attendes"
                                 items={countriesWithEmailAsLabel}
-                                selectedItems={countriesWithEmailAsLabel.filter((item) => values.attendes.includes(item._id))}
+                                selectedItems={countriesWithEmailAsLabel?.filter((item) => values?.attendes.includes(item._id))}
                                 onSelectedItemsChange={(changes) => {
                                     const selectedLabels = extractLabels(changes.selectedItems);
                                     setFieldValue('attendes', selectedLabels);
@@ -121,6 +139,7 @@ const AddMeeting = (props) => {
                             />
                             <Text color={'red'}> {errors.attendes && touched.attendes && errors.attendes}</Text>
                         </GridItem>
+                        }
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Location

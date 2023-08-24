@@ -58,7 +58,6 @@ const View = () => {
 
             <Grid templateColumns="repeat(4, 1fr)" gap={3}>
 
-                AttendesArray[]
                 <GridItem colSpan={{ base: 4 }}>
                     <Card >
                         <Grid templateColumns={{ base: "1fr" }} gap={4}>

@@ -11,7 +11,7 @@ const AddTask = (props) => {
     const { onClose, isOpen, fetchData } = props
     const [isChecked, setIsChecked] = useState(true);
     const userId = JSON.parse(localStorage.getItem('user'))._id
-    const [contactData, setContactData] = useState([]);
+    const [assignmentToData, setAssignmentToData] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"))
     const [isLoding, setIsLoding] = useState(false)
 
@@ -62,13 +62,18 @@ const AddTask = (props) => {
     useEffect(async () => {
         values.start = props?.date
         try {
-            let result = await getApi(user.role === 'admin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`);
-            setContactData(result?.data)
+            let result
+            if (values.category === "contact") {
+                result = await getApi(user.role === 'admin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
+            } else if (values.category === "lead") {
+                result = await getApi(user.role === 'admin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
+            }
+            setAssignmentToData(result?.data)
         }
         catch (e) {
             console.log(e);
         }
-    }, [props])
+    }, [props, values.category])
 
     return (
         <Modal isOpen={isOpen} size={'xl'} >
@@ -101,22 +106,16 @@ const AddTask = (props) => {
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Category
                             </FormLabel>
-                            <Select
-                                value={values.category}
-                                name="category"
-                                onChange={handleChange}
-                                mb={errors.category && touched.category ? undefined : '10px'}
-                                fontWeight='500'
-                                placeholder={'Select Category'}
-                                borderColor={errors.category && touched.category ? "red.300" : null}
-                            >
-                                <option value="call">Call</option>
-                                <option value="email">Email</option>
-                                <option value="meeting">Meeting</option>
-                            </Select>
-                            <Text mb='10px' color={'red'}> {errors.recipient && touched.recipient && errors.recipient}</Text>
+                            <RadioGroup onChange={(e) => setFieldValue('category', e)} value={values.category}>
+                                <Stack direction='row'>
+                                    <Radio value='None' >None</Radio>
+                                    <Radio value='contact'>Contact</Radio>
+                                    <Radio value='lead'>Lead</Radio>
+                                </Stack>
+                            </RadioGroup>
+                            <Text mb='10px' color={'red'}> {errors.category && touched.category && errors.category}</Text>
                         </GridItem>
-                        <GridItem colSpan={{ base: 12, md: 6 }} >
+                        <GridItem colSpan={{ base: 12, md: values.category === "None" ? 12 : 6 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Description
                             </FormLabel>
@@ -132,9 +131,9 @@ const AddTask = (props) => {
                             />
                             <Text mb='10px' color={'red'}> {errors.description && touched.description && errors.description}</Text>
                         </GridItem>
-                        <GridItem colSpan={{ base: 12, md: 6 }} >
+                        {values.category !== "None" && <GridItem colSpan={{ base: 12, md: 6 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Assignment To
+                                Assignment To {values.category === "contact" ? "Contact" : values.category === "lead" && 'Lead'}
                             </FormLabel>
                             <Select
                                 value={values.assignmentTo}
@@ -145,13 +144,12 @@ const AddTask = (props) => {
                                 placeholder={'Assignment To'}
                                 borderColor={errors.assignmentTo && touched.assignmentTo ? "red.300" : null}
                             >
-                                <option value="">None</option>
-                                {contactData?.map((item) => {
-                                    return <option value={item._id} key={item._id}>{`${item.firstName} ${item.lastName}`}</option>
+                                {assignmentToData?.map((item) => {
+                                    return <option value={item._id} key={item._id}>{values.category === 'contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
                                 })}
                             </Select>
                             <Text mb='10px' color={'red'}> {errors.assignmentTo && touched.assignmentTo && errors.assignmentTo}</Text>
-                        </GridItem>
+                        </GridItem>}
                         <GridItem colSpan={{ base: 12 }} >
                             <Checkbox isChecked={isChecked} onChange={(e) => setIsChecked(e.target.checked)}>All Day Task ? </Checkbox>
                         </GridItem>
@@ -237,7 +235,7 @@ const AddTask = (props) => {
                             />
                             <Text mb='10px' color={'red'}> {errors.textColor && touched.textColor && errors.textColor}</Text>
                         </GridItem>
-                        <GridItem colSpan={{ base: 12, md: 6 }} >
+                        {/* <GridItem colSpan={{ base: 12, md: 6 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Reminder
                             </FormLabel>
@@ -249,20 +247,8 @@ const AddTask = (props) => {
                                 </Stack>
                             </RadioGroup>
                             <Text mb='10px' color={'red'}> {errors.reminder && touched.reminder && errors.reminder}</Text>
-                        </GridItem>
+                        </GridItem> */}
                         <GridItem colSpan={{ base: 12, md: 6 }} >
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Full screen event
-                            </FormLabel>
-                            <RadioGroup onChange={(e) => setFieldValue('display', e)} value={values.display}>
-                                <Stack direction='row'>
-                                    <Radio value='background' >Yes</Radio>
-                                    <Radio value='no'>No</Radio>
-                                </Stack>
-                            </RadioGroup>
-                            <Text mb='10px' color={'red'}> {errors.display && touched.display && errors.display}</Text>
-                        </GridItem>
-                        <GridItem colSpan={{ base: 12 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Url
                             </FormLabel>
@@ -277,6 +263,18 @@ const AddTask = (props) => {
                                 borderColor={errors?.url && touched?.url ? "red.300" : null}
                             />
                             <Text mb='10px' color={'red'}> {errors.url && touched.url && errors.url}</Text>
+                        </GridItem>
+                        <GridItem colSpan={{ base: 12, md: 6 }} >
+                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                Full screen event
+                            </FormLabel>
+                            <RadioGroup onChange={(e) => setFieldValue('display', e)} value={values.display}>
+                                <Stack direction='row'>
+                                    <Radio value='background' >Yes</Radio>
+                                    <Radio value='no'>No</Radio>
+                                </Stack>
+                            </RadioGroup>
+                            <Text mb='10px' color={'red'}> {errors.display && touched.display && errors.display}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>

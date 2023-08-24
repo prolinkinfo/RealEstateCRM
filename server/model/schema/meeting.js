@@ -8,6 +8,7 @@ const meetingHistory = new mongoose.Schema({
         required: true
     }],
     location: String,
+    related: String,
     dateTime: String,
     notes: String,
     // meetingReminders: { type: String, required: true },
