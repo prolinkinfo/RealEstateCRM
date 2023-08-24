@@ -69,9 +69,7 @@ const AddMeeting = (props) => {
         } else if (values.related === "lead") {
             result = await getApi(user.role === 'admin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
         }
-
         setData(result?.data);
-
     }
 
     useEffect(() => {

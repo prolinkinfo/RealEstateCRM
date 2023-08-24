@@ -453,9 +453,9 @@ const View = () => {
                                                     {data?.meetingHistory.length > 0 && <MeetingTable fetchData={fetchData} columnsData={MeetingColumns} data={data?.meetingHistory} title={'meeting '} />}
                                                     <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} id={param.id} />
                                                 </GridItem>
-                                                <GridItem colSpan={{ base: 2 }}>
+                                                {/* <GridItem colSpan={{ base: 2 }}>
                                                     {data?.textMsg?.length > 0 ? <PhoneCall text='true' fetchData={fetchData} columnsData={textColumnsDataColumns} tableData={data?.textMsg} title={'Text Msg '} /> : <Button onClick={() => navigate('/communication-integration')} leftIcon={<MdOutlineMessage />} colorScheme="gray" >send text Msg</Button>}
-                                                </GridItem>
+                                                </GridItem> */}
                                                 <GridItem colSpan={{ base: 2 }}>
                                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Notes and Comments </Text>
                                                     <Text>{data?.contact?.notesandComments ? data?.contact?.notesandComments : 'N/A'}</Text>
