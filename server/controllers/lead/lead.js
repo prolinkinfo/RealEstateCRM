@@ -1,4 +1,6 @@
 const Lead = require('../../model/schema/lead')
+const EmailHistory = require('../../model/schema/email');
+const PhoneCall = require('../../model/schema/phoneCall');
 
 const index = async (req, res) => {
     const query = req.query
@@ -41,8 +43,81 @@ const edit = async (req, res) => {
 
 const view = async (req, res) => {
     let lead = await Lead.findOne({ _id: req.params.id })
+
+    let query = req.query
+    if (query.sender) {
+        query.sender = new mongoose.Types.ObjectId(query.sender);
+    }
+    query.createByLead = req.params.id
+
+    let Email = await EmailHistory.aggregate([
+        {
+            $lookup: {
+                from: 'contacts',
+                localField: 'createBy',
+                foreignField: '_id',
+                as: 'contact'
+            }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'sender',
+                foreignField: '_id',
+                as: 'users'
+            }
+        },
+        { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
+        { $unwind: '$contact' },
+        { $match: { 'contact.deleted': false, 'users.deleted': false } },
+        {
+            $addFields: {
+                senderEmail: '$users.username',
+                deleted: '$contact.deleted',
+                createByName: { $concat: ['$contact.title', ' ', '$contact.firstName', ' ', '$contact.lastName'] },
+            }
+        },
+        {
+            $project: {
+                contact: 0,
+                // users: 0
+            }
+        },
+    ])
+    let phoneCall = await PhoneCall.aggregate([
+        {
+            $lookup: {
+                from: 'contacts',
+                localField: 'createBy',
+                foreignField: '_id',
+                as: 'contact'
+            }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'sender',
+                foreignField: '_id',
+                as: 'users'
+            }
+        },
+        { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
+        { $unwind: '$contact' },
+        { $match: { 'contact.deleted': false, 'users.deleted': false } },
+        {
+            $addFields: {
+                senderName: { $concat: ['$users.firstName', ' ', '$users.lastName'] },
+                deleted: '$contact.deleted',
+                createByName: { $concat: ['$contact.title', ' ', '$contact.firstName', ' ', '$contact.lastName'] },
+            }
+        },
+        { $project: { contact: 0, users: 0 } },
+
+    ])
+
+
     if (!lead) return res.status(404).json({ message: "no Data Found." })
-    res.status(200).json(lead)
+    res.status(200).json({ lead, Email, phoneCall })
 }
 
 const deleteData = async (req, res) => {

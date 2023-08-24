@@ -7,5 +7,5 @@ export const emailSchema = yup.object({
     bcc: yup.string().email(),
     subject: yup.string(),
     message: yup.string(),
-    createBy: yup.string().required("Create By Is required")
+    createBy: yup.string()
 })

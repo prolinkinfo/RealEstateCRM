@@ -464,8 +464,10 @@ const View = () => {
                                         </Grid>
                                     </Card>
                                 </GridItem>
+
                             </TabPanel>
                             <TabPanel>
+
                                 <GridItem colSpan={{ base: 4 }} >
                                     <Card >
                                         <Grid templateColumns={{ base: "1fr" }} gap={4}>

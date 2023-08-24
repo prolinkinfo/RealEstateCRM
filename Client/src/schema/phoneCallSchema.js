@@ -7,5 +7,5 @@ export const phoneCallSchema = yup.object({
     recipient: yup.string().min(999999999, 'Phone number is invalid').max(999999999999, 'Phone number is invalid').required("Recipient Is required"),
     callDuration: yup.string(),
     callNotes: yup.string(),
-    createBy: yup.string().required("createBy Is required")
+    createBy: yup.string()
 })

@@ -103,16 +103,15 @@ export default function ColumnsTable(props) {
           </Thead>
 
           <Tbody  {...getTableBodyProps()}>
-            {data?.length === 0 && (
+            {data?.length === 0 ? (
               <Tr>
-                <Td colSpan={columns.length}>
+                <Td colSpan={columns?.length}>
                   <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
                     -- No Data Found --
                   </Text>
                 </Td>
               </Tr>
-            )}
-            {page?.map((row, index) => {
+            ) : page?.map((row, index) => {
               prepareRow(row);
               return (
                 <Tr {...row?.getRowProps()} key={index}>
