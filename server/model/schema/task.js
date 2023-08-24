@@ -7,7 +7,11 @@ const Task = new mongoose.Schema({
     notes: String,
     assignmentTo: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'contact',
+        ref: "contact",
+    },
+    assignmentToLead: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Lead",
     },
     reminder: String,
     start: String,

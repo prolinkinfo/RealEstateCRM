@@ -23,6 +23,7 @@ import { BsFillSendFill, BsFillTelephoneFill } from "react-icons/bs";
 import PhoneCall from "../contact/components/phonCall";
 import AddPhoneCall from "../phoneCall/components/AddPhoneCall";
 import AddTask from "../task/components/addTask";
+import TaskTable from "../task/components/CheckTable.js";
 
 
 const View = () => {
@@ -71,7 +72,14 @@ const View = () => {
         { Header: "times tamp", accessor: "timestamp", },
         { Header: "create By", accessor: "createdByName", },
     ];
-
+    const taskColumns = [
+        { Header: "#", accessor: "_id", isSortable: false, width: 5 },
+        { Header: 'Title', accessor: 'title' },
+        { Header: "Category", accessor: "category", },
+        { Header: "Assignment To", accessor: "assignmentToName", },
+        { Header: "Start Date", accessor: "start", },
+        { Header: "End Date", accessor: "end", },
+    ];
 
     const fetchData = async () => {
         setIsLoding(true)
@@ -329,7 +337,7 @@ const View = () => {
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 2 }}>
                                                     <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>
-                                                    {allData?.phoneCall?.length > 0 && <PhoneCall fetchData={fetchData} columnsData={columnsDataColumns} lead='true' tableData={allData?.phoneCall} title={'Task'} />}
+                                                    {allData?.task?.length > 0 && <TaskTable fetchData={fetchData} columnsData={taskColumns} data={allData?.task} title={'Task '} />}
                                                     <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="lead" id={param.id} />
                                                 </GridItem>
                                             </Grid>

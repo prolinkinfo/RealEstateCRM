@@ -1,6 +1,7 @@
 const Lead = require('../../model/schema/lead')
 const EmailHistory = require('../../model/schema/email');
 const PhoneCall = require('../../model/schema/phoneCall');
+const Task = require('../../model/schema/task')
 
 const index = async (req, res) => {
     const query = req.query
@@ -112,12 +113,41 @@ const view = async (req, res) => {
             }
         },
         { $project: { contact: 0, users: 0 } },
+    ])
 
+    let task = await Task.aggregate([
+        { $match: { assignmentToLead: lead._id } },
+        {
+            $lookup: {
+                from: 'lead',
+                localField: 'assignmentToLead',
+                foreignField: '_id',
+                as: 'lead'
+            }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'createBy',
+                foreignField: '_id',
+                as: 'users'
+            }
+        },
+        { $unwind: { path: '$lead', preserveNullAndEmptyArrays: true } },
+        { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
+        {
+            $addFields: {
+                assignmentToName: '$lead.leadName',
+                createByName: '$users.username',
+            }
+        },
+        { $project: { contact: 0, users: 0 } },
     ])
 
 
     if (!lead) return res.status(404).json({ message: "no Data Found." })
-    res.status(200).json({ lead, Email, phoneCall })
+    // res.status(200).json({ task })
+    res.status(200).json({ lead, Email, phoneCall, task })
 }
 
 const deleteData = async (req, res) => {
