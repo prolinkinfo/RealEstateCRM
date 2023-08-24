@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 // Chakra imports
@@ -28,12 +28,14 @@ import { RiEyeCloseLine } from "react-icons/ri";
 import { postApi } from "services/api";
 import { loginSchema } from "schema";
 import { toast } from "react-toastify";
+import Spinner from "components/spinner/Spinner";
 
 function SignIn() {
   // Chakra color mode
   const textColor = useColorModeValue("navy.700", "white");
   const textColorSecondary = "gray.400";
   const brandStars = useColorModeValue("brand.500", "brand.400");
+  const [isLoding, setIsLoding] = React.useState(false)
 
   const [show, setShow] = React.useState(false);
   const showPass = () => setShow(!show);
@@ -52,13 +54,22 @@ function SignIn() {
   const navigate = useNavigate()
 
   const login = async () => {
-    let response = await postApi('api/user/login', values)
-    if (response && response.status === 200) {
-      navigate('/admin')
-      resetForm();
-      toast.success("Logout Success")
-    } else {
-      toast.error(response.response.data?.error)
+    try {
+      setIsLoding(true)
+      let response = await postApi('api/user/login', values)
+      if (response && response.status === 200) {
+        navigate('/admin')
+        resetForm();
+        toast.success("Logout Success")
+      } else {
+        toast.error(response.response.data?.error)
+      }
+    }
+    catch (e) {
+      console.log(e)
+    }
+    finally {
+      setIsLoding(false)
     }
   }
 
@@ -218,8 +229,10 @@ function SignIn() {
               w='100%'
               h='50'
               onClick={handleSubmit}
-              mb='24px'>
-              Sign In
+              mb='24px'
+              disabled={isLoding ? true : false}
+            >
+              {isLoding ? <Spinner /> : 'Sign In'}
             </Button>
           </FormControl>
           {/* <Flex
