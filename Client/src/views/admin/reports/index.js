@@ -14,7 +14,7 @@ const Report = () => {
     const tableColumns = [
         { Header: 'Email Sent', accessor: 'emailsent' },
         { Header: "Outbound Calls", accessor: "outboundcall" },
-        { Header: "Text Sent", accessor: "textsent" },
+        // { Header: "Text Sent", accessor: "textsent" },
         // { Header: "Lead Assigned", accessor: "leadAssigned" },
     ];
 

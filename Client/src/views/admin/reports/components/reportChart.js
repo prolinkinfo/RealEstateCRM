@@ -91,8 +91,8 @@ const ReportChart = (props) => {
                 <Box display='flex' alignItems='center' flexWrap={'wrap'} justifyContent='space-between' mb={4}>
                     <Select value={select} onChange={(e) => setSelect(e.target.value)} width={{ base: '100%', md: '15%' }} mb={{ base: 3, md: 'auto' }}>
                         <option value='EmailDetails'>Email</option>
-                        <option value='TextSent'>TextSent</option>
                         <option value='outboundcall'>PhoneCall</option>
+                        {/* <option value='TextSent'>TextSent</option> */}
                         <option value='all'>all</option>
                     </Select>
                     <Box width={{ base: '100%', md: 'auto' }} flexWrap={'wrap'} justifyContent={'left'} mb={{ base: 3, md: 'auto' }} display='flex'>
