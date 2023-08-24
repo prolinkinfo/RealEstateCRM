@@ -106,8 +106,6 @@ const view = async (req, res) => {
                 }
             },
         ])
-        console.log(response[0])
-        console.log("result", result)
         res.status(200).json(response[0])
     } catch (err) {
         console.error('Failed :', err);

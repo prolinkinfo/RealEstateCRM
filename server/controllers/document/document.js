@@ -111,8 +111,6 @@ const downloadFile = async (req, res) => {
     try {
         const { id } = req.params;
 
-        console.log(id)
-
         // Check if the folder exists in the database
         const folder = await DocumentSchema.findOne({ 'file._id': id });
 
