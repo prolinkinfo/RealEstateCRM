@@ -29,7 +29,7 @@ const EventView = (props) => {
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader justifyContent='space-between' display='flex' >
-                    Event
+                    Task
                     <IconButton onClick={() => onClose(false)} icon={<CloseIcon />} />
                 </ModalHeader>
                 <ModalBody>
@@ -37,23 +37,23 @@ const EventView = (props) => {
                     <Grid templateColumns="repeat(12, 1fr)" gap={3} >
 
                         <GridItem colSpan={{ base: 12, md: 6 }} >
-                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Event Title </Text>
+                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Title </Text>
                             <Text>{data?.title ? data?.title : ' - '}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
-                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Event category </Text>
+                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task category </Text>
                             <Text>{data?.category ? data?.category : ' - '}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
-                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Event start </Text>
+                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task start </Text>
                             <Text>{data?.start ? moment(data?.start).format('L LT') : ' - '}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
-                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Event end  </Text>
+                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task end  </Text>
                             <Text>{data?.end ? moment(data?.end).format('L LT') : moment(data?.start).format('L')}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
-                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Event Link </Text>
+                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Link </Text>
                             {data?.url ?
                                 <a target='_blank' href={data?.url}>
                                     <IconButton borderRadius="10px" size="md" icon={<BiLink />} />
@@ -61,7 +61,7 @@ const EventView = (props) => {
                             }
                         </GridItem>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
-                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Event reminder </Text>
+                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task reminder </Text>
                             <Text>{data?.reminder ? data?.reminder : ' - '}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }} >
@@ -69,15 +69,15 @@ const EventView = (props) => {
                             <Text>{data?.assignmentToName ? data?.assignmentToName : ' - '}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }} >
-                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Event createBy </Text>
+                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task createBy </Text>
                             <Text>{data?.createByName ? data?.createByName : ' - '}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }} >
-                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Event Description</Text>
+                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Description</Text>
                             <Text>{data?.description ? data?.description : ' - '}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }} >
-                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Event notes </Text>
+                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task notes </Text>
                             <Text>{data?.notes ? data?.notes : ' - '}</Text>
                         </GridItem>
                     </Grid>
