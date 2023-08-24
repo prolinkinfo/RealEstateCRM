@@ -192,11 +192,11 @@ const Add = (props) => {
                                         value={values.phoneNumber}
                                         name="phoneNumber"
                                         fontWeight='500'
-                                        borderColor={errors.title && touched.title ? "red.300" : null}
-                                        mb={errors.title && touched.title ? undefined : '10px'}
+                                        borderColor={errors.phoneNumber && touched.phoneNumber ? "red.300" : null}
+                                        mb={errors.phoneNumber && touched.phoneNumber ? undefined : '10px'}
                                         placeholder="Phone number" borderRadius="16px" />
                                 </InputGroup>
-                                {errors.title && touched.title && <Text mb='10px' color={'red'}> {errors.title}</Text>}
+                                {errors.phoneNumber && touched.phoneNumber && <Text mb='10px' color={'red'}> {errors.phoneNumber}</Text>}
                             </GridItem>
 
                             <GridItem colSpan={{ base: 12, sm: 6 }}>
