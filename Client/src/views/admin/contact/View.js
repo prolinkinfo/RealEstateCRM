@@ -15,6 +15,7 @@ import Add from "./Add";
 import Edit from "./Edit";
 import Delete from "./Delete";
 import MeetingTable from "../meeting/components/CheckTable";
+import TaskTable from "../task/components/CheckTable.js";
 import ColumnsTable from "./components/ColumnsTable";
 import AddEmailHistory from "../emailHistory/components/AddEmailHistory";
 import AddPhoneCall from "../phoneCall/components/AddPhoneCall";
@@ -72,7 +73,19 @@ const View = () => {
         { Header: "times tamp", accessor: "timestamp", },
         { Header: "create By", accessor: "createdByName", },
     ];
-
+    const taskColumns = [
+        {
+            Header: "#",
+            accessor: "_id",
+            isSortable: false,
+            width: 5
+        },
+        { Header: 'Title', accessor: 'title' },
+        { Header: "Category", accessor: "category", },
+        { Header: "Assignment To", accessor: "assignmentToName", },
+        { Header: "Start Date", accessor: "start", },
+        { Header: "End Date", accessor: "end", },
+    ];
     const [addEmailHistory, setAddEmailHistory] = useState(false);
     const [addPhoneCall, setAddPhoneCall] = useState(false);
     const [addMeeting, setMeeting] = useState(false);
@@ -457,7 +470,7 @@ const View = () => {
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 2 }}>
                                                     <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>
-                                                    {data?.meetingHistory.length > 0 && <MeetingTable fetchData={fetchData} columnsData={MeetingColumns} data={data?.meetingHistory} title={'Task '} />}
+                                                    {data?.task.length > 0 && <TaskTable fetchData={fetchData} columnsData={taskColumns} data={data?.task} title={'Task '} />}
                                                     <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="contact" id={param.id} />
                                                 </GridItem>
                                                 {/* <GridItem colSpan={{ base: 2 }}>

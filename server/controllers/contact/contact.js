@@ -2,12 +2,13 @@ const Contact = require('../../model/schema/contact')
 const emailHistory = require('../../model/schema/email')
 const MeetingHistory = require('../../model/schema/meeting')
 const phoneCall = require('../../model/schema/phoneCall')
+const Task = require('../../model/schema/task')
 const TextMsg = require('../../model/schema/textMsg')
 
 const index = async (req, res) => {
     const query = req.query
     query.deleted = false;
-    
+
     let allData = await Contact.find(query).populate({
         path: 'createBy',
         match: { deleted: false } // Populate only if createBy.deleted is false
@@ -258,7 +259,37 @@ const view = async (req, res) => {
             },
         ]);
 
-        res.status(200).json({ interestProperty, contact, EmailHistory, phoneCallHistory, meetingHistory, textMsg });
+        let task = await Task.aggregate([
+            { $match: { assignmentTo: contact._id } },
+            {
+                $lookup: {
+                    from: 'contacts',
+                    localField: 'assignmentTo',
+                    foreignField: '_id',
+                    as: 'contact'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'createBy',
+                    foreignField: '_id',
+                    as: 'users'
+                }
+            },
+            { $unwind: { path: '$contact', preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
+            {
+                $addFields: {
+                    assignmentToName: '$contact.email',
+                    createByName: '$users.username',
+                }
+            },
+            { $project: { contact: 0, users: 0 } },
+        ])
+
+
+        res.status(200).json({ interestProperty, contact, EmailHistory, phoneCallHistory, meetingHistory, textMsg, task });
     }
     catch (error) {
         console.error(error);
