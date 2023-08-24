@@ -1,4 +1,5 @@
 import { Button, FormLabel, Grid, GridItem, Heading, Input, List, ListItem, Text, Textarea, useDisclosure } from '@chakra-ui/react';
+import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { BsFillTelephoneFill } from 'react-icons/bs';
@@ -12,6 +13,7 @@ const Call = () => {
     const [data, setData] = useState([])
     const user = JSON.parse(localStorage.getItem('user'))
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [isLoding, setIsLoding] = useState(false)
 
     const initialValues = {
         sender: user?._id,
@@ -40,6 +42,7 @@ const Call = () => {
 
     const AddData = async () => {
         try {
+            setIsLoding(true)
             let response = await postApi('api/phoneCall/add', values)
             if (response.status === 200) {
 
@@ -48,6 +51,9 @@ const Call = () => {
             }
         } catch (e) {
             console.error(e);
+        }
+        finally {
+            setIsLoding(false)
         }
     };
 
@@ -152,7 +158,7 @@ const Call = () => {
             </GridItem>
 
             <GridItem colSpan={{ base: 12 }} >
-                <Button variant='brand' onClick={handleSubmit} leftIcon={<BsFillTelephoneFill />}>Call</Button>
+                <Button variant='brand' disabled={isLoding ? true : false} onClick={handleSubmit} leftIcon={<BsFillTelephoneFill />}>{isLoding ? <Spinner /> : 'Call'}</Button>
                 <Button onClick={() => formik.resetForm()}>Clear</Button>
             </GridItem>
 

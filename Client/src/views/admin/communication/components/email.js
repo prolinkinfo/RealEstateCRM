@@ -1,4 +1,5 @@
 import { Button, FormLabel, Grid, GridItem, Heading, Input, List, ListItem, Text, Textarea, useDisclosure } from '@chakra-ui/react';
+import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { BsFillSendFill } from 'react-icons/bs';
@@ -11,6 +12,7 @@ const Email = () => {
     const [data, setData] = useState([])
     const user = JSON.parse(localStorage.getItem('user'))
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [isLoding, setIsLoding] = useState(false)
 
     const initialValues = {
         sender: user?._id,
@@ -42,6 +44,7 @@ const Email = () => {
 
     const AddData = async () => {
         try {
+            setIsLoding(true)
             let response = await postApi('api/email/add', values)
             if (response.status === 200) {
                 toast.success('Email Send successfully')
@@ -49,6 +52,9 @@ const Email = () => {
             }
         } catch (e) {
             console.log(e);
+        }
+        finally {
+            setIsLoding(false)
         }
     };
 
@@ -176,7 +182,7 @@ const Email = () => {
             </GridItem>
 
             <GridItem colSpan={{ base: 12 }} >
-                <Button variant='brand' onClick={handleSubmit} rightIcon={<BsFillSendFill />}>Send</Button>
+                <Button variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} rightIcon={<BsFillSendFill />}> {isLoding ? <Spinner /> : 'Send'}</Button>
                 <Button onClick={() => formik.resetForm()}>Clear</Button>
             </GridItem>
 

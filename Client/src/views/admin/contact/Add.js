@@ -1,13 +1,16 @@
 import { CloseIcon, PhoneIcon, StarIcon } from '@chakra-ui/icons';
 import { Box, Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormLabel, Grid, GridItem, Heading, IconButton, Input, InputGroup, InputLeftElement, Radio, RadioGroup, Select, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Stack, Text } from '@chakra-ui/react';
 import { HSeparator } from 'components/separator/Separator';
+import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
 import React from 'react';
+import { useState } from 'react';
 import { BiMobile } from 'react-icons/bi';
 import { contactSchema } from 'schema';
 import { postApi } from 'services/api';
 
 const Add = (props) => {
+    const [isLoding, setIsLoding] = useState(false)
 
     const initialValues = {
         firstName: "",
@@ -67,6 +70,7 @@ const Add = (props) => {
 
     const AddData = async () => {
         try {
+            setIsLoding(true)
             let response = await postApi('api/contact/add', values)
             if (response.status === 200) {
                 props.onClose();
@@ -74,6 +78,10 @@ const Add = (props) => {
         } catch (e) {
             console.log(e);
         }
+        finally {
+            setIsLoding(false)
+        }
+
     };
 
     const handleCancel = () => {
@@ -731,10 +739,11 @@ const Add = (props) => {
                         <Button
                             sx={{ textTransform: "capitalize" }}
                             variant="brand"
+                            disabled={isLoding ? true : false}
                             type="submit"
                             onClick={handleSubmit}
                         >
-                            Add Data
+                            {isLoding ? <Spinner /> : 'Add Data'}
                         </Button>
                         <Button
                             variant="outline"

@@ -7,10 +7,13 @@ import { RiEyeCloseLine } from 'react-icons/ri';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { CloseIcon, PhoneIcon } from '@chakra-ui/icons';
 import { toast } from 'react-toastify';
+import Spinner from 'components/spinner/Spinner';
+import { useState } from 'react';
 
 
 const AddUser = (props) => {
     const { onClose, isOpen, fetchData } = props
+    const [isLoding, setIsLoding] = useState(false)
 
     const [show, setShow] = React.useState(false);
     const showPass = () => setShow(!show);
@@ -35,6 +38,7 @@ const AddUser = (props) => {
 
     const AddData = async () => {
         try {
+            setIsLoding(true)
             let response = await postApi('api/user/register', values)
             if (response && response.status === 200) {
                 props.onClose();
@@ -44,6 +48,9 @@ const AddUser = (props) => {
             }
         } catch (e) {
             console.log(e);
+        }
+        finally {
+            setIsLoding(false)
         }
     };
 
@@ -159,7 +166,7 @@ const AddUser = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' onClick={handleSubmit}>Add</Button>
+                    <Button variant='brand' disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Add'}</Button>
                     <Button onClick={() => {
                         formik.resetForm()
                         onClose()

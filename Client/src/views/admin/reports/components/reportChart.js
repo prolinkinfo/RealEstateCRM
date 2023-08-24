@@ -12,7 +12,6 @@ import moment from 'moment';
 const ReportChart = (props) => {
     const { dashboard } = props;
     const [reportChart, setReportChart] = useState({})
-
     const [startDate, setStartDate] = useState(new Date(new Date() - 14 * 24 * 60 * 60 * 1000));
     const [endDate, setEndDate] = useState(new Date());
     const [select, setSelect] = useState('all');

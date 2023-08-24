@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { deleteApi } from 'services/api';
 import { HSeparator } from 'components/separator/Separator';
 import { constant } from 'constant';
+import Spinner from 'components/spinner/Spinner';
 
 
 const Index = () => {
@@ -18,6 +19,7 @@ const Index = () => {
     const [data, setData] = useState([])
     const { isOpen, onOpen, onClose } = useDisclosure();
     const user = JSON.parse(localStorage.getItem("user"))
+    const [isLoding, setIsLoding] = useState(false)
 
     const fetchData = async () => {
         let result = await getApi(user.role === 'admin' ? 'api/document' : `api/document?createBy=${user._id}`);
@@ -59,6 +61,7 @@ const Index = () => {
 
     const AddData = async () => {
         try {
+            setIsLoding(true)
             const formData = new FormData();
             formData?.append('folderName', values.folderName);
             formData?.append('createBy', values.createBy);
@@ -75,6 +78,9 @@ const Index = () => {
             }
         } catch (e) {
             console.log(e);
+        }
+        finally {
+            setIsLoding(false)
         }
     };
 
@@ -137,8 +143,8 @@ const Index = () => {
                             <Text mb='10px' color={'red'}> {errors.folderName && touched.folderName && errors.folderName}</Text>
                         </GridItem>
                         <Upload count={values.files.length} onFileSelect={(file) => setFieldValue('files', file)} />
-                        <Button onClick={handleSubmit} variant='brand' fontWeight='500'>
-                            Publish now
+                        <Button disabled={isLoding ? true : false} onClick={handleSubmit} variant='brand' fontWeight='500'>
+                            {isLoding ? <Spinner /> : 'Publish now'}
                         </Button>
                     </Card>
                 </GridItem>

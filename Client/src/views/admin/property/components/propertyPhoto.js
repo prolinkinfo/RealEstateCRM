@@ -4,10 +4,12 @@ import { useFormik } from 'formik'
 import React from 'react'
 import { postApi } from 'services/api'
 import Upload from './Upload'
+import { useState } from 'react'
+import Spinner from 'components/spinner/Spinner'
 
 const PropertyPhoto = (props) => {
     const { onClose, isOpen, fetchData, text } = props
-
+    const [isLoding, setIsLoding] = useState(false)
 
     const initialValues = {
         property: ''
@@ -24,6 +26,7 @@ const PropertyPhoto = (props) => {
 
     const AddData = async () => {
         try {
+            setIsLoding(true)
             const formData = new FormData();
             // Append property to the formData
             values.property.forEach((file) => {
@@ -49,6 +52,9 @@ const PropertyPhoto = (props) => {
         } catch (e) {
             console.log(e);
         }
+        finally {
+            setIsLoding(false)
+        }
     };
 
 
@@ -67,7 +73,7 @@ const PropertyPhoto = (props) => {
                     </Grid>
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' onClick={handleSubmit} rightIcon={<AddIcon />}>Add</Button>
+                    <Button variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} rightIcon={<AddIcon />}>{isLoding ? <Spinner /> : 'Add'}</Button>
                     <Button onClick={() => {
                         onClose()
                         formik.resetForm()

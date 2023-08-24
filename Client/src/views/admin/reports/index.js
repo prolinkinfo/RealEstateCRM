@@ -3,9 +3,7 @@ import { useState } from "react";
 import { getApi } from 'services/api';
 import CheckTable from "./components/CheckTable";
 import Card from "components/card/Card";
-import { postApi } from "services/api";
 import 'react-datepicker/dist/react-datepicker.css';
-import moment from 'moment';
 import ReportChart from './components/reportChart';
 
 const Report = () => {

@@ -6,10 +6,12 @@ import { getApi } from 'services/api';
 import { MeetingSchema } from 'schema';
 import { AddIcon } from '@chakra-ui/icons';
 import { CUIAutoComplete } from 'chakra-ui-autocomplete';
+import Spinner from 'components/spinner/Spinner';
 
 const AddMeeting = (props) => {
     const { onClose, isOpen, fetchData } = props
     const [data, setData] = useState([])
+    const [isLoding, setIsLoding] = useState(false)
 
     const user = JSON.parse(localStorage.getItem('user'))
 
@@ -35,6 +37,7 @@ const AddMeeting = (props) => {
 
     const AddData = async () => {
         try {
+            setIsLoding(true)
             let response = await postApi('api/meeting/add', values)
             if (response.status === 200) {
                 props.onClose();
@@ -42,6 +45,9 @@ const AddMeeting = (props) => {
             }
         } catch (e) {
             console.log(e);
+        }
+        finally {
+            setIsLoding(false)
         }
     };
 
@@ -168,7 +174,7 @@ const AddMeeting = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' leftIcon={<AddIcon />} onClick={handleSubmit}>Add</Button>
+                    <Button variant='brand' leftIcon={<AddIcon />} disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Add'}</Button>
                     <Button onClick={() => {
                         formik.resetForm()
                         onClose()

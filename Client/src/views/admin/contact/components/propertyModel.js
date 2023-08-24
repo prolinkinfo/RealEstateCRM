@@ -4,10 +4,12 @@ import React, { useEffect, useState } from 'react'
 import CheckTable from './propertyTable'
 import { getApi } from 'services/api'
 import { postApi } from 'services/api'
+import Spinner from 'components/spinner/Spinner'
 
 const PropertyModel = (props) => {
     const { onClose, isOpen, fetchData, id, interestProperty } = props
     const [selectedValues, setSelectedValues] = useState([]);
+    const [isLoding, setIsLoding] = useState(false)
 
 
     const columns = [
@@ -34,10 +36,19 @@ const PropertyModel = (props) => {
     const uniqueValues = [...new Set(selectedValues)];
 
     const handleSubmit = async () => {
-        let result = await postApi(`api/contact/add-property-interest/${id}`, uniqueValues);
-        if (result && result.status == 200) {
-            fetchData()
-            onClose()
+        try {
+            setIsLoding(true)
+            let result = await postApi(`api/contact/add-property-interest/${id}`, uniqueValues);
+            if (result && result.status == 200) {
+                fetchData()
+                onClose()
+            }
+        }
+        catch (e) {
+            console.log(e)
+        }
+        finally {
+            setIsLoding(false)
         }
     }
 
@@ -57,7 +68,7 @@ const PropertyModel = (props) => {
                     <CheckTable tableData={data} selectedValues={selectedValues} setSelectedValues={setSelectedValues} columnsData={columns} title="Property Table" />
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' onClick={handleSubmit} leftIcon={<AddIcon />}>Add</Button>
+                    <Button variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} leftIcon={<AddIcon />}> {isLoding ? <Spinner /> : 'Add'}</Button>
                     <Button onClick={() => onClose()}>Close</Button>
                 </ModalFooter>
             </ModalContent>

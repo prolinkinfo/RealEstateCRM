@@ -5,11 +5,14 @@ import { emailSchema } from 'schema';
 import { postApi } from 'services/api';
 import { getApi } from 'services/api';
 import { BsFillSendFill } from 'react-icons/bs';
+import { useState } from 'react';
+import Spinner from 'components/spinner/Spinner';
 
 
 const AddEmailHistory = (props) => {
     const { onClose, isOpen, fetchData } = props
     const user = JSON.parse(localStorage.getItem('user'))
+    const [isLoding, setIsLoding] = useState(false)
 
     const initialValues = {
         sender: user?._id,
@@ -30,6 +33,7 @@ const AddEmailHistory = (props) => {
 
     const AddData = async () => {
         try {
+            setIsLoding(true)
             let response = await postApi('api/email/add', values)
             if (response.status === 200) {
                 props.onClose();
@@ -37,6 +41,9 @@ const AddEmailHistory = (props) => {
             }
         } catch (e) {
             console.log(e);
+        }
+        finally {
+            setIsLoding(false)
         }
     };
 
@@ -118,7 +125,7 @@ const AddEmailHistory = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' onClick={handleSubmit} rightIcon={<BsFillSendFill />}>Send</Button>
+                    <Button variant='brand' onClick={handleSubmit} rightIcon={<BsFillSendFill />} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Send'}</Button>
                     <Button onClick={() => {
                         formik.resetForm()
                         onClose()

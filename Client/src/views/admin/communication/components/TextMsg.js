@@ -1,4 +1,5 @@
 import { Button, FormLabel, Grid, GridItem, Heading, Input, List, ListItem, Text, Textarea, useDisclosure } from '@chakra-ui/react';
+import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { MdOutlineMessage } from 'react-icons/md';
@@ -12,6 +13,7 @@ const TextMsg = () => {
     const [data, setData] = useState([])
     const user = JSON.parse(localStorage.getItem('user'))
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [isLoding, setIsLoding] = useState(false)
 
     const initialValues = {
         sender: user?._id,
@@ -38,6 +40,7 @@ const TextMsg = () => {
 
     const AddData = async () => {
         try {
+            setIsLoding(true)
             let response = await postApi('api/text-msg/add', values)
             if (response.status === 200) {
                 toast.success(`Text Msg send successfully to ${values.to} `)
@@ -45,6 +48,9 @@ const TextMsg = () => {
             }
         } catch (e) {
             console.log(e);
+        }
+        finally {
+            setIsLoding(false)
         }
     };
 
@@ -131,7 +137,7 @@ const TextMsg = () => {
             </GridItem>
 
             <GridItem colSpan={{ base: 12 }} >
-                <Button variant='brand' onClick={handleSubmit} leftIcon={<MdOutlineMessage />}>Send Msg</Button>
+                <Button variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} leftIcon={<MdOutlineMessage />}>  {isLoding ? <Spinner /> : 'Send Msg'}</Button>
                 <Button onClick={() => formik.resetForm()}>Clear</Button>
             </GridItem>
 

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { TaskSchema } from 'schema';
 import { getApi } from 'services/api';
 import { postApi } from 'services/api';
+import Spinner from 'components/spinner/Spinner';
 
 const AddTask = (props) => {
     const { onClose, isOpen, fetchData } = props
@@ -12,6 +13,7 @@ const AddTask = (props) => {
     const userId = JSON.parse(localStorage.getItem('user'))._id
     const [contactData, setContactData] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"))
+    const [isLoding, setIsLoding] = useState(false)
 
     const initialValues = {
         title: '',
@@ -42,6 +44,7 @@ const AddTask = (props) => {
 
     const AddData = async () => {
         try {
+            setIsLoding(true)
             let response = await postApi('api/task/add', values)
             if (response.status === 200) {
                 formik.resetForm()
@@ -50,6 +53,9 @@ const AddTask = (props) => {
             }
         } catch (e) {
             console.log(e);
+        }
+        finally {
+            setIsLoding(false)
         }
     };
 
@@ -293,7 +299,7 @@ const AddTask = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' onClick={handleSubmit}>Add</Button>
+                    <Button variant='brand' disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Add'}</Button>
                     <Button onClick={() => {
                         formik.resetForm()
                         onClose()

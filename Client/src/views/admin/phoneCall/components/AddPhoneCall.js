@@ -5,10 +5,13 @@ import { postApi } from 'services/api';
 import { phoneCallSchema } from 'schema';
 import { BsFillTelephoneFill } from 'react-icons/bs';
 import { getApi } from 'services/api';
+import Spinner from 'components/spinner/Spinner';
+import { useState } from 'react';
 
 
 const AddPhoneCall = (props) => {
     const { onClose, isOpen, fetchData } = props
+    const [isLoding, setIsLoding] = useState(false)
 
     const user = JSON.parse(localStorage.getItem('user'))
 
@@ -32,6 +35,7 @@ const AddPhoneCall = (props) => {
 
     const AddData = async () => {
         try {
+            setIsLoding(true)
             let response = await postApi('api/phoneCall/add', values)
             if (response.status === 200) {
                 props.onClose();
@@ -39,6 +43,9 @@ const AddPhoneCall = (props) => {
             }
         } catch (e) {
             console.log(e);
+        }
+        finally {
+            setIsLoding(false)
         }
     };
 
@@ -136,7 +143,7 @@ const AddPhoneCall = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' leftIcon={<BsFillTelephoneFill />} onClick={handleSubmit}>Call</Button>
+                    <Button variant='brand' leftIcon={<BsFillTelephoneFill />} disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Call'}</Button>
                     <Button onClick={() => {
                         formik.resetForm()
                         onClose()

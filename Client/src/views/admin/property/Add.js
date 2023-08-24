@@ -1,11 +1,14 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormLabel, Grid, GridItem, Heading, IconButton, Input, Select, Text, Textarea } from '@chakra-ui/react';
 import { HSeparator } from 'components/separator/Separator';
+import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
+import { useState } from 'react';
 import { propertySchema } from 'schema';
 import { postApi } from 'services/api';
 
 const Add = (props) => {
+    const [isLoding, setIsLoding] = useState(false)
 
     const initialValues = {
         //1. basicPropertyInformation:
@@ -65,6 +68,7 @@ const Add = (props) => {
 
     const AddData = async () => {
         try {
+            setIsLoding(true)
             let response = await postApi('api/property/add', values)
             if (response.status === 200) {
                 props.onClose();
@@ -72,6 +76,9 @@ const Add = (props) => {
             }
         } catch (e) {
             console.log(e);
+        }
+        finally {
+            setIsLoding(false)
         }
     };
 
@@ -605,8 +612,8 @@ const Add = (props) => {
 
 
                     <DrawerFooter>
-                        <Button sx={{ textTransform: "capitalize" }} variant="brand" type="submit" onClick={handleSubmit}                        >
-                            Add Data
+                        <Button sx={{ textTransform: "capitalize" }} disabled={isLoding ? true : false} variant="brand" type="submit" onClick={handleSubmit}                        >
+                            {isLoding ? <Spinner /> : 'Add Data'}
                         </Button>
                         <Button
                             variant="outline"
