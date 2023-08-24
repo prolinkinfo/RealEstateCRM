@@ -1,13 +1,13 @@
 import * as yup from 'yup'
 
 export const TaskSchema = yup.object({
-    title: yup.string().required(),
+    title: yup.string().required("Field Is required"),
     category: yup.string(),
     description: yup.string(),
     notes: yup.string(),
     assignmentTo: yup.string(),
     reminder: yup.string(),
-    start: yup.string().required(),
+    start: yup.string().required("Field Is required"),
     end: yup.string(),
     backgroundColor: yup.string(),
     borderColor: yup.string(),

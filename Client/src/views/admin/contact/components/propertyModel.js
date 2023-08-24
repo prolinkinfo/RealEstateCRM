@@ -1,5 +1,5 @@
 import { AddIcon } from '@chakra-ui/icons'
-import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react'
+import { Button, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import CheckTable from './propertyTable'
 import { getApi } from 'services/api'
@@ -28,10 +28,12 @@ const PropertyModel = (props) => {
     const [data, setData] = useState([])
     const user = JSON.parse(localStorage.getItem("user"))
     const fetchPropertyData = async () => {
+        setIsLoding(true)
         let result = await getApi(user.role === 'admin' ? 'api/property/' : `api/property/?createBy=${user._id}`);
         if (result && result.status == 200) {
             setData(result?.data);
         }
+        setIsLoding(false)
     }
     const uniqueValues = [...new Set(selectedValues)];
 
@@ -65,7 +67,10 @@ const PropertyModel = (props) => {
                 <ModalHeader>Select Intrasted Property</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <CheckTable tableData={data} selectedValues={selectedValues} setSelectedValues={setSelectedValues} columnsData={columns} title="Property Table" />
+                    {isLoding ?
+                        <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
+                            <Spinner />
+                        </Flex> : <CheckTable tableData={data} selectedValues={selectedValues} setSelectedValues={setSelectedValues} columnsData={columns} title="Property Table" />}
                 </ModalBody>
                 <ModalFooter>
                     <Button variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} leftIcon={<AddIcon />}> {isLoding ? <Spinner /> : 'Add'}</Button>

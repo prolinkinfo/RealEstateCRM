@@ -3,14 +3,14 @@ const currentYear = new Date().getFullYear()
 
 export const propertySchema = yup.object({
     // 1. basicPropertyInformation:
-    propertyType: yup.string().required(),
-    propertyAddress: yup.string().required(),
-    listingPrice: yup.string().required(),
-    squareFootage: yup.string().required(),
-    numberofBedrooms: yup.number().required(),
-    numberofBathrooms: yup.number().required(),
-    yearBuilt: yup.number().min(1000).max(currentYear).required(),
-    propertyDescription: yup.string().required(),
+    propertyType: yup.string().required("Field Is required"),
+    propertyAddress: yup.string().required("Field Is required"),
+    listingPrice: yup.string().required("Field Is required"),
+    squareFootage: yup.string().required("Field Is required"),
+    numberofBedrooms: yup.number().required("Field Is required"),
+    numberofBathrooms: yup.number().required("Field Is required"),
+    yearBuilt: yup.number().min(1000).max(currentYear).required("Field Is required"),
+    propertyDescription: yup.string().required("Field Is required"),
     //2. Property Features and Amenities:
     lotSize: yup.string(),
     parkingAvailability: yup.string(),

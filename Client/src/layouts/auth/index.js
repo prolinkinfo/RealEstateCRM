@@ -3,11 +3,11 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import routes from "routes.js";
 
 // Chakra imports
-import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
+import { Box, Flex, Spinner, useColorModeValue } from "@chakra-ui/react";
 
 // Layout components
 import { SidebarContext } from "contexts/SidebarContext";
-import Spinner from "components/spinner/Spinner";
+// import Spinner from "components/spinner/Spinner";
 
 // Custom Chakra theme
 export default function Auth({ setIsLogin }) {

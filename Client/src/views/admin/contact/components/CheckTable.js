@@ -28,9 +28,10 @@ import Delete from "../Delete";
 import AddEmailHistory from "views/admin/emailHistory/components/AddEmailHistory";
 import AddPhoneCall from "views/admin/phoneCall/components/AddPhoneCall";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
+import Spinner from "components/spinner/Spinner";
 
 export default function CheckTable(props) {
-  const { columnsData, tableData, fetchData } = props;
+  const { columnsData, tableData, fetchData, isLoding } = props;
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -159,123 +160,130 @@ export default function CheckTable(props) {
           ))}
         </Thead>
         <Tbody {...getTableBodyProps()}>
-          {data?.length === 0 && (
+          {isLoding ?
             <Tr>
-              <Td colSpan={columns.length}>
-                <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                  -- No Data Found --
-                </Text>
+              <Td colSpan={columns?.length}>
+                <Flex justifyContent={'center'} alignItems={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                  <Spinner />
+                </Flex>
               </Td>
             </Tr>
-          )}
-          {data?.length > 0 && page?.map((row, i) => {
-            prepareRow(row);
-            return (
-              <Tr {...row?.getRowProps()} key={i}>
-                {row?.cells?.map((cell, index) => {
-                  let data = "";
-                  if (cell?.column.Header === "#") {
-                    data = (
-                      <Flex align="center">
-                        <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />
-                        <Text color={textColor} fontSize="sm" fontWeight="700">
-                          {cell?.row?.index + 1}
-                        </Text>
-                      </Flex>
-                    );
-                  } else if (cell?.column.Header === "title") {
-                    data = (
-                      <Text
-                        me="10px"
-                        color={textColor}
-                        fontSize="sm"
-                        fontWeight="700"
-                      >
-                        {cell?.value}
-                      </Text>
-                    );
-                  } else if (cell?.column.Header === "first Name") {
-                    data = (
-                      <Link to={user?.role !== 'admin' ? `/contactView/${cell?.row?.original._id}` : `/admin/contactView/${cell?.row?.original._id}`}>
+            : data?.length === 0 ? (
+              <Tr>
+                <Td colSpan={columns.length}>
+                  <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                    -- No Data Found --
+                  </Text>
+                </Td>
+              </Tr>
+            ) : data?.length > 0 && page?.map((row, i) => {
+              prepareRow(row);
+              return (
+                <Tr {...row?.getRowProps()} key={i}>
+                  {row?.cells?.map((cell, index) => {
+                    let data = "";
+                    if (cell?.column.Header === "#") {
+                      data = (
+                        <Flex align="center">
+                          <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />
+                          <Text color={textColor} fontSize="sm" fontWeight="700">
+                            {cell?.row?.index + 1}
+                          </Text>
+                        </Flex>
+                      );
+                    } else if (cell?.column.Header === "title") {
+                      data = (
                         <Text
                           me="10px"
-                          sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                          color='green.400'
+                          color={textColor}
                           fontSize="sm"
                           fontWeight="700"
                         >
                           {cell?.value}
                         </Text>
-                      </Link>
-                    );
-                  } else if (cell?.column.Header === "last Name") {
-                    data = (
-                      <Text
-                        me="10px"
-                        color={textColor}
-                        fontSize="sm"
-                        fontWeight="700"
-                      >
-                        {cell?.value}
-                      </Text>
-                    );
-                  } else if (cell?.column.Header === "phone Number") {
-                    data = (
-                      <Text fontSize="sm" fontWeight="700"
-                        onClick={() => {
-                          setAddPhoneCall(true)
-                          setSelectedId(cell?.row?.values._id)
-                        }}
-                        color='green.400' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>
-                        {cell?.value}
-                      </Text>
-                    );
-                  } else if (cell?.column.Header === "Email Address") {
-                    data = (
-                      <Text fontSize="sm" fontWeight="700"
-                        onClick={() => {
-                          setAddEmailHistory(true)
-                          setSelectedId(cell?.row?.values._id)
-                        }}
-                        color='green.400' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>
-                        {cell?.value}
-                      </Text>
-                    );
-                  } else if (cell?.column.Header === "physical Address") {
-                    data = (
-                      <Text color={textColor} fontSize="sm" fontWeight="700">
-                        {cell?.value}
-                      </Text>
-                    );
-                  } else if (cell?.column.Header === "mailing Address") {
-                    data = (
-                      <Text color={textColor} fontSize="sm" fontWeight="700">
-                        {cell?.value}
-                      </Text>
-                    );
-                  } else if (cell?.column.Header === "Contact Method") {
-                    data = (
-                      <Text color={textColor} fontSize="sm" fontWeight="700">
-                        {cell?.value}
-                      </Text>
-                    );
-                  }
+                      );
+                    } else if (cell?.column.Header === "first Name") {
+                      data = (
+                        <Link to={user?.role !== 'admin' ? `/contactView/${cell?.row?.original._id}` : `/admin/contactView/${cell?.row?.original._id}`}>
+                          <Text
+                            me="10px"
+                            sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                            color='green.400'
+                            fontSize="sm"
+                            fontWeight="700"
+                          >
+                            {cell?.value}
+                          </Text>
+                        </Link>
+                      );
+                    } else if (cell?.column.Header === "last Name") {
+                      data = (
+                        <Text
+                          me="10px"
+                          color={textColor}
+                          fontSize="sm"
+                          fontWeight="700"
+                        >
+                          {cell?.value}
+                        </Text>
+                      );
+                    } else if (cell?.column.Header === "phone Number") {
+                      data = (
+                        <Text fontSize="sm" fontWeight="700"
+                          onClick={() => {
+                            setAddPhoneCall(true)
+                            setSelectedId(cell?.row?.values._id)
+                          }}
+                          color='green.400' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>
+                          {cell?.value}
+                        </Text>
+                      );
+                    } else if (cell?.column.Header === "Email Address") {
+                      data = (
+                        <Text fontSize="sm" fontWeight="700"
+                          onClick={() => {
+                            setAddEmailHistory(true)
+                            setSelectedId(cell?.row?.values._id)
+                          }}
+                          color='green.400' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>
+                          {cell?.value}
+                        </Text>
+                      );
+                    } else if (cell?.column.Header === "physical Address") {
+                      data = (
+                        <Text color={textColor} fontSize="sm" fontWeight="700">
+                          {cell?.value}
+                        </Text>
+                      );
+                    } else if (cell?.column.Header === "mailing Address") {
+                      data = (
+                        <Text color={textColor} fontSize="sm" fontWeight="700">
+                          {cell?.value}
+                        </Text>
+                      );
+                    } else if (cell?.column.Header === "Contact Method") {
+                      data = (
+                        <Text color={textColor} fontSize="sm" fontWeight="700">
+                          {cell?.value}
+                        </Text>
+                      );
+                    }
 
-                  return (
-                    <Td
-                      {...cell?.getCellProps()}
-                      key={index}
-                      fontSize={{ sm: "14px" }}
-                      minW={{ sm: "150px", md: "200px", lg: "auto" }}
-                      borderColor="transparent"
-                    >
-                      {data}
-                    </Td>
-                  );
-                })}
-              </Tr>
-            );
-          })}
+                    return (
+                      <Td
+                        {...cell?.getCellProps()}
+                        key={index}
+                        fontSize={{ sm: "14px" }}
+                        minW={{ sm: "150px", md: "200px", lg: "auto" }}
+                        borderColor="transparent"
+                      >
+                        {data}
+                      </Td>
+                    );
+                  })}
+                </Tr>
+              );
+            })}
         </Tbody>
       </Table>
       <div style={{ display: 'flex', justifyContent: 'left', alignItems: 'center', margin: "1rem" }}>

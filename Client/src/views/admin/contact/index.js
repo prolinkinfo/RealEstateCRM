@@ -27,12 +27,15 @@ const Index = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const size = "lg";
     const [data, setData] = useState([])
+    const [isLoding, setIsLoding] = useState(false)
 
     const user = JSON.parse(localStorage.getItem("user"))
 
     const fetchData = async () => {
+        setIsLoding(true)
         let result = await getApi(user.role === 'admin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`);
         setData(result.data);
+        setIsLoding(false)
     }
 
     const handleClick = () => {
@@ -47,7 +50,7 @@ const Index = () => {
                 </GridItem>
             </Grid>
             {/* <CheckTable columnsData={columns} tableData={data} /> */}
-            <CheckTable columnsData={columns} isOpen={isOpen} tableData={data} fetchData={fetchData} />
+            <CheckTable isLoding={isLoding} columnsData={columns} isOpen={isOpen} tableData={data} fetchData={fetchData} />
             {/* Add Form */}
             <Add isOpen={isOpen} size={size} onClose={onClose} />
         </div>
