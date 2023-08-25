@@ -20,7 +20,8 @@ const AddPhoneCall = (props) => {
         recipient: '',
         callDuration: '',
         callNotes: '',
-        createBy: ''
+        createBy: '',
+        createByLead: ''
     }
 
     const formik = useFormik({

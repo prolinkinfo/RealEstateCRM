@@ -7,8 +7,8 @@ const emailHistory = new mongoose.Schema({
         required: true
     },
     recipient: { type: String },
-    cc: { type: String },
-    bcc: { type: String },
+    // cc: { type: String },
+    // bcc: { type: String },
     subject: { type: String },
     message: { type: String },
     createByLead: {

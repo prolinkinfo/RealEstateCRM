@@ -10,6 +10,10 @@ const phoneCall = new mongoose.Schema({
     callDuration: { type: String },
     callNotes: { type: String },
     phoneNumber: { type: String },
+    createByLead: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Lead",
+    },
     createBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'contacts',
