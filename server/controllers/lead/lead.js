@@ -52,12 +52,13 @@ const view = async (req, res) => {
     query.createByLead = req.params.id
 
     let Email = await EmailHistory.aggregate([
+        { $match: { createByLead: lead._id } },
         {
             $lookup: {
-                from: 'contacts',
-                localField: 'createBy',
+                from: 'leads', // Assuming this is the collection name for 'leads'
+                localField: 'createByLead',
                 foreignField: '_id',
-                as: 'contact'
+                as: 'createByrefLead'
             }
         },
         {
@@ -69,19 +70,33 @@ const view = async (req, res) => {
             }
         },
         { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
-        { $unwind: '$contact' },
-        { $match: { 'contact.deleted': false, 'users.deleted': false } },
+        { $unwind: { path: '$createByRef', preserveNullAndEmptyArrays: true } },
+        { $unwind: { path: '$createByrefLead', preserveNullAndEmptyArrays: true } },
+        { $match: { 'users.deleted': false } },
         {
             $addFields: {
                 senderEmail: '$users.username',
-                deleted: '$contact.deleted',
-                createByName: { $concat: ['$contact.title', ' ', '$contact.firstName', ' ', '$contact.lastName'] },
+                deleted: {
+                    $cond: [
+                        { $eq: ['$createByRef.deleted', false] },
+                        '$createByRef.deleted',
+                        { $ifNull: ['$createByrefLead.deleted', false] }
+                    ]
+                },
+                createByName: {
+                    $cond: {
+                        if: '$createByRef',
+                        then: { $concat: ['$createByRef.title', ' ', '$createByRef.firstName', ' ', '$createByRef.lastName'] },
+                        else: { $concat: ['$createByrefLead.leadName'] }
+                    }
+                },
             }
         },
         {
             $project: {
-                contact: 0,
-                // users: 0
+                createByRef: 0,
+                createByrefLead: 0,
+                users: 0
             }
         },
     ])

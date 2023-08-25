@@ -68,10 +68,10 @@ const view = async (req, res) => {
             { $match: { createBy: contact._id } },
             {
                 $lookup: {
-                    from: 'contacts',
+                    from: 'contacts', // Assuming this is the collection name for 'contacts'
                     localField: 'createBy',
                     foreignField: '_id',
-                    as: 'createdBy'
+                    as: 'createByRef'
                 }
             },
             {
@@ -83,14 +83,62 @@ const view = async (req, res) => {
                 }
             },
             { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: '$createByRef', preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: '$createByrefLead', preserveNullAndEmptyArrays: true } },
+            { $match: { 'users.deleted': false } },
+            {
+                $addFields: {
+                    senderEmail: '$users.username',
+                    deleted: {
+                        $cond: [
+                            { $eq: ['$createByRef.deleted', false] },
+                            '$createByRef.deleted',
+                            { $ifNull: ['$createByrefLead.deleted', false] }
+                        ]
+                    },
+
+                    createByName: {
+                        $cond: {
+                            if: '$createByRef',
+                            then: { $concat: ['$createByRef.title', ' ', '$createByRef.firstName', ' ', '$createByRef.lastName'] },
+                            else: { $concat: ['$createByrefLead.leadName'] }
+                        }
+                    },
+                }
+            },
             {
                 $project: {
-                    sender: '$users.username',
-                    recipient: '$recipient',
-                    createBy: { $concat: [{ $arrayElemAt: ['$createdBy.title', 0] }, ' ', { $arrayElemAt: ['$createdBy.firstName', 0] }, ' ', { $arrayElemAt: ['$createdBy.lastName', 0] }] },
-                    timestamp: '$timestamp',
+                    createByRef: 0,
+                    createByrefLead: 0,
+                    users: 0,
                 }
-            }
+            },
+
+            // {
+            //     $lookup: {
+            //         from: 'contacts',
+            //         localField: 'createBy',
+            //         foreignField: '_id',
+            //         as: 'createdBy'
+            //     }
+            // },
+            // {
+            //     $lookup: {
+            //         from: 'users',
+            //         localField: 'sender',
+            //         foreignField: '_id',
+            //         as: 'users'
+            //     }
+            // },
+            // { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
+            // {
+            //     $project: {
+            //         sender: '$users.username',
+            //         recipient: '$recipient',
+            //         createBy: { $concat: [{ $arrayElemAt: ['$createdBy.title', 0] }, ' ', { $arrayElemAt: ['$createdBy.firstName', 0] }, ' ', { $arrayElemAt: ['$createdBy.lastName', 0] }] },
+            //         timestamp: '$timestamp',
+            //     }
+            // }
             // --------------------------
             // {
             //     $lookup: {

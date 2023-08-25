@@ -43,37 +43,7 @@ const index = async (req, res) => {
         if (query.sender) {
             query.sender = new mongoose.Types.ObjectId(query.sender);
         }
-        // const result = await EmailHistory.find(query).populate('sender createByLead createBy');
 
-        const pipeline = [
-            { $match: { query } },
-            {
-                $lookup: {
-                    from: 'users', // Assuming this is the collection name for 'users'
-                    localField: 'sender',
-                    foreignField: '_id',
-                    as: 'sender'
-                }
-            },
-            {
-                $lookup: {
-                    from: 'leads', // Assuming this is the collection name for 'leads'
-                    localField: 'createByLead',
-                    foreignField: '_id',
-                    as: 'createByLead'
-                }
-            },
-            {
-                $lookup: {
-                    from: 'contacts', // Assuming this is the collection name for 'contacts'
-                    localField: 'createBy',
-                    foreignField: '_id',
-                    as: 'createBy'
-                }
-            },
-        ];
-
-        const results = await EmailHistory.aggregate(pipeline);
         let result = await EmailHistory.aggregate([
             { $match: query },
             {
