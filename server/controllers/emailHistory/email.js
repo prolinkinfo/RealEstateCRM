@@ -116,57 +116,6 @@ const view = async (req, res) => {
 
         if (!result) return res.status(404).json({ message: "no Data Found." })
 
-        // let response = await EmailHistory.aggregate([
-        //     { $match: { _id: result._id } },
-        //     {
-        //         $lookup: {
-        //             from: 'contacts', // Assuming this is the collection name for 'contacts'
-        //             localField: 'createBy',
-        //             foreignField: '_id',
-        //             as: 'contact'
-        //         }
-        //     },
-        //     {
-        //         $lookup: {
-        //             from: 'leads', // Assuming this is the collection name for 'leads'
-        //             localField: 'createByLead',
-        //             foreignField: '_id',
-        //             as: 'createByrefLead'
-        //         }
-        //     },
-        //     {
-        //         $lookup: {
-        //             from: 'users',
-        //             localField: 'sender',
-        //             foreignField: '_id',
-        //             as: 'users'
-        //         }
-        //     },
-        //     { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
-        //     { $unwind: '$contact' },
-        //     { $match: { 'users.deleted': false } },
-        //     {
-        //         $addFields: {
-        //             senderEmail: '$users.username',
-
-        //             deleted: {
-        //                 $cond: [
-        //                     { $eq: ['$contact.deleted', false] },
-        //                     '$contact.deleted',
-        //                     { $ifNull: ['$createByrefLead.deleted', false] }
-        //                 ]
-        //             },
-        //             createByName: {
-        //                 $cond: {
-        //                     if: '$contact',
-        //                     then: { $concat: ['$contact.title', ' ', '$contact.firstName', ' ', '$contact.lastName'] },
-        //                     else: { $concat: ['$createByrefLead.leadName'] }
-        //                 }
-        //             },
-        //         }
-        //     },
-        //     { $project: { contact: 0, users: 0 } }
-        // ])
         let response = await EmailHistory.aggregate([
             { $match: { _id: result._id } },
             {

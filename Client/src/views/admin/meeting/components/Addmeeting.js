@@ -7,6 +7,7 @@ import { MeetingSchema } from 'schema';
 import { AddIcon } from '@chakra-ui/icons';
 import { CUIAutoComplete } from 'chakra-ui-autocomplete';
 import Spinner from 'components/spinner/Spinner';
+import { toast } from 'react-toastify';
 
 const AddMeeting = (props) => {
     const { onClose, isOpen, fetchData } = props
@@ -39,11 +40,15 @@ const AddMeeting = (props) => {
     const AddData = async () => {
         try {
             setIsLoding(true)
-            let response = await postApi('api/meeting/add', values)
-            if (response.status === 200) {
-                formik.resetForm();
-                props.onClose();
-                fetchData()
+            if (values.attendes.length > 0 || values.attendesLead.length > 0) {
+                let response = await postApi('api/meeting/add', values)
+                if (response.status === 200) {
+                    formik.resetForm();
+                    props.onClose();
+                    fetchData()
+                }
+            } else {
+                toast.error('Select Related To')
             }
         } catch (e) {
             console.log(e);
