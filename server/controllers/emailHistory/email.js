@@ -128,6 +128,14 @@ const view = async (req, res) => {
             },
             {
                 $lookup: {
+                    from: 'leads', // Assuming this is the collection name for 'leads'
+                    localField: 'createByLead',
+                    foreignField: '_id',
+                    as: 'createByrefLead'
+                }
+            },
+            {
+                $lookup: {
                     from: 'users',
                     localField: 'sender',
                     foreignField: '_id',
@@ -136,15 +144,28 @@ const view = async (req, res) => {
             },
             { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
             { $unwind: '$contact' },
-            { $match: { 'contact.deleted': false, 'users.deleted': false } },
+            { $match: { 'users.deleted': false } },
             {
                 $addFields: {
                     senderEmail: '$users.username',
-                    deleted: '$contact.deleted',
-                    createByName: { $concat: ['$contact.title', ' ', '$contact.firstName', ' ', '$contact.lastName'] },
+
+                    deleted: {
+                        $cond: [
+                            { $eq: ['$contact.deleted', false] },
+                            '$contact.deleted',
+                            { $ifNull: ['$createByrefLead.deleted', false] }
+                        ]
+                    },
+                    createByName: {
+                        $cond: {
+                            if: '$contact',
+                            then: { $concat: ['$contact.title', ' ', '$contact.firstName', ' ', '$contact.lastName'] },
+                            else: { $concat: ['$createByrefLead.leadName'] }
+                        }
+                    },
                 }
             },
-            { $project: { contact: 0, users: 0 } }
+            { $project: { contact: 0, createByrefLead: 0, users: 0 } }
         ])
 
         res.status(200).json(response[0])
