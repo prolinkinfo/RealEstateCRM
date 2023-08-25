@@ -43,12 +43,50 @@ const index = async (req, res) => {
         if (query.sender) {
             query.sender = new mongoose.Types.ObjectId(query.sender);
         }
-        // let createBy =
+        // const result = await EmailHistory.find(query).populate('sender createByLead createBy');
+
+        const pipeline = [
+            { $match: { query } },
+            {
+                $lookup: {
+                    from: 'users', // Assuming this is the collection name for 'users'
+                    localField: 'sender',
+                    foreignField: '_id',
+                    as: 'sender'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'leads', // Assuming this is the collection name for 'leads'
+                    localField: 'createByLead',
+                    foreignField: '_id',
+                    as: 'createByLead'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'contacts', // Assuming this is the collection name for 'contacts'
+                    localField: 'createBy',
+                    foreignField: '_id',
+                    as: 'createBy'
+                }
+            },
+        ];
+
+        const results = await EmailHistory.aggregate(pipeline);
         let result = await EmailHistory.aggregate([
             { $match: query },
             {
                 $lookup: {
-                    from: 'contacts',
+                    from: 'leads', // Assuming this is the collection name for 'leads'
+                    localField: 'createByLead',
+                    foreignField: '_id',
+                    as: 'createByrefLead'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'contacts', // Assuming this is the collection name for 'contacts'
                     localField: 'createBy',
                     foreignField: '_id',
                     as: 'createByRef'
@@ -63,22 +101,38 @@ const index = async (req, res) => {
                 }
             },
             { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
-            { $unwind: '$createByRef' },
-            { $match: { 'createByRef.deleted': false, 'users.deleted': false } },
+            { $unwind: { path: '$createByRef', preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: '$createByrefLead', preserveNullAndEmptyArrays: true } },
+            { $match: { 'users.deleted': false } },
             {
                 $addFields: {
                     senderEmail: '$users.username',
-                    deleted: '$createByRef.deleted',
-                    createByName: { $concat: ['$createByRef.title', ' ', '$createByRef.firstName', ' ', '$createByRef.lastName'] },
+                    deleted: {
+                        $cond: [
+                            { $eq: ['$createByRef.deleted', false] },
+                            '$createByRef.deleted',
+                            { $ifNull: ['$createByrefLead.deleted', false] }
+                        ]
+                    },
+                    createByName: {
+                        $cond: {
+                            if: '$createByRef',
+                            then: { $concat: ['$createByRef.title', ' ', '$createByRef.firstName', ' ', '$createByRef.lastName'] },
+                            else: { $concat: ['$createByrefLead.leadName'] }
+                        }
+                    },
                 }
             },
             {
                 $project: {
-                    contact: 0,
-                    // users: 0
+                    createByRef: 0,
+                    createByrefLead: 0,
+                    users: 0
                 }
             },
         ])
+
+
         res.status(200).json(result);
     } catch (err) {
         console.error('Failed :', err);

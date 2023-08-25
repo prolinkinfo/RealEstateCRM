@@ -4,11 +4,9 @@ const mongoose = require('mongoose');
 const index = async (req, res) => {
     query = req.query;
     query.deleted = false;
-    // Convert createBy to ObjectId if provided
     if (query.createBy) {
         query.createBy = new mongoose.Types.ObjectId(query.createBy);
     }
-    // { $match: { 'contact.deleted': false, 'users.deleted': false } },
 
     try {
         let result = await Task.aggregate([

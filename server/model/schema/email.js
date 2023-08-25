@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const emailHistory = new mongoose.Schema({
     sender: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
+        ref: 'User',
         required: true
     },
     recipient: { type: String },
@@ -17,7 +17,7 @@ const emailHistory = new mongoose.Schema({
     },
     createBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'contacts',
+        ref: 'Contact',
     },
     timestamp: {
         type: Date,
