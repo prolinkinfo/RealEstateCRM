@@ -5,12 +5,23 @@ const mongoose = require('mongoose');
 
 const add = async (req, res) => {
     try {
-        const email = new EmailHistory(req.body);
+        const { sender, recipient, subject, message, createBy, createByLead } = req.body;
+
+        const email = { sender, recipient, subject, message }
+        const result = new EmailHistory(email);
+        if (createBy) {
+            email.createBy = createBy;
+        }
+        if (createByLead) {
+            email.createByLead = createByLead;
+        }
+
         const user = await User.findById({ _id: email.sender });
         user.emailsent = user.emailsent + 1;
         await user.save();
         // sendEmail(email.recipient, email.subject, email.message)
-        await email.save();
+
+        await result.save();
         res.status(200).json({ email });
     } catch (err) {
         console.error('Failed to create :', err);

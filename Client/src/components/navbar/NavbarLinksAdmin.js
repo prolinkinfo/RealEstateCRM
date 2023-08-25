@@ -21,6 +21,7 @@ import routes from 'routes.js';
 import { useNavigate } from 'react-router-dom';
 import { getApi } from 'services/api';
 import { toast } from 'react-toastify';
+import jwtDecode from 'jwt-decode';
 
 export default function HeaderLinks(props) {
 	const { secondary } = props;
@@ -61,6 +62,20 @@ export default function HeaderLinks(props) {
 		toast.success('Log out Successfully')
 	}
 
+	const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+	if (token) {
+		try {
+			const decodedToken = jwtDecode(token);
+			const currentTime = Date.now() / 1000; // Convert milliseconds to seconds
+			if (decodedToken.exp < currentTime) {
+				logOut();
+				toast.error("Token has expired")
+			}
+		}
+		catch (error) {
+			console.error('Error decoding token:', error);
+		}
+	}
 
 	return (
 		<Flex

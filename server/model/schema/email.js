@@ -11,10 +11,13 @@ const emailHistory = new mongoose.Schema({
     bcc: { type: String },
     subject: { type: String },
     message: { type: String },
+    createByLead: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Lead",
+    },
     createBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'contacts',
-        required: true
     },
     timestamp: {
         type: Date,

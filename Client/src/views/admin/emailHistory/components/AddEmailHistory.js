@@ -19,7 +19,8 @@ const AddEmailHistory = (props) => {
         recipient: '',
         subject: '',
         message: '',
-        createBy: ''
+        createBy: '',
+        createByLead: '',
     }
     const formik = useFormik({
         initialValues: initialValues,
@@ -59,7 +60,7 @@ const AddEmailHistory = (props) => {
             let response = await getApi('api/lead/view/', props.id)
             if (response?.status === 200) {
                 setFieldValue('recipient', response?.data?.lead?.leadEmail);
-                setFieldValue('createBy', props.id);
+                setFieldValue('createByLead', props.id);
                 values.recipient = response?.data?.lead?.leadEmail
             }
         }

@@ -23,6 +23,7 @@
     "formik": "^2.4.2",
     "framer-motion": "^4.1.17",
     "fullcalendar": "^6.1.8",
+    "jwt-decode": "^3.1.2",
     "moment": "^2.29.4",
     "react": "17.0.2",
     "react-apexcharts": "^1.4.1",
