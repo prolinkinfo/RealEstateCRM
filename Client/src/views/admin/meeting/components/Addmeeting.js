@@ -10,7 +10,7 @@ import Spinner from 'components/spinner/Spinner';
 import { toast } from 'react-toastify';
 
 const AddMeeting = (props) => {
-    const { onClose, isOpen, fetchData } = props
+    const { onClose, isOpen, fetchData, from } = props
     const [data, setData] = useState([])
     const [isLoding, setIsLoding] = useState(false)
 
@@ -21,7 +21,7 @@ const AddMeeting = (props) => {
         attendes: [],
         attendesLead: [],
         location: '',
-        related: '',
+        related: from ? from : '',
         dateTime: '',
         notes: '',
         createFor: '',
