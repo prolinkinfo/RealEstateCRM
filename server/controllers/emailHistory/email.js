@@ -225,7 +225,7 @@ const view = async (req, res) => {
             },
         ])
 
-        res.status(200).json(response)
+        res.status(200).json(response[0])
     } catch (err) {
         console.error('Failed :', err);
         res.status(400).json({ err, error: 'Failed ' });
