@@ -7,8 +7,15 @@ const add = async (req, res) => {
     try {
         const { sender, recipient, subject, message, createBy, createByLead } = req.body;
 
+        if (createBy && !mongoose.Types.ObjectId.isValid(createBy)) {
+            res.status(400).json({ error: 'Invalid createBy value' });
+        }
+        if (createByLead && !mongoose.Types.ObjectId.isValid(createByLead)) {
+            res.status(400).json({ error: 'Invalid createByLead value' });
+        }
+
         const email = { sender, recipient, subject, message }
-        const result = new EmailHistory(email);
+
         if (createBy) {
             email.createBy = createBy;
         }
@@ -21,8 +28,9 @@ const add = async (req, res) => {
         await user.save();
         // sendEmail(email.recipient, email.subject, email.message)
 
+        const result = new EmailHistory(email);
         await result.save();
-        res.status(200).json({ email });
+        res.status(200).json({ result });
     } catch (err) {
         console.error('Failed to create :', err);
         res.status(400).json({ err, error: 'Failed to create' });
@@ -35,7 +43,7 @@ const index = async (req, res) => {
         if (query.sender) {
             query.sender = new mongoose.Types.ObjectId(query.sender);
         }
-
+        // let createBy =
         let result = await EmailHistory.aggregate([
             { $match: query },
             {
@@ -43,7 +51,7 @@ const index = async (req, res) => {
                     from: 'contacts',
                     localField: 'createBy',
                     foreignField: '_id',
-                    as: 'contact'
+                    as: 'createByRef'
                 }
             },
             {
@@ -55,13 +63,13 @@ const index = async (req, res) => {
                 }
             },
             { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
-            { $unwind: '$contact' },
-            { $match: { 'contact.deleted': false, 'users.deleted': false } },
+            { $unwind: '$createByRef' },
+            { $match: { 'createByRef.deleted': false, 'users.deleted': false } },
             {
                 $addFields: {
                     senderEmail: '$users.username',
-                    deleted: '$contact.deleted',
-                    createByName: { $concat: ['$contact.title', ' ', '$contact.firstName', ' ', '$contact.lastName'] },
+                    deleted: '$createByRef.deleted',
+                    createByName: { $concat: ['$createByRef.title', ' ', '$createByRef.firstName', ' ', '$createByRef.lastName'] },
                 }
             },
             {
