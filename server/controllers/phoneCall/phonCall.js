@@ -4,13 +4,32 @@ const mongoose = require('mongoose');
 
 const add = async (req, res) => {
     try {
-        const result = new PhoneCall(req.body);
-        const user = await User.findById({ _id: result.sender });
-        user.outboundcall = user.outboundcall + 1;
+        const { sender, recipient, callDuration, callNotes, createBy, createByLead } = req.body;
 
+        if (createBy && !mongoose.Types.ObjectId.isValid(createBy)) {
+            res.status(400).json({ error: 'Invalid createBy value' });
+        }
+        if (createByLead && !mongoose.Types.ObjectId.isValid(createByLead)) {
+            res.status(400).json({ error: 'Invalid createByLead value' });
+        }
+        const phoneCall = { sender, recipient, callDuration, callNotes }
+
+        if (createBy) {
+            phoneCall.createBy = createBy;
+        }
+        if (createByLead) {
+            phoneCall.createByLead = createByLead;
+        }
+
+
+        const user = await User.findById({ _id: phoneCall.sender });
+        user.outboundcall = user.outboundcall + 1;
         await user.save();
+
+
+        const result = new PhoneCall(phoneCall);
         await result.save();
-        res.status(200).json(result);
+        res.status(200).json({ result });
     } catch (err) {
         console.error('Failed to create :', err);
         res.status(400).json({ err, error: 'Failed to create' });

@@ -62,7 +62,7 @@ const AddPhoneCall = (props) => {
             let response = await getApi('api/lead/view/', props.id)
             if (response?.status === 200) {
                 setFieldValue('recipient', response?.data?.lead?.leadPhoneNumber);
-                setFieldValue('createBy', props.id);
+                setFieldValue('createByLead', props.id);
                 values.recipient = response?.data?.lead?.leadPhoneNumber
             }
         }
