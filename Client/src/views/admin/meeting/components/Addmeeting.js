@@ -24,7 +24,6 @@ const AddMeeting = (props) => {
         related: from ? from : '',
         dateTime: '',
         notes: '',
-        createFor: '',
         createdBy: user?._id,
     }
 
@@ -58,16 +57,7 @@ const AddMeeting = (props) => {
         }
     };
 
-    const fetchContactData = async () => {
-        if (props.id) {
-            let response = await getApi('api/contact/view/', props.id)
-            if (response?.status === 200) {
-                setFieldValue('createFor', props?.id);
-            }
-        }
-    }
-
-    const fetchContactAllData = async () => {
+    const fetchAllData = async () => {
         let result
         if (values.related === "contact") {
             result = await getApi(user.role === 'admin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
@@ -78,8 +68,7 @@ const AddMeeting = (props) => {
     }
 
     useEffect(() => {
-        fetchContactData()
-        fetchContactAllData()
+        fetchAllData()
     }, [props.id, values.related])
 
     const extractLabels = (selectedItems) => {
