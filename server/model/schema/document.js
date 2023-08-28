@@ -6,6 +6,14 @@ const fileSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    linkContact: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Contact',
+    },
+    linkLead: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Lead',
+    },
     path: {
         type: String,
         required: true,

@@ -67,6 +67,8 @@ const storage = multer.diskStorage({
     },
 });
 
+
+
 const upload = multer({ storage: storage });
 
 const file = async (req, res) => {
@@ -140,15 +142,11 @@ const deleteFile = async (req, res) => {
 
         // Check if the folder exists in the database
         const folder = await DocumentSchema.findOne({ 'file._id': id });
-
         if (!folder) {
             return res.status(404).json({ message: 'File not found' });
         }
-
         // Find the file with the specified fileName within the folder
         const file = folder.file.find((f) => f._id.toString() === id);
-
-
         if (!file) {
             return res.status(404).json({ message: 'File not found' });
         }
@@ -165,4 +163,40 @@ const deleteFile = async (req, res) => {
     }
 };
 
-module.exports = { file, upload, index, downloadFile, deleteFile }
+const LinkDocument = async (req, res) => {
+    try {
+        const { id } = req.params;
+        let { linkContact, linkLead } = req.body
+
+        if (!linkContact && !linkLead) {
+            return res.status(404).json({ message: 'Select valid contact or lead ' });
+        }
+
+        // Check if the folder exists in the database
+        const folder = await DocumentSchema.findOne({ 'file._id': id });
+        if (!folder) {
+            return res.status(404).json({ message: 'File not found' });
+        }
+
+        const file = folder.file.find((f) => f._id.toString() === id);
+        if (!file) {
+            return res.status(404).json({ message: 'File not found' });
+        }
+
+        if (linkContact) {
+            file.linkContact = linkContact;
+        } else if (linkLead) {
+            file.linkLead = linkLead;
+        }
+
+        // Save the updated document
+
+        const savedFolder = await folder.save();
+
+        res.status(200).json({ message: "File link successfully.", document: savedFolder });
+    } catch (err) {
+        res.status(500).json({ message: "Error deleting file.", error: err });
+    }
+};
+
+module.exports = { file, upload, index, downloadFile, deleteFile, LinkDocument }

@@ -1,14 +1,16 @@
-import { DeleteIcon, DownloadIcon, ViewIcon } from '@chakra-ui/icons';
+import { DeleteIcon, DownloadIcon, LinkIcon, ViewIcon } from '@chakra-ui/icons';
 import { Collapse, Flex, List, ListIcon, ListItem, Text } from '@chakra-ui/react';
 import React, { useState } from 'react'
 import { FcOpenedFolder } from 'react-icons/fc';
 import { FiChevronDown, FiChevronRight, FiFile } from 'react-icons/fi';
 import Delete from 'views/admin/document/component/Delete';
+import LinkModel from 'views/admin/document/component/LinkModel';
 
 const FolderTreeView = ({ data, deleteFile, item, download, name, isFile, children }) => {
     const [isOpen, setIsOpen] = useState(false);
     // const user = localStorage.getItem('user');
     const [deleteModel, setDelete] = useState(false);
+    const [linkModel, setLinkModel] = useState(false);
     const [id, setId] = useState(false);
 
 
@@ -23,6 +25,11 @@ const FolderTreeView = ({ data, deleteFile, item, download, name, isFile, childr
 
     const deletedata = (data) => {
         setDelete(true)
+        setId(data)
+    }
+
+    const handleLinkClick = (data) => {
+        setLinkModel(true)
         setId(data)
     }
 
@@ -43,12 +50,14 @@ const FolderTreeView = ({ data, deleteFile, item, download, name, isFile, childr
                     {item?.createByName ? <Text>({item?.createByName})</Text> : null}
                     {!isFolder &&
                         <Text>
+                            <LinkIcon ml={3} cursor={'pointer'} onClick={() => handleLinkClick(data?._id)} />
                             {isImageUrl(data?.img) && <ViewIcon ml={3} cursor={'pointer'} color={'green'} onClick={() => window.open(data?.img)} />}
                             <DownloadIcon ml={3} cursor={'pointer'} onClick={() => handleClick(data?._id)} />
                             <DeleteIcon ml={3} cursor={'pointer'} color={'red'} onClick={() => deletedata(data?._id)} />
                         </Text>
                     }
                     <Delete isOpen={deleteModel} onClose={setDelete} method='one' deleteFile={deleteFile} id={id} />
+                    <LinkModel isOpen={linkModel} onClose={setLinkModel} id={id} />
                 </Text>
             </ListItem>
             {isFolder && (
