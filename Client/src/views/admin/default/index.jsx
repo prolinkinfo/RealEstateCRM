@@ -55,10 +55,10 @@ export default function UserReports() {
     let property = await getApi(user.role === 'admin' ? 'api/property/' : `api/property/?createBy=${user._id}`);
 
 
-    setPropertyData(property.data);
-    setLeadData(lead.data);
-    setContactData(contact.data);
-    setTask(taskData.data);
+    setPropertyData(property?.data);
+    setLeadData(lead?.data);
+    setContactData(contact?.data);
+    setTask(taskData?.data);
   }
 
   useEffect(() => {
@@ -73,25 +73,25 @@ export default function UserReports() {
           onClick={() => navigate('/task')}
           startContent={<IconBox w='56px' h='56px' bg='linear-gradient(90deg, #4481EB 0%, #04BEFE 100%)' icon={<Icon w='28px' h='28px' as={MdAddTask} color='white' />} />}
           name='Tasks'
-          value={task?.length}
+          value={task?.length || 0}
         />
         <MiniStatistics
           onClick={() => navigate('/contacts')}
           startContent={<IconBox w='56px' h='56px' bg={boxBg} icon={<Icon w='32px' h='32px' as={MdContacts} color={brandColor} />} />}
           name='Contacts'
-          value={contactData?.length}
+          value={contactData?.length || 0}
         />
         <MiniStatistics
           onClick={() => navigate('/lead')}
           startContent={<IconBox w='56px' h='56px' bg={boxBg} icon={<Icon w='32px' h='32px' as={MdLeaderboard} color={brandColor} />} />}
           name='Leads'
-          value={leadData?.length}
+          value={leadData?.length || 0}
         />
         <MiniStatistics
           onClick={() => navigate('/properties')}
           startContent={<IconBox w='56px' h='56px' bg={boxBg} icon={<Icon w='32px' h='32px' as={LuBuilding2} color={brandColor} />} />}
           name='property'
-          value={propertyData?.length}
+          value={propertyData?.length || 0}
         />
 
         {/* ---------------- */}

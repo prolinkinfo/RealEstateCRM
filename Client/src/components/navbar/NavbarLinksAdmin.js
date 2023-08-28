@@ -56,30 +56,33 @@ export default function HeaderLinks(props) {
 		fetchData()
 	}, [])
 
-	const logOut = () => {
+	const logOut = ({ token }) => {
+		console.log(token)
 		localStorage.clear()
+		sessionStorage.clear()
 		navigate('/auth')
-		toast.success('Log out Successfully')
+		if (token) {
+			toast.error(token)
+		} else {
+			toast.success('Log out Successfully')
+		}
 	}
 
 	const token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
-	useEffect(() => {
-		if (token) {
-			try {
-				const decodedToken = jwtDecode(token);
-				const currentTime = Date.now() / 1000; // Convert milliseconds to seconds
-				if (decodedToken.exp < currentTime) {
-					logOut();
-					toast.error("Token has expired")
-				}
-			}
-			catch (error) {
-				console.error('Error decoding token:', error);
+	if (token) {
+		try {
+			const decodedToken = jwtDecode(token);
+			const currentTime = Date.now() / 1000; // Convert milliseconds to seconds
+			if (decodedToken.exp < currentTime) {
+				logOut({ token: 'Token has expired' });
 			}
 		}
+		catch (error) {
+			console.error('Error decoding token:', error);
+		}
+	}
 
-	})
 
 	return (
 		<Flex

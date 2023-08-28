@@ -12,8 +12,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
+	const token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
-	const token = localStorage.getItem("token");
 	const user = JSON.parse(localStorage.getItem("user"))
 	useNavigate()
 

@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 // Chakra imports
 import {
   Box,
-  Button, Flex,
+  Button, Checkbox, Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -36,6 +36,7 @@ function SignIn() {
   const textColorSecondary = "gray.400";
   const brandStars = useColorModeValue("brand.500", "brand.400");
   const [isLoding, setIsLoding] = React.useState(false)
+  const [checkBox, setCheckBox] = React.useState(false)
 
   const [show, setShow] = React.useState(false);
   const showPass = () => setShow(!show);
@@ -58,9 +59,16 @@ function SignIn() {
       setIsLoding(true)
       let response = await postApi('api/user/login', values)
       if (response && response.status === 200) {
+        if (response.data?.token && response.data?.token !== null) {
+          if (checkBox) {
+            localStorage.setItem('token', response.data?.token)
+          } else {
+            sessionStorage.setItem('token', response.data?.token)
+          }
+        }
         navigate('/admin')
         resetForm();
-        toast.success("Logout Success")
+        toast.success("Login Successfully!")
       } else {
         toast.error(response.response.data?.error)
       }
@@ -172,6 +180,25 @@ function SignIn() {
                 </InputRightElement>
               </InputGroup>
               {errors.password && touched.password && <FormErrorMessage mb='24px'> {errors.password}</FormErrorMessage>}
+              <Flex justifyContent='space-between' align='center' mb='24px'>
+                <FormControl display='flex' alignItems='center'>
+                  <Checkbox
+                    onChange={(e) => setCheckBox(e.target.checked)}
+                    id='remember-login'
+                    colorScheme='brandScheme'
+                    me='10px'
+                  />
+                  <FormLabel
+                    htmlFor='remember-login'
+                    mb='0'
+                    fontWeight='normal'
+                    color={textColor}
+                    fontSize='sm'>
+                    Keep me logged in
+                  </FormLabel>
+                </FormControl>
+              </Flex>
+
               <Flex justifyContent='space-between' align='center' mb='24px'>
               </Flex>
               <Button
