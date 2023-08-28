@@ -59,13 +59,6 @@ function SignIn() {
       setIsLoding(true)
       let response = await postApi('api/user/login', values, checkBox)
       if (response && response.status === 200) {
-        // if (response.data?.token && response.data?.token !== null) {
-        //   if (checkBox) {
-        //     localStorage.setItem('token', response.data?.token)
-        //   } else {
-        //     sessionStorage.setItem('token', response.data?.token)
-        //   }
-        // }
         navigate('/admin')
         toast.success("Login Successfully!")
         resetForm();
