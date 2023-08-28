@@ -21,6 +21,14 @@ const index = async (req, res) => {
             },
             {
                 $lookup: {
+                    from: 'leads', // Assuming this is the collection name for 'leads'
+                    localField: 'assignmentToLead',
+                    foreignField: '_id',
+                    as: 'Lead'
+                }
+            },
+            {
+                $lookup: {
                     from: 'users',
                     localField: 'createBy',
                     foreignField: '_id',
@@ -29,13 +37,21 @@ const index = async (req, res) => {
             },
             { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
             { $unwind: { path: '$contact', preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: '$Lead', preserveNullAndEmptyArrays: true } },
             { $match: { 'users.deleted': false } },
             {
                 $addFields: {
-                    assignmentToName: '$contact.email',
+                    // assignmentToName: '$contact.email',
+                    assignmentToName: {
+                        $cond: {
+                            if: '$contact',
+                            then: { $concat: ['$contact.title', ' ', '$contact.firstName', ' ', '$contact.lastName'] },
+                            else: { $concat: ['$Lead.leadName'] }
+                        }
+                    },
                 }
             },
-            { $project: { contact: 0 } },
+            { $project: { users: 0, contact: 0, Lead: 0 } },
         ]);
 
         res.send(result);

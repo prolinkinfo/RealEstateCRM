@@ -313,7 +313,7 @@ const View = () => {
                             </TabPanel>
                             <TabPanel>
                                 <GridItem colSpan={{ base: 4 }} >
-                                    <Card overflow={'scroll'}>
+                                    <Card >
                                         <Grid templateColumns={{ base: "1fr" }} gap={4}>
                                             <GridItem colSpan={2}>
                                                 <Box>
