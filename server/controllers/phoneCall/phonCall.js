@@ -76,7 +76,7 @@ const index = async (req, res) => {
             { $match: { 'users.deleted': false } },
             {
                 $addFields: {
-                    senderEmail: '$users.username',
+                    senderName: { $concat: ['$users.firstName', ' ', '$users.lastName'] },
                     deleted: {
                         $cond: [
                             { $eq: ['$contact.deleted', false] },
@@ -94,7 +94,6 @@ const index = async (req, res) => {
                 }
             },
             { $project: { contact: 0, createByrefLead: 0, users: 0 } },
-
         ])
 
         res.status(200).json(result);
