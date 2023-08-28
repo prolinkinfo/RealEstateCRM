@@ -83,7 +83,7 @@ const View = () => {
                                 </GridItem>
                                 <GridItem colSpan={{ base: 2, md: 1 }}>
                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Create to </Text>
-                                    <Link to={user?.role !== 'admin' ? `/contactView/${data?.createBy}` : `/admin/contactView/${data?.createBy}`}>
+                                    <Link to={data?.createBy ? user?.role !== 'admin' ? `/contactView/${data?.createBy}` : `/admin/contactView/${data?.createBy}` : user?.role !== 'admin' ? `/leadView/${data?.createByLead}` : `/admin/leadView/${data?.createByLead}`}>
                                         <Text color='green.400' sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.createByName ? data?.createByName : ' - '}</Text>
                                     </Link>
                                 </GridItem>

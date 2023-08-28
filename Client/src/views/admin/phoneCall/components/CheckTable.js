@@ -177,7 +177,7 @@ export default function CheckTable(props) {
                     );
                   } else if (cell?.column.Header === "create From") {
                     data = (
-                      <Link to={user?.role !== 'admin' ? `/contactView/${cell?.row?.original.createBy}` : `/admin/contactView/${cell?.row?.original.createBy}`}>
+                      <Link to={cell?.row?.original?.createBy ? user?.role !== 'admin' ? `/contactView/${cell?.row?.original.createBy}` : `/admin/contactView/${cell?.row?.original.createBy}` : user?.role !== 'admin' ? `/leadView/${cell?.row?.original.createByLead}` : `/admin/leadView/${cell?.row?.original.createByLead}`}>
                         <Text
                           me="10px"
                           sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
