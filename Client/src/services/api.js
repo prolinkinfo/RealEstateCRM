@@ -4,14 +4,20 @@ import { constant } from "constant"
 const token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
 
-export const postApi = async (path, data) => {
+export const postApi = async (path, data, login) => {
     try {
         let result = await axios.post(constant.baseUrl + path, data, {
             headers: {
                 Authorization: token
             }
         })
+
         if (result.data?.token && result.data?.token !== null) {
+            if (login) {
+                localStorage.setItem('token', result.data?.token)
+            } else {
+                sessionStorage.setItem('token', result.data?.token)
+            }
             localStorage.setItem('user', JSON.stringify(result.data?.user))
         }
         return result

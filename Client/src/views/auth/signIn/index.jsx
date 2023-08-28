@@ -57,18 +57,18 @@ function SignIn() {
   const login = async () => {
     try {
       setIsLoding(true)
-      let response = await postApi('api/user/login', values)
+      let response = await postApi('api/user/login', values, checkBox)
       if (response && response.status === 200) {
-        if (response.data?.token && response.data?.token !== null) {
-          if (checkBox) {
-            localStorage.setItem('token', response.data?.token)
-          } else {
-            sessionStorage.setItem('token', response.data?.token)
-          }
-        }
+        // if (response.data?.token && response.data?.token !== null) {
+        //   if (checkBox) {
+        //     localStorage.setItem('token', response.data?.token)
+        //   } else {
+        //     sessionStorage.setItem('token', response.data?.token)
+        //   }
+        // }
         navigate('/admin')
-        resetForm();
         toast.success("Login Successfully!")
+        resetForm();
       } else {
         toast.error(response.response.data?.error)
       }
