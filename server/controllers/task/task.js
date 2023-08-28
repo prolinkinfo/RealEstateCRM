@@ -41,7 +41,6 @@ const index = async (req, res) => {
             { $match: { 'users.deleted': false } },
             {
                 $addFields: {
-                    // assignmentToName: '$contact.email',
                     assignmentToName: {
                         $cond: {
                             if: '$contact',
@@ -130,6 +129,14 @@ const view = async (req, res) => {
             },
             {
                 $lookup: {
+                    from: 'leads', // Assuming this is the collection name for 'leads'
+                    localField: 'assignmentToLead',
+                    foreignField: '_id',
+                    as: 'Lead'
+                }
+            },
+            {
+                $lookup: {
                     from: 'users',
                     localField: 'createBy',
                     foreignField: '_id',
@@ -138,13 +145,20 @@ const view = async (req, res) => {
             },
             { $unwind: { path: '$contact', preserveNullAndEmptyArrays: true } },
             { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: '$Lead', preserveNullAndEmptyArrays: true } },
             {
                 $addFields: {
-                    assignmentToName: '$contact.email',
+                    assignmentToName: {
+                        $cond: {
+                            if: '$contact',
+                            then: { $concat: ['$contact.title', ' ', '$contact.firstName', ' ', '$contact.lastName'] },
+                            else: { $concat: ['$Lead.leadName'] }
+                        }
+                    },
                     createByName: '$users.username',
                 }
             },
-            { $project: { contact: 0, users: 0 } },
+            { $project: { contact: 0, users: 0, Lead: 0 } },
         ])
         res.status(200).json(result[0]);
 
