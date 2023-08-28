@@ -57,7 +57,6 @@ export default function HeaderLinks(props) {
 	}, [])
 
 	const logOut = ({ token }) => {
-		console.log(token)
 		localStorage.clear()
 		sessionStorage.clear()
 		navigate('/auth')
