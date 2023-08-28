@@ -34,8 +34,6 @@ const Email = () => {
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
 
-
-
     if (touched.recipient && errors.createBy) {
         toast.error('Please select an authorized recipient');
         formik.resetForm();

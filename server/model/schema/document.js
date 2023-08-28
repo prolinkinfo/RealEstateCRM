@@ -13,7 +13,7 @@ const fileSchema = new mongoose.Schema({
     linkLead: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Lead',
-    },
+    },  
     path: {
         type: String,
         required: true,

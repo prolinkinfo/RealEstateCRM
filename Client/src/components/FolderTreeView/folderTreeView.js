@@ -1,10 +1,14 @@
 import { DeleteIcon, DownloadIcon, LinkIcon, ViewIcon } from '@chakra-ui/icons';
-import { Collapse, Flex, List, ListIcon, ListItem, Text } from '@chakra-ui/react';
+import { Collapse, Flex, Icon, IconButton, List, ListIcon, ListItem, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react';
 import React, { useState } from 'react'
 import { FcOpenedFolder } from 'react-icons/fc';
 import { FiChevronDown, FiChevronRight, FiFile } from 'react-icons/fi';
+import { IoIosContact } from 'react-icons/io';
+import { MdLeaderboard } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 import Delete from 'views/admin/document/component/Delete';
 import LinkModel from 'views/admin/document/component/LinkModel';
+import { CiMenuKebab } from "react-icons/ci";
 
 const FolderTreeView = ({ data, deleteFile, item, download, name, isFile, children }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -12,7 +16,7 @@ const FolderTreeView = ({ data, deleteFile, item, download, name, isFile, childr
     const [deleteModel, setDelete] = useState(false);
     const [linkModel, setLinkModel] = useState(false);
     const [id, setId] = useState(false);
-
+    const navigate = useNavigate()
 
     const handleToggle = () => {
         setIsOpen(!isOpen);
@@ -32,6 +36,7 @@ const FolderTreeView = ({ data, deleteFile, item, download, name, isFile, childr
         setLinkModel(true)
         setId(data)
     }
+    const user = JSON.parse(localStorage.getItem("user"))
 
     function isImageUrl(url) {
         const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
@@ -47,26 +52,37 @@ const FolderTreeView = ({ data, deleteFile, item, download, name, isFile, childr
                         {isFolder && (isOpen ? <FiChevronDown /> : <FiChevronRight />)}
                         {name}
                     </Flex>
-                    {item?.createByName ? <Text>({item?.createByName})</Text> : null}
+                    {item?.createByName ? <Text>({item?.createByName}) </Text> : null}
                     {!isFolder &&
-                        <Text>
-                            <LinkIcon ml={3} cursor={'pointer'} onClick={() => handleLinkClick(data?._id)} />
-                            {isImageUrl(data?.img) && <ViewIcon ml={3} cursor={'pointer'} color={'green'} onClick={() => window.open(data?.img)} />}
-                            <DownloadIcon ml={3} cursor={'pointer'} onClick={() => handleClick(data?._id)} />
-                            <DeleteIcon ml={3} cursor={'pointer'} color={'red'} onClick={() => deletedata(data?._id)} />
-                        </Text>
+                        <Flex justifyContent={'right'} width={'100%'}  >
+                            <Menu isLazy  >
+                                <MenuButton><CiMenuKebab /></MenuButton>
+                                <MenuList position={'absolute'} right={-5} pl={'0.5em'} pr={'2em'} minW={'fit-content'} >
+                                    {data?.linkContact ?
+                                        <MenuItem onClick={() => navigate(user?.role !== 'admin' ? `/contactView/${data?.linkContact}` : `/admin/contactView/${data?.linkContact}`)} icon={<IoIosContact fontSize={15} />}>Linked Contact</MenuItem>
+                                        : data?.linkLead && <MenuItem onClick={() => navigate(user?.role !== 'admin' ? `/leadView/${data?.linkLead}` : `/admin/leadView/${data?.linkLead}`)} icon={<MdLeaderboard fontSize={15} />}>Linked Lead</MenuItem>
+                                    }
+                                    <MenuItem color={'blue'} onClick={() => handleLinkClick(data?._id)} icon={<LinkIcon fontSize={15} />}>Link</MenuItem>
+                                    {isImageUrl(data?.img) && <MenuItem color={'green'} onClick={() => window.open(data?.img)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>}
+                                    <MenuItem onClick={() => handleClick(data?._id)} icon={<DownloadIcon fontSize={15} />}>Download</MenuItem>
+                                    <MenuItem color={'red'} onClick={() => deletedata(data?._id)} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>
+                                </MenuList>
+                            </Menu>
+                        </Flex>
                     }
                     <Delete isOpen={deleteModel} onClose={setDelete} method='one' deleteFile={deleteFile} id={id} />
                     <LinkModel isOpen={linkModel} onClose={setLinkModel} id={id} />
                 </Text>
             </ListItem>
-            {isFolder && (
-                <Collapse in={isOpen} animateOpacity>
-                    <List styleType="disc" ml={4}>
-                        {children}
-                    </List>
-                </Collapse>
-            )}
+            {
+                isFolder && (
+                    <Collapse in={isOpen} animateOpacity>
+                        <List styleType="disc" ml={4}>
+                            {children}
+                        </List>
+                    </Collapse>
+                )
+            }
         </List>
     );
 };
