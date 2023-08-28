@@ -24,6 +24,9 @@ import PhoneCall from "../contact/components/phonCall";
 import AddPhoneCall from "../phoneCall/components/AddPhoneCall";
 import AddTask from "../task/components/addTask";
 import TaskTable from "../task/components/CheckTable.js";
+import MeetingTable from "../meeting/components/CheckTable";
+import { SiGooglemeet } from "react-icons/si";
+import AddMeeting from "../meeting/components/Addmeeting";
 
 
 const View = () => {
@@ -37,6 +40,7 @@ const View = () => {
     const [deleteModel, setDelete] = useState(false);
     const [isLoding, setIsLoding] = useState(false)
     const [taskModel, setTaskModel] = useState(false);
+    const [addMeeting, setMeeting] = useState(false);
 
     const size = "lg";
 
@@ -45,21 +49,14 @@ const View = () => {
     const [addPhoneCall, setAddPhoneCall] = useState(false);
 
     const columnsDataColumns = [
-        { Header: "sender", accessor: "sender", },
+        { Header: "sender", accessor: "senderName", },
         { Header: "recipient", accessor: "recipient", },
         { Header: "time stamp", accessor: "timestamp", },
         { Header: "create at", accessor: "createBy", },
     ];
 
-    const PropertyColumn = [
-        { Header: 'property Type', accessor: 'propertyType' },
-        { Header: "property Address", accessor: "propertyAddress", },
-        { Header: "listing Price", accessor: "listingPrice", },
-        { Header: "square Footage", accessor: "squareFootage", },
-        { Header: "year Built", accessor: "yearBuilt", },
-    ];
     const textColumnsDataColumns = [
-        { Header: "sender", accessor: "sender", },
+        { Header: "sender", accessor: "senderName", },
         { Header: "recipient", accessor: "to", },
         { Header: "time stamp", accessor: "timestamp", },
         { Header: "create at", accessor: "createBy", },
@@ -339,6 +336,11 @@ const View = () => {
                                                     <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>
                                                     {allData?.task?.length > 0 && <TaskTable fetchData={fetchData} columnsData={taskColumns} data={allData?.task} title={'Task '} />}
                                                     <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="lead" id={param.id} />
+                                                </GridItem>
+                                                <GridItem colSpan={{ base: 2 }}>
+                                                    <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>
+                                                    {allData?.meeting?.length > 0 && <MeetingTable fetchData={fetchData} columnsData={MeetingColumns} data={allData?.meeting} title={'meeting '} />}
+                                                    <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="lead" id={param.id} />
                                                 </GridItem>
                                             </Grid>
                                         </Grid>

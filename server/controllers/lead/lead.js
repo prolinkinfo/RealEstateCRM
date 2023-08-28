@@ -2,6 +2,7 @@ const Lead = require('../../model/schema/lead')
 const EmailHistory = require('../../model/schema/email');
 const PhoneCall = require('../../model/schema/phoneCall');
 const Task = require('../../model/schema/task')
+const MeetingHistory = require('../../model/schema/meeting')
 
 const index = async (req, res) => {
     const query = req.query
@@ -75,7 +76,7 @@ const view = async (req, res) => {
         { $match: { 'users.deleted': false } },
         {
             $addFields: {
-                senderEmail: '$users.username',
+                senderName: { $concat: ['$users.firstName', ' ', '$users.lastName'] },
                 deleted: {
                     $cond: [
                         { $eq: ['$createByRef.deleted', false] },
@@ -100,15 +101,18 @@ const view = async (req, res) => {
             }
         },
     ])
+
     let phoneCall = await PhoneCall.aggregate([
+        { $match: { createByLead: lead._id } },
         {
             $lookup: {
-                from: 'contacts',
-                localField: 'createBy',
+                from: 'leads', // Assuming this is the collection name for 'leads'
+                localField: 'createByLead',
                 foreignField: '_id',
-                as: 'contact'
+                as: 'createByrefLead'
             }
         },
+
         {
             $lookup: {
                 from: 'users',
@@ -118,16 +122,16 @@ const view = async (req, res) => {
             }
         },
         { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
-        { $unwind: '$contact' },
-        { $match: { 'contact.deleted': false, 'users.deleted': false } },
+        { $unwind: { path: '$createByrefLead', preserveNullAndEmptyArrays: true } },
+        { $match: { 'users.deleted': false } },
         {
             $addFields: {
                 senderName: { $concat: ['$users.firstName', ' ', '$users.lastName'] },
-                deleted: '$contact.deleted',
-                createByName: { $concat: ['$contact.title', ' ', '$contact.firstName', ' ', '$contact.lastName'] },
+                deleted: '$createByrefLead.deleted',
+                createByName: '$createByrefLead.leadName',
             }
         },
-        { $project: { contact: 0, users: 0 } },
+        { $project: { createByrefLead: 0, users: 0 } },
     ])
 
     let task = await Task.aggregate([
@@ -152,17 +156,54 @@ const view = async (req, res) => {
         { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
         {
             $addFields: {
-                assignmentToName: '$lead.leadName',
+                assignmentToName: lead.leadName,
                 createByName: '$users.username',
             }
         },
-        { $project: { contact: 0, users: 0 } },
+        { $project: { lead: 0, users: 0 } },
     ])
 
-
+    let meeting = await MeetingHistory.aggregate([
+        {
+            $match: {
+                $expr: {
+                    $and: [
+                        { $in: [lead._id, '$attendesLead'] },
+                    ]
+                }
+            }
+        },
+        {
+            $lookup: {
+                from: 'lead',
+                localField: 'assignmentToLead',
+                foreignField: '_id',
+                as: 'lead'
+            }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'createdBy',
+                foreignField: '_id',
+                as: 'users'
+            }
+        },
+        { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
+        {
+            $addFields: {
+                attendesArray: '$lead.leadEmail',
+                createdByName: '$users.username',
+            }
+        },
+        {
+            $project: {
+                users: 0
+            }
+        }
+    ]);
     if (!lead) return res.status(404).json({ message: "no Data Found." })
-    // res.status(200).json({ task })
-    res.status(200).json({ lead, Email, phoneCall, task })
+    res.status(200).json({ lead, Email, phoneCall, task, meeting })
 }
 
 const deleteData = async (req, res) => {

@@ -46,7 +46,7 @@ const View = () => {
     const navigate = useNavigate()
 
     const columnsDataColumns = [
-        { Header: "sender", accessor: "sender", },
+        { Header: "sender", accessor: "senderName", },
         { Header: "recipient", accessor: "recipient", },
         { Header: "time stamp", accessor: "timestamp", },
         { Header: "create at", accessor: "createBy", },
@@ -74,12 +74,7 @@ const View = () => {
         { Header: "create By", accessor: "createdByName", },
     ];
     const taskColumns = [
-        {
-            Header: "#",
-            accessor: "_id",
-            isSortable: false,
-            width: 5
-        },
+        { Header: "#", accessor: "_id", isSortable: false, width: 5 },
         { Header: 'Title', accessor: 'title' },
         { Header: "Category", accessor: "category", },
         { Header: "Assignment To", accessor: "assignmentToName", },
