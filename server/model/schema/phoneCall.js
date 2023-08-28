@@ -17,7 +17,6 @@ const phoneCall = new mongoose.Schema({
     createBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'contacts',
-        required: true
     },
     timestamp: {
         type: Date,

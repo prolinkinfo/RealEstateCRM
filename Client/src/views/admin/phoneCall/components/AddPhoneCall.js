@@ -8,7 +8,6 @@ import { getApi } from 'services/api';
 import Spinner from 'components/spinner/Spinner';
 import { useState } from 'react';
 
-
 const AddPhoneCall = (props) => {
     const { onClose, isOpen, fetchData } = props
     const [isLoding, setIsLoding] = useState(false)

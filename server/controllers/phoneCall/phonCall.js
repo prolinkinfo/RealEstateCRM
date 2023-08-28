@@ -48,6 +48,14 @@ const index = async (req, res) => {
             { $match: query },
             {
                 $lookup: {
+                    from: 'leads', // Assuming this is the collection name for 'leads'
+                    localField: 'createByLead',
+                    foreignField: '_id',
+                    as: 'createByrefLead'
+                }
+            },
+            {
+                $lookup: {
                     from: 'contacts',
                     localField: 'createBy',
                     foreignField: '_id',
@@ -63,16 +71,29 @@ const index = async (req, res) => {
                 }
             },
             { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
-            { $unwind: '$contact' },
-            { $match: { 'contact.deleted': false, 'users.deleted': false } },
+            { $unwind: { path: '$contact', preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: '$createByrefLead', preserveNullAndEmptyArrays: true } },
+            { $match: { 'users.deleted': false } },
             {
                 $addFields: {
-                    senderName: { $concat: ['$users.firstName', ' ', '$users.lastName'] },
-                    deleted: '$contact.deleted',
-                    createByName: { $concat: ['$contact.title', ' ', '$contact.firstName', ' ', '$contact.lastName'] },
+                    senderEmail: '$users.username',
+                    deleted: {
+                        $cond: [
+                            { $eq: ['$contact.deleted', false] },
+                            '$contact.deleted',
+                            { $ifNull: ['$createByrefLead.deleted', false] }
+                        ]
+                    },
+                    createByName: {
+                        $cond: {
+                            if: '$contact',
+                            then: { $concat: ['$contact.title', ' ', '$contact.firstName', ' ', '$contact.lastName'] },
+                            else: { $concat: ['$createByrefLead.leadName'] }
+                        }
+                    },
                 }
             },
-            { $project: { contact: 0, users: 0 } },
+            { $project: { contact: 0, createByrefLead: 0, users: 0 } },
 
         ])
 

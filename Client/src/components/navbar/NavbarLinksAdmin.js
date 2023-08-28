@@ -63,19 +63,23 @@ export default function HeaderLinks(props) {
 	}
 
 	const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-	if (token) {
-		try {
-			const decodedToken = jwtDecode(token);
-			const currentTime = Date.now() / 1000; // Convert milliseconds to seconds
-			if (decodedToken.exp < currentTime) {
-				logOut();
-				toast.error("Token has expired")
+
+	useEffect(() => {
+		if (token) {
+			try {
+				const decodedToken = jwtDecode(token);
+				const currentTime = Date.now() / 1000; // Convert milliseconds to seconds
+				if (decodedToken.exp < currentTime) {
+					logOut();
+					toast.error("Token has expired")
+				}
+			}
+			catch (error) {
+				console.error('Error decoding token:', error);
 			}
 		}
-		catch (error) {
-			console.error('Error decoding token:', error);
-		}
-	}
+
+	})
 
 	return (
 		<Flex
