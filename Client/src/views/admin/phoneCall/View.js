@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { Link, useParams } from "react-router-dom";
 import { getApi } from "services/api";
-
+import Spinner from "components/spinner/Spinner";
 
 const View = () => {
 
@@ -18,10 +18,13 @@ const View = () => {
     const [deleteModel, setDelete] = useState(false);
     const user = JSON.parse(localStorage.getItem("user"))
     const size = "lg";
+    const [isLoding, setIsLoding] = useState(false)
 
     const fetchData = async () => {
+        setIsLoding(true)
         let response = await getApi('api/phoneCall/view/', param.id)
         setData(response?.data);
+        setIsLoding(false)
     }
     useEffect(() => {
         fetchData()
@@ -34,77 +37,85 @@ const View = () => {
             {/* <Edit isOpen={edit} size={size} onClose={setEdit} /> */}
             {/* <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/user/delete/' id={param.id} /> */}
 
-            <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
-                <GridItem colStart={6} >
-                    <Flex justifyContent={'right'} >
-                        {/* <Menu> */}
-                        {/* <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}> */}
-                        {/* Actions */}
-                        {/* </MenuButton> */}
-                        {/* <MenuDivider /> */}
-                        {/* <MenuList> */}
-                        {/* <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem> */}
-                        {/* <MenuDivider /> */}
-                        {/* <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem> */}
-                        {/* </MenuList> */}
-                        {/* </Menu> */}
-                        <Link to="/phone-call">
-                            <Button leftIcon={<IoIosArrowBack />} variant="brand">
-                                Back
-                            </Button>
-                        </Link>
-                    </Flex>
-                </GridItem>
-            </Grid>
+            {isLoding ?
+                <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
+                    <Spinner />
+                </Flex> : <>
 
 
-            <Grid templateColumns="repeat(4, 1fr)" gap={3}>
+                    <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
+                        <GridItem colStart={6} >
+                            <Flex justifyContent={'right'} >
+                                {/* <Menu> */}
+                                {/* <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}> */}
+                                {/* Actions */}
+                                {/* </MenuButton> */}
+                                {/* <MenuDivider /> */}
+                                {/* <MenuList> */}
+                                {/* <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem> */}
+                                {/* <MenuDivider /> */}
+                                {/* <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem> */}
+                                {/* </MenuList> */}
+                                {/* </Menu> */}
+                                <Link to="/phone-call">
+                                    <Button leftIcon={<IoIosArrowBack />} variant="brand">
+                                        Back
+                                    </Button>
+                                </Link>
+                            </Flex>
+                        </GridItem>
+                    </Grid>
 
 
-                <GridItem colSpan={{ base: 4 }}>
-                    <Card >
-                        <Grid templateColumns={{ base: "1fr" }} gap={4}>
-                            <GridItem colSpan={2}>
-                                <Box>
-                                    <Heading size="md" mb={3}>
-                                        Phone Call View page
-                                    </Heading>
-                                    <HSeparator />
-                                </Box>
-                            </GridItem>
-                            <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
-                                <GridItem colSpan={{ base: 2, md: 1 }}>
-                                    <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Sender </Text>
-                                    <Text>{data?.senderName ? data?.senderName : ' - '}</Text>
-                                </GridItem>
-                                <GridItem colSpan={{ base: 2, md: 1 }}>
-                                    <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Recipient </Text>
-                                    <Text>{data?.recipient ? data?.recipient : ' - '}</Text>
-                                </GridItem>
-                                <GridItem colSpan={{ base: 2, md: 1 }}>
-                                    <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Create to </Text>
-                                    <Link to={data?.createBy ? user?.role !== 'admin' ? `/contactView/${data?.createBy}` : `/admin/contactView/${data?.createBy}` : user?.role !== 'admin' ? `/leadView/${data?.createByLead}` : `/admin/leadView/${data?.createByLead}`}>
-                                        <Text color='green.400' sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.createByName ? data?.createByName : ' - '}</Text>
-                                    </Link>
-                                </GridItem>
-                                <GridItem colSpan={{ base: 2, md: 1 }}>
-                                    <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Timestamp </Text>
-                                    <Text> {data?.timestamp ? moment(data?.timestamp).format('DD-MM-YYYY  h:mma ') : ' - '} [{data?.timestamp ? moment(data?.timestamp).toNow() : ' - '}]</Text>
-                                </GridItem>
-                                <GridItem colSpan={{ base: 2, md: 1 }}>
-                                    <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Call Duration </Text>
-                                    <Text>{data?.callDuration ? data?.callDuration : ' - '}</Text>
-                                </GridItem>
-                                <GridItem colSpan={{ base: 2 }}>
-                                    <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Call Notes </Text>
-                                    <pre style={{ whiteSpace: 'pre-wrap' }}>{data?.callNotes ? data?.callNotes : ' - '}</pre>
-                                </GridItem>
-                            </Grid>
-                        </Grid>
-                    </Card>
-                </GridItem>
+                    <Grid templateColumns="repeat(4, 1fr)" gap={3}>
 
-            </Grid>
+
+                        <GridItem colSpan={{ base: 4 }}>
+                            <Card >
+                                <Grid templateColumns={{ base: "1fr" }} gap={4}>
+                                    <GridItem colSpan={2}>
+                                        <Box>
+                                            <Heading size="md" mb={3}>
+                                                Phone Call View page
+                                            </Heading>
+                                            <HSeparator />
+                                        </Box>
+                                    </GridItem>
+                                    <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
+                                        <GridItem colSpan={{ base: 2, md: 1 }}>
+                                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Sender </Text>
+                                            <Text>{data?.senderName ? data?.senderName : ' - '}</Text>
+                                        </GridItem>
+                                        <GridItem colSpan={{ base: 2, md: 1 }}>
+                                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Recipient </Text>
+                                            <Text>{data?.recipient ? data?.recipient : ' - '}</Text>
+                                        </GridItem>
+                                        <GridItem colSpan={{ base: 2, md: 1 }}>
+                                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Create to </Text>
+                                            <Link to={data?.createBy ? user?.role !== 'admin' ? `/contactView/${data?.createBy}` : `/admin/contactView/${data?.createBy}` : user?.role !== 'admin' ? `/leadView/${data?.createByLead}` : `/admin/leadView/${data?.createByLead}`}>
+                                                <Text color='green.400' sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.createByName ? data?.createByName : ' - '}</Text>
+                                            </Link>
+                                        </GridItem>
+                                        <GridItem colSpan={{ base: 2, md: 1 }}>
+                                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Timestamp </Text>
+                                            <Text> {data?.timestamp ? moment(data?.timestamp).format('DD-MM-YYYY  h:mma ') : ' - '} [{data?.timestamp ? moment(data?.timestamp).toNow() : ' - '}]</Text>
+                                        </GridItem>
+                                        <GridItem colSpan={{ base: 2, md: 1 }}>
+                                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Call Duration </Text>
+                                            <Text>{data?.callDuration ? data?.callDuration : ' - '}</Text>
+                                        </GridItem>
+                                        <GridItem colSpan={{ base: 2 }}>
+                                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Call Notes </Text>
+                                            <pre style={{ whiteSpace: 'pre-wrap' }}>{data?.callNotes ? data?.callNotes : ' - '}</pre>
+                                        </GridItem>
+                                    </Grid>
+                                </Grid>
+                            </Card>
+                        </GridItem>
+
+                    </Grid>
+                </>}
+
             {/* <Card mt={3}>
                 <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                     <GridItem colStart={6} >
