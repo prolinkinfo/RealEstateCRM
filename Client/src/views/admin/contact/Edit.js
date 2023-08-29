@@ -173,7 +173,7 @@ const Edit = (props) => {
                                     placeholder='Enter First Name'
                                     // mb={errors.firstName && touched.firstName ? undefined : '10px'}
                                     fontWeight='500'
-                                    borderColor={errors.firstName && touched.firstName ? "red.300" : null}
+                                    borderColor={errors.firstName && touched.firstName ? "red.300" : 'none'}
                                 />
                                 <Text mb='10px' color={'red'}> {errors.firstName && touched.firstName && errors.firstName}</Text>
                             </GridItem>

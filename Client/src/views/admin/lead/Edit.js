@@ -73,7 +73,7 @@ const Edit = (props) => {
     let response
     const fetchData = async () => {
         response = await getApi('api/lead/view/', param.id)
-        // Lead Information
+        // Lead Information`
         values.leadName = response?.data?.leadName;
         values.leadEmail = response?.data?.leadEmail;
         values.leadPhoneNumber = response?.data?.leadPhoneNumber;
@@ -364,7 +364,7 @@ const Edit = (props) => {
 
                                     placeholder='Enter Lead Owner'
                                     fontWeight='500'
-                                    borderColor={errors.leadOwner && touched.leadOwner ? "red.300" : null}
+                                    borderColor={errors.leadOwner && touched.leadOwner ? "red.300" : 'none'}
                                 />
                                 <Text mb='10px' color={'red'}>{errors.leadOwner && touched.leadOwner && errors.leadOwner}</Text>
                             </GridItem>
@@ -380,7 +380,7 @@ const Edit = (props) => {
 
                                     placeholder='Enter Lead Communication Preferences'
                                     fontWeight='500'
-                                    borderColor={errors.leadCommunicationPreferences && touched.leadCommunicationPreferences ? "red.300" : null}
+                                    borderColor={errors.leadCommunicationPreferences && touched.leadCommunicationPreferences ? "red.300" : 'none'}
                                 />
                                 <Text mb='10px' color={'red'}>{errors.leadCommunicationPreferences && touched.leadCommunicationPreferences && errors.leadCommunicationPreferences}</Text>
                             </GridItem>
