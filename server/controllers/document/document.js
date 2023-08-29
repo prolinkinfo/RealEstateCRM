@@ -185,7 +185,8 @@ const LinkDocument = async (req, res) => {
 
         if (linkContact) {
             file.linkContact = linkContact;
-        } else if (linkLead) {
+        }
+        if (linkLead) {
             file.linkLead = linkLead;
         }
 
