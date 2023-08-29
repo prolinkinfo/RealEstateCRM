@@ -22,9 +22,10 @@ import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import EventView from "../eventView";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
+import Spinner from "components/spinner/Spinner";
 
 export default function CheckTable(props) {
-  const { columnsData, data } = props;
+  const { columnsData, data, isLoding } = props;
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -133,93 +134,100 @@ export default function CheckTable(props) {
           ))}
         </Thead>
         <Tbody {...getTableBodyProps()}>
-          {data?.length === 0 && (
+          {isLoding ?
             <Tr>
-              <Td colSpan={columns.length}>
-                <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                  -- No Data Found --
-                </Text>
+              <Td colSpan={columns?.length}>
+                <Flex justifyContent={'center'} alignItems={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                  <Spinner />
+                </Flex>
               </Td>
             </Tr>
-          )}
-          {page?.map((row, i) => {
-            prepareRow(row);
-            return (
-              <Tr {...row?.getRowProps()} key={i}>
-                {row?.cells?.map((cell, index) => {
-                  let data = "";
-                  if (cell?.column.Header === "#") {
-                    data = (
-                      <Flex align="center">
-                        {/* <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" /> */}
-                        <Text color={textColor} fontSize="sm" fontWeight="700">
-                          {cell?.row?.index + 1}
-                        </Text>
-                      </Flex>
-                    );
-                  } else if (cell?.column.Header === "Title") {
-                    data = (
-                      <Text
-                        onClick={() => handleDateClick(cell)}
-                        me="10px"
-                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
-                        color='green.400'
-                        fontSize="sm"
-                        fontWeight="700"
-                      >
-                        {cell?.value}
-                      </Text>
-                    );
-                  } else if (cell?.column.Header === "Category") {
-                    data = (
-                      <Text
-                        me="10px"
-                        color={textColor}
-                        fontSize="sm"
-                        fontWeight="700"
-                      >
-                        {cell?.value ? cell?.value : ' - '}
-                      </Text>
-                    );
-                  } else if (cell?.column.Header === "Assignment To") {
-                    data = (
-                      <Text
-                        me="10px"
-                        color={textColor}
-                        fontSize="sm"
-                        fontWeight="700"
-                      >
-                        {cell?.value ? cell?.value : ' - '}
-                      </Text>
-                    );
-                  } else if (cell?.column.Header === "Start Date") {
-                    data = (
-                      <Text color={textColor} fontSize="sm" fontWeight="700">
-                        {cell?.value}
-                      </Text>
-                    );
-                  } else if (cell?.column.Header === "End Date") {
-                    data = (
-                      <Text color={textColor} fontSize="sm" fontWeight="700">
-                        {cell?.value ? cell?.value : cell?.row?.values.start}
-                      </Text>
-                    );
-                  }
-                  return (
-                    <Td
-                      {...cell?.getCellProps()}
-                      key={index}
-                      fontSize={{ sm: "14px" }}
-                      minW={{ sm: "150px", md: "200px", lg: "auto" }}
-                      borderColor="transparent"
-                    >
-                      {data}
-                    </Td>
-                  );
-                })}
+            : data?.length === 0 ? (
+              <Tr>
+                <Td colSpan={columns.length}>
+                  <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                    -- No Data Found --
+                  </Text>
+                </Td>
               </Tr>
-            );
-          })}
+            ) : page?.map((row, i) => {
+              prepareRow(row);
+              return (
+                <Tr {...row?.getRowProps()} key={i}>
+                  {row?.cells?.map((cell, index) => {
+                    let data = "";
+                    if (cell?.column.Header === "#") {
+                      data = (
+                        <Flex align="center">
+                          {/* <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" /> */}
+                          <Text color={textColor} fontSize="sm" fontWeight="700">
+                            {cell?.row?.index + 1}
+                          </Text>
+                        </Flex>
+                      );
+                    } else if (cell?.column.Header === "Title") {
+                      data = (
+                        <Text
+                          onClick={() => handleDateClick(cell)}
+                          me="10px"
+                          sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                          color='green.400'
+                          fontSize="sm"
+                          fontWeight="700"
+                        >
+                          {cell?.value}
+                        </Text>
+                      );
+                    } else if (cell?.column.Header === "Category") {
+                      data = (
+                        <Text
+                          me="10px"
+                          color={textColor}
+                          fontSize="sm"
+                          fontWeight="700"
+                        >
+                          {cell?.value ? cell?.value : ' - '}
+                        </Text>
+                      );
+                    } else if (cell?.column.Header === "Assignment To") {
+                      data = (
+                        <Text
+                          me="10px"
+                          color={textColor}
+                          fontSize="sm"
+                          fontWeight="700"
+                        >
+                          {cell?.value ? cell?.value : ' - '}
+                        </Text>
+                      );
+                    } else if (cell?.column.Header === "Start Date") {
+                      data = (
+                        <Text color={textColor} fontSize="sm" fontWeight="700">
+                          {cell?.value}
+                        </Text>
+                      );
+                    } else if (cell?.column.Header === "End Date") {
+                      data = (
+                        <Text color={textColor} fontSize="sm" fontWeight="700">
+                          {cell?.value ? cell?.value : cell?.row?.values.start}
+                        </Text>
+                      );
+                    }
+                    return (
+                      <Td
+                        {...cell?.getCellProps()}
+                        key={index}
+                        fontSize={{ sm: "14px" }}
+                        minW={{ sm: "150px", md: "200px", lg: "auto" }}
+                        borderColor="transparent"
+                      >
+                        {data}
+                      </Td>
+                    );
+                  })}
+                </Tr>
+              );
+            })}
         </Tbody>
       </Table>
       <div style={{ display: 'flex', justifyContent: 'left', alignItems: 'center', margin: "1rem" }}>

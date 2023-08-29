@@ -23,9 +23,10 @@ import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
+import Spinner from "components/spinner/Spinner";
 
 export default function CheckTable(props) {
-  const { columnsData, data } = props;
+  const { columnsData, data, isLoding } = props;
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -113,90 +114,97 @@ export default function CheckTable(props) {
           ))}
         </Thead>
         <Tbody {...getTableBodyProps()}>
-          {data?.length === 0 && (
+          {isLoding ?
             <Tr>
-              <Td colSpan={columns.length}>
-                <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                  -- No Data Found --
-                </Text>
+              <Td colSpan={columns?.length}>
+                <Flex justifyContent={'center'} alignItems={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                  <Spinner />
+                </Flex>
               </Td>
             </Tr>
-          )}
-          {data?.length > 0 && page?.map((row, i) => {
-            prepareRow(row);
-            return (
-              <Tr {...row?.getRowProps()} key={i}>
-                {row?.cells?.map((cell, index) => {
-                  let data = "";
-                  if (cell?.column.Header === "#") {
-                    data = (
-                      <Flex align="center">
-                        <Text color={textColor} fontSize="sm" fontWeight="700">
-                          {cell?.row?.index + 1}
-                        </Text>
-                      </Flex>
-                    );
-                  } else if (cell?.column.Header === "agenda") {
-                    data = (
-                      <Link to={user?.role !== 'admin' ? `/metting/${cell?.row?.values._id}` : `/admin/metting/${cell?.row?.values._id}`}>
+            : data?.length === 0 ? (
+              <Tr>
+                <Td colSpan={columns.length}>
+                  <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                    -- No Data Found --
+                  </Text>
+                </Td>
+              </Tr>
+            ) : data?.length > 0 && page?.map((row, i) => {
+              prepareRow(row);
+              return (
+                <Tr {...row?.getRowProps()} key={i}>
+                  {row?.cells?.map((cell, index) => {
+                    let data = "";
+                    if (cell?.column.Header === "#") {
+                      data = (
+                        <Flex align="center">
+                          <Text color={textColor} fontSize="sm" fontWeight="700">
+                            {cell?.row?.index + 1}
+                          </Text>
+                        </Flex>
+                      );
+                    } else if (cell?.column.Header === "agenda") {
+                      data = (
+                        <Link to={user?.role !== 'admin' ? `/metting/${cell?.row?.values._id}` : `/admin/metting/${cell?.row?.values._id}`}>
+                          <Text
+                            me="10px"
+                            sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                            color='green.400'
+                            fontSize="sm"
+                            fontWeight="700"
+                          >
+                            {cell?.value ? cell?.value : ' - '}
+                          </Text>
+                        </Link>
+                      );
+                    } else if (cell?.column.Header === "date Time") {
+                      data = (
                         <Text
                           me="10px"
-                          sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                          color='green.400'
+                          color={textColor}
+                          fontSize="sm"
+                          fontWeight="700"
+                        >
+                          {moment(cell?.value).format('D/MM/YYYY LT')}
+                        </Text>
+                      );
+                    } else if (cell?.column.Header === "create By") {
+                      data = (
+                        <Text
+                          me="10px"
+                          color={textColor}
                           fontSize="sm"
                           fontWeight="700"
                         >
                           {cell?.value ? cell?.value : ' - '}
                         </Text>
-                      </Link>
-                    );
-                  } else if (cell?.column.Header === "date Time") {
-                    data = (
-                      <Text
-                        me="10px"
-                        color={textColor}
-                        fontSize="sm"
-                        fontWeight="700"
-                      >
-                        {moment(cell?.value).format('D/MM/YYYY LT')}
-                      </Text>
-                    );
-                  } else if (cell?.column.Header === "create By") {
-                    data = (
-                      <Text
-                        me="10px"
-                        color={textColor}
-                        fontSize="sm"
-                        fontWeight="700"
-                      >
-                        {cell?.value ? cell?.value : ' - '}
-                      </Text>
 
-                    );
-                  } else if (cell?.column.Header === "times tamp") {
-                    data = (
-                      <Text color={textColor} fontSize="sm" fontWeight="700">
-                        {/* {moment(cell?.value).toNow()} */}
-                        {moment(cell?.value).format('(DD/MM) LT')}
+                      );
+                    } else if (cell?.column.Header === "times tamp") {
+                      data = (
+                        <Text color={textColor} fontSize="sm" fontWeight="700">
+                          {/* {moment(cell?.value).toNow()} */}
+                          {moment(cell?.value).format('(DD/MM) LT')}
 
-                      </Text>
+                        </Text>
+                      );
+                    }
+                    return (
+                      <Td
+                        {...cell?.getCellProps()}
+                        key={index}
+                        fontSize={{ sm: "14px" }}
+                        minW={{ sm: "150px", md: "200px", lg: "auto" }}
+                        borderColor="transparent"
+                      >
+                        {data}
+                      </Td>
                     );
-                  }
-                  return (
-                    <Td
-                      {...cell?.getCellProps()}
-                      key={index}
-                      fontSize={{ sm: "14px" }}
-                      minW={{ sm: "150px", md: "200px", lg: "auto" }}
-                      borderColor="transparent"
-                    >
-                      {data}
-                    </Td>
-                  );
-                })}
-              </Tr>
-            );
-          })}
+                  })}
+                </Tr>
+              );
+            })}
         </Tbody>
       </Table>
       <div style={{ display: 'flex', justifyContent: 'left', alignItems: 'center', margin: "1rem" }}>

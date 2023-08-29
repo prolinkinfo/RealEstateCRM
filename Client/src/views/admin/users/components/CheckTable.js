@@ -27,6 +27,7 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import Delete from "../Delete";
 import { getApi } from "services/api";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
+import Spinner from "components/spinner/Spinner";
 
 export default function CheckTable(props) {
   const { columnsData } = props;
@@ -39,10 +40,13 @@ export default function CheckTable(props) {
   const [deleteModel, setDelete] = useState(false);
   // const data = useMemo(() => tableData, [tableData]);
   const [data, setData] = useState([])
+  const [isLoding, setIsLoding] = useState(false)
 
   const fetchData = async () => {
+    setIsLoding(true)
     let result = await getApi('api/user/');
     setData(result.data?.user);
+    setIsLoding(false)
   }
 
   const tableInstance = useTable(
@@ -146,88 +150,95 @@ export default function CheckTable(props) {
           ))}
         </Thead>
         <Tbody {...getTableBodyProps()}>
-          {data?.length === 0 && (
+          {isLoding ?
             <Tr>
-              <Td colSpan={columns.length}>
-                <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                  -- No Data Found --
-                </Text>
+              <Td colSpan={columns?.length}>
+                <Flex justifyContent={'center'} alignItems={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                  <Spinner />
+                </Flex>
               </Td>
             </Tr>
-          )}
-          {page?.map((row, i) => {
-            prepareRow(row);
-            return (
-              <Tr {...row?.getRowProps()} key={i}>
-                {row?.cells?.map((cell, index) => {
-                  let data = "";
-                  if (cell?.column.Header === "#") {
-                    data = (
-                      <Flex align="center" >
-                        {cell?.row?.original?.role !== 'admin' ? <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" /> : <Text me="28px"></Text>}
-                        <Text color={textColor} fontSize="sm" fontWeight="700">
-                          {cell?.row?.index + 1}
-                        </Text>
-                      </Flex>
-                    );
-                  } else if (cell?.column.Header === "email Id") {
-                    data = (
-                      <Link to={user?.role !== 'admin' ? `/userView/${cell?.row?.values._id}` : `/admin/userView/${cell?.row?.values._id}`}>
+            : data?.length === 0 ? (
+              <Tr>
+                <Td colSpan={columns.length}>
+                  <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                    -- No Data Found --
+                  </Text>
+                </Td>
+              </Tr>
+            ) : page?.map((row, i) => {
+              prepareRow(row);
+              return (
+                <Tr {...row?.getRowProps()} key={i}>
+                  {row?.cells?.map((cell, index) => {
+                    let data = "";
+                    if (cell?.column.Header === "#") {
+                      data = (
+                        <Flex align="center" >
+                          {cell?.row?.original?.role !== 'admin' ? <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" /> : <Text me="28px"></Text>}
+                          <Text color={textColor} fontSize="sm" fontWeight="700">
+                            {cell?.row?.index + 1}
+                          </Text>
+                        </Flex>
+                      );
+                    } else if (cell?.column.Header === "email Id") {
+                      data = (
+                        <Link to={user?.role !== 'admin' ? `/userView/${cell?.row?.values._id}` : `/admin/userView/${cell?.row?.values._id}`}>
+                          <Text
+                            me="10px"
+                            sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                            color='green.400'
+                            fontSize="sm"
+                            fontWeight="700"
+                          >
+                            {cell?.value}
+                          </Text>
+                        </Link>
+                      );
+                    } else if (cell?.column.Header === "first Name") {
+                      data = (
                         <Text
                           me="10px"
-                          sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                          color='green.400'
+                          color={textColor}
                           fontSize="sm"
                           fontWeight="700"
                         >
+                          {cell?.value ? cell?.value : ' - '}
+                        </Text>
+                      );
+                    } else if (cell?.column.Header === "last Name") {
+                      data = (
+                        <Text
+                          me="10px"
+                          color={textColor}
+                          fontSize="sm"
+                          fontWeight="700"
+                        >
+                          {cell?.value ? cell?.value : ' - '}
+                        </Text>
+                      );
+                    } else if (cell?.column.Header === "role") {
+                      data = (
+                        <Text color={textColor} fontSize="sm" fontWeight="700">
                           {cell?.value}
                         </Text>
-                      </Link>
-                    );
-                  } else if (cell?.column.Header === "first Name") {
-                    data = (
-                      <Text
-                        me="10px"
-                        color={textColor}
-                        fontSize="sm"
-                        fontWeight="700"
+                      );
+                    }
+                    return (
+                      <Td
+                        {...cell?.getCellProps()}
+                        key={index}
+                        fontSize={{ sm: "14px" }}
+                        minW={{ sm: "150px", md: "200px", lg: "auto" }}
+                        borderColor="transparent"
                       >
-                        {cell?.value ? cell?.value : ' - '}
-                      </Text>
+                        {data}
+                      </Td>
                     );
-                  } else if (cell?.column.Header === "last Name") {
-                    data = (
-                      <Text
-                        me="10px"
-                        color={textColor}
-                        fontSize="sm"
-                        fontWeight="700"
-                      >
-                        {cell?.value ? cell?.value : ' - '}
-                      </Text>
-                    );
-                  } else if (cell?.column.Header === "role") {
-                    data = (
-                      <Text color={textColor} fontSize="sm" fontWeight="700">
-                        {cell?.value}
-                      </Text>
-                    );
-                  }
-                  return (
-                    <Td
-                      {...cell?.getCellProps()}
-                      key={index}
-                      fontSize={{ sm: "14px" }}
-                      minW={{ sm: "150px", md: "200px", lg: "auto" }}
-                      borderColor="transparent"
-                    >
-                      {data}
-                    </Td>
-                  );
-                })}
-              </Tr>
-            );
-          })}
+                  })}
+                </Tr>
+              );
+            })}
         </Tbody>
       </Table>
       <div style={{ display: 'flex', justifyContent: 'left', alignItems: 'center', margin: "1rem" }}>

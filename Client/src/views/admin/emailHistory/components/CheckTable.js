@@ -25,6 +25,7 @@ import { Link } from "react-router-dom";
 import { getApi } from "services/api";
 import moment from "moment";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
+import Spinner from "components/spinner/Spinner";
 
 export default function CheckTable(props) {
   const { columnsData } = props;
@@ -35,10 +36,13 @@ export default function CheckTable(props) {
 
   const [data, setData] = useState([])
   const user = JSON.parse(localStorage.getItem("user"))
+  const [isLoding, setIsLoding] = useState(false)
 
   const fetchData = async () => {
+    setIsLoding(true)
     let result = await getApi(user.role === 'admin' ? 'api/email/' : `api/email/?sender=${user._id}`);
     setData(result?.data);
+    setIsLoding(false)
   }
 
   const tableInstance = useTable(
@@ -127,98 +131,105 @@ export default function CheckTable(props) {
           ))}
         </Thead>
         <Tbody {...getTableBodyProps()}>
-          {data?.length === 0 && (
+          {isLoding ?
             <Tr>
-              <Td colSpan={columns.length}>
-                <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                  -- No Data Found --
-                </Text>
+              <Td colSpan={columns?.length}>
+                <Flex justifyContent={'center'} alignItems={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                  <Spinner />
+                </Flex>
               </Td>
             </Tr>
-          )}
-          {page?.map((row, i) => {
-            prepareRow(row);
-            return (
-              <Tr {...row?.getRowProps()} key={i}>
-                {row?.cells?.map((cell, index) => {
-                  let data = "";
-                  if (cell?.column.Header === "#") {
-                    data = (
-                      <Flex align="center">
-                        <Text color={textColor} fontSize="sm" fontWeight="700">
-                          {cell?.row?.index + 1}
-                        </Text>
-                      </Flex>
-                    );
-                  } else if (cell?.column.Header === "sender Email") {
-                    data = (
-                      <Text
-                        me="10px"
-                        color={textColor}
-                        fontSize="sm"
-                        fontWeight="700"
-                      >
-                        {cell?.value ? cell?.value : ' - '}
-                      </Text>
-                    );
-                  } else if (cell?.column.Header === "recipient") {
-                    data = (
-                      <Link to={user?.role !== 'admin' ? `/Email/${cell?.row?.values._id}` : `/admin/Email/${cell?.row?.values._id}`}>
+            : data?.length === 0 ? (
+              <Tr>
+                <Td colSpan={columns.length}>
+                  <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                    -- No Data Found --
+                  </Text>
+                </Td>
+              </Tr>
+            ) : page?.map((row, i) => {
+              prepareRow(row);
+              return (
+                <Tr {...row?.getRowProps()} key={i}>
+                  {row?.cells?.map((cell, index) => {
+                    let data = "";
+                    if (cell?.column.Header === "#") {
+                      data = (
+                        <Flex align="center">
+                          <Text color={textColor} fontSize="sm" fontWeight="700">
+                            {cell?.row?.index + 1}
+                          </Text>
+                        </Flex>
+                      );
+                    } else if (cell?.column.Header === "sender Email") {
+                      data = (
                         <Text
                           me="10px"
-                          sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                          color='green.400'
-                          fontSize="sm"
-                          fontWeight="700"
-                        >
-                          {cell?.value}
-                        </Text>
-                      </Link>
-                    );
-                  } else if (cell?.column.Header === "create From") {
-                    data = (
-                      <Link to={cell?.row?.original?.createBy ? user?.role !== 'admin' ? `/contactView/${cell?.row?.original.createBy}` : `/admin/contactView/${cell?.row?.original.createBy}` : user?.role !== 'admin' ? `/leadView/${cell?.row?.original.createByLead}` : `/admin/leadView/${cell?.row?.original.createByLead}`}>
-                        <Text
-                          me="10px"
-                          sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                          color='green.400'
+                          color={textColor}
                           fontSize="sm"
                           fontWeight="700"
                         >
                           {cell?.value ? cell?.value : ' - '}
                         </Text>
-                      </Link>
+                      );
+                    } else if (cell?.column.Header === "recipient") {
+                      data = (
+                        <Link to={user?.role !== 'admin' ? `/Email/${cell?.row?.values._id}` : `/admin/Email/${cell?.row?.values._id}`}>
+                          <Text
+                            me="10px"
+                            sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                            color='green.400'
+                            fontSize="sm"
+                            fontWeight="700"
+                          >
+                            {cell?.value}
+                          </Text>
+                        </Link>
+                      );
+                    } else if (cell?.column.Header === "create From") {
+                      data = (
+                        <Link to={cell?.row?.original?.createBy ? user?.role !== 'admin' ? `/contactView/${cell?.row?.original.createBy}` : `/admin/contactView/${cell?.row?.original.createBy}` : user?.role !== 'admin' ? `/leadView/${cell?.row?.original.createByLead}` : `/admin/leadView/${cell?.row?.original.createByLead}`}>
+                          <Text
+                            me="10px"
+                            sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                            color='green.400'
+                            fontSize="sm"
+                            fontWeight="700"
+                          >
+                            {cell?.value ? cell?.value : ' - '}
+                          </Text>
+                        </Link>
 
-                    );
-                  } else if (cell?.column.Header === "timestamp") {
-                    data = (
-                      <Text color={textColor} fontSize="sm" fontWeight="700">
-                        {moment(cell?.value).toNow()}
-                      </Text>
-                    );
-                  } else if (cell?.column.Header === "create at") {
-                    data = (
-                      <Text color={textColor} fontSize="sm" fontWeight="700">
-                        {moment(cell?.row?.values.timestamp).format('(DD/MM) h:mma')}
-                      </Text>
-                    );
-                  }
-                  return (
-                    <Td
-                      {...cell?.getCellProps()}
-                      key={index}
-                      fontSize={{ sm: "14px" }}
-                      minW={{ sm: "150px", md: "200px", lg: "auto" }}
-                      borderColor="transparent"
-                    >
-                      {data}
+                      );
+                    } else if (cell?.column.Header === "timestamp") {
+                      data = (
+                        <Text color={textColor} fontSize="sm" fontWeight="700">
+                          {moment(cell?.value).toNow()}
+                        </Text>
+                      );
+                    } else if (cell?.column.Header === "create at") {
+                      data = (
+                        <Text color={textColor} fontSize="sm" fontWeight="700">
+                          {moment(cell?.row?.values.timestamp).format('(DD/MM) h:mma')}
+                        </Text>
+                      );
+                    }
+                    return (
+                      <Td
+                        {...cell?.getCellProps()}
+                        key={index}
+                        fontSize={{ sm: "14px" }}
+                        minW={{ sm: "150px", md: "200px", lg: "auto" }}
+                        borderColor="transparent"
+                      >
+                        {data}
 
-                    </Td>
-                  );
-                })}
-              </Tr>
-            );
-          })}
+                      </Td>
+                    );
+                  })}
+                </Tr>
+              );
+            })}
         </Tbody>
       </Table>
       <div style={{ display: 'flex', justifyContent: 'left', alignItems: 'center', margin: "1rem" }}>

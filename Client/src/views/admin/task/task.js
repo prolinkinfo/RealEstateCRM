@@ -4,9 +4,10 @@ import { Button, useDisclosure, Flex, Text } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons'
 import AddTask from './components/addTask'
 import CountUpComponent from "components/countUpComponent/countUpComponent"
+import { useEffect, useState } from 'react'
+import { getApi } from 'services/api'
 
 const Task = (props) => {
-    const { data, fetchData } = props
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const columns = [
@@ -27,23 +28,28 @@ const Task = (props) => {
         onOpen()
     }
 
-    // const [data, setData] = useState([])
+    const [data, setData] = useState([])
+    const user = JSON.parse(localStorage.getItem("user"))
+    const [isLoding, setIsLoding] = useState(false)
 
-    // const fetchData = async () => {
-    //     let result = await getApi('api/task/');
-    //     setData(result.data);
-    // }
+    const fetchData = async () => {
+        setIsLoding(true)
+        let result = await getApi(user.role === 'admin' ? 'api/task/' : `api/task/?createBy=${user._id}`);
+        setData(result.data);
+        setIsLoding(false)
+    }
 
-    // useEffect(() => {
-    //     fetchData()
-    // }, [])
+    useEffect(() => {
+        fetchData()
+    }, [])
+
 
     return (
         <div>
             <Flex alignItems={'center'} justifyContent={"right"} flexWrap={'wrap'} mb={3}>
                 <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Create Task</Button>
             </Flex>
-            <CheckTable columnsData={columns} data={data} />
+            <CheckTable columnsData={columns} data={data} isLoding={isLoding} />
             <AddTask isOpen={isOpen} fetchData={fetchData} onClose={onClose} />
         </div>
     )

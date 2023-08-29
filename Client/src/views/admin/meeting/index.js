@@ -23,10 +23,13 @@ const Index = () => {
 
     const [data, setData] = useState([])
     const user = JSON.parse(localStorage.getItem("user"))
+    const [isLoding, setIsLoding] = useState(false)
 
     const fetchData = async () => {
+        setIsLoding(true)
         let result = await getApi(user.role === 'admin' ? 'api/meeting' : `api/meeting?createdBy=${user._id}`);
         setData(result?.data);
+        setIsLoding(false)
     }
 
     const [addMeeting, setMeeting] = useState(false);
@@ -44,7 +47,7 @@ const Index = () => {
             </Grid>
 
             {/* <CheckTable columnsData={columns} tableData={data} /> */}
-            <CheckTable isOpen={addMeeting} data={data} columnsData={columns} />
+            <CheckTable isOpen={addMeeting} isLoding={isLoding} data={data} columnsData={columns} />
             {/* Add Form */}
             <AddMeeting isOpen={addMeeting} onClose={setMeeting} />
         </div>

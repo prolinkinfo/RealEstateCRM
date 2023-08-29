@@ -148,7 +148,7 @@ const View = () => {
                         </TabList>
 
                         <TabPanels>
-                            <TabPanel>
+                            <TabPanel pt={4} p={0}>
 
                                 <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                                     <GridItem colSpan={{ base: 12, md: 6 }}>
@@ -283,9 +283,7 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
-                                </Grid>
 
-                                <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                                     <GridItem colSpan={{ base: 12 }}>
                                         <Card >
                                             <Grid templateColumns="repeat(12, 1fr)" gap={4}>
@@ -327,10 +325,10 @@ const View = () => {
                                 </Grid>
 
                             </TabPanel>
-                            <TabPanel>
+                            <TabPanel pt={4} p={0}>
                                 <GridItem colSpan={{ base: 4 }} >
                                     <Card >
-                                        <Grid templateColumns={{ base: "1fr" }} gap={4}>
+                                        <Grid overflow={'hidden'} templateColumns={{ base: "1fr" }} gap={4}>
                                             <GridItem colSpan={2}>
                                                 <Box>
                                                     <Heading size="md" mb={3}>

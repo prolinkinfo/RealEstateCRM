@@ -1,4 +1,4 @@
-import { Button, FormLabel, Grid, GridItem, Heading, Input, List, ListItem, Text, VStack, useDisclosure } from '@chakra-ui/react';
+import { Button, Flex, FormLabel, Grid, GridItem, Heading, Input, List, ListItem, Text, VStack, useDisclosure } from '@chakra-ui/react';
 import Card from 'components/card/Card';
 import FolderTreeView from 'components/FolderTreeView/folderTreeView';
 import { useEffect, useState } from 'react';
@@ -23,10 +23,11 @@ const Index = () => {
     const [isLoding, setIsLoding] = useState(false)
     const [linkDocument, setLinkDocument] = useState(false)
 
-
     const fetchData = async () => {
+        setIsLoding(true)
         let result = await getApi(user.role === 'admin' ? 'api/document' : `api/document?createBy=${user._id}`);
         setData(result?.data);
+        setIsLoding(false)
     }
 
     const initialValues = {
@@ -104,13 +105,21 @@ const Index = () => {
                         </Heading>
                         <HSeparator />
                         <VStack mt={4} alignItems="flex-start">
-                            {data?.map((item) => (
-                                <FolderTreeView name={item.folderName} item={item}>
-                                    {item?.files?.map((file) => (
-                                        <FolderTreeView download={download} setLinkDocument={setLinkDocument} deleteFile={deleteFile} data={file} name={file.fileName} isFile />
-                                    ))}
-                                </FolderTreeView>
-                            ))}
+                            {isLoding ?
+                                <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
+                                    <Spinner />
+                                </Flex>
+                                : data?.length === 0 ? (
+                                    <Text textAlign={'center'} width="100%" fontSize="sm" fontWeight="700">
+                                        -- No Document Found --
+                                    </Text>
+                                ) : data?.map((item) => (
+                                    <FolderTreeView name={item.folderName} item={item}>
+                                        {item?.files?.map((file) => (
+                                            <FolderTreeView download={download} setLinkDocument={setLinkDocument} deleteFile={deleteFile} data={file} name={file.fileName} isFile />
+                                        ))}
+                                    </FolderTreeView>
+                                ))}
                         </VStack>
                     </Card>
                 </GridItem>
