@@ -1,9 +1,11 @@
 import { CloseIcon, PhoneIcon, StarIcon } from '@chakra-ui/icons';
 import { Box, Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormLabel, Grid, GridItem, Heading, IconButton, Input, InputGroup, InputLeftElement, Radio, RadioGroup, Select, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Stack, Text } from '@chakra-ui/react';
 import { HSeparator } from 'components/separator/Separator';
+import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
 import moment from 'moment';
 import React, { useEffect } from 'react';
+import { useState } from 'react';
 import { BiMobile } from 'react-icons/bi';
 import { useParams } from 'react-router-dom';
 import { contactSchema } from 'schema';
@@ -11,6 +13,7 @@ import { putApi } from 'services/api';
 import { getApi } from 'services/api';
 
 const Edit = (props) => {
+    const [isLoding, setIsLoding] = useState(false)
 
     const initialValues = {
         firstName: "",
@@ -76,12 +79,15 @@ const Edit = (props) => {
 
     const EditData = async () => {
         try {
+            setIsLoding(true)
             let response = await putApi(`api/contact/edit/${param.id}`, values)
             if (response.status === 200) {
                 props.onClose();
             }
         } catch (e) {
             console.log(e);
+        } finally {
+            setIsLoding(false)
         }
     };
 
@@ -796,9 +802,10 @@ const Edit = (props) => {
                             variant="solid"
                             colorScheme="green"
                             type="submit"
+                            disabled={isLoding ? true : false}
                             onClick={handleSubmit}
                         >
-                            Update Data
+                            {isLoding ? <Spinner /> : 'Update Data'}
                         </Button>
                         <Button
                             variant="outline"

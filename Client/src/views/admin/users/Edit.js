@@ -7,6 +7,8 @@ import { getApi } from 'services/api';
 import { useParams } from 'react-router-dom';
 import { putApi } from 'services/api';
 import { toast } from 'react-toastify';
+import { useState } from 'react';
+import Spinner from 'components/spinner/Spinner';
 
 
 const Edit = (props) => {
@@ -29,9 +31,11 @@ const Edit = (props) => {
     });
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, } = formik
 
+    const [isLoding, setIsLoding] = useState(false)
 
     const EditData = async () => {
         try {
+            setIsLoding(true)
             let response = await putApi(`api/user/edit/${param.id}`, values)
             if (response && response.status === 200) {
                 props.onClose();
@@ -41,6 +45,9 @@ const Edit = (props) => {
             }
         } catch (e) {
             console.log(e);
+        }
+        finally {
+            setIsLoding(false)
         }
     };
 
@@ -141,7 +148,7 @@ const Edit = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' onClick={handleSubmit}>Edit</Button>
+                    <Button variant='brand' disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Update Data'}</Button>
                     <Button onClick={() => onClose(false)}>close</Button>
                 </ModalFooter>
             </ModalContent>

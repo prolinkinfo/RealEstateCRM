@@ -1,14 +1,16 @@
 import { CloseIcon, PhoneIcon } from '@chakra-ui/icons';
 import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormLabel, Grid, GridItem, Heading, IconButton, Input, InputGroup, InputLeftElement, Select, Text } from '@chakra-ui/react';
 import { HSeparator } from 'components/separator/Separator';
+import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { leadSchema } from 'schema';
 import { putApi } from 'services/api';
 import { getApi } from 'services/api';
 
 const Edit = (props) => {
+    const [isLoding, setIsLoding] = useState(false)
 
     const initialValues = {
         // Lead Information:
@@ -57,12 +59,16 @@ const Edit = (props) => {
 
     const EditData = async () => {
         try {
+            setIsLoding(true)
             let response = await putApi(`api/lead/edit/${param.id}`, values)
             if (response.status === 200) {
                 props.onClose();
             }
         } catch (e) {
             console.log(e);
+        }
+        finally {
+            setIsLoding(false)
         }
     };
 
@@ -564,9 +570,10 @@ const Edit = (props) => {
                             variant="solid"
                             colorScheme="green"
                             type="submit"
+                            disabled={isLoding ? true : false}
                             onClick={handleSubmit}
                         >
-                            Update Data
+                            {isLoding ? <Spinner /> : 'Update Data'}
                         </Button>
                         <Button
                             variant="outline"

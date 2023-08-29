@@ -1,7 +1,9 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormLabel, Grid, GridItem, Heading, IconButton, Input, Select, Text, Textarea } from '@chakra-ui/react';
 import { HSeparator } from 'components/separator/Separator';
+import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
+import { useState } from 'react';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { propertySchema } from 'schema';
@@ -65,15 +67,20 @@ const Edit = (props) => {
     });
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
+    const [isLoding, setIsLoding] = useState(false)
 
     const EditData = async () => {
         try {
+            setIsLoding(true)
             let response = await putApi(`api/property/edit/${param.id}`, values)
             if (response.status === 200) {
                 props.onClose();
             }
         } catch (e) {
             console.log(e);
+        }
+        finally {
+            setIsLoding(false)
         }
     };
 
@@ -662,10 +669,11 @@ const Edit = (props) => {
                             sx={{ textTransform: "capitalize" }}
                             variant="solid"
                             colorScheme="green"
+                            disabled={isLoding ? true : false}
                             type="submit"
                             onClick={handleSubmit}
                         >
-                            Update Data
+                            {isLoding ? <Spinner /> : 'Update Data'}
                         </Button>
                         <Button
                             variant="outline"
