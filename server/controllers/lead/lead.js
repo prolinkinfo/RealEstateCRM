@@ -3,6 +3,7 @@ const EmailHistory = require('../../model/schema/email');
 const PhoneCall = require('../../model/schema/phoneCall');
 const Task = require('../../model/schema/task')
 const MeetingHistory = require('../../model/schema/meeting')
+const DocumentSchema = require('../../model/schema/document')
 
 const index = async (req, res) => {
     const query = req.query
@@ -45,6 +46,7 @@ const edit = async (req, res) => {
 
 const view = async (req, res) => {
     let lead = await Lead.findOne({ _id: req.params.id })
+    if (!lead) return res.status(404).json({ message: "no Data Found." })
 
     let query = req.query
     if (query.sender) {
@@ -202,8 +204,31 @@ const view = async (req, res) => {
             }
         }
     ]);
-    if (!lead) return res.status(404).json({ message: "no Data Found." })
-    res.status(200).json({ lead, Email, phoneCall, task, meeting })
+    const Document = await DocumentSchema.aggregate([
+        { $unwind: '$file' },
+        { $match: { 'file.deleted': false, 'file.linkLead': lead._id } },
+        {
+            $lookup: {
+                from: 'users', // Replace 'users' with the actual name of your users collection
+                localField: 'createBy',
+                foreignField: '_id', // Assuming the 'createBy' field in DocumentSchema corresponds to '_id' in the 'users' collection
+                as: 'creatorInfo'
+            }
+        },
+        { $unwind: { path: '$creatorInfo', preserveNullAndEmptyArrays: true } },
+        { $match: { 'creatorInfo.deleted': false } },
+        {
+            $group: {
+                _id: '$_id',  // Group by the document _id (folder's _id)
+                folderName: { $first: '$folderName' }, // Get the folderName (assuming it's the same for all files in the folder)
+                createByName: { $first: { $concat: ['$creatorInfo.firstName', ' ', '$creatorInfo.lastName'] } },
+                files: { $push: '$file' }, // Push the matching files back into an array
+            }
+        },
+        { $project: { creatorInfo: 0 } },
+    ]);
+
+    res.status(200).json({ lead, Email, phoneCall, task, meeting, Document })
 }
 
 const deleteData = async (req, res) => {
