@@ -4,6 +4,7 @@ const MeetingHistory = require('../../model/schema/meeting')
 const phoneCall = require('../../model/schema/phoneCall')
 const Task = require('../../model/schema/task')
 const TextMsg = require('../../model/schema/textMsg')
+const DocumentSchema = require('../../model/schema/document')
 
 const index = async (req, res) => {
     const query = req.query
@@ -336,8 +337,31 @@ const view = async (req, res) => {
             { $project: { contact: 0, users: 0 } },
         ])
 
+        const Document = await DocumentSchema.aggregate([
+            { $unwind: '$file' },
+            { $match: { 'file.deleted': false, 'file.linkContact': contact._id } },
+            {
+                $lookup: {
+                    from: 'users', // Replace 'users' with the actual name of your users collection
+                    localField: 'createBy',
+                    foreignField: '_id', // Assuming the 'createBy' field in DocumentSchema corresponds to '_id' in the 'users' collection
+                    as: 'creatorInfo'
+                }
+            },
+            { $unwind: { path: '$creatorInfo', preserveNullAndEmptyArrays: true } },
+            { $match: { 'creatorInfo.deleted': false } },
+            {
+                $group: {
+                    _id: '$_id',  // Group by the document _id (folder's _id)
+                    folderName: { $first: '$folderName' }, // Get the folderName (assuming it's the same for all files in the folder)
+                    createByName: { $first: { $concat: ['$creatorInfo.firstName', ' ', '$creatorInfo.lastName'] } },
+                    files: { $push: '$file' }, // Push the matching files back into an array
+                }
+            },
+            { $project: { creatorInfo: 0 } },
+        ]);
 
-        res.status(200).json({ interestProperty, contact, EmailHistory, phoneCallHistory, meetingHistory, textMsg, task });
+        res.status(200).json({ interestProperty, contact, EmailHistory, phoneCallHistory, meetingHistory, textMsg, task, Document });
     }
     catch (error) {
         console.error(error);
