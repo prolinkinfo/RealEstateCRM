@@ -1,8 +1,6 @@
 import axios from "axios"
 import { constant } from "constant"
 
-const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-
 
 export const postApi = async (path, data, login) => {
     try {
