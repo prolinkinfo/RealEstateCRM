@@ -1,11 +1,12 @@
 import { CloseIcon } from '@chakra-ui/icons';
-import { Button, Checkbox, FormLabel, Grid, GridItem, IconButton, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Radio, RadioGroup, Select, Stack, Text, Textarea, useBreakpointValue } from '@chakra-ui/react';
+import { Button, Checkbox, Flex, FormLabel, Grid, GridItem, IconButton, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Radio, RadioGroup, Select, Stack, Text, Textarea } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { TaskSchema } from 'schema';
 import { getApi } from 'services/api';
 import { postApi } from 'services/api';
 import Spinner from 'components/spinner/Spinner';
+import { LiaMousePointerSolid } from 'react-icons/lia';
 
 const AddTask = (props) => {
     const { onClose, isOpen, fetchData } = props
@@ -109,7 +110,7 @@ const AddTask = (props) => {
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Category
                             </FormLabel>
-                            <RadioGroup onChange={(e) => setFieldValue('category', e)} value={values.category}>
+                            <RadioGroup onChange={(e) => { setFieldValue('category', e); setFieldValue('assignmentTo', null); setFieldValue('assignmentToLead', null); }} value={values.category}>
                                 <Stack direction='row'>
                                     <Radio value='None' >None</Radio>
                                     <Radio value='contact'>Contact</Radio>
@@ -135,45 +136,57 @@ const AddTask = (props) => {
                             <Text mb='10px' color={'red'}> {errors.description && touched.description && errors.description}</Text>
                         </GridItem>
                         {values.category === "contact" ?
-                            <GridItem colSpan={{ base: 12, md: 6 }} >
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Assignment To {values.category === "contact" ? "Contact" : values.category === "lead" && 'Lead'}
-                                </FormLabel>
-                                <Select
-                                    value={values.assignmentTo}
-                                    name="assignmentTo"
-                                    onChange={handleChange}
-                                    mb={errors.assignmentTo && touched.assignmentTo ? undefined : '10px'}
-                                    fontWeight='500'
-                                    placeholder={'Assignment To'}
-                                    borderColor={errors.assignmentTo && touched.assignmentTo ? "red.300" : null}
-                                >
-                                    {assignmentToData?.map((item) => {
-                                        return <option value={item._id} key={item._id}>{values.category === 'contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
-                                    })}
-                                </Select>
-                                <Text mb='10px' color={'red'}> {errors.assignmentTo && touched.assignmentTo && errors.assignmentTo}</Text>
-                            </GridItem>
-                            : values.category === "lead" ?
+                            <>
                                 <GridItem colSpan={{ base: 12, md: 6 }} >
                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                        Assignment To sdas {values.category === "contact" ? "Contact" : values.category === "lead" && 'Lead'}
+                                        Assignment To  Contact
                                     </FormLabel>
-                                    <Select
-                                        value={values.assignmentToLead}
-                                        name="assignmentToLead"
-                                        onChange={handleChange}
-                                        mb={errors.assignmentToLead && touched.assignmentToLead ? undefined : '10px'}
-                                        fontWeight='500'
-                                        placeholder={'Assignment To'}
-                                        borderColor={errors.assignmentToLead && touched.assignmentToLead ? "red.300" : null}
-                                    >
-                                        {assignmentToData?.map((item) => {
-                                            return <option value={item._id} key={item._id}>{values.category === 'contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
-                                        })}
-                                    </Select>
-                                    <Text mb='10px' color={'red'}> {errors.assignmentToLead && touched.assignmentToLead && errors.assignmentToLead}</Text>
-                                </GridItem> : ''
+                                    <Flex justifyContent={'space-between'}>
+                                        <Select
+                                            value={values.assignmentTo}
+                                            name="assignmentTo"
+                                            onChange={handleChange}
+                                            mb={errors.assignmentTo && touched.assignmentTo ? undefined : '10px'}
+                                            fontWeight='500'
+                                            placeholder={'Assignment To'}
+                                            borderColor={errors.assignmentTo && touched.assignmentTo ? "red.300" : null}
+                                        >
+                                            {assignmentToData?.map((item) => {
+                                                return <option value={item._id} key={item._id}>{values.category === 'contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
+                                            })}
+                                        </Select>
+                                        <IconButton ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
+                                    </Flex>
+                                    <Text mb='10px' color={'red'}> {errors.assignmentTo && touched.assignmentTo && errors.assignmentTo}</Text>
+                                </GridItem>
+
+                            </>
+                            : values.category === "lead" ?
+                                <>
+                                    <GridItem colSpan={{ base: 12, md: 6 }} >
+                                        <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                            Assignment To Lead
+                                        </FormLabel>
+                                        <Flex justifyContent={'space-between'}>
+                                            <Select
+                                                value={values.assignmentToLead}
+                                                name="assignmentToLead"
+                                                onChange={handleChange}
+                                                mb={errors.assignmentToLead && touched.assignmentToLead ? undefined : '10px'}
+                                                fontWeight='500'
+                                                placeholder={'Assignment To'}
+                                                borderColor={errors.assignmentToLead && touched.assignmentToLead ? "red.300" : null}
+                                            >
+                                                {assignmentToData?.map((item) => {
+                                                    return <option value={item._id} key={item._id}>{values.category === 'contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
+                                                })}
+                                            </Select>
+                                            <IconButton ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
+                                        </Flex>
+                                        <Text mb='10px' color={'red'}> {errors.assignmentToLead && touched.assignmentToLead && errors.assignmentToLead}</Text>
+                                    </GridItem>
+                                </>
+                                : ''
                         }
                         <GridItem colSpan={{ base: 12 }} >
                             <Checkbox isChecked={isChecked} onChange={(e) => setIsChecked(e.target.checked)}>All Day Task ? </Checkbox>

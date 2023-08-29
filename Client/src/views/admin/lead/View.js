@@ -81,6 +81,7 @@ const View = () => {
         { Header: "Start Date", accessor: "start", },
         { Header: "End Date", accessor: "end", },
     ];
+
     const download = async (data) => {
         if (data) {
             let result = await getApi(`api/document/download/`, data)
