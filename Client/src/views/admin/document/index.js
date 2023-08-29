@@ -80,11 +80,11 @@ const Index = () => {
                 formData?.append('files', file);
             });
 
-            let response = await postApi('api/document/add', formData);
-            if (response && response.status === 200) {
-                fetchData();
-                formik.resetForm();
-            }
+            // let response = await postApi('api/document/add', formData);
+            // if (response && response.status === 200) {
+            //     fetchData();
+            //     formik.resetForm();
+            // }
         } catch (e) {
             console.log(e);
         }
@@ -142,7 +142,6 @@ const Index = () => {
                                 fontWeight='500'
                                 borderColor={errors?.folderName && touched?.folderName ? "red.300" : null}
                             />
-
                             {isOpen && values?.folderName && (
                                 <List position={'relative'} border={'1px solid'} bg={'gray.100'} width={'100%'} borderRadius={'0px 0px 20px 20px'} lineHeight={1} >
                                     {data?.filter((option) => option?.folderName?.toLowerCase()?.includes(values?.folderName.toLowerCase())).map((option, index) => (
@@ -163,7 +162,6 @@ const Index = () => {
                                 File Name
                             </FormLabel>
                             <Input
-                                onFocus={onOpen}
                                 fontSize='sm'
                                 onChange={handleChange}
                                 onBlur={() => setTimeout(onClose, 200)}
