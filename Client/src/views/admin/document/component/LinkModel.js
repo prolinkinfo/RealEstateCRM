@@ -8,7 +8,7 @@ import { getApi } from 'services/api';
 import { postApi } from 'services/api';
 
 const Link = (props) => {
-
+    const { setLinkDocument } = props;
     const [isLoding, setIsLoding] = useState(false)
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [data, setData] = useState([])
@@ -28,7 +28,6 @@ const Link = (props) => {
         },
     });
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
-    console.log(props.id)
 
     const handleClick = async () => {
         try {
@@ -36,6 +35,7 @@ const Link = (props) => {
             let data = values.linkContact ? { linkContact: values.linkContact } : { linkLead: values.linkLead }
             let response = await postApi(`api/document/link-document/${props.id}`, data)
             if (response && response.status === 200) {
+                setLinkDocument((pre) => !pre)
                 props.onClose();
             } else {
                 toast.error(response.response.data?.message)

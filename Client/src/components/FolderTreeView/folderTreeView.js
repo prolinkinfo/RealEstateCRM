@@ -10,7 +10,7 @@ import Delete from 'views/admin/document/component/Delete';
 import LinkModel from 'views/admin/document/component/LinkModel';
 import { CiMenuKebab } from "react-icons/ci";
 
-const FolderTreeView = ({ data, deleteFile, item, download, name, isFile, children }) => {
+const FolderTreeView = ({ data, deleteFile, item, download, name, isFile, children, setLinkDocument }) => {
     const [isOpen, setIsOpen] = useState(false);
     // const user = localStorage.getItem('user');
     const [deleteModel, setDelete] = useState(false);
@@ -71,7 +71,7 @@ const FolderTreeView = ({ data, deleteFile, item, download, name, isFile, childr
                         </Flex>
                     }
                     <Delete isOpen={deleteModel} onClose={setDelete} method='one' deleteFile={deleteFile} id={id} />
-                    <LinkModel isOpen={linkModel} onClose={setLinkModel} id={id} />
+                    <LinkModel isOpen={linkModel} setLinkDocument={setLinkDocument} onClose={setLinkModel} id={id} />
                 </Text>
             </ListItem>
             {

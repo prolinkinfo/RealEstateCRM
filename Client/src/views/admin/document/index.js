@@ -20,6 +20,8 @@ const Index = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const user = JSON.parse(localStorage.getItem("user"))
     const [isLoding, setIsLoding] = useState(false)
+    const [linkDocument, setLinkDocument] = useState(false)
+
 
     const fetchData = async () => {
         let result = await getApi(user.role === 'admin' ? 'api/document' : `api/document?createBy=${user._id}`);
@@ -86,8 +88,7 @@ const Index = () => {
 
     useEffect(() => {
         fetchData()
-    }, [])
-
+    }, [linkDocument])
 
     return (
         <div>
@@ -102,7 +103,7 @@ const Index = () => {
                             {data?.map((item) => (
                                 <FolderTreeView name={item.folderName} item={item}>
                                     {item?.files?.map((file) => (
-                                        <FolderTreeView download={download} deleteFile={deleteFile} data={file} name={file.fileName} isFile />
+                                        <FolderTreeView download={download} setLinkDocument={setLinkDocument} deleteFile={deleteFile} data={file} name={file.fileName} isFile />
                                     ))}
                                 </FolderTreeView>
                             ))}
