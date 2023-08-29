@@ -371,13 +371,13 @@ const View = () => {
                                         </Heading>
                                         <HSeparator />
                                         <VStack mt={4} alignItems="flex-start">
-                                            {allData?.Document?.map((item) => (
+                                            {allData?.Document?.length > 0 ? allData?.Document?.map((item) => (
                                                 <FolderTreeView name={item.folderName} item={item}>
                                                     {item?.files?.map((file) => (
                                                         <FolderTreeView download={download} data={file} name={file.fileName} isFile from="lead" />
                                                     ))}
                                                 </FolderTreeView>
-                                            ))}
+                                            )) : <Text> No Documents Found</Text>}
                                         </VStack>
                                     </Card>
                                 </GridItem>
