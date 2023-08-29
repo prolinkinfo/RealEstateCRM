@@ -33,6 +33,7 @@ const Index = () => {
     const initialValues = {
         folderName: '',
         files: '',
+        filename: '',
         createBy: user._id
     };
 
@@ -72,6 +73,7 @@ const Index = () => {
             const formData = new FormData();
             formData?.append('folderName', values.folderName);
             formData?.append('createBy', values.createBy);
+            formData?.append('filename', values.filename);
 
             // Append files to the formData
             values.files.forEach((file) => {
@@ -93,7 +95,7 @@ const Index = () => {
 
     useEffect(() => {
         fetchData()
-    }, [linkDocument])
+    }, [linkDocument, handleSubmit])
 
     return (
         <div>
@@ -136,14 +138,14 @@ const Index = () => {
                                 onBlur={() => setTimeout(onClose, 200)}
                                 value={values.folderName}
                                 name="folderName"
-                                placeholder='Recipient'
+                                placeholder='Enter Folder Name'
                                 fontWeight='500'
                                 borderColor={errors?.folderName && touched?.folderName ? "red.300" : null}
                             />
 
                             {isOpen && values?.folderName && (
                                 <List position={'relative'} border={'1px solid'} bg={'gray.100'} width={'100%'} borderRadius={'0px 0px 20px 20px'} lineHeight={1} >
-                                    {data?.filter((option) => option?.folderName?.includes(values?.folderName.toLowerCase())).map((option, index) => (
+                                    {data?.filter((option) => option?.folderName?.toLowerCase()?.includes(values?.folderName.toLowerCase())).map((option, index) => (
                                         <ListItem p={3} borderBottom={'2px solid #efefef'} sx={{ '&:last-child': { borderBottom: 'none' } }} key={option?._id} cursor={'pointer'}
                                             onClick={() => {
                                                 setFieldValue('folderName', option?.folderName)
@@ -155,6 +157,23 @@ const Index = () => {
                                 </List>
                             )}
                             <Text mb='10px' color={'red'}> {errors.folderName && touched.folderName && errors.folderName}</Text>
+                        </GridItem>
+                        <GridItem colSpan={{ base: 12 }} >
+                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                File Name
+                            </FormLabel>
+                            <Input
+                                onFocus={onOpen}
+                                fontSize='sm'
+                                onChange={handleChange}
+                                onBlur={() => setTimeout(onClose, 200)}
+                                value={values.filename}
+                                name="filename"
+                                placeholder='Enter File Name'
+                                fontWeight='500'
+                                borderColor={errors?.filename && touched?.filename ? "red.300" : null}
+                            />
+                            <Text mb='10px' color={'red'}> {errors.filename && touched.filename && errors.filename}</Text>
                         </GridItem>
                         <Upload count={values.files.length} onFileSelect={(file) => setFieldValue('files', file)} />
                         <Button disabled={isLoding ? true : false} onClick={handleSubmit} variant='brand' fontWeight='500'>

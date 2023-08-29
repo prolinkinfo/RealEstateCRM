@@ -73,12 +73,12 @@ const upload = multer({ storage: storage });
 
 const file = async (req, res) => {
     try {
-        const { folderName, createBy } = req.body;
+        const { filename, folderName, createBy } = req.body;
 
         const url = req.protocol + '://' + req.get('host');
 
         const files = req.files.map((file) => ({
-            fileName: file.filename,
+            fileName: filename || file.filename,
             path: file.path,
             img: `${url}/api/document/images/${file.filename}`,
             createOn: new Date(),
