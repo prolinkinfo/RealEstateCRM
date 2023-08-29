@@ -8,7 +8,7 @@ export const postApi = async (path, data, login) => {
     try {
         let result = await axios.post(constant.baseUrl + path, data, {
             headers: {
-                Authorization: token
+                Authorization: localStorage.getItem("token") || sessionStorage.getItem("token")
             }
         })
 
@@ -30,7 +30,7 @@ export const putApi = async (path, data, id) => {
     try {
         let result = await axios.put(constant.baseUrl + path, data, {
             headers: {
-                Authorization: token
+                Authorization: localStorage.getItem("token") || sessionStorage.getItem("token")
             }
         })
         return result
@@ -44,7 +44,7 @@ export const deleteApi = async (path, id) => {
     try {
         let result = await axios.delete(constant.baseUrl + path + id, {
             headers: {
-                Authorization: token
+                Authorization: localStorage.getItem("token") || sessionStorage.getItem("token")
             }
         })
         if (result.data?.token && result.data?.token !== null) {
@@ -61,7 +61,7 @@ export const deleteManyApi = async (path, data) => {
     try {
         let result = await axios.post(constant.baseUrl + path, data, {
             headers: {
-                Authorization: token
+                Authorization: localStorage.getItem("token") || sessionStorage.getItem("token")
             }
         })
         if (result.data?.token && result.data?.token !== null) {
@@ -79,7 +79,7 @@ export const getApi = async (path, id) => {
         if (id) {
             let result = await axios.get(constant.baseUrl + path + id, {
                 headers: {
-                    Authorization: token
+                    Authorization: localStorage.getItem("token") || sessionStorage.getItem("token")
                 }
             })
             return result
@@ -87,7 +87,7 @@ export const getApi = async (path, id) => {
         else {
             let result = await axios.get(constant.baseUrl + path, {
                 headers: {
-                    Authorization: token
+                    Authorization: localStorage.getItem("token") || sessionStorage.getItem("token")
                 }
             })
             return result
