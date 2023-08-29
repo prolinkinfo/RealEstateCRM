@@ -185,18 +185,19 @@ const LinkDocument = async (req, res) => {
 
         if (linkContact) {
             file.linkContact = linkContact;
+            file.linkLead = null;
         }
         if (linkLead) {
             file.linkLead = linkLead;
+            file.linkContact = null;
         }
 
         // Save the updated document
-
         const savedFolder = await folder.save();
 
         res.status(200).json({ message: "File link successfully.", document: savedFolder });
     } catch (err) {
-        res.status(500).json({ message: "Error deleting file.", error: err });
+        res.status(500).json({ message: "Error Link file.", error: err });
     }
 };
 
