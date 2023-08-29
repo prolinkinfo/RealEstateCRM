@@ -12,6 +12,7 @@ import { deleteApi } from 'services/api';
 import { HSeparator } from 'components/separator/Separator';
 import { constant } from 'constant';
 import Spinner from 'components/spinner/Spinner';
+import { toast } from 'react-toastify';
 
 
 const Index = () => {
@@ -49,6 +50,9 @@ const Index = () => {
             let result = await getApi(`api/document/download/`, data)
             if (result && result.status === 200) {
                 window.open(`${constant.baseUrl}api/document/download/${data}`)
+                toast.success('file Download successful')
+            } else if (result && result.response.status === 404) {
+                toast.error('file Not Found')
             }
         }
     }

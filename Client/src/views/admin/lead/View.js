@@ -2,6 +2,7 @@ import { AddIcon, ChevronDownIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons
 import {
     useDisclosure, Box, Button, Flex, Grid, GridItem, Heading, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text, Tabs,
     TabList,
+    VStack,
     Tab,
     TabPanel,
     TabPanels,
@@ -27,6 +28,9 @@ import TaskTable from "../task/components/CheckTable.js";
 import MeetingTable from "../meeting/components/CheckTable";
 import { SiGooglemeet } from "react-icons/si";
 import AddMeeting from "../meeting/components/Addmeeting";
+import { toast } from "react-toastify";
+import FolderTreeView from 'components/FolderTreeView/folderTreeView';
+import { constant } from "constant";
 
 
 const View = () => {
@@ -77,6 +81,17 @@ const View = () => {
         { Header: "Start Date", accessor: "start", },
         { Header: "End Date", accessor: "end", },
     ];
+    const download = async (data) => {
+        if (data) {
+            let result = await getApi(`api/document/download/`, data)
+            if (result && result.status === 200) {
+                window.open(`${constant.baseUrl}api/document/download/${data}`)
+                toast.success('file Download successful')
+            } else if (result && result.response.status === 404) {
+                toast.error('file Not Found')
+            }
+        }
+    }
 
     const fetchData = async () => {
         setIsLoding(true)
@@ -129,6 +144,7 @@ const View = () => {
                         >
                             <Tab>Information</Tab>
                             <Tab>Activity</Tab>
+                            <Tab>Document</Tab>
                         </TabList>
 
                         <TabPanels>
@@ -347,6 +363,26 @@ const View = () => {
                                     </Card>
                                 </GridItem>
                             </TabPanel>
+                            <TabPanel pt={4} p={0}>
+                                <GridItem colSpan={{ base: 4 }} >
+                                    <Card minH={'50vh'} >
+                                        <Heading size="lg" mb={4} >
+                                            Documents
+                                        </Heading>
+                                        <HSeparator />
+                                        <VStack mt={4} alignItems="flex-start">
+                                            {allData?.Document?.map((item) => (
+                                                <FolderTreeView name={item.folderName} item={item}>
+                                                    {item?.files?.map((file) => (
+                                                        <FolderTreeView download={download} data={file} name={file.fileName} isFile from="lead" />
+                                                    ))}
+                                                </FolderTreeView>
+                                            ))}
+                                        </VStack>
+                                    </Card>
+                                </GridItem>
+                            </TabPanel>
+
                         </TabPanels>
                     </Tabs>
                     <Card mt={3}>

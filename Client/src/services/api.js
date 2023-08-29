@@ -94,6 +94,7 @@ export const getApi = async (path, id) => {
         }
     } catch (e) {
         console.error(e)
+        return e
     }
 }
 

@@ -1,5 +1,5 @@
 import { AddIcon, ChevronDownIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { useDisclosure, Box, Button, Flex, Grid, GridItem, Heading, IconButton, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text, Tabs, TabList, Tab, TabPanels, TabPanel } from "@chakra-ui/react";
+import { useDisclosure, Box, Button, Flex, Grid, GridItem, Heading, IconButton, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text, Tabs, TabList, Tab, TabPanels, TabPanel, VStack } from "@chakra-ui/react";
 import Card from "components/card/Card";
 import { HSeparator } from "components/separator/Separator";
 import moment from "moment/moment";
@@ -28,6 +28,9 @@ import PropertyModel from "./components/propertyModel";
 import PropertyTable from "./components/propertyTable";
 import Spinner from "components/spinner/Spinner";
 import AddTask from "../task/components/addTask";
+import FolderTreeView from 'components/FolderTreeView/folderTreeView';
+import { constant } from "constant";
+import { toast } from "react-toastify";
 
 
 const View = () => {
@@ -81,9 +84,22 @@ const View = () => {
         { Header: "Start Date", accessor: "start", },
         { Header: "End Date", accessor: "end", },
     ];
+
     const [addEmailHistory, setAddEmailHistory] = useState(false);
     const [addPhoneCall, setAddPhoneCall] = useState(false);
     const [addMeeting, setMeeting] = useState(false);
+
+    const download = async (data) => {
+        if (data) {
+            let result = await getApi(`api/document/download/`, data)
+            if (result && result.status === 200) {
+                window.open(`${constant.baseUrl}api/document/download/${data}`)
+                toast.success('file Download successful')
+            } else if (result && result.response.status === 404) {
+                toast.error('file Not Found')
+            }
+        }
+    }
 
     const fetchData = async () => {
         setIsLoding(true)
@@ -137,11 +153,12 @@ const View = () => {
                         >
                             <Tab>Information</Tab>
                             <Tab>Activity</Tab>
+                            <Tab>Document</Tab>
                             <Tab>Social Media</Tab>
                         </TabList>
 
                         <TabPanels>
-                            <TabPanel>
+                            <TabPanel pt={4} p={0}>
 
                                 <Grid templateColumns="repeat(4, 1fr)" gap={3}>
                                     <GridItem rowSpan={2} colSpan={{ base: 4, md: 1 }}>
@@ -437,7 +454,7 @@ const View = () => {
                                 </Grid>
 
                             </TabPanel>
-                            <TabPanel>
+                            <TabPanel pt={4} p={0}>
                                 <GridItem colSpan={{ base: 4 }} >
                                     <Card overflow={'scroll'}>
                                         <Grid templateColumns={{ base: "1fr" }} gap={4}>
@@ -481,7 +498,27 @@ const View = () => {
                                 </GridItem>
 
                             </TabPanel>
-                            <TabPanel>
+                            <TabPanel pt={4} p={0}>
+                                <GridItem colSpan={{ base: 4 }} >
+                                    <Card minH={'50vh'} >
+                                        <Heading size="lg" mb={4} >
+                                            Documents
+                                        </Heading>
+                                        <HSeparator />
+                                        <VStack mt={4} alignItems="flex-start">
+                                            {data?.Document?.map((item) => (
+                                                <FolderTreeView name={item.folderName} item={item}>
+                                                    {item?.files?.map((file) => (
+                                                        <FolderTreeView download={download} data={file} name={file.fileName} isFile from="contact" />
+                                                    ))}
+                                                </FolderTreeView>
+                                            ))}
+                                        </VStack>
+                                    </Card>
+                                </GridItem>
+                            </TabPanel>
+
+                            <TabPanel pt={4} p={0}>
 
                                 <GridItem colSpan={{ base: 4 }} >
                                     <Card >
