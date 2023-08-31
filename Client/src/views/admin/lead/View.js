@@ -19,7 +19,7 @@ import Edit from "./Edit";
 import Delete from "./Delete";
 import Spinner from "components/spinner/Spinner";
 import ColumnsTable from "../contact/components/ColumnsTable";
-import AddEmailHistory from "../emailHistory/components/AddEmailHistory";
+import AddEmailHistory from "../emailHistory/components/AddEmail";
 import { BsFillSendFill, BsFillTelephoneFill } from "react-icons/bs";
 import PhoneCall from "../contact/components/phonCall";
 import AddPhoneCall from "../phoneCall/components/AddPhoneCall";

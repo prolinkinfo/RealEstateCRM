@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button, FormLabel, Textarea, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
+import { Button, FormLabel, Textarea, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, IconButton, Flex } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { emailSchema } from 'schema';
 import { postApi } from 'services/api';
@@ -7,12 +7,17 @@ import { getApi } from 'services/api';
 import { BsFillSendFill } from 'react-icons/bs';
 import { useState } from 'react';
 import Spinner from 'components/spinner/Spinner';
+import ContactModel from "components/commonTableModel/ContactModel";
+import LeadModel from "components/commonTableModel/LeadModel";
+import { LiaMousePointerSolid } from 'react-icons/lia';
 
 
 const AddEmailHistory = (props) => {
     const { onClose, isOpen, fetchData } = props
     const user = JSON.parse(localStorage.getItem('user'))
     const [isLoding, setIsLoding] = useState(false)
+    const [contactModelOpen, setContactModel] = useState(false);
+    const [leadModelOpen, setLeadModel] = useState(false);
 
     const initialValues = {
         sender: user?._id,
@@ -48,7 +53,7 @@ const AddEmailHistory = (props) => {
         }
     };
 
-    const fetchDataR = async () => {
+    const fetchRecipientData = async () => {
         if (props.id && props.lead !== 'true') {
             let response = await getApi('api/contact/view/', props.id)
             if (response?.status === 200) {
@@ -67,9 +72,8 @@ const AddEmailHistory = (props) => {
     }
 
     useEffect(() => {
-        fetchDataR()
+        fetchRecipientData()
     }, [props.id])
-
 
     return (
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
@@ -78,6 +82,10 @@ const AddEmailHistory = (props) => {
                 <ModalHeader>Send Email </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
+                    {/*  Contact Model  */}
+                    {/* <ContactModel isOpen={contactModelOpen} onClose={setContactModel} fieldName='selectedId' setFieldValue={setFieldValue} /> */}
+                    {/* Lead Model  */}
+                    {/* <LeadModel isOpen={leadModelOpen} onClose={setLeadModel} fieldName='selectedId' setFieldValue={setFieldValue} /> */} */}
 
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
 

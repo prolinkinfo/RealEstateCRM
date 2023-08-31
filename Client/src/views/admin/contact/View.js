@@ -17,7 +17,7 @@ import Delete from "./Delete";
 import MeetingTable from "../meeting/components/CheckTable";
 import TaskTable from "../task/components/CheckTable.js";
 import ColumnsTable from "./components/ColumnsTable";
-import AddEmailHistory from "../emailHistory/components/AddEmailHistory";
+import AddEmailHistory from "../emailHistory/components/AddEmail";
 import AddPhoneCall from "../phoneCall/components/AddPhoneCall";
 import PhoneCall from "./components/phonCall";
 import { MdOutlineMessage } from "react-icons/md";

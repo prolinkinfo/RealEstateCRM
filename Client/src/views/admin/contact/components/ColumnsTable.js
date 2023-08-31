@@ -21,7 +21,7 @@ import moment from 'moment';
 
 // Custom components
 import Card from "components/card/Card";
-import AddEmailHistory from "../../emailHistory/components/AddEmailHistory";
+import AddEmailHistory from "../../emailHistory/components/AddEmail";
 import { Link, useParams } from "react-router-dom";
 import { BsFillSendFill } from "react-icons/bs";
 import CountUpComponent from "components/countUpComponent/countUpComponent";

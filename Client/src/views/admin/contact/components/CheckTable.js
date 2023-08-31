@@ -25,7 +25,7 @@ import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import { DeleteIcon } from "@chakra-ui/icons";
 import Delete from "../Delete";
-import AddEmailHistory from "views/admin/emailHistory/components/AddEmailHistory";
+import AddEmailHistory from "views/admin/emailHistory/components/AddEmail";
 import AddPhoneCall from "views/admin/phoneCall/components/AddPhoneCall";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
 import Spinner from "components/spinner/Spinner";

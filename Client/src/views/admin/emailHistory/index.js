@@ -8,19 +8,14 @@ import CheckTable from './components/CheckTable';
 
 const Index = () => {
     const columns = [
-        {
-            Header: "#",
-            accessor: "_id",
-            isSortable: false,
-            width: 10
-        },
+        { Header: "#", accessor: "_id", isSortable: false, width: 10 },
         { Header: 'sender Email', accessor: 'senderEmail' },
         { Header: "recipient", accessor: "recipient", },
         { Header: "create From", accessor: "createByName", },
         { Header: "timestamp", accessor: "timestamp", },
         { Header: "create at" },
-
     ];
+
     const { isOpen, onOpen, onClose } = useDisclosure()
     const size = "lg";
 
