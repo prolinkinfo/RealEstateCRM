@@ -7,6 +7,8 @@ import { getApi } from 'services/api';
 import { postApi } from 'services/api';
 import Spinner from 'components/spinner/Spinner';
 import { LiaMousePointerSolid } from 'react-icons/lia';
+import ContactModel from "components/commonTableModel/ContactModel";
+import LeadModel from "components/commonTableModel/LeadModel";
 
 const AddTask = (props) => {
     const { onClose, isOpen, fetchData } = props
@@ -15,6 +17,9 @@ const AddTask = (props) => {
     const [assignmentToData, setAssignmentToData] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"))
     const [isLoding, setIsLoding] = useState(false)
+    const [contactModelOpen, setContactModel] = useState(false);
+    const [leadModelOpen, setLeadModel] = useState(false);
+
 
     const initialValues = {
         title: '',
@@ -33,8 +38,6 @@ const AddTask = (props) => {
         url: '',
         createBy: userId,
     };
-
-
 
     const formik = useFormik({
         initialValues: initialValues,
@@ -88,6 +91,10 @@ const AddTask = (props) => {
                     <IconButton onClick={() => props.from ? onClose(false) : onClose()} icon={<CloseIcon />} />
                 </ModalHeader>
                 <ModalBody>
+                    {/* Contact Model  */}
+                    <ContactModel isOpen={contactModelOpen} onClose={setContactModel} fieldName='assignmentTo' setFieldValue={setFieldValue} />
+                    {/* Lead Model  */}
+                    <LeadModel isOpen={leadModelOpen} onClose={setLeadModel} fieldName='assignmentToLead' setFieldValue={setFieldValue} />
 
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
@@ -155,11 +162,10 @@ const AddTask = (props) => {
                                                 return <option value={item._id} key={item._id}>{values.category === 'contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
                                             })}
                                         </Select>
-                                        <IconButton ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
+                                        <IconButton onClick={() => setContactModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
                                     </Flex>
                                     <Text mb='10px' color={'red'}> {errors.assignmentTo && touched.assignmentTo && errors.assignmentTo}</Text>
                                 </GridItem>
-
                             </>
                             : values.category === "lead" ?
                                 <>
@@ -181,7 +187,7 @@ const AddTask = (props) => {
                                                     return <option value={item._id} key={item._id}>{values.category === 'contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
                                                 })}
                                             </Select>
-                                            <IconButton ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
+                                            <IconButton onClick={() => setLeadModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
                                         </Flex>
                                         <Text mb='10px' color={'red'}> {errors.assignmentToLead && touched.assignmentToLead && errors.assignmentToLead}</Text>
                                     </GridItem>

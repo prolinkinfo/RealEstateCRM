@@ -8,12 +8,7 @@ import Add from "./Add";
 
 const Index = () => {
     const columns = [
-        {
-            Header: "#",
-            accessor: "_id",
-            isSortable: false,
-            width: 10
-        },
+        { Header: "#", accessor: "_id", isSortable: false, width: 10 },
         { Header: 'title', accessor: 'title' },
         { Header: "first Name", accessor: "firstName", },
         { Header: "last Name", accessor: "lastName", },
@@ -22,8 +17,8 @@ const Index = () => {
         { Header: "physical Address", accessor: "physicalAddress", },
         { Header: "mailing Address", accessor: "mailingAddress", },
         { Header: "Contact Method", accessor: "preferredContactMethod", },
-
     ];
+    
     const { isOpen, onOpen, onClose } = useDisclosure()
     const size = "lg";
     const [data, setData] = useState([])

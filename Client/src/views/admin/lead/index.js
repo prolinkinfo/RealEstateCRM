@@ -9,12 +9,7 @@ const Index = () => {
     const [columns, setColumns] = useState([]);
 
     const tableColumns = [
-        {
-            Header: "#",
-            accessor: "_id",
-            isSortable: false,
-            width: 10
-        },
+        { Header: "#", accessor: "_id", isSortable: false, width: 10 },
         { Header: 'Lead Name', accessor: 'leadName', width: 20 },
         { Header: "Lead Email", accessor: "leadEmail", },
         { Header: "Lead PhoneNumber", accessor: "leadPhoneNumber", },

@@ -62,6 +62,7 @@ const server = app.listen(port, () => {
 
 // Connect to MongoDB
 const DATABASE_URL = process.env.DB_URL || 'mongodb://127.0.0.1:27017'
+// const DATABASE_URL = 'mongodb://127.0.0.1:27017'
 const DATABASE = process.env.DB || 'Prolink'
 
 db(DATABASE_URL, DATABASE);
