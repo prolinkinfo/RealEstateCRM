@@ -111,7 +111,6 @@ export default function CheckTable(props) {
       px="0px"
       overflowX={{ sm: "scroll", lg: "scroll" }}
     >
-
       <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={selectedId} />
       <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} id={selectedId} />
 

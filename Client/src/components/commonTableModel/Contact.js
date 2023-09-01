@@ -88,8 +88,7 @@ export default function ContactTable(props) {
       direction='column'
       w='100%'
       px='0px'
-      style={{ border: '1px solid gray.200' }
-      }
+      style={{ border: '1px solid gray.200' }}
       overflowX={{ sm: "scroll", lg: "hidden" }}>
       <Flex px='25px' justify='space-between' mb='20px' align='center'>
         <Text
