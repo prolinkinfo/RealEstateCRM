@@ -7,7 +7,7 @@ build
 Client/node_modules
 server/node_modules
 server/.env
-Client/src/.env
+Client/.env
 
 /.pnp
 .pnp.js
