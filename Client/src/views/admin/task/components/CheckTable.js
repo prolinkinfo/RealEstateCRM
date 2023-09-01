@@ -1,4 +1,5 @@
 import {
+  Button,
   Flex,
   Table, Tbody,
   Td,
@@ -23,9 +24,10 @@ import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import EventView from "../eventView";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
 import Spinner from "components/spinner/Spinner";
+import { AddIcon } from "@chakra-ui/icons";
 
 export default function CheckTable(props) {
-  const { columnsData, data, isLoding } = props;
+  const { columnsData, data, isLoding, setTaskModel } = props;
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -69,21 +71,6 @@ export default function CheckTable(props) {
     setEventView(true)
   }
 
-  // const handlePageSizeChange = (e) => {
-  //   setPageSize(e.target.value);
-  // };
-
-
-  // const handleCheckboxChange = (event, value) => {
-  //   if (event.target.checked) {
-  //     setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
-  //   } else {
-  //     setSelectedValues((prevSelectedValues) =>
-  //       prevSelectedValues.filter((selectedValue) => selectedValue !== value)
-  //     );
-  //   }
-  // };
-
   return (
     <Card
       direction="column"
@@ -101,6 +88,7 @@ export default function CheckTable(props) {
         >
           Task (<CountUpComponent targetNumber={data?.length} />)
         </Text>
+        {setTaskModel && <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>}
       </Flex>
 
 

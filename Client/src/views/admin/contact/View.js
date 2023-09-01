@@ -43,7 +43,11 @@ const View = () => {
     const [deleteModel, setDelete] = useState(false);
     const [propertyModel, setPropertyModel] = useState(false);
     const [isLoding, setIsLoding] = useState(false)
+
     const [taskModel, setTaskModel] = useState(false);
+    const [addEmailHistory, setAddEmailHistory] = useState(false);
+    const [addPhoneCall, setAddPhoneCall] = useState(false);
+    const [addMeeting, setMeeting] = useState(false);
 
     const size = "lg";
     const navigate = useNavigate()
@@ -84,10 +88,6 @@ const View = () => {
         { Header: "Start Date", accessor: "start", },
         { Header: "End Date", accessor: "end", },
     ];
-
-    const [addEmailHistory, setAddEmailHistory] = useState(false);
-    const [addPhoneCall, setAddPhoneCall] = useState(false);
-    const [addMeeting, setMeeting] = useState(false);
 
     const download = async (data) => {
         if (data) {
@@ -472,17 +472,15 @@ const View = () => {
                                                     <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} id={param.id} />
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 2 }}>
-                                                    {data?.phoneCallHistory?.length > 0 ? <PhoneCall fetchData={fetchData} columnsData={columnsDataColumns} tableData={data?.phoneCallHistory} title={'Phone Call '} /> : <Button onClick={() => setAddPhoneCall(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" > Call </Button>}
+                                                    {data?.phoneCallHistory?.length > 0 ? <PhoneCall fetchData={fetchData} columnsData={columnsDataColumns} tableData={data?.phoneCallHistory} title={'Call '} /> : <Button onClick={() => setAddPhoneCall(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" > Call </Button>}
                                                     <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param.id} />
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 2 }}>
-                                                    <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>
-                                                    {data?.meetingHistory.length > 0 && <MeetingTable fetchData={fetchData} columnsData={MeetingColumns} data={data?.meetingHistory} title={'meeting '} />}
+                                                    {data?.meetingHistory.length > 0 ? <MeetingTable fetchData={fetchData} setMeeting={setMeeting} columnsData={MeetingColumns} data={data?.meetingHistory} title={'Meeting '} /> : <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>}
                                                     <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="contact" id={param.id} />
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 2 }}>
-                                                    <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>
-                                                    {data?.task.length > 0 && <TaskTable fetchData={fetchData} columnsData={taskColumns} data={data?.task} title={'Task '} />}
+                                                    {data?.task.length > 0 ? <TaskTable fetchData={fetchData} setTaskModel={setTaskModel} columnsData={taskColumns} data={data?.task} title={'Task '} /> : <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>}
                                                     <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="contact" id={param.id} />
                                                 </GridItem>
                                                 {/* <GridItem colSpan={{ base: 2 }}>

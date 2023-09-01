@@ -63,9 +63,9 @@ export default function ColumnsTable(props) {
       direction='column'
       w='100%'
       px='0px'
-      style={{ border: '1px solid gray.200' }
-      }
-      overflowX={{ sm: "scroll", lg: "hidden" }}>
+      style={{ border: '1px solid gray.200' }}
+      overflowX={{ sm: "scroll", lg: "hidden" }}
+    >
       <Flex px='25px' justify='space-between' mb='20px' align='center'>
         <Text
           color={textColor}
@@ -74,7 +74,6 @@ export default function ColumnsTable(props) {
           lineHeight='100%'>
           {title}  (<CountUpComponent targetNumber={data?.length} />)
         </Text>
-        {/* <Menu /> */}
         <Button onClick={() => setAddEmailHistory(true)} rightIcon={<BsFillSendFill />} colorScheme="gray" >Send Email</Button>
         <AddEmailHistory lead={props.lead} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} />
       </Flex>

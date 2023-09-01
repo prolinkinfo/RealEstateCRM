@@ -120,7 +120,7 @@ const AddMeeting = (props) => {
                         </GridItem>
                         {data?.length > 0 && values.related && <GridItem colSpan={{ base: 12 }}>
                             <CUIAutoComplete
-                                label={`Choose preferred attendes ${values.related === "contact" ? "Contact" : values.related === "lead" && "Lead"}`}
+                                label={`Choose Preferred Attendes ${values.related === "contact" ? "Contact" : values.related === "lead" && "Lead"}`}
                                 placeholder="Type a Name"
                                 name="attendes"
                                 items={countriesWithEmailAsLabel}

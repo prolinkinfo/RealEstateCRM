@@ -1,4 +1,5 @@
 import {
+  Button,
   Flex,
   Table, Tbody,
   Td,
@@ -24,9 +25,10 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
 import Spinner from "components/spinner/Spinner";
+import { SiGooglemeet } from "react-icons/si";
 
 export default function CheckTable(props) {
-  const { columnsData, data, isLoding } = props;
+  const { columnsData, data, isLoding, setMeeting } = props;
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -82,6 +84,7 @@ export default function CheckTable(props) {
         >
           Metting (<CountUpComponent targetNumber={data?.length} />)
         </Text>
+        {setMeeting && <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>}
       </Flex>
 
       <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">

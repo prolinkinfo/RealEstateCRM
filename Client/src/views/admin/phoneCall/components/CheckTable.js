@@ -73,8 +73,6 @@ export default function CheckTable(props) {
   initialState.pageSize = 10
   const { pageIndex } = state;
 
-
-
   // const handlePageSizeChange = (e) => {
   //   setPageSize(e.target.value);
   // };
@@ -97,7 +95,7 @@ export default function CheckTable(props) {
           fontWeight="700"
           lineHeight="100%"
         >
-          Phone Call (<CountUpComponent targetNumber={data?.length} />)
+          Call (<CountUpComponent targetNumber={data?.length} />)
         </Text>
       </Flex>
 
