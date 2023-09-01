@@ -10,6 +10,7 @@ import Spinner from 'components/spinner/Spinner';
 import { toast } from 'react-toastify';
 import { LiaMousePointerSolid } from 'react-icons/lia';
 import MultiContactModel from 'components/commonTableModel/MultiContactModel';
+import MultiLeadModel from 'components/commonTableModel/MultiLeadModel';
 
 const AddMeeting = (props) => {
     const { onClose, isOpen, fetchData, from } = props
@@ -81,7 +82,6 @@ const AddMeeting = (props) => {
         return selectedItems.map((item) => item._id);
     };
 
-
     const countriesWithEmailAsLabel = data?.map((item) => ({
         ...item,
         value: item._id,
@@ -96,7 +96,9 @@ const AddMeeting = (props) => {
                 <ModalCloseButton />
                 <ModalBody>
                     {/* Contact Model  */}
-                    <MultiContactModel isOpen={contactModelOpen} onClose={setContactModel} fieldName='attendes' values={values} setFieldValue={setFieldValue} />
+                    <MultiContactModel isOpen={contactModelOpen} onClose={setContactModel} fieldName='attendes' setFieldValue={setFieldValue} />
+                    {/* Lead Model  */}
+                    <MultiLeadModel isOpen={leadModelOpen} onClose={setLeadModel} fieldName='attendesLead' setFieldValue={setFieldValue} />
 
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12 }}>
