@@ -483,13 +483,13 @@ const View = () => {
                                                     {data?.task.length > 0 ? <TaskTable fetchData={fetchData} setTaskModel={setTaskModel} columnsData={taskColumns} data={data?.task} title={'Task '} /> : <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>}
                                                     <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="contact" id={param.id} />
                                                 </GridItem>
-                                                {/* <GridItem colSpan={{ base: 2 }}>
-                                                    {data?.textMsg?.length > 0 ? <PhoneCall text='true' fetchData={fetchData} columnsData={textColumnsDataColumns} tableData={data?.textMsg} title={'Text Msg '} /> : <Button onClick={() => navigate('/communication-integration')} leftIcon={<MdOutlineMessage />} colorScheme="gray" >send text Msg</Button>}
-                                                </GridItem> */}
                                                 <GridItem colSpan={{ base: 2 }}>
                                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Notes and Comments </Text>
                                                     <Text>{data?.contact?.notesandComments ? data?.contact?.notesandComments : 'N/A'}</Text>
                                                 </GridItem>
+                                                {/* <GridItem colSpan={{ base: 2 }}>
+                                                    {data?.textMsg?.length > 0 ? <PhoneCall text='true' fetchData={fetchData} columnsData={textColumnsDataColumns} tableData={data?.textMsg} title={'Text Msg '} /> : <Button onClick={() => navigate('/communication-integration')} leftIcon={<MdOutlineMessage />} colorScheme="gray" >send text Msg</Button>}
+                                                </GridItem> */}
                                             </Grid>
                                         </Grid>
                                     </Card>

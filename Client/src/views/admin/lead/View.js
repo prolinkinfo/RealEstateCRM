@@ -348,13 +348,11 @@ const View = () => {
                                                     <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param.id} lead='true' />
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 2 }}>
-                                                    <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>
-                                                    {allData?.task?.length > 0 && <TaskTable fetchData={fetchData} columnsData={taskColumns} data={allData?.task} title={'Task '} />}
+                                                    {allData?.task?.length > 0 ? <TaskTable setTaskModel={setTaskModel} fetchData={fetchData} columnsData={taskColumns} data={allData?.task} title={'Task '} /> : <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>}
                                                     <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="lead" id={param.id} />
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 2 }}>
-                                                    <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>
-                                                    {allData?.meeting?.length > 0 && <MeetingTable fetchData={fetchData} columnsData={MeetingColumns} data={allData?.meeting} title={'meeting '} />}
+                                                    {allData?.meeting?.length > 0 ? <MeetingTable setMeeting={setMeeting} fetchData={fetchData} columnsData={MeetingColumns} data={allData?.meeting} title={'meeting '} /> : <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>}
                                                     <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="lead" id={param.id} />
                                                 </GridItem>
                                             </Grid>

@@ -152,7 +152,7 @@ const AddPhoneCall = (props) => {
                             <Textarea
                                 resize={'none'}
                                 fontSize='sm'
-                                placeholder='Here is a sample placeholder'
+                                placeholder='Enter Call Notes'
                                 onChange={handleChange} onBlur={handleBlur}
                                 value={values.callNotes}
                                 name="callNotes"
