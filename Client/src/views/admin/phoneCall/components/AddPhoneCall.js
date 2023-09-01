@@ -130,7 +130,7 @@ const AddPhoneCall = (props) => {
                             />
                             <Text mb='10px' color={'red'}> {errors.time && touched.time && errors.time}</Text>
                         </GridItem>
-                        {/* <GridItem colSpan={{ base: 12 }}>
+                        <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Call Duration<Text color={"red"}>*</Text>
                             </FormLabel>
@@ -144,7 +144,7 @@ const AddPhoneCall = (props) => {
                                 borderColor={errors.callDuration && touched.callDuration ? "red.300" : null}
                             />
                             <Text mb='10px' color={'red'}> {errors.callDuration && touched.callDuration && errors.callDuration}</Text>
-                        </GridItem> */}
+                        </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Call Notes
