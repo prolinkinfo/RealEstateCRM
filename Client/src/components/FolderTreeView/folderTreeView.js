@@ -57,15 +57,15 @@ const FolderTreeView = ({ data, deleteFile, item, download, name, isFile, childr
                         <Flex justifyContent={'right'} width={'100%'}  >
                             <Menu isLazy  >
                                 <MenuButton><CiMenuKebab /></MenuButton>
-                                <MenuList position={'absolute'} right={-5} pl={'0.5em'} pr={'2em'} minW={'fit-content'} >
+                                <MenuList position={'absolute'} right={-5} pl={'0.5em'} minW={'fit-content'} >
                                     {!from && data?.linkContact ?
-                                        <MenuItem onClick={() => navigate(user?.role !== 'admin' ? `/contactView/${data?.linkContact}` : `/admin/contactView/${data?.linkContact}`)} icon={<IoIosContact fontSize={15} />}>Linked Contact</MenuItem>
-                                        : !from && data?.linkLead && <MenuItem onClick={() => navigate(user?.role !== 'admin' ? `/leadView/${data?.linkLead}` : `/admin/leadView/${data?.linkLead}`)} icon={<MdLeaderboard fontSize={15} />}>Linked Lead</MenuItem>
+                                        <MenuItem pr={2} w={'180px'} onClick={() => navigate(user?.role !== 'admin' ? `/contactView/${data?.linkContact}` : `/admin/contactView/${data?.linkContact}`)} icon={<IoIosContact fontSize={15} />}>Linked Contact</MenuItem>
+                                        : !from && data?.linkLead && <MenuItem pr={2} w={'180px'} onClick={() => navigate(user?.role !== 'admin' ? `/leadView/${data?.linkLead}` : `/admin/leadView/${data?.linkLead}`)} icon={<MdLeaderboard fontSize={15} />}>Linked Lead</MenuItem>
                                     }
-                                    {!from && <MenuItem color={'blue'} onClick={() => handleLinkClick(data?._id)} icon={<LinkIcon fontSize={15} />}>Link</MenuItem>}
-                                    {isImageUrl(data?.img) && <MenuItem color={'green'} onClick={() => window.open(data?.img)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>}
-                                    <MenuItem onClick={() => handleClick(data?._id)} icon={<DownloadIcon fontSize={15} />}>Download</MenuItem>
-                                    {!from && <MenuItem color={'red'} onClick={() => deletedata(data?._id)} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>}
+                                    {!from && <MenuItem pr={10} color={'blue'} onClick={() => handleLinkClick(data?._id)} icon={<LinkIcon fontSize={15} />}>Link</MenuItem>}
+                                    {isImageUrl(data?.img) && <MenuItem pr={10} color={'green'} onClick={() => window.open(data?.img)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>}
+                                    <MenuItem pr={10} onClick={() => handleClick(data?._id)} icon={<DownloadIcon fontSize={15} />}>Download</MenuItem>
+                                    {!from && <MenuItem pr={10} color={'red'} onClick={() => deletedata(data?._id)} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>}
                                 </MenuList>
                             </Menu>
                         </Flex>

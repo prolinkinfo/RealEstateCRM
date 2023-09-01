@@ -100,8 +100,8 @@ const Index = () => {
     return (
         <div>
             <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={2}>
-                <GridItem colSpan={{ base: 12, md: 7 }} >
-                    <Card>
+                <GridItem colSpan={{ base: 12, md: 7 }}  >
+                    <Card minH={'20em'}>
                         <Heading size="lg" mb={4} >
                             File Explorer
                         </Heading>
@@ -142,7 +142,7 @@ const Index = () => {
                                 fontWeight='500'
                                 borderColor={errors?.folderName && touched?.folderName ? "red.300" : null}
                             />
-                            {isOpen && values?.folderName && (
+                            {isOpen && values?.folderName && data?.filter((option) => option?.folderName?.toLowerCase()?.includes(values?.folderName.toLowerCase())).length > 0 && (
                                 <List position={'relative'} border={'1px solid'} bg={'gray.100'} width={'100%'} borderRadius={'0px 0px 20px 20px'} lineHeight={1} >
                                     {data?.filter((option) => option?.folderName?.toLowerCase()?.includes(values?.folderName.toLowerCase())).map((option, index) => (
                                         <ListItem p={3} borderBottom={'2px solid #efefef'} sx={{ '&:last-child': { borderBottom: 'none' } }} key={option?._id} cursor={'pointer'}
