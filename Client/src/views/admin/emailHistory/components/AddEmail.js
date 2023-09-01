@@ -26,6 +26,7 @@ const AddEmailHistory = (props) => {
         message: '',
         createBy: '',
         createByLead: '',
+        time: '',
     }
     const formik = useFormik({
         initialValues: initialValues,
@@ -82,10 +83,6 @@ const AddEmailHistory = (props) => {
                 <ModalHeader>Send Email </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    {/*  Contact Model  */}
-                    {/* <ContactModel isOpen={contactModelOpen} onClose={setContactModel} fieldName='selectedId' setFieldValue={setFieldValue} /> */}
-                    {/* Lead Model  */}
-                    {/* <LeadModel isOpen={leadModelOpen} onClose={setLeadModel} fieldName='selectedId' setFieldValue={setFieldValue} /> */} */}
 
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
 
@@ -118,6 +115,22 @@ const AddEmailHistory = (props) => {
                                 borderColor={errors.subject && touched.subject ? "red.300" : null}
                             />
                             <Text mb='10px' color={'red'}> {errors.subject && touched.subject && errors.subject}</Text>
+                        </GridItem>
+                        <GridItem colSpan={{ base: 12 }}>
+                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                Date & Time
+                            </FormLabel>
+                            <Input
+                                type='datetime-local'
+                                fontSize='sm'
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.time}
+                                name="time"
+                                fontWeight='500'
+                                borderColor={errors.time && touched.time ? "red.300" : null}
+                            />
+                            <Text mb='10px' color={'red'}> {errors.time && touched.time && errors.time}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>

@@ -10,6 +10,7 @@ const emailHistory = new mongoose.Schema({
     // cc: { type: String },
     // bcc: { type: String },
     subject: { type: String },
+    time: { type: String, default: Date.now },
     message: { type: String },
     createByLead: {
         type: mongoose.Schema.Types.ObjectId,
