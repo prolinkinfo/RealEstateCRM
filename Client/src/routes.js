@@ -172,7 +172,7 @@ const routes = [
     component: PhoneCall,
   },
   {
-    name: "Phone Call View",
+    name: "Call View",
     layout: "/admin",
     both: true,
     under: "phone-call",

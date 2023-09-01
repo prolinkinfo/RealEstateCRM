@@ -77,7 +77,7 @@ const AddPhoneCall = (props) => {
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Add Phone Call </ModalHeader>
+                <ModalHeader>Add Call </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
 

@@ -76,7 +76,7 @@ const View = () => {
                                     <GridItem colSpan={2}>
                                         <Box>
                                             <Heading size="md" mb={3}>
-                                                Phone Call View page
+                                                Call View page
                                             </Heading>
                                             <HSeparator />
                                         </Box>
