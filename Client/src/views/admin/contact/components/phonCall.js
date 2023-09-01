@@ -66,7 +66,8 @@ export default function PhoneCall(props) {
       px='0px'
       style={{ border: '1px solid gray.200' }
       }
-      overflowX={{ sm: "scroll", lg: "hidden" }}>
+      overflowX={{ sm: "scroll", lg: "hidden" }}
+    >
       <Flex px='25px' justify='space-between' mb='20px' align='center'>
         <Text
           color={textColor}

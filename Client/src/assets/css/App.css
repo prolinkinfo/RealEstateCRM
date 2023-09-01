@@ -34,14 +34,6 @@ option {
   overflow-y: auto;
 }
 
-.fc-bg-event {
-  opacity: 1 !important;
-}
-
-.p0 {
-  margin-top: 0;
-}
-
 .table-container thead {
   position: sticky;
   top: 0;
@@ -59,4 +51,12 @@ option {
 .css-70fard,
 .apexcharts-toolbar {
   z-index: 0 !important;
+}
+
+.fc-bg-event {
+  opacity: 1 !important;
+}
+
+.p0 {
+  margin-top: 0;
 }
