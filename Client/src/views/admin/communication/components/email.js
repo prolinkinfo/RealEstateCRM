@@ -178,7 +178,6 @@ const Email = () => {
                 />
                 <Text mb='10px' color={'red'}> {errors.message && touched.message && errors.message}</Text>
             </GridItem>
-
             <GridItem colSpan={{ base: 12 }} >
                 <Button variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} rightIcon={<BsFillSendFill />}> {isLoding ? <Spinner /> : 'Send'}</Button>
                 <Button onClick={() => formik.resetForm()}>Clear</Button>
