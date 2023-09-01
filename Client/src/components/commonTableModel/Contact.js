@@ -24,7 +24,7 @@ import { Link } from "react-router-dom";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
 
 export default function ContactTable(props) {
-  const { columnsData, tableData, title, selectedValues, setSelectedValues } = props;
+  const { columnsData, tableData, title, type, selectedValues, setSelectedValues } = props;
 
   const columns = useMemo(() => columnsData, [columnsData]);
   const data = useMemo(() => tableData, [tableData]);
@@ -64,11 +64,22 @@ export default function ContactTable(props) {
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
 
   const handleCheckboxChange = (event, value) => {
-    if (event.target.checked) {
-      setSelectedValues(value);
+    if (type === "multi") {
+      if (event.target.checked) {
+        setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
+      } else {
+        setSelectedValues((prevSelectedValues) =>
+          prevSelectedValues.filter((selectedValue) => selectedValue !== value)
+        );
+      }
     } else {
-      setSelectedValues(null);
+      if (event.target.checked) {
+        setSelectedValues(value);
+      } else {
+        setSelectedValues(null);
+      }
     }
+
   };
 
 
@@ -131,8 +142,8 @@ export default function ContactTable(props) {
                     if (cell?.column.Header === "#") {
                       data = (
                         <Flex align="center">
-                          {/* <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => setSelectedValues(event, cell?.value)} me="10px" /> */}
-                          <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues === cell?.value} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />
+                          {type === "multi" ? <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" /> :
+                            <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues === cell?.value} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />}
                           <Text color={textColor} fontSize="sm" fontWeight="700">
                             {cell?.row?.index + 1}
                           </Text>

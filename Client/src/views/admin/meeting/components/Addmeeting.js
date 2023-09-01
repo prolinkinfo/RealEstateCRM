@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, FormLabel, Textarea, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, RadioGroup, Stack, Radio } from '@chakra-ui/react';
+import { Button, FormLabel, Textarea, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, RadioGroup, Stack, Radio, Flex, IconButton } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { postApi } from 'services/api';
 import { getApi } from 'services/api';
@@ -8,11 +8,15 @@ import { AddIcon } from '@chakra-ui/icons';
 import { CUIAutoComplete } from 'chakra-ui-autocomplete';
 import Spinner from 'components/spinner/Spinner';
 import { toast } from 'react-toastify';
+import { LiaMousePointerSolid } from 'react-icons/lia';
+import MultiContactModel from 'components/commonTableModel/MultiContactModel';
 
 const AddMeeting = (props) => {
     const { onClose, isOpen, fetchData, from } = props
     const [data, setData] = useState([])
     const [isLoding, setIsLoding] = useState(false)
+    const [contactModelOpen, setContactModel] = useState(false);
+    const [leadModelOpen, setLeadModel] = useState(false);
 
     const user = JSON.parse(localStorage.getItem('user'))
 
@@ -35,6 +39,8 @@ const AddMeeting = (props) => {
         },
     });
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue } = formik
+
+
 
     const AddData = async () => {
         try {
@@ -75,6 +81,7 @@ const AddMeeting = (props) => {
         return selectedItems.map((item) => item._id);
     };
 
+
     const countriesWithEmailAsLabel = data?.map((item) => ({
         ...item,
         value: item._id,
@@ -88,9 +95,10 @@ const AddMeeting = (props) => {
                 <ModalHeader>Add Meeting </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
+                    {/* Contact Model  */}
+                    <MultiContactModel isOpen={contactModelOpen} onClose={setContactModel} fieldName='attendes' values={values} setFieldValue={setFieldValue} />
 
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
-
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Agenda<Text color={"red"}>*</Text>
@@ -118,20 +126,26 @@ const AddMeeting = (props) => {
                             </RadioGroup>
                             <Text mb='10px' color={'red'}> {errors.related && touched.related && errors.related}</Text>
                         </GridItem>
-                        {data?.length > 0 && values.related && <GridItem colSpan={{ base: 12 }}>
-                            <CUIAutoComplete
-                                label={`Choose Preferred Attendes ${values.related === "contact" ? "Contact" : values.related === "lead" && "Lead"}`}
-                                placeholder="Type a Name"
-                                name="attendes"
-                                items={countriesWithEmailAsLabel}
-                                selectedItems={countriesWithEmailAsLabel?.filter((item) => values.related === "contact" ? values?.attendes.includes(item._id) : values.related === "lead" && values?.attendesLead.includes(item._id))}
-                                onSelectedItemsChange={(changes) => {
-                                    const selectedLabels = extractLabels(changes.selectedItems);
-                                    values.related === "contact" ? setFieldValue('attendes', selectedLabels) : values.related === "lead" && setFieldValue('attendesLead', selectedLabels)
-                                }}
-                            />
-                            <Text color={'red'}> {errors.attendes && touched.attendes && errors.attendes}</Text>
-                        </GridItem>
+                        {data?.length > 0 && values.related &&
+                            <GridItem colSpan={{ base: 12 }}>
+                                <Flex alignItems={'end'} justifyContent={'space-between'} >
+                                    <Text w={'100%'} >
+                                        <CUIAutoComplete
+                                            label={`Choose Preferred Attendes ${values.related === "contact" ? "Contact" : values.related === "lead" && "Lead"}`}
+                                            placeholder="Type a Name"
+                                            name="attendes"
+                                            items={countriesWithEmailAsLabel}
+                                            selectedItems={countriesWithEmailAsLabel?.filter((item) => values.related === "contact" ? values?.attendes.includes(item._id) : values.related === "lead" && values?.attendesLead.includes(item._id))}
+                                            onSelectedItemsChange={(changes) => {
+                                                const selectedLabels = extractLabels(changes.selectedItems);
+                                                values.related === "contact" ? setFieldValue('attendes', selectedLabels) : values.related === "lead" && setFieldValue('attendesLead', selectedLabels)
+                                            }}
+                                        />
+                                    </Text>
+                                    <IconButton mb={6} onClick={() => values.related === "contact" ? setContactModel(true) : values.related === "lead" && setLeadModel(true)} fontSize='25px' icon={<LiaMousePointerSolid />} />
+                                </Flex>
+                                <Text color={'red'}> {errors.attendes && touched.attendes && errors.attendes}</Text>
+                            </GridItem>
                         }
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>

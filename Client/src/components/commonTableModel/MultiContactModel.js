@@ -1,30 +1,34 @@
 import { AddIcon } from '@chakra-ui/icons'
 import { Button, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import CheckTable from './propertyTable'
+import ContactTable from './Contact.js'
 import { getApi } from 'services/api'
 import { postApi } from 'services/api'
 import Spinner from 'components/spinner/Spinner'
+import { GiClick } from "react-icons/gi";
 
-const PropertyModel = (props) => {
-    const { onClose, isOpen, fetchData, id, interestProperty } = props
+const MultiContactModel = (props) => {
+    const { onClose, isOpen, fieldName, setFieldValue } = props
     const [selectedValues, setSelectedValues] = useState([]);
     const [isLoding, setIsLoding] = useState(false)
-
+    const [data, setData] = useState([])
 
     const columns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-        { Header: 'property Type', accessor: 'propertyType' },
-        { Header: "property Address", accessor: "propertyAddress", },
-        { Header: "listing Price", accessor: "listingPrice", },
-        { Header: "square Footage", accessor: "squareFootage", },
-        { Header: "year Built", accessor: "yearBuilt", },
+        { Header: 'title', accessor: 'title' },
+        { Header: "first Name", accessor: "firstName" },
+        { Header: "last Name", accessor: "lastName" },
+        { Header: "phone Number", accessor: "phoneNumber" },
+        { Header: "Email Address", accessor: "email" },
+        { Header: "physical Address", accessor: "physicalAddress" },
+        { Header: "mailing Address", accessor: "mailingAddress" },
+        { Header: "Contact Method", accessor: "preferredContactMethod" },
     ];
-    const [data, setData] = useState([])
+
     const user = JSON.parse(localStorage.getItem("user"))
-    const fetchPropertyData = async () => {
+    const fetchContactData = async () => {
         setIsLoding(true)
-        let result = await getApi(user.role === 'admin' ? 'api/property/' : `api/property/?createBy=${user._id}`);
+        let result = await getApi(user.role === 'admin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`);
         if (result && result.status == 200) {
             setData(result?.data);
         }
@@ -35,11 +39,9 @@ const PropertyModel = (props) => {
     const handleSubmit = async () => {
         try {
             setIsLoding(true)
-            let result = await postApi(`api/contact/add-property-interest/${id}`, uniqueValues);
-            if (result && result.status == 200) {
-                fetchData()
-                onClose()
-            }
+            onClose()
+            setFieldValue(fieldName, uniqueValues)
+            // setSelectedValues([])
         }
         catch (e) {
             console.log(e)
@@ -49,26 +51,24 @@ const PropertyModel = (props) => {
         }
     }
 
-
     useEffect(() => {
-        interestProperty?.map((item) => setSelectedValues((prevSelectedValues) => [...prevSelectedValues, item]))
-        fetchPropertyData()
-    }, [interestProperty])
+        fetchContactData()
+    }, [])
 
     return (
         <Modal onClose={onClose} size='full' isOpen={isOpen} >
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Select Intrasted Property</ModalHeader>
+                <ModalHeader>Select Contact</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     {isLoding ?
                         <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                             <Spinner />
-                        </Flex> : <CheckTable tableData={data} selectedValues={selectedValues} setSelectedValues={setSelectedValues} columnsData={columns} title="Property Table" />}
+                        </Flex> : <ContactTable tableData={data} type='multi' selectedValues={selectedValues} setSelectedValues={setSelectedValues} columnsData={columns} title="Contact" />}
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} leftIcon={<AddIcon />}> {isLoding ? <Spinner /> : 'Add'}</Button>
+                    <Button variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} leftIcon={<GiClick />}> {isLoding ? <Spinner /> : 'Select'}</Button>
                     <Button onClick={() => onClose()}>Close</Button>
                 </ModalFooter>
             </ModalContent>
@@ -77,4 +77,4 @@ const PropertyModel = (props) => {
     )
 }
 
-export default PropertyModel
+export default MultiContactModel
