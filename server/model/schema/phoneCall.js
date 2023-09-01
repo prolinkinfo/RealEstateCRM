@@ -10,6 +10,7 @@ const phoneCall = new mongoose.Schema({
     callDuration: { type: String },
     callNotes: { type: String },
     phoneNumber: { type: String },
+    time: { type: String, default: Date.now },
     createByLead: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Lead",

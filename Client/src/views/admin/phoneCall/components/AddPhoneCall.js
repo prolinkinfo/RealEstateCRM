@@ -20,7 +20,8 @@ const AddPhoneCall = (props) => {
         callDuration: '',
         callNotes: '',
         createBy: '',
-        createByLead: ''
+        createByLead: '',
+        time: '',
     }
 
     const formik = useFormik({
@@ -112,6 +113,22 @@ const AddPhoneCall = (props) => {
                                 borderColor={errors.recipient && touched.recipient ? "red.300" : null}
                             />
                             <Text mb='10px' color={'red'}> {errors.recipient && touched.recipient && errors.recipient}</Text>
+                        </GridItem>
+                        <GridItem colSpan={{ base: 12 }}>
+                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                Date & Time
+                            </FormLabel>
+                            <Input
+                                type='datetime-local'
+                                fontSize='sm'
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.time}
+                                name="time"
+                                fontWeight='500'
+                                borderColor={errors.time && touched.time ? "red.300" : null}
+                            />
+                            <Text mb='10px' color={'red'}> {errors.time && touched.time && errors.time}</Text>
                         </GridItem>
                         {/* <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>

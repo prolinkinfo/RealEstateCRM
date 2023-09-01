@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const add = async (req, res) => {
     try {
-        const { sender, recipient, callDuration, callNotes, createBy, createByLead } = req.body;
+        const { sender, recipient, callDuration, time, callNotes, createBy, createByLead } = req.body;
 
         if (createBy && !mongoose.Types.ObjectId.isValid(createBy)) {
             res.status(400).json({ error: 'Invalid createBy value' });
@@ -12,7 +12,7 @@ const add = async (req, res) => {
         if (createByLead && !mongoose.Types.ObjectId.isValid(createByLead)) {
             res.status(400).json({ error: 'Invalid createByLead value' });
         }
-        const phoneCall = { sender, recipient, callDuration, callNotes }
+        const phoneCall = { sender, recipient, callDuration, time, callNotes }
 
         if (createBy) {
             phoneCall.createBy = createBy;
@@ -20,7 +20,6 @@ const add = async (req, res) => {
         if (createByLead) {
             phoneCall.createByLead = createByLead;
         }
-
 
         const user = await User.findById({ _id: phoneCall.sender });
         user.outboundcall = user.outboundcall + 1;
