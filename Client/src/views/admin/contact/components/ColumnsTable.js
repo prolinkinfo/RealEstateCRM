@@ -1,12 +1,13 @@
 import {
   Box,
   Button,
-  Flex, Table,
+  Flex, IconButton, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Table,
   Tbody,
   Td,
   Text,
   Th,
   Thead,
+  Tooltip,
   Tr,
   useColorModeValue
 } from "@chakra-ui/react";
@@ -25,6 +26,8 @@ import AddEmailHistory from "../../emailHistory/components/AddEmail";
 import { Link, useParams } from "react-router-dom";
 import { BsFillSendFill } from "react-icons/bs";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
+import { ArrowLeftIcon, ArrowRightIcon, ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import Pagination from "components/pagination/Pagination";
 
 export default function ColumnsTable(props) {
   const { columnsData, tableData, title, fetchData } = props;
@@ -33,11 +36,11 @@ export default function ColumnsTable(props) {
   const data = useMemo(() => tableData, [tableData]);
   const [addEmailHistory, setAddEmailHistory] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"))
-
+  const [gopageValue, setGopageValue] = useState()
   const tableInstance = useTable(
     {
-      columns,
-      data,
+      columns, data,
+      initialState: { pageIndex: 0 }
     },
     useGlobalFilter,
     useSortBy,
@@ -48,11 +51,22 @@ export default function ColumnsTable(props) {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    page,
     prepareRow,
-    initialState,
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    state: { pageIndex, pageSize }
   } = tableInstance;
-  initialState.pageSize = 5;
+
+  if (pageOptions.length < gopageValue) {
+    setGopageValue(pageOptions.length)
+  }
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -169,6 +183,9 @@ export default function ColumnsTable(props) {
           </Tbody>
         </Table>
       </Box>
+
+      <Pagination gotoPage={gotoPage} gopageValue={gopageValue} setGopageValue={setGopageValue} pageCount={pageCount} canPreviousPage={canPreviousPage} previousPage={previousPage} canNextPage={canNextPage} pageOptions={pageOptions} setPageSize={setPageSize} nextPage={nextPage} pageSize={pageSize} pageIndex={pageIndex} />
+
     </Card>
   );
 }
