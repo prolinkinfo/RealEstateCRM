@@ -42,11 +42,6 @@ option {
   overflow-y: auto;
 }
 
-.table-container-property {
-  min-height: auto;
-  max-height: 80vh;
-  overflow-y: auto;
-}
 
 .table-container thead {
   position: sticky;
@@ -55,8 +50,14 @@ option {
   background: #ffffff;
 }
 
+.table-container-property {
+  min-height: auto;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
 .table-container-property thead {
-  /* position: sticky; */
+  position: sticky;
   top: 0;
   height: 25px;
   background: #ffffff;

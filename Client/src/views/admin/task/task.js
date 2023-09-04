@@ -49,7 +49,7 @@ const Task = (props) => {
             <Flex alignItems={'center'} justifyContent={"right"} flexWrap={'wrap'} mb={3}>
                 <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Create Task</Button>
             </Flex>
-            <CheckTable columnsData={columns} data={data} isLoding={isLoding} />
+            <CheckTable columnsData={columns} data={data} isLoding={isLoding} className='table-fix-container' />
             <AddTask isOpen={isOpen} fetchData={fetchData} onClose={onClose} />
         </div>
     )

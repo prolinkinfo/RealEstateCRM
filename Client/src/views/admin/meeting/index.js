@@ -47,7 +47,7 @@ const Index = () => {
             </Grid>
 
             {/* <CheckTable columnsData={columns} tableData={data} /> */}
-            <CheckTable isOpen={addMeeting} isLoding={isLoding} data={data} columnsData={columns} />
+            <CheckTable isOpen={addMeeting} isLoding={isLoding} data={data} columnsData={columns} className='table-fix-container' />
             {/* Add Form */}
             <AddMeeting isOpen={addMeeting} onClose={setMeeting} />
         </div>
