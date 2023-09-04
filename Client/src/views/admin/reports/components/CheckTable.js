@@ -16,12 +16,21 @@ import {
     useTable,
 } from "react-table";
 
-export default function CheckTable(props) {
+// Custom components
 import { DeleteIcon } from "@chakra-ui/icons";
 import Card from "components/card/Card";
 import Pagination from "components/pagination/Pagination";
 import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 import Delete from "views/admin/contact/Delete";
+
+
+export default function CheckTable(props) {
+    const { columnsData, barData } = props;
+
+    const textColor = useColorModeValue("secondaryGray.900", "white");
+    const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
+    const columns = useMemo(() => columnsData, [columnsData]);
+    const [selectedValues, setSelectedValues] = useState([]);
 
     const [deleteModel, setDelete] = useState(false);
     // const [data, setData] = useState(barData)
