@@ -3,7 +3,6 @@ import { Box, Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHea
 import { HSeparator } from 'components/separator/Separator';
 import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
-import React from 'react';
 import { useState } from 'react';
 import { BiMobile } from 'react-icons/bi';
 import { contactSchema } from 'schema';

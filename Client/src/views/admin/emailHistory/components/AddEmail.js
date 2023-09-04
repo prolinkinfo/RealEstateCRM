@@ -1,15 +1,10 @@
-import React, { useEffect } from 'react';
-import { Button, FormLabel, Textarea, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, IconButton, Flex } from '@chakra-ui/react';
-import { useFormik } from 'formik';
-import { emailSchema } from 'schema';
-import { postApi } from 'services/api';
-import { getApi } from 'services/api';
-import { BsFillSendFill } from 'react-icons/bs';
-import { useState } from 'react';
+import { Button, FormLabel, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, Textarea } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
-import ContactModel from "components/commonTableModel/ContactModel";
-import LeadModel from "components/commonTableModel/LeadModel";
-import { LiaMousePointerSolid } from 'react-icons/lia';
+import { useFormik } from 'formik';
+import { useEffect, useState } from 'react';
+import { BsFillSendFill } from 'react-icons/bs';
+import { emailSchema } from 'schema';
+import { getApi, postApi } from 'services/api';
 
 
 const AddEmailHistory = (props) => {

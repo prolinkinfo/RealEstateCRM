@@ -2,8 +2,7 @@ import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, 
 import Spinner from 'components/spinner/Spinner';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { deleteManyApi } from 'services/api';
-import { deleteApi } from 'services/api';
+import { deleteApi, deleteManyApi } from 'services/api';
 
 const Delete = (props) => {
     const [isLoding, setIsLoding] = useState(false)

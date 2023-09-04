@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Button, FormLabel, Textarea, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, RadioGroup, Stack, Radio, Flex, IconButton } from '@chakra-ui/react';
-import { useFormik } from 'formik';
-import { postApi } from 'services/api';
-import { getApi } from 'services/api';
-import { MeetingSchema } from 'schema';
 import { AddIcon } from '@chakra-ui/icons';
+import { Button, Flex, FormLabel, Grid, GridItem, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Radio, RadioGroup, Stack, Text, Textarea } from '@chakra-ui/react';
 import { CUIAutoComplete } from 'chakra-ui-autocomplete';
-import Spinner from 'components/spinner/Spinner';
-import { toast } from 'react-toastify';
-import { LiaMousePointerSolid } from 'react-icons/lia';
 import MultiContactModel from 'components/commonTableModel/MultiContactModel';
 import MultiLeadModel from 'components/commonTableModel/MultiLeadModel';
+import Spinner from 'components/spinner/Spinner';
+import { useFormik } from 'formik';
+import { useEffect, useState } from 'react';
+import { LiaMousePointerSolid } from 'react-icons/lia';
+import { toast } from 'react-toastify';
+import { MeetingSchema } from 'schema';
+import { getApi, postApi } from 'services/api';
 
 const AddMeeting = (props) => {
     const { onClose, isOpen, fetchData, from } = props

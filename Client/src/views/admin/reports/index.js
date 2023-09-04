@@ -1,9 +1,8 @@
-import { useEffect } from 'react';
-import { useState } from "react";
+import Card from "components/card/Card";
+import { useEffect, useState } from 'react';
+import 'react-datepicker/dist/react-datepicker.css';
 import { getApi } from 'services/api';
 import CheckTable from "./components/CheckTable";
-import Card from "components/card/Card";
-import 'react-datepicker/dist/react-datepicker.css';
 import ReportChart from './components/reportChart';
 
 const Report = () => {

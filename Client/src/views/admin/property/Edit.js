@@ -3,12 +3,10 @@ import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, 
 import { HSeparator } from 'components/separator/Separator';
 import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { propertySchema } from 'schema';
-import { putApi } from 'services/api';
-import { getApi } from 'services/api';
+import { getApi, putApi } from 'services/api';
 const Edit = (props) => {
 
     const initialValues = {

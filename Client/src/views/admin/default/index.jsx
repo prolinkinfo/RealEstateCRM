@@ -1,40 +1,29 @@
 
 // Chakra imports
 import {
-  Avatar,
-  Box,
   Flex,
-  FormLabel,
   Heading,
-  Icon, IconButton, Select,
+  Icon, IconButton,
   SimpleGrid,
   useColorModeValue
 } from "@chakra-ui/react";
 // Assets
-import Usa from "assets/img/dashboards/usa.png";
 // Custom components
+import { ViewIcon } from "@chakra-ui/icons";
+import Card from "components/card/Card";
 import MiniStatistics from "components/card/MiniStatistics";
 import IconBox from "components/icons/IconBox";
+import { HSeparator } from "components/separator/Separator";
 import { useEffect, useState } from "react";
 import { LuBuilding2 } from "react-icons/lu";
 import {
   MdAddTask,
-  MdAttachMoney,
-  MdBarChart,
   MdContacts,
-  MdFileCopy,
-  MdLeaderboard,
+  MdLeaderboard
 } from "react-icons/md";
-import { getApi } from "services/api";
-import DailyTraffic from "views/admin/default/components/DailyTraffic";
-import PieCard from "views/admin/default/components/PieCard";
-import TotalSpent from "views/admin/default/components/TotalSpent";
-import WeeklyRevenue from "views/admin/default/components/WeeklyRevenue";
-import ReportChart from "../reports/components/reportChart";
-import { HSeparator } from "components/separator/Separator";
-import Card from "components/card/Card";
-import { ViewIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
+import { getApi } from "services/api";
+import ReportChart from "../reports/components/reportChart";
 
 export default function UserReports() {
   // Chakra Color Mode

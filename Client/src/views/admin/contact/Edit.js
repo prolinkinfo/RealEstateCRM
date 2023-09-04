@@ -4,13 +4,11 @@ import { HSeparator } from 'components/separator/Separator';
 import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
 import moment from 'moment';
-import React, { useEffect } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BiMobile } from 'react-icons/bi';
 import { useParams } from 'react-router-dom';
 import { contactSchema } from 'schema';
-import { putApi } from 'services/api';
-import { getApi } from 'services/api';
+import { getApi, putApi } from 'services/api';
 
 const Edit = (props) => {
     const [isLoding, setIsLoding] = useState(false)

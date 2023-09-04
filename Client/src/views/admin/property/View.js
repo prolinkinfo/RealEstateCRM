@@ -1,22 +1,18 @@
 import { AddIcon, ChevronDownIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { useDisclosure, Box, Button, Image, Flex, Grid, GridItem, Tabs, TabList, Tab, TabPanels, TabPanel, Heading, IconButton, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text, AspectRatio } from "@chakra-ui/react";
+import { AspectRatio, Box, Button, Flex, Grid, GridItem, Heading, Image, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useDisclosure } from "@chakra-ui/react";
 import Card from "components/card/Card";
 import { HSeparator } from "components/separator/Separator";
+import Spinner from "components/spinner/Spinner";
 import moment from "moment/moment";
 import { useEffect, useState } from "react";
-import { AiFillStar } from "react-icons/ai";
-import { BiLink, BiLogoLinkedin } from "react-icons/bi";
-import { BsTwitter } from "react-icons/bs";
-import { FaFacebook } from "react-icons/fa";
 import { IoIosArrowBack } from "react-icons/io";
 import { Link, useParams } from "react-router-dom";
 import { getApi } from "services/api";
-import Add from "./Add";
-import Edit from "./Edit";
-import Delete from "./Delete";
-import PropertyPhoto from "./components/propertyPhoto";
 import CheckTable from "../contact/components/CheckTable";
-import Spinner from "components/spinner/Spinner";
+import Add from "./Add";
+import Delete from "./Delete";
+import Edit from "./Edit";
+import PropertyPhoto from "./components/propertyPhoto";
 
 
 

@@ -1,14 +1,12 @@
-import React, { useEffect } from 'react';
-import { Button, FormLabel, Grid, GridItem, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, InputGroup, IconButton, InputLeftElement } from '@chakra-ui/react';
-import { useFormik } from 'formik';
-import { userSchema } from 'schema';
 import { CloseIcon, PhoneIcon } from '@chakra-ui/icons';
-import { getApi } from 'services/api';
-import { useParams } from 'react-router-dom';
-import { putApi } from 'services/api';
-import { toast } from 'react-toastify';
-import { useState } from 'react';
+import { Button, FormLabel, Grid, GridItem, IconButton, Input, InputGroup, InputLeftElement, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
+import { useFormik } from 'formik';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { userSchema } from 'schema';
+import { getApi, putApi } from 'services/api';
 
 
 const Edit = (props) => {

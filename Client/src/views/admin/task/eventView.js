@@ -1,13 +1,13 @@
 import { CloseIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import { DrawerFooter, Flex, Grid, GridItem, IconButton, Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react'
+import Spinner from "components/spinner/Spinner"
+import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { BiLink } from 'react-icons/bi'
-import { getApi } from 'services/api'
-import EditTask from './components/editTask'
-import DeleteTask from './components/deleteTask'
-import moment from 'moment'
 import { Link } from 'react-router-dom'
-import Spinner from "components/spinner/Spinner";
+import { getApi } from 'services/api'
+import DeleteTask from './components/deleteTask'
+import EditTask from './components/editTask'
 
 const EventView = (props) => {
     const { onClose, isOpen, info } = props

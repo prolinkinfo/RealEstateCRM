@@ -1,11 +1,9 @@
 import { LinkIcon } from '@chakra-ui/icons';
 import { Button, FormLabel, Grid, GridItem, Input, List, ListItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Radio, RadioGroup, Stack, Text, useDisclosure } from '@chakra-ui/react';
 import { useFormik } from 'formik';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { getApi } from 'services/api';
-import { postApi } from 'services/api';
+import { getApi, postApi } from 'services/api';
 
 const Link = (props) => {
     const { setLinkDocument } = props;

@@ -16,14 +16,13 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
-import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 
 // Custom components
 import Card from "components/card/Card";
-import { Link } from "react-router-dom";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
-import { useState } from "react";
 import Pagination from "components/pagination/Pagination";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function PropertyTable(props) {
   const { columnsData, tableData, title, selectedValues, setSelectedValues } = props;

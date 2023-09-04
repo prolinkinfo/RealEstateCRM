@@ -3,10 +3,10 @@ import Card from 'components/card/Card';
 import { useEffect, useState } from 'react';
 
 import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from '@fullcalendar/timegrid';
-import listPlugin from '@fullcalendar/list';
 import interactionPlugin from "@fullcalendar/interaction";
+import listPlugin from '@fullcalendar/list';
 import multiMonthPlugin from '@fullcalendar/multimonth';
+import timeGridPlugin from '@fullcalendar/timegrid';
 // import EventView from '../eventView';
 import { useBreakpointValue, useDisclosure } from '@chakra-ui/react';
 import AddTask from 'views/admin/task/components/addTask';

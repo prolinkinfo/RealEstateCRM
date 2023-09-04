@@ -1,16 +1,17 @@
 import {
   Box,
   Button,
-  Flex, IconButton, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Table,
+  Flex,
+  Table,
   Tbody,
   Td,
   Text,
   Th,
   Thead,
-  Tooltip,
   Tr,
   useColorModeValue
 } from "@chakra-ui/react";
+import moment from 'moment';
 import { useMemo, useState } from "react";
 import {
   useGlobalFilter,
@@ -18,16 +19,14 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
-import moment from 'moment';
 
 // Custom components
 import Card from "components/card/Card";
-import AddEmailHistory from "../../emailHistory/components/AddEmail";
-import { Link, useParams } from "react-router-dom";
-import { BsFillSendFill } from "react-icons/bs";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
-import { ArrowLeftIcon, ArrowRightIcon, ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import Pagination from "components/pagination/Pagination";
+import { BsFillSendFill } from "react-icons/bs";
+import { Link, useParams } from "react-router-dom";
+import AddEmailHistory from "../../emailHistory/components/AddEmail";
 
 export default function ColumnsTable(props) {
   const { columnsData, tableData, title, fetchData } = props;

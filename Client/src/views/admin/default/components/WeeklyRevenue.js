@@ -10,12 +10,11 @@ import {
 import Card from "components/card/Card.js";
 // Custom components
 import BarChart from "components/charts/BarChart";
-import React from "react";
+import { MdBarChart } from "react-icons/md";
 import {
   barChartDataConsumption,
   barChartOptionsConsumption,
 } from "variables/charts";
-import { MdBarChart } from "react-icons/md";
 
 export default function WeeklyRevenue(props) {
   const { ...rest } = props;

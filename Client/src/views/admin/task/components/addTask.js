@@ -1,14 +1,13 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { Button, Checkbox, Flex, FormLabel, Grid, GridItem, IconButton, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Radio, RadioGroup, Select, Stack, Text, Textarea } from '@chakra-ui/react';
-import { useFormik } from 'formik';
-import { useEffect, useState } from 'react';
-import { TaskSchema } from 'schema';
-import { getApi } from 'services/api';
-import { postApi } from 'services/api';
-import Spinner from 'components/spinner/Spinner';
-import { LiaMousePointerSolid } from 'react-icons/lia';
 import ContactModel from "components/commonTableModel/ContactModel";
 import LeadModel from "components/commonTableModel/LeadModel";
+import Spinner from 'components/spinner/Spinner';
+import { useFormik } from 'formik';
+import { useEffect, useState } from 'react';
+import { LiaMousePointerSolid } from 'react-icons/lia';
+import { TaskSchema } from 'schema';
+import { getApi, postApi } from 'services/api';
 
 const AddTask = (props) => {
     const { onClose, isOpen, fetchData } = props

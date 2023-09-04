@@ -3,8 +3,7 @@ import { Button, Checkbox, FormLabel, Grid, GridItem, IconButton, Input, Modal, 
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { TaskSchema } from 'schema';
-import { putApi } from 'services/api';
-import { getApi } from 'services/api';
+import { getApi, putApi } from 'services/api';
 
 const EditTask = (props) => {
     const { onClose, isOpen, fetchData } = props

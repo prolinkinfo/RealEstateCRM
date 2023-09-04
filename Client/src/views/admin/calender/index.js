@@ -1,6 +1,6 @@
-import Calender from './components/calender';
 import { useEffect, useState } from "react";
 import { getApi } from "services/api";
+import Calender from './components/calender';
 
 
 const Index = () => {

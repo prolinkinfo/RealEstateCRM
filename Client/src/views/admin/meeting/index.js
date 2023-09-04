@@ -2,8 +2,8 @@ import { AddIcon } from "@chakra-ui/icons";
 import { Button, Grid, GridItem } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { getApi } from 'services/api';
-import CheckTable from './components/CheckTable';
 import AddMeeting from "./components/Addmeeting";
+import CheckTable from './components/CheckTable';
 
 
 const Index = () => {

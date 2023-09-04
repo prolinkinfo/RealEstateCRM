@@ -1,12 +1,12 @@
-import { useDisclosure, Box, Button, Flex, Grid, GridItem, Heading, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Grid, GridItem, Heading, Text, useDisclosure } from "@chakra-ui/react";
 import Card from "components/card/Card";
 import { HSeparator } from "components/separator/Separator";
+import Spinner from "components/spinner/Spinner";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { Link, useParams } from "react-router-dom";
 import { getApi } from "services/api";
-import Spinner from "components/spinner/Spinner";
 
 const View = () => {
 

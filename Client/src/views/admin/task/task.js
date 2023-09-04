@@ -1,11 +1,9 @@
-import Card from 'components/card/Card'
-import CheckTable from './components/CheckTable'
-import { Button, useDisclosure, Flex, Text } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons'
-import AddTask from './components/addTask'
-import CountUpComponent from "components/countUpComponent/countUpComponent"
+import { Button, Flex, useDisclosure } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { getApi } from 'services/api'
+import CheckTable from './components/CheckTable'
+import AddTask from './components/addTask'
 
 const Task = (props) => {
     const { isOpen, onOpen, onClose } = useDisclosure()

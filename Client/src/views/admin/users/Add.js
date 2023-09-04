@@ -1,14 +1,13 @@
-import React from 'react';
-import { Button, FormLabel, Grid, GridItem, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, InputGroup, InputRightElement, Icon, IconButton, InputLeftElement } from '@chakra-ui/react';
+import { CloseIcon, PhoneIcon } from '@chakra-ui/icons';
+import { Button, FormLabel, Grid, GridItem, Icon, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
+import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
+import React, { useState } from 'react';
+import { MdOutlineRemoveRedEye } from 'react-icons/md';
+import { RiEyeCloseLine } from 'react-icons/ri';
+import { toast } from 'react-toastify';
 import { userSchema } from 'schema';
 import { postApi } from 'services/api';
-import { RiEyeCloseLine } from 'react-icons/ri';
-import { MdOutlineRemoveRedEye } from 'react-icons/md';
-import { CloseIcon, PhoneIcon } from '@chakra-ui/icons';
-import { toast } from 'react-toastify';
-import Spinner from 'components/spinner/Spinner';
-import { useState } from 'react';
 
 
 const AddUser = (props) => {

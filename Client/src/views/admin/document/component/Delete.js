@@ -1,8 +1,5 @@
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react';
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { deleteManyApi } from 'services/api';
-import { deleteApi } from 'services/api';
 
 const Delete = (props) => {
     const handleDeleteClick = async () => {

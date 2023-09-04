@@ -1,18 +1,16 @@
 import { Button, Flex, FormLabel, Grid, GridItem, Heading, Input, List, ListItem, Text, VStack, useDisclosure } from '@chakra-ui/react';
-import Card from 'components/card/Card';
 import FolderTreeView from 'components/FolderTreeView/folderTreeView';
-import { useEffect, useState } from 'react';
-import Upload from './component/Upload';
-import { getApi } from 'services/api';
-import { postApi } from 'services/api';
-import { useFormik } from 'formik';
-import { documentSchema } from 'schema';
-import { useNavigate } from 'react-router-dom';
-import { deleteApi } from 'services/api';
+import Card from 'components/card/Card';
 import { HSeparator } from 'components/separator/Separator';
-import { constant } from 'constant';
 import Spinner from 'components/spinner/Spinner';
+import { constant } from 'constant';
+import { useFormik } from 'formik';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { documentSchema } from 'schema';
+import { deleteApi, getApi } from 'services/api';
+import Upload from './component/Upload';
 
 
 const Index = () => {

@@ -1,7 +1,7 @@
 import { AddIcon } from "@chakra-ui/icons";
 import { Button, Grid, GridItem, useDisclosure } from '@chakra-ui/react';
-import CheckTable from './components/CheckTable';
 import Add from "./Add";
+import CheckTable from './components/CheckTable';
 
 const Index = () => {
     const columns = [

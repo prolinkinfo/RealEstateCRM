@@ -1,12 +1,10 @@
-import React, { useEffect } from 'react';
-import { Button, FormLabel, Textarea, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
-import { useFormik } from 'formik';
-import { postApi } from 'services/api';
-import { phoneCallSchema } from 'schema';
-import { BsFillTelephoneFill } from 'react-icons/bs';
-import { getApi } from 'services/api';
+import { Button, FormLabel, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, Textarea } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
-import { useState } from 'react';
+import { useFormik } from 'formik';
+import { useEffect, useState } from 'react';
+import { BsFillTelephoneFill } from 'react-icons/bs';
+import { phoneCallSchema } from 'schema';
+import { getApi, postApi } from 'services/api';
 
 const AddPhoneCall = (props) => {
     const { onClose, isOpen, fetchData } = props

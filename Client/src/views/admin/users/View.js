@@ -1,15 +1,15 @@
 import { AddIcon, ChevronDownIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { useDisclosure, Box, Button, Flex, Grid, GridItem, Heading, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Grid, GridItem, Heading, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text, useDisclosure } from "@chakra-ui/react";
 import Card from "components/card/Card";
 import { HSeparator } from "components/separator/Separator";
+import Spinner from "components/spinner/Spinner";
 import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { Link, useParams } from "react-router-dom";
 import { getApi } from "services/api";
 import Add from "./Add";
-import Edit from "./Edit";
 import Delete from "./Delete";
-import Spinner from "components/spinner/Spinner";
+import Edit from "./Edit";
 
 const View = () => {
 

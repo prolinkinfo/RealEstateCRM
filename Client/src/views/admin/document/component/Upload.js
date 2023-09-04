@@ -7,11 +7,9 @@ import {
   Text,
   useColorModeValue
 } from "@chakra-ui/react";
-// Custom components
-import React from "react";
 // Assets
-import { MdUpload } from "react-icons/md";
 import Dropzone from "components/Dropzone";
+import { MdUpload } from "react-icons/md";
 
 export default function Upload(props) {
   const { used, total, count, ...rest } = props;

@@ -22,9 +22,9 @@ import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { Link } from "react-router-dom";
 // import Delete from "../Delete";
-import { getApi } from "services/api";
-import moment from "moment";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
+import moment from "moment";
+import { getApi } from "services/api";
 
 export default function CheckTable(props) {
   const { columnsData } = props;

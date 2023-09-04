@@ -1,36 +1,39 @@
 import { AddIcon, ChevronDownIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import {
-    useDisclosure, Box, Button, Flex, Grid, GridItem, Heading, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text, Tabs,
-    TabList,
-    VStack,
+    Box, Button, Flex, Grid, GridItem, Heading, Menu, MenuButton, MenuDivider, MenuItem, MenuList,
     Tab,
+    TabList,
     TabPanel,
     TabPanels,
+    Tabs,
+    Text,
+    VStack,
+    useDisclosure,
 } from "@chakra-ui/react";
+import FolderTreeView from 'components/FolderTreeView/folderTreeView';
 import Card from "components/card/Card";
 import { HSeparator } from "components/separator/Separator";
+import Spinner from "components/spinner/Spinner";
+import { constant } from "constant";
 import moment from "moment/moment";
 import { useEffect, useState } from "react";
-import { IoIosArrowBack } from "react-icons/io";
-import { Link, useParams } from "react-router-dom";
-import { getApi } from "services/api";
-import Add from "./Add";
-import Edit from "./Edit";
-import Delete from "./Delete";
-import Spinner from "components/spinner/Spinner";
-import ColumnsTable from "../contact/components/ColumnsTable";
-import AddEmailHistory from "../emailHistory/components/AddEmail";
 import { BsFillSendFill, BsFillTelephoneFill } from "react-icons/bs";
-import PhoneCall from "../contact/components/phonCall";
-import AddPhoneCall from "../phoneCall/components/AddPhoneCall";
-import AddTask from "../task/components/addTask";
-import TaskTable from "../task/components/CheckTable.js";
-import MeetingTable from "../meeting/components/CheckTable";
+import { IoIosArrowBack } from "react-icons/io";
 import { SiGooglemeet } from "react-icons/si";
-import AddMeeting from "../meeting/components/Addmeeting";
+import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import FolderTreeView from 'components/FolderTreeView/folderTreeView';
-import { constant } from "constant";
+import { getApi } from "services/api";
+import ColumnsTable from "../contact/components/ColumnsTable";
+import PhoneCall from "../contact/components/phonCall";
+import AddEmailHistory from "../emailHistory/components/AddEmail";
+import AddMeeting from "../meeting/components/Addmeeting";
+import MeetingTable from "../meeting/components/CheckTable";
+import AddPhoneCall from "../phoneCall/components/AddPhoneCall";
+import TaskTable from "../task/components/CheckTable.js";
+import AddTask from "../task/components/addTask";
+import Add from "./Add";
+import Delete from "./Delete";
+import Edit from "./Edit";
 
 
 const View = () => {

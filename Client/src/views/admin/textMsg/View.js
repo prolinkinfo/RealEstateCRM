@@ -1,4 +1,4 @@
-import { useDisclosure, Box, Button, Flex, Grid, GridItem, Heading, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Grid, GridItem, Heading, Text } from "@chakra-ui/react";
 import Card from "components/card/Card";
 import { HSeparator } from "components/separator/Separator";
 import moment from "moment";

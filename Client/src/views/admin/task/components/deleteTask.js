@@ -1,8 +1,7 @@
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
 import { useState } from 'react';
-import { deleteManyApi } from 'services/api';
-import { deleteApi } from 'services/api';
+import { deleteApi, deleteManyApi } from 'services/api';
 
 const DeleteTask = (props) => {
     const [isLoding, setIsLoding] = useState(false)

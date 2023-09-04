@@ -1,11 +1,10 @@
 import { AddIcon } from '@chakra-ui/icons'
 import { Button, Grid, GridItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react'
+import Spinner from 'components/spinner/Spinner'
 import { useFormik } from 'formik'
-import React from 'react'
+import { useState } from 'react'
 import { postApi } from 'services/api'
 import Upload from './Upload'
-import { useState } from 'react'
-import Spinner from 'components/spinner/Spinner'
 
 const PropertyPhoto = (props) => {
     const { onClose, isOpen, fetchData, text } = props

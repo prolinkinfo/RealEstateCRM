@@ -1,5 +1,4 @@
 import { Grid, GridItem, useDisclosure } from '@chakra-ui/react';
-import { useState } from 'react';
 import CheckTable from './components/CheckTable';
 
 

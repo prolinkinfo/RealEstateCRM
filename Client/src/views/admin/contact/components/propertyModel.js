@@ -1,10 +1,9 @@
 import { AddIcon } from '@chakra-ui/icons'
 import { Button, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react'
-import CheckTable from './propertyTable'
-import { getApi } from 'services/api'
-import { postApi } from 'services/api'
 import Spinner from 'components/spinner/Spinner'
+import { useEffect, useState } from 'react'
+import { getApi, postApi } from 'services/api'
+import CheckTable from './propertyTable'
 
 const PropertyModel = (props) => {
     const { onClose, isOpen, fetchData, id, interestProperty } = props

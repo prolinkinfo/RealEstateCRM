@@ -1,23 +1,15 @@
 import {
+  Box,
+  Checkbox,
   Flex,
   Table,
-  Checkbox,
   Tbody,
   Td,
   Text,
   Th,
   Thead,
   Tr,
-  useColorModeValue,
-  Tooltip,
-  IconButton,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-  Select,
-  Box
+  useColorModeValue
 } from "@chakra-ui/react";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -28,17 +20,16 @@ import {
 } from "react-table";
 
 // Custom components
+import { DeleteIcon } from "@chakra-ui/icons";
 import Card from "components/card/Card";
+import CountUpComponent from "components/countUpComponent/countUpComponent";
+import Pagination from "components/pagination/Pagination";
+import Spinner from "components/spinner/Spinner";
 import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
-import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { Link } from "react-router-dom";
-import { ArrowLeftIcon, ArrowRightIcon, ChevronLeftIcon, ChevronRightIcon, DeleteIcon } from "@chakra-ui/icons";
-import Delete from "../Delete";
 import AddEmailHistory from "views/admin/emailHistory/components/AddEmail";
 import AddPhoneCall from "views/admin/phoneCall/components/AddPhoneCall";
-import CountUpComponent from "components/countUpComponent/countUpComponent";
-import Spinner from "components/spinner/Spinner";
-import Pagination from "components/pagination/Pagination";
+import Delete from "../Delete";
 
 export default function CheckTable(props) {
   const { columnsData, tableData, fetchData, isLoding } = props;

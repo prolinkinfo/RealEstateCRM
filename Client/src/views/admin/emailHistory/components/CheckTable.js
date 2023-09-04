@@ -1,19 +1,11 @@
 import {
   Box,
   Flex,
-  IconButton,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  Select,
   Table, Tbody,
   Td,
   Text,
   Th,
   Thead,
-  Tooltip,
   Tr,
   useColorModeValue
 } from "@chakra-ui/react";
@@ -28,15 +20,13 @@ import {
 // Custom components
 import Card from "components/card/Card";
 import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
-import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { Link } from "react-router-dom";
 // import Delete from "../Delete";
-import { getApi } from "services/api";
-import moment from "moment";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
-import Spinner from "components/spinner/Spinner";
-import { ArrowLeftIcon, ArrowRightIcon, ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import Pagination from "components/pagination/Pagination";
+import Spinner from "components/spinner/Spinner";
+import moment from "moment";
+import { getApi } from "services/api";
 
 export default function CheckTable(props) {
   const { columnsData } = props;
