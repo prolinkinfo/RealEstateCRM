@@ -43,7 +43,6 @@ option {
   overflow-y: auto;
 }
 
-
 .table-container thead {
   position: sticky;
   top: 0;
