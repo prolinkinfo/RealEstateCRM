@@ -1,11 +1,19 @@
 import {
   Button,
   Flex,
+  IconButton,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  Select,
   Table, Tbody,
   Td,
   Text,
   Th,
   Thead,
+  Tooltip,
   Tr,
   useColorModeValue
 } from "@chakra-ui/react";
@@ -24,7 +32,7 @@ import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import EventView from "../eventView";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
 import Spinner from "components/spinner/Spinner";
-import { AddIcon } from "@chakra-ui/icons";
+import { AddIcon, ArrowLeftIcon, ArrowRightIcon, ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 
 export default function CheckTable(props) {
   const { columnsData, data, isLoding, setTaskModel } = props;
@@ -35,13 +43,14 @@ export default function CheckTable(props) {
   // const [selectedValues, setSelectedValues] = useState([]);
   const [eventView, setEventView] = useState(false)
   const [id, setId] = useState()
+  const [gopageValue, setGopageValue] = useState()
 
   // const data = useMemo(() => tableData, [tableData]);
 
   const tableInstance = useTable(
     {
       columns, data,
-      // initialState: { pageIndex: 0, pageSize: 10 },
+      initialState: { pageIndex: 0 }
     },
     useGlobalFilter,
     useSortBy,
@@ -52,19 +61,22 @@ export default function CheckTable(props) {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    page,
     prepareRow,
-    initialState,
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
     nextPage,
     previousPage,
-    canNextPage,
-    canPreviousPage,
-    pageOptions,
-    state,
-    // setPageSize,
+    setPageSize,
+    state: { pageIndex, pageSize }
   } = tableInstance;
-  initialState.pageSize = 10
-  const { pageIndex } = state;
+
+  if (pageOptions.length < gopageValue) {
+    setGopageValue(pageOptions.length)
+  }
 
   const handleDateClick = (cell) => {
     setId(cell?.row?.values?._id)
@@ -218,19 +230,91 @@ export default function CheckTable(props) {
             })}
         </Tbody>
       </Table>
-      <div style={{ display: 'flex', justifyContent: 'left', alignItems: 'center', margin: "1rem" }}>
 
+      <Flex justifyContent="space-between" m={4} alignItems="center">
+        <Flex>
+          <Tooltip label="First Page">
+            <IconButton
+              onClick={() => { gotoPage(0); setGopageValue(1) }}
+              isDisabled={!canPreviousPage}
+              icon={<ArrowLeftIcon h={3} w={3} />}
+              mr={4}
+            />
+          </Tooltip>
+          <Tooltip label="Previous Page">
+            <IconButton
+              onClick={() => { previousPage(); setGopageValue((pre) => pre - 1) }}
+              isDisabled={!canPreviousPage}
+              icon={<ChevronLeftIcon h={6} w={6} />}
+            />
+          </Tooltip>
+        </Flex>
 
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-          <GrFormPrevious />
-        </button>
-        <span style={{ margin: "0 0.5rem" }}>
-          Page {pageIndex + 1} of {pageOptions.length}
-        </span>
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
-          <GrFormNext />
-        </button>
-      </div>
+        <Flex alignItems="center">
+          <Text flexShrink="0" mr={8}>
+            Page{" "}
+            <Text fontWeight="bold" as="span">
+              {pageIndex + 1}
+            </Text>{" "}
+            of{" "}
+            <Text fontWeight="bold" as="span">
+              {pageOptions.length}
+            </Text>
+          </Text>
+          <Text flexShrink="0">Go to page:</Text>{" "}
+          <NumberInput
+            ml={2}
+            mr={8}
+            w={28}
+            min={1}
+            max={pageOptions.length}
+            value={gopageValue}
+            onChange={(value) => {
+              const page = value ? value - 1 : 0;
+              gotoPage(page);
+              setGopageValue(value)
+            }}
+            defaultValue={pageIndex + 1}
+          >
+            <NumberInputField />
+            <NumberInputStepper>
+              <NumberIncrementStepper />
+              <NumberDecrementStepper />
+            </NumberInputStepper>
+          </NumberInput>
+          <Select
+            w={32}
+            value={pageSize}
+            onChange={(e) => {
+              setPageSize(Number(e.target.value));
+            }}
+          >
+            {[5, 10, 20, 30, 40, 50].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                Show {pageSize}
+              </option>
+            ))}
+          </Select>
+        </Flex>
+
+        <Flex>
+          <Tooltip label="Next Page">
+            <IconButton
+              onClick={() => { nextPage(); setGopageValue((pre) => pre + 1) }}
+              isDisabled={!canNextPage}
+              icon={<ChevronRightIcon h={6} w={6} />}
+            />
+          </Tooltip>
+          <Tooltip label="Last Page">
+            <IconButton
+              onClick={() => { gotoPage(pageCount - 1); setGopageValue(pageCount) }}
+              isDisabled={!canNextPage}
+              icon={<ArrowRightIcon h={3} w={3} />}
+              ml={4}
+            />
+          </Tooltip>
+        </Flex>
+      </Flex>
 
     </Card >
   );

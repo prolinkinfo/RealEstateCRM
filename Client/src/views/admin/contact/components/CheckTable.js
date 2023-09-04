@@ -293,7 +293,7 @@ export default function CheckTable(props) {
         <Flex>
           <Tooltip label="First Page">
             <IconButton
-              onClick={() => gotoPage(0)}
+              onClick={() => { gotoPage(0); setGopageValue(1) }}
               isDisabled={!canPreviousPage}
               icon={<ArrowLeftIcon h={3} w={3} />}
               mr={4}
@@ -301,7 +301,7 @@ export default function CheckTable(props) {
           </Tooltip>
           <Tooltip label="Previous Page">
             <IconButton
-              onClick={previousPage}
+              onClick={() => { previousPage(); setGopageValue((pre) => pre - 1) }}
               isDisabled={!canPreviousPage}
               icon={<ChevronLeftIcon h={6} w={6} />}
             />
@@ -358,14 +358,14 @@ export default function CheckTable(props) {
         <Flex>
           <Tooltip label="Next Page">
             <IconButton
-              onClick={nextPage}
+              onClick={() => { nextPage(); setGopageValue((pre) => pre + 1) }}
               isDisabled={!canNextPage}
               icon={<ChevronRightIcon h={6} w={6} />}
             />
           </Tooltip>
           <Tooltip label="Last Page">
             <IconButton
-              onClick={() => gotoPage(pageCount - 1)}
+              onClick={() => { gotoPage(pageCount - 1); setGopageValue(pageCount) }}
               isDisabled={!canNextPage}
               icon={<ArrowRightIcon h={3} w={3} />}
               ml={4}
