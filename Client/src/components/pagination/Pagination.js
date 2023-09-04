@@ -5,11 +5,10 @@ import React from 'react'
 const Pagination = (props) => {
     const { gotoPage, gopageValue, setGopageValue, pageCount, canPreviousPage, previousPage, canNextPage, pageOptions, setPageSize, nextPage, pageSize, pageIndex } = props
 
-
     return (
 
         <Flex justifyContent="space-between" m={4} alignItems="center">
-            <Flex>
+            {pageOptions?.length !== 1 && <Flex>
                 <Tooltip label="First Page">
                     <IconButton
                         onClick={() => { gotoPage(0); setGopageValue(1) }}
@@ -25,40 +24,42 @@ const Pagination = (props) => {
                         icon={<ChevronLeftIcon h={6} w={6} />}
                     />
                 </Tooltip>
-            </Flex>
+            </Flex>}
 
             <Flex alignItems="center">
-                <Text flexShrink="0" mr={8}>
-                    Page{" "}
-                    <Text fontWeight="bold" as="span">
-                        {pageIndex + 1}
-                    </Text>{" "}
-                    of{" "}
-                    <Text fontWeight="bold" as="span">
-                        {pageOptions?.length}
+                {pageOptions?.length !== 1 && <>
+                    <Text flexShrink="0" mr={8}>
+                        Page{" "}
+                        <Text fontWeight="bold" as="span">
+                            {pageIndex + 1}
+                        </Text>{" "}
+                        of{" "}
+                        <Text fontWeight="bold" as="span">
+                            {pageOptions?.length}
+                        </Text>
                     </Text>
-                </Text>
-                <Text flexShrink="0">Go to page:</Text>{" "}
-                <NumberInput
-                    ml={2}
-                    mr={8}
-                    w={28}
-                    min={1}
-                    max={pageOptions?.length}
-                    value={gopageValue}
-                    onChange={(value) => {
-                        const page = value ? value - 1 : 0;
-                        gotoPage(page);
-                        setGopageValue(value)
-                    }}
-                    defaultValue={pageIndex + 1}
-                >
-                    <NumberInputField />
-                    <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                    </NumberInputStepper>
-                </NumberInput>
+                    <Text flexShrink="0">Go to page:</Text>{" "}
+                    <NumberInput
+                        ml={2}
+                        mr={8}
+                        w={28}
+                        min={1}
+                        max={pageOptions?.length}
+                        value={gopageValue}
+                        onChange={(value) => {
+                            const page = value ? value - 1 : 0;
+                            gotoPage(page);
+                            setGopageValue(value)
+                        }}
+                        defaultValue={pageIndex + 1}
+                    >
+                        <NumberInputField />
+                        <NumberInputStepper>
+                            <NumberIncrementStepper />
+                            <NumberDecrementStepper />
+                        </NumberInputStepper>
+                    </NumberInput>
+                </>}
                 <Select
                     w={32}
                     value={pageSize}
@@ -74,23 +75,24 @@ const Pagination = (props) => {
                 </Select>
             </Flex>
 
-            <Flex>
-                <Tooltip label="Next Page">
-                    <IconButton
-                        onClick={() => { nextPage(); setGopageValue((pre) => pre + 1) }}
-                        isDisabled={!canNextPage}
-                        icon={<ChevronRightIcon h={6} w={6} />}
-                    />
-                </Tooltip>
-                <Tooltip label="Last Page">
-                    <IconButton
-                        onClick={() => { gotoPage(pageCount - 1); setGopageValue(pageCount) }}
-                        isDisabled={!canNextPage}
-                        icon={<ArrowRightIcon h={3} w={3} />}
-                        ml={4}
-                    />
-                </Tooltip>
-            </Flex>
+            {pageOptions?.length !== 1 &&
+                <Flex>
+                    <Tooltip label="Next Page">
+                        <IconButton
+                            onClick={() => { nextPage(); setGopageValue((pre) => pre + 1) }}
+                            isDisabled={!canNextPage}
+                            icon={<ChevronRightIcon h={6} w={6} />}
+                        />
+                    </Tooltip>
+                    <Tooltip label="Last Page">
+                        <IconButton
+                            onClick={() => { gotoPage(pageCount - 1); setGopageValue(pageCount) }}
+                            isDisabled={!canNextPage}
+                            icon={<ArrowRightIcon h={3} w={3} />}
+                            ml={4}
+                        />
+                    </Tooltip>
+                </Flex>}
         </Flex>
     )
 }
