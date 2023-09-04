@@ -21,6 +21,7 @@ app.get('/', async (req, res) => {
 
     res.send('Welcome to my world...')
 
+    //! for Delete folder ./uploads
     // const folderPath = './uploads'; // Use the appropriate path here
     // try {
     //     function removeFolderRecursive(folderPath) {
@@ -56,9 +57,6 @@ const server = app.listen(port, () => {
     console.log(`Server listening at ${protocol}://${host}:${port}`);
 });
 
-// app.listen(port, () => {
-//     console.log(`listening on http://127.0.0.1:${port}`)
-// });
 
 // Connect to MongoDB
 const DATABASE_URL = process.env.DB_URL || 'mongodb://127.0.0.1:27017'
