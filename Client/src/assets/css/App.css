@@ -22,6 +22,20 @@ option {
   border-radius: 20px;
 }
 
+.css-70fard,
+.apexcharts-toolbar {
+  z-index: 0 !important;
+}
+
+.fc-bg-event {
+  opacity: 1 !important;
+}
+
+.p0 {
+  margin-top: 0;
+}
+
+/* TABLE  */
 .table-container {
   min-height: auto;
   max-height: 23vh;
@@ -48,15 +62,16 @@ option {
   background: #ffffff;
 }
 
-.css-70fard,
-.apexcharts-toolbar {
-  z-index: 0 !important;
+
+.table-fix-container {
+  min-height: auto;
+  max-height: 65vh;
+  overflow-y: auto;
 }
 
-.fc-bg-event {
-  opacity: 1 !important;
-}
-
-.p0 {
-  margin-top: 0;
+.table-fix-container thead {
+  position: sticky;
+  top: 0;
+  height: 25px;
+  background: #ffffff;
 }
