@@ -40,8 +40,8 @@ export default function HeaderLinks(props) {
 	);
 	// const borderButton = useColorModeValue('secondaryGray.500', 'whiteAlpha.200');
 
-	const navigate = useNavigate()
 	const [loginUser, setLoginUser] = useState()
+	const navigate = useNavigate()
 
 	const user = loginUser?.firstName + ' ' + loginUser?.lastName;
 
@@ -56,31 +56,46 @@ export default function HeaderLinks(props) {
 		fetchData()
 	}, [])
 
-	const logOut = ({ token }) => {
-		localStorage.clear()
-		sessionStorage.clear()
-		navigate('/auth')
-		if (token) {
-			toast.error(token)
+	const [isLogoutScheduled, setIsLogoutScheduled] = useState(false);
+
+	const logOut = (message) => {
+		localStorage.clear();
+		sessionStorage.clear();
+		navigate('/auth');
+		if (message) {
+			toast.error(message);
 		} else {
-			toast.success('Log out Successfully')
+			toast.success('Logged out automatically due to token expiration');
 		}
-	}
+		setIsLogoutScheduled(true);
+	};
 
-	const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+	useEffect(() => {
+		const token = localStorage.getItem('token') || sessionStorage.getItem('token');
 
-	if (token) {
-		try {
-			const decodedToken = jwtDecode(token);
-			const currentTime = Date.now() / 1000; // Convert milliseconds to seconds
-			if (decodedToken.exp < currentTime) {
-				logOut({ token: 'Token has expired' });
+		if (token) {
+			try {
+				const decodedToken = jwtDecode(token);
+				const currentTime = Date.now() / 1000; // Convert milliseconds to seconds
+				if (decodedToken.exp < currentTime) {
+					if (!isLogoutScheduled) {
+						logOut('Token has expired');
+					}
+				} else {
+					// Schedule automatic logout when the token expires
+					const timeToExpire = (decodedToken.exp - currentTime) * 1000; // Convert seconds to milliseconds
+					setTimeout(() => {
+						if (!isLogoutScheduled) {
+							logOut('Token has expired');
+						}
+					}, timeToExpire);
+				}
+			} catch (error) {
+				console.error('Error decoding token:', error);
 			}
 		}
-		catch (error) {
-			console.error('Error decoding token:', error);
-		}
-	}
+	}, [isLogoutScheduled]);
+
 
 
 	return (
