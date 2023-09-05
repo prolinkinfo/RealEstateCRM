@@ -118,7 +118,7 @@ export default function CheckTable(props) {
           fontWeight="700"
           lineHeight="100%"
         >
-          Lead Information Table  (<CountUpComponent targetNumber={data?.length} />)
+          Leads  (<CountUpComponent targetNumber={data?.length} />)
         </Text>
         {/* <Menu /> */}
         {selectedValues.length > 0 && <DeleteIcon onClick={() => setDelete(true)} color={'red'} />}

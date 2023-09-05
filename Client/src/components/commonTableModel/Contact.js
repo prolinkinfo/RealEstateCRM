@@ -9,7 +9,7 @@ import {
   Tr,
   useColorModeValue
 } from "@chakra-ui/react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   useGlobalFilter,
   usePagination,
@@ -22,6 +22,7 @@ import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import Card from "components/card/Card";
 import { Link } from "react-router-dom";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
+import Pagination from "components/pagination/Pagination";
 
 export default function ContactTable(props) {
   const { columnsData, tableData, title, type, selectedValues, setSelectedValues } = props;
@@ -29,11 +30,12 @@ export default function ContactTable(props) {
   const columns = useMemo(() => columnsData, [columnsData]);
   const data = useMemo(() => tableData, [tableData]);
   const user = JSON.parse(localStorage.getItem("user"))
+  const [gopageValue, setGopageValue] = useState()
 
   const tableInstance = useTable(
     {
-      columns,
-      data,
+      columns, data,
+      initialState: { pageIndex: 0 }
     },
     useGlobalFilter,
     useSortBy,
@@ -44,21 +46,22 @@ export default function ContactTable(props) {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    page,
     prepareRow,
-    initialState,
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
     nextPage,
     previousPage,
-    canNextPage,
-    canPreviousPage,
-    pageOptions,
-    state,
-    // setPageSize,
+    setPageSize,
+    state: { pageIndex, pageSize }
   } = tableInstance;
 
-  initialState.pageSize = 7;
-
-  const { pageIndex } = state;
+  if (pageOptions.length < gopageValue) {
+    setGopageValue(pageOptions.length)
+  }
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -79,7 +82,6 @@ export default function ContactTable(props) {
         setSelectedValues(null);
       }
     }
-
   };
 
 
@@ -234,19 +236,8 @@ export default function ContactTable(props) {
           </Tbody>
         </Table>
       </Box>
-      <div style={{ display: 'flex', justifyContent: 'left', alignItems: 'center', margin: "1rem" }}>
+      {data?.length > 5 && <Pagination gotoPage={gotoPage} gopageValue={gopageValue} setGopageValue={setGopageValue} pageCount={pageCount} canPreviousPage={canPreviousPage} previousPage={previousPage} canNextPage={canNextPage} pageOptions={pageOptions} setPageSize={setPageSize} nextPage={nextPage} pageSize={pageSize} pageIndex={pageIndex} />}
 
-
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-          <GrFormPrevious />
-        </button>
-        <span style={{ margin: "0 0.5rem" }}>
-          Page {pageIndex + 1} of {pageOptions.length}
-        </span>
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
-          <GrFormNext />
-        </button>
-      </div>
     </Card>
   );
 }

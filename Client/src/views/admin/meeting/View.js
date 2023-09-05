@@ -74,7 +74,7 @@ const View = () => {
                                     <GridItem colSpan={2}>
                                         <Box>
                                             <Heading size="md" mb={3}>
-                                                Metting View page
+                                                Meeting View page
                                             </Heading>
                                             <HSeparator />
                                         </Box>

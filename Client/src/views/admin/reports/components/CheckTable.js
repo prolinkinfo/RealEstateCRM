@@ -84,7 +84,7 @@ export default function CheckTable(props) {
                     fontWeight="700"
                     lineHeight="100%"
                 >
-                    Reporting Information Table ({data.length})
+                    Report Information ({data.length})
                 </Text>
                 {/* <Menu /> */}
                 {selectedValues.length > 0 && <DeleteIcon onClick={() => setDelete(true)} color={'red'} />}

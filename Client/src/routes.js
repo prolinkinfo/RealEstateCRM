@@ -44,7 +44,7 @@ const Document = React.lazy(() => import("views/admin/document"));
 const EmailHistory = React.lazy(() => import("views/admin/emailHistory"));
 const EmailHistoryView = React.lazy(() => import("views/admin/emailHistory/View"));
 
-const Metting = React.lazy(() => import("views/admin/meeting"));
+const Meeting = React.lazy(() => import("views/admin/meeting"));
 const MettingView = React.lazy(() => import("views/admin/meeting/View"));
 
 const PhoneCall = React.lazy(() => import("views/admin/phoneCall"));
@@ -145,17 +145,17 @@ const routes = [
     icon: <Icon as={FaTasks} width='20px' height='20px' color='inherit' />,
     component: Task,
   },
-  // ------------- Metting Routes ------------------------
+  // ------------- Meeting Routes ------------------------
   {
-    name: "Metting",
+    name: "Meeting",
     layout: "/admin",
     both: true,
     path: "/metting",
     icon: <Icon as={SiGooglemeet} width='20px' height='20px' color='inherit' />,
-    component: Metting,
+    component: Meeting,
   },
   {
-    name: "Metting View",
+    name: "Meeting View",
     layout: "/admin",
     both: true,
     under: "metting",
@@ -164,7 +164,7 @@ const routes = [
   },
   // ------------- Phone Routes ------------------------
   {
-    name: "Phone",
+    name: "Call",
     layout: "/admin",
     both: true,
     path: "/phone-call",
