@@ -57,16 +57,16 @@ const View = () => {
 
     const columnsDataColumns = [
         { Header: "sender", accessor: "senderName", },
-        { Header: "recipient", accessor: "recipient", },
+        { Header: "recipient", accessor: "createByName", },
         { Header: "time stamp", accessor: "timestamp", },
-        { Header: "create at", accessor: "createBy", },
+        { Header: "Created", accessor: "createBy", },
     ];
 
     const textColumnsDataColumns = [
         { Header: "sender", accessor: "senderName", },
         { Header: "recipient", accessor: "to", },
         { Header: "time stamp", accessor: "timestamp", },
-        { Header: "create at", accessor: "createBy", },
+        { Header: "Created", accessor: "createBy", },
     ];
 
     const MeetingColumns = [
@@ -251,7 +251,7 @@ const View = () => {
                                                     <Text>{data?.leadSourceCampaign ? data?.leadSourceCampaign : 'N/A'}</Text>
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12, md: 6 }} >
-                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Sourc eReferral </Text>
+                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Source Referral </Text>
                                                     <Text>{data?.leadSourceReferral ? data?.leadSourceReferral : 'N/A'}</Text>
                                                 </GridItem>
                                             </Grid>

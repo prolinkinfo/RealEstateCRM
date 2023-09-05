@@ -155,7 +155,7 @@ export default function PhoneCall(props) {
                           </Link>
                         </Flex>
                       );
-                    } else if (cell?.column.Header === "create at") {
+                    } else if (cell?.column.Header === "Created") {
                       data = (
                         <Text color={textColor} fontSize='sm' fontWeight='700'>
                           {moment(cell?.row?.values.timestamp).format('h:mma (DD/MM)')}

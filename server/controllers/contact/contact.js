@@ -89,7 +89,7 @@ const view = async (req, res) => {
             { $match: { 'users.deleted': false } },
             {
                 $addFields: {
-                    senderName: '$users.username',
+                    senderName: { $concat: ['$users.firstName', ' ', '$users.lastName'] },
                     deleted: {
                         $cond: [
                             { $eq: ['$createByRef.deleted', false] },

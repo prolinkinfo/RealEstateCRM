@@ -53,9 +53,9 @@ const View = () => {
 
     const columnsDataColumns = [
         { Header: "sender", accessor: "senderName", },
-        { Header: "recipient", accessor: "recipient", },
+        { Header: "recipient", accessor: "createByName", },
         { Header: "time stamp", accessor: "timestamp", },
-        { Header: "create at", accessor: "createBy", },
+        { Header: "Created", accessor: "createBy", },
     ];
 
     const PropertyColumn = [
@@ -69,7 +69,7 @@ const View = () => {
         { Header: "sender", accessor: "sender", },
         { Header: "recipient", accessor: "to", },
         { Header: "time stamp", accessor: "timestamp", },
-        { Header: "create at", accessor: "createBy", },
+        { Header: "Created", accessor: "createBy", },
     ];
 
     const MeetingColumns = [

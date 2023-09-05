@@ -10,7 +10,7 @@ const Index = () => {
         { Header: "recipient", accessor: "recipient", },
         { Header: "create From", accessor: "createByName", },
         { Header: "timestamp", accessor: "timestamp", },
-        { Header: "create at" },
+        { Header: "Created" },
     ];
 
     const { isOpen, onOpen, onClose } = useDisclosure()
