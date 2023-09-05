@@ -226,7 +226,7 @@ const view = async (req, res) => {
             { $match: { 'contact.deleted': false } },
             {
                 $addFields: {
-                    senderName: '$users.username',
+                    senderName: { $concat: ['$users.firstName', ' ', '$users.lastName'] },
                     deleted: '$contact.deleted',
                     createByName: { $concat: ['$contact.title', ' ', '$contact.firstName', ' ', '$contact.lastName'] },
                 }
