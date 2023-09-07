@@ -28,7 +28,7 @@ import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 import EventView from "../eventView";
 
 export default function CheckTable(props) {
-  const { columnsData, data, isLoding, setTaskModel, className } = props;
+  const { columnsData, fetchData, data, isLoding, setTaskModel, className } = props;
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -83,7 +83,7 @@ export default function CheckTable(props) {
       px="0px"
       overflowX={{ sm: "scroll", lg: "hidden" }}
     >
-      <EventView isOpen={eventView} onClose={setEventView} info={id} />
+      <EventView fetchData={fetchData} isOpen={eventView} onClose={setEventView} info={id} />
       <Flex px="25px" justify="space-between" mb="20px" align="center">
         <Text
           color={'secondaryGray.900'}
@@ -171,7 +171,7 @@ export default function CheckTable(props) {
                             {cell?.value}
                           </Text>
                         );
-                      } else if (cell?.column.Header === "Category") {
+                      } else if (cell?.column.Header === "Related") {
                         data = (
                           <Text
                             me="10px"

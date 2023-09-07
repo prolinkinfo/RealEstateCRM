@@ -1,16 +1,21 @@
 import { CloseIcon } from '@chakra-ui/icons';
-import { Button, Checkbox, FormLabel, Grid, GridItem, IconButton, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Radio, RadioGroup, Select, Stack, Text, Textarea, useBreakpointValue } from '@chakra-ui/react';
+import { Button, Checkbox, Flex, FormLabel, Grid, GridItem, IconButton, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Radio, RadioGroup, Select, Stack, Text, Textarea, useBreakpointValue } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
+import { LiaMousePointerSolid } from 'react-icons/lia';
 import { TaskSchema } from 'schema';
 import { getApi, putApi } from 'services/api';
+import ContactModel from "components/commonTableModel/ContactModel";
+import LeadModel from "components/commonTableModel/LeadModel";
 
 const EditTask = (props) => {
     const { onClose, isOpen, fetchData } = props
     const [isChecked, setIsChecked] = useState();
     const userId = JSON.parse(localStorage.getItem('user'))._id
-    const [contactData, setContactData] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"))
+    const [assignmentToData, setAssignmentToData] = useState([]);
+    const [contactModelOpen, setContactModel] = useState(false);
+    const [leadModelOpen, setLeadModel] = useState(false);
 
     const initialValues = {
         title: '',
@@ -18,6 +23,7 @@ const EditTask = (props) => {
         description: '',
         notes: '',
         assignmentTo: '',
+        assignmentToLead: '',
         reminder: '',
         start: '',
         end: '',
@@ -58,19 +64,20 @@ const EditTask = (props) => {
             try {
                 let result = await getApi('api/task/view/', props.id)
 
-                values.title = result?.data?.title
-                values.category = result?.data?.category
-                values.description = result?.data?.description
-                values.notes = result?.data?.notes
-                values.assignmentTo = result?.data?.assignmentTo
-                values.reminder = result?.data?.reminder
-                values.start = result?.data?.start
-                values.end = result?.data?.end
-                values.backgroundColor = result?.data?.backgroundColor
-                values.borderColor = result?.data?.borderColor
-                values.textColor = result?.data?.textColor
-                values.display = result?.data?.display
-                values.url = result?.data?.url
+                setFieldValue('title', result?.data?.title)
+                setFieldValue('category', result?.data?.category)
+                setFieldValue('description', result?.data?.description)
+                setFieldValue('notes', result?.data?.notes)
+                setFieldValue('assignmentTo', result?.data?.assignmentTo)
+                setFieldValue('reminder', result?.data?.reminder)
+                setFieldValue('start', result?.data?.start)
+                setFieldValue('end', result?.data?.end)
+                setFieldValue('backgroundColor', result?.data?.backgroundColor)
+                setFieldValue('borderColor', result?.data?.borderColor)
+                setFieldValue('textColor', result?.data?.textColor)
+                setFieldValue('display', result?.data?.display)
+                setFieldValue('url', result?.data?.url)
+                setFieldValue('assignmentToLead', result?.data?.assignmentToLead)
             }
             catch (e) {
                 console.log(e);
@@ -80,17 +87,27 @@ const EditTask = (props) => {
 
     const getContactDetails = async () => {
         try {
-            let result = await getApi(user.role === 'admin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`);
-            setContactData(result?.data)
+            let result
+            if (values.category === "contact") {
+                result = await getApi(user.role === 'admin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
+            } else if (values.category === "lead") {
+                result = await getApi(user.role === 'admin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
+            }
+            setAssignmentToData(result?.data)
         }
         catch (e) {
             console.log(e);
         }
     }
+
+    useEffect(() => {
+        getContactDetails()
+    }, [values.category])
+
     useEffect(() => {
         getContactDetails()
         fetchTaskData()
-    }, [props])
+    }, [props.id])
 
     return (
         <Modal isOpen={isOpen} size={'xl'} isCentered={useBreakpointValue({ base: false, md: true })}>
@@ -101,6 +118,10 @@ const EditTask = (props) => {
                     <IconButton onClick={() => onClose(false)} icon={<CloseIcon />} />
                 </ModalHeader>
                 <ModalBody>
+                    {/* Contact Model  */}
+                    <ContactModel isOpen={contactModelOpen} onClose={setContactModel} fieldName='assignmentTo' setFieldValue={setFieldValue} />
+                    {/* Lead Model  */}
+                    <LeadModel isOpen={leadModelOpen} onClose={setLeadModel} fieldName='assignmentToLead' setFieldValue={setFieldValue} />
 
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
@@ -121,6 +142,87 @@ const EditTask = (props) => {
                         </GridItem>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                Related
+                            </FormLabel>
+                            <RadioGroup onChange={(e) => { setFieldValue('category', e); setFieldValue('assignmentTo', null); setFieldValue('assignmentToLead', null); }} value={values.category}>
+                                <Stack direction='row'>
+                                    <Radio value='None' >None</Radio>
+                                    <Radio value='contact'>Contact</Radio>
+                                    <Radio value='lead'>Lead</Radio>
+                                </Stack>
+                            </RadioGroup>
+                            <Text mb='10px' color={'red'}> {errors.category && touched.category && errors.category}</Text>
+                        </GridItem>
+                        <GridItem colSpan={{ base: 12, md: values.category === "None" ? 12 : 6 }} >
+                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                Description
+                            </FormLabel>
+                            <Input
+                                fontSize='sm'
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.description}
+                                name="description"
+                                placeholder='Description'
+                                fontWeight='500'
+                                borderColor={errors?.description && touched?.description ? "red.300" : null}
+                            />
+                            <Text mb='10px' color={'red'}> {errors.description && touched.description && errors.description}</Text>
+                        </GridItem>
+                        {values.category === "contact" ?
+                            <>
+                                <GridItem colSpan={{ base: 12, md: 6 }} >
+                                    <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                        Assignment To  Contact
+                                    </FormLabel>
+                                    <Flex justifyContent={'space-between'}>
+                                        <Select
+                                            value={values.assignmentTo}
+                                            name="assignmentTo"
+                                            onChange={handleChange}
+                                            mb={errors.assignmentTo && touched.assignmentTo ? undefined : '10px'}
+                                            fontWeight='500'
+                                            placeholder={'Assignment To'}
+                                            borderColor={errors.assignmentTo && touched.assignmentTo ? "red.300" : null}
+                                        >
+                                            {assignmentToData?.map((item) => {
+                                                return <option value={item._id} key={item._id}>{values.category === 'contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
+                                            })}
+                                        </Select>
+                                        <IconButton onClick={() => setContactModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
+                                    </Flex>
+                                    <Text mb='10px' color={'red'}> {errors.assignmentTo && touched.assignmentTo && errors.assignmentTo}</Text>
+                                </GridItem>
+                            </>
+                            : values.category === "lead" ?
+                                <>
+                                    <GridItem colSpan={{ base: 12, md: 6 }} >
+                                        <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                            Assignment To Lead
+                                        </FormLabel>
+                                        <Flex justifyContent={'space-between'}>
+                                            <Select
+                                                value={values.assignmentToLead}
+                                                name="assignmentToLead"
+                                                onChange={handleChange}
+                                                mb={errors.assignmentToLead && touched.assignmentToLead ? undefined : '10px'}
+                                                fontWeight='500'
+                                                placeholder={'Assignment To'}
+                                                borderColor={errors.assignmentToLead && touched.assignmentToLead ? "red.300" : null}
+                                            >
+                                                {assignmentToData?.map((item) => {
+                                                    return <option value={item._id} key={item._id}>{item.leadName}</option>
+                                                })}
+                                            </Select>
+                                            <IconButton onClick={() => setLeadModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
+                                        </Flex>
+                                        <Text mb='10px' color={'red'}> {errors.assignmentToLead && touched.assignmentToLead && errors.assignmentToLead}</Text>
+                                    </GridItem>
+                                </>
+                                : ''
+                        }
+                        {/* <GridItem colSpan={{ base: 12, md: 6 }} >
+                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Category
                             </FormLabel>
                             <Select
@@ -138,8 +240,8 @@ const EditTask = (props) => {
                                 <option value="meeting">Meeting</option>
                             </Select>
                             <Text mb='10px' color={'red'}> {errors.recipient && touched.recipient && errors.recipient}</Text>
-                        </GridItem>
-                        <GridItem colSpan={{ base: 12, md: 6 }} >
+                        </GridItem> */}
+                        {/* <GridItem colSpan={{ base: 12, md: 6 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Description
                             </FormLabel>
@@ -174,7 +276,7 @@ const EditTask = (props) => {
                                 })}
                             </Select>
                             <Text mb='10px' color={'red'}> {errors.assignmentTo && touched.assignmentTo && errors.assignmentTo}</Text>
-                        </GridItem>
+                        </GridItem> */}
                         <GridItem colSpan={{ base: 12 }} >
                             <Checkbox isChecked={isChecked} onChange={(e) => setIsChecked(e.target.checked)}>All Day Task ? </Checkbox>
                         </GridItem>
@@ -323,7 +425,7 @@ const EditTask = (props) => {
                 </ModalBody>
                 <ModalFooter>
                     <Button variant='brand' onClick={handleSubmit}>Edit</Button>
-                    <Button onClick={() => formik.resetForm()}>Clear</Button>
+                    <Button ml={2} onClick={() => onClose(false)}>Close</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

@@ -16,7 +16,7 @@ const Task = (props) => {
             width: 5
         },
         { Header: 'Title', accessor: 'title' },
-        { Header: "Category", accessor: "category", },
+        { Header: "Related", accessor: "category", },
         { Header: "Assignment To", accessor: "assignmentToName", },
         { Header: "Start Date", accessor: "start", },
         { Header: "End Date", accessor: "end", },
@@ -47,7 +47,7 @@ const Task = (props) => {
             <Flex alignItems={'center'} justifyContent={"right"} flexWrap={'wrap'} mb={3}>
                 <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Create Task</Button>
             </Flex>
-            <CheckTable columnsData={columns} data={data} isLoding={isLoding} className='table-fix-container' />
+            <CheckTable columnsData={columns} fetchData={fetchData} data={data} isLoding={isLoding} className='table-fix-container' />
             <AddTask isOpen={isOpen} fetchData={fetchData} onClose={onClose} />
         </div>
     )

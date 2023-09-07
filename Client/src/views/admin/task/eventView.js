@@ -10,14 +10,14 @@ import DeleteTask from './components/deleteTask'
 import EditTask from './components/editTask'
 
 const EventView = (props) => {
-    const { onClose, isOpen, info } = props
+    const { onClose, isOpen, info, fetchData } = props
     const [data, setData] = useState()
     const [edit, setEdit] = useState(false);
     const [deleteModel, setDelete] = useState(false);
     const user = JSON.parse(localStorage.getItem("user"))
     const [isLoding, setIsLoding] = useState(false)
 
-    const fetchData = async () => {
+    const fetchViewData = async () => {
         if (info) {
             setIsLoding(true)
             let result = await getApi('api/task/view/', info?.event ? info?.event?._def?.extendedProps?._id : info);
@@ -27,7 +27,7 @@ const EventView = (props) => {
     }
 
     useEffect(() => {
-        fetchData()
+        fetchViewData()
     }, [info])
 
     return (
@@ -51,7 +51,7 @@ const EventView = (props) => {
                                     <Text>{data?.title ? data?.title : ' - '}</Text>
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, md: 6 }} >
-                                    <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task category </Text>
+                                    <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Related To </Text>
                                     <Text>{data?.category ? data?.category : ' - '}</Text>
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, md: 6 }} >
@@ -99,7 +99,7 @@ const EventView = (props) => {
                             <IconButton variant='outline' onClick={() => setEdit(true)} borderRadius="10px" size="md" icon={<EditIcon />} />
                             <IconButton colorScheme='red' onClick={() => setDelete(true)} ml={3} borderRadius="10px" size="md" icon={<DeleteIcon />} />
 
-                            <EditTask fetchData={props.fetchData} isOpen={edit} onClose={setEdit} viewClose={onClose} id={info?.event ? info?.event?._def?.extendedProps?._id : info} />
+                            <EditTask fetchData={fetchData} isOpen={edit} onClose={setEdit} viewClose={onClose} id={info?.event ? info?.event?._def?.extendedProps?._id : info} />
                             <DeleteTask fetchData={props.fetchData} isOpen={deleteModel} onClose={setDelete} viewClose={onClose} url='api/task/delete/' method='one' id={info?.event ? info?.event?._def?.extendedProps?._id : info} />
                         </DrawerFooter>
                     </>}
