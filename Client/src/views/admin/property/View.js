@@ -174,7 +174,7 @@ const View = () => {
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12, md: 6 }} >
                                                     <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Parking Availability </Text>
-                                                    <Text>{data?.parkingAvailability ? data?.parkingAvailability : 'N/A'}</Text>
+                                                    <Text textTransform={'capitalize'}>{data?.parkingAvailability ? data?.parkingAvailability : 'N/A'}</Text>
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12, md: 6 }} >
                                                     <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Heating And Cooling Systems </Text>
@@ -308,7 +308,7 @@ const View = () => {
                                         </Card>
                                     </GridItem>
                                     {filteredContacts?.length > 0 &&
-                                        <GridItem GridItem GridItem colSpan={{ base: 12 }}>
+                                        <GridItem colSpan={{ base: 12 }}>
                                             <Card >
                                                 <Grid templateColumns={{ base: "1fr" }} gap={4}>
                                                     <GridItem colSpan={2}>
@@ -329,7 +329,6 @@ const View = () => {
                                             </Card>
                                         </GridItem>
                                     }
-
                                 </Grid>
                             </TabPanel>
 

@@ -110,13 +110,17 @@ const View = () => {
         fetchData()
     }, [edit, addEmailHistory, addPhoneCall])
 
+    function toCamelCase(text) {
+        return text?.replace(/([a-z])([A-Z])/g, '$1 $2');
+    }
+
+
+
     return (
         <>
             <Add isOpen={isOpen} size={size} onClose={onClose} />
             <Edit isOpen={edit} size={size} onClose={setEdit} />
             <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/contact/delete/' id={param.id} />
-
-
 
             {isLoding ?
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
@@ -245,15 +249,15 @@ const View = () => {
                                                 <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Lead Source </Text>
-                                                        <Text>{data?.contact?.leadSource ? data?.contact?.leadSource : 'N/A'}</Text>
+                                                        <Text textTransform={'capitalize'}>{data?.contact?.leadSource ? toCamelCase(data?.contact?.leadSource) : 'N/A'}</Text>
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Referral Source </Text>
-                                                        <Text>{data?.contact?.referralSource ? data?.contact?.referralSource : 'N/A'}</Text>
+                                                        <Text textTransform={'capitalize'}>{data?.contact?.referralSource ? toCamelCase(data?.contact?.referralSource) : 'N/A'}</Text>
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Campaing Source </Text>
-                                                        <Text>{data?.contact?.campaignSource ? data?.contact?.campaignSource : 'N/A'}</Text>
+                                                        <Text textTransform={'capitalize'}>{data?.contact?.campaignSource ? toCamelCase(data?.contact?.campaignSource) : 'N/A'}</Text>
                                                     </GridItem>
                                                 </Grid>
                                             </Grid>
@@ -274,7 +278,7 @@ const View = () => {
                                                 <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Lead Status </Text>
-                                                        <Text>{data?.contact?.leadStatus ? data?.contact?.leadStatus : 'N/A'}</Text>
+                                                        <Text textTransform={'capitalize'}>{data?.contact?.leadStatus ? toCamelCase(data?.contact?.leadStatus) : 'N/A'}</Text>
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Lead Rating </Text>
@@ -285,7 +289,7 @@ const View = () => {
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Lead Conversion Probability </Text>
-                                                        <Text>{data?.contact?.leadConversionProbability ? data?.contact?.leadConversionProbability : 'N/A'}</Text>
+                                                        <Text textTransform={'capitalize'}>{data?.contact?.leadConversionProbability ? toCamelCase(data?.contact?.leadConversionProbability) : 'N/A'}</Text>
                                                     </GridItem>
                                                 </Grid>
                                             </Grid>

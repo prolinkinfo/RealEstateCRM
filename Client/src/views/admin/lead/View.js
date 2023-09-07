@@ -108,6 +108,9 @@ const View = () => {
         fetchData()
     }, [edit, addEmailHistory, addPhoneCall])
 
+    function toCamelCase(text) {
+        return text?.replace(/([a-z])([A-Z])/g, '$1 $2');
+    }
     return (
         <>
             <Add isOpen={isOpen} size={size} onClose={onClose} />
@@ -228,7 +231,7 @@ const View = () => {
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12, md: 6 }} >
                                                     <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Status </Text>
-                                                    <Text>{data?.leadStatus ? data?.leadStatus : 'N/A'}</Text>
+                                                    <Text textTransform={'capitalize'}>{data?.leadStatus ? toCamelCase(data?.leadStatus) : 'N/A'}</Text>
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12, md: 6 }} >
                                                     <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Source Details </Text>
