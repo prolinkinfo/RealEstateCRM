@@ -1,4 +1,4 @@
-import { CloseIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons'
+import { CloseIcon, DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons'
 import { DrawerFooter, Flex, Grid, GridItem, IconButton, Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react'
 import Spinner from "components/spinner/Spinner"
 import moment from 'moment'
@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 import { getApi } from 'services/api'
 import DeleteTask from './components/deleteTask'
 import EditTask from './components/editTask'
+import { useNavigate } from 'react-router-dom';
 
 const EventView = (props) => {
     const { onClose, isOpen, info, fetchData } = props
@@ -16,6 +17,7 @@ const EventView = (props) => {
     const [deleteModel, setDelete] = useState(false);
     const user = JSON.parse(localStorage.getItem("user"))
     const [isLoding, setIsLoding] = useState(false)
+    const navigate = useNavigate()
 
     const fetchViewData = async () => {
         if (info) {
@@ -30,6 +32,9 @@ const EventView = (props) => {
         fetchViewData()
     }, [info])
 
+    const handleViewOpen = () => {
+        navigate(user?.role !== 'admin' ? `/view/${info}` : `/admin/view/${info}`)
+    }
     return (
         <Modal isOpen={isOpen} size={'md'} isCentered>
             <ModalOverlay />
@@ -96,7 +101,8 @@ const EventView = (props) => {
 
                         </ModalBody>
                         <DrawerFooter>
-                            <IconButton variant='outline' onClick={() => setEdit(true)} borderRadius="10px" size="md" icon={<EditIcon />} />
+                            <IconButton variant='outline' onClick={() => handleViewOpen()} borderRadius="10px" size="md" icon={<ViewIcon />} />
+                            <IconButton variant='outline' onClick={() => setEdit(true)} ml={3} borderRadius="10px" size="md" icon={<EditIcon />} />
                             <IconButton colorScheme='red' onClick={() => setDelete(true)} ml={3} borderRadius="10px" size="md" icon={<DeleteIcon />} />
 
                             <EditTask fetchData={fetchData} isOpen={edit} onClose={setEdit} viewClose={onClose} id={info?.event ? info?.event?._def?.extendedProps?._id : info} />

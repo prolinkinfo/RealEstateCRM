@@ -2,10 +2,11 @@ import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, 
 import Spinner from 'components/spinner/Spinner';
 import { useState } from 'react';
 import { deleteApi, deleteManyApi } from 'services/api';
+import { useNavigate } from 'react-router-dom';
 
 const DeleteTask = (props) => {
     const [isLoding, setIsLoding] = useState(false)
-
+    const navigate = useNavigate()
     const handleDeleteClick = async () => {
         if (props.method === 'one') {
             try {
@@ -14,8 +15,11 @@ const DeleteTask = (props) => {
                 if (response.status === 200) {
                     props.viewClose();
                     props.onClose(false)
-                    props.fetchData()
+                    !props.redirectPage && props.fetchData()
+                    navigate(props.redirectPage)
+                    console.log(props.redirectPage)
                 }
+
             } catch (error) {
                 console.log(error)
             }

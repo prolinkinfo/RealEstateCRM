@@ -37,6 +37,7 @@ const LeadView = React.lazy(() => import("views/admin/lead/View"));
 const Communication = React.lazy(() => import("views/admin/communication"));
 
 const Task = React.lazy(() => import("views/admin/task"));
+const TaskView = React.lazy(() => import("views/admin/task/components/taskView"));
 const Calender = React.lazy(() => import("views/admin/calender"));
 
 const Document = React.lazy(() => import("views/admin/document"));
@@ -144,6 +145,14 @@ const routes = [
     path: "/task",
     icon: <Icon as={FaTasks} width='20px' height='20px' color='inherit' />,
     component: Task,
+  },
+  {
+    name: "Task View",
+    layout: "/admin",
+    both: true,
+    under: "task",
+    path: "/view/:id",
+    component: TaskView,
   },
   // ------------- Meeting Routes ------------------------
   {
