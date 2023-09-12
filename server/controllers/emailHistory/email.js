@@ -5,16 +5,17 @@ const mongoose = require('mongoose');
 
 const add = async (req, res) => {
     try {
-        const { sender, recipient, subject, message, time, createBy, createByLead } = req.body;
+        const { sender, recipient, subject, message, startDate, endDate, createBy, createByLead } = req.body;
 
         if (createBy && !mongoose.Types.ObjectId.isValid(createBy)) {
+                                                                                        
             res.status(400).json({ error: 'Invalid createBy value' });
         }
         if (createByLead && !mongoose.Types.ObjectId.isValid(createByLead)) {
             res.status(400).json({ error: 'Invalid createByLead value' });
         }
 
-        const email = { sender, recipient, subject, message, time }
+        const email = { sender, recipient, subject, message, startDate, endDate }
 
         if (createBy) {
             email.createBy = createBy;
