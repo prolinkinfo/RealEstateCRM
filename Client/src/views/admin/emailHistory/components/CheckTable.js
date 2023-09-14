@@ -166,7 +166,7 @@ export default function CheckTable(props) {
                             </Text>
                           </Flex>
                         );
-                      } else if (cell?.column.Header === "sender Email") {
+                      } else if (cell?.column.Header === "sender Name") {
                         data = (
                           <Text
                             me="10px"

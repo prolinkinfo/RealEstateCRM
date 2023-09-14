@@ -6,7 +6,7 @@ import CheckTable from './components/CheckTable';
 const Index = () => {
     const columns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-        { Header: 'sender Email', accessor: 'senderEmail' },
+        { Header: 'sender Name', accessor: 'senderName' },
         { Header: "recipient", accessor: "createByName", },
         { Header: "Realeted To", },
         { Header: "timestamp", accessor: "timestamp", },

@@ -8,7 +8,6 @@ const add = async (req, res) => {
         const { sender, recipient, subject, message, startDate, endDate, createBy, createByLead } = req.body;
 
         if (createBy && !mongoose.Types.ObjectId.isValid(createBy)) {
-
             res.status(400).json({ error: 'Invalid createBy value' });
         }
         if (createByLead && !mongoose.Types.ObjectId.isValid(createByLead)) {
