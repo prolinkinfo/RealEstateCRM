@@ -191,9 +191,11 @@ export default function CheckTable(props) {
                             </Text>
                           </Link>
                         );
-                      } else if (cell?.column.Header === "create From") {
+                      } else if (cell?.column.Header === "Realeted To") {
                         data = (
                           <Link to={cell?.row?.original?.createBy ? user?.role !== 'admin' ? `/contactView/${cell?.row?.original.createBy}` : `/admin/contactView/${cell?.row?.original.createBy}` : user?.role !== 'admin' ? `/leadView/${cell?.row?.original.createByLead}` : `/admin/leadView/${cell?.row?.original.createByLead}`}>
+
+                            {console.log(cell?.row?.original.createBy, "cell?.row?.original.createBy")}
                             <Text
                               me="10px"
                               sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
@@ -201,7 +203,7 @@ export default function CheckTable(props) {
                               fontSize="sm"
                               fontWeight="700"
                             >
-                              {cell?.value ? cell?.value : ' - '}
+                              {cell?.row?.original.createBy ? "contact" : cell?.row?.original.createByLead && "lead"}
                             </Text>
                           </Link>
 

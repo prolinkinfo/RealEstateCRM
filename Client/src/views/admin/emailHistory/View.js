@@ -91,8 +91,12 @@ const View = () => {
                                             </Link>
                                         </GridItem>
                                         <GridItem colSpan={{ base: 2, md: 1 }}>
-                                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Date & Time </Text>
-                                            <Text> {data?.time ? moment(data?.time).format('lll ') : ' - '} </Text>
+                                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Start Date </Text>
+                                            <Text> {data?.startDate ? moment(data?.startDate).format('lll ') : ' - '} </Text>
+                                        </GridItem>
+                                        <GridItem colSpan={{ base: 2, md: 1 }}>
+                                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>End Date </Text>
+                                            <Text> {data?.endDate ? moment(data?.endDate).format('lll ') : ' - '} </Text>
                                         </GridItem>
                                         <GridItem colSpan={{ base: 2, md: 1 }}>
                                             <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Time stamp </Text>

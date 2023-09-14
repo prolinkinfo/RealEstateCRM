@@ -7,8 +7,8 @@ const Index = () => {
     const columns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
         { Header: 'sender Email', accessor: 'senderEmail' },
-        { Header: "recipient", accessor: "recipient", },
-        { Header: "create From", accessor: "createByName", },
+        { Header: "recipient", accessor: "createByName", },
+        { Header: "Realeted To", },
         { Header: "timestamp", accessor: "timestamp", },
         { Header: "Created" },
     ];

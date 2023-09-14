@@ -101,6 +101,14 @@ const View = () => {
                                             <Text> {data?.timestamp ? moment(data?.timestamp).format('DD-MM-YYYY  h:mma ') : ' - '} [{data?.timestamp ? moment(data?.timestamp).toNow() : ' - '}]</Text>
                                         </GridItem>
                                         <GridItem colSpan={{ base: 2, md: 1 }}>
+                                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Start Date </Text>
+                                            <Text> {data?.startDate ? moment(data?.startDate).format('lll ') : ' - '} </Text>
+                                        </GridItem>
+                                        <GridItem colSpan={{ base: 2, md: 1 }}>
+                                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>End Date </Text>
+                                            <Text> {data?.endDate ? moment(data?.endDate).format('lll ') : ' - '} </Text>
+                                        </GridItem>
+                                        <GridItem colSpan={{ base: 2, md: 1 }}>
                                             <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Call Duration </Text>
                                             <Text>{data?.callDuration ? data?.callDuration : ' - '}</Text>
                                         </GridItem>

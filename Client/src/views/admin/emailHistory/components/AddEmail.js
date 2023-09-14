@@ -21,7 +21,8 @@ const AddEmailHistory = (props) => {
         message: '',
         createBy: '',
         createByLead: '',
-        time: '',
+        startDate: '',
+        endDate: '',
     }
     const formik = useFormik({
         initialValues: initialValues,
@@ -111,7 +112,7 @@ const AddEmailHistory = (props) => {
                             />
                             <Text mb='10px' color={'red'}> {errors.subject && touched.subject && errors.subject}</Text>
                         </GridItem>
-                        <GridItem colSpan={{ base: 12 }}>
+                        {/* <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Date & Time
                             </FormLabel>
@@ -126,6 +127,38 @@ const AddEmailHistory = (props) => {
                                 borderColor={errors.time && touched.time ? "red.300" : null}
                             />
                             <Text mb='10px' color={'red'}> {errors.time && touched.time && errors.time}</Text>
+                        </GridItem> */}
+                        <GridItem colSpan={{ base: 12, md: 6 }} >
+                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                Start Date
+                            </FormLabel>
+                            <Input
+                                type="datetime-local"
+                                fontSize='sm'
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.startDate}
+                                name="startDate"
+                                fontWeight='500'
+                                borderColor={errors?.startDate && touched?.startDate ? "red.300" : null}
+                            />
+                            <Text mb='10px' color={'red'}> {errors.startDate && touched.startDate && errors.startDate}</Text>
+                        </GridItem>
+                        <GridItem colSpan={{ base: 12, md: 6 }} >
+                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                End Date
+                            </FormLabel>
+                            <Input
+                                type='datetime-local'
+                                fontSize='sm'
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.endDate}
+                                name="endDate"
+                                fontWeight='500'
+                                borderColor={errors?.endDate && touched?.endDate ? "red.300" : null}
+                            />
+                            <Text mb='10px' color={'red'}> {errors.endDate && touched.endDate && errors.endDate}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>

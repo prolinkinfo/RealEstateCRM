@@ -11,8 +11,8 @@ const Index = () => {
             width: 10
         },
         { Header: 'sender', accessor: 'senderName' },
-        { Header: "recipient", accessor: "recipient", },
-        { Header: "create From", accessor: "createByName", },
+        { Header: "recipient", accessor: "createByName", },
+        { Header: "Realeted To", },
         { Header: "timestamp", accessor: "timestamp", },
         { Header: "Created" },
 
