@@ -1,9 +1,14 @@
 import { ArrowLeftIcon, ArrowRightIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { Flex, IconButton, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Text, Tooltip } from '@chakra-ui/react';
 import React from 'react'
+import { useEffect } from 'react';
 
 const Pagination = (props) => {
     const { gotoPage, gopageValue, setGopageValue, pageCount, canPreviousPage, previousPage, canNextPage, pageOptions, setPageSize, nextPage, pageSize, pageIndex } = props
+
+    useEffect(() => {
+        setGopageValue(1)
+    }, [])
 
     return (
 
