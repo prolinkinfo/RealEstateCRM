@@ -19,12 +19,6 @@ export const contactSchema = yup.object({
     leadStatus: yup.string(),
     leadRating: yup.number(),
     leadConversionProbability: yup.string(),
-    // 4. Property of Interest
-    // propertyType: yup.string(),
-    // desiredLocation: yup.string(),
-    // preferredPriceRange: yup.number(),
-    // squareFootageRequirements: yup.string(),
-    // otherPropertySpecifications: yup.string(),
     // 5. History:
     emailHistory: yup.string(),
     phoneCallHistory: yup.string(),
