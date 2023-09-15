@@ -291,7 +291,7 @@ const AddTask = (props) => {
                             </RadioGroup>
                             <Text mb='10px' color={'red'}> {errors.reminder && touched.reminder && errors.reminder}</Text>
                         </GridItem> */}
-                        <GridItem colSpan={{ base: 12, md: 6 }} >
+                        <GridItem colSpan={{ base: 12 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Url
                             </FormLabel>
@@ -307,18 +307,7 @@ const AddTask = (props) => {
                             />
                             <Text mb='10px' color={'red'}> {errors.url && touched.url && errors.url}</Text>
                         </GridItem>
-                        <GridItem colSpan={{ base: 12, md: 6 }} >
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Full screen event
-                            </FormLabel>
-                            <RadioGroup onChange={(e) => setFieldValue('display', e)} value={values.display}>
-                                <Stack direction='row'>
-                                    <Radio value='background' >Yes</Radio>
-                                    <Radio value='no'>No</Radio>
-                                </Stack>
-                            </RadioGroup>
-                            <Text mb='10px' color={'red'}> {errors.display && touched.display && errors.display}</Text>
-                        </GridItem>
+
                         <GridItem colSpan={{ base: 12 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Notes

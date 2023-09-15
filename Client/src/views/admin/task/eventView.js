@@ -33,7 +33,12 @@ const EventView = (props) => {
     }, [info])
 
     const handleViewOpen = () => {
-        navigate(user?.role !== 'admin' ? `/view/${info}` : `/admin/view/${info}`)
+        if (info?.event) {
+            navigate(user?.role !== 'admin' ? `/view/${info?.event?._def?.extendedProps?._id}` : `/admin/view/${info?.event?._def?.extendedProps?._id}`)
+        }
+        else {
+            navigate(user?.role !== 'admin' ? `/view/${info}` : `/admin/view/${info}`)
+        }
     }
     return (
         <Modal isOpen={isOpen} size={'md'} isCentered>

@@ -32,7 +32,6 @@ const TaskView = (props) => {
             setIsLoding(false)
         }
     }
-
     useEffect(() => {
         fetchViewData()
     }, [id, edit])

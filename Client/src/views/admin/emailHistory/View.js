@@ -91,6 +91,11 @@ const View = () => {
                                             </Link>
                                         </GridItem>
                                         <GridItem colSpan={{ base: 2, md: 1 }}>
+                                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Realeted To </Text>
+                                            <Text>{data?.createBy ? "contact" : data?.createByLead && "lead"}</Text>
+                                        </GridItem>
+
+                                        <GridItem colSpan={{ base: 2, md: 1 }}>
                                             <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Start Date </Text>
                                             <Text> {data?.startDate ? moment(data?.startDate).format('lll ') : ' - '} </Text>
                                         </GridItem>

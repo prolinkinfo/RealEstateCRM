@@ -29,6 +29,8 @@ import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { getApi } from "services/api";
 import Delete from "../Delete";
+import AddEmailHistory from "views/admin/emailHistory/components/AddEmail";
+import AddPhoneCall from "views/admin/phoneCall/components/AddPhoneCall";
 
 export default function CheckTable(props) {
   const { columnsData } = props;
@@ -38,6 +40,10 @@ export default function CheckTable(props) {
   const [selectedValues, setSelectedValues] = useState([]);
   const [gopageValue, setGopageValue] = useState()
   const [deleteModel, setDelete] = useState(false);
+  const [addEmailHistory, setAddEmailHistory] = useState(false);
+  const [addPhoneCall, setAddPhoneCall] = useState(false);
+  const [selectedId, setSelectedId] = useState();
+  const [callSelectedId, setCallSelectedId] = useState();
 
   // const data = useMemo(() => tableData, [tableData]);
   const [data, setData] = useState([])
@@ -206,20 +212,33 @@ export default function CheckTable(props) {
                         data = (
                           <Text
                             me="10px"
-                            color={textColor}
                             fontSize="sm"
                             fontWeight="700"
+                            color='green.400'
+                            sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline', cursor: 'pointer' } }}
+                            onClick={() => {
+                              setAddEmailHistory(true)
+                              setSelectedId(cell?.row?.values._id)
+                            }
+                            }
                           >
-                            {cell?.value}
+                            {cell?.value
+                            }
                           </Text>
                         );
                       } else if (cell?.column.Header === "Lead PhoneNumber") {
                         data = (
                           <Text
                             me="10px"
-                            color={textColor}
                             fontSize="sm"
                             fontWeight="700"
+                            color='green.400'
+                            sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline', cursor: 'pointer' } }}
+                            onClick={() => {
+                              setAddPhoneCall(true)
+                              setCallSelectedId(cell?.row?.values._id)
+                            }
+                            }
                           >
                             {cell?.value}
                           </Text>
@@ -269,7 +288,8 @@ export default function CheckTable(props) {
       </Box>
       {data?.length > 5 && <Pagination gotoPage={gotoPage} gopageValue={gopageValue} setGopageValue={setGopageValue} pageCount={pageCount} canPreviousPage={canPreviousPage} previousPage={previousPage} canNextPage={canNextPage} pageOptions={pageOptions} setPageSize={setPageSize} nextPage={nextPage} pageSize={pageSize} pageIndex={pageIndex} />}
 
-
-    </Card>
+      <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} lead='true' id={selectedId} />
+      <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={callSelectedId} lead='true' />
+    </Card >
   );
 }

@@ -97,9 +97,10 @@ const View = () => {
                                             </Link>
                                         </GridItem>
                                         <GridItem colSpan={{ base: 2, md: 1 }}>
-                                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Timestamp </Text>
-                                            <Text> {data?.timestamp ? moment(data?.timestamp).format('DD-MM-YYYY  h:mma ') : ' - '} [{data?.timestamp ? moment(data?.timestamp).toNow() : ' - '}]</Text>
+                                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Realeted To </Text>
+                                            <Text>{data?.createBy ? "contact" : data?.createByLead && "lead"}</Text>
                                         </GridItem>
+
                                         <GridItem colSpan={{ base: 2, md: 1 }}>
                                             <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Start Date </Text>
                                             <Text> {data?.startDate ? moment(data?.startDate).format('lll ') : ' - '} </Text>
@@ -107,6 +108,10 @@ const View = () => {
                                         <GridItem colSpan={{ base: 2, md: 1 }}>
                                             <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>End Date </Text>
                                             <Text> {data?.endDate ? moment(data?.endDate).format('lll ') : ' - '} </Text>
+                                        </GridItem>
+                                        <GridItem colSpan={{ base: 2, md: 1 }}>
+                                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Timestamp </Text>
+                                            <Text> {data?.timestamp ? moment(data?.timestamp).format('DD-MM-YYYY  h:mma ') : ' - '} [{data?.timestamp ? moment(data?.timestamp).toNow() : ' - '}]</Text>
                                         </GridItem>
                                         <GridItem colSpan={{ base: 2, md: 1 }}>
                                             <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Call Duration </Text>
