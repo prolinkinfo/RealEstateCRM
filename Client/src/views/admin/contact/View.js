@@ -64,7 +64,7 @@ const View = () => {
         { Header: "listing Price", accessor: "listingPrice", },
         { Header: "square Footage", accessor: "squareFootage", },
         { Header: "year Built", accessor: "yearBuilt", },
-    ];
+    ];  
     const textColumnsDataColumns = [
         { Header: "sender", accessor: "sender", },
         { Header: "recipient", accessor: "to", },
@@ -113,7 +113,6 @@ const View = () => {
     function toCamelCase(text) {
         return text?.replace(/([a-z])([A-Z])/g, '$1 $2');
     }
-
 
 
     return (
