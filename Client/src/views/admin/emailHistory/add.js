@@ -19,7 +19,7 @@ const AddPhoneCall = (props) => {
     const initialValues = {
         sender: user?._id,
         recipient: '',
-        callDuration: '',
+        subject: '',
         callNotes: '',
         createBy: '',
         createByLead: '',
@@ -42,7 +42,7 @@ const AddPhoneCall = (props) => {
     const AddData = async () => {
         try {
             setIsLoding(true)
-            let response = await postApi('api/phoneCall/add', values)
+            let response = await postApi('api/email/add', values)
             if (response.status === 200) {
                 props.onClose();
                 fetchData()
@@ -54,6 +54,7 @@ const AddPhoneCall = (props) => {
             setIsLoding(false)
         }
     };
+
     useEffect(async () => {
         values.start = props?.date
         try {
@@ -69,34 +70,33 @@ const AddPhoneCall = (props) => {
             console.log(e);
         }
     }, [props, values.category])
-    const fetchDataR = async () => {
+    const fetchRecipientData = async () => {
         if (props.id && props.lead !== 'true') {
             let response = await getApi('api/contact/view/', props.id)
             if (response?.status === 200) {
-                setFieldValue('recipient', response?.data?.contact?.phoneNumber);
-                setFieldValue('createBy', props?.id);
-                values.recipient = response?.data?.contact?.phoneNumber
+                setFieldValue('recipient', response?.data?.contact?.email);
+                setFieldValue('createBy', props.id);
+                values.recipient = response?.data?.contact?.email
             }
         } else if (props.id && props.lead === 'true') {
             let response = await getApi('api/lead/view/', props.id)
             if (response?.status === 200) {
-                setFieldValue('recipient', response?.data?.lead?.leadPhoneNumber);
+                setFieldValue('recipient', response?.data?.lead?.leadEmail);
                 setFieldValue('createByLead', props.id);
-                values.recipient = response?.data?.lead?.leadPhoneNumber
+                values.recipient = response?.data?.lead?.leadEmail
             }
         }
     }
 
     useEffect(() => {
-        fetchDataR()
+        fetchRecipientData()
     }, [props.id])
-
 
     return (
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Add Call </ModalHeader>
+                <ModalHeader>Add Email </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
 
@@ -234,34 +234,34 @@ const AddPhoneCall = (props) => {
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Call Duration<Text color={"red"}>*</Text>
+                                Subject<Text color={"red"}>*</Text>
                             </FormLabel>
                             <Input
                                 fontSize='sm'
                                 onChange={handleChange} onBlur={handleBlur}
-                                value={values.callDuration}
-                                name="callDuration"
-                                placeholder='call Duration'
+                                value={values.subject}
+                                name="subject"
+                                placeholder='subject'
                                 fontWeight='500'
-                                borderColor={errors.callDuration && touched.callDuration ? "red.300" : null}
+                                borderColor={errors.subject && touched.subject ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.callDuration && touched.callDuration && errors.callDuration}</Text>
+                            <Text mb='10px' color={'red'}> {errors.subject && touched.subject && errors.subject}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Call Notes
+                                Message
                             </FormLabel>
                             <Textarea
                                 resize={'none'}
                                 fontSize='sm'
-                                placeholder='Enter Call Notes'
+                                placeholder='Enter Message'
                                 onChange={handleChange} onBlur={handleBlur}
-                                value={values.callNotes}
-                                name="callNotes"
+                                value={values.message}
+                                name="message"
                                 fontWeight='500'
-                                borderColor={errors.callNotes && touched.callNotes ? "red.300" : null}
+                                borderColor={errors.message && touched.message ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.callNotes && touched.callNotes && errors.callNotes}</Text>
+                            <Text mb='10px' color={'red'}> {errors.message && touched.message && errors.message}</Text>
                         </GridItem>
 
                     </Grid>

@@ -1,6 +1,8 @@
-import { Grid, GridItem, useDisclosure } from '@chakra-ui/react';
+import { Button, Grid, GridItem, useDisclosure } from '@chakra-ui/react';
 import CheckTable from './components/CheckTable';
 // import Add from "./Add";
+import { AddIcon } from '@chakra-ui/icons';
+import Add from './add';
 
 
 const Index = () => {
@@ -24,13 +26,13 @@ const Index = () => {
         <div>
             <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
                 <GridItem colStart={6} textAlign={"right"}>
-                    {/* <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button> */}
+                    <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>
                 </GridItem>
             </Grid>
             {/* <CheckTable columnsData={columns} tableData={data} /> */}
             <CheckTable isOpen={isOpen} columnsData={columns} />
             {/* Add Form */}
-            {/* <Add isOpen={isOpen} size={size} onClose={onClose} /> */}
+            <Add isOpen={isOpen} size={size} onClose={onClose} />
         </div>
     )
 }
