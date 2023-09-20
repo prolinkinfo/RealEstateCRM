@@ -626,7 +626,7 @@ const Add = (props) => {
                                     borderColor={errors.linkedInProfile && touched.linkedInProfile ? "red.300" : null}
                                 />
                                 {values.linkedInProfile && (
-                                    <a color='blue' style={{ color: 'blue', textDecoration: 'underline' }} target="_blank" href={values.linkedInProfile}                                      >
+                                    <a color='blue' style={{ color: 'blue', textDecoration: 'underline' }} rel="noreferrer" target="_blank" href={values.linkedInProfile}                                      >
                                         View
                                     </a>
                                 )}
@@ -646,7 +646,7 @@ const Add = (props) => {
                                     borderColor={errors.facebookProfile && touched.facebookProfile ? "red.300" : null}
                                 />
                                 {values.facebookProfile && (
-                                    <a color='blue' style={{ color: 'blue', textDecoration: 'underline' }} target="_blank" href={"https://www.facebook.com/" + values.facebookProfile}>
+                                    <a color='blue' style={{ color: 'blue', textDecoration: 'underline' }} rel="noreferrer" target="_blank" href={"https://www.facebook.com/" + values.facebookProfile}>
                                         View
                                     </a>
                                 )}
@@ -666,7 +666,7 @@ const Add = (props) => {
                                     borderColor={errors.twitterHandle && touched.twitterHandle ? "red.300" : null}
                                 />
                                 {values.twitterHandle && (
-                                    <a color='blue' style={{ color: 'blue', textDecoration: 'underline' }} target="_blank" href={"https://twitter.com/" + values.twitterHandle}>
+                                    <a color='blue' style={{ color: 'blue', textDecoration: 'underline' }} rel="noreferrer" target="_blank" href={"https://twitter.com/" + values.twitterHandle}>
                                         View
                                     </a>
                                 )}
@@ -686,7 +686,7 @@ const Add = (props) => {
                                     borderColor={errors.otherProfiles && touched.otherProfiles ? "red.300" : null}
                                 />
                                 {values.otherProfiles && (
-                                    <a color='blue' style={{ color: 'blue', textDecoration: 'underline' }} target="_blank" href={values.otherProfiles}>
+                                    <a color='blue' style={{ color: 'blue', textDecoration: 'underline' }} rel="noreferrer" target="_blank" href={values.otherProfiles}>
                                         View
                                     </a>
                                 )}
