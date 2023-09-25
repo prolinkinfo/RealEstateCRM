@@ -88,7 +88,7 @@ export default function CheckTable(props) {
           fontWeight="700"
           lineHeight="100%"
         >
-          Meeting (<CountUpComponent targetNumber={data?.length} />)
+          Meetings (<CountUpComponent targetNumber={data?.length} />)
         </Text>
         {setMeeting && <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>}
       </Flex>

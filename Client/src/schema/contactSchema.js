@@ -7,7 +7,7 @@ export const contactSchema = yup.object({
     title: yup.string().required('Title is required'),
     email: yup.string().email().required('Email is required'),
     phoneNumber: yup.number().min(1000000000, 'Phone number is invalid').max(999999999999, 'Phone number is invalid').required('Phonenumber is Required'),
-    mobileNumber: yup.number().min(1000000000, 'Phone number is invalid').max(999999999999, 'Phone number is invalid'),
+    mobileNumber: yup.number().min(1000000000, 'Phone number is invalid').max(999999999999, 'Phone number is invalid').notRequired(),
     physicalAddress: yup.string().required('Physical address is required'),
     mailingAddress: yup.string(),
     preferredContactMethod: yup.string().required('Preferred contact method is required'),
