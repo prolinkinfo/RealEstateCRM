@@ -13,6 +13,7 @@ const emailRoute = require('./emailHistory/_routes');
 const phoneCallRoute = require('./phoneCall/_routes');
 const TextMsgRoute = require('./textMsg/_routes');
 const meetingRoute = require('./meeting/_routes');
+const paymentRoute = require('./payment/_routes');
 
 //Api`s
 router.use('/contact', contactRoute);
@@ -27,5 +28,6 @@ router.use('/email', emailRoute);
 router.use('/phoneCall', phoneCallRoute);
 router.use('/text-msg', TextMsgRoute);
 router.use('/meeting', meetingRoute);
+router.use('/payment', paymentRoute);
 
 module.exports = router;

@@ -19,6 +19,7 @@
     "mongoose": "^7.2.4",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.4",
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "stripe": "^13.7.0"
   }
 }
