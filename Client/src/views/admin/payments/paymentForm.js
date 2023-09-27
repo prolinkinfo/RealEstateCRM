@@ -1,100 +1,105 @@
 
-import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js"
-import axios from "axios"
-import React, { useState } from 'react'
+import { FormLabel, GridItem, Input, Text } from "@chakra-ui/react"
+import { useElements, useStripe } from "@stripe/react-stripe-js"
+import { useFormik } from "formik"
+import { useEffect, useState } from 'react'
 
-
-const CARD_OPTIONS = {
-    iconStyle: "solid",
-    style: {
-        base: {
-            iconColor: "#c4f0ff",
-            color: "#000",
-            fontWeight: 500,
-            fontFamily: "Roboto, Open Sans, Segoe UI, sans-serif",
-            fontSize: "16px",
-            fontSmoothing: "antialiased",
-            ":-webkit-autofill": { color: "#fce883" },
-            "::placeholder": { color: "#87bbfd" }
-        },
-        invalid: {
-            iconColor: "#ffc7ee",
-            color: "#ffc7ee"
-        },
-        InputElement: {
-            color: "#000"
-        }
-    }
-}
 
 export default function PaymentForm() {
-    const [success, setSuccess] = useState(false)
-    const stripe = useStripe()
-    const elements = useElements()
+    const [price, setPrice] = useState(false)
 
 
 
-    const handleSubmit = async () => {
-        // try {
-        //     setIsLoding(true)
-        //     let response = await postApi('api/stripe/create-checkout-session', values)
-        //     if (response.status === 200) {
-        //         if (res.ok) return res.json();
-        //         return res.json().then((json) => Promise.reject(json));
-        //     }
-        // } catch (e) {
-        //     console.log(e);
-        // }
-        // finally {
-        //     setIsLoding(false)
-        // }
-    };
-
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault()
-    //     const { error, paymentMethod } = await stripe.createPaymentMethod({
-    //         type: "card",
-    //         card: elements.getElement(CardElement)
-    //     })
+    const initialValues = {
+        name: "",
+        amount: '1000',
+    }
 
 
-    //     if (!error) {
-    //         try {
-    //             const { id } = paymentMethod
-    //             const response = await axios.post("http://localhost:4000/payment", {
-    //                 amount: 1000,
-    //                 id
-    //             })
+    const formik = useFormik({
+        initialValues: initialValues,
+        // validationSchema: phoneCallSchema,
+        // onSubmit: (handleSubmit)
+        onSubmit: (values, { resetForm }) => {
+            handleSubmit();
+            resetForm();
+        },
+    });
+    const { errors, touched, values, handleBlur, handleChange, setFieldValue } = formik
 
-    //             if (response.data.success) {
-    //                 console.log("Successful payment")
-    //                 setSuccess(true)
-    //             }
-
-    //         } catch (error) {
-    //             console.log("Error", error)
-    //         }
-    //     } else {
-    //         console.log(error.message)
-    //     }
-    // }
-
+    const handleSubmit = () => {
+        fetch(
+            `${process.env.REACT_APP_BASE_URL}api/payment/add`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                mode: "cors",
+                body: JSON.stringify({
+                    items: [{ quantity: 1, price: values.amount, name: values.name }],
+                }),
+            }
+        )
+            .then((res) => {
+                if (res.ok) return res.json();
+                return res.json().then((json) => Promise.reject(json));
+            })
+            .then(({ url }) => {
+                window.open(url);
+            })
+            .catch((e) => {
+                console.log(e.error);
+            });
+    }
     return (
         <>
-            {!success ?
-                <form onSubmit={handleSubmit}>
-                    <fieldset className="FormGroup">
-                        <div className="FormRow">
-                            <CardElement options={CARD_OPTIONS} />
-                        </div>
-                    </fieldset>
-                    <button style={{ margin: "14px 0 0 0" }}>Pay</button>
-                </form>
-                :
-                <div>
-                    <h2>You just bought a sweet spatula congrats this is the best decision of you're life</h2>
-                </div>
-            }
+            <GridItem colSpan={{ base: 12, md: 6 }} >
+                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                    Name
+                </FormLabel>
+                <Input
+                    type="text"
+                    fontSize='sm'
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.name}
+                    name="name"
+                    fontWeight='500'
+                    borderColor={errors?.name && touched?.name ? "red.300" : null}
+                />
+                <Text mb='10px' color={'red'}> {errors.name && touched.name && errors.name}</Text>
+            </GridItem>
+            <GridItem colSpan={{ base: 12, md: 6 }} >
+                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                    Amount
+                </FormLabel>
+                <Input
+                    type="number"
+                    fontSize='sm'
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.amount}
+                    name="amount"
+                    fontWeight='500'
+                    borderColor={errors?.amount && touched?.amount ? "red.300" : null}
+                />
+                <Text mb='10px' color={'red'}> {errors.amount && touched.amount && errors.amount}</Text>
+            </GridItem>
+
+            <button style={{ margin: "14px 0 0 0" }} onClick={handleSubmit}>Pay</button>
+            {/* // <form
+                //     onSubmit={handleSubmit}
+                // >
+                //     <fieldset className="FormGroup">
+                //         <div className="FormRow">
+                //             <CardElement options={CARD_OPTIONS} />
+                //         </div>
+                //     </fieldset>
+                //     <button style={{ margin: "14px 0 0 0" }}>Pay</button>
+                // </form> */}
+
+
 
         </>
     )

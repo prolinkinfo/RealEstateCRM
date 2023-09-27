@@ -1,8 +1,8 @@
 const stripeModule = require('stripe')
 
-const stripe = stripeModule(process.env.STRIPE_PRIVATE_KEY);
 
 const add = async (req, res) => {
+    const stripe = stripeModule(process.env.STRIPE_PRIVATE_KEY);
     try {
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
@@ -19,8 +19,8 @@ const add = async (req, res) => {
                     quantity: item.quantity,
                 };
             }),
-            success_url: "https://course-pro-seven.vercel.app",
-            cancel_url: "https://course-pro-seven.vercel.app",
+            success_url: "https://real-estate-crm-jet.vercel.app/payments",
+            cancel_url: "https://real-estate-crm-jet.vercel.app/payments",
         });
 
         res.json({ url: session.url });
