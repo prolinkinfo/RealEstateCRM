@@ -6,15 +6,11 @@ import { useEffect, useState } from 'react'
 
 
 export default function PaymentForm() {
-    const [price, setPrice] = useState(false)
-
-
 
     const initialValues = {
         name: "",
         amount: '1000',
     }
-
 
     const formik = useFormik({
         initialValues: initialValues,
@@ -41,15 +37,18 @@ export default function PaymentForm() {
         )
             .then((res) => {
                 if (res.ok) return res.json();
+                localStorage.setItem('res', res)
                 return res.json().then((json) => Promise.reject(json));
             })
             .then(({ url }) => {
                 window.open(url);
+                // window.location = url;
             })
             .catch((e) => {
                 console.log(e.error);
             });
     }
+
     return (
         <>
             <GridItem display='flex' justifyContent="center" padding="10px 0 50px 0">

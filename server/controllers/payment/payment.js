@@ -19,8 +19,8 @@ const add = async (req, res) => {
                     quantity: item.quantity,
                 };
             }),
-            success_url: "https://real-estate-crm-jet.vercel.app/payments",
-            cancel_url: "https://real-estate-crm-jet.vercel.app/payments",
+            success_url: "http://localhost:3000/payments",
+            cancel_url: "http://localhost:3000/payments",
         });
         console.log(session)
         res.json({ url: session.url });
