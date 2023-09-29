@@ -1,20 +1,18 @@
 
 import { Button, FormLabel, GridItem, Input, Text } from "@chakra-ui/react"
-import { useElements, useStripe } from "@stripe/react-stripe-js"
 import { useFormik } from "formik"
-import { useEffect, useState } from 'react'
 
 
 export default function PaymentForm() {
 
     const initialValues = {
-        name: "",
+        name: "Ravi",
         amount: '1000',
     }
 
     const formik = useFormik({
         initialValues: initialValues,
-        onSubmit: (values, { resetForm }) => {
+        onSubmit: (_values, { resetForm }) => {
             handleSubmit();
             resetForm();
         },
@@ -31,7 +29,10 @@ export default function PaymentForm() {
                 },
                 mode: "cors",
                 body: JSON.stringify({
-                    items: [{ quantity: 1, price: values.amount, name: values.name }],
+                    items: [
+                        { quantity: 1, price: values.amount, name: values.name, description: 'send to Prolink' },
+                    ],
+                    customer_email: 'denish@gmail.com',
                 }),
             }
         )
@@ -42,7 +43,6 @@ export default function PaymentForm() {
             })
             .then(({ url }) => {
                 window.open(url);
-                // window.location = url;
             })
             .catch((e) => {
                 console.log(e.error);
@@ -90,9 +90,6 @@ export default function PaymentForm() {
                 <Text mb='10px' color={'red'}> {errors.amount && touched.amount && errors.amount}</Text>
             </GridItem>
             <Button onClick={() => handleSubmit()} variant="brand">Pay</Button>
-
-
-
         </>
     )
 }
