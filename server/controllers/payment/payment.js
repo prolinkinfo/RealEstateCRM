@@ -22,7 +22,6 @@ const add = async (req, res) => {
             success_url: "https://real-estate-crm-jet.vercel.app/payments",
             cancel_url: "https://real-estate-crm-jet.vercel.app/payments",
         });
-
         res.json({ url: session.url });
     } catch (e) {
         res.status(500).json({ error: e.message });
