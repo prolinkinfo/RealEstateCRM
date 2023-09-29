@@ -7,6 +7,7 @@ const add = async (req, res) => {
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
             mode: "payment",
+            customer_email: req.body.customer_email,
             line_items: req.body.items.map((item) => {
                 return {
                     price_data: {
@@ -25,6 +26,7 @@ const add = async (req, res) => {
         console.log(session)
         res.json({ url: session.url });
     } catch (e) {
+        console.log(e)
         res.status(500).json({ error: e.message });
     }
 }
