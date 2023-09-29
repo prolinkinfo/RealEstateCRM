@@ -1,5 +1,5 @@
 
-import { FormLabel, GridItem, Input, Text } from "@chakra-ui/react"
+import { Button, FormLabel, GridItem, Input, Text } from "@chakra-ui/react"
 import { useElements, useStripe } from "@stripe/react-stripe-js"
 import { useFormik } from "formik"
 import { useEffect, useState } from 'react'
@@ -18,8 +18,6 @@ export default function PaymentForm() {
 
     const formik = useFormik({
         initialValues: initialValues,
-        // validationSchema: phoneCallSchema,
-        // onSubmit: (handleSubmit)
         onSubmit: (values, { resetForm }) => {
             handleSubmit();
             resetForm();
@@ -54,7 +52,12 @@ export default function PaymentForm() {
     }
     return (
         <>
-            <GridItem colSpan={{ base: 12, md: 6 }} >
+            <GridItem display='flex' justifyContent="center" padding="10px 0 50px 0">
+                <img src={require('../../../assets/img/masterCard.png')} width="100px" />
+                <img src={require('../../../assets/img/american-express.png')} width="100px" />
+                <img src={require('../../../assets/img/visa.png')} width="100px" />
+            </GridItem>
+            <GridItem sx={{ m: 1, width: '100%' }} >
                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                     Name
                 </FormLabel>
@@ -65,12 +68,13 @@ export default function PaymentForm() {
                     onBlur={handleBlur}
                     value={values.name}
                     name="name"
+                    placeholder="Enter name"
                     fontWeight='500'
                     borderColor={errors?.name && touched?.name ? "red.300" : null}
                 />
                 <Text mb='10px' color={'red'}> {errors.name && touched.name && errors.name}</Text>
             </GridItem>
-            <GridItem colSpan={{ base: 12, md: 6 }} >
+            <GridItem sx={{ m: 1, width: '100%' }} >
                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                     Amount
                 </FormLabel>
@@ -86,18 +90,7 @@ export default function PaymentForm() {
                 />
                 <Text mb='10px' color={'red'}> {errors.amount && touched.amount && errors.amount}</Text>
             </GridItem>
-
-            <button style={{ margin: "14px 0 0 0" }} onClick={handleSubmit}>Pay</button>
-            {/* // <form
-                //     onSubmit={handleSubmit}
-                // >
-                //     <fieldset className="FormGroup">
-                //         <div className="FormRow">
-                //             <CardElement options={CARD_OPTIONS} />
-                //         </div>
-                //     </fieldset>
-                //     <button style={{ margin: "14px 0 0 0" }}>Pay</button>
-                // </form> */}
+            <Button onClick={() => handleSubmit()} variant="brand">Pay</Button>
 
 
 
