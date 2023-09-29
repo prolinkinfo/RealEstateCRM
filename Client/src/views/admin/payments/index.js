@@ -17,7 +17,6 @@ const StripeContainer = () => {
 
             <GridItem colSpan={{ base: 12, md: 6 }}>
                 <Card>
-
                     <Elements stripe={stirpeTestPromise}>
                         <PaymentForm />
                     </Elements>
