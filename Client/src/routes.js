@@ -13,7 +13,7 @@ import { AiFillFolderOpen, AiOutlineMail } from "react-icons/ai";
 import { PiPhoneCallBold } from "react-icons/pi";
 import { LuBuilding2 } from "react-icons/lu";
 import { GiSatelliteCommunication } from "react-icons/gi";
-import { FaCalendarAlt, FaGooglePay, FaTasks } from "react-icons/fa";
+import { FaCalendarAlt, FaRupeeSign, FaTasks } from "react-icons/fa";
 import { SiGooglemeet } from "react-icons/si";
 import React from "react";
 
@@ -222,7 +222,7 @@ const routes = [
     layout: "/admin",
     both: true,
     path: "/payments",
-    icon: <Icon as={FaGooglePay} width='20px' height='20px' color='inherit' />,
+    icon: <Icon as={FaRupeeSign} width='20px' height='20px' color='inherit' />,
     component: Payments,
   },
   // // ------------- Text message Routes ------------------------

@@ -16,7 +16,7 @@
     "@fullcalendar/resource-timeline": "^6.1.8",
     "@fullcalendar/scrollgrid": "^6.1.8",
     "@hypertheme-editor/chakra-ui": "^0.1.5",
-       "@stripe/react-stripe-js": "^2.3.0",
+    "@stripe/react-stripe-js": "^2.3.0",
     "@stripe/stripe-js": "^2.1.6",
     "apexcharts": "^3.41.1",
     "axios": "^1.4.0",
