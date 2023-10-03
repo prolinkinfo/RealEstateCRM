@@ -3,8 +3,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import PaymentForm from "./paymentForm";
 import Card from "components/card/Card";
-import { Button, Flex, Grid, GridItem } from "@chakra-ui/react";
-import { FaHistory } from 'react-icons/fa';
+import { Flex, Grid, GridItem } from "@chakra-ui/react";
 
 const PUBLIC_KEY = "pk_test_51Nx0ulSFr3y25H3gtYaIaVQDwcMVg1USXhA8DCu2sApXlLDf6vhCRLqqBNj2gKoeO2O5SiF5SZ1zCukR1IMztGFK00WeIq8rz3"
 
