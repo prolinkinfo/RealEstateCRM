@@ -5,5 +5,6 @@ const router = express.Router();
 
 
 router.post('/add', payment.add)
+router.get('/', payment.index)
 
 module.exports = router

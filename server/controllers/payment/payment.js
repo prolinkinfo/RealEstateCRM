@@ -1,6 +1,45 @@
 const stripeModule = require('stripe')
 
 
+const index = async (req, res) => {
+    const stripe = stripeModule(process.env.STRIPE_PRIVATE_KEY);
+    try {
+        const session = await stripe.paymentIntents.list({ limit: 100 });
+
+        const paymentIntents = session.data;
+
+        const paymentInfo = [];
+
+        for (const paymentIntent of paymentIntents) {
+            const paymentMethodId = paymentIntent.payment_method;
+            const paymentMethod = await stripe.paymentMethods.retrieve(paymentMethodId);
+
+            // Extract card details
+            const cardDetails = paymentMethod.card;
+            const billingDetails = paymentMethod.billing_details;
+            const expMonth = cardDetails.exp_month < 10 ? `0${cardDetails.exp_month}` : cardDetails.exp_month;
+            const expYear = cardDetails.exp_year.toString().slice(-2); // Get the last two digits of the year
+
+            const paymentData = {
+                id: paymentIntent.id,
+                amount: paymentIntent.amount,
+                cardholderName: billingDetails.name,
+                cardholderEmail: billingDetails.email,
+                cardExp: `${expMonth}/${expYear}`,
+                cardBrand: cardDetails.brand,
+                cardNumber: `**** **** **** ${cardDetails.last4}`,
+            };
+
+            paymentInfo.push(paymentData);
+        }
+
+        res.status(200).json(paymentInfo);
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({ error: e.message });
+    }
+}
+
 const add = async (req, res) => {
     const stripe = stripeModule(process.env.STRIPE_PRIVATE_KEY);
     try {
@@ -8,7 +47,6 @@ const add = async (req, res) => {
             payment_method_types: ["card"],
             mode: "payment",
             customer_email: req.body.customer_email,
-            // billing_address_collection: 'required', // You can set this to 'required' if you want to make billing address collection mandatory.
             line_items: req.body.items.map((item) => {
                 return {
                     price_data: {
@@ -17,7 +55,7 @@ const add = async (req, res) => {
                             name: item.name,
                             description: item.description,
                         },
-                        unit_amount: item.price * 100,
+                        unit_amount: item.price,
                     },
                     quantity: item.quantity,
                 };
@@ -32,5 +70,5 @@ const add = async (req, res) => {
     }
 }
 
-module.exports = { add }
+module.exports = { add, index }
 
