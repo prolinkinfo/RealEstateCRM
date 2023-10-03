@@ -22,8 +22,8 @@ const add = async (req, res) => {
                     quantity: item.quantity,
                 };
             }),
-            success_url: "http://localhost:3000/payments",
-            cancel_url: "http://localhost:3000/payments",
+            success_url: "https://real-estate-crm-jet.vercel.app/payments",
+            cancel_url: "https://real-estate-crm-jet.vercel.app/payments",
         });
         res.json({ url: session.url });
     } catch (e) {
