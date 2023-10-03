@@ -1,24 +1,18 @@
 
 import { Button, FormLabel, GridItem, Input, Text } from "@chakra-ui/react"
-import { useElements, useStripe } from "@stripe/react-stripe-js"
 import { useFormik } from "formik"
-import { useEffect, useState } from 'react'
 
 
 export default function PaymentForm() {
-    const [price, setPrice] = useState(false)
-
-
 
     const initialValues = {
-        name: "",
+        name: "Ravi",
         amount: '1000',
     }
 
-
     const formik = useFormik({
         initialValues: initialValues,
-        onSubmit: (values, { resetForm }) => {
+        onSubmit: (_values, { resetForm }) => {
             handleSubmit();
             resetForm();
         },
@@ -35,12 +29,16 @@ export default function PaymentForm() {
                 },
                 mode: "cors",
                 body: JSON.stringify({
-                    items: [{ quantity: 1, price: values.amount, name: values.name }],
+                    items: [
+                        { quantity: 1, price: values.amount, name: values.name, description: 'send to Prolink' },
+                    ],
+                    customer_email: 'denish@gmail.com',
                 }),
             }
         )
             .then((res) => {
                 if (res.ok) return res.json();
+                localStorage.setItem('res', res)
                 return res.json().then((json) => Promise.reject(json));
             })
             .then(({ url }) => {
@@ -50,6 +48,7 @@ export default function PaymentForm() {
                 console.log(e.error);
             });
     }
+
     return (
         <>
             <GridItem display='flex' justifyContent="center" padding="10px 0 50px 0">
@@ -91,9 +90,6 @@ export default function PaymentForm() {
                 <Text mb='10px' color={'red'}> {errors.amount && touched.amount && errors.amount}</Text>
             </GridItem>
             <Button onClick={() => handleSubmit()} variant="brand">Pay</Button>
-
-
-
         </>
     )
 }

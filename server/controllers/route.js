@@ -23,11 +23,11 @@ router.use('/task', taskRoute);
 router.use('/document', documentRoute);
 router.use('/reporting', reportingRoute);
 router.use('/user', userRoute);
+router.use('/payment', paymentRoute);
 
 router.use('/email', emailRoute);
 router.use('/phoneCall', phoneCallRoute);
 router.use('/text-msg', TextMsgRoute);
 router.use('/meeting', meetingRoute);
-router.use('/payment', paymentRoute);
 
 module.exports = router;
