@@ -55,7 +55,7 @@ const add = async (req, res) => {
                             name: item.name,
                             description: item.description,
                         },
-                        unit_amount: item.price,
+                        unit_amount: item.price * 100,
                     },
                     quantity: item.quantity,
                 };

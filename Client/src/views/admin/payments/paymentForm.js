@@ -1,25 +1,32 @@
-
 import { Button, FormLabel, GridItem, Input, Text } from "@chakra-ui/react"
 import { useFormik } from "formik"
+import * as yup from 'yup'
 
 
 export default function PaymentForm() {
 
     const initialValues = {
-        name: "Ravi",
-        amount: '1000',
+        name: "",
+        amount: '',
+        email: '',
     }
+    const validation = yup.object({
+        name: yup.string().min(2).required('First Name is required'),
+        amount: yup.number().required('Amount is required'),
+        email: yup.string().email().required('Email is required'),
+    })
 
     const formik = useFormik({
         initialValues: initialValues,
-        onSubmit: (_values, { resetForm }) => {
-            handleSubmit();
+        validationSchema: validation,
+        onSubmit: (values, { resetForm }) => {
+            addPayment();
             resetForm();
         },
     });
-    const { errors, touched, values, handleBlur, handleChange, setFieldValue } = formik
+    const { errors, touched, values, handleBlur, handleChange, handleSubmit } = formik
 
-    const handleSubmit = () => {
+    const addPayment = () => {
         fetch(
             `${process.env.REACT_APP_BASE_URL}api/payment/add`,
             {
@@ -32,7 +39,7 @@ export default function PaymentForm() {
                     items: [
                         { quantity: 1, price: values.amount, name: values.name, description: 'send to Prolink' },
                     ],
-                    customer_email: 'denish@gmail.com',
+                    customer_email: values.email,
                 }),
             }
         )
@@ -75,6 +82,23 @@ export default function PaymentForm() {
             </GridItem>
             <GridItem sx={{ m: 1, width: '100%' }} >
                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                    Email
+                </FormLabel>
+                <Input
+                    type="text"
+                    fontSize='sm'
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.email}
+                    name="email"
+                    placeholder="Enter Email"
+                    fontWeight='500'
+                    borderColor={errors?.email && touched?.email ? "red.300" : null}
+                />
+                <Text mb='10px' color={'red'}> {errors.email && touched.email && errors.email}</Text>
+            </GridItem>
+            <GridItem sx={{ m: 1, width: '100%' }} >
+                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                     Amount
                 </FormLabel>
                 <Input
@@ -83,13 +107,14 @@ export default function PaymentForm() {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.amount}
+                    placeholder="Enter Amount"
                     name="amount"
                     fontWeight='500'
                     borderColor={errors?.amount && touched?.amount ? "red.300" : null}
                 />
                 <Text mb='10px' color={'red'}> {errors.amount && touched.amount && errors.amount}</Text>
             </GridItem>
-            <Button onClick={() => handleSubmit()} variant="brand">Pay</Button>
+            <Button onClick={handleSubmit} variant="brand">Pay</Button>
         </>
     )
 }
