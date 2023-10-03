@@ -22,7 +22,7 @@
     "axios": "^1.4.0",
     "chakra-ui-autocomplete": "^1.4.5",
     "formik": "^2.4.2",
-    "framer-motion": "^6.5.1",
+    "framer-motion": "^4.1.17",
     "fullcalendar": "^6.1.8",
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.4",
