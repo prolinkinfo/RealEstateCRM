@@ -12,7 +12,7 @@ export default function PaymentForm() {
     }
     const validation = yup.object({
         name: yup.string().min(2).required('First Name is required'),
-        amount: yup.number().required('Amount is required'),
+        amount: yup.number().max(999999.99, 'total amount due must be no more than ₹999,999.99.').required('Amount is required'),
         email: yup.string().email().required('Email is required'),
     })
 

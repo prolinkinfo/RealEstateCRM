@@ -1,11 +1,10 @@
 
-import React from "react";
-import { Elements } from '@stripe/react-stripe-js'
-import { loadStripe } from '@stripe/stripe-js'
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import PaymentForm from "./paymentForm";
 import Card from "components/card/Card";
 import { Button, Flex, Grid, GridItem } from "@chakra-ui/react";
-import { AddIcon } from "@chakra-ui/icons";
+import { FaHistory } from 'react-icons/fa';
 
 const PUBLIC_KEY = "pk_test_51Nx0ulSFr3y25H3gtYaIaVQDwcMVg1USXhA8DCu2sApXlLDf6vhCRLqqBNj2gKoeO2O5SiF5SZ1zCukR1IMztGFK00WeIq8rz3"
 
@@ -30,9 +29,9 @@ const StripeContainer = () => {
                     </Flex>
                 </Card>
             </GridItem>
-            <GridItem colStart={12} textAlign={"right"}>
-                <Button leftIcon={<AddIcon />} variant="brand">Add</Button>
-            </GridItem>
+            {/* <GridItem>
+                <Button leftIcon={<FaHistory />} variant="brand">History</Button>
+            </GridItem> */}
         </Grid>
 
     );
