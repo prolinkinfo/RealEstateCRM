@@ -27,7 +27,7 @@ const Edit = (props) => {
             resetForm();
         },
     });
-    const { errors, touched, values, handleBlur, handleChange, handleSubmit, } = formik
+    const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue } = formik
 
     const [isLoding, setIsLoding] = useState(false)
 
@@ -52,10 +52,10 @@ const Edit = (props) => {
     const param = useParams()
     const fetcEdithData = async () => {
         let response = await getApi('api/user/view/', param.id)
-        values.firstName = response.data?.firstName
-        values.lastName = response.data?.lastName
-        values.username = response.data?.username
-        values.phoneNumber = response.data?.phoneNumber
+        setFieldValue('firstName', response.data?.firstName)
+        setFieldValue('lastName', response.data?.lastName)
+        setFieldValue('username', response.data?.username)
+        setFieldValue('phoneNumber', response.data?.phoneNumber)
     }
 
     useEffect(() => {
