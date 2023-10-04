@@ -36,7 +36,7 @@ function SignIn() {
   const textColorSecondary = "gray.400";
   const brandStars = useColorModeValue("brand.500", "brand.400");
   const [isLoding, setIsLoding] = React.useState(false)
-  const [checkBox, setCheckBox] = React.useState(false)
+  const [checkBox, setCheckBox] = React.useState(true)
 
   const [show, setShow] = React.useState(false);
   const showPass = () => setShow(!show);
@@ -176,8 +176,11 @@ function SignIn() {
               <Flex justifyContent='space-between' align='center' mb='24px'>
                 <FormControl display='flex' alignItems='center'>
                   <Checkbox
+                    // onChange={(e) => setCheckBox(e.target.checked)}
                     onChange={(e) => setCheckBox(e.target.checked)}
                     id='remember-login'
+                    value={checkBox}
+                    defaultChecked
                     colorScheme='brandScheme'
                     me='10px'
                   />
