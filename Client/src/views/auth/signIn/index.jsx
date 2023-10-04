@@ -176,7 +176,6 @@ function SignIn() {
               <Flex justifyContent='space-between' align='center' mb='24px'>
                 <FormControl display='flex' alignItems='center'>
                   <Checkbox
-                    // onChange={(e) => setCheckBox(e.target.checked)}
                     onChange={(e) => setCheckBox(e.target.checked)}
                     id='remember-login'
                     value={checkBox}
