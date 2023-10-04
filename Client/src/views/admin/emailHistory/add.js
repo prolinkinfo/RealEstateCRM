@@ -3,9 +3,8 @@ import { Button, Flex, FormLabel, Grid, GridItem, IconButton, Input, Modal, Moda
 import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
-import { BsFillTelephoneFill } from 'react-icons/bs';
 import { LiaMousePointerSolid } from 'react-icons/lia';
-import { phoneCallSchema } from 'schema';
+import { emailSchema } from 'schema';
 import { getApi, postApi } from 'services/api';
 
 const AddPhoneCall = (props) => {
@@ -31,7 +30,7 @@ const AddPhoneCall = (props) => {
     }
     const formik = useFormik({
         initialValues: initialValues,
-        validationSchema: phoneCallSchema,
+        validationSchema: emailSchema,
         onSubmit: (values, { resetForm }) => {
             AddData();
             resetForm();
