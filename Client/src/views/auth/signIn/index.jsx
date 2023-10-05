@@ -81,7 +81,6 @@ function SignIn() {
         w='100%'
         mx={{ base: "auto", lg: "0px" }}
         me='auto'
-        // h='100%'
         h='fit-content'
         alignItems='start'
         justifyContent='center'
