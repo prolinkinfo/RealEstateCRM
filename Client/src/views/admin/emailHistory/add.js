@@ -53,7 +53,6 @@ const AddPhoneCall = (props) => {
             setIsLoding(false)
         }
     };
-
     useEffect(async () => {
         values.start = props?.date
         try {
@@ -69,19 +68,18 @@ const AddPhoneCall = (props) => {
             console.log(e);
         }
     }, [props, values.category])
+
     const fetchRecipientData = async () => {
-        if (props.id && props.lead !== 'true') {
-            let response = await getApi('api/contact/view/', props.id)
+        if (values.createBy) {
+            let response = await getApi('api/contact/view/', values.createBy)
             if (response?.status === 200) {
                 setFieldValue('recipient', response?.data?.contact?.email);
-                setFieldValue('createBy', props.id);
                 values.recipient = response?.data?.contact?.email
             }
-        } else if (props.id && props.lead === 'true') {
-            let response = await getApi('api/lead/view/', props.id)
+        } else if (values.createByLead) {
+            let response = await getApi('api/lead/view/', values.createByLead)
             if (response?.status === 200) {
                 setFieldValue('recipient', response?.data?.lead?.leadEmail);
-                setFieldValue('createByLead', props.id);
                 values.recipient = response?.data?.lead?.leadEmail
             }
         }
@@ -89,7 +87,7 @@ const AddPhoneCall = (props) => {
 
     useEffect(() => {
         fetchRecipientData()
-    }, [props.id])
+    }, [values.createBy, values.createByLead])
 
     return (
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
@@ -135,13 +133,11 @@ const AddPhoneCall = (props) => {
                                             </Select>
                                             <IconButton onClick={() => setContactModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
                                         </Flex>
-                                        <Text mb='10px' color={'red'}> {errors.createBy && touched.createBy && errors.createBy}</Text>
                                     </GridItem>
                                 </>
                                 : values.category === "lead" ?
                                     <>
                                         <GridItem colSpan={{ base: 12, md: 6 }} >
-
                                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                                 Recipient (Lead)
                                             </FormLabel>
@@ -161,28 +157,26 @@ const AddPhoneCall = (props) => {
                                                 </Select>
                                                 <IconButton onClick={() => setLeadModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
                                             </Flex>
-                                            <Text mb='10px' color={'red'}> {errors.createByLead && touched.createByLead && errors.createByLead}</Text>
                                         </GridItem>
                                     </>
                                     : ''
                             }
+                            <Text mb='10px' color={'red'}> {errors.createBy && touched.createBy && errors.createBy}</Text>
                         </GridItem>
-                        {/* <GridItem colSpan={{ base: 12 }}>
+                        <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Recipient<Text color={"red"}>*</Text>
                             </FormLabel>
                             <Input
                                 fontSize='sm'
-                                type='number'
-                                onChange={handleChange} onBlur={handleBlur}
+                                disabled
                                 value={values.recipient}
                                 name="recipient"
                                 placeholder='Recipient'
                                 fontWeight='500'
                                 borderColor={errors.recipient && touched.recipient ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.recipient && touched.recipient && errors.recipient}</Text>
-                        </GridItem> */}
+                        </GridItem>
                         {/* <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Date & Time
