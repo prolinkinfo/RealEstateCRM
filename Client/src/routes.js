@@ -1,21 +1,20 @@
 
 import { Icon } from "@chakra-ui/react";
-import {
-  MdHome,
-  MdLock, MdContacts,
-  MdLeaderboard,
-  MdInsertChartOutlined,
-  MdOutlineMessage
-} from "react-icons/md";
 import { HiUsers } from "react-icons/hi";
+import {
+  MdContacts,
+  MdHome,
+  MdInsertChartOutlined,
+  MdLeaderboard,
+  MdLock
+} from "react-icons/md";
 // icon
-import { AiFillFolderOpen, AiOutlineMail } from "react-icons/ai";
-import { PiPhoneCallBold } from "react-icons/pi";
-import { LuBuilding2 } from "react-icons/lu";
-import { GiSatelliteCommunication } from "react-icons/gi";
-import { FaCalendarAlt, FaRupeeSign, FaTasks } from "react-icons/fa";
-import { SiGooglemeet } from "react-icons/si";
 import React from "react";
+import { AiFillFolderOpen, AiOutlineMail } from "react-icons/ai";
+import { FaCalendarAlt, FaRupeeSign, FaTasks } from "react-icons/fa";
+import { LuBuilding2 } from "react-icons/lu";
+import { PiPhoneCallBold } from "react-icons/pi";
+import { SiGooglemeet } from "react-icons/si";
 
 // Admin Imports
 const MainDashboard = React.lazy(() => import("views/admin/default"));
