@@ -30,7 +30,7 @@ const TextMsg = () => {
         },
     });
 
-    const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
+    const { errors, touched, values, handleChange, handleSubmit, setFieldValue, } = formik
 
     if (touched.to && errors.createFor) {
         toast.error('Please select an authorized to');

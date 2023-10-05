@@ -32,7 +32,6 @@ const Index = () => {
                     <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>
                 </GridItem>
             </Grid>
-            {/* <CheckTable columnsData={columns} tableData={data} /> */}
             <CheckTable isOpen={isOpen} columnsData={columns} />
             {/* Add Form */}
             <Add isOpen={isOpen} size={size} onClose={onClose} />

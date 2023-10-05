@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import { documentSchema } from 'schema';
 import { deleteApi, getApi } from 'services/api';
 import Upload from './component/Upload';
+import { postApi } from 'services/api';
 
 
 const Index = () => {
@@ -78,11 +79,11 @@ const Index = () => {
                 formData?.append('files', file);
             });
 
-            // let response = await postApi('api/document/add', formData);
-            // if (response && response.status === 200) {
-            //     fetchData();
-            //     formik.resetForm();
-            // }
+            let response = await postApi('api/document/add', formData);
+            if (response && response.status === 200) {
+                fetchData();
+                formik.resetForm();
+            }
         } catch (e) {
             console.log(e);
         }

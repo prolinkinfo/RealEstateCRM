@@ -81,22 +81,6 @@ const AddPhoneCall = (props) => {
                 <ModalBody>
 
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
-
-                        {/* <GridItem colSpan={{ base: 12 }}>
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Sender<Text color={"red"}>*</Text>
-                            </FormLabel>
-                            <Input
-                                fontSize='sm'
-                                onChange={handleChange} onBlur={handleBlur}
-                                value={values.sender}
-                                name="sender"
-                                placeholder='Sender'
-                                fontWeight='500'
-                                borderColor={errors.sender && touched.sender ? "red.300" : null}
-                            />
-                            <Text mb='10px' color={'red'}> {errors.sender && touched.sender && errors.sender}</Text>
-                        </GridItem> */}
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Recipient<Text color={"red"}>*</Text>
@@ -113,22 +97,6 @@ const AddPhoneCall = (props) => {
                             />
                             <Text mb='10px' color={'red'}> {errors.recipient && touched.recipient && errors.recipient}</Text>
                         </GridItem>
-                        {/* <GridItem colSpan={{ base: 12 }}>
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Date & Time
-                            </FormLabel>
-                            <Input
-                                type='datetime-local'
-                                fontSize='sm'
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.time}
-                                name="time"
-                                fontWeight='500'
-                                borderColor={errors.time && touched.time ? "red.300" : null}
-                            />
-                            <Text mb='10px' color={'red'}> {errors.time && touched.time && errors.time}</Text>
-                        </GridItem> */}
                         <GridItem colSpan={{ base: 12, md: 6 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Start Date

@@ -278,19 +278,6 @@ const AddTask = (props) => {
                             />
                             <Text mb='10px' color={'red'}> {errors.textColor && touched.textColor && errors.textColor}</Text>
                         </GridItem>
-                        {/* <GridItem colSpan={{ base: 12, md: 6 }} >
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Reminder
-                            </FormLabel>
-                            <RadioGroup onChange={(e) => setFieldValue('reminder', e)} value={values.reminder}>
-                                <Stack direction='row'>
-                                    <Radio value='None' >None</Radio>
-                                    <Radio value='email'>Email</Radio>
-                                    <Radio value='sms'>Sms</Radio>
-                                </Stack>
-                            </RadioGroup>
-                            <Text mb='10px' color={'red'}> {errors.reminder && touched.reminder && errors.reminder}</Text>
-                        </GridItem> */}
                         <GridItem colSpan={{ base: 12 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Url

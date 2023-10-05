@@ -13,11 +13,7 @@ const View = () => {
     const param = useParams()
 
     const [data, setData] = useState()
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    const [edit, setEdit] = useState(false);
-    const [deleteModel, setDelete] = useState(false);
     const user = JSON.parse(localStorage.getItem("user"))
-    const size = "lg";
     const [isLoding, setIsLoding] = useState(false)
 
     const fetchData = async () => {
@@ -29,47 +25,15 @@ const View = () => {
     useEffect(() => {
         fetchData()
     }, [])
-    // edit
 
     return (
         <>
-            {/* <Add isOpen={isOpen} size={size} onClose={onClose} /> */}
-            {/* <Edit isOpen={edit} size={size} onClose={setEdit} /> */}
-            {/* <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/user/delete/' id={param.id} /> */}
 
             {isLoding ?
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                     <Spinner />
                 </Flex> : <>
-
-
-                    <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
-                        <GridItem colStart={6} >
-                            <Flex justifyContent={'right'} >
-                                {/* <Menu> */}
-                                {/* <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}> */}
-                                {/* Actions */}
-                                {/* </MenuButton> */}
-                                {/* <MenuDivider /> */}
-                                {/* <MenuList> */}
-                                {/* <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem> */}
-                                {/* <MenuDivider /> */}
-                                {/* <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem> */}
-                                {/* </MenuList> */}
-                                {/* </Menu> */}
-                                <Link to="/phone-call">
-                                    <Button leftIcon={<IoIosArrowBack />} variant="brand">
-                                        Back
-                                    </Button>
-                                </Link>
-                            </Flex>
-                        </GridItem>
-                    </Grid>
-
-
                     <Grid templateColumns="repeat(4, 1fr)" gap={3}>
-
-
                         <GridItem colSpan={{ base: 4 }}>
                             <Card >
                                 <Grid templateColumns={{ base: "1fr" }} gap={4}>

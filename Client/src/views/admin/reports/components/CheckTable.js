@@ -33,7 +33,6 @@ export default function CheckTable(props) {
     const [selectedValues, setSelectedValues] = useState([]);
 
     const [deleteModel, setDelete] = useState(false);
-    // const [data, setData] = useState(barData)
     const data = useMemo(() => barData, [barData]);
     const [gopageValue, setGopageValue] = useState()
 
@@ -140,7 +139,6 @@ export default function CheckTable(props) {
                                     if (cell?.column.Header === "#") {
                                         data = (
                                             <Flex align="center">
-                                                {/* <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" /> */}
                                                 <Text color={textColor} fontSize="sm" fontWeight="700">
                                                     {cell?.row?.index + 1}
                                                 </Text>
@@ -166,7 +164,6 @@ export default function CheckTable(props) {
                                                 fontSize="sm"
                                                 fontWeight="700"
                                             >
-                                                {/* {Array.isArray(reportChart.EmailDetails) && reportChart.EmailDetails.map((item => item.totalEmails))} */}
                                                 {cell?.value}
                                             </Text>
                                         );
@@ -178,7 +175,6 @@ export default function CheckTable(props) {
                                                 fontSize="sm"
                                                 fontWeight="700"
                                             >
-                                                {/* {Array.isArray(reportChart.TextSent) && reportChart.TextSent.map((item => item.totalTextSent))} */}
                                                 {cell?.value}
                                             </Text>
                                         );
@@ -191,7 +187,6 @@ export default function CheckTable(props) {
                                                 fontSize="sm"
                                                 fontWeight="700"
                                             >
-                                                {/* {Array.isArray(reportChart.outboundcall) && reportChart.outboundcall.map((item => item.totalCall))} */}
                                                 {cell?.value}
                                             </Text>
                                         );

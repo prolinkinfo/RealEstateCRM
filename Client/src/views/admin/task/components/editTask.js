@@ -221,62 +221,6 @@ const EditTask = (props) => {
                                 </>
                                 : ''
                         }
-                        {/* <GridItem colSpan={{ base: 12, md: 6 }} >
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Category
-                            </FormLabel>
-                            <Select
-                                value={values.category}
-                                name="category"
-                                onChange={handleChange}
-                                mb={errors.category && touched.category ? undefined : '10px'}
-                                fontWeight='500'
-                                placeholder={'Select Category'}
-                                borderColor={errors.category && touched.category ? "red.300" : null}
-                            >
-                                <option value="None">None</option>
-                                <option value="call">Call</option>
-                                <option value="email">Email</option>
-                                <option value="meeting">Meeting</option>
-                            </Select>
-                            <Text mb='10px' color={'red'}> {errors.recipient && touched.recipient && errors.recipient}</Text>
-                        </GridItem> */}
-                        {/* <GridItem colSpan={{ base: 12, md: 6 }} >
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Description
-                            </FormLabel>
-                            <Input
-                                fontSize='sm'
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.description}
-                                name="description"
-                                placeholder='Description'
-                                fontWeight='500'
-                                borderColor={errors?.description && touched?.description ? "red.300" : null}
-                            />
-                            <Text mb='10px' color={'red'}> {errors.description && touched.description && errors.description}</Text>
-                        </GridItem>
-                        <GridItem colSpan={{ base: 12, md: 6 }} >
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Assignment To
-                            </FormLabel>
-                            <Select
-                                value={values.assignmentTo}
-                                name="assignmentTo"
-                                onChange={handleChange}
-                                mb={errors.assignmentTo && touched.assignmentTo ? undefined : '10px'}
-                                fontWeight='500'
-                                placeholder={'Assignment To'}
-                                borderColor={errors.assignmentTo && touched.assignmentTo ? "red.300" : null}
-                            >
-                                <option value="">None</option>
-                                {contactData?.map((item) => {
-                                    return <option value={item._id} key={item._id}>{item.email}</option>
-                                })}
-                            </Select>
-                            <Text mb='10px' color={'red'}> {errors.assignmentTo && touched.assignmentTo && errors.assignmentTo}</Text>
-                        </GridItem> */}
                         <GridItem colSpan={{ base: 12 }} >
                             <Checkbox isChecked={isChecked} onChange={(e) => setIsChecked(e.target.checked)}>All Day Task ? </Checkbox>
                         </GridItem>

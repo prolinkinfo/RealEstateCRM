@@ -122,8 +122,6 @@ const Call = () => {
                 )}
                 <Text mb='10px' color={'red'}> {errors.recipient && touched.recipient && errors.recipient}</Text>
             </GridItem>
-
-
             {/* <GridItem colSpan={{ base: 12 }} >
                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                     Call Duration

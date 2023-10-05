@@ -23,37 +23,9 @@ const View = () => {
     useEffect(() => {
         fetchData()
     }, [])
-    // edit
 
     return (
         <>
-            {/* <Add isOpen={isOpen} size={size} onClose={onClose} /> */}
-            {/* <Edit isOpen={edit} size={size} onClose={setEdit} /> */}
-            {/* <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/user/delete/' id={param.id} /> */}
-
-            <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
-                <GridItem colStart={6} >
-                    <Flex justifyContent={'right'} >
-                        {/* <Menu> */}
-                        {/* <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}> */}
-                        {/* Actions */}
-                        {/* </MenuButton> */}
-                        {/* <MenuDivider /> */}
-                        {/* <MenuList> */}
-                        {/* <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem> */}
-                        {/* <MenuDivider /> */}
-                        {/* <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem> */}
-                        {/* </MenuList> */}
-                        {/* </Menu> */}
-                        <Link to="/text-msg">
-                            <Button leftIcon={<IoIosArrowBack />} variant="brand">
-                                Back
-                            </Button>
-                        </Link>
-                    </Flex>
-                </GridItem>
-            </Grid>
-
 
             <Grid templateColumns="repeat(4, 1fr)" gap={3}>
 
@@ -98,16 +70,6 @@ const View = () => {
                 </GridItem>
 
             </Grid>
-            {/* <Card mt={3}>
-                <Grid templateColumns="repeat(6, 1fr)" gap={1}>
-                    <GridItem colStart={6} >
-                        <Flex justifyContent={"right"}>
-                            <Button onClick={() => setEdit(true)} leftIcon={<EditIcon />} variant="outline" colorScheme="green">Edit</Button>
-                            <Button style={{ background: 'red.800' }} ml={2.5} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>
-                        </Flex>
-                    </GridItem>
-                </Grid>
-            </Card> */}
         </>
     );
 };

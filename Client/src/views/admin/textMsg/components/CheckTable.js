@@ -21,7 +21,6 @@ import Card from "components/card/Card";
 import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { Link } from "react-router-dom";
-// import Delete from "../Delete";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
 import moment from "moment";
 import { getApi } from "services/api";
@@ -44,7 +43,6 @@ export default function CheckTable(props) {
   const tableInstance = useTable(
     {
       columns, data,
-      // initialState: { pageIndex: 0, pageSize: 10 },
     },
     useGlobalFilter,
     useSortBy,
@@ -64,14 +62,9 @@ export default function CheckTable(props) {
     canPreviousPage,
     pageOptions,
     state,
-    // setPageSize,
   } = tableInstance;
   initialState.pageSize = 10
   const { pageIndex } = state;
-
-  // const handlePageSizeChange = (e) => {
-  //   setPageSize(e.target.value);
-  // };
 
   useEffect(() => {
     fetchData()

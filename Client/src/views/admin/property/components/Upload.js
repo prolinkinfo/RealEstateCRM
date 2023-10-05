@@ -24,8 +24,6 @@ export default function Upload(props) {
         <Dropzone
           w={{ base: "100%" }}
           me='36px'
-          // maxH={{ base: "60%", lg: "50%", "2xl": "100%" }}
-          // minH={{ base: "70%", lg: "50%", "2xl": "100%" }}
           minH={200}
           img={props.text === 'Property Photos' ? 'img' : ''}
           height={'100%'}

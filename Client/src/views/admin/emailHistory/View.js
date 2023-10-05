@@ -30,11 +30,9 @@ const View = () => {
     useEffect(() => {
         fetchData()
     }, [])
-    // edit
 
     return (
         <>
-
             {isLoding ?
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                     <Spinner />
@@ -76,14 +74,6 @@ const View = () => {
                                             <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Recipient </Text>
                                             <Text>{data?.recipient ? data?.recipient : ' - '}</Text>
                                         </GridItem>
-                                        {/* <GridItem colSpan={{ base: 2, md: 1 }}>
-                                    <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Cc </Text>
-                                    <Text>{data?.cc ? data?.cc : ' - '}</Text>
-                                </GridItem>
-                                <GridItem colSpan={{ base: 2, md: 1 }}>
-                                    <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Bcc </Text>
-                                    <Text>{data?.bcc ? data?.bcc : ' - '}</Text>
-                                </GridItem> */}
                                         <GridItem colSpan={{ base: 2, md: 1 }}>
                                             <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Create From </Text>
                                             <Link to={data?.createBy ? user?.role !== 'admin' ? `/contactView/${data?.createBy}` : `/admin/contactView/${data?.createBy}` : user?.role !== 'admin' ? `/leadView/${data?.createByLead}` : `/admin/leadView/${data?.createByLead}`}>

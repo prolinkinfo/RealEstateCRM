@@ -23,8 +23,6 @@ export default function Upload(props) {
         <Dropzone
           w={{ base: "100%", "2xl": "240px" }}
           me='36px'
-          // maxH={{ base: "60%", lg: "50%", "2xl": "100%" }}
-          // minH={{ base: "70%", lg: "50%", "2xl": "100%" }}
           minH={200}
           height={'100%'}
           onFileSelect={props.onFileSelect}

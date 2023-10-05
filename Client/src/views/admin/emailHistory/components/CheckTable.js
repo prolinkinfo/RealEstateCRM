@@ -77,12 +77,6 @@ export default function CheckTable(props) {
     setGopageValue(pageOptions.length)
   }
 
-
-
-  // const handlePageSizeChange = (e) => {
-  //   setPageSize(e.target.value);
-  // };
-
   useEffect(() => {
     fetchData()
   }, [props.isOpen])

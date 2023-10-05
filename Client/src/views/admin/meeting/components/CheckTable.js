@@ -70,10 +70,6 @@ export default function CheckTable(props) {
   }
 
 
-  // const handlePageSizeChange = (e) => {
-  //   setPageSize(e.target.value);
-  // };
-
   return (
     <Card
       direction="column"

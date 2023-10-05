@@ -82,10 +82,6 @@ export default function CheckTable(props) {
     setGopageValue(pageOptions.length)
   }
 
-  // const handlePageSizeChange = (e) => {
-  //   setPageSize(e.target.value);
-  // };
-
 
   const handleCheckboxChange = (event, value) => {
     if (event.target.checked) {

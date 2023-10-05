@@ -32,11 +32,6 @@ const Edit = (props) => {
         leadRating: "",
         leadConversionProbability: "",
         // 4. Property of Interest
-        // propertyType: "",
-        // desiredLocation: "",
-        // preferredPriceRange: "",
-        // squareFootageRequirements: "",
-        // otherPropertySpecifications: "",
         // 5. History:
         notesandComments: "",
         // 6. Tags or Categories

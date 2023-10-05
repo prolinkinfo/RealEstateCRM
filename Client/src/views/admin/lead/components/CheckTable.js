@@ -83,18 +83,11 @@ export default function CheckTable(props) {
     setPageSize,
     state: { pageIndex, pageSize }
   } = tableInstance;
-  // initialState.pageSize = 10
-  // const { pageIndex } = state;
-
 
 
   if (pageOptions.length < gopageValue) {
     setGopageValue(pageOptions.length)
   }
-  // const handlePageSizeChange = (e) => {
-  //   setPageSize(e.target.value);
-  // };
-
 
   const handleCheckboxChange = (event, value) => {
     if (event.target.checked) {
@@ -290,6 +283,6 @@ export default function CheckTable(props) {
 
       <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} lead='true' id={selectedId} />
       <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={callSelectedId} lead='true' />
-    </Card >
+    </Card>
   );
 }
