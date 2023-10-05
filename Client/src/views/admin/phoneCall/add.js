@@ -23,7 +23,7 @@ const AddPhoneCall = (props) => {
         callNotes: '',
         createBy: '',
         createByLead: '',
-        startDate: '',
+        startDate: new Date(),
         endDate: '',
         category: 'contact',
         assignmentTo: '',
@@ -69,28 +69,25 @@ const AddPhoneCall = (props) => {
             console.log(e);
         }
     }, [props, values.category])
-    const fetchDataR = async () => {
-        if (props.id && props.lead !== 'true') {
-            let response = await getApi('api/contact/view/', props.id)
+    const fetchRecipientData = async () => {
+        if (values.createBy) {
+            let response = await getApi('api/contact/view/', values.createBy)
             if (response?.status === 200) {
                 setFieldValue('recipient', response?.data?.contact?.phoneNumber);
-                setFieldValue('createBy', props?.id);
                 values.recipient = response?.data?.contact?.phoneNumber
             }
-        } else if (props.id && props.lead === 'true') {
-            let response = await getApi('api/lead/view/', props.id)
+        } else if (values.createByLead) {
+            let response = await getApi('api/lead/view/', values.createByLead)
             if (response?.status === 200) {
                 setFieldValue('recipient', response?.data?.lead?.leadPhoneNumber);
-                setFieldValue('createByLead', props.id);
                 values.recipient = response?.data?.lead?.leadPhoneNumber
             }
         }
     }
 
     useEffect(() => {
-        fetchDataR()
-    }, [props.id])
-
+        fetchRecipientData()
+    }, [values.createBy, values.createByLead])
 
     return (
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
@@ -168,38 +165,20 @@ const AddPhoneCall = (props) => {
                                     : ''
                             }
                         </GridItem>
-                        {/* <GridItem colSpan={{ base: 12 }}>
+                        <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Recipient<Text color={"red"}>*</Text>
                             </FormLabel>
                             <Input
                                 fontSize='sm'
-                                type='number'
-                                onChange={handleChange} onBlur={handleBlur}
+                                disabled
                                 value={values.recipient}
                                 name="recipient"
                                 placeholder='Recipient'
                                 fontWeight='500'
                                 borderColor={errors.recipient && touched.recipient ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.recipient && touched.recipient && errors.recipient}</Text>
-                        </GridItem> */}
-                        {/* <GridItem colSpan={{ base: 12 }}>
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Date & Time
-                            </FormLabel>
-                            <Input
-                                type='datetime-local'
-                                fontSize='sm'
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.time}
-                                name="time"
-                                fontWeight='500'
-                                borderColor={errors.time && touched.time ? "red.300" : null}
-                            />
-                            <Text mb='10px' color={'red'}> {errors.time && touched.time && errors.time}</Text>
-                        </GridItem> */}
+                        </GridItem>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Start Date
