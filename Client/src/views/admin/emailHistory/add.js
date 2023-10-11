@@ -1,6 +1,8 @@
 import { AddIcon } from '@chakra-ui/icons';
 import { Button, Flex, FormLabel, Grid, GridItem, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Radio, RadioGroup, Select, Stack, Text, Textarea } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
+import ContactModel from "components/commonTableModel/ContactModel";
+import LeadModel from "components/commonTableModel/LeadModel";
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { LiaMousePointerSolid } from 'react-icons/lia';
@@ -96,6 +98,10 @@ const AddPhoneCall = (props) => {
                 <ModalHeader>Add Email </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
+                    {/* Contact Model  */}
+                    <ContactModel isOpen={contactModelOpen} onClose={setContactModel} fieldName='createBy' setFieldValue={setFieldValue} />
+                    {/* Lead Model  */}
+                    <LeadModel isOpen={leadModelOpen} onClose={setLeadModel} fieldName='createByLead' setFieldValue={setFieldValue} />
 
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
