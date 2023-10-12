@@ -69,7 +69,7 @@ const routes = [
     component: MainDashboard,
   },
   {
-    name: "Dasheboard",
+    name: "Dashboard",
     layout: "/user",
     path: "/default",
     icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
