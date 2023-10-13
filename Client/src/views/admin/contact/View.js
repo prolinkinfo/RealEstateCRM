@@ -64,7 +64,7 @@ const View = () => {
         { Header: "listing Price", accessor: "listingPrice", },
         { Header: "square Footage", accessor: "squareFootage", },
         { Header: "year Built", accessor: "yearBuilt", },
-    ];  
+    ];
     const textColumnsDataColumns = [
         { Header: "sender", accessor: "sender", },
         { Header: "recipient", accessor: "to", },
@@ -162,8 +162,8 @@ const View = () => {
                         <TabPanels>
                             <TabPanel pt={4} p={0}>
 
-                                <Grid templateColumns="repeat(4, 1fr)" gap={3}>
-                                    <GridItem rowSpan={2} colSpan={{ base: 4, md: 1 }}>
+                                <Grid templateColumns="repeat(12, 1fr)" gap={3}>
+                                    <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 4 }}>
                                         <Card >
                                             <Grid templateColumns={{ base: "1fr" }} gap={4}>
                                                 <GridItem colSpan={2}>
@@ -233,8 +233,7 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
-
-                                    <GridItem colSpan={{ base: 4, md: 3 }}>
+                                    <GridItem colSpan={{ base: 12, md: 6, lg: 4 }}>
                                         <Card >
                                             <Grid templateColumns={{ base: "1fr" }} gap={4}>
                                                 <GridItem colSpan={2}>
@@ -262,8 +261,7 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
-
-                                    <GridItem colSpan={{ base: 4, md: 3 }}>
+                                    <GridItem colSpan={{ base: 12, md: 6, lg: 4 }}>
                                         <Card >
                                             <Grid templateColumns={{ base: "1fr" }} gap={4}>
                                                 <GridItem colSpan={2}>
@@ -294,10 +292,7 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
-
-
-
-                                    <GridItem colSpan={{ base: 4, md: 2 }} >
+                                    <GridItem colSpan={{ base: 12, md: 6, lg: 4 }} >
                                         <Card >
                                             <Grid templateColumns={{ base: "1fr" }} gap={4}>
                                                 <GridItem colSpan={2}>
@@ -317,8 +312,7 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
-
-                                    <GridItem colSpan={{ base: 4, md: 2 }} >
+                                    <GridItem colSpan={{ base: 12, md: 6, lg: 4 }} >
                                         <Card >
                                             <Grid templateColumns={{ base: "1fr" }} gap={4}>
                                                 <GridItem colSpan={2}>
@@ -346,7 +340,7 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
-                                    <GridItem colSpan={{ base: 4, md: 1 }} rowSpan={2} >
+                                    <GridItem colSpan={{ base: 12, md: 6, lg: 4 }}  >
                                         <Card >
                                             <Grid templateColumns={{ base: "1fr" }} gap={4}>
                                                 <GridItem colSpan={2}>
@@ -378,7 +372,7 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
-                                    <GridItem colSpan={{ base: 4, md: 3 }} >
+                                    <GridItem colSpan={{ base: 12, md: 6, lg: 4 }} >
                                         <Card >
                                             <Grid templateColumns={{ base: "1fr" }} gap={4}>
                                                 <GridItem colSpan={2}>
@@ -402,7 +396,7 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
-                                    <GridItem colSpan={{ base: 4, md: 3 }} >
+                                    <GridItem colSpan={{ base: 12, md: 6, lg: 4 }} >
                                         <Card >
                                             <Grid templateColumns={{ base: "1fr" }} gap={4}>
                                                 <GridItem colSpan={2}>
@@ -426,8 +420,7 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
-
-                                    <GridItem colSpan={{ base: 4 }} >
+                                    <GridItem colSpan={{ base: 12 }} >
                                         <Card >
                                             <Grid templateColumns={{ base: "1fr" }} gap={4}>
                                                 <GridItem colSpan={2}>
@@ -452,12 +445,11 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
-
                                 </Grid>
 
                             </TabPanel>
                             <TabPanel pt={4} p={0}>
-                                <GridItem colSpan={{ base: 4 }} >
+                                <GridItem colSpan={{ base: 12 }} >
                                     <Card overflow={'scroll'}>
                                         <Grid templateColumns={{ base: "1fr" }} gap={4}>
                                             <GridItem colSpan={2}>
@@ -468,24 +460,24 @@ const View = () => {
                                                     <HSeparator />
                                                 </Box>
                                             </GridItem>
-                                            <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
-                                                <GridItem colSpan={{ base: 2 }}>
+                                            <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
+                                                <GridItem colSpan={{ base: 12 }}>
                                                     {data?.EmailHistory.length > 0 ? <ColumnsTable fetchData={fetchData} columnsData={columnsDataColumns} tableData={data?.EmailHistory} title={'Email '} /> : <Button onClick={() => setAddEmailHistory(true)} leftIcon={<BsFillSendFill />} colorScheme="gray" >Send Email </Button>}
                                                     <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} id={param.id} />
                                                 </GridItem>
-                                                <GridItem colSpan={{ base: 2 }}>
+                                                <GridItem colSpan={{ base: 12 }}>
                                                     {data?.phoneCallHistory?.length > 0 ? <PhoneCall fetchData={fetchData} columnsData={columnsDataColumns} tableData={data?.phoneCallHistory} title={'Call '} /> : <Button onClick={() => setAddPhoneCall(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" > Call </Button>}
                                                     <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param.id} />
                                                 </GridItem>
-                                                <GridItem colSpan={{ base: 2 }}>
+                                                <GridItem colSpan={{ base: 12 }}>
                                                     {data?.meetingHistory.length > 0 ? <MeetingTable className='table-container' fetchData={fetchData} setMeeting={setMeeting} columnsData={MeetingColumns} data={data?.meetingHistory} title={'Meeting '} /> : <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>}
                                                     <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="contact" id={param.id} />
                                                 </GridItem>
-                                                <GridItem colSpan={{ base: 2 }}>
+                                                <GridItem colSpan={{ base: 12 }}>
                                                     {data?.task.length > 0 ? <TaskTable fetchData={fetchData} className='table-container' setTaskModel={setTaskModel} columnsData={taskColumns} data={data?.task} title={'Task '} /> : <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>}
                                                     <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="contact" id={param.id} />
                                                 </GridItem>
-                                                <GridItem colSpan={{ base: 2 }}>
+                                                <GridItem colSpan={{ base: 12 }}>
                                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Notes and Comments </Text>
                                                     <Text>{data?.contact?.notesandComments ? data?.contact?.notesandComments : 'N/A'}</Text>
                                                 </GridItem>
@@ -499,8 +491,8 @@ const View = () => {
 
                             </TabPanel>
                             <TabPanel pt={4} p={0}>
-                                <GridItem colSpan={{ base: 4 }} >
-                                    <Card minH={'50vh'} >
+                                <GridItem colSpan={{ base: 12 }} >
+                                    <Card minH={'40vh'} >
                                         <Heading size="lg" mb={4} >
                                             Documents
                                         </Heading>
@@ -520,7 +512,7 @@ const View = () => {
 
                             <TabPanel pt={4} p={0}>
 
-                                <GridItem colSpan={{ base: 4 }} >
+                                <GridItem colSpan={{ base: 12 }} >
                                     <Card >
                                         <Grid templateColumns={{ base: "1fr" }} gap={4}>
                                             <GridItem colSpan={2} textAlign={'center'}>
@@ -532,30 +524,30 @@ const View = () => {
                                                 </Box>
                                             </GridItem>
                                             {data?.contact?.linkedInProfile || data?.contact?.facebookProfile || data?.contact?.twitterHandle || data?.contact?.otherProfiles ?
-                                                <Grid templateColumns={'repeat(4, 1fr)'} gap={4} flexWrap={'wrap'} display={'flex'} justifyContent={'center'}>
+                                                <Grid templateColumns={'repeat(4, 1fr)'} gap={4} my={3} flexWrap={'wrap'} display={'flex'} justifyContent={'center'}>
                                                     {data?.contact?.linkedInProfile && <GridItem textAlign={'center'} colSpan={{ base: 2, md: 1 }}>
-                                                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> LinkedIn Profile  </Text>
                                                         <a target='_blank' href={data?.contact?.linkedInProfile}>
                                                             <IconButton colorScheme="brand" aria-label="Call Fred" borderRadius="10px" size="md" icon={<BiLogoLinkedin />} />
                                                         </a>
+                                                        <Text fontSize="sm" mt={2} fontWeight="bold" color={'blackAlpha.900'}> LinkedIn Profile  </Text>
                                                     </GridItem>}
                                                     {data?.contact?.facebookProfile && <GridItem textAlign={'center'} colSpan={{ base: 2, md: 1 }}>
-                                                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Facebook Profile  </Text>
                                                         <a target='_blank' href={`https://www.facebook.com/${data?.contact?.facebookProfile}`}>
                                                             <IconButton colorScheme="brand" aria-label="Call Fred" borderRadius="10px" size="md" icon={<FaFacebook />} />
                                                         </a>
+                                                        <Text fontSize="sm" mt={2} fontWeight="bold" color={'blackAlpha.900'}> Facebook Profile  </Text>
                                                     </GridItem>}
                                                     {data?.contact?.linkedInProfile && <GridItem textAlign={'center'} colSpan={{ base: 2, md: 1 }}>
-                                                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Twitter Handle  </Text>
                                                         <a target='_blank' href={'https://twitter.com/' + data?.contact?.twitterHandle}>
                                                             <IconButton colorScheme="brand" aria-label="Call Fred" borderRadius="10px" size="md" icon={<BsTwitter />} />
                                                         </a>
+                                                        <Text fontSize="sm" mt={2} fontWeight="bold" color={'blackAlpha.900'}> Twitter Handle  </Text>
                                                     </GridItem>}
                                                     {data?.contact?.linkedInProfile && <GridItem textAlign={'center'} colSpan={{ base: 2, md: 1 }}>
-                                                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Other Profiles  </Text>
                                                         <a target='_blank' href={data?.contact?.otherProfiles}>
                                                             <IconButton colorScheme="brand" aria-label="Call Fred" borderRadius="10px" size="md" icon={<BiLink />} />
                                                         </a>
+                                                        <Text fontSize="sm" mt={2} fontWeight="bold" color={'blackAlpha.900'}> Other Profiles  </Text>
                                                     </GridItem>}
                                                 </Grid>
                                                 :
