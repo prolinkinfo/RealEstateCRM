@@ -84,13 +84,13 @@ const EventView = (props) => {
                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task reminder </Text>
                                     <Text>{data?.reminder ? data?.reminder : ' - '}</Text>
                                 </GridItem>
-                                <GridItem colSpan={{ base: 12 }} >
+                                <GridItem colSpan={{ base: 12, md: 6 }} >
                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> assignment To  </Text>
                                     <Link to={data?.assignmentTo ? user?.role !== 'admin' ? `/contactView/${data?.assignmentTo}` : `/admin/contactView/${data?.assignmentTo}` : user?.role !== 'admin' ? `/leadView/${data?.assignmentToLead}` : `/admin/leadView/${data?.assignmentToLead}`}>
                                         <Text color='green.400' sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.assignmentToName ? data?.assignmentToName : ' - '}</Text>
                                     </Link>
                                 </GridItem>
-                                <GridItem colSpan={{ base: 12 }} >
+                                <GridItem colSpan={{ base: 12, md: 6 }} >
                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task createBy </Text>
                                     <Text>{data?.createByName ? data?.createByName : ' - '}</Text>
                                 </GridItem>

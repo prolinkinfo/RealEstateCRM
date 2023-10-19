@@ -9,7 +9,7 @@ option {
 }
 
 * {
-  letter-spacing: .3px;
+  letter-spacing: 0.3px;
   outline: none;
 }
 
@@ -63,7 +63,6 @@ option {
   background: #ffffff;
 }
 
-
 .table-fix-container {
   min-height: auto;
   max-height: 65vh;
@@ -75,4 +74,7 @@ option {
   top: 0;
   height: 25px;
   background: #ffffff;
+}
+.tableData {
+  padding: 10px !important;
 }
