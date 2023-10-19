@@ -104,7 +104,7 @@ const View = () => {
                         <TabPanels>
                             <TabPanel pt={4} p={0}>
                                 <Grid templateColumns="repeat(12, 1fr)" gap={3}>
-                                    <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
+                                    <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <Card >
                                             <Grid templateColumns="repeat(12, 1fr)" gap={4}>
                                                 <GridItem colSpan={12}>
@@ -156,7 +156,7 @@ const View = () => {
                                     </GridItem>
 
 
-                                    <GridItem colSpan={{ base: 12, md: 6 }}>
+                                    <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
                                         <Card >
                                             <Grid templateColumns="repeat(12, 1fr)" gap={4}>
                                                 <GridItem colSpan={12}>
@@ -228,33 +228,7 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
-                                    <GridItem colSpan={{ base: 12, md: 6 }}>
-                                        <Card >
-                                            <Grid templateColumns="repeat(12, 1fr)" gap={4}>
-                                                <GridItem colSpan={12}>
-                                                    <Box>
-                                                        <Heading size="md" mb={3}>
-                                                            Financial Information
-                                                        </Heading>
-                                                        <HSeparator />
-                                                    </Box>
-                                                </GridItem>
-                                                <GridItem colSpan={{ base: 12, md: 6 }} >
-                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Property Taxes </Text>
-                                                    <Text>{data?.propertyTaxes}</Text>
-                                                </GridItem>
-                                                <GridItem colSpan={{ base: 12, md: 6 }} >
-                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Homeowners Association </Text>
-                                                    <Text>{data?.homeownersAssociation}</Text>
-                                                </GridItem>
-                                                <GridItem colSpan={{ base: 12 }} >
-                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Mortgage Information </Text>
-                                                    <Text>{data?.mortgageInformation}</Text>
-                                                </GridItem>
-                                            </Grid>
-                                        </Card>
-                                    </GridItem>
-                                    <GridItem colSpan={{ base: 12, md: 6 }}>
+                                    <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
                                         <Card >
                                             <Grid templateColumns="repeat(12, 1fr)" gap={4}>
                                                 <GridItem colSpan={12}>
@@ -288,7 +262,34 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
-                                    <GridItem colSpan={{ base: 12 }}>
+                                    <GridItem colSpan={{ base: 12, md: 6 }}>
+                                        <Card >
+                                            <Grid templateColumns="repeat(12, 1fr)" gap={4}>
+                                                <GridItem colSpan={12}>
+                                                    <Box>
+                                                        <Heading size="md" mb={3}>
+                                                            Financial Information
+                                                        </Heading>
+                                                        <HSeparator />
+                                                    </Box>
+                                                </GridItem>
+                                                <GridItem colSpan={{ base: 12, md: 6 }} >
+                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Property Taxes </Text>
+                                                    <Text>{data?.propertyTaxes}</Text>
+                                                </GridItem>
+                                                <GridItem colSpan={{ base: 12, md: 6 }} >
+                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Homeowners Association </Text>
+                                                    <Text>{data?.homeownersAssociation}</Text>
+                                                </GridItem>
+                                                <GridItem colSpan={{ base: 12 }} >
+                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Mortgage Information </Text>
+                                                    <Text>{data?.mortgageInformation}</Text>
+                                                </GridItem>
+                                            </Grid>
+                                        </Card>
+                                    </GridItem>
+
+                                    <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <Card >
                                             <Grid templateColumns="repeat(12, 1fr)" gap={4}>
                                                 <GridItem colSpan={12}>
@@ -306,6 +307,7 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
+
                                     {filteredContacts?.length > 0 &&
                                         <GridItem colSpan={{ base: 12 }}>
                                             <Card >

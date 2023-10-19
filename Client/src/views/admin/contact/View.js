@@ -205,7 +205,7 @@ const View = () => {
                                                         </Text>
                                                         <Text>{data?.contact?.mobileNumber ? data?.contact?.mobileNumber : 'N/A'}</Text>
                                                     </GridItem>
-                                                    <GridItem colSpan={{ base: 2, md: 1 }}>
+                                                    <GridItem colSpan={{ base: 2 }}>
                                                         <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
                                                             Email Address
                                                         </Text>
