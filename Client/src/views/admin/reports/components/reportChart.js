@@ -1,4 +1,4 @@
-import { Box, Radio, RadioGroup, Select, Stack } from '@chakra-ui/react';
+import { Box, Grid, Radio, RadioGroup, Select, Stack } from '@chakra-ui/react';
 import Card from "components/card/Card";
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -109,7 +109,6 @@ const ReportChart = (props) => {
                     </Box>
                 </Box>
             }
-
             <div id="chart">
                 <div id="chart-timeline">
                     {selectedSeries && (
@@ -124,6 +123,9 @@ const ReportChart = (props) => {
                     )}
                 </div>
             </div>
+
+
+
         </Card>
     )
 }

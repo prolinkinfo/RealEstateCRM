@@ -12,7 +12,7 @@ const Pagination = (props) => {
 
     return (
 
-        <Flex justifyContent="space-between" m={4} alignItems="center">
+        <Flex justifyContent="space-between" mt={2} alignItems="center">
             {pageOptions?.length !== 1 && <Flex>
                 <Tooltip label="First Page">
                     <IconButton

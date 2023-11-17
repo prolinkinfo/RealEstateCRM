@@ -29,7 +29,7 @@ import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { getApi } from "services/api";
 import Delete from "../Delete";
-
+// import '.\src\assets\css\App.css' 
 export default function CheckTable(props) {
   const { columnsData } = props;
   const textColor = useColorModeValue("secondaryGray.900", "white");
@@ -103,7 +103,7 @@ export default function CheckTable(props) {
       px="0px"
       overflowX={{ sm: "scroll", lg: "hidden" }}
     >
-      <Flex px="25px" justify="space-between" mb="20px" align="center">
+      <Flex px="25px" justify="space-between" mb="15px" align="center">
         <Text
           color={textColor}
           fontSize="22px"
@@ -151,7 +151,7 @@ export default function CheckTable(props) {
           <Tbody {...getTableBodyProps()}>
             {isLoding ?
               <Tr>
-                <Td colSpan={columns?.length}>
+                <Td colSpan={columns?.length} >
                   <Flex justifyContent={'center'} alignItems={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
                     <Spinner />
                   </Flex>
@@ -159,7 +159,7 @@ export default function CheckTable(props) {
               </Tr>
               : data?.length === 0 ? (
                 <Tr>
-                  <Td colSpan={columns.length}>
+                  <Td colSpan={columns.length} className="tableData">
                     <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
                       -- No Data Found --
                     </Text>
@@ -184,6 +184,7 @@ export default function CheckTable(props) {
                         data = (
                           <Link to={user?.role !== 'admin' ? `/propertyView/${cell?.row?.values._id}` : `/admin/propertyView/${cell?.row?.values._id}`}>
                             <Text
+                              className="tableData"
                               me="10px"
                               sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
                               color='green.400'
@@ -197,6 +198,7 @@ export default function CheckTable(props) {
                       } else if (cell?.column.Header === "property Address") {
                         data = (
                           <Text
+                            className="tableData"
                             me="10px"
                             color={textColor}
                             fontSize="sm"
@@ -208,6 +210,7 @@ export default function CheckTable(props) {
                       } else if (cell?.column.Header === "listing Price") {
                         data = (
                           <Text
+                            className="tableData"
                             me="10px"
                             color={textColor}
                             fontSize="sm"
@@ -218,31 +221,32 @@ export default function CheckTable(props) {
                         );
                       } else if (cell?.column.Header === "square Footage") {
                         data = (
-                          <Text color={textColor} fontSize="sm" fontWeight="700">
+                          <Text color={textColor} fontSize="sm" fontWeight="700" className="tableData">
                             {cell?.value}
                           </Text>
                         );
                       } else if (cell?.column.Header === "year Built") {
                         data = (
-                          <Text color={textColor} fontSize="sm" fontWeight="700">
+                          <Text color={textColor} fontSize="sm" fontWeight="700" className="tableData">
                             {cell?.value}
                           </Text>
                         );
                       } else if (cell?.column.Header === "number of Bedrooms") {
                         data = (
-                          <Text color={textColor} fontSize="sm" fontWeight="700">
+                          <Text color={textColor} fontSize="sm" fontWeight="700" className="tableData">
                             {cell?.value}
                           </Text>
                         );
                       } else if (cell?.column.Header === "number of Bathrooms") {
                         data = (
-                          <Text color={textColor} fontSize="sm" fontWeight="700">
+                          <Text color={textColor} fontSize="sm" fontWeight="700" className="tableData">
                             {cell?.value}
                           </Text>
                         );
                       }
                       return (
                         <Td
+                          className="tableData"
                           {...cell?.getCellProps()}
                           key={index}
                           fontSize={{ sm: "14px" }}
