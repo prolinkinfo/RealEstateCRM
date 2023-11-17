@@ -269,7 +269,7 @@ const data = async (req, res) => {
         ]);
 
         if (EmailDetails.length <= 0 && outboundcall.length <= 0 && TextSent.length <= 0) {
-            res.status(400).json({ totalEmails: 0, totalCall: 0, totalTextSent: 0 });
+            res.status(200).json({ totalEmails: 0, totalCall: 0, totalTextSent: 0 });
         } else {
             res.status(200).json({ EmailDetails, outboundcall });
             // res.status(200).json({ EmailDetails, outboundcall, TextSent });
