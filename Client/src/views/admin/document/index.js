@@ -51,9 +51,9 @@ const Index = () => {
             let result = await getApi(`api/document/download/`, data)
             if (result && result.status === 200) {
                 window.open(`${constant.baseUrl}api/document/download/${data}`)
-                toast.success('file Download successful')
+                toast.success('File Download successful')
             } else if (result && result.response.status === 404) {
-                toast.error('file Not Found')
+                toast.error('File Not Found')
             }
         }
     }
