@@ -110,11 +110,11 @@ export default function HeaderLinks(props) {
 			borderRadius="30px"
 			boxShadow={shadow}
 		>
-			<SearchBar
+			{/* <SearchBar
 				mb={secondary ? { base: "10px", md: "unset" } : "unset"}
 				me="10px"
 				borderRadius="30px"
-			/>
+			/> */}
 
 			<Flex
 				bg={ethBg}
