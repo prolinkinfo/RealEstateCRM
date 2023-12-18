@@ -99,7 +99,7 @@ export default function AdminNavbar(props) {
 
 						{under?.under && <BreadcrumbItem color={secondaryText} fontSize='sm' mb='5px'>
 							<BreadcrumbLink as={rrd.Link} to={`${under.both === true ? '' : under.layout + '/'}${under.under}`} color={secondaryText}>
-								{under.under}
+								{under.parentName}
 							</BreadcrumbLink>
 						</BreadcrumbItem>}
 
