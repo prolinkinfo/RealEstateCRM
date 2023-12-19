@@ -90,6 +90,7 @@ export default function AdminNavbar(props) {
 				alignItems={{ xl: 'center' }}
 				mb={gap}>
 				<Box mb={{ sm: '8px', md: '0px' }}>
+					{/*
 					<Breadcrumb>
 						<BreadcrumbItem color={secondaryText} fontSize='sm' mb='5px'>
 							<BreadcrumbLink as={rrd.Link} to='/admin/default' color={secondaryText}>
@@ -111,7 +112,7 @@ export default function AdminNavbar(props) {
 						</BreadcrumbItem>
 
 					</Breadcrumb>
-
+					*/}
 					<Link
 						color={mainText}
 						href='#'
