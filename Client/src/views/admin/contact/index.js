@@ -24,9 +24,7 @@ const Index = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const size = "lg";
     const [data, setData] = useState([])
-    const [searchData, setSearchData] = useState([])
     const [isLoding, setIsLoding] = useState(false)
-    const [te, setTe] = useState()
 
     const user = JSON.parse(localStorage.getItem("user"))
 
