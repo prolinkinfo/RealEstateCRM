@@ -184,7 +184,7 @@ export default function CheckTable(props) {
                             <Text
                               me="10px"
                               sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                              color='green.400'
+                              color='brand.600'
                               fontSize="sm"
                               fontWeight="700"
                             >
@@ -198,7 +198,7 @@ export default function CheckTable(props) {
                             me="10px"
                             fontSize="sm"
                             fontWeight="700"
-                            color='green.400'
+                            color='brand.600'
                             sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline', cursor: 'pointer' } }}
                             onClick={() => {
                               setAddEmailHistory(true)
@@ -216,7 +216,7 @@ export default function CheckTable(props) {
                             me="10px"
                             fontSize="sm"
                             fontWeight="700"
-                            color='green.400'
+                            color='brand.600'
                             sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline', cursor: 'pointer' } }}
                             onClick={() => {
                               setAddPhoneCall(true)
@@ -235,7 +235,7 @@ export default function CheckTable(props) {
                         );
                       } else if (cell?.column.Header === "Lead Status") {
                         data = (
-                          <Text color={textColor} fontSize="sm" fontWeight="700">
+                          <Text color={textColor} bgColor={cell?.value === "active" ? "green.500" : cell?.value === "sold" ? "red.300" : cell?.value === "pending" ? "yellow.400" : "#000"} p={1} borderRadius={"20px"} textAlign={"center"} fontSize="sm" fontWeight="700">
                             {cell?.value}
                           </Text>
                         );
@@ -247,7 +247,13 @@ export default function CheckTable(props) {
                         );
                       } else if (cell?.column.Header === "Lead Score") {
                         data = (
-                          <Text color={textColor} fontSize="sm" fontWeight="700">
+                          <Text color={
+                            cell?.value < 40
+                              ? 'red.600'
+                              : cell?.value < 80
+                                ? 'yellow.400'
+                                : 'green.600'
+                          } fontSize="md" fontWeight="900" textAlign={"center"} >
                             {cell?.value}
                           </Text>
                         );
