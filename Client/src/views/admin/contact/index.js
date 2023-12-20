@@ -212,8 +212,8 @@ const Index = () => {
                 </GridItem>
             </Grid>
             {/* Add Form */}
-            < Add isOpen={isOpen} size={size} onClose={onClose} />
-        </div >
+            <Add isOpen={isOpen} size={size} onClose={onClose} />
+        </div>
     )
 }
 
