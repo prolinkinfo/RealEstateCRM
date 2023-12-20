@@ -89,11 +89,11 @@ const Index = () => {
 
     return (
         <div>
-            <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={2}>
+            <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={4}>
                 <GridItem colStart={6} textAlign={"right"}>
                     <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>
                 </GridItem>
-                <GridItem colSpan={6} m={4}>
+                <GridItem colSpan={6} >
                     <Card>
                         <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={2}>
                             <GridItem colSpan={4}>
@@ -203,8 +203,6 @@ const Index = () => {
                     <CheckTable isLoding={isLoding} columnsData={columns} isOpen={isOpen} tableData={searchedData?.length > 0 ? searchedData : data} fetchData={fetchData} />
                 </GridItem>
             </Grid>
-            {/* <CommonCheckTable columnData={columns} title="Leads" data={data} /> */}
-            {/* <CheckTable columnsData={columns} isOpen={isOpen} /> */}
             {/* Add Form */}
             <Add isOpen={isOpen} size={size} onClose={onClose} />
         </div>
