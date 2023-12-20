@@ -33,7 +33,7 @@ import AddEmailHistory from "views/admin/emailHistory/components/AddEmail";
 import AddPhoneCall from "views/admin/phoneCall/components/AddPhoneCall";
 
 export default function CheckTable(props) {
-  const { columnsData } = props;
+  const { columnsData, tableData, fetchData, isLoding } = props;
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   const columns = useMemo(() => columnsData, [columnsData]);
@@ -45,17 +45,8 @@ export default function CheckTable(props) {
   const [selectedId, setSelectedId] = useState();
   const [callSelectedId, setCallSelectedId] = useState();
 
-  // const data = useMemo(() => tableData, [tableData]);
-  const [data, setData] = useState([])
+  const data = useMemo(() => tableData, [tableData]);
   const user = JSON.parse(localStorage.getItem("user"))
-  const [isLoding, setIsLoding] = useState(false)
-
-  const fetchData = async () => {
-    setIsLoding(true)
-    let result = await getApi(user.role === 'admin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
-    setData(result.data);
-    setIsLoding(false)
-  }
 
   const tableInstance = useTable(
     {
@@ -100,7 +91,7 @@ export default function CheckTable(props) {
   };
 
   useEffect(() => {
-    fetchData()
+    if (fetchData) fetchData()
   }, [deleteModel, props.isOpen])
 
   return (
