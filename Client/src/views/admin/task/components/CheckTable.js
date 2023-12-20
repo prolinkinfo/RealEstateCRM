@@ -91,7 +91,7 @@ export default function CheckTable(props) {
           fontWeight="700"
           lineHeight="100%"
         >
-          Tasks (<CountUpComponent targetNumber={data?.length} />)
+          Tasks (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
         </Text>
         {setTaskModel && <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>}
       </Flex>

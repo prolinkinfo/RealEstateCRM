@@ -98,7 +98,7 @@ export default function CheckTable(props) {
           fontWeight="700"
           lineHeight="100%"
         >
-          Calls (<CountUpComponent targetNumber={data?.length} />)
+          Calls (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
         </Text>
       </Flex>
 
