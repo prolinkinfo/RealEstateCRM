@@ -117,7 +117,7 @@ export default function CheckTable(props) {
       <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/lead/deleteMany' data={selectedValues} method='many' />
       <Box overflowY={"auto"} className="table-fix-container">
         <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
-          <Thead>
+          <Thead >
             {headerGroups?.map((headerGroup, index) => (
               <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
                 {headerGroup.headers?.map((column, index) => (
@@ -128,6 +128,7 @@ export default function CheckTable(props) {
                     borderColor={borderColor}
                   >
                     <Flex
+                      style={{ textTransform: "capitalize !important" }}
                       justify="space-between"
                       align="center"
                       fontSize={{ sm: "10px", lg: "12px" }}
