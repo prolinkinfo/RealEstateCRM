@@ -3,6 +3,8 @@ import { Button, Grid, GridItem, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import Add from "./Add";
 import CheckTable from './components/CheckTable';
+import CommonCheckTable from "components/checkTable/checktable";
+import { getApi } from "services/api";
 
 
 const Index = () => {
@@ -18,8 +20,23 @@ const Index = () => {
         { Header: "Lead Owner", accessor: "leadOwner", },
         { Header: "Lead Score", accessor: "leadScore", },
     ];
+
     const { isOpen, onOpen, onClose } = useDisclosure()
     const size = "lg";
+    const [data, setData] = useState([])
+    const user = JSON.parse(localStorage.getItem("user"))
+    const [isLoding, setIsLoding] = useState(false)
+
+    const fetchData = async () => {
+        setIsLoding(true)
+        let result = await getApi(user.role === 'admin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
+        setData(result.data);
+        setIsLoding(false)
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [isOpen])
 
     useEffect(() => {
         setColumns(tableColumns)
@@ -37,6 +54,7 @@ const Index = () => {
                     <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>
                 </GridItem>
             </Grid>
+            {/* <CommonCheckTable columnData={columns} title="Leads" data={data} /> */}
             <CheckTable columnsData={columns} isOpen={isOpen} />
             {/* Add Form */}
             <Add isOpen={isOpen} size={size} onClose={onClose} />
