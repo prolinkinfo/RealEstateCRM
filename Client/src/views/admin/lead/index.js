@@ -1,18 +1,19 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Button, Grid, GridItem, useDisclosure, Input, FormLabel, Select } from '@chakra-ui/react';
+import { Button, FormLabel, Grid, GridItem, Input, Select, useDisclosure } from '@chakra-ui/react';
+import Card from "components/card/Card";
+import { useFormik } from "formik";
 import { useEffect, useState } from 'react';
+import { FaSearch } from "react-icons/fa";
+import { FaAnglesDown, FaAnglesUp } from "react-icons/fa6";
+import { getApi } from "services/api";
 import Add from "./Add";
 import CheckTable from './components/CheckTable';
-import Card from "components/card/Card";
-import { getApi } from "services/api";
-import { useFormik } from "formik";
-import CommonCheckTable from "components/checkTable/checktable";
-
 
 const Index = () => {
     const [columns, setColumns] = useState([]);
     const [isLoding, setIsLoding] = useState(false);
     const [data, setData] = useState([]);
+    const [searchOpen, setSearchOpen] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"));
 
@@ -94,10 +95,10 @@ const Index = () => {
                     <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>
                 </GridItem>
                 <GridItem colSpan={6} >
-                    <Card>
+                    <Card >
                         <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={2}>
-                            <GridItem colSpan={4}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' >
+                            <GridItem colSpan={{ base: 12, md: 6, lg: 4 }}>
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
                                     Lead Name
                                 </FormLabel>
                                 <Input
@@ -109,8 +110,8 @@ const Index = () => {
                                     fontWeight='500'
                                 />
                             </GridItem>
-                            <GridItem colSpan={4}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500'>
+                            <GridItem colSpan={{ base: 12, md: 6, lg: 4 }}>
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
                                     Lead Status
                                 </FormLabel>
                                 <Select
@@ -125,77 +126,85 @@ const Index = () => {
                                     <option value='sold'>sold</option>
                                 </Select>
                             </GridItem>
-                            <GridItem colSpan={4}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' >
-                                    Lead Email
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadEmail}
-                                    name="leadEmail"
-                                    placeholder='Enter Lead Email'
-                                    fontWeight='500'
-                                />
+                            <GridItem colSpan={{ base: 12, md: 12, lg: 4 }} display={"flex"} flexWrap={"wrap"} justifyContent={"space-between"} alignItems={"center"} pt={5}>
+                                {searchOpen === true ?
+                                    <Button onClick={() => setSearchOpen(!searchOpen)} colorScheme="gray" variant="outline"><FaAnglesUp /></Button> :
+                                    <Button onClick={() => setSearchOpen(!searchOpen)} colorScheme="gray" variant="outline"> <FaAnglesDown /> </Button>
+                                }
+                                <span>
+
+                                    <Button onClick={() => handleSubmit()} colorScheme="brand" leftIcon={<FaSearch />} variant="outline" margin={"0 10px 0 0"}>Search</Button>
+                                    <Button onClick={() => handleClear()} colorScheme="brand" variant="outline">Clear</Button>
+                                </span>
                             </GridItem>
-                            <GridItem colSpan={4}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' >
-                                    Lead PhoneNumber
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadPhoneNumber}
-                                    name="leadPhoneNumber"
-                                    placeholder='Enter Lead PhoneNumber'
-                                    fontWeight='500'
-                                />
-                            </GridItem>
-                            <GridItem colSpan={4}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' >
-                                    Lead Address
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadAddress}
-                                    name="leadAddress"
-                                    placeholder='Enter Lead Address'
-                                    fontWeight='500'
-                                />
-                            </GridItem>
-                            <GridItem colSpan={4}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' >
-                                    Lead Owner
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadOwner}
-                                    name="leadOwner"
-                                    placeholder='Enter Lead Owner'
-                                    fontWeight='500'
-                                />
-                            </GridItem>
-                            <GridItem colSpan={4}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' >
-                                    Lead Score
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadScore}
-                                    name="leadScore"
-                                    placeholder='Enter Lead Score'
-                                    fontWeight='500'
-                                />
-                            </GridItem>
-                            <GridItem colSpan={2} textAlign={"center"}>
-                                <Button onClick={() => handleSubmit()} variant="brand">Search</Button>
-                            </GridItem>
-                            <GridItem colSpan={2} textAlign={"center"}>
-                                <Button onClick={() => handleClear()} variant="brand">Clear</Button>
-                            </GridItem>
+                            {searchOpen &&
+                                <>
+                                    <GridItem colSpan={{ base: 12, md: 6, lg: 4 }}>
+                                        <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2} >
+                                            Lead Email
+                                        </FormLabel>
+                                        <Input
+                                            fontSize='sm'
+                                            onChange={handleChange} onBlur={handleBlur}
+                                            value={values.leadEmail}
+                                            name="leadEmail"
+                                            placeholder='Enter Lead Email'
+                                            fontWeight='500'
+                                        />
+                                    </GridItem>
+                                    <GridItem colSpan={{ base: 12, md: 6, lg: 4 }}>
+                                        <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
+                                            Lead PhoneNumber
+                                        </FormLabel>
+                                        <Input
+                                            fontSize='sm'
+                                            onChange={handleChange} onBlur={handleBlur}
+                                            value={values.leadPhoneNumber}
+                                            name="leadPhoneNumber"
+                                            placeholder='Enter Lead PhoneNumber'
+                                            fontWeight='500'
+                                        />
+                                    </GridItem>
+                                    <GridItem colSpan={{ base: 12, md: 6, lg: 4 }}>
+                                        <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
+                                            Lead Address
+                                        </FormLabel>
+                                        <Input
+                                            fontSize='sm'
+                                            onChange={handleChange} onBlur={handleBlur}
+                                            value={values.leadAddress}
+                                            name="leadAddress"
+                                            placeholder='Enter Lead Address'
+                                            fontWeight='500'
+                                        />
+                                    </GridItem>
+                                    <GridItem colSpan={{ base: 12, md: 6, lg: 4 }}>
+                                        <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
+                                            Lead Owner
+                                        </FormLabel>
+                                        <Input
+                                            fontSize='sm'
+                                            onChange={handleChange} onBlur={handleBlur}
+                                            value={values.leadOwner}
+                                            name="leadOwner"
+                                            placeholder='Enter Lead Owner'
+                                            fontWeight='500'
+                                        />
+                                    </GridItem>
+                                    <GridItem colSpan={{ base: 12, md: 6, lg: 4 }}>
+                                        <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
+                                            Lead Score
+                                        </FormLabel>
+                                        <Input
+                                            fontSize='sm'
+                                            onChange={handleChange} onBlur={handleBlur}
+                                            value={values.leadScore}
+                                            name="leadScore"
+                                            placeholder='Enter Lead Score'
+                                            fontWeight='500'
+                                        />
+                                    </GridItem>
+                                </>}
                         </Grid>
                     </Card>
                 </GridItem>

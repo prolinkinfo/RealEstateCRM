@@ -34,7 +34,8 @@ import AddPhoneCall from "views/admin/phoneCall/components/AddPhoneCall";
 
 export default function CheckTable(props) {
   const { columnsData, tableData, fetchData, isLoding } = props;
-  const textColor = useColorModeValue("secondaryGray.900", "white");
+  const textColor = useColorModeValue("gray.500", "white");
+  // const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   const columns = useMemo(() => columnsData, [columnsData]);
   const [selectedValues, setSelectedValues] = useState([]);
@@ -98,12 +99,11 @@ export default function CheckTable(props) {
     <Card
       direction="column"
       w="100%"
-      px="0px"
       overflowX={{ sm: "scroll", lg: "hidden" }}
     >
       <Flex px="25px" justify="space-between" mb="20px" align="center">
         <Text
-          color={textColor}
+          color={"secondaryGray.900"}
           fontSize="22px"
           fontWeight="700"
           lineHeight="100%"
@@ -128,13 +128,14 @@ export default function CheckTable(props) {
                     borderColor={borderColor}
                   >
                     <Flex
-                      style={{ textTransform: "capitalize !important" }}
                       justify="space-between"
                       align="center"
-                      fontSize={{ sm: "10px", lg: "12px" }}
-                      color="gray.400"
+                      fontSize={{ sm: "14px", lg: "16px" }}
+                      color=" secondaryGray.900"
                     >
-                      {column.render("Header")}
+                      <span style={{ textTransform: "capitalize" }}>
+                        {column.render("Header")}
+                      </span>
                       {column.isSortable !== false && (
                         <span>
                           {column.isSorted ? (column.isSortedDesc ? <FaSortDown /> : <FaSortUp />) : <FaSort />}
@@ -236,7 +237,8 @@ export default function CheckTable(props) {
                         );
                       } else if (cell?.column.Header === "Lead Status") {
                         data = (
-                          <Text color={textColor} bgColor={cell?.value === "active" ? "green.500" : cell?.value === "sold" ? "red.300" : cell?.value === "pending" ? "yellow.400" : "#000"} p={1} borderRadius={"20px"} textAlign={"center"} fontSize="sm" fontWeight="700">
+                          <Text color={"secondaryGray.900"} bgColor={cell?.value === "active" ? "green.500" : cell?.value === "sold" ? "red.300" : cell?.value === "pending" ? "yellow.400" : "#000"
+                          } p={1} borderRadius={"20px"} textAlign={"center"} fontSize="sm" fontWeight="700" >
                             {cell?.value}
                           </Text>
                         );
@@ -281,6 +283,6 @@ export default function CheckTable(props) {
 
       <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} lead='true' id={selectedId} />
       <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={callSelectedId} lead='true' />
-    </Card>
+    </Card >
   );
 }
