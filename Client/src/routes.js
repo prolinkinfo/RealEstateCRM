@@ -279,7 +279,7 @@ const routes = [
     both: true,
     layout: "/admin",
     parentName: "Email",
-    under: "Users",
+    under: "user",
     path: "/userView/:id",
     component: UserView,
   },
