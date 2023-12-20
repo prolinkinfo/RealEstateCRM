@@ -6,6 +6,7 @@ import CheckTable from './components/CheckTable';
 import Card from "components/card/Card";
 import { getApi } from "services/api";
 import { useFormik } from "formik";
+import CommonCheckTable from "components/checkTable/checktable";
 
 
 const Index = () => {
@@ -25,6 +26,7 @@ const Index = () => {
         { Header: "Lead Owner", accessor: "leadOwner", },
         { Header: "Lead Score", accessor: "leadScore", },
     ];
+
     const { isOpen, onOpen, onClose } = useDisclosure()
     const size = "lg";
 
@@ -201,6 +203,8 @@ const Index = () => {
                     <CheckTable isLoding={isLoding} columnsData={columns} isOpen={isOpen} tableData={searchedData?.length > 0 ? searchedData : data} fetchData={fetchData} />
                 </GridItem>
             </Grid>
+            {/* <CommonCheckTable columnData={columns} title="Leads" data={data} /> */}
+            {/* <CheckTable columnsData={columns} isOpen={isOpen} /> */}
             {/* Add Form */}
             <Add isOpen={isOpen} size={size} onClose={onClose} />
         </div>

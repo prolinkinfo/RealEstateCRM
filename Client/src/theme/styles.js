@@ -47,6 +47,7 @@ export const globalStyles = {
     },
     red: {
       100: "#FEEFEE",
+      300: "#eb7b74",
       500: "#EE5D50",
       600: "#E31A1A",
     },
@@ -56,6 +57,7 @@ export const globalStyles = {
     },
     orange: {
       100: "#FFF6DA",
+      400: "#fde04ce8",
       500: "#FFB547",
     },
     green: {

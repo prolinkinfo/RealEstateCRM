@@ -121,7 +121,7 @@ const View = () => {
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                     <Spinner />
                 </Flex> : <>
-                    <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
+                    {/* <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
                         <GridItem colStart={6} >
                             <Flex justifyContent={"right"}>
                                 <Menu>
@@ -143,16 +143,49 @@ const View = () => {
                                 </Link>
                             </Flex>
                         </GridItem>
-                    </Grid>
+                    </Grid> */}
 
                     <Tabs >
-                        <TabList
-                            sx={{ '& button:focus': { boxShadow: 'none', }, }}
-                        >
-                            <Tab>Information</Tab>
-                            <Tab>Activity</Tab>
-                            <Tab>Document</Tab>
-                        </TabList>
+                        <Grid templateColumns="repeat(3, 1fr)" mb={3} gap={1}>
+                            <GridItem colSpan={2}>
+                                <TabList sx={{
+                                    border: "none",
+                                    '& button:focus': { boxShadow: 'none', },
+                                    '& button': {
+                                        margin: "0 5px", border: '2px solid #8080803d', borderTopLeftRadius: "10px", borderTopRightRadius: "10px", borderBottom: 0
+                                    },
+                                    '& button[aria-selected="true"]': {
+                                        border: "2px solid brand.200", borderBottom: 0
+                                    },
+                                }} >
+                                    <Tab >Information</Tab>
+                                    <Tab>Activity</Tab>
+                                    <Tab>Document</Tab>
+                                </TabList>
+
+                            </GridItem>
+                            <GridItem  >
+                                <Flex justifyContent={"right"}>
+                                    <Menu>
+                                        <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
+                                            Actions
+                                        </MenuButton>
+                                        <MenuDivider />
+                                        <MenuList>
+                                            <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>
+                                            <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>
+                                            <MenuDivider />
+                                            <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
+                                        </MenuList>
+                                    </Menu>
+                                    <Link to="/lead">
+                                        <Button leftIcon={<IoIosArrowBack />} variant="brand">
+                                            Back
+                                        </Button>
+                                    </Link>
+                                </Flex>
+                            </GridItem>
+                        </Grid>
 
                         <TabPanels>
                             <TabPanel pt={4} p={0}>
@@ -194,26 +227,31 @@ const View = () => {
                                                 <GridItem colSpan={12}>
                                                     <Box>
                                                         <Heading size="md" mb={3}>
-                                                            Lead Assignment and Ownership
+                                                            Lead Dates and Follow-up
                                                         </Heading>
                                                         <HSeparator />
                                                     </Box>
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12, md: 6 }} >
-                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Assigned Agent</Text>
-                                                    <Text>{data?.leadAssignedAgent ? data?.leadAssignedAgent : 'N/A'}</Text>
+                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead FollowUp Status </Text>
+                                                    <Text>{data?.leadFollowUpStatus ? data?.leadFollowUpStatus : 'N/A'}</Text>
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12, md: 6 }} >
-                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Assigned Agent</Text>
-                                                    <Text>{data?.leadAssignedAgent ? data?.leadAssignedAgent : 'N/A'}</Text>
+                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Creation Date </Text>
+                                                    <Text>{moment(data?.leadCreationDate).format('L')}</Text>
                                                 </GridItem>
-                                                <GridItem colSpan={{ base: 12 }} >
-                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Communication Preferences</Text>
-                                                    <Text>{data?.leadCommunicationPreferences ? data?.leadCommunicationPreferences : 'N/A'}</Text>
+                                                <GridItem colSpan={{ base: 12, md: 6 }} >
+                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Conversion Date </Text>
+                                                    <Text>{moment(data?.leadConversionDate).format('L')}</Text>
+                                                </GridItem>
+                                                <GridItem colSpan={{ base: 12, md: 6 }} >
+                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">  Lead FollowUp Date </Text>
+                                                    <Text>{moment(data?.leadFollowUpDate).format('L')}</Text>
                                                 </GridItem>
                                             </Grid>
                                         </Card>
                                     </GridItem>
+
                                     <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <Card >
                                             <Grid templateColumns="repeat(12, 1fr)" gap={4}>
@@ -260,37 +298,33 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
+
                                     <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <Card >
                                             <Grid templateColumns="repeat(12, 1fr)" gap={4}>
                                                 <GridItem colSpan={12}>
                                                     <Box>
                                                         <Heading size="md" mb={3}>
-                                                            Lead Dates and Follow-up
+                                                            Lead Assignment and Ownership
                                                         </Heading>
                                                         <HSeparator />
                                                     </Box>
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12, md: 6 }} >
-                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead FollowUp Status </Text>
-                                                    <Text>{data?.leadFollowUpStatus ? data?.leadFollowUpStatus : 'N/A'}</Text>
+                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Assigned Agent</Text>
+                                                    <Text>{data?.leadAssignedAgent ? data?.leadAssignedAgent : 'N/A'}</Text>
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12, md: 6 }} >
-                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Creation Date </Text>
-                                                    <Text>{moment(data?.leadCreationDate).format('L')}</Text>
+                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Assigned Agent</Text>
+                                                    <Text>{data?.leadAssignedAgent ? data?.leadAssignedAgent : 'N/A'}</Text>
                                                 </GridItem>
-                                                <GridItem colSpan={{ base: 12, md: 6 }} >
-                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Conversion Date </Text>
-                                                    <Text>{moment(data?.leadConversionDate).format('L')}</Text>
-                                                </GridItem>
-                                                <GridItem colSpan={{ base: 12, md: 6 }} >
-                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">  Lead FollowUp Date </Text>
-                                                    <Text>{moment(data?.leadFollowUpDate).format('L')}</Text>
+                                                <GridItem colSpan={{ base: 12 }} >
+                                                    <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Lead Communication Preferences</Text>
+                                                    <Text>{data?.leadCommunicationPreferences ? data?.leadCommunicationPreferences : 'N/A'}</Text>
                                                 </GridItem>
                                             </Grid>
                                         </Card>
                                     </GridItem>
-
                                     <GridItem colSpan={{ base: 12 }}>
                                         <Card >
                                             <Grid templateColumns="repeat(12, 1fr)" gap={4}>
