@@ -127,7 +127,7 @@ const Index = () => {
                                     <option value='sold'>sold</option>
                                 </Select>
                             </GridItem>
-                            <GridItem colSpan={{ base: 12, md: 12, lg: 4 }} display={"flex"} flexWrap={"wrap"} justifyContent={"space-between"} alignItems={"center"} pt={5}>
+                            <GridItem colSpan={{ base: 12, md: 12, lg: 4 }} display={"flex"} flexWrap={"wrap"} justifyContent={"space-between"} alignItems={"center"} pt={7}>
                                 {searchOpen === true ?
                                     <Button onClick={() => setSearchOpen(!searchOpen)} colorScheme="gray" variant="outline"><FaAnglesUp /></Button> :
                                     <Button onClick={() => setSearchOpen(!searchOpen)} colorScheme="gray" variant="outline"> <FaAnglesDown /> </Button>
