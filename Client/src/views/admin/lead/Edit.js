@@ -80,7 +80,6 @@ const Edit = (props) => {
     let response
     const fetchData = async () => {
         response = await getApi('api/lead/view/', param.id)
-        console.log("lead edit fetch response ", response?.data?.lead);
         // Lead Information`
         values.leadName = response?.data?.lead?.leadName;
         values.leadEmail = response?.data?.lead?.leadEmail;
