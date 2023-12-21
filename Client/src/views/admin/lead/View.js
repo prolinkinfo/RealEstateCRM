@@ -371,7 +371,6 @@ const View = () => {
                             </TabPanel>
                             <TabPanel pt={4} p={0}>
                                 <GridItem colSpan={{ base: 4 }} >
-
                                     <Grid overflow={'hidden'} templateColumns={{ base: "1fr" }} gap={4}>
                                         <GridItem colSpan={2}>
                                             <Box>
