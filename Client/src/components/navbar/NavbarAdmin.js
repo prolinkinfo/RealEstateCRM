@@ -17,7 +17,7 @@ export default function AdminNavbar(props) {
 		};
 	});
 
-	const { secondary, message, brandText, under } = props;
+	const { secondary, message, brandText, under, setOpenSidebar, openSidebar } = props;
 
 	// Here are all the props that may change depending on navbar's type or state.(secondary, variant, scrolled)
 	let mainText = useColorModeValue('navy.700', 'white');
@@ -53,6 +53,7 @@ export default function AdminNavbar(props) {
 			borderRadius='16px'
 			borderWidth='1.5px'
 			borderStyle='solid'
+			zIindex='99999'
 			transitionDelay='0s, 0s, 0s, 0s'
 			transitionDuration=' 0.25s, 0.25s, 0.25s, 0s'
 			transition-property='box-shadow, background-color, filter, border'
@@ -79,9 +80,10 @@ export default function AdminNavbar(props) {
 				base: 'calc(100vw - 6%)',
 				md: 'calc(100vw - 8%)',
 				lg: 'calc(100vw - 6%)',
-				xl: 'calc(100vw - 350px)',
-				'2xl': 'calc(100vw - 365px)'
-			}}>
+				xl: openSidebar === true ? 'calc(100vw - 350px)' : 'calc(100vw - 142px)',
+				'2xl': openSidebar === true ? 'calc(100vw - 360px)' : 'calc(100vw - 145px)'
+			}}
+		>
 			<Flex
 				w='100%'
 				flexDirection={{

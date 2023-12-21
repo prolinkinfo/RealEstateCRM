@@ -119,7 +119,7 @@ const View = () => {
             <Add isOpen={isOpen} size={size} onClose={onClose} />
             <Edit isOpen={edit} size={size} onClose={setEdit} />
             <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/lead/delete/' id={param.id} />
-  
+
             {isLoding ?
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                     <Spinner />
@@ -255,7 +255,7 @@ const View = () => {
                                         </Card>
                                     </GridItem>
 
-                                    <GridItem colSpan={{ base: 12, md: 6 }}>
+                                    <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                         <Card >
                                             <Grid templateColumns="repeat(12, 1fr)" gap={4}>
                                                 <GridItem colSpan={12}>
@@ -302,7 +302,7 @@ const View = () => {
                                         </Card>
                                     </GridItem>
 
-                                    <GridItem colSpan={{ base: 12, md: 6 }}>
+                                    <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                         <Card >
                                             <Grid templateColumns="repeat(12, 1fr)" gap={4}>
                                                 <GridItem colSpan={12}>
@@ -328,7 +328,7 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
-                                    <GridItem colSpan={{ base: 12 }}>
+                                    <GridItem colSpan={{ base: 12, sm: 12, md: 4 }}>
                                         <Card >
                                             <Grid templateColumns="repeat(12, 1fr)" gap={4}>
                                                 <GridItem colSpan={12}>
@@ -371,48 +371,56 @@ const View = () => {
                             </TabPanel>
                             <TabPanel pt={4} p={0}>
                                 <GridItem colSpan={{ base: 4 }} >
-                                    <Card >
-                                        <Grid overflow={'hidden'} templateColumns={{ base: "1fr" }} gap={4}>
-                                            <GridItem colSpan={2}>
-                                                <Box>
-                                                    <Heading size="md" mb={3}>
-                                                        Communication
-                                                    </Heading>
-                                                    <HSeparator />
-                                                </Box>
-                                            </GridItem>
-                                            <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
-                                                <GridItem colSpan={{ base: 2 }}>
+
+                                    <Grid overflow={'hidden'} templateColumns={{ base: "1fr" }} gap={4}>
+                                        <GridItem colSpan={2}>
+                                            <Box>
+                                                <Heading size="md" mb={3}>
+                                                    Communication
+                                                </Heading>
+                                                <HSeparator />
+                                            </Box>
+                                        </GridItem>
+                                        <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
+                                            <GridItem colSpan={{ base: 6 }}>
+                                                <Card >
                                                     {allData?.Email && allData?.Email?.length ? <ColumnsTable fetchData={fetchData} columnsData={columnsDataColumns} lead='true' tableData={showEmail ? allData.Email : [allData.Email[0]]} title={'Email '} /> : <Button onClick={() => setAddEmailHistory(true)} leftIcon={<BsFillSendFill />} colorScheme="gray" >Send Email </Button>}
-                                                    <div style={{ display: "flex", justifyContent: "end" }}>
-                                                        <Button colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showEmail ? setShowEmail(false) : setShowEmail(true)}>{showEmail ? "Show less" : "Show more"}</Button>
-                                                    </div>
                                                     <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} lead='true' id={param.id} />
-                                                </GridItem>
-                                                <GridItem colSpan={{ base: 2 }}>
+                                                    {allData.Email?.length > 1 &&
+                                                        <div style={{ display: "flex", justifyContent: "end" }}>
+                                                            <Button colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showEmail ? setShowEmail(false) : setShowEmail(true)}>{showEmail ? "Show less" : "Show more"}</Button>
+                                                        </div>}
+                                                </Card>
+                                            </GridItem>
+                                            <GridItem colSpan={{ base: 6 }}>
+                                                <Card >
                                                     {allData?.phoneCall?.length > 0 ? <PhoneCall fetchData={fetchData} columnsData={columnsDataColumns} lead='true' tableData={showCall ? allData?.phoneCall : [allData?.phoneCall[0]]} title={'Call '} /> : <Button onClick={() => setAddPhoneCall(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" > Call </Button>}
-                                                    <div style={{ display: "flex", justifyContent: "end" }}>
+                                                    {allData?.phoneCall?.lenght > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                         <Button colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showCall ? setShowCall(false) : setShowCall(true)}>{showCall ? "Show less" : "Show more"}</Button>
-                                                    </div>
+                                                    </div>}
                                                     <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param.id} lead='true' />
-                                                </GridItem>
-                                                <GridItem colSpan={{ base: 2 }}>
+                                                </Card>
+                                            </GridItem>
+                                            <GridItem colSpan={{ base: 6 }}>
+                                                <Card >
                                                     {allData?.task?.length > 0 ? <TaskTable className='table-container' setTaskModel={setTaskModel} fetchData={fetchData} columnsData={taskColumns} data={showTasks ? allData?.task : [allData?.task[0]]} title={'Task '} /> : <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>}
-                                                    <div style={{ display: "flex", justifyContent: "end" }}>
+                                                    {allData?.task?.lenght > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                         <Button colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showTasks ? setShowTasks(false) : setShowTasks(true)}>{showTasks ? "Show less" : "Show more"}</Button>
-                                                    </div>
+                                                    </div>}
                                                     <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="lead" id={param.id} />
-                                                </GridItem>
-                                                <GridItem colSpan={{ base: 2 }}>
+                                                </Card>
+                                            </GridItem>
+                                            <GridItem colSpan={{ base: 6 }}>
+                                                <Card >
                                                     {allData?.meeting?.length > 0 ? <MeetingTable className='table-container' setMeeting={setMeeting} fetchData={fetchData} columnsData={MeetingColumns} data={showMeetings ? allData?.meeting : [allData?.meeting[0]]} title={'meeting '} /> : <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>}
-                                                    <div style={{ display: "flex", justifyContent: "end" }}>
+                                                    {allData?.meeting?.lenght > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                         <Button colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showMeetings ? setShowMeetings(false) : setShowMeetings(true)}>{showMeetings ? "Show less" : "Show more"}</Button>
-                                                    </div>
+                                                    </div>}
                                                     <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="lead" id={param.id} />
-                                                </GridItem>
-                                            </Grid>
+                                                </Card>
+                                            </GridItem>
                                         </Grid>
-                                    </Card>
+                                    </Grid>
                                 </GridItem>
                             </TabPanel>
                             <TabPanel pt={4} p={0}>
