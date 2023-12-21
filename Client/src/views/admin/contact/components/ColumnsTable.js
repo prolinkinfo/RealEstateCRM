@@ -29,13 +29,9 @@ import { Link, useParams } from "react-router-dom";
 import AddEmailHistory from "../../emailHistory/components/AddEmail";
 export default function ColumnsTable(props) {
   const { columnsData, tableData, title, fetchData } = props;
-  const [show, setShow] = useState(false);
-
   const columns = useMemo(() => columnsData, [columnsData]);
-  const displayRecords = show ? tableData : [tableData[0]]; // Display all records if showAll is true, else display only the first one
-  // const data = useMemo(() => displayRecords, [displayRecords]);
+  const data = useMemo(() => tableData, [tableData]);
 
-  const data = displayRecords;
   const [addEmailHistory, setAddEmailHistory] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"))
   const [gopageValue, setGopageValue] = useState()
@@ -74,13 +70,8 @@ export default function ColumnsTable(props) {
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   const param = useParams()
 
-  console.log("displayRecords ", displayRecords);
-  console.log(data, "data");
-
-
   useEffect(() => {
-    console.log("hi");
-    // Update gopageValue only after the initial render
+    // Update gopageValue only after the initial render 
     if (gopageValue === undefined && pageOptions.length < gopageValue) {
       setGopageValue(pageOptions.length);
     }
@@ -139,11 +130,9 @@ export default function ColumnsTable(props) {
                 </Td>
               </Tr>
             ) : page?.map((row, index) => {
-              console.log("page ", page)
               prepareRow(row);
               return (
                 <Tr {...row?.getRowProps()} key={index}>
-                  {console.log("row", row)}
                   {row?.cells?.map((cell, index) => {
                     let data = "";
                     if (cell?.column.Header === "sender") {
@@ -201,12 +190,6 @@ export default function ColumnsTable(props) {
 
         </Table>
       </Box>
-      <div style={{
-        display: "flex",
-        justifyContent: "end"
-      }}>
-        <Button colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => setShow(true)}>{show ? "Show less" : "Show more"}</Button>
-      </div>
 
       {data?.length > 5 && <Pagination gotoPage={gotoPage} gopageValue={gopageValue} setGopageValue={setGopageValue} pageCount={pageCount} canPreviousPage={canPreviousPage} previousPage={previousPage} canNextPage={canNextPage} pageOptions={pageOptions} setPageSize={setPageSize} nextPage={nextPage} pageSize={pageSize} pageIndex={pageIndex} />}
 
