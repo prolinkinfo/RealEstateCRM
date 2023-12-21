@@ -1,5 +1,5 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Button, FormLabel, Grid, GridItem, Input, Select, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Flex, FormLabel, Grid, GridItem, Input, Select, useDisclosure } from '@chakra-ui/react';
 import Card from "components/card/Card";
 import { useFormik } from "formik";
 import { useEffect, useState } from 'react';
@@ -43,7 +43,8 @@ const Index = () => {
         leadPhoneNumber: '',
         leadAddress: '',
         leadOwner: '',
-        leadScore: ''
+        fromLeadScore: '',
+        toLeadScore: ''
     }
 
     const formik = useFormik({
@@ -58,9 +59,11 @@ const Index = () => {
                     (!values?.leadPhoneNumber || (item?.leadPhoneNumber && item?.leadPhoneNumber.toString().includes(values?.leadPhoneNumber?.replace(/\D/g, '')))) &&
                     (!values?.leadAddress || (item?.leadAddress && item?.leadAddress.toLowerCase().includes(values?.leadAddress?.toLocaleLowerCase()))) &&
                     (!values?.leadOwner || (item?.leadOwner && item?.leadOwner.toLowerCase().includes(values?.leadOwner?.toLocaleLowerCase()))) &&
-                    (values?.leadScore === null || values?.leadScore === undefined ||   // if values.leadScore = 0 then also filter works
+                    (values?.fromLeadScore === null || values?.fromLeadScore === undefined || values?.toLeadScore === null || values?.toLeadScore === undefined ||
                         (item?.leadScore !== undefined &&
-                            item?.leadScore.toString().includes(values?.leadScore?.replace(/\D/g, ''))))
+                            (parseInt(item?.leadScore, 10) >= parseInt(values.fromLeadScore, 10) || 0) &&
+                            (parseInt(item?.leadScore, 10) <= parseInt(values.toLeadScore, 10) || 0)))
+
             )
 
             if (serachResult?.length > 0) {
@@ -135,7 +138,7 @@ const Index = () => {
                                 <span>
 
                                     <Button onClick={() => handleSubmit()} colorScheme="brand" leftIcon={<FaSearch />} variant="outline" margin={"0 10px 0 0"}>Search</Button>
-                                    <Button onClick={() => handleClear()} colorScheme="brand" variant="outline">Clear</Button>
+                                    <Button onClick={() => resetForm()} colorScheme="brand" type="reset" variant="outline">Clear</Button>
                                 </span>
                             </GridItem>
                             {searchOpen &&
@@ -192,18 +195,32 @@ const Index = () => {
                                             fontWeight='500'
                                         />
                                     </GridItem>
-                                    <GridItem colSpan={{ base: 12, md: 6, lg: 4 }}>
+                                    <GridItem colSpan={{ base: 12, md: 6, lg: 4 }} >
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
                                             Lead Score
                                         </FormLabel>
-                                        <Input
-                                            fontSize='sm'
-                                            onChange={handleChange} onBlur={handleBlur}
-                                            value={values.leadScore}
-                                            name="leadScore"
-                                            placeholder='Enter Lead Score'
-                                            fontWeight='500'
-                                        />
+                                        <Flex justifyContent={"space-between"}>
+                                            <Box w={"49%"}>
+                                                <Input
+                                                    fontSize='sm'
+                                                    onChange={handleChange} onBlur={handleBlur}
+                                                    value={values.fromLeadScore}
+                                                    name="fromLeadScore"
+                                                    placeholder='From Lead Score'
+                                                    fontWeight='500'
+                                                />
+                                            </Box>
+                                            <Box w={"49%"} >
+                                                <Input
+                                                    fontSize='sm'
+                                                    onChange={handleChange} onBlur={handleBlur}
+                                                    value={values.toLeadScore}
+                                                    name="toLeadScore"
+                                                    placeholder='To Lead Score'
+                                                    fontWeight='500'
+                                                />
+                                            </Box>
+                                        </Flex>
                                     </GridItem>
                                 </>}
                         </Grid>

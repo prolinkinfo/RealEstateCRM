@@ -20,7 +20,6 @@ export function SidebarLinks(props) {
   const user = JSON.parse(localStorage.getItem("user"))
 
   const { routes, setOpenSidebar, openSidebar } = props;
-  console.log(props, "props")
 
   // verifies if routeName is the one active (in browser input)
   const activeRoute = (routeName) => {
