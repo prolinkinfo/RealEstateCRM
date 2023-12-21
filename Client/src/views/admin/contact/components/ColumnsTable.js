@@ -12,7 +12,7 @@ import {
   useColorModeValue
 } from "@chakra-ui/react";
 import moment from 'moment';
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import {
   useGlobalFilter,
   usePagination,
@@ -27,12 +27,15 @@ import Pagination from "components/pagination/Pagination";
 import { BsFillSendFill } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
 import AddEmailHistory from "../../emailHistory/components/AddEmail";
-
 export default function ColumnsTable(props) {
   const { columnsData, tableData, title, fetchData } = props;
+  const [show, setShow] = useState(false);
 
   const columns = useMemo(() => columnsData, [columnsData]);
-  const data = useMemo(() => tableData, [tableData]);
+  const displayRecords = show ? tableData : [tableData[0]]; // Display all records if showAll is true, else display only the first one
+  // const data = useMemo(() => displayRecords, [displayRecords]);
+
+  const data = displayRecords;
   const [addEmailHistory, setAddEmailHistory] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"))
   const [gopageValue, setGopageValue] = useState()
@@ -71,6 +74,18 @@ export default function ColumnsTable(props) {
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   const param = useParams()
 
+  console.log("displayRecords ", displayRecords);
+  console.log(data, "data");
+
+
+  useEffect(() => {
+    console.log("hi");
+    // Update gopageValue only after the initial render
+    if (gopageValue === undefined && pageOptions.length < gopageValue) {
+      setGopageValue(pageOptions.length);
+    }
+  }, [pageOptions, gopageValue]);
+
   return (
     <Card
       direction='column'
@@ -79,7 +94,7 @@ export default function ColumnsTable(props) {
       style={{ border: '1px solid gray.200' }}
       overflowX={{ sm: "scroll", lg: "hidden" }}
     >
-      <Flex px='25px' justify='space-between' mb='20px' align='center'>
+      <Flex px='25px' justify='space-between' mb='10px' align='center'>
         <Text
           color={textColor}
           fontSize='22px'
@@ -124,10 +139,12 @@ export default function ColumnsTable(props) {
                 </Td>
               </Tr>
             ) : page?.map((row, index) => {
+              console.log("page ", page)
               prepareRow(row);
               return (
                 <Tr {...row?.getRowProps()} key={index}>
-                  {row?.cells.map((cell, index) => {
+                  {console.log("row", row)}
+                  {row?.cells?.map((cell, index) => {
                     let data = "";
                     if (cell?.column.Header === "sender") {
                       data = (
@@ -178,10 +195,18 @@ export default function ColumnsTable(props) {
                   })}
                 </Tr>
               );
+
             })}
           </Tbody>
+
         </Table>
       </Box>
+      <div style={{
+        display: "flex",
+        justifyContent: "end"
+      }}>
+        <Button colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => setShow(true)}>{show ? "Show less" : "Show more"}</Button>
+      </div>
 
       {data?.length > 5 && <Pagination gotoPage={gotoPage} gopageValue={gopageValue} setGopageValue={setGopageValue} pageCount={pageCount} canPreviousPage={canPreviousPage} previousPage={previousPage} canNextPage={canNextPage} pageOptions={pageOptions} setPageSize={setPageSize} nextPage={nextPage} pageSize={pageSize} pageIndex={pageIndex} />}
 

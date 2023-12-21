@@ -116,6 +116,7 @@ const Index = () => {
                                 </FormLabel>
                                 <Select
                                     value={values.leadStatus}
+                                    fontSize='sm'
                                     name="leadStatus"
                                     onChange={handleChange}
                                     fontWeight='500'
