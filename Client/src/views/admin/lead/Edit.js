@@ -3,6 +3,7 @@ import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, 
 import { HSeparator } from 'components/separator/Separator';
 import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { leadSchema } from 'schema';
@@ -79,6 +80,7 @@ const Edit = (props) => {
     let response
     const fetchData = async () => {
         response = await getApi('api/lead/view/', param.id)
+        console.log("lead edit fetch response ", response?.data?.lead);
         // Lead Information`
         values.leadName = response?.data?.lead?.leadName;
         values.leadEmail = response?.data?.lead?.leadEmail;
@@ -98,9 +100,9 @@ const Edit = (props) => {
         values.leadOwner = response?.data?.lead?.leadOwner;
         values.leadCommunicationPreferences = response?.data?.lead?.leadCommunicationPreferences;
         // Lead Dates and Follow-up
-        values.leadCreationDate = response?.data?.lead?.leadCreationDate;
-        values.leadConversionDate = response?.data?.lead?.leadConversionDate;
-        values.leadFollowUpDate = response?.data?.lead?.leadFollowUpDate;
+        values.leadCreationDate = moment(response?.data?.lead?.leadCreationDate).format('YYYY-MM-DD');
+        values.leadConversionDate = moment(response?.data?.lead?.leadConversionDate).format('YYYY-MM-DD');
+        values.leadFollowUpDate = moment(response?.data?.lead?.leadFollowUpDate).format('YYYY-MM-DD');
         values.leadFollowUpStatus = response?.data?.lead?.leadFollowUpStatus;
         // Lead Scoring and Nurturing
         values.leadScore = response?.data?.lead?.leadScore;
