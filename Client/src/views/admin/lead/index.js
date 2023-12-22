@@ -1,5 +1,5 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Box, Button, Flex, FormLabel, Grid, GridItem, Input, Select, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Flex, FormLabel, Grid, GridItem, Input, Select, useDisclosure, Text } from '@chakra-ui/react';
 import Card from "components/card/Card";
 import { useFormik } from "formik";
 import { useEffect, useState } from 'react';
@@ -8,6 +8,7 @@ import { FaAnglesDown, FaAnglesUp } from "react-icons/fa6";
 import { getApi } from "services/api";
 import Add from "./Add";
 import CheckTable from './components/CheckTable';
+import * as yup from 'yup';
 
 const Index = () => {
     const [columns, setColumns] = useState([]);
@@ -47,23 +48,34 @@ const Index = () => {
         toLeadScore: ''
     }
 
+    const validationSchema = yup.object({
+        leadName: yup.string(),
+        leadStatus: yup.string(),
+        leadEmail: yup.string().email("Lead Email is invalid"),
+        leadPhoneNumber: yup.number().min(0, 'Lead Phone Number is invalid').max(999999999999, 'Lead Phone Number is invalid'),
+        leadAddress: yup.string(),
+        leadOwner: yup.string(),
+        fromLeadScore: yup.number().min(0, "From Lead Score is invalid"),
+        toLeadScore: yup.number().min(yup.ref('fromLeadScore'), "To Lead Score must be greater than or equal to From Lead Score")
+    });
+
     const formik = useFormik({
         initialValues: initialValues,
+        validationSchema: validationSchema,
         onSubmit: (values, { resetForm }) => {
 
             const serachResult = data?.filter(
                 (item) =>
-                    (!values?.leadName || (item?.leadName && item?.leadName.toLowerCase().includes(values?.leadName?.toLocaleLowerCase()))) &&
-                    (!values?.leadStatus || (item?.leadStatus && item?.leadStatus.toLowerCase().includes(values?.leadStatus?.toLocaleLowerCase()))) &&
-                    (!values?.leadEmail || (item?.leadEmail && item?.leadEmail.toLowerCase().includes(values?.leadEmail?.toLocaleLowerCase()))) &&
-                    (!values?.leadPhoneNumber || (item?.leadPhoneNumber && item?.leadPhoneNumber.toString().includes(values?.leadPhoneNumber?.replace(/\D/g, '')))) &&
-                    (!values?.leadAddress || (item?.leadAddress && item?.leadAddress.toLowerCase().includes(values?.leadAddress?.toLocaleLowerCase()))) &&
-                    (!values?.leadOwner || (item?.leadOwner && item?.leadOwner.toLowerCase().includes(values?.leadOwner?.toLocaleLowerCase()))) &&
-                    (values?.fromLeadScore === null || values?.fromLeadScore === undefined || values?.toLeadScore === null || values?.toLeadScore === undefined ||
-                        (item?.leadScore !== undefined &&
+                    (!values?.leadName || (item?.leadName && item?.leadName.toLowerCase().includes(values?.leadName?.toLowerCase()))) &&
+                    (!values?.leadStatus || (item?.leadStatus && item?.leadStatus.toLowerCase().includes(values?.leadStatus?.toLowerCase()))) &&
+                    (!values?.leadEmail || (item?.leadEmail && item?.leadEmail.toLowerCase().includes(values?.leadEmail?.toLowerCase()))) &&
+                    (!values?.leadPhoneNumber || (item?.leadPhoneNumber && item?.leadPhoneNumber.toString().includes(values?.leadPhoneNumber))) &&
+                    (!values?.leadAddress || (item?.leadAddress && item?.leadAddress.toLowerCase().includes(values?.leadAddress?.toLowerCase()))) &&
+                    (!values?.leadOwner || (item?.leadOwner && item?.leadOwner.toLowerCase().includes(values?.leadOwner?.toLowerCase()))) &&
+                    ([null, undefined, ''].includes(values?.fromLeadScore) || [null, undefined, ''].includes(values?.toLeadScore) ||
+                        ((item?.leadScore || item?.leadScore === 0) &&
                             (parseInt(item?.leadScore, 10) >= parseInt(values.fromLeadScore, 10) || 0) &&
                             (parseInt(item?.leadScore, 10) <= parseInt(values.toLeadScore, 10) || 0)))
-
             )
 
             if (serachResult?.length > 0) {
@@ -111,7 +123,9 @@ const Index = () => {
                                     name="leadName"
                                     placeholder='Enter Lead Name'
                                     fontWeight='500'
+                                    borderColor={errors.leadName && touched.leadName ? "red.300" : null}
                                 />
+                                <Text mb='10px' color={'red'}> {errors.leadName && touched.leadName && errors.leadName}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6, lg: 4 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
@@ -124,11 +138,13 @@ const Index = () => {
                                     onChange={handleChange}
                                     fontWeight='500'
                                     placeholder={'Select Lead Status'}
+                                    borderColor={errors.leadStatus && touched.leadStatus ? "red.300" : null}
                                 >
                                     <option value='active'>active</option>
                                     <option value='pending'>pending</option>
                                     <option value='sold'>sold</option>
                                 </Select>
+                                <Text mb='10px' color={'red'}> {errors.leadStatus && touched.leadStatus && errors.leadStatus}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 12, lg: 4 }} display={"flex"} flexWrap={"wrap"} justifyContent={"space-between"} alignItems={"center"} pt={7}>
                                 {searchOpen === true ?
@@ -138,7 +154,7 @@ const Index = () => {
                                 <span>
 
                                     <Button onClick={() => handleSubmit()} colorScheme="brand" leftIcon={<FaSearch />} variant="outline" margin={"0 10px 0 0"}>Search</Button>
-                                    <Button onClick={() => resetForm()} colorScheme="brand" type="reset" variant="outline">Clear</Button>
+                                    <Button onClick={() => handleClear()} colorScheme="brand" type="reset" variant="outline">Clear</Button>
                                 </span>
                             </GridItem>
                             {searchOpen &&
@@ -154,20 +170,26 @@ const Index = () => {
                                             name="leadEmail"
                                             placeholder='Enter Lead Email'
                                             fontWeight='500'
+                                            type="email"
+                                            borderColor={errors.leadEmail && touched.leadEmail ? "red.300" : null}
                                         />
+                                        <Text mb='10px' color={'red'}> {errors.leadEmail && touched.leadEmail && errors.leadEmail}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12, md: 6, lg: 4 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
-                                            Lead PhoneNumber
+                                            Lead Phone Number
                                         </FormLabel>
                                         <Input
                                             fontSize='sm'
                                             onChange={handleChange} onBlur={handleBlur}
                                             value={values.leadPhoneNumber}
                                             name="leadPhoneNumber"
-                                            placeholder='Enter Lead PhoneNumber'
+                                            placeholder='Enter Lead Phone Number'
                                             fontWeight='500'
+                                            borderColor={errors.leadPhoneNumber && touched.leadPhoneNumber ? "red.300" : null}
+                                            type="number"
                                         />
+                                        <Text mb='10px' color={'red'}> {errors.leadPhoneNumber && touched.leadPhoneNumber && errors.leadPhoneNumber}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12, md: 6, lg: 4 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
@@ -180,7 +202,9 @@ const Index = () => {
                                             name="leadAddress"
                                             placeholder='Enter Lead Address'
                                             fontWeight='500'
+                                            borderColor={errors.leadAddress && touched.leadAddress ? "red.300" : null}
                                         />
+                                        <Text mb='10px' color={'red'}> {errors.leadAddress && touched.leadAddress && errors.leadAddress}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12, md: 6, lg: 4 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
@@ -193,7 +217,9 @@ const Index = () => {
                                             name="leadOwner"
                                             placeholder='Enter Lead Owner'
                                             fontWeight='500'
+                                            borderColor={errors.leadOwner && touched.leadOwner ? "red.300" : null}
                                         />
+                                        <Text mb='10px' color={'red'}> {errors.leadOwner && touched.leadOwner && errors.leadOwner}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12, md: 6, lg: 4 }} >
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
@@ -203,22 +229,36 @@ const Index = () => {
                                             <Box w={"49%"}>
                                                 <Input
                                                     fontSize='sm'
-                                                    onChange={handleChange} onBlur={handleBlur}
+                                                    onChange={(e) => {
+                                                        setFieldValue('toLeadScore', e.target.value)
+                                                        handleChange(e)
+                                                    }}
+                                                    onBlur={handleBlur}
                                                     value={values.fromLeadScore}
                                                     name="fromLeadScore"
                                                     placeholder='From Lead Score'
                                                     fontWeight='500'
+                                                    type='number'
+                                                    borderColor={errors.fromLeadScore && touched.fromLeadScore ? "red.300" : null}
                                                 />
+                                                <Text mb='10px' color={'red'}> {errors.fromLeadScore && touched.fromLeadScore && errors.fromLeadScore}</Text>
                                             </Box>
-                                            <Box w={"49%"} >
+                                            <Box w={"49%"}>
                                                 <Input
                                                     fontSize='sm'
-                                                    onChange={handleChange} onBlur={handleBlur}
+                                                    onChange={(e) => {
+                                                        values.fromLeadScore <= e.target.value && handleChange(e)
+                                                    }}
+                                                    onBlur={handleBlur}
                                                     value={values.toLeadScore}
                                                     name="toLeadScore"
                                                     placeholder='To Lead Score'
                                                     fontWeight='500'
+                                                    type='number'
+                                                    borderColor={errors.toLeadScore && touched.toLeadScore ? "red.300" : null}
+                                                    disabled={[null, undefined, ''].includes(values.fromLeadScore) || values.fromLeadScore < 0}
                                                 />
+                                                <Text mb='10px' color={'red'}> {errors.toLeadScore && touched.toLeadScore && errors.toLeadScore}</Text>
                                             </Box>
                                         </Flex>
                                     </GridItem>
