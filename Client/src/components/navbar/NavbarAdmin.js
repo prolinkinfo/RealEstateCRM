@@ -26,7 +26,7 @@ export default function AdminNavbar(props) {
 	let navbarFilter = 'none';
 	let navbarBackdrop = 'blur(20px)';
 	let navbarShadow = 'none';
-	let navbarBg = useColorModeValue('rgba(244, 247, 254, 0.2)', 'rgba(11,20,55,0.5)');
+	let navbarBg = useColorModeValue('#fff', 'rgba(11,20,55,0.5)');
 	let navbarBorder = 'transparent';
 	let secondaryMargin = '0px';
 	let paddingX = '15px';
@@ -41,6 +41,7 @@ export default function AdminNavbar(props) {
 
 	return (
 		<Box
+
 			position={navbarPosition}
 			boxShadow={navbarShadow}
 			bg={navbarBg}
@@ -90,6 +91,7 @@ export default function AdminNavbar(props) {
 				alignItems={{ xl: 'center' }}
 				mb={gap}>
 				<Box mb={{ sm: '8px', md: '0px' }}>
+					{/*
 					<Breadcrumb>
 						<BreadcrumbItem color={secondaryText} fontSize='sm' mb='5px'>
 							<BreadcrumbLink as={rrd.Link} to='/admin/default' color={secondaryText}>
@@ -99,7 +101,7 @@ export default function AdminNavbar(props) {
 
 						{under?.under && <BreadcrumbItem color={secondaryText} fontSize='sm' mb='5px'>
 							<BreadcrumbLink as={rrd.Link} to={`${under.both === true ? '' : under.layout + '/'}${under.under}`} color={secondaryText}>
-								{under.under}
+								{under.parentName}
 							</BreadcrumbLink>
 						</BreadcrumbItem>}
 
@@ -111,7 +113,7 @@ export default function AdminNavbar(props) {
 						</BreadcrumbItem>
 
 					</Breadcrumb>
-
+					*/}
 					<Link
 						color={mainText}
 						href='#'
