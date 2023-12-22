@@ -175,7 +175,7 @@ export default function CheckTable(props) {
                         data = (
                           <Flex align="center">
                             <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />
-                            <Text color={textColor} fontSize="sm" fontWeight="700">
+                            <Text color={textColor} fontSize="sm" fontWeight="500">
                               {cell?.row?.index + 1}
                             </Text>
                           </Flex>
@@ -188,7 +188,7 @@ export default function CheckTable(props) {
                               sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
                               color='brand.600'
                               fontSize="sm"
-                              fontWeight="700"
+                              fontWeight="500"
                             >
                               {cell?.value}
                             </Text>
@@ -199,7 +199,7 @@ export default function CheckTable(props) {
                           <Text
                             me="10px"
                             fontSize="sm"
-                            fontWeight="700"
+                            fontWeight="500"
                             color='brand.600'
                             sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline', cursor: 'pointer' } }}
                             onClick={() => {
@@ -217,7 +217,7 @@ export default function CheckTable(props) {
                           <Text
                             me="10px"
                             fontSize="sm"
-                            fontWeight="700"
+                            fontWeight="500"
                             color='brand.600'
                             sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline', cursor: 'pointer' } }}
                             onClick={() => {
@@ -231,20 +231,20 @@ export default function CheckTable(props) {
                         );
                       } else if (cell?.column.Header === "Lead Address") {
                         data = (
-                          <Text color={textColor} fontSize="sm" fontWeight="700">
+                          <Text color={textColor} fontSize="sm" fontWeight="500">
                             {cell?.value}
                           </Text>
                         );
                       } else if (cell?.column.Header === "Lead Status") {
                         data = (
                           <Text color={"secondaryGray.900"} bgColor={cell?.value === "active" ? "green.500" : cell?.value === "sold" ? "red.300" : cell?.value === "pending" ? "yellow.400" : "#000"
-                          } p={1} borderRadius={"20px"} textAlign={"center"} fontSize="sm" fontWeight="700" >
+                          } p={1} borderRadius={"20px"} textAlign={"center"} fontSize="sm" fontWeight="500" textTransform={"capitalize"}>
                             {cell?.value}
                           </Text>
                         );
                       } else if (cell?.column.Header === "Lead Owner") {
                         data = (
-                          <Text color={textColor} fontSize="sm" fontWeight="700">
+                          <Text color={textColor} fontSize="sm" fontWeight="500">
                             {cell?.value}
                           </Text>
                         );
