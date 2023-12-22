@@ -53,17 +53,17 @@ const Index = () => {
 
             const serachResult = data?.filter(
                 (item) =>
-                    (!values?.leadName || (item?.leadName && item?.leadName.toLowerCase().includes(values?.leadName?.toLocaleLowerCase()))) &&
-                    (!values?.leadStatus || (item?.leadStatus && item?.leadStatus.toLowerCase().includes(values?.leadStatus?.toLocaleLowerCase()))) &&
-                    (!values?.leadEmail || (item?.leadEmail && item?.leadEmail.toLowerCase().includes(values?.leadEmail?.toLocaleLowerCase()))) &&
+                    (!values?.leadName || (item?.leadName && item?.leadName.toLowerCase().includes(values?.leadName?.toLowerCase()))) &&
+                    (!values?.leadStatus || (item?.leadStatus && item?.leadStatus.toLowerCase().includes(values?.leadStatus?.toLowerCase()))) &&
+                    (!values?.leadEmail || (item?.leadEmail && item?.leadEmail.toLowerCase().includes(values?.leadEmail?.toLowerCase()))) &&
                     (!values?.leadPhoneNumber || (item?.leadPhoneNumber && item?.leadPhoneNumber.toString().includes(values?.leadPhoneNumber?.replace(/\D/g, '')))) &&
-                    (!values?.leadAddress || (item?.leadAddress && item?.leadAddress.toLowerCase().includes(values?.leadAddress?.toLocaleLowerCase()))) &&
-                    (!values?.leadOwner || (item?.leadOwner && item?.leadOwner.toLowerCase().includes(values?.leadOwner?.toLocaleLowerCase()))) &&
-                    (values?.fromLeadScore === null || values?.fromLeadScore === undefined || values?.toLeadScore === null || values?.toLeadScore === undefined ||
-                        (item?.leadScore !== undefined &&
-                            (parseInt(item?.leadScore, 10) >= parseInt(values.fromLeadScore, 10) || 0) &&
-                            (parseInt(item?.leadScore, 10) <= parseInt(values.toLeadScore, 10) || 0)))
-
+                    (!values?.leadAddress || (item?.leadAddress && item?.leadAddress.toLowerCase().includes(values?.leadAddress?.toLowerCase()))) &&
+                    (!values?.leadOwner || (item?.leadOwner && item?.leadOwner.toLowerCase().includes(values?.leadOwner?.toLowerCase()))) &&
+                    (!values?.fromLeadScore ||
+                        (item?.leadScore &&
+                            parseInt(item?.leadScore, 10) >= parseInt(values.fromLeadScore, 10) &&
+                            parseInt(item?.leadScore, 10) <= parseInt(values.toLeadScore, 10))
+                    )
             )
 
             if (serachResult?.length > 0) {
@@ -138,7 +138,7 @@ const Index = () => {
                                 <span>
 
                                     <Button onClick={() => handleSubmit()} colorScheme="brand" leftIcon={<FaSearch />} variant="outline" margin={"0 10px 0 0"}>Search</Button>
-                                    <Button onClick={() => resetForm()} colorScheme="brand" type="reset" variant="outline">Clear</Button>
+                                    <Button onClick={() => handleClear()} colorScheme="brand" type="reset" variant="outline">Clear</Button>
                                 </span>
                             </GridItem>
                             {searchOpen &&
