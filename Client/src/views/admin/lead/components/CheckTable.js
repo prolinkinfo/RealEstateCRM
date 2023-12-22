@@ -1,7 +1,17 @@
 import {
   Box,
+  Button,
   Checkbox,
   Flex,
+  Grid,
+  GridItem,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Table,
   Tbody,
   Td,
@@ -9,7 +19,8 @@ import {
   Th,
   Thead,
   Tr,
-  useColorModeValue
+  useColorModeValue,
+  useDisclosure
 } from "@chakra-ui/react";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -20,7 +31,7 @@ import {
 } from "react-table";
 
 // Custom components
-import { DeleteIcon } from "@chakra-ui/icons";
+import { DeleteIcon, DownloadIcon, EditIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
 import Card from "components/card/Card";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
 import Pagination from "components/pagination/Pagination";
@@ -31,6 +42,9 @@ import { getApi } from "services/api";
 import Delete from "../Delete";
 import AddEmailHistory from "views/admin/emailHistory/components/AddEmail";
 import AddPhoneCall from "views/admin/phoneCall/components/AddPhoneCall";
+import Add from "../Add";
+import { AddIcon } from "@chakra-ui/icons";
+import { CiMenuKebab } from "react-icons/ci";
 
 export default function CheckTable(props) {
   const { columnsData, tableData, fetchData, isLoding } = props;
@@ -48,6 +62,8 @@ export default function CheckTable(props) {
 
   const data = useMemo(() => tableData, [tableData]);
   const user = JSON.parse(localStorage.getItem("user"))
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
 
   const tableInstance = useTable(
     {
@@ -90,29 +106,51 @@ export default function CheckTable(props) {
       );
     }
   };
-
+  const handleClick = () => {
+    onOpen()
+  }
+  const size = "lg";
   useEffect(() => {
     if (fetchData) fetchData()
   }, [deleteModel, props.isOpen])
 
   return (
-    <Card
+    <>    <Card
       direction="column"
       w="100%"
       overflowX={{ sm: "scroll", lg: "hidden" }}
     >
-      <Flex px="25px" justify="space-between" mb="20px" align="center">
-        <Text
-          color={"secondaryGray.900"}
-          fontSize="22px"
-          fontWeight="700"
-          lineHeight="100%"
-        >
-          Leads  (<CountUpComponent targetNumber={data?.length} />)
-        </Text>
-        {/* <Menu /> */}
+      {/* <Flex px="25px" justify="space-between" mb="20px" align="center"> */}
+      <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={4}>
+        <GridItem colSpan={8} >
+          <Flex alignItems={"center"} flexWrap={"wrap"}>
+            <Text
+              color={"secondaryGray.900"}
+              fontSize="22px"
+              fontWeight="700"
+            >
+              Leads  (<CountUpComponent targetNumber={data?.length} />)
+            </Text>
+            <InputGroup width={"30%"} mx={3}>
+              <InputLeftElement
+                pointerEvents="none"
+                children={<SearchIcon color="gray.300" borderRadius="16px" />}
+              />
+              <Input type="text"
+                fontSize='sm'
+                // onChange={ }
+                fontWeight='500'
+                placeholder="Search..." borderRadius="16px" />
+            </InputGroup>
+            <Button leftIcon={<AddIcon />} variant="brand">Advance Search</Button>
+          </Flex>
+        </GridItem>
+        <GridItem colSpan={4} textAlign={"right"}>
+          <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>
+        </GridItem>
         {selectedValues.length > 0 && <DeleteIcon onClick={() => setDelete(true)} color={'red'} />}
-      </Flex>
+      </Grid>
+      {/* </Flex> */}
       {/* Delete model */}
       <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/lead/deleteMany' data={selectedValues} method='many' />
       <Box overflowY={"auto"} className="table-fix-container">
@@ -128,12 +166,12 @@ export default function CheckTable(props) {
                     borderColor={borderColor}
                   >
                     <Flex
-                      justify="space-between"
                       align="center"
+                      justifyContent={column.center ? "center" : "start"}
                       fontSize={{ sm: "14px", lg: "16px" }}
                       color=" secondaryGray.900"
                     >
-                      <span style={{ textTransform: "capitalize" }}>
+                      <span style={{ textTransform: "capitalize", marginRight: "8px" }}>
                         {column.render("Header")}
                       </span>
                       {column.isSortable !== false && (
@@ -180,7 +218,7 @@ export default function CheckTable(props) {
                             </Text>
                           </Flex>
                         );
-                      } else if (cell?.column.Header === "Lead Name") {
+                      } else if (cell?.column.Header === "Name") {
                         data = (
                           <Link to={user?.role !== 'admin' ? `/leadView/${cell?.row?.values._id}` : `/admin/leadView/${cell?.row?.values._id}`}>
                             <Text
@@ -194,7 +232,7 @@ export default function CheckTable(props) {
                             </Text>
                           </Link>
                         );
-                      } else if (cell?.column.Header === "Lead Email") {
+                      } else if (cell?.column.Header === "Email") {
                         data = (
                           <Text
                             me="10px"
@@ -212,7 +250,7 @@ export default function CheckTable(props) {
                             }
                           </Text>
                         );
-                      } else if (cell?.column.Header === "Lead PhoneNumber") {
+                      } else if (cell?.column.Header === "PhoneNumber") {
                         data = (
                           <Text
                             me="10px"
@@ -229,26 +267,26 @@ export default function CheckTable(props) {
                             {cell?.value}
                           </Text>
                         );
-                      } else if (cell?.column.Header === "Lead Address") {
+                      } else if (cell?.column.Header === "Address") {
                         data = (
                           <Text color={textColor} fontSize="sm" fontWeight="500">
                             {cell?.value}
                           </Text>
                         );
-                      } else if (cell?.column.Header === "Lead Status") {
+                      } else if (cell?.column.Header === "Status") {
                         data = (
                           <Text color={"secondaryGray.900"} bgColor={cell?.value === "active" ? "green.500" : cell?.value === "sold" ? "red.300" : cell?.value === "pending" ? "yellow.400" : "#000"
                           } p={1} borderRadius={"20px"} textAlign={"center"} fontSize="sm" fontWeight="500" textTransform={"capitalize"}>
                             {cell?.value}
                           </Text>
                         );
-                      } else if (cell?.column.Header === "Lead Owner") {
+                      } else if (cell?.column.Header === "Owner") {
                         data = (
                           <Text color={textColor} fontSize="sm" fontWeight="500">
                             {cell?.value}
                           </Text>
                         );
-                      } else if (cell?.column.Header === "Lead Score") {
+                      } else if (cell?.column.Header === "Score") {
                         data = (
                           <Text color={
                             cell?.value < 40
@@ -260,6 +298,19 @@ export default function CheckTable(props) {
                             {cell?.value}
                           </Text>
                         );
+                      } else if (cell?.column.Header === "Action") {
+                        data = (
+                          <Text fontSize="md" fontWeight="900" textAlign={"center"} >
+                            <Menu isLazy  >
+                              <MenuButton><CiMenuKebab /></MenuButton>
+                              <MenuList position={'absolute'} right={-5} pl={'0.5em'} minW={'fit-content'} >
+                                <MenuItem pr={10} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>
+                                <MenuItem pr={10} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>
+                                <MenuItem pr={10} icon={<ViewIcon fontSize={15} />}>View</MenuItem>
+                              </MenuList>
+                            </Menu>
+                          </Text>
+                        )
                       }
                       return (
                         <Td
@@ -283,6 +334,10 @@ export default function CheckTable(props) {
 
       <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} lead='true' id={selectedId} />
       <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={callSelectedId} lead='true' />
-    </Card >
+
+      <Add isOpen={isOpen} size={size} onClose={onClose} />
+    </Card>
+    </>
+
   );
 }
