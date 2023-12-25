@@ -112,7 +112,7 @@ export default function CheckTable(props) {
           fontWeight="700"
           lineHeight="100%"
         >
-          Users (<CountUpComponent targetNumber={data?.length} />)
+          Users (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
         </Text>
         {/* <Menu /> */}
         {selectedValues.length > 0 && <DeleteIcon onClick={() => setDelete(true)} color={'red'} />}
