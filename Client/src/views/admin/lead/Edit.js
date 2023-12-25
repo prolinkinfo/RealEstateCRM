@@ -3,6 +3,7 @@ import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, 
 import { HSeparator } from 'components/separator/Separator';
 import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { leadSchema } from 'schema';
@@ -80,35 +81,35 @@ const Edit = (props) => {
     const fetchData = async () => {
         response = await getApi('api/lead/view/', param.id)
         // Lead Information`
-        values.leadName = response?.data?.leadName;
-        values.leadEmail = response?.data?.leadEmail;
-        values.leadPhoneNumber = response?.data?.leadPhoneNumber;
-        values.leadAddress = response?.data?.leadAddress;
+        values.leadName = response?.data?.lead?.leadName;
+        values.leadEmail = response?.data?.lead?.leadEmail;
+        values.leadPhoneNumber = response?.data?.lead?.leadPhoneNumber;
+        values.leadAddress = response?.data?.lead?.leadAddress;
         // Lead Source and Details
-        values.leadSource = response?.data?.leadSource;
-        values.leadStatus = response?.data?.leadStatus;
-        values.leadSourceDetails = response?.data?.leadSourceDetails;
-        values.leadCampaign = response?.data?.leadCampaign;
-        values.leadSourceChannel = response?.data?.leadSourceChannel;
-        values.leadSourceMedium = response?.data?.leadSourceMedium;
-        values.leadSourceCampaign = response?.data?.leadSourceCampaign;
-        values.leadSourceReferral = response?.data?.leadSourceReferral;
+        values.leadSource = response?.data?.lead?.leadSource;
+        values.leadStatus = response?.data?.lead?.leadStatus;
+        values.leadSourceDetails = response?.data?.lead?.leadSourceDetails;
+        values.leadCampaign = response?.data?.lead?.leadCampaign;
+        values.leadSourceChannel = response?.data?.lead?.leadSourceChannel;
+        values.leadSourceMedium = response?.data?.lead?.leadSourceMedium;
+        values.leadSourceCampaign = response?.data?.lead?.leadSourceCampaign;
+        values.leadSourceReferral = response?.data?.lead?.leadSourceReferral;
         // Lead Assignment and Ownership
-        values.leadAssignedAgent = response?.data?.leadAssignedAgent;
-        values.leadOwner = response?.data?.leadOwner;
-        values.leadCommunicationPreferences = response?.data?.leadCommunicationPreferences;
+        values.leadAssignedAgent = response?.data?.lead?.leadAssignedAgent;
+        values.leadOwner = response?.data?.lead?.leadOwner;
+        values.leadCommunicationPreferences = response?.data?.lead?.leadCommunicationPreferences;
         // Lead Dates and Follow-up
-        values.leadCreationDate = response?.data?.leadCreationDate;
-        values.leadConversionDate = response?.data?.leadConversionDate;
-        values.leadFollowUpDate = response?.data?.leadFollowUpDate;
-        values.leadFollowUpStatus = response?.data?.leadFollowUpStatus;
+        values.leadCreationDate = moment(response?.data?.lead?.leadCreationDate).format('YYYY-MM-DD');
+        values.leadConversionDate = moment(response?.data?.lead?.leadConversionDate).format('YYYY-MM-DD');
+        values.leadFollowUpDate = moment(response?.data?.lead?.leadFollowUpDate).format('YYYY-MM-DD');
+        values.leadFollowUpStatus = response?.data?.lead?.leadFollowUpStatus;
         // Lead Scoring and Nurturing
-        values.leadScore = response?.data?.leadScore;
-        values.leadNurturingWorkflow = response?.data?.leadNurturingWorkflow;
-        values.leadEngagementLevel = response?.data?.leadEngagementLevel;
-        values.leadConversionRate = response?.data?.leadConversionRate;
-        values.leadNurturingStage = response?.data?.leadNurturingStage;
-        values.leadNextAction = response?.data?.leadNextAction;
+        values.leadScore = response?.data?.lead?.leadScore;
+        values.leadNurturingWorkflow = response?.data?.lead?.leadNurturingWorkflow;
+        values.leadEngagementLevel = response?.data?.lead?.leadEngagementLevel;
+        values.leadConversionRate = response?.data?.lead?.leadConversionRate;
+        values.leadNurturingStage = response?.data?.lead?.leadNurturingStage;
+        values.leadNextAction = response?.data?.lead?.leadNextAction;
     }
 
     useEffect(() => {
