@@ -23,7 +23,7 @@ const Index = () => {
         { Header: 'Name', accessor: 'leadName', width: 20 },
         { Header: "Status", accessor: "leadStatus", },
         { Header: "Email", accessor: "leadEmail", },
-        { Header: "PhoneNumber", accessor: "leadPhoneNumber", },
+        { Header: "Phone Number", accessor: "leadPhoneNumber", },
         { Header: "Owner", accessor: "leadOwner", },
         { Header: "Score", accessor: "leadScore", },
         { Header: "Action", isSortable: false, center: true },

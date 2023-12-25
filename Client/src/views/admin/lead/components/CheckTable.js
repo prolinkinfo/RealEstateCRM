@@ -38,7 +38,7 @@ import CountUpComponent from "components/countUpComponent/countUpComponent";
 import Pagination from "components/pagination/Pagination";
 import Spinner from "components/spinner/Spinner";
 import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getApi } from "services/api";
 import Delete from "../Delete";
 import AddEmailHistory from "views/admin/emailHistory/components/AddEmail";
@@ -60,7 +60,7 @@ export default function CheckTable(props) {
   const [addPhoneCall, setAddPhoneCall] = useState(false);
   const [selectedId, setSelectedId] = useState();
   const [callSelectedId, setCallSelectedId] = useState();
-
+  const navigate = useNavigate();
   const data = useMemo(() => tableData, [tableData]);
   const user = JSON.parse(localStorage.getItem("user"))
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -325,7 +325,7 @@ export default function CheckTable(props) {
                               <MenuList position={'absolute'} right={-5} pl={'0.5em'} minW={'fit-content'} >
                                 <MenuItem pr={10} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>
                                 <MenuItem pr={10} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>
-                                <MenuItem pr={10} icon={<ViewIcon fontSize={15} />}>View</MenuItem>
+                                <MenuItem color={'green'} pr={10} onClick={() => navigate(user?.role !== 'admin' ? `/leadView/${cell?.row?.original._id}` : `/admin/leadView/${cell?.row?.original._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>
                               </MenuList>
                             </Menu>
                           </Text>
