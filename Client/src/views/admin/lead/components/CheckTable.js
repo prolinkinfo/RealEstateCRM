@@ -93,7 +93,7 @@ export default function CheckTable(props) {
     initialValues: initialValues,
     onSubmit: (values, { resetForm }) => {
       console.log(values, "values")
-      const serachResult = data?.filter(
+      const searchResult = allData?.filter(
         (item) =>
           (!values?.leadName || (item?.leadName && item?.leadName.toLowerCase().includes(values?.leadName?.toLowerCase()))) &&
           (!values?.leadStatus || (item?.leadStatus && item?.leadStatus.toLowerCase().includes(values?.leadStatus?.toLowerCase()))) &&
@@ -107,14 +107,15 @@ export default function CheckTable(props) {
               parseInt(item?.leadScore, 10) <= parseInt(values.toLeadScore, 10))
           )
       )
+      setSearchedData(searchResult);
+      setDisplaySearchData(true)
+      setAdvaceSearch(false)
 
-      if (serachResult?.length > 0) {
-        setSearchedData(serachResult);
-      } else {
-        setSearchedData([]);
-      }
     }
   })
+  useEffect(() => {
+    setSearchedData(data);
+  }, []);
   const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
   const tableInstance = useTable(
     {
