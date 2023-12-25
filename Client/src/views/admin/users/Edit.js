@@ -37,7 +37,7 @@ const Edit = (props) => {
             let response = await putApi(`api/user/edit/${param.id}`, values)
             if (response && response.status === 200) {
                 props.onClose();
-                fetchData()
+                props.setAction((pre) => !pre)
             } else {
                 toast.error(response.response.data?.message)
             }

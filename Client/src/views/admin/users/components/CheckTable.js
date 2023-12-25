@@ -95,7 +95,6 @@ export default function CheckTable(props) {
 
   useEffect(() => {
     fetchData()
-    // }, [deleteModel, props.isOpen])
   }, [action])
 
   return (
