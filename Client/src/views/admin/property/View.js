@@ -25,7 +25,7 @@ const View = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [edit, setEdit] = useState(false);
     const [deleteModel, setDelete] = useState(false);
-
+    const [action, setAction] = useState(false)
     const [propertyPhoto, setPropertyPhoto] = useState(false);
 
     const [virtualToursorVideos, setVirtualToursorVideos] = useState(false);
@@ -59,12 +59,12 @@ const View = () => {
     }
     useEffect(() => {
         fetchData()
-    }, [edit, addEmailHistory, addPhoneCall])
+    }, [action])
 
     return (
         <>
             <Add isOpen={isOpen} size={size} onClose={onClose} />
-            <Edit isOpen={edit} size={size} onClose={setEdit} />
+            <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} />
             <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/property/delete/' id={param.id} />
 
             {isLoding ?

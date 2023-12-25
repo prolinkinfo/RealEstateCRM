@@ -76,6 +76,7 @@ const Edit = (props) => {
             let response = await putApi(`api/contact/edit/${param.id}`, values)
             if (response.status === 200) {
                 props.onClose();
+                props.setAction((pre) => !pre)
             }
         } catch (e) {
             console.log(e);
