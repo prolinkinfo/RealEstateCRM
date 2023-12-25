@@ -70,7 +70,7 @@ const add = async (req, res) => {
         if (assignmentToLead && !mongoose.Types.ObjectId.isValid(assignmentToLead)) {
             res.status(400).json({ error: 'Invalid assignmentToLead value' });
         }
-        const taskData = { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy };
+        const taskData = { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy, createdDate: new Date() };
 
         if (assignmentTo) {
             taskData.assignmentTo = assignmentTo;
@@ -79,7 +79,7 @@ const add = async (req, res) => {
             taskData.assignmentToLead = assignmentToLead;
         }
         const result = new Task(taskData);
-        await result.save();
+        // await result.save();
         res.status(200).json(result);
     } catch (err) {
         console.error('Failed to create task:', err);
