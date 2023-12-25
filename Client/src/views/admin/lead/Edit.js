@@ -57,11 +57,12 @@ const Edit = (props) => {
     });
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
-
+    let selectId = props?.selectedId;
     const EditData = async () => {
         try {
             setIsLoding(true)
-            let response = await putApi(`api/lead/edit/${param.id}`, values)
+            console.log(selectId, param.id, "response")
+            let response = await putApi(`api/lead/edit/${param.id ? param.id : selectId}`, values)
             if (response.status === 200) {
                 props.onClose();
             }
@@ -79,7 +80,7 @@ const Edit = (props) => {
 
     let response
     const fetchData = async () => {
-        response = await getApi('api/lead/view/', param.id)
+        response = await getApi('api/lead/view/', param.id ? param.id : selectId)
         // Lead Information`
         values.leadName = response?.data?.lead?.leadName;
         values.leadEmail = response?.data?.lead?.leadEmail;
@@ -114,7 +115,7 @@ const Edit = (props) => {
 
     useEffect(() => {
         fetchData()
-    }, [])
+    }, [props])
 
     return (
         <div>

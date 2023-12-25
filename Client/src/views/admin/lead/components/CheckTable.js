@@ -46,6 +46,7 @@ import AddPhoneCall from "views/admin/phoneCall/components/AddPhoneCall";
 import Add from "../Add";
 import { AddIcon } from "@chakra-ui/icons";
 import { CiMenuKebab } from "react-icons/ci";
+import Edit from "../Edit";
 
 export default function CheckTable(props) {
   const { columnsData, tableData, fetchData, isLoding, allData, setSearchedData, setDisplaySearchData } = props;
@@ -64,7 +65,7 @@ export default function CheckTable(props) {
   const data = useMemo(() => tableData, [tableData]);
   const user = JSON.parse(localStorage.getItem("user"))
   const { isOpen, onOpen, onClose } = useDisclosure()
-
+  const [edit, setEdit] = useState(false);
 
   const tableInstance = useTable(
     {
@@ -269,7 +270,7 @@ export default function CheckTable(props) {
                             }
                           </Text>
                         );
-                      } else if (cell?.column.Header === "PhoneNumber") {
+                      } else if (cell?.column.Header === "Phone Number") {
                         data = (
                           <Text
                             me="10px"
@@ -323,9 +324,9 @@ export default function CheckTable(props) {
                             <Menu isLazy  >
                               <MenuButton><CiMenuKebab /></MenuButton>
                               <MenuList position={'absolute'} right={-5} pl={'0.5em'} minW={'fit-content'} >
-                                <MenuItem pr={10} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>
-                                <MenuItem pr={10} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>
+                                <MenuItem pr={10} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>
                                 <MenuItem color={'green'} pr={10} onClick={() => navigate(user?.role !== 'admin' ? `/leadView/${cell?.row?.original._id}` : `/admin/leadView/${cell?.row?.original._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>
+                                <MenuItem color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} pr={10} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>
                               </MenuList>
                             </Menu>
                           </Text>
@@ -355,6 +356,7 @@ export default function CheckTable(props) {
       <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={callSelectedId} lead='true' />
 
       <Add isOpen={isOpen} size={size} onClose={onClose} />
+      <Edit isOpen={edit} size={size} selectedId={selectedId} onClose={setEdit} />
     </Card>
     </>
 
