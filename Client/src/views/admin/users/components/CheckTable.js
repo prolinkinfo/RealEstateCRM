@@ -31,7 +31,7 @@ import { getApi } from "services/api";
 import Delete from "../Delete";
 
 export default function CheckTable(props) {
-  const { columnsData } = props;
+  const { columnsData, action, setAction } = props;
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -95,7 +95,8 @@ export default function CheckTable(props) {
 
   useEffect(() => {
     fetchData()
-  }, [deleteModel, props.isOpen])
+    // }, [deleteModel, props.isOpen])
+  }, [action])
 
   return (
     <Card
@@ -111,13 +112,13 @@ export default function CheckTable(props) {
           fontWeight="700"
           lineHeight="100%"
         >
-          Users (<CountUpComponent targetNumber={data?.length} />)
+          Users (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
         </Text>
         {/* <Menu /> */}
         {selectedValues.length > 0 && <DeleteIcon onClick={() => setDelete(true)} color={'red'} />}
       </Flex>
       {/* Delete model */}
-      <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/user/deleteMany' data={selectedValues} method='many' />
+      <Delete isOpen={deleteModel} onClose={setDelete} setAction={setAction} setSelectedValues={setSelectedValues} url='api/user/deleteMany' data={selectedValues} method='many' />
 
       <Box overflowY={"auto"} className="table-fix-container">
         <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
@@ -244,6 +245,6 @@ export default function CheckTable(props) {
       </Box>
       {data?.length > 5 && <Pagination gotoPage={gotoPage} gopageValue={gopageValue} setGopageValue={setGopageValue} pageCount={pageCount} canPreviousPage={canPreviousPage} previousPage={previousPage} canNextPage={canNextPage} pageOptions={pageOptions} setPageSize={setPageSize} nextPage={nextPage} pageSize={pageSize} pageIndex={pageIndex} />}
 
-    </Card >
+    </Card>
   );
 }

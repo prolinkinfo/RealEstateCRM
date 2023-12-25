@@ -24,6 +24,7 @@ const Index = () => {
     const [data, setData] = useState([])
     const user = JSON.parse(localStorage.getItem("user"))
     const [isLoding, setIsLoding] = useState(false)
+    const [action, setAction] = useState(false)
 
     const fetchData = async () => {
         setIsLoding(true)
@@ -36,7 +37,7 @@ const Index = () => {
 
     useEffect(() => {
         fetchData()
-    }, [addMeeting])
+    }, [action])
 
     return (
         <div>
@@ -49,7 +50,7 @@ const Index = () => {
             {/* <CheckTable columnsData={columns} tableData={data} /> */}
             <CheckTable isOpen={addMeeting} isLoding={isLoding} data={data} columnsData={columns} className='table-fix-container' />
             {/* Add Form */}
-            <AddMeeting isOpen={addMeeting} onClose={setMeeting} />
+            <AddMeeting setAction={setAction} isOpen={addMeeting} onClose={setMeeting} />
         </div>
     )
 }

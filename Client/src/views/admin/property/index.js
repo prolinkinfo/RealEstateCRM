@@ -24,6 +24,7 @@ const Index = () => {
     ];
 
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const [action, setAction] = useState(false)
     const size = "lg";
 
     useEffect(() => {
@@ -42,9 +43,9 @@ const Index = () => {
                     <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>
                 </GridItem>
             </Grid>
-            <CheckTable columnsData={columns} isOpen={isOpen} />
+            <CheckTable columnsData={columns} isOpen={isOpen} action={action} setAction={setAction} />
             {/* Add Form */}
-            <Add isOpen={isOpen} size={size} onClose={onClose} />
+            <Add isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} />
         </div>
     )
 }

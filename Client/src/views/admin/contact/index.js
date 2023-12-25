@@ -1,9 +1,11 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Button, Grid, GridItem, Spinner, useDisclosure } from '@chakra-ui/react';
-import { useState } from 'react';
+import { Box, Button, FormLabel, Grid, GridItem, Input, Spinner, Text, useDisclosure } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 import { getApi } from 'services/api';
 import CheckTable from './components/CheckTable';
 import Add from "./Add";
+import Card from "components/card/Card";
+import { useFormik } from "formik";
 
 
 const Index = () => {
@@ -18,11 +20,12 @@ const Index = () => {
         { Header: "mailing Address", accessor: "mailingAddress", },
         { Header: "Contact Method", accessor: "preferredContactMethod", },
     ];
-    
+
     const { isOpen, onOpen, onClose } = useDisclosure()
     const size = "lg";
     const [data, setData] = useState([])
     const [isLoding, setIsLoding] = useState(false)
+    const [action, setAction] = useState(false)
 
     const user = JSON.parse(localStorage.getItem("user"))
 
@@ -37,17 +40,22 @@ const Index = () => {
         onOpen()
     }
 
+    useEffect(() => {
+        fetchData()
+    }, [action])
+
     return (
         <div>
-            <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
+            <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={2}>
                 <GridItem colStart={6} textAlign={"right"}>
                     <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>
                 </GridItem>
+                <GridItem colSpan={6}>
+                    <CheckTable isLoding={isLoding} columnsData={columns} isOpen={isOpen} tableData={data} fetchData={fetchData} setAction={setAction} />
+                </GridItem>
             </Grid>
-            {/* <CheckTable columnsData={columns} tableData={data} /> */}
-            <CheckTable isLoding={isLoding} columnsData={columns} isOpen={isOpen} tableData={data} fetchData={fetchData} />
             {/* Add Form */}
-            <Add isOpen={isOpen} size={size} onClose={onClose} />
+            <Add isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} />
         </div>
     )
 }
