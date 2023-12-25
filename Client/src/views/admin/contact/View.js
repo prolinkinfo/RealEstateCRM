@@ -111,7 +111,6 @@ const View = () => {
         fetchData()
     }, [action])
 
-
     function toCamelCase(text) {
         return text?.replace(/([a-z])([A-Z])/g, '$1 $2');
     }
