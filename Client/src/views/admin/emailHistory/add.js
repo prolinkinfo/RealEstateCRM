@@ -10,7 +10,7 @@ import { emailSchema } from 'schema';
 import { getApi, postApi } from 'services/api';
 
 const AddPhoneCall = (props) => {
-    const { onClose, isOpen, fetchData } = props
+    const { onClose, isOpen } = props
     const [isLoding, setIsLoding] = useState(false)
     const [assignmentToData, setAssignmentToData] = useState([]);
     const [contactModelOpen, setContactModel] = useState(false);
@@ -46,7 +46,7 @@ const AddPhoneCall = (props) => {
             let response = await postApi('api/email/add', values)
             if (response.status === 200) {
                 props.onClose();
-                fetchData()
+                props.setAction((pre) => !pre)
             }
         } catch (e) {
             console.log(e);

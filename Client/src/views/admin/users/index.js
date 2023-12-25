@@ -2,6 +2,7 @@ import { AddIcon } from "@chakra-ui/icons";
 import { Button, Grid, GridItem, useDisclosure } from '@chakra-ui/react';
 import Add from "./Add";
 import CheckTable from './components/CheckTable';
+import { useState } from "react";
 
 const Index = () => {
     const columns = [
@@ -18,6 +19,7 @@ const Index = () => {
 
     ];
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const [action, setAction] = useState(false)
     const size = "lg";
 
     const handleClick = () => {
@@ -31,9 +33,9 @@ const Index = () => {
                     <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>
                 </GridItem>
             </Grid>
-            <CheckTable isOpen={isOpen} columnsData={columns} />
+            <CheckTable isOpen={isOpen} setAction={setAction} action={action} columnsData={columns} />
             {/* Add Form */}
-            <Add isOpen={isOpen} size={size} onClose={onClose} />
+            <Add isOpen={isOpen} size={size} setAction={setAction} onClose={onClose} />
         </div>
     )
 }

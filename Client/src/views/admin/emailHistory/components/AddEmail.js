@@ -8,7 +8,7 @@ import { getApi, postApi } from 'services/api';
 
 
 const AddEmailHistory = (props) => {
-    const { onClose, isOpen, fetchData } = props
+    const { onClose, isOpen, fetchData, setAction } = props
     const user = JSON.parse(localStorage.getItem('user'))
     const [isLoding, setIsLoding] = useState(false)
     const [contactModelOpen, setContactModel] = useState(false);
@@ -41,6 +41,7 @@ const AddEmailHistory = (props) => {
             if (response.status === 200) {
                 props.onClose();
                 fetchData()
+                setAction((pre) => !pre)
             }
         } catch (e) {
             console.log(e);

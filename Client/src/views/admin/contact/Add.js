@@ -73,6 +73,7 @@ const Add = (props) => {
             let response = await postApi('api/contact/add', values)
             if (response.status === 200) {
                 props.onClose();
+                props.setAction((pre) => !pre)
             }
         } catch (e) {
             console.log(e);

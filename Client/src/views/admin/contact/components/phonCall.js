@@ -85,7 +85,7 @@ export default function PhoneCall(props) {
           fontSize='22px'
           fontWeight='700'
           lineHeight='100%'>
-          {title} (<CountUpComponent targetNumber={data?.length} />)
+          {title} (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
         </Text>
         {/* <Menu /> */}
         {!props.text ? <Button onClick={() => setAddModel(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" >Call</Button> : <Button onClick={() => navigate('/communication-integration')} leftIcon={<MdOutlineMessage />} colorScheme="gray" >send text Msg</Button>}

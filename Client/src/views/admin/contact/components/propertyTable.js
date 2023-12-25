@@ -91,7 +91,7 @@ export default function PropertyTable(props) {
           fontSize='22px'
           fontWeight='700'
           lineHeight='100%'>
-          {title}  (<CountUpComponent targetNumber={data?.length} />)
+          {title}  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
         </Text>
       </Flex>
       <Box overflowY={'auto'} className="table-container-property" >

@@ -12,7 +12,7 @@ import { MeetingSchema } from 'schema';
 import { getApi, postApi } from 'services/api';
 
 const AddMeeting = (props) => {
-    const { onClose, isOpen, fetchData, from } = props
+    const { onClose, isOpen, setAction, from } = props
     const [data, setData] = useState([])
     const [isLoding, setIsLoding] = useState(false)
     const [contactModelOpen, setContactModel] = useState(false);
@@ -50,7 +50,7 @@ const AddMeeting = (props) => {
                 if (response.status === 200) {
                     formik.resetForm();
                     props.onClose();
-                    fetchData()
+                    setAction((pre) => !pre)
                 }
             } else {
                 toast.error('Select Related To')

@@ -185,7 +185,7 @@ export default function CheckTable(props) {
               fontSize="22px"
               fontWeight="700"
             >
-              Leads  (<CountUpComponent targetNumber={data?.length} />)
+              Leads  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
             </Text>
             <InputGroup width={"30%"} mx={3}>
               <InputLeftElement
