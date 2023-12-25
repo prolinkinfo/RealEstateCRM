@@ -14,6 +14,7 @@ const Index = () => {
     const [isLoding, setIsLoding] = useState(false);
     const [data, setData] = useState([]);
     const [searchOpen, setSearchOpen] = useState(false);
+    const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"));
 
@@ -227,7 +228,15 @@ const Index = () => {
                     </Card>
                 </GridItem> */}
                 <GridItem colSpan={6}>
-                    <CheckTable isLoding={isLoding} columnsData={columns} isOpen={isOpen} tableData={searchedData?.length > 0 ? searchedData : data} fetchData={fetchData} />
+                    <CheckTable
+                        isLoding={isLoding}
+                        columnsData={columns}
+                        isOpen={isOpen}
+                        setSearchedData={setSearchedData}
+                        allData={data}
+                        tableData={displaySearchData ? searchedData : data}
+                        fetchData={fetchData}
+                        setDisplaySearchData={setDisplaySearchData} />
                 </GridItem>
             </Grid>
             {/* Add Form */}

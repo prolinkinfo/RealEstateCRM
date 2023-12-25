@@ -8,6 +8,7 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  InputRightElement,
   Menu,
   MenuButton,
   MenuItem,
@@ -47,7 +48,7 @@ import { AddIcon } from "@chakra-ui/icons";
 import { CiMenuKebab } from "react-icons/ci";
 
 export default function CheckTable(props) {
-  const { columnsData, tableData, fetchData, isLoding } = props;
+  const { columnsData, tableData, fetchData, isLoding, allData, setSearchedData, setDisplaySearchData } = props;
   const textColor = useColorModeValue("gray.500", "white");
   // const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -138,11 +139,29 @@ export default function CheckTable(props) {
               />
               <Input type="text"
                 fontSize='sm'
-                // onChange={ }
+                onChange={(e) => {
+                  const results = allData.filter((item) => {
+                    // Iterate through each property of the object
+                    for (const key in item) {
+                      // Check if the value of the property contains the search term
+                      if (
+                        item[key] &&
+                        typeof item[key] === "string" &&
+                        item[key].toLowerCase().includes(e.target.value.toLowerCase())
+                      ) {
+                        return true; // If found, include in the results
+                      }
+                    }
+                    return false; // If not found in any field, exclude from the results
+                  });
+                  setSearchedData(results)
+                  setDisplaySearchData(true)
+
+                }}
                 fontWeight='500'
                 placeholder="Search..." borderRadius="16px" />
             </InputGroup>
-            <Button leftIcon={<AddIcon />} variant="brand">Advance Search</Button>
+            <Button variant="brand">Advance Search</Button>
           </Flex>
         </GridItem>
         <GridItem colSpan={4} textAlign={"right"}>
