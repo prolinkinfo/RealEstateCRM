@@ -356,7 +356,7 @@ export default function CheckTable(props) {
       <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={callSelectedId} lead='true' />
 
       <Add isOpen={isOpen} size={size} onClose={onClose} />
-      <Edit isOpen={edit} size={size} selectedId={selectedId} onClose={setEdit} />
+      <Edit isOpen={edit} size={size} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} />
     </Card>
     </>
 
