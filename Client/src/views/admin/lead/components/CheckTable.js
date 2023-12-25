@@ -536,7 +536,7 @@ export default function CheckTable(props) {
           </ModalBody>
           <ModalFooter>
             <Button variant="outline" colorScheme='green' mr={2} onClick={handleSubmit} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
-            <Button colorScheme="red" onClick={() => { setAdvaceSearch(false); resetForm() }}>Cancel</Button>
+            <Button colorScheme="red" onClick={() => resetForm()}>Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
