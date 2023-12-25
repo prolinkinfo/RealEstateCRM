@@ -95,17 +95,27 @@ export default function CheckTable(props) {
       console.log(values, "values")
       const searchResult = allData?.filter(
         (item) =>
+          // (!values?.leadName || (item?.leadName && item?.leadName.toLowerCase().includes(values?.leadName?.toLowerCase()))) &&
+          // (!values?.leadStatus || (item?.leadStatus && item?.leadStatus.toLowerCase().includes(values?.leadStatus?.toLowerCase()))) &&
+          // (!values?.leadEmail || (item?.leadEmail && item?.leadEmail.toLowerCase().includes(values?.leadEmail?.toLowerCase()))) &&
+          // (!values?.leadPhoneNumber || (item?.leadPhoneNumber && item?.leadPhoneNumber.toString().includes(values?.leadPhoneNumber?.replace(/\D/g, '')))) &&
+          // (!values?.leadAddress || (item?.leadAddress && item?.leadAddress.toLowerCase().includes(values?.leadAddress?.toLowerCase()))) &&
+          // (!values?.leadOwner || (item?.leadOwner && item?.leadOwner.toLowerCase().includes(values?.leadOwner?.toLowerCase()))) &&
+          // (!values?.fromLeadScore ||
+          //   (item?.leadScore &&
+          //     parseInt(item?.leadScore, 10) >= parseInt(values.fromLeadScore, 10) &&
+          //     parseInt(item?.leadScore, 10) <= parseInt(values.toLeadScore, 10))
+          // )
           (!values?.leadName || (item?.leadName && item?.leadName.toLowerCase().includes(values?.leadName?.toLowerCase()))) &&
           (!values?.leadStatus || (item?.leadStatus && item?.leadStatus.toLowerCase().includes(values?.leadStatus?.toLowerCase()))) &&
           (!values?.leadEmail || (item?.leadEmail && item?.leadEmail.toLowerCase().includes(values?.leadEmail?.toLowerCase()))) &&
-          (!values?.leadPhoneNumber || (item?.leadPhoneNumber && item?.leadPhoneNumber.toString().includes(values?.leadPhoneNumber?.replace(/\D/g, '')))) &&
+          (!values?.leadPhoneNumber || (item?.leadPhoneNumber && item?.leadPhoneNumber.toString().includes(values?.leadPhoneNumber))) &&
           (!values?.leadAddress || (item?.leadAddress && item?.leadAddress.toLowerCase().includes(values?.leadAddress?.toLowerCase()))) &&
           (!values?.leadOwner || (item?.leadOwner && item?.leadOwner.toLowerCase().includes(values?.leadOwner?.toLowerCase()))) &&
-          (!values?.fromLeadScore ||
-            (item?.leadScore &&
-              parseInt(item?.leadScore, 10) >= parseInt(values.fromLeadScore, 10) &&
-              parseInt(item?.leadScore, 10) <= parseInt(values.toLeadScore, 10))
-          )
+          ([null, undefined, ''].includes(values?.fromLeadScore) || [null, undefined, ''].includes(values?.toLeadScore) ||
+            ((item?.leadScore || item?.leadScore === 0) &&
+              (parseInt(item?.leadScore, 10) >= parseInt(values.fromLeadScore, 10) || 0) &&
+              (parseInt(item?.leadScore, 10) <= parseInt(values.toLeadScore, 10) || 0)))
       )
       setSearchedData(searchResult);
       setDisplaySearchData(true)
@@ -114,7 +124,7 @@ export default function CheckTable(props) {
     }
   })
   useEffect(() => {
-    setSearchedData(data);
+    setSearchedData && setSearchedData(data);
   }, []);
   const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
   const tableInstance = useTable(
@@ -494,21 +504,33 @@ export default function CheckTable(props) {
                   <Box w={"49%"}>
                     <Input
                       fontSize='sm'
-                      onChange={handleChange} onBlur={handleBlur}
-                      value={values?.fromLeadScore}
+                      onChange={(e) => {
+                        setFieldValue('toLeadScore', e.target.value)
+                        handleChange(e)
+                      }}
+                      onBlur={handleBlur}
+                      value={values.fromLeadScore}
                       name="fromLeadScore"
-                      placeholder='From '
+                      placeholder='From Lead Score'
                       fontWeight='500'
+                      type='number'
+                      borderColor={errors.fromLeadScore && touched.fromLeadScore ? "red.300" : null}
                     />
                   </Box>
                   <Box w={"49%"} >
                     <Input
                       fontSize='sm'
-                      onChange={handleChange} onBlur={handleBlur}
-                      value={values?.toLeadScore}
+                      onChange={(e) => {
+                        values.fromLeadScore <= e.target.value && handleChange(e)
+                      }}
+                      onBlur={handleBlur}
+                      value={values.toLeadScore}
                       name="toLeadScore"
-                      placeholder='To '
+                      placeholder='To Lead Score'
                       fontWeight='500'
+                      type='number'
+                      borderColor={errors.toLeadScore && touched.toLeadScore ? "red.300" : null}
+                      disabled={[null, undefined, ''].includes(values.fromLeadScore) || values.fromLeadScore < 0}
                     />
                   </Box>
                 </Flex>

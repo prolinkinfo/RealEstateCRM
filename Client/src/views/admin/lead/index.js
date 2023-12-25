@@ -109,7 +109,7 @@ const Index = () => {
                 </GridItem>
             </Grid>
             {/* Add Form */}
-            {/* <Add isOpen={isOpen} size={size} onClose={onClose} /> */}
+            <Add isOpen={isOpen} size={size} onClose={onClose} />
         </div>
     )
 }
