@@ -3,6 +3,7 @@ import {
   Button,
   Checkbox,
   Flex,
+  FormLabel,
   Grid,
   GridItem,
   Input,
@@ -13,6 +14,14 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Select,
   Table,
   Tbody,
   Td,
@@ -47,6 +56,7 @@ import Add from "../Add";
 import { AddIcon } from "@chakra-ui/icons";
 import { CiMenuKebab } from "react-icons/ci";
 import Edit from "../Edit";
+import { Formik, useFormik } from "formik";
 
 export default function CheckTable(props) {
   const { columnsData, tableData, fetchData, isLoding, allData, setSearchedData, setDisplaySearchData } = props;
@@ -59,6 +69,7 @@ export default function CheckTable(props) {
   const [deleteModel, setDelete] = useState(false);
   const [addEmailHistory, setAddEmailHistory] = useState(false);
   const [addPhoneCall, setAddPhoneCall] = useState(false);
+  const [advaceSearch, setAdvaceSearch] = useState(false);
   const [selectedId, setSelectedId] = useState();
   const [callSelectedId, setCallSelectedId] = useState();
   const navigate = useNavigate();
@@ -67,6 +78,44 @@ export default function CheckTable(props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [edit, setEdit] = useState(false);
 
+  const initialValues = {
+    leadName: '',
+    leadStatus: '',
+    leadEmail: '',
+    leadPhoneNumber: '',
+    leadAddress: '',
+    leadOwner: '',
+    fromLeadScore: '',
+    toLeadScore: ''
+  }
+
+  const formik = useFormik({
+    initialValues: initialValues,
+    onSubmit: (values, { resetForm }) => {
+      console.log(values, "values")
+      const serachResult = data?.filter(
+        (item) =>
+          (!values?.leadName || (item?.leadName && item?.leadName.toLowerCase().includes(values?.leadName?.toLowerCase()))) &&
+          (!values?.leadStatus || (item?.leadStatus && item?.leadStatus.toLowerCase().includes(values?.leadStatus?.toLowerCase()))) &&
+          (!values?.leadEmail || (item?.leadEmail && item?.leadEmail.toLowerCase().includes(values?.leadEmail?.toLowerCase()))) &&
+          (!values?.leadPhoneNumber || (item?.leadPhoneNumber && item?.leadPhoneNumber.toString().includes(values?.leadPhoneNumber?.replace(/\D/g, '')))) &&
+          (!values?.leadAddress || (item?.leadAddress && item?.leadAddress.toLowerCase().includes(values?.leadAddress?.toLowerCase()))) &&
+          (!values?.leadOwner || (item?.leadOwner && item?.leadOwner.toLowerCase().includes(values?.leadOwner?.toLowerCase()))) &&
+          (!values?.fromLeadScore ||
+            (item?.leadScore &&
+              parseInt(item?.leadScore, 10) >= parseInt(values.fromLeadScore, 10) &&
+              parseInt(item?.leadScore, 10) <= parseInt(values.toLeadScore, 10))
+          )
+      )
+
+      if (serachResult?.length > 0) {
+        setSearchedData(serachResult);
+      } else {
+        setSearchedData([]);
+      }
+    }
+  })
+  const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
   const tableInstance = useTable(
     {
       columns, data,
@@ -162,7 +211,7 @@ export default function CheckTable(props) {
                 fontWeight='500'
                 placeholder="Search..." borderRadius="16px" />
             </InputGroup>
-            <Button variant="brand">Advance Search</Button>
+            <Button variant="brand" onClick={() => setAdvaceSearch(true)}>Advance Search</Button>
           </Flex>
         </GridItem>
         <GridItem colSpan={4} textAlign={"right"}>
@@ -358,6 +407,120 @@ export default function CheckTable(props) {
       <Add isOpen={isOpen} size={size} onClose={onClose} />
       <Edit isOpen={edit} size={size} selectedId={selectedId} onClose={setEdit} />
     </Card>
+      <Modal onClose={() => setAdvaceSearch(false)} isOpen={advaceSearch} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Advance Search</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={2}>
+              <GridItem colSpan={{ base: 12, md: 6 }}>
+                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
+                  Name
+                </FormLabel>
+                <Input
+                  fontSize='sm'
+                  onChange={handleChange} onBlur={handleBlur}
+                  value={values?.leadName}
+                  name="leadName"
+                  placeholder='Enter Lead Name'
+                  fontWeight='500'
+                />
+              </GridItem>
+              <GridItem colSpan={{ base: 12, md: 6 }}>
+                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
+                  Status
+                </FormLabel>
+                <Select
+                  value={values?.leadStatus}
+                  fontSize='sm'
+                  name="leadStatus"
+                  onChange={handleChange}
+                  fontWeight='500'
+                  placeholder={'Select Lead Status'}
+                >
+                  <option value='active'>active</option>
+                  <option value='pending'>pending</option>
+                  <option value='sold'>sold</option>
+                </Select>
+              </GridItem>
+
+              <GridItem colSpan={{ base: 12, md: 6 }}>
+                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2} >
+                  Email
+                </FormLabel>
+                <Input
+                  fontSize='sm'
+                  onChange={handleChange} onBlur={handleBlur}
+                  value={values?.leadEmail}
+                  name="leadEmail"
+                  placeholder='Enter Lead Email'
+                  fontWeight='500'
+                />
+              </GridItem>
+              <GridItem colSpan={{ base: 12, md: 6 }}>
+                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
+                  Phone Number
+                </FormLabel>
+                <Input
+                  fontSize='sm'
+                  onChange={handleChange} onBlur={handleBlur}
+                  value={values?.leadPhoneNumber}
+                  name="leadPhoneNumber"
+                  placeholder='Enter Lead PhoneNumber'
+                  fontWeight='500'
+                />
+              </GridItem>
+
+              <GridItem colSpan={{ base: 12, md: 6 }}>
+                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
+                  Owner
+                </FormLabel>
+                <Input
+                  fontSize='sm'
+                  onChange={handleChange} onBlur={handleBlur}
+                  value={values?.leadOwner}
+                  name="leadOwner"
+                  placeholder='Enter Lead Owner'
+                  fontWeight='500'
+                />
+              </GridItem>
+              <GridItem colSpan={{ base: 12, md: 6 }} >
+                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
+                  Score
+                </FormLabel>
+                <Flex justifyContent={"space-between"}>
+                  <Box w={"49%"}>
+                    <Input
+                      fontSize='sm'
+                      onChange={handleChange} onBlur={handleBlur}
+                      value={values?.fromLeadScore}
+                      name="fromLeadScore"
+                      placeholder='From '
+                      fontWeight='500'
+                    />
+                  </Box>
+                  <Box w={"49%"} >
+                    <Input
+                      fontSize='sm'
+                      onChange={handleChange} onBlur={handleBlur}
+                      value={values?.toLeadScore}
+                      name="toLeadScore"
+                      placeholder='To '
+                      fontWeight='500'
+                    />
+                  </Box>
+                </Flex>
+              </GridItem>
+
+            </Grid>
+          </ModalBody>
+          <ModalFooter>
+            <Button variant="outline" mr={2} onClick={handleSubmit} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
+            <Button colorScheme="red" >Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
 
   );
