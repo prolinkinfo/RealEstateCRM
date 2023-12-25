@@ -29,6 +29,7 @@ const Delete = (props) => {
                 if (response.status === 200) {
                     props.setSelectedValues([])
                     props.onClose(false)
+                    props.setAction((pre) => !pre)
                 }
             } catch (error) {
                 console.log(error)

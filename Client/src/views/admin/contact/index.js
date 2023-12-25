@@ -1,6 +1,6 @@
 import { AddIcon } from "@chakra-ui/icons";
 import { Box, Button, FormLabel, Grid, GridItem, Input, Spinner, Text, useDisclosure } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getApi } from 'services/api';
 import CheckTable from './components/CheckTable';
 import Add from "./Add";
@@ -25,18 +25,9 @@ const Index = () => {
     const size = "lg";
     const [data, setData] = useState([])
     const [isLoding, setIsLoding] = useState(false)
+    const [action, setAction] = useState(false)
 
     const user = JSON.parse(localStorage.getItem("user"))
-
-    const formik = useFormik({
-        initialValues: { firstName: '' },
-        // initialValues: initialValues,
-        // validationSchema: contactSchema,
-        onSubmit: (values, { resetForm }) => {
-            resetForm();
-        },
-    });
-    const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
 
     const fetchData = async () => {
         setIsLoding(true)
@@ -49,6 +40,9 @@ const Index = () => {
         onOpen()
     }
 
+    useEffect(() => {
+        fetchData()
+    }, [action])
 
     return (
         <div>
@@ -57,33 +51,11 @@ const Index = () => {
                     <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>
                 </GridItem>
                 <GridItem colSpan={6}>
-                    <Card>
-                        <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={2}>
-                            <GridItem colSpan={4}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' >
-                                    First Name<Text color={"red"}>*</Text>
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.firstName}
-                                    name="firstName"
-                                    placeholder='Enter First Name'
-                                    fontWeight='500'
-                                    borderColor={errors.firstName && touched.firstName ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}> {errors.firstName && touched.firstName && errors.firstName}</Text>
-
-                            </GridItem>
-                        </Grid>
-                    </Card>
-                </GridItem>
-                <GridItem colSpan={6}>
-                    <CheckTable isLoding={isLoding} columnsData={columns} isOpen={isOpen} tableData={data} fetchData={fetchData} />
+                    <CheckTable isLoding={isLoding} columnsData={columns} isOpen={isOpen} tableData={data} fetchData={fetchData} setAction={setAction} />
                 </GridItem>
             </Grid>
             {/* Add Form */}
-            <Add isOpen={isOpen} size={size} onClose={onClose} />
+            <Add isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} />
         </div>
     )
 }

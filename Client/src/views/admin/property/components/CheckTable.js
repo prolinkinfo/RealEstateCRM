@@ -31,7 +31,7 @@ import { getApi } from "services/api";
 import Delete from "../Delete";
 // import '.\src\assets\css\App.css' 
 export default function CheckTable(props) {
-  const { columnsData } = props;
+  const { columnsData, action, setAction } = props;
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   const columns = useMemo(() => columnsData, [columnsData]);
@@ -94,7 +94,7 @@ export default function CheckTable(props) {
 
   useEffect(() => {
     fetchData()
-  }, [deleteModel, props.isOpen])
+  }, [action])
 
   return (
     <Card
@@ -116,7 +116,7 @@ export default function CheckTable(props) {
         {selectedValues.length > 0 && <DeleteIcon onClick={() => setDelete(true)} color={'red'} />}
       </Flex>
       {/* Delete model */}
-      <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/property/deleteMany' data={selectedValues} method='many' />
+      <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} setAction={setAction} url='api/property/deleteMany' data={selectedValues} method='many' />
 
       <Box overflowY={"auto"} className="table-fix-container">
         <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">

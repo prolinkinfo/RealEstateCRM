@@ -29,7 +29,7 @@ import moment from "moment";
 import { getApi } from "services/api";
 
 export default function CheckTable(props) {
-  const { columnsData } = props;
+  const { columnsData, action } = props;
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -79,7 +79,7 @@ export default function CheckTable(props) {
 
   useEffect(() => {
     fetchData()
-  }, [props.isOpen])
+  }, [action])
 
   return (
     <Card
