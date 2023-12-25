@@ -20,6 +20,7 @@ const View = () => {
     const [edit, setEdit] = useState(false);
     const [deleteModel, setDelete] = useState(false);
     const [isLoding, setIsLoding] = useState(false)
+    const [action, setAction] = useState(false)
 
     const size = "lg";
 
@@ -32,7 +33,7 @@ const View = () => {
 
     useEffect(() => {
         fetchData()
-    }, [edit])
+    }, [action])
 
     return (
         <>
@@ -40,10 +41,8 @@ const View = () => {
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                     <Spinner />
                 </Flex> : <>
-
-
                     <Add isOpen={isOpen} size={size} onClose={onClose} />
-                    <Edit isOpen={edit} size={size} onClose={setEdit} />
+                    <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} />
                     <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/user/delete/' id={param.id} />
 
                     <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>

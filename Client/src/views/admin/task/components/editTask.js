@@ -1,5 +1,5 @@
 import { CloseIcon } from '@chakra-ui/icons';
-import { Button, Checkbox, Flex, FormLabel, Grid, GridItem, IconButton, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Radio, RadioGroup, Select, Stack, Text, Textarea, useBreakpointValue } from '@chakra-ui/react';
+import { Button, Checkbox, Flex, FormLabel, Grid, GridItem, IconButton, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Radio, RadioGroup, Select, Stack, Text, Textarea, useBreakpointValue } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { LiaMousePointerSolid } from 'react-icons/lia';
@@ -111,7 +111,7 @@ const EditTask = (props) => {
 
     return (
         <Modal isOpen={isOpen} size={'xl'} isCentered={useBreakpointValue({ base: false, md: true })}>
-            {/* <ModalOverlay /> */}
+            {!props.from && <ModalOverlay />}
             <ModalContent>
                 <ModalHeader justifyContent='space-between' display='flex' >
                     Edit Task
