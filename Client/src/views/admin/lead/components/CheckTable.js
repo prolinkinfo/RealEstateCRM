@@ -41,7 +41,7 @@ import {
 } from "react-table";
 
 // Custom components
-import { DeleteIcon, DownloadIcon, EditIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
+import { CloseIcon, DeleteIcon, DownloadIcon, EditIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
 import Card from "components/card/Card";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
 import Pagination from "components/pagination/Pagination";
@@ -59,7 +59,7 @@ import Edit from "../Edit";
 import { Formik, useFormik } from "formik";
 
 export default function CheckTable(props) {
-  const { columnsData, tableData, fetchData, isLoding, allData, setSearchedData, setDisplaySearchData } = props;
+  const { columnsData, tableData, fetchData, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData } = props;
   const textColor = useColorModeValue("gray.500", "white");
   // const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -70,6 +70,7 @@ export default function CheckTable(props) {
   const [addEmailHistory, setAddEmailHistory] = useState(false);
   const [addPhoneCall, setAddPhoneCall] = useState(false);
   const [advaceSearch, setAdvaceSearch] = useState(false);
+  const [searchClear, setSearchClear] = useState(false);
   const [selectedId, setSelectedId] = useState();
   const [callSelectedId, setCallSelectedId] = useState();
   const navigate = useNavigate();
@@ -95,17 +96,6 @@ export default function CheckTable(props) {
       console.log(values, "values")
       const searchResult = allData?.filter(
         (item) =>
-          // (!values?.leadName || (item?.leadName && item?.leadName.toLowerCase().includes(values?.leadName?.toLowerCase()))) &&
-          // (!values?.leadStatus || (item?.leadStatus && item?.leadStatus.toLowerCase().includes(values?.leadStatus?.toLowerCase()))) &&
-          // (!values?.leadEmail || (item?.leadEmail && item?.leadEmail.toLowerCase().includes(values?.leadEmail?.toLowerCase()))) &&
-          // (!values?.leadPhoneNumber || (item?.leadPhoneNumber && item?.leadPhoneNumber.toString().includes(values?.leadPhoneNumber?.replace(/\D/g, '')))) &&
-          // (!values?.leadAddress || (item?.leadAddress && item?.leadAddress.toLowerCase().includes(values?.leadAddress?.toLowerCase()))) &&
-          // (!values?.leadOwner || (item?.leadOwner && item?.leadOwner.toLowerCase().includes(values?.leadOwner?.toLowerCase()))) &&
-          // (!values?.fromLeadScore ||
-          //   (item?.leadScore &&
-          //     parseInt(item?.leadScore, 10) >= parseInt(values.fromLeadScore, 10) &&
-          //     parseInt(item?.leadScore, 10) <= parseInt(values.toLeadScore, 10))
-          // )
           (!values?.leadName || (item?.leadName && item?.leadName.toLowerCase().includes(values?.leadName?.toLowerCase()))) &&
           (!values?.leadStatus || (item?.leadStatus && item?.leadStatus.toLowerCase().includes(values?.leadStatus?.toLowerCase()))) &&
           (!values?.leadEmail || (item?.leadEmail && item?.leadEmail.toLowerCase().includes(values?.leadEmail?.toLowerCase()))) &&
@@ -120,9 +110,13 @@ export default function CheckTable(props) {
       setSearchedData(searchResult);
       setDisplaySearchData(true)
       setAdvaceSearch(false)
-
+      setSearchClear(true)
     }
   })
+  const handleClear = () => {
+    setDisplaySearchData(false)
+  }
+
   useEffect(() => {
     setSearchedData && setSearchedData(data);
   }, []);
@@ -222,7 +216,9 @@ export default function CheckTable(props) {
                 fontWeight='500'
                 placeholder="Search..." borderRadius="16px" />
             </InputGroup>
-            <Button variant="brand" onClick={() => setAdvaceSearch(true)}>Advance Search</Button>
+            <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)}>Advance Search</Button>
+            {displaySearchData === true ?
+              <Button variant="outline" colorScheme='red' ms={2} leftIcon={<CloseIcon />} onClick={() => handleClear()}>clear</Button> : ""}
           </Flex>
         </GridItem>
         <GridItem colSpan={4} textAlign={"right"}>
@@ -418,11 +414,11 @@ export default function CheckTable(props) {
       <Add isOpen={isOpen} size={size} onClose={onClose} />
       <Edit isOpen={edit} size={size} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} />
     </Card>
-      <Modal onClose={() => setAdvaceSearch(false)} isOpen={advaceSearch} isCentered>
+      <Modal onClose={() => { setAdvaceSearch(false); resetForm() }} isOpen={advaceSearch} isCentered>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Advance Search</ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton onClick={() => { setAdvaceSearch(false); resetForm() }} />
           <ModalBody>
             <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={2}>
               <GridItem colSpan={{ base: 12, md: 6 }}>
@@ -539,8 +535,8 @@ export default function CheckTable(props) {
             </Grid>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" mr={2} onClick={handleSubmit} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
-            <Button colorScheme="red" >Cancel</Button>
+            <Button variant="outline" colorScheme='green' mr={2} onClick={handleSubmit} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
+            <Button colorScheme="red" onClick={() => { setAdvaceSearch(false); resetForm() }}>Cancel</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

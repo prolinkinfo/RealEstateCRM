@@ -123,31 +123,8 @@ const View = () => {
             {isLoding ?
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                     <Spinner />
-                </Flex> : <>
-                    {/* <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
-                        <GridItem colStart={6} >
-                            <Flex justifyContent={"right"}>
-                                <Menu>
-                                    <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
-                                        Actions
-                                    </MenuButton>
-                                    <MenuDivider />
-                                    <MenuList>
-                                        <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>
-                                        <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>
-                                        <MenuDivider />
-                                        <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
-                                    </MenuList>
-                                </Menu>
-                                <Link to="/lead">
-                                    <Button leftIcon={<IoIosArrowBack />} variant="brand">
-                                        Back
-                                    </Button>
-                                </Link>
-                            </Flex>
-                        </GridItem>
-                    </Grid> */}
-
+                </Flex> :
+                <>
                     <Tabs >
                         <Grid templateColumns="repeat(3, 1fr)" mb={3} gap={1}>
                             <GridItem colSpan={2}>
@@ -176,9 +153,9 @@ const View = () => {
                                         <MenuDivider />
                                         <MenuList>
                                             <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>
-                                            <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>
+                                            <MenuItem color={'green'} onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>
                                             <MenuDivider />
-                                            <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
+                                            <MenuItem color={'red'} onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
                                         </MenuList>
                                     </Menu>
                                     <Link to="/lead">
@@ -192,7 +169,6 @@ const View = () => {
 
                         <TabPanels>
                             <TabPanel pt={4} p={0}>
-
                                 <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                                     <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <Card >
@@ -254,7 +230,6 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
-
                                     <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                         <Card >
                                             <Grid templateColumns="repeat(12, 1fr)" gap={4}>
@@ -301,7 +276,6 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
-
                                     <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                         <Card >
                                             <Grid templateColumns="repeat(12, 1fr)" gap={4}>
@@ -367,7 +341,6 @@ const View = () => {
                                         </Card>
                                     </GridItem>
                                 </Grid>
-
                             </TabPanel>
                             <TabPanel pt={4} p={0}>
                                 <GridItem colSpan={{ base: 4 }} >
