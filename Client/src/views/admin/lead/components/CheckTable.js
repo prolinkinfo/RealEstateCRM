@@ -46,7 +46,7 @@ import {
 } from "react-table";
 
 // Custom components
-import { CloseIcon, DeleteIcon, DownloadIcon, EditIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
+import { CloseIcon, DeleteIcon, DownloadIcon, EditIcon, EmailIcon, PhoneIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
 import Card from "components/card/Card";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
 import Pagination from "components/pagination/Pagination";
@@ -432,10 +432,12 @@ export default function CheckTable(props) {
                           <Text fontSize="md" fontWeight="900" textAlign={"center"} >
                             <Menu isLazy  >
                               <MenuButton><CiMenuKebab /></MenuButton>
-                              <MenuList position={'absolute'} right={-5} pl={'0.5em'} minW={'fit-content'} >
-                                <MenuItem pr={10} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>
-                                <MenuItem color={'green'} pr={10} onClick={() => navigate(user?.role !== 'admin' ? `/leadView/${cell?.row?.original._id}` : `/admin/leadView/${cell?.row?.original._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>
-                                <MenuItem color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} pr={10} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>
+                              <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
+                                <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>
+                                <MenuItem py={2.5} width={"165px"} onClick={() => { setAddPhoneCall(true); setCallSelectedId(cell?.row?.values._id) }} icon={<PhoneIcon fontSize={15} />}>Create Call</MenuItem>
+                                <MenuItem py={2.5} width={"165px"} onClick={() => { setAddEmailHistory(true); setSelectedId(cell?.row?.values._id) }} icon={<EmailIcon fontSize={15} />}>Send Email</MenuItem>
+                                <MenuItem py={2.5} color={'green'} onClick={() => navigate(user?.role !== 'admin' ? `/leadView/${cell?.row?.original._id}` : `/admin/leadView/${cell?.row?.original._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>
+                                <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>
                               </MenuList>
                             </Menu>
                           </Text>
