@@ -79,7 +79,7 @@ const add = async (req, res) => {
             taskData.assignmentToLead = assignmentToLead;
         }
         const result = new Task(taskData);
-        // await result.save();
+        await result.save();
         res.status(200).json(result);
     } catch (err) {
         console.error('Failed to create task:', err);
