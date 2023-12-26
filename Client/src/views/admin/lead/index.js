@@ -22,7 +22,8 @@ const Index = () => {
         { Header: "Score", accessor: "leadScore", },
         { Header: "Action", isSortable: false, center: true },
     ];
-
+    const [dynamicColumns, setDynamicColumns] = useState([...tableColumns]);
+    const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
     const { isOpen, onOpen, onClose } = useDisclosure()
     const size = "lg";
 
@@ -51,7 +52,12 @@ const Index = () => {
                         displaySearchData={displaySearchData}
                         tableData={displaySearchData ? searchedData : data}
                         fetchData={fetchData}
-                        setDisplaySearchData={setDisplaySearchData} />
+                        setDisplaySearchData={setDisplaySearchData}
+                        selectedColumns={selectedColumns}
+                        setDynamicColumns={setDynamicColumns}
+                        dynamicColumns={dynamicColumns}
+                        setSelectedColumns={setSelectedColumns} />
+
                 </GridItem>
             </Grid>
 

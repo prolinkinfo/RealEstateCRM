@@ -22,6 +22,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Select,
+  Switch,
   Table,
   Tbody,
   Td,
@@ -57,13 +58,15 @@ import { AddIcon } from "@chakra-ui/icons";
 import { CiMenuKebab } from "react-icons/ci";
 import Edit from "../Edit";
 import { Formik, useFormik } from "formik";
+import { BsColumnsGap } from "react-icons/bs";
 
 export default function CheckTable(props) {
-  const { columnsData, tableData, fetchData, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData } = props;
+  const { columnsData, tableData, fetchData, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns } = props;
   const textColor = useColorModeValue("gray.500", "white");
   // const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
-  const columns = useMemo(() => columnsData, [columnsData]);
+  const columns = useMemo(() => selectedColumns, [selectedColumns]);
+  // const columns = useMemo(() => columnsData, [columnsData]);
   const [selectedValues, setSelectedValues] = useState([]);
   const [gopageValue, setGopageValue] = useState()
   const [deleteModel, setDelete] = useState(false);
@@ -78,7 +81,47 @@ export default function CheckTable(props) {
   const user = JSON.parse(localStorage.getItem("user"))
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [edit, setEdit] = useState(false);
+  const [manageColumns, setManageColumns] = useState(false);
 
+
+
+  // const addColumn = (newColumn) => {
+  //   setDynamicColumns([...dynamicColumns, newColumn]);
+  //   setSelectedColumns([...selectedColumns, newColumn]);
+  // };
+
+  // const removeColumn = (columnKey) => {
+  //   const updatedDynamicColumns = dynamicColumns.filter((column) => column.accessor !== columnKey);
+  //   setDynamicColumns(updatedDynamicColumns);
+
+  //   const updatedSelectedColumns = selectedColumns.filter((column) => column.accessor !== columnKey);
+  //   setSelectedColumns(updatedSelectedColumns);
+  // };
+
+  // const toggleColumnVisibility = (columnKey) => {
+  //   const isColumnSelected = selectedColumns.some((column) => column.accessor === columnKey);
+
+  //   if (isColumnSelected) {
+  //     const updatedColumns = selectedColumns.filter((column) => column.accessor !== columnKey);
+  //     setSelectedColumns(updatedColumns);
+  //   } else {
+  //     const columnToAdd = dynamicColumns.find((column) => column.accessor === columnKey);
+  //     setSelectedColumns([...selectedColumns, columnToAdd]);
+  //   }
+  // };
+  const [tempSelectedColumns, setTempSelectedColumns] = useState(selectedColumns); // State to track changes
+
+  const toggleColumnVisibility = (columnKey) => {
+    const isColumnSelected = tempSelectedColumns.some((column) => column.accessor === columnKey);
+
+    if (isColumnSelected) {
+      const updatedColumns = tempSelectedColumns.filter((column) => column.accessor !== columnKey);
+      setTempSelectedColumns(updatedColumns);
+    } else {
+      const columnToAdd = dynamicColumns.find((column) => column.accessor === columnKey);
+      setTempSelectedColumns([...tempSelectedColumns, columnToAdd]);
+    }
+  };
   const initialValues = {
     leadName: '',
     leadStatus: '',
@@ -222,6 +265,14 @@ export default function CheckTable(props) {
           </Flex>
         </GridItem>
         <GridItem colSpan={4} textAlign={"right"}>
+          <Menu isLazy  >
+            <MenuButton><Button variant="outline" colorScheme="brand" me={2}>  <BsColumnsGap /></Button></MenuButton>
+            <MenuList position={'absolute'} right={-5} pl={'0.5em'} minW={'fit-content'} >
+              <MenuItem onClick={() => setManageColumns(true)} width={"165px"}> Manage Columns
+              </MenuItem>
+            </MenuList>
+          </Menu>
+          {/* <Button onClick={() => handleClick()} variant="outline" colorScheme="brand" me={2}>  <BsColumnsGap /></Button> */}
           <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>
         </GridItem>
         {selectedValues.length > 0 && <DeleteIcon onClick={() => setDelete(true)} color={'red'} />}
@@ -230,6 +281,20 @@ export default function CheckTable(props) {
       {/* Delete model */}
       <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/lead/deleteMany' data={selectedValues} method='many' />
       <Box overflowY={"auto"} className="table-fix-container">
+        {/* <div>
+          {dynamicColumns.map((column) => (
+            <Text display={"flex"} key={column.accessor}>
+              <Checkbox
+                // checked={selectedColumns.some((selectedColumn) => selectedColumn.accessor === column.accessor)}
+                // checked={true}
+                defaultChecked={selectedColumns.some((selectedColumn) => selectedColumn.accessor === column.accessor)}
+                onChange={() => toggleColumnVisibility(column.accessor)}
+              />
+              {column.Header}
+              <Button onClick={() => removeColumn(column.accessor)}>Remove</Button>
+            </Text>
+          ))}
+        </div> */}
         <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
           <Thead >
             {headerGroups?.map((headerGroup, index) => (
@@ -414,6 +479,7 @@ export default function CheckTable(props) {
       <Add isOpen={isOpen} size={size} onClose={onClose} />
       <Edit isOpen={edit} size={size} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} />
     </Card>
+      {/* Advance filter */}
       <Modal onClose={() => { setAdvaceSearch(false); resetForm() }} isOpen={advaceSearch} isCentered>
         <ModalOverlay />
         <ModalContent>
@@ -536,6 +602,36 @@ export default function CheckTable(props) {
           </ModalBody>
           <ModalFooter>
             <Button variant="outline" colorScheme='green' mr={2} onClick={handleSubmit} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
+            <Button colorScheme="red" onClick={() => resetForm()}>Clear</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      {/* Manage Columns */}
+      <Modal onClose={() => { setManageColumns(false); resetForm() }} isOpen={manageColumns} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Advance Search</ModalHeader>
+          <ModalCloseButton onClick={() => { setManageColumns(false); resetForm() }} />
+          <ModalBody>
+            <div>
+              {dynamicColumns.map((column) => (
+                <Text display={"flex"} key={column.accessor} py={2}>
+                  <Checkbox
+                    defaultChecked={selectedColumns.some((selectedColumn) => selectedColumn.accessor === column.accessor)}
+                    onChange={() => toggleColumnVisibility(column.accessor)}
+                    pe={2}
+                  />
+                  {column.Header}
+                </Text>
+              ))}
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <Button variant="outline" colorScheme='green' mr={2} onClick={() => {
+              setSelectedColumns(tempSelectedColumns);
+              setManageColumns(false);
+              resetForm();
+            }} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
             <Button colorScheme="red" onClick={() => resetForm()}>Clear</Button>
           </ModalFooter>
         </ModalContent>
