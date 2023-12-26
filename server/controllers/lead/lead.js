@@ -22,6 +22,7 @@ const index = async (req, res) => {
 
 const add = async (req, res) => {
     try {
+        req.body.createdDate = new Date();
         const user = new Lead(req.body);
         await user.save();
         res.status(200).json(user);

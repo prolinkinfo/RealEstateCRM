@@ -39,6 +39,13 @@ const leadSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    updatedDate: {
+        type: Date,
+        default: Date.now
+    },
+    createdDate: {
+        type: Date,
+    },
     createBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

@@ -30,14 +30,13 @@ const register = async (req, res) => {
         const { username, password, firstName, lastName, phoneNumber } = req.body;
         const user = await User.findOne({ username: username })
 
-
         if (user) {
             return res.status(401).json({ message: "user already exist please try another email" })
         } else {
             // Hash the password
             const hashedPassword = await bcrypt.hash(password, 10);
             // Create a new user
-            const user = new User({ username, password: hashedPassword, firstName, lastName, phoneNumber });
+            const user = new User({ username, password: hashedPassword, firstName, lastName, phoneNumber, createdDate: new Date() });
             // Save the user to the database
             await user.save();
             res.status(200).json({ message: 'User created successfully' });

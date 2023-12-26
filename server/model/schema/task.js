@@ -26,6 +26,13 @@ const Task = new mongoose.Schema({
         ref: 'users',
         required: true
     },
+    updatedDate: {
+        type: Date,
+        default: Date.now
+    },
+    createdDate: {
+        type: Date,
+    },
     deleted: {
         type: Boolean,
         default: false,

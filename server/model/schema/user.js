@@ -18,6 +18,13 @@ const user = new mongoose.Schema({
     phoneNumber: { type: Number },
     firstName: String,
     lastName: String,
+    updatedDate: {
+        type: Date,
+        default: Date.now
+    },
+    createdDate: {
+        type: Date,
+    },
     deleted: {
         type: Boolean,
         default: false,
