@@ -9,6 +9,8 @@ import { getApi } from "services/api";
 import Add from "./Add";
 import CheckTable from './components/CheckTable';
 import * as yup from 'yup';
+import { FiUpload } from 'react-icons/fi';
+import ImportModal from "./components/ImportModal";
 
 const Index = () => {
     const [columns, setColumns] = useState([]);
@@ -17,6 +19,7 @@ const Index = () => {
     const [searchOpen, setSearchOpen] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"));
+    const [isImportLead, setIsImportLead] = useState(false);
 
     const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
@@ -108,6 +111,7 @@ const Index = () => {
             <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={4}>
                 <GridItem colStart={6} textAlign={"right"}>
                     <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>
+                    <Button leftIcon={<FiUpload />} onClick={() => setIsImportLead(true)} variant="brand" ms="4px">Import</Button>
                 </GridItem>
                 <GridItem colSpan={6} >
                     <Card >
@@ -272,6 +276,7 @@ const Index = () => {
             </Grid>
             {/* Add Form */}
             <Add isOpen={isOpen} size={size} onClose={onClose} />
+            <ImportModal text='Lead file' fetchData={fetchData} isOpen={isImportLead} onClose={setIsImportLead} />
         </div>
     )
 }
