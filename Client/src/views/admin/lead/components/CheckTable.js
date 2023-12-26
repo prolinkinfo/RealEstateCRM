@@ -6,6 +6,7 @@ import {
   FormLabel,
   Grid,
   GridItem,
+  HStack,
   Input,
   InputGroup,
   InputLeftElement,
@@ -24,6 +25,9 @@ import {
   Select,
   Switch,
   Table,
+  Tag,
+  TagCloseButton,
+  TagLabel,
   Tbody,
   Td,
   Text,
@@ -59,6 +63,7 @@ import { CiMenuKebab } from "react-icons/ci";
 import Edit from "../Edit";
 import { Formik, useFormik } from "formik";
 import { BsColumnsGap } from "react-icons/bs";
+import * as yup from "yup"
 
 export default function CheckTable(props) {
   const { columnsData, tableData, fetchData, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns } = props;
@@ -68,6 +73,7 @@ export default function CheckTable(props) {
   const columns = useMemo(() => selectedColumns, [selectedColumns]);
   // const columns = useMemo(() => columnsData, [columnsData]);
   const [selectedValues, setSelectedValues] = useState([]);
+  const [getTagValues, setGetTagValues] = useState([]);
   const [gopageValue, setGopageValue] = useState()
   const [deleteModel, setDelete] = useState(false);
   const [addEmailHistory, setAddEmailHistory] = useState(false);
@@ -82,33 +88,6 @@ export default function CheckTable(props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [edit, setEdit] = useState(false);
   const [manageColumns, setManageColumns] = useState(false);
-
-
-
-  // const addColumn = (newColumn) => {
-  //   setDynamicColumns([...dynamicColumns, newColumn]);
-  //   setSelectedColumns([...selectedColumns, newColumn]);
-  // };
-
-  // const removeColumn = (columnKey) => {
-  //   const updatedDynamicColumns = dynamicColumns.filter((column) => column.accessor !== columnKey);
-  //   setDynamicColumns(updatedDynamicColumns);
-
-  //   const updatedSelectedColumns = selectedColumns.filter((column) => column.accessor !== columnKey);
-  //   setSelectedColumns(updatedSelectedColumns);
-  // };
-
-  // const toggleColumnVisibility = (columnKey) => {
-  //   const isColumnSelected = selectedColumns.some((column) => column.accessor === columnKey);
-
-  //   if (isColumnSelected) {
-  //     const updatedColumns = selectedColumns.filter((column) => column.accessor !== columnKey);
-  //     setSelectedColumns(updatedColumns);
-  //   } else {
-  //     const columnToAdd = dynamicColumns.find((column) => column.accessor === columnKey);
-  //     setSelectedColumns([...selectedColumns, columnToAdd]);
-  //   }
-  // };
   const [tempSelectedColumns, setTempSelectedColumns] = useState(selectedColumns); // State to track changes
 
   const toggleColumnVisibility = (columnKey) => {
@@ -132,24 +111,34 @@ export default function CheckTable(props) {
     fromLeadScore: '',
     toLeadScore: ''
   }
-
+  const validationSchema = yup.object({
+    leadName: yup.string(),
+    leadStatus: yup.string(),
+    leadEmail: yup.string().email("Lead Email is invalid"),
+    leadPhoneNumber: yup.number().typeError('Enter Number').min(0, 'Lead Phone Number is invalid').max(999999999999, 'Lead Phone Number is invalid').notRequired(),
+    leadAddress: yup.string(),
+    leadOwner: yup.string(),
+    fromLeadScore: yup.number().min(0, "From Lead Score is invalid"),
+    toLeadScore: yup.number().min(yup.ref('fromLeadScore'), "To Lead Score must be greater than or equal to From Lead Score")
+  });
   const formik = useFormik({
     initialValues: initialValues,
+    validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
-      console.log(values, "values")
       const searchResult = allData?.filter(
         (item) =>
           (!values?.leadName || (item?.leadName && item?.leadName.toLowerCase().includes(values?.leadName?.toLowerCase()))) &&
           (!values?.leadStatus || (item?.leadStatus && item?.leadStatus.toLowerCase().includes(values?.leadStatus?.toLowerCase()))) &&
           (!values?.leadEmail || (item?.leadEmail && item?.leadEmail.toLowerCase().includes(values?.leadEmail?.toLowerCase()))) &&
           (!values?.leadPhoneNumber || (item?.leadPhoneNumber && item?.leadPhoneNumber.toString().includes(values?.leadPhoneNumber))) &&
-          (!values?.leadAddress || (item?.leadAddress && item?.leadAddress.toLowerCase().includes(values?.leadAddress?.toLowerCase()))) &&
           (!values?.leadOwner || (item?.leadOwner && item?.leadOwner.toLowerCase().includes(values?.leadOwner?.toLowerCase()))) &&
           ([null, undefined, ''].includes(values?.fromLeadScore) || [null, undefined, ''].includes(values?.toLeadScore) ||
             ((item?.leadScore || item?.leadScore === 0) &&
               (parseInt(item?.leadScore, 10) >= parseInt(values.fromLeadScore, 10) || 0) &&
               (parseInt(item?.leadScore, 10) <= parseInt(values.toLeadScore, 10) || 0)))
       )
+      let getValue = [values.leadName, values?.leadStatus, values?.leadEmail, values?.leadPhoneNumber, values?.leadOwner, (![null, undefined, ''].includes(values?.fromLeadScore) && `${values.fromLeadScore}-${values.toLeadScore}`) || undefined].filter(value => value);
+      setGetTagValues(getValue)
       setSearchedData(searchResult);
       setDisplaySearchData(true)
       setAdvaceSearch(false)
@@ -261,7 +250,8 @@ export default function CheckTable(props) {
             </InputGroup>
             <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)}>Advance Search</Button>
             {displaySearchData === true ?
-              <Button variant="outline" colorScheme='red' ms={2} leftIcon={<CloseIcon />} onClick={() => handleClear()}>clear</Button> : ""}
+              <Button variant="outline" colorScheme='red' ms={2} leftIcon={<CloseIcon />} onClick={() => { handleClear(); setGetTagValues([]) }}>clear</Button> : ""}
+            {selectedValues.length > 0 && <DeleteIcon onClick={() => setDelete(true)} color={'red'} ms={2} />}
           </Flex>
         </GridItem>
         <GridItem colSpan={4} textAlign={"right"}>
@@ -275,26 +265,25 @@ export default function CheckTable(props) {
           {/* <Button onClick={() => handleClick()} variant="outline" colorScheme="brand" me={2}>  <BsColumnsGap /></Button> */}
           <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>
         </GridItem>
-        {selectedValues.length > 0 && <DeleteIcon onClick={() => setDelete(true)} color={'red'} />}
+        <HStack spacing={4}>
+          {getTagValues && getTagValues.map((item) => (
+            <Tag
+              size={"lg"}
+              key={item}
+              borderRadius='full'
+              variant='solid'
+              colorScheme="gray"
+            >
+              <TagLabel>{item}</TagLabel>
+              {/* <TagCloseButton /> */}
+            </Tag>
+          ))}
+        </HStack>
       </Grid>
       {/* </Flex> */}
       {/* Delete model */}
       <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/lead/deleteMany' data={selectedValues} method='many' />
       <Box overflowY={"auto"} className="table-fix-container">
-        {/* <div>
-          {dynamicColumns.map((column) => (
-            <Text display={"flex"} key={column.accessor}>
-              <Checkbox
-                // checked={selectedColumns.some((selectedColumn) => selectedColumn.accessor === column.accessor)}
-                // checked={true}
-                defaultChecked={selectedColumns.some((selectedColumn) => selectedColumn.accessor === column.accessor)}
-                onChange={() => toggleColumnVisibility(column.accessor)}
-              />
-              {column.Header}
-              <Button onClick={() => removeColumn(column.accessor)}>Remove</Button>
-            </Text>
-          ))}
-        </div> */}
         <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
           <Thead >
             {headerGroups?.map((headerGroup, index) => (
@@ -387,8 +376,7 @@ export default function CheckTable(props) {
                             }
                             }
                           >
-                            {cell?.value
-                            }
+                            {cell?.value}
                           </Text>
                         );
                       } else if (cell?.column.Header === "Phone Number") {
@@ -499,6 +487,8 @@ export default function CheckTable(props) {
                   placeholder='Enter Lead Name'
                   fontWeight='500'
                 />
+                <Text mb='10px' color={'red'}> {errors.leadName && touched.leadName && errors.leadName}</Text>
+
               </GridItem>
               <GridItem colSpan={{ base: 12, md: 6 }}>
                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
@@ -516,6 +506,8 @@ export default function CheckTable(props) {
                   <option value='pending'>pending</option>
                   <option value='sold'>sold</option>
                 </Select>
+                <Text mb='10px' color={'red'}> {errors.leadStatus && touched.leadStatus && errors.leadStatus}</Text>
+
               </GridItem>
 
               <GridItem colSpan={{ base: 12, md: 6 }}>
@@ -530,6 +522,8 @@ export default function CheckTable(props) {
                   placeholder='Enter Lead Email'
                   fontWeight='500'
                 />
+                <Text mb='10px' color={'red'}> {errors.leadEmail && touched.leadEmail && errors.leadEmail}</Text>
+
               </GridItem>
               <GridItem colSpan={{ base: 12, md: 6 }}>
                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
@@ -543,6 +537,8 @@ export default function CheckTable(props) {
                   placeholder='Enter Lead PhoneNumber'
                   fontWeight='500'
                 />
+                <Text mb='10px' color={'red'}> {errors.leadPhoneNumber && touched.leadPhoneNumber && errors.leadPhoneNumber}</Text>
+
               </GridItem>
 
               <GridItem colSpan={{ base: 12, md: 6 }}>
@@ -557,6 +553,8 @@ export default function CheckTable(props) {
                   placeholder='Enter Lead Owner'
                   fontWeight='500'
                 />
+                <Text mb='10px' color={'red'}> {errors.leadOwner && touched.leadOwner && errors.leadOwner}</Text>
+
               </GridItem>
               <GridItem colSpan={{ base: 12, md: 6 }} >
                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
@@ -578,6 +576,7 @@ export default function CheckTable(props) {
                       type='number'
                       borderColor={errors.fromLeadScore && touched.fromLeadScore ? "red.300" : null}
                     />
+
                   </Box>
                   <Box w={"49%"} >
                     <Input
@@ -596,6 +595,8 @@ export default function CheckTable(props) {
                     />
                   </Box>
                 </Flex>
+                <Text mb='10px' color={'red'}> {errors.fromLeadScore && touched.fromLeadScore && errors.fromLeadScore}</Text>
+
               </GridItem>
 
             </Grid>
