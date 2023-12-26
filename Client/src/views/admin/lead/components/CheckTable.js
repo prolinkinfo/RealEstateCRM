@@ -221,10 +221,13 @@ export default function CheckTable(props) {
             </Text>
             <InputGroup width={"30%"} mx={3}>
               <InputLeftElement
+                size="sm"
+                top={"-3px"}
                 pointerEvents="none"
                 children={<SearchIcon color="gray.300" borderRadius="16px" />}
               />
               <Input type="text"
+                size="sm"
                 fontSize='sm'
                 onChange={(e) => {
                   const results = allData.filter((item) => {
@@ -248,27 +251,33 @@ export default function CheckTable(props) {
                 fontWeight='500'
                 placeholder="Search..." borderRadius="16px" />
             </InputGroup>
-            <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)}>Advance Search</Button>
-            {displaySearchData === true ?
-              <Button variant="outline" colorScheme='red' ms={2} leftIcon={<CloseIcon />} onClick={() => { handleClear(); setGetTagValues([]) }}>clear</Button> : ""}
+            <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} size="sm">Advance Search</Button>
+            {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setGetTagValues([]) }}>clear</Button> : ""}
             {selectedValues.length > 0 && <DeleteIcon onClick={() => setDelete(true)} color={'red'} ms={2} />}
           </Flex>
         </GridItem>
-        <GridItem colSpan={4} textAlign={"right"}>
+        <GridItem colSpan={4} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
           <Menu isLazy  >
-            <MenuButton><Button variant="outline" colorScheme="brand" me={2}>  <BsColumnsGap /></Button></MenuButton>
+            <MenuButton p={4}>
+              {/* <Button variant="outline" colorScheme="brand" me={2}>  */}
+              <BsColumnsGap />
+              {/* </Button> */}
+            </MenuButton>
             <MenuList position={'absolute'} right={-5} pl={'0.5em'} minW={'fit-content'} >
               <MenuItem onClick={() => setManageColumns(true)} width={"165px"}> Manage Columns
               </MenuItem>
             </MenuList>
           </Menu>
           {/* <Button onClick={() => handleClick()} variant="outline" colorScheme="brand" me={2}>  <BsColumnsGap /></Button> */}
-          <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>
+          <Button onClick={() => handleClick()} size="sm"
+            // leftIcon={<AddIcon />} 
+            variant="brand">Add</Button>
         </GridItem>
         <HStack spacing={4}>
           {getTagValues && getTagValues.map((item) => (
             <Tag
-              size={"lg"}
+              size={"md"}
+              p={2}
               key={item}
               borderRadius='full'
               variant='solid'
