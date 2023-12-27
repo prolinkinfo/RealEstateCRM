@@ -91,7 +91,7 @@ export default function ColumnsTable(props) {
           fontSize='22px'
           fontWeight='700'
           lineHeight='100%'>
-          {title}  (<CountUpComponent targetNumber={data?.length} />)
+          {title}  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
         </Text>
         <Button onClick={() => setAddEmailHistory(true)} rightIcon={<BsFillSendFill />} colorScheme="gray" >Send Email</Button>
         <AddEmailHistory lead={props.lead} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} />

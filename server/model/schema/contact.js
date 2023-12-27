@@ -54,6 +54,13 @@ const Contact = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    updatedDate: {
+        type: Date,
+        default: Date.now
+    },
+    createdDate: {
+        type: Date,
+    },
     deleted: {
         type: Boolean,
         default: false,

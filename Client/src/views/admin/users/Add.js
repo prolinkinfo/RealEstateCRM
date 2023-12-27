@@ -11,7 +11,7 @@ import { postApi } from 'services/api';
 
 
 const AddUser = (props) => {
-    const { onClose, isOpen, fetchData } = props
+    const { onClose, isOpen, setAction } = props
     const [isLoding, setIsLoding] = useState(false)
 
     const [show, setShow] = React.useState(false);
@@ -41,7 +41,7 @@ const AddUser = (props) => {
             let response = await postApi('api/user/register', values)
             if (response && response.status === 200) {
                 props.onClose();
-                // fetchData()
+                setAction((pre) => !pre)
             } else {
                 toast.error(response.response.data?.message)
             }

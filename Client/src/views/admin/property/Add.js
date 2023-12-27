@@ -73,6 +73,7 @@ const Add = (props) => {
             if (response.status === 200) {
                 props.onClose();
                 formik.resetForm();
+                props.setAction((pre) => !pre)
             }
         } catch (e) {
             console.log(e);

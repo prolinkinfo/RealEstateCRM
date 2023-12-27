@@ -31,7 +31,7 @@ export const propertySchema = yup.object({
     marketingDescription: yup.string(),
     multipleListingService: yup.string(),
     //5. Property History:
-    previousOwners: yup.number().min(0),
+    previousOwners: yup.number().min(0).notRequired(),
     purchaseHistory: yup.string(),
     //6. Financial Information:
     propertyTaxes: yup.string(),
@@ -44,5 +44,4 @@ export const propertySchema = yup.object({
     contractorsOrServiceProviders: yup.string(),
     //8. Property Notes and Comments:
     internalNotesOrComments: yup.string(),
-    //9. Custom Fields
 })

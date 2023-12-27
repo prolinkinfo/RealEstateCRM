@@ -42,6 +42,7 @@ const View = () => {
     const [deleteModel, setDelete] = useState(false);
     const [propertyModel, setPropertyModel] = useState(false);
     const [isLoding, setIsLoding] = useState(false)
+    const [action, setAction] = useState(false)
 
     const [taskModel, setTaskModel] = useState(false);
     const [addEmailHistory, setAddEmailHistory] = useState(false);
@@ -108,17 +109,16 @@ const View = () => {
     }
     useEffect(() => {
         fetchData()
-    }, [edit, addEmailHistory, addPhoneCall])
+    }, [action])
 
     function toCamelCase(text) {
         return text?.replace(/([a-z])([A-Z])/g, '$1 $2');
     }
 
-
     return (
         <>
             <Add isOpen={isOpen} size={size} onClose={onClose} />
-            <Edit isOpen={edit} size={size} onClose={setEdit} />
+            <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} />
             <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/contact/delete/' id={param.id} />
 
             {isLoding ?
@@ -463,11 +463,11 @@ const View = () => {
                                             <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
                                                 <GridItem colSpan={{ base: 12 }}>
                                                     {data?.EmailHistory.length > 0 ? <ColumnsTable fetchData={fetchData} columnsData={columnsDataColumns} tableData={data?.EmailHistory} title={'Email '} /> : <Button onClick={() => setAddEmailHistory(true)} leftIcon={<BsFillSendFill />} colorScheme="gray" >Send Email </Button>}
-                                                    <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} id={param.id} />
+                                                    <AddEmailHistory fetchData={fetchData} setAction={setAction} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} id={param.id} />
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12 }}>
                                                     {data?.phoneCallHistory?.length > 0 ? <PhoneCall fetchData={fetchData} columnsData={columnsDataColumns} tableData={data?.phoneCallHistory} title={'Call '} /> : <Button onClick={() => setAddPhoneCall(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" > Call </Button>}
-                                                    <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param.id} />
+                                                    <AddPhoneCall fetchData={fetchData} setAction={setAction} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param.id} />
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12 }}>
                                                     {data?.meetingHistory.length > 0 ? <MeetingTable className='table-container' fetchData={fetchData} setMeeting={setMeeting} columnsData={MeetingColumns} data={data?.meetingHistory} title={'Meeting '} /> : <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>}

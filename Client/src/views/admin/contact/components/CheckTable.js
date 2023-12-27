@@ -32,7 +32,7 @@ import AddPhoneCall from "views/admin/phoneCall/components/AddPhoneCall";
 import Delete from "../Delete";
 
 export default function CheckTable(props) {
-  const { columnsData, tableData, fetchData, isLoding } = props;
+  const { columnsData, tableData, fetchData, isLoding, setAction } = props;
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -96,11 +96,6 @@ export default function CheckTable(props) {
   const [addEmailHistory, setAddEmailHistory] = useState(false);
   const [addPhoneCall, setAddPhoneCall] = useState(false);
 
-
-  useEffect(() => {
-    if (fetchData) fetchData()
-  }, [deleteModel, props.isOpen])
-
   return (
     <Card
       direction="column"
@@ -118,13 +113,13 @@ export default function CheckTable(props) {
           fontWeight="700"
           lineHeight="100%"
         >
-          Contacts (<CountUpComponent targetNumber={data?.length} />)
+          Contacts (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
         </Text>
         {/* <Menu /> */}
         {selectedValues.length > 0 && <DeleteIcon onClick={() => setDelete(true)} color={'red'} />}
       </Flex>
       {/* Delete model */}
-      <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/contact/deleteMany' data={selectedValues} method='many' />
+      <Delete setAction={setAction} isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/contact/deleteMany' data={selectedValues} method='many' />
 
       <Box overflowY={"auto"} className="table-fix-container">
         <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
