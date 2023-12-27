@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Papa from 'papaparse';
 import {
     Box,
@@ -17,6 +17,7 @@ import {
 import { useFormik } from "formik";
 import { postApi } from 'services/api';
 import { toast } from 'react-toastify';
+import moment from 'moment';
 
 function LeadImport() {
 
@@ -26,6 +27,7 @@ function LeadImport() {
     const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
     const [importedFileData, setImportedFileData] = useState([]);
     const [isLoding, setIsLoding] = useState(false);
+    const navigate = useNavigate();
 
     const columns = [
         { Header: 'Fields In Crm', accessor: 'crmFields' },
@@ -86,7 +88,8 @@ function LeadImport() {
         leadNextAction: '',
         leadNurturingWorkflow: '',
         leadCampaign: '',
-        leadSourceMedium: ''
+        leadSourceMedium: '',
+        createdDate: ''
     };
 
     const formik = useFormik({
@@ -94,6 +97,11 @@ function LeadImport() {
         onSubmit: (values, { resetForm }) => {
 
             const leadsData = importedFileData?.map((item, ind) => {
+                const leadCreationDate = moment(item[values.leadCreationDate || "leadCreationDate"]);
+                const leadConversionDate = moment(item[values.leadConversionDate || "leadConversionDate"]);
+                const leadFollowUpDate = moment(item[values.leadFollowUpDate || "leadFollowUpDate"]);
+                const updatedDate = moment(item[values.updatedDate || "updatedDate"]);
+
                 return {
                     leadName: item[values.leadName || "leadName"],
                     leadEmail: item[values.leadEmail || "leadEmail"],
@@ -106,25 +114,27 @@ function LeadImport() {
                     leadSourceChannel: item[values.leadSourceChannel || "leadSourceChannel"],
                     leadAssignedAgent: item[values.leadAssignedAgent || "leadAssignedAgent"],
                     leadOwner: item[values.leadOwner || "leadOwner"],
-                    leadCreationDate: item[values.leadCreationDate || "leadCreationDate"],
-                    leadConversionDate: item[values.leadConversionDate || "leadConversionDate"],
-                    leadFollowUpDate: item[values.leadFollowUpDate || "leadFollowUpDate"],
+                    leadCreationDate: leadCreationDate.isValid() ? item[values.leadCreationDate || "leadCreationDate"] : '',
+                    leadConversionDate: leadConversionDate.isValid() ? item[values.leadConversionDate || "leadConversionDate"] : '',
+                    leadFollowUpDate: leadFollowUpDate.isValid() ? item[values.leadFollowUpDate || "leadFollowUpDate"] : '',
                     leadFollowUpStatus: item[values.leadFollowUpStatus || "leadFollowUpStatus"],
                     leadCommunicationPreferences: item[values.leadCommunicationPreferences || "leadCommunicationPreferences"],
                     leadEngagementLevel: item[values.leadEngagementLevel || "leadEngagementLevel"],
                     leadConversionRate: item[values.leadConversionRate || "leadConversionRate"],
                     leadNurturingStage: item[values.leadNurturingStage || "leadNurturingStage"],
                     deleted: item[values.deleted || "deleted"],
-                    createBy: item[values.createBy || "createBy"],
-                    updatedDate: item[values.updatedDate || "updatedDate"],
+                    // createBy: item[values.createBy || "createBy"],
+                    createBy: JSON.parse(localStorage.getItem('user'))._id,
+                    updatedDate: updatedDate.isValid() ? item[values.updatedDate || "updatedDate"] : '',
                     leadNextAction: item[values.leadNextAction || "leadNextAction"],
                     leadNurturingWorkflow: item[values.leadNurturingWorkflow || "leadNurturingWorkflow"],
                     leadCampaign: item[values.leadCampaign || "leadCampaign"],
                     leadSourceMedium: item[values.leadSourceMedium || "leadSourceMedium"],
+                    createdDate: new Date()
                 }
             });
 
-            // AddData(leadsData);
+            AddData(leadsData);
         }
     })
 
@@ -132,14 +142,18 @@ function LeadImport() {
 
     const AddData = async (leads) => {
         try {
-            setIsLoding(true)
+            setIsLoding(true);
             let response = await postApi('api/lead/addMany', leads)
             if (response.status === 200) {
                 toast.success(`Leads imported successfully`)
                 resetForm();
+                navigate('/lead');
             }
         } catch (e) {
             console.error(e);
+            toast.success(`Leads import failed`)
+            resetForm();
+            navigate('/lead');
         }
         finally {
             setIsLoding(false)
@@ -165,7 +179,6 @@ function LeadImport() {
         };
         reader.readAsText(file);
     };
-
 
     useEffect(() => {
         if (fileData && fileData.length > 0) {

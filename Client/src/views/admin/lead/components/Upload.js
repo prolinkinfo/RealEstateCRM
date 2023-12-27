@@ -61,7 +61,7 @@ export default function Upload(props) {
                         my={{ base: "auto" }}
                         mx='auto'
                         textAlign='start'>
-                        Accepted File Type (Excel file - 15MB max) only 1 file
+                        Accepted File Type (csv file - 15MB max) only 1 file
                     </Text>
                 </Flex>
             </GridItem>

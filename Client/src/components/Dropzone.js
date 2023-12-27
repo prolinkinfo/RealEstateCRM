@@ -21,7 +21,7 @@ function Dropzone(props) {
       }
       else if (props.csv === "csv") {
         const excelFiles = acceptedFiles.filter((file) => {
-          return ["text/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]?.includes(file?.type)
+          return ["text/csv"]?.includes(file?.type)
         })
         if (excelFiles.length > 0) {
           props.onFileSelect(excelFiles);
