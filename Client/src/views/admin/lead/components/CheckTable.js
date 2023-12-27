@@ -89,6 +89,7 @@ export default function CheckTable(props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [edit, setEdit] = useState(false);
   const [isImportLead, setIsImportLead] = useState(false);
+  const [searchbox, setSearchbox] = useState('');
   const [manageColumns, setManageColumns] = useState(false);
   const [tempSelectedColumns, setTempSelectedColumns] = useState(selectedColumns); // State to track changes
 
@@ -145,6 +146,7 @@ export default function CheckTable(props) {
       setDisplaySearchData(true)
       setAdvaceSearch(false)
       setSearchClear(true)
+      resetForm();
     }
   })
   const handleClear = () => {
@@ -231,6 +233,7 @@ export default function CheckTable(props) {
               <Input type="text"
                 size="sm"
                 fontSize='sm'
+                value={searchbox}
                 onChange={(e) => {
                   const results = allData.filter((item) => {
                     // Iterate through each property of the object
@@ -247,14 +250,15 @@ export default function CheckTable(props) {
                     return false; // If not found in any field, exclude from the results
                   });
                   setSearchedData(results)
-                  setDisplaySearchData(true)
+                  setSearchbox(e.target.value)
+                  setDisplaySearchData(e.target.value === "" ? false : true)
 
                 }}
                 fontWeight='500'
                 placeholder="Search..." borderRadius="16px" />
             </InputGroup>
             <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} size="sm">Advance Search</Button>
-            {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setGetTagValues([]) }}>clear</Button> : ""}
+            {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>clear</Button> : ""}
             {selectedValues.length > 0 && <DeleteIcon onClick={() => setDelete(true)} color={'red'} ms={2} />}
           </Flex>
         </GridItem>

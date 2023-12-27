@@ -11,14 +11,13 @@ import { useFormik } from "formik";
 const Index = () => {
     const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-        { Header: 'title', accessor: 'title' },
-        { Header: "first Name", accessor: "firstName", },
-        { Header: "last Name", accessor: "lastName", },
-        { Header: "phone Number", accessor: "phoneNumber", },
+        { Header: 'Title', accessor: 'title' },
+        { Header: "First Name", accessor: "firstName", },
+        { Header: "Last Name", accessor: "lastName", },
+        { Header: "Phone Number", accessor: "phoneNumber", },
         { Header: "Email Address", accessor: "email", },
-        { Header: "physical Address", accessor: "physicalAddress", },
-        { Header: "mailing Address", accessor: "mailingAddress", },
         { Header: "Contact Method", accessor: "preferredContactMethod", },
+        { Header: "Action", isSortable: false, center: true },
     ];
 
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -55,18 +54,19 @@ const Index = () => {
                 <GridItem colSpan={6}>
                     <CheckTable
                         isLoding={isLoding}
-                        columnsData={tableColumns}
+                        columnsData={columns}
+                        isOpen={isOpen}
+                        setAction={setAction}
+                        action={action}
                         setSearchedData={setSearchedData}
                         displaySearchData={displaySearchData}
                         setDisplaySearchData={setDisplaySearchData}
-                        isOpen={isOpen}
                         allData={data}
                         // tableData={data}
                         setDynamicColumns={setDynamicColumns}
                         dynamicColumns={dynamicColumns}
                         tableData={displaySearchData ? searchedData : data}
                         fetchData={fetchData}
-                        setAction={setAction}
                         onOpen={onOpen}
                         onClose={onClose}
                         selectedColumns={selectedColumns}

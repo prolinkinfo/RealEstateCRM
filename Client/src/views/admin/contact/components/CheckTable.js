@@ -43,26 +43,28 @@ import {
 } from "react-table";
 
 // Custom components
-import { DeleteIcon, SearchIcon } from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon, EmailIcon, PhoneIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
 import Card from "components/card/Card";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
 import Pagination from "components/pagination/Pagination";
 import Spinner from "components/spinner/Spinner";
 import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AddEmailHistory from "views/admin/emailHistory/components/AddEmail";
 import AddPhoneCall from "views/admin/phoneCall/components/AddPhoneCall";
 import Delete from "../Delete";
 import Add from "../Add";
 import { BsColumnsGap } from "react-icons/bs";
 import { useFormik } from "formik";
+import { CiMenuKebab } from "react-icons/ci";
+import Edit from "../Edit";
 
 export default function CheckTable(props) {
-  const { columnsData, tableData, fetchData, isLoding, setAction, allData, onClose, setSearchedData, onOpen, isOpen, displaySearchData, dynamicColumns, setDisplaySearchData, selectedColumns, setSelectedColumns } = props;
-
+  const { columnsData, tableData, fetchData, isLoding, setAction, allData, onClose, setSearchedData, onOpen, isOpen, displaySearchData, dynamicColumns, action, setDisplaySearchData, selectedColumns, setSelectedColumns } = props;
+  const navigate = useNavigate();
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
-  const columns = useMemo(() => columnsData, [columnsData]);
+  // const columns = useMemo(() => columnsData, [columnsData]);
   const [selectedValues, setSelectedValues] = useState([]);
   const [getTagValues, setGetTagValues] = useState([]);
   const [deleteModel, setDelete] = useState(false);
@@ -73,10 +75,13 @@ export default function CheckTable(props) {
   const [searchClear, setSearchClear] = useState(false);
   const [manageColumns, setManageColumns] = useState(false);
   const [advaceSearch, setAdvaceSearch] = useState(false);
+  const [searchbox, setSearchbox] = useState('');
   const [tempSelectedColumns, setTempSelectedColumns] = useState(selectedColumns);
   // const [data, setData] = useState([])
+  const [edit, setEdit] = useState(false);
   const data = useMemo(() => tableData, [tableData]);
 
+  const columns = useMemo(() => selectedColumns, [selectedColumns]);
   // const fetchData = async () => {
   //   let result = await getApi('api/contact/');
   //   setData(result.data);
@@ -129,24 +134,21 @@ export default function CheckTable(props) {
     onOpen()
   }
   const initialValues = {
-    leadName: '',
-    leadStatus: '',
-    leadEmail: '',
-    leadPhoneNumber: '',
-    leadAddress: '',
-    leadOwner: '',
-    fromLeadScore: '',
-    toLeadScore: ''
+    title: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    preferredContactMethod: '',
   }
   const validationSchema = yup.object({
-    leadName: yup.string(),
-    leadStatus: yup.string(),
-    leadEmail: yup.string().email("Lead Email is invalid"),
-    leadPhoneNumber: yup.number().typeError('Enter Number').min(0, 'Lead Phone Number is invalid').max(999999999999, 'Lead Phone Number is invalid').notRequired(),
-    leadAddress: yup.string(),
-    leadOwner: yup.string(),
-    fromLeadScore: yup.number().min(0, "From Lead Score is invalid"),
-    toLeadScore: yup.number().min(yup.ref('fromLeadScore'), "To Lead Score must be greater than or equal to From Lead Score")
+    title: yup.string(),
+    firstName: yup.string(),
+    email: yup.string().email("Lead Email is invalid"),
+    phoneNumber: yup.number().typeError('Enter Number').min(0, 'Lead Phone Number is invalid').max(999999999999, 'Lead Phone Number is invalid').notRequired(),
+    lastName: yup.string(),
+    preferredContactMethod: yup.string(),
+
   });
   const formik = useFormik({
     initialValues: initialValues,
@@ -154,22 +156,20 @@ export default function CheckTable(props) {
     onSubmit: (values, { resetForm }) => {
       const searchResult = allData?.filter(
         (item) =>
-          (!values?.leadName || (item?.leadName && item?.leadName.toLowerCase().includes(values?.leadName?.toLowerCase()))) &&
-          (!values?.leadStatus || (item?.leadStatus && item?.leadStatus.toLowerCase().includes(values?.leadStatus?.toLowerCase()))) &&
-          (!values?.leadEmail || (item?.leadEmail && item?.leadEmail.toLowerCase().includes(values?.leadEmail?.toLowerCase()))) &&
-          (!values?.leadPhoneNumber || (item?.leadPhoneNumber && item?.leadPhoneNumber.toString().includes(values?.leadPhoneNumber))) &&
-          (!values?.leadOwner || (item?.leadOwner && item?.leadOwner.toLowerCase().includes(values?.leadOwner?.toLowerCase()))) &&
-          ([null, undefined, ''].includes(values?.fromLeadScore) || [null, undefined, ''].includes(values?.toLeadScore) ||
-            ((item?.leadScore || item?.leadScore === 0) &&
-              (parseInt(item?.leadScore, 10) >= parseInt(values.fromLeadScore, 10) || 0) &&
-              (parseInt(item?.leadScore, 10) <= parseInt(values.toLeadScore, 10) || 0)))
+          (!values?.title || (item?.title && item?.title.toLowerCase().includes(values?.title?.toLowerCase()))) &&
+          (!values?.firstName || (item?.firstName && item?.firstName.toLowerCase().includes(values?.firstName?.toLowerCase()))) &&
+          (!values?.lastName || (item?.lastName && item?.lastName.toLowerCase().includes(values?.lastName?.toLowerCase()))) &&
+          (!values?.email || (item?.email && item?.email.toLowerCase().includes(values?.email?.toLowerCase()))) &&
+          (!values?.phoneNumber || (item?.phoneNumber && item?.phoneNumber.toString().includes(values?.phoneNumber))) &&
+          (!values?.preferredContactMethod || (item?.preferredContactMethod && item?.preferredContactMethod.toLowerCase().includes(values?.preferredContactMethod?.toLowerCase())))
       )
-      let getValue = [values.leadName, values?.leadStatus, values?.leadEmail, values?.leadPhoneNumber, values?.leadOwner, (![null, undefined, ''].includes(values?.fromLeadScore) && `${values.fromLeadScore}-${values.toLeadScore}`) || undefined].filter(value => value);
+      let getValue = [values.title, values?.firstName, values?.lastName, values?.email, values?.phoneNumber, values?.preferredContactMethod].filter(value => value);
       setGetTagValues(getValue)
       setSearchedData(searchResult);
       setDisplaySearchData(true)
       setAdvaceSearch(false)
       setSearchClear(true)
+      resetForm();
     }
   })
   const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
@@ -188,6 +188,9 @@ export default function CheckTable(props) {
       setTempSelectedColumns([...tempSelectedColumns, columnToAdd]);
     }
   };
+  useEffect(() => {
+    if (fetchData) fetchData()
+  }, [action])
   return (
     <>
       <Card
@@ -217,6 +220,7 @@ export default function CheckTable(props) {
                 <Input type="text"
                   size="sm"
                   fontSize='sm'
+                  value={searchbox}
                   onChange={(e) => {
                     const results = allData.filter((item) => {
                       // Iterate through each property of the object
@@ -224,24 +228,25 @@ export default function CheckTable(props) {
                         // Check if the value of the property contains the search term
                         if (
                           item[key] &&
-                          typeof item[key] === "string" &&
-                          item[key].toLowerCase().includes(e.target.value.toLowerCase())
+                          (typeof item[key] === "string" ?
+                            item[key].toLowerCase().includes(e.target.value.toLowerCase()) :
+                            (typeof item[key] === "number" && item[key].toString().includes(e.target.value)))
                         ) {
                           return true; // If found, include in the results
                         }
                       }
                       return false; // If not found in any field, exclude from the results
                     });
+                    setSearchbox(e.target.value)
                     setSearchedData(results)
                     setDisplaySearchData(true)
-
                   }}
                   fontWeight='500'
                   placeholder="Search..." borderRadius="16px" />
               </InputGroup>
               <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} size="sm">Advance Search</Button>
-              {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setGetTagValues([]) }}>clear</Button> : ""}
-              {selectedValues.length > 0 && <DeleteIcon onClick={() => setDelete(true)} color={'red'} />}
+              {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setGetTagValues([]); setSearchbox(''); }}>clear</Button> : ""}
+              {selectedValues.length > 0 && <DeleteIcon onClick={() => setDelete(true)} color={'red'} ms={2} />}
             </Flex>
           </GridItem>
           <GridItem colSpan={4} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
@@ -291,12 +296,14 @@ export default function CheckTable(props) {
                       borderColor={borderColor}
                     >
                       <Flex
-                        justify="space-between"
+                        justifyContent={column.center ? "center" : "start"}
                         align="center"
-                        fontSize={{ sm: "10px", lg: "12px" }}
+                        fontSize={{ sm: "14px", lg: "16px" }}
                         color="gray.400"
                       >
-                        {column.render("Header")}
+                        <span style={{ textTransform: "capitalize", marginRight: "8px" }}>
+                          {column.render("Header")}
+                        </span>
                         {column.isSortable !== false && (
                           <span>
                             {column.isSorted ? (column.isSortedDesc ? <FaSortDown /> : <FaSortUp />) : <FaSort />}
@@ -340,7 +347,7 @@ export default function CheckTable(props) {
                               </Text>
                             </Flex>
                           );
-                        } else if (cell?.column.Header === "title") {
+                        } else if (cell?.column.Header === "Title") {
                           data = (
                             <Text
                               me="10px"
@@ -351,13 +358,13 @@ export default function CheckTable(props) {
                               {cell?.value}
                             </Text>
                           );
-                        } else if (cell?.column.Header === "first Name") {
+                        } else if (cell?.column.Header === "First Name") {
                           data = (
                             <Link to={user?.role !== 'admin' ? `/contactView/${cell?.row?.original._id}` : `/admin/contactView/${cell?.row?.original._id}`}>
                               <Text
                                 me="10px"
                                 sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                                color='green.400'
+                                color='brand.600'
                                 fontSize="sm"
                                 fontWeight="700"
                               >
@@ -365,7 +372,7 @@ export default function CheckTable(props) {
                               </Text>
                             </Link>
                           );
-                        } else if (cell?.column.Header === "last Name") {
+                        } else if (cell?.column.Header === "Last Name") {
                           data = (
                             <Text
                               me="10px"
@@ -376,14 +383,14 @@ export default function CheckTable(props) {
                               {cell?.value}
                             </Text>
                           );
-                        } else if (cell?.column.Header === "phone Number") {
+                        } else if (cell?.column.Header === "Phone Number") {
                           data = (
                             <Text fontSize="sm" fontWeight="700"
                               onClick={() => {
                                 setAddPhoneCall(true)
                                 setSelectedId(cell?.row?.values._id)
                               }}
-                              color='green.400' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>
+                              color='brand.600' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>
                               {cell?.value}
                             </Text>
                           );
@@ -394,19 +401,7 @@ export default function CheckTable(props) {
                                 setAddEmailHistory(true)
                                 setSelectedId(cell?.row?.values._id)
                               }}
-                              color='green.400' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>
-                              {cell?.value}
-                            </Text>
-                          );
-                        } else if (cell?.column.Header === "physical Address") {
-                          data = (
-                            <Text color={textColor} fontSize="sm" fontWeight="700">
-                              {cell?.value}
-                            </Text>
-                          );
-                        } else if (cell?.column.Header === "mailing Address") {
-                          data = (
-                            <Text color={textColor} fontSize="sm" fontWeight="700">
+                              color='brand.600' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>
                               {cell?.value}
                             </Text>
                           );
@@ -416,6 +411,27 @@ export default function CheckTable(props) {
                               {cell?.value}
                             </Text>
                           );
+                        } else if (cell?.column.Header === "Action") {
+                          data = (
+                            <Text fontSize="md" fontWeight="900" textAlign={"center"} >
+                              <Menu isLazy  >
+                                <MenuButton><CiMenuKebab /></MenuButton>
+                                <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
+                                  <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>
+                                  <MenuItem py={2.5} width={"165px"} onClick={() => {
+                                    setAddPhoneCall(true)
+                                    setSelectedId(cell?.row?.values._id)
+                                  }} icon={<PhoneIcon fontSize={15} />}>Create Call</MenuItem>
+                                  <MenuItem py={2.5} width={"165px"} onClick={() => {
+                                    setAddEmailHistory(true)
+                                    setSelectedId(cell?.row?.values._id)
+                                  }} icon={<EmailIcon fontSize={15} />}>Send Email</MenuItem>
+                                  <MenuItem py={2.5} color={'green'} onClick={() => navigate(user?.role !== 'admin' ? `/contactView/${cell?.row?.original._id}` : `/admin/contactView/${cell?.row?.original._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>
+                                  <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>
+                                </MenuList>
+                              </Menu>
+                            </Text>
+                          )
                         }
                         return (
                           <Td
@@ -438,6 +454,7 @@ export default function CheckTable(props) {
         {data?.length > 5 && <Pagination gotoPage={gotoPage} gopageValue={gopageValue} setGopageValue={setGopageValue} pageCount={pageCount} canPreviousPage={canPreviousPage} previousPage={previousPage} canNextPage={canNextPage} pageOptions={pageOptions} setPageSize={setPageSize} nextPage={nextPage} pageSize={pageSize} pageIndex={pageIndex} />}
 
       </Card>
+      {/* modal */}
       <Add
         isOpen={isOpen}
         size={size}
@@ -445,8 +462,9 @@ export default function CheckTable(props) {
         setAction={setAction} />
       <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={selectedId} />
       <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} id={selectedId} />
+      <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} selectedId={selectedId} setSelectedId={setSelectedId} />
       {/* Advance filter */}
-      <Modal onClose={() => { setAdvaceSearch(false); resetForm() }} isOpen={advaceSearch} isCentered>
+      <Modal onClose={() => { setAdvaceSearch(false); resetForm(); }} isOpen={advaceSearch} isCentered>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Advance Search</ModalHeader>
@@ -455,52 +473,48 @@ export default function CheckTable(props) {
             <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={2}>
               <GridItem colSpan={{ base: 12, md: 6 }}>
                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
-                  Name
+                  Title
                 </FormLabel>
                 <Input
                   fontSize='sm'
                   onChange={handleChange} onBlur={handleBlur}
-                  value={values?.leadName}
-                  name="leadName"
-                  placeholder='Enter Lead Name'
+                  value={values?.title}
+                  name="title"
+                  placeholder='Enter Title'
                   fontWeight='500'
                 />
-                <Text mb='10px' color={'red'}> {errors.leadName && touched.leadName && errors.leadName}</Text>
+                <Text mb='10px' color={'red'}> {errors.title && touched.title && errors.title}</Text>
 
               </GridItem>
               <GridItem colSpan={{ base: 12, md: 6 }}>
                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
-                  Status
+                  FirstName
                 </FormLabel>
-                <Select
-                  value={values?.leadStatus}
+                <Input
                   fontSize='sm'
-                  name="leadStatus"
-                  onChange={handleChange}
+                  onChange={handleChange} onBlur={handleBlur}
+                  value={values?.firstName}
+                  name="firstName"
+                  placeholder='Enter FirstName'
                   fontWeight='500'
-                  placeholder={'Select Lead Status'}
-                >
-                  <option value='active'>active</option>
-                  <option value='pending'>pending</option>
-                  <option value='sold'>sold</option>
-                </Select>
-                <Text mb='10px' color={'red'}> {errors.leadStatus && touched.leadStatus && errors.leadStatus}</Text>
+                />
+                <Text mb='10px' color={'red'}> {errors.firstName && touched.firstName && errors.firstName}</Text>
 
               </GridItem>
 
               <GridItem colSpan={{ base: 12, md: 6 }}>
                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2} >
-                  Email
+                  LastName
                 </FormLabel>
                 <Input
                   fontSize='sm'
                   onChange={handleChange} onBlur={handleBlur}
-                  value={values?.leadEmail}
-                  name="leadEmail"
-                  placeholder='Enter Lead Email'
+                  value={values?.lastName}
+                  name="lastName"
+                  placeholder='Enter LastName'
                   fontWeight='500'
                 />
-                <Text mb='10px' color={'red'}> {errors.leadEmail && touched.leadEmail && errors.leadEmail}</Text>
+                <Text mb='10px' color={'red'}> {errors.lastName && touched.lastName && errors.lastName}</Text>
 
               </GridItem>
               <GridItem colSpan={{ base: 12, md: 6 }}>
@@ -510,70 +524,28 @@ export default function CheckTable(props) {
                 <Input
                   fontSize='sm'
                   onChange={handleChange} onBlur={handleBlur}
-                  value={values?.leadPhoneNumber}
-                  name="leadPhoneNumber"
-                  placeholder='Enter Lead PhoneNumber'
+                  value={values?.phoneNumber}
+                  name="phoneNumber"
+                  placeholder='Enter PhoneNumber'
                   fontWeight='500'
                 />
-                <Text mb='10px' color={'red'}> {errors.leadPhoneNumber && touched.leadPhoneNumber && errors.leadPhoneNumber}</Text>
+                <Text mb='10px' color={'red'}> {errors.phoneNumber && touched.phoneNumber && errors.phoneNumber}</Text>
 
               </GridItem>
 
-              <GridItem colSpan={{ base: 12, md: 6 }}>
+              <GridItem colSpan={{ base: 12 }}>
                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
-                  Owner
+                  Preferred Contact Method
                 </FormLabel>
                 <Input
                   fontSize='sm'
                   onChange={handleChange} onBlur={handleBlur}
-                  value={values?.leadOwner}
-                  name="leadOwner"
-                  placeholder='Enter Lead Owner'
+                  value={values?.preferredContactMethod}
+                  name="preferredContactMethod"
+                  placeholder='Enter Preferred Contact Method'
                   fontWeight='500'
                 />
-                <Text mb='10px' color={'red'}> {errors.leadOwner && touched.leadOwner && errors.leadOwner}</Text>
-
-              </GridItem>
-              <GridItem colSpan={{ base: 12, md: 6 }} >
-                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
-                  Score
-                </FormLabel>
-                <Flex justifyContent={"space-between"}>
-                  <Box w={"49%"}>
-                    <Input
-                      fontSize='sm'
-                      onChange={(e) => {
-                        setFieldValue('toLeadScore', e.target.value)
-                        handleChange(e)
-                      }}
-                      onBlur={handleBlur}
-                      value={values.fromLeadScore}
-                      name="fromLeadScore"
-                      placeholder='From Lead Score'
-                      fontWeight='500'
-                      type='number'
-                      borderColor={errors.fromLeadScore && touched.fromLeadScore ? "red.300" : null}
-                    />
-
-                  </Box>
-                  <Box w={"49%"} >
-                    <Input
-                      fontSize='sm'
-                      onChange={(e) => {
-                        values.fromLeadScore <= e.target.value && handleChange(e)
-                      }}
-                      onBlur={handleBlur}
-                      value={values.toLeadScore}
-                      name="toLeadScore"
-                      placeholder='To Lead Score'
-                      fontWeight='500'
-                      type='number'
-                      borderColor={errors.toLeadScore && touched.toLeadScore ? "red.300" : null}
-                      disabled={[null, undefined, ''].includes(values.fromLeadScore) || values.fromLeadScore < 0}
-                    />
-                  </Box>
-                </Flex>
-                <Text mb='10px' color={'red'}> {errors.fromLeadScore && touched.fromLeadScore && errors.fromLeadScore}</Text>
+                <Text mb='10px' color={'red'}> {errors.preferredContactMethod && touched.preferredContactMethod && errors.preferredContactMethod}</Text>
 
               </GridItem>
 
