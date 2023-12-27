@@ -25,7 +25,7 @@ export const leadSchema = yup.object({
     leadFollowUpDate: yup.date().required("lead Follow Up Date  Is required"),
     leadFollowUpStatus: yup.string(),
     // Lead Scoring and Nurturing:
-    leadScore: yup.number().required("Lead Score Is required"),
+    leadScore: yup.number().required("Lead Score Is required").min(0, "Lead Score Is invalid"),
     leadNurturingWorkflow: yup.string(),
     leadEngagementLevel: yup.string(),
     leadConversionRate: yup.number().required("lead Conversion Rate Is required"),
