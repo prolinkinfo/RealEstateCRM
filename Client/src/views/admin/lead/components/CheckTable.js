@@ -209,7 +209,6 @@ export default function CheckTable(props) {
       w="100%"
       overflowX={{ sm: "scroll", lg: "hidden" }}
     >
-      {/* <Flex px="25px" justify="space-between" mb="20px" align="center"> */}
       <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={4}>
         <GridItem colSpan={8} >
           <Flex alignItems={"center"} flexWrap={"wrap"}>
@@ -260,9 +259,7 @@ export default function CheckTable(props) {
         <GridItem colSpan={4} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
           <Menu isLazy  >
             <MenuButton p={4}>
-              {/* <Button variant="outline" colorScheme="brand" me={2}>  */}
               <BsColumnsGap />
-              {/* </Button> */}
             </MenuButton>
             <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} >
               <MenuItem onClick={() => setManageColumns(true)} width={"165px"}> Manage Columns
@@ -271,9 +268,7 @@ export default function CheckTable(props) {
               </MenuItem>
             </MenuList>
           </Menu>
-          {/* <Button onClick={() => handleClick()} variant="outline" colorScheme="brand" me={2}>  <BsColumnsGap /></Button> */}
           <Button onClick={() => handleClick()} size="sm"
-            // leftIcon={<AddIcon />} 
             variant="brand">Add</Button>
         </GridItem>
         <HStack spacing={4}>
@@ -292,7 +287,6 @@ export default function CheckTable(props) {
           ))}
         </HStack>
       </Grid>
-      {/* </Flex> */}
       {/* Delete model */}
       <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/lead/deleteMany' data={selectedValues} method='many' setAction={setAction} />
       <Box overflowY={"auto"} className="table-fix-container">

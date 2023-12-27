@@ -56,9 +56,9 @@ const Index = () => {
                         tableData={displaySearchData ? searchedData : data}
                         fetchData={fetchData}
                         setDisplaySearchData={setDisplaySearchData}
-                        selectedColumns={selectedColumns}
                         setDynamicColumns={setDynamicColumns}
                         dynamicColumns={dynamicColumns}
+                        selectedColumns={selectedColumns}
                         setSelectedColumns={setSelectedColumns} />
                 </GridItem>
             </Grid>

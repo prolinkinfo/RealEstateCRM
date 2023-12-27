@@ -9,7 +9,7 @@ import { useFormik } from "formik";
 
 
 const Index = () => {
-    const columns = [
+    const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
         { Header: 'title', accessor: 'title' },
         { Header: "first Name", accessor: "firstName", },
@@ -22,10 +22,14 @@ const Index = () => {
     ];
 
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const size = "lg";
     const [data, setData] = useState([])
     const [isLoding, setIsLoding] = useState(false)
     const [action, setAction] = useState(false)
+    const [columns, setColumns] = useState([]);
+    const [searchedData, setSearchedData] = useState([]);
+    const [displaySearchData, setDisplaySearchData] = useState(false);
+    const [dynamicColumns, setDynamicColumns] = useState([...tableColumns]);
+    const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
 
     const user = JSON.parse(localStorage.getItem("user"))
 
@@ -36,26 +40,41 @@ const Index = () => {
         setIsLoding(false)
     }
 
-    const handleClick = () => {
-        onOpen()
-    }
 
     useEffect(() => {
         fetchData()
+        setColumns(tableColumns)
     }, [action])
 
     return (
         <div>
             <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={4}>
-                <GridItem colStart={6} textAlign={"right"}>
+                {/* <GridItem colStart={6} textAlign={"right"}>
                     <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>
-                </GridItem>
+                </GridItem> */}
                 <GridItem colSpan={6}>
-                    <CheckTable isLoding={isLoding} columnsData={columns} isOpen={isOpen} tableData={data} fetchData={fetchData} setAction={setAction} />
+                    <CheckTable
+                        isLoding={isLoding}
+                        columnsData={tableColumns}
+                        setSearchedData={setSearchedData}
+                        displaySearchData={displaySearchData}
+                        setDisplaySearchData={setDisplaySearchData}
+                        isOpen={isOpen}
+                        allData={data}
+                        // tableData={data}
+                        setDynamicColumns={setDynamicColumns}
+                        dynamicColumns={dynamicColumns}
+                        tableData={displaySearchData ? searchedData : data}
+                        fetchData={fetchData}
+                        setAction={setAction}
+                        onOpen={onOpen}
+                        onClose={onClose}
+                        selectedColumns={selectedColumns}
+                        setSelectedColumns={setSelectedColumns} />
                 </GridItem>
             </Grid>
             {/* Add Form */}
-            <Add isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} />
+            {/* <Add isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} /> */}
         </div>
     )
 }
