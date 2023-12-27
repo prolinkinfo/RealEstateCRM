@@ -64,6 +64,7 @@ const Edit = (props) => {
             let response = await putApi(`api/lead/edit/${props?.selectedId || param.id}`, values)
             if (response.status === 200) {
                 props.onClose();
+                props.setAction((pre) => !pre)
             }
         } catch (e) {
             console.log(e);
@@ -158,7 +159,7 @@ const Edit = (props) => {
                                 <GridItem colSpan={{ base: 12, sm: 6 }}>
                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                         Lead Phone Number<Text color={"red"}>*</Text>
-                                    </FormLabel> 
+                                    </FormLabel>
                                     <InputGroup>
                                         <InputLeftElement
                                             pointerEvents="none"

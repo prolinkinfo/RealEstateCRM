@@ -52,7 +52,7 @@ const View = () => {
     const [showCall, setShowCall] = useState(false);
     const [showTasks, setShowTasks] = useState(false);
     const [showMeetings, setShowMeetings] = useState(false);
-
+    const [action, setAction] = useState(false)
     const size = "lg";
 
     const [addEmailHistory, setAddEmailHistory] = useState(false);
@@ -116,9 +116,9 @@ const View = () => {
     }
     return (
         <>
-            <Add isOpen={isOpen} size={size} onClose={onClose} />
-            <Edit isOpen={edit} size={size} onClose={setEdit} />
-            <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/lead/delete/' id={param.id} />
+            <Add isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} />
+            <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} />
+            <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/lead/delete/' id={param.id} setAction={setAction} />
 
             {isLoding ?
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >

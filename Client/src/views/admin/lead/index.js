@@ -24,6 +24,7 @@ const Index = () => {
     ];
     const [dynamicColumns, setDynamicColumns] = useState([...tableColumns]);
     const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
+    const [action, setAction] = useState(false)
     const { isOpen, onOpen, onClose } = useDisclosure()
     const size = "lg";
 
@@ -36,7 +37,7 @@ const Index = () => {
 
     useEffect(() => {
         setColumns(tableColumns)
-    }, [onClose])
+    }, [action])
 
     return (
         <div>
@@ -47,6 +48,8 @@ const Index = () => {
                         isLoding={isLoding}
                         columnsData={columns}
                         isOpen={isOpen}
+                        setAction={setAction}
+                        action={action}
                         setSearchedData={setSearchedData}
                         allData={data}
                         displaySearchData={displaySearchData}
@@ -57,7 +60,6 @@ const Index = () => {
                         setDynamicColumns={setDynamicColumns}
                         dynamicColumns={dynamicColumns}
                         setSelectedColumns={setSelectedColumns} />
-
                 </GridItem>
             </Grid>
 

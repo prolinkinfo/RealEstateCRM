@@ -66,7 +66,7 @@ import { BsColumnsGap } from "react-icons/bs";
 import * as yup from "yup"
 
 export default function CheckTable(props) {
-  const { columnsData, tableData, fetchData, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns } = props;
+  const { columnsData, tableData, fetchData, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action } = props;
   const textColor = useColorModeValue("gray.500", "white");
   // const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -200,7 +200,8 @@ export default function CheckTable(props) {
   const size = "lg";
   useEffect(() => {
     if (fetchData) fetchData()
-  }, [deleteModel, props.isOpen])
+  }, [action])
+  // }, [deleteModel, props.isOpen])
 
   return (
     <>    <Card
@@ -263,8 +264,10 @@ export default function CheckTable(props) {
               <BsColumnsGap />
               {/* </Button> */}
             </MenuButton>
-            <MenuList position={'absolute'} right={-5} pl={'0.5em'} minW={'fit-content'} >
+            <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} >
               <MenuItem onClick={() => setManageColumns(true)} width={"165px"}> Manage Columns
+              </MenuItem>
+              <MenuItem width={"165px"}> Import Leads
               </MenuItem>
             </MenuList>
           </Menu>
@@ -291,7 +294,7 @@ export default function CheckTable(props) {
       </Grid>
       {/* </Flex> */}
       {/* Delete model */}
-      <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/lead/deleteMany' data={selectedValues} method='many' />
+      <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/lead/deleteMany' data={selectedValues} method='many' setAction={setAction} />
       <Box overflowY={"auto"} className="table-fix-container">
         <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
           <Thead >
@@ -345,7 +348,7 @@ export default function CheckTable(props) {
               ) : page?.map((row, i) => {
                 prepareRow(row);
                 return (
-                  <Tr {...row?.getRowProps()} key={i}>
+                  <Tr {...row?.getRowProps()} key={i} className="leadRow">
                     {row?.cells?.map((cell, index) => {
                       let data = "";
                       if (cell?.column.Header === "#") {
@@ -475,8 +478,8 @@ export default function CheckTable(props) {
       <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} lead='true' id={selectedId} />
       <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={callSelectedId} lead='true' />
 
-      <Add isOpen={isOpen} size={size} onClose={onClose} />
-      <Edit isOpen={edit} size={size} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} />
+      <Add isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} />
+      <Edit isOpen={edit} size={size} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} />
     </Card>
       {/* Advance filter */}
       <Modal onClose={() => { setAdvaceSearch(false); resetForm() }} isOpen={advaceSearch} isCentered>
