@@ -1,10 +1,6 @@
-<<<<<<< HEAD
-import { Box, Button, Flex, FormLabel, Grid, GridItem, Input, Select, useDisclosure } from '@chakra-ui/react';
-=======
 import { AddIcon } from "@chakra-ui/icons";
 import { Box, Button, Flex, FormLabel, Grid, GridItem, Input, Select, useDisclosure, Text } from '@chakra-ui/react';
 import Card from "components/card/Card";
->>>>>>> 9f940403184d004decc2b9b538b80880893031aa
 import { useFormik } from "formik";
 import { useEffect, useState } from 'react';
 import { getApi } from "services/api";
