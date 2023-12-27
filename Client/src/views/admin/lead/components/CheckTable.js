@@ -64,6 +64,7 @@ import Edit from "../Edit";
 import { Formik, useFormik } from "formik";
 import { BsColumnsGap } from "react-icons/bs";
 import * as yup from "yup"
+import ImportModal from "./ImportModal";
 
 export default function CheckTable(props) {
   const { columnsData, tableData, fetchData, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action } = props;
@@ -87,6 +88,7 @@ export default function CheckTable(props) {
   const user = JSON.parse(localStorage.getItem("user"))
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [edit, setEdit] = useState(false);
+  const [isImportLead, setIsImportLead] = useState(false);
   const [manageColumns, setManageColumns] = useState(false);
   const [tempSelectedColumns, setTempSelectedColumns] = useState(selectedColumns); // State to track changes
 
@@ -264,7 +266,7 @@ export default function CheckTable(props) {
             <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} >
               <MenuItem onClick={() => setManageColumns(true)} width={"165px"}> Manage Columns
               </MenuItem>
-              <MenuItem width={"165px"}> Import Leads
+              <MenuItem width={"165px"} onClick={() => setIsImportLead(true)}> Import Leads
               </MenuItem>
             </MenuList>
           </Menu>
@@ -474,6 +476,8 @@ export default function CheckTable(props) {
 
       <Add isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} />
       <Edit isOpen={edit} size={size} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} />
+      <ImportModal text='Lead file' fetchData={fetchData} isOpen={isImportLead} onClose={setIsImportLead} />
+
     </Card>
       {/* Advance filter */}
       <Modal onClose={() => { setAdvaceSearch(false); resetForm() }} isOpen={advaceSearch} isCentered>
