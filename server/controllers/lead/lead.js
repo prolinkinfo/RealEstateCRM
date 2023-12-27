@@ -28,7 +28,7 @@ const addMany = async (req, res) => {
         res.status(200).json(insertedLead);
     } catch (err) {
         console.error('Failed to create Lead :', err);
-        res.status(400).json({ error: 'Failed to create Lead' });
+        res.status(400).json({ error: 'Failed to create Lead: ', err });
     }
 };
 
