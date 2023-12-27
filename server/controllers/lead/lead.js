@@ -20,8 +20,21 @@ const index = async (req, res) => {
     res.send(result)
 }
 
+const addMany = async (req, res) => {
+    try {
+        const data = req.body;
+        const insertedLead = await Lead.insertMany(data);
+
+        res.status(200).json(insertedLead);
+    } catch (err) {
+        console.error('Failed to create Lead :', err);
+        res.status(400).json({ error: 'Failed to create Lead' });
+    }
+};
+
 const add = async (req, res) => {
     try {
+        req.body.createdDate = new Date();
         const user = new Lead(req.body);
         await user.save();
         res.status(200).json(user);
@@ -249,4 +262,4 @@ const deleteMany = async (req, res) => {
     }
 }
 
-module.exports = { index, add, view, edit, deleteData, deleteMany }
+module.exports = { index, add, addMany, view, edit, deleteData, deleteMany }
