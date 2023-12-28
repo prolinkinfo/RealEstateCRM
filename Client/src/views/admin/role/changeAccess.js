@@ -59,38 +59,6 @@ function ChangeAccess({
           <ModalHeader>Change Access</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {/* <TableContainer>
-              <Table variant="simple">
-                <Thead>
-                  <Tr>
-                    <Th>Title</Th>
-                    <Th width="20px">Create</Th>
-                    <Th width="20px">View</Th>
-                    <Th width="20px">Update</Th>
-                    <Th width="20px">Delete</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {data.map((item) => (
-                    <Tr>
-                      <Td>{item.title}</Td>
-                      <Td textAlign="center">
-                        <Checkbox />
-                      </Td>
-                      <Td textAlign="center">
-                        <Checkbox />
-                      </Td>
-                      <Td textAlign="center">
-                        <Checkbox />
-                      </Td>
-                      <Td textAlign="center">
-                        <Checkbox />
-                      </Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
-            </TableContainer> */}
             <Table>
               <Thead>
                 {headerGroups?.map((headerGroup, index) => (
@@ -101,6 +69,7 @@ function ChangeAccess({
                         pe="10px"
                         key={index}
                         borderColor={borderColor}
+                        display={column.display === false && "none"}
                       >
                         <Flex
                           justify="space-between"
@@ -244,6 +213,7 @@ function ChangeAccess({
                               fontSize={{ sm: "14px" }}
                               minW={{ sm: "150px", md: "200px", lg: "auto" }}
                               borderColor="transparent"
+                              sx={{display : cell?.column.Header === '#' && 'none'}}
                             >
                               {data}
                             </Td>
@@ -260,12 +230,17 @@ function ChangeAccess({
             <Button variant="brand" onClick={handleSave}>
               Save
             </Button>
-            <Button onClick={onClose}  variant="outline"
-                            colorScheme='red'
-                            sx={{
-                                marginLeft: 2,
-                                textTransform: "capitalize",
-                            }}>Close</Button>
+            <Button
+              onClick={onClose}
+              variant="outline"
+              colorScheme="red"
+              sx={{
+                marginLeft: 2,
+                textTransform: "capitalize",
+              }}
+            >
+              Close
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
