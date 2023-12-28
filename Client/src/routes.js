@@ -14,6 +14,7 @@ import { AiFillFolderOpen, AiOutlineMail } from "react-icons/ai";
 import { FaCalendarAlt, FaRupeeSign, FaTasks } from "react-icons/fa";
 import { LuBuilding2 } from "react-icons/lu";
 import { PiPhoneCallBold } from "react-icons/pi";
+import { LiaCriticalRole } from "react-icons/lia";
 import { SiGooglemeet } from "react-icons/si";
 
 // Admin Imports
@@ -39,6 +40,7 @@ const Task = React.lazy(() => import("views/admin/task"));
 const TaskView = React.lazy(() => import("views/admin/task/components/taskView"));
 const Calender = React.lazy(() => import("views/admin/calender"));
 const Payments = React.lazy(() => import("views/admin/payments"));
+const Role = React.lazy(() => import("views/admin/role"));
 
 const Document = React.lazy(() => import("views/admin/document"));
 
@@ -230,6 +232,15 @@ const routes = [
     path: "/payments",
     icon: <Icon as={FaRupeeSign} width='20px' height='20px' color='inherit' />,
     component: Payments,
+  },
+
+   // ------------- Roles Routes ------------------------
+   {
+    name: "Roles",
+    layout: "/admin",
+    path: "/role",
+    icon: <Icon as={LiaCriticalRole} width='20px' height='20px' color='inherit' />,
+    component: Role,
   },
   // // ------------- Text message Routes ------------------------
   // {
