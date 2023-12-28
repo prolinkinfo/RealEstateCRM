@@ -62,7 +62,7 @@ import Edit from "../Edit";
 export default function CheckTable(props) {
   const { columnsData, setAction, tableData, fetchData, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, action } = props;
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const textColor = useColorModeValue("secondaryGray.900", "white");
+  const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   // const columns = useMemo(() => columnsData, [columnsData]);
   const columns = useMemo(() => selectedColumns, [selectedColumns]);
