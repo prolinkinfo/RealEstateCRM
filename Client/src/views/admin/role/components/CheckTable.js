@@ -123,8 +123,6 @@ export default function CheckTable(props) {
     setIsLoding(false);
   };
 
-  console.log(data)
-
   const tableInstance = useTable(
     {
       columns,
@@ -155,7 +153,7 @@ export default function CheckTable(props) {
 
   useEffect(() => {
     if (fetchData) fetchData();
-  }, [props.isOpen]);
+  }, []);
 
   if (pageOptions.length < gopageValue) {
     setGopageValue(pageOptions.length);
