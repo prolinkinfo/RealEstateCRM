@@ -46,7 +46,7 @@ const Index = () => {
 
     return (
         <div>
-            <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={2}>
+            <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={4}>
                 <GridItem colStart={6} textAlign={"right"}>
                     <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>
                 </GridItem>

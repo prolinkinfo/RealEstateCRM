@@ -33,6 +33,7 @@ const PropertyView = React.lazy(() => import("views/admin/property/View"));
 
 const Lead = React.lazy(() => import("views/admin/lead"));
 const LeadView = React.lazy(() => import("views/admin/lead/View"));
+const LeadImport = React.lazy(() => import("views/admin/lead/components/LeadImport"));
 
 const Communication = React.lazy(() => import("views/admin/communication"));
 
@@ -95,6 +96,15 @@ const routes = [
     parentName: "Lead",
     path: "/leadView/:id",
     component: LeadView,
+  },
+  {
+    name: "Lead Import",
+    layout: "/admin",
+    both: true,
+    under: "lead",
+    parentName: "Lead",
+    path: "/leadImport",
+    component: LeadImport,
   },
   // --------------- contact Routes --------------------
   {
