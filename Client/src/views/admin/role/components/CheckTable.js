@@ -39,7 +39,6 @@ import { Link } from "react-router-dom";
 import { getApi } from "services/api";
 import ChangeAccess from "../changeAccess";
 import RolePanel from "./rolePanel";
-import PenalTable from "./penalTable";
 
 export default function CheckTable(props) {
   const { columnsData, action, setAction, onOpen, isOpen, onClose } = props;
