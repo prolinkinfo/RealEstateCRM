@@ -159,10 +159,10 @@ export default function CheckTable(props) {
           (!values?.listingPrice || (item?.listingPrice && item?.listingPrice.toString().includes(values?.listingPrice?.toLowerCase()))) &&
           (!values?.squareFootage || (item?.squareFootage && item?.squareFootage.toString().includes(values?.squareFootage))) &&
           (!values?.yearBuilt || (item?.yearBuilt && item?.yearBuilt.toString().includes(values?.yearBuilt))) &&
-          (!values?.numberOfBedrooms || (item?.numberOfBedrooms && item?.numberOfBedrooms.toString() === values?.numberOfBedrooms)) &&
-          (!values?.numberOfBathrooms || (item?.numberOfBathrooms && item?.numberOfBathrooms.toString().includes(values?.numberOfBathrooms))),
+          (!values?.numberOfBedrooms || (item?.numberofBedrooms && item?.numberofBedrooms.toString() === values?.numberOfBedrooms)) &&
+          (!values?.numberOfBathrooms || (item?.numberofBathrooms && item?.numberofBathrooms.toString() === values?.numberOfBathrooms)),
       )
-      console.log(typeof (values?.numberOfBedrooms))
+
       let getValue = [values.propertyType, values?.numberOfBedrooms, values?.numberOfBathrooms, values?.listingPrice, values?.squareFootage, values?.yearBuilt].filter(value => value);
       setGetTagValues(getValue)
       setSearchedData(searchResult);
