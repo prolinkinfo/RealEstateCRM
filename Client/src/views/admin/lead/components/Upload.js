@@ -53,7 +53,7 @@ export default function Upload(props) {
                         textAlign='start'
                         fontSize='2xl'
                         mt={{ base: "20px" }}>
-                        Upload {props.text}         {/* text -  Lead File */}
+                        Upload {props.text}
                     </Text>
                     <Text
                         color={textColorSecondary}
@@ -61,7 +61,7 @@ export default function Upload(props) {
                         my={{ base: "auto" }}
                         mx='auto'
                         textAlign='start'>
-                        Accepted File Type (csv file - 15MB max) only 1 file
+                        Accepted File Type (csv, xlsx file - 15MB max) only 1 file
                     </Text>
                 </Flex>
             </GridItem>
