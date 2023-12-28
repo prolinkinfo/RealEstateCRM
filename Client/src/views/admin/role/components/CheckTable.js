@@ -309,13 +309,7 @@ export default function CheckTable(props) {
                               data = (
                                 <Text
                                   me="10px"
-                                  sx={{
-                                    "&:hover": {
-                                      color: "blue.500",
-                                      textDecoration: "underline",
-                                    },
-                                  }}
-                                  color="brand.600"
+                                  color={textColor}
                                   fontSize="sm"
                                   fontWeight="700"
                                 >
@@ -415,7 +409,7 @@ export default function CheckTable(props) {
                           key={index}
                           borderColor={borderColor}
                         >
-                          {console.log(column)}
+                          
                           <Flex
                             justify="space-between"
                             align="center"
@@ -506,13 +500,7 @@ export default function CheckTable(props) {
                               data = (
                                 <Text
                                   me="10px"
-                                  sx={{
-                                    "&:hover": {
-                                      color: "blue.500",
-                                      textDecoration: "underline",
-                                    },
-                                  }}
-                                  color="brand.600"
+                                  color={textColor}
                                   fontSize="sm"
                                   fontWeight="700"
                                 >
@@ -612,7 +600,7 @@ export default function CheckTable(props) {
                           key={index}
                           borderColor={borderColor}
                         >
-                          {console.log(column)}
+                          
                           <Flex
                             justify="space-between"
                             align="center"
@@ -704,13 +692,7 @@ export default function CheckTable(props) {
                               data = (
                                 <Text
                                   me="10px"
-                                  sx={{
-                                    "&:hover": {
-                                      color: "blue.500",
-                                      textDecoration: "underline",
-                                    },
-                                  }}
-                                  color="brand.600"
+                                  color={textColor}
                                   fontSize="sm"
                                   fontWeight="700"
                                 >
@@ -810,7 +792,7 @@ export default function CheckTable(props) {
                           key={index}
                           borderColor={borderColor}
                         >
-                          {console.log(column)}
+                          
                           <Flex
                             justify="space-between"
                             align="center"
@@ -901,13 +883,7 @@ export default function CheckTable(props) {
                               data = (
                                 <Text
                                   me="10px"
-                                  sx={{
-                                    "&:hover": {
-                                      color: "blue.500",
-                                      textDecoration: "underline",
-                                    },
-                                  }}
-                                  color="brand.600"
+                                  color={textColor}
                                   fontSize="sm"
                                   fontWeight="700"
                                 >
@@ -1006,7 +982,7 @@ export default function CheckTable(props) {
                           key={index}
                           borderColor={borderColor}
                         >
-                          {console.log(column)}
+                          
                           <Flex
                             justify="space-between"
                             align="center"
@@ -1097,13 +1073,7 @@ export default function CheckTable(props) {
                               data = (
                                 <Text
                                   me="10px"
-                                  sx={{
-                                    "&:hover": {
-                                      color: "blue.500",
-                                      textDecoration: "underline",
-                                    },
-                                  }}
-                                  color="brand.600"
+                                  color={textColor}
                                   fontSize="sm"
                                   fontWeight="700"
                                 >
@@ -1174,7 +1144,8 @@ export default function CheckTable(props) {
         </Card>
       </Tabs>
       <ChangeAccess isOpen={isOpen} onClose={onClose} onOpen={onOpen} borderColor={borderColor}
-       data={page} headerGroups={headerGroups} textColor={textColor} column={columns} getTableBodyProps={getTableBodyProps} isLoding={isLoding} prepareRow={prepareRow} />
+       data={page} headerGroups={headerGroups} textColor={textColor} column={columns} getTableBodyProps={getTableBodyProps}
+       page={data} setData={setData} isLoding={isLoding} prepareRow={prepareRow} />
     </>
   );
 }
