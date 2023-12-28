@@ -18,6 +18,7 @@ import { useFormik } from "formik";
 import { postApi } from 'services/api';
 import { toast } from 'react-toastify';
 import moment from 'moment';
+import ExcelJS from 'exceljs';
 
 function LeadImport() {
 
@@ -160,24 +161,52 @@ function LeadImport() {
         }
     };
 
-    // works for only .csv file
-    const parseFileData = (file) => {
+    const parseFileData = async (file) => {
         const reader = new FileReader();
+        const extension = file.name.split('.').pop().toLowerCase();
 
         reader.onload = async ({ target }) => {
-            const csv = Papa.parse(target.result, {
-                header: true,
-            });
-            const parsedData = csv?.data;
 
-            setImportedFileData(parsedData);
+            if (extension === 'csv') {
+                const csv = Papa.parse(target.result, {
+                    header: true,
+                });
+                const parsedData = csv?.data;
+                setImportedFileData(parsedData);
 
-            const fileHeadingFields = Object.keys(parsedData[0]);
-            setImportedFileFields(fileHeadingFields);
+                const fileHeadingFields = Object.keys(parsedData[0]);
+                setImportedFileFields(fileHeadingFields);
 
-            // const columns = Object.values(parsedData[0]);
+            } else if (extension === 'xlsx') {
+                const data = new Uint8Array(target.result);
+                const workbook = new ExcelJS.Workbook();
+
+                await workbook.xlsx.load(data);
+
+                const worksheet = workbook.getWorksheet(1);
+                const jsonData = [];
+
+                // Iterate over rows and cells
+                worksheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+                    const rowData = {};
+                    row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+                        rowData[worksheet.getCell(1, colNumber).value] = cell.value;
+                    });
+                    jsonData.push(rowData);
+                });
+                setImportedFileData(jsonData);
+
+                const fileHeadingFields = Object.keys(jsonData[0]);
+                setImportedFileFields(fileHeadingFields);
+            }
         };
-        reader.readAsText(file);
+
+        if (extension === 'csv') {
+            reader.readAsText(file);
+        } else if (extension === 'xlsx') {
+            const blob = new Blob([file]);
+            reader.readAsArrayBuffer(blob);
+        }
     };
 
     useEffect(() => {
@@ -227,8 +256,8 @@ function LeadImport() {
                                             onChange={handleChange}
                                         >
                                             {
-                                                importedFileFields?.map(item => (
-                                                    <option value={item} key={item}>{item}</option>
+                                                importedFileFields?.map(field => (
+                                                    <option value={field} key={field}>{field}</option>
                                                 ))
                                             }
                                         </Select>
