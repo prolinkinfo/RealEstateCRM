@@ -262,4 +262,9 @@ const deleteMany = async (req, res) => {
     }
 }
 
-module.exports = { index, add, addMany, view, edit, deleteData, deleteMany }
+const exportLead = async (req,res) => {
+  
+ 
+}
+
+module.exports = { index, add, addMany, view, edit, deleteData, deleteMany ,exportLead}
