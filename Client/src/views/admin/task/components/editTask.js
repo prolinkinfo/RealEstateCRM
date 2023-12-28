@@ -7,6 +7,7 @@ import { TaskSchema } from 'schema';
 import { getApi, putApi } from 'services/api';
 import ContactModel from "components/commonTableModel/ContactModel";
 import LeadModel from "components/commonTableModel/LeadModel";
+import Spinner from 'components/spinner/Spinner';
 
 const EditTask = (props) => {
     const { onClose, isOpen, fetchData } = props
@@ -16,7 +17,7 @@ const EditTask = (props) => {
     const [assignmentToData, setAssignmentToData] = useState([]);
     const [contactModelOpen, setContactModel] = useState(false);
     const [leadModelOpen, setLeadModel] = useState(false);
-
+    const [isLoding, setIsLoding] = useState(false);
     const initialValues = {
         title: '',
         category: 'None',
@@ -47,6 +48,7 @@ const EditTask = (props) => {
 
     const EditData = async () => {
         try {
+            setIsLoding(true)
             let response = await putApi(`api/task/edit/${props.id}`, values)
             if (response.status === 200) {
                 formik.resetForm()
@@ -57,11 +59,15 @@ const EditTask = (props) => {
         } catch (e) {
             console.log(e);
         }
+        finally {
+            setIsLoding(false)
+        }
     };
 
     const fetchTaskData = async () => {
         if (props.id) {
             try {
+                setIsLoding(true)
                 let result = await getApi('api/task/view/', props.id)
 
                 setFieldValue('title', result?.data?.title)
@@ -81,6 +87,9 @@ const EditTask = (props) => {
             }
             catch (e) {
                 console.log(e);
+            }
+            finally {
+                setIsLoding(false)
             }
         }
     }
@@ -122,239 +131,243 @@ const EditTask = (props) => {
                     <ContactModel isOpen={contactModelOpen} onClose={setContactModel} fieldName='assignmentTo' setFieldValue={setFieldValue} />
                     {/* Lead Model  */}
                     <LeadModel isOpen={leadModelOpen} onClose={setLeadModel} fieldName='assignmentToLead' setFieldValue={setFieldValue} />
-
-                    <Grid templateColumns="repeat(12, 1fr)" gap={3}>
-                        <GridItem colSpan={{ base: 12, md: 6 }} >
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Title<Text color={"red"}>*</Text>
-                            </FormLabel>
-                            <Input
-                                fontSize='sm'
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.title}
-                                name="title"
-                                placeholder='Title'
-                                fontWeight='500'
-                                borderColor={errors?.title && touched?.title ? "red.300" : null}
-                            />
-                            <Text mb='10px' color={'red'}> {errors.title && touched.title && errors.title}</Text>
-                        </GridItem>
-                        <GridItem colSpan={{ base: 12, md: 6 }} >
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Related
-                            </FormLabel>
-                            <RadioGroup onChange={(e) => { setFieldValue('category', e); setFieldValue('assignmentTo', null); setFieldValue('assignmentToLead', null); }} value={values.category}>
-                                <Stack direction='row'>
-                                    <Radio value='None' >None</Radio>
-                                    <Radio value='contact'>Contact</Radio>
-                                    <Radio value='lead'>Lead</Radio>
-                                </Stack>
-                            </RadioGroup>
-                            <Text mb='10px' color={'red'}> {errors.category && touched.category && errors.category}</Text>
-                        </GridItem>
-                        <GridItem colSpan={{ base: 12, md: values.category === "None" ? 12 : 6 }} >
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Description
-                            </FormLabel>
-                            <Input
-                                fontSize='sm'
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.description}
-                                name="description"
-                                placeholder='Description'
-                                fontWeight='500'
-                                borderColor={errors?.description && touched?.description ? "red.300" : null}
-                            />
-                            <Text mb='10px' color={'red'}> {errors.description && touched.description && errors.description}</Text>
-                        </GridItem>
-                        {values.category === "contact" ?
-                            <>
-                                <GridItem colSpan={{ base: 12, md: 6 }} >
-                                    <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                        Assignment To  Contact
-                                    </FormLabel>
-                                    <Flex justifyContent={'space-between'}>
-                                        <Select
-                                            value={values.assignmentTo}
-                                            name="assignmentTo"
-                                            onChange={handleChange}
-                                            mb={errors.assignmentTo && touched.assignmentTo ? undefined : '10px'}
-                                            fontWeight='500'
-                                            placeholder={'Assignment To'}
-                                            borderColor={errors.assignmentTo && touched.assignmentTo ? "red.300" : null}
-                                        >
-                                            {assignmentToData?.map((item) => {
-                                                return <option value={item._id} key={item._id}>{values.category === 'contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
-                                            })}
-                                        </Select>
-                                        <IconButton onClick={() => setContactModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
-                                    </Flex>
-                                    <Text mb='10px' color={'red'}> {errors.assignmentTo && touched.assignmentTo && errors.assignmentTo}</Text>
-                                </GridItem>
-                            </>
-                            : values.category === "lead" ?
+                    {isLoding ?
+                        <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
+                            <Spinner />
+                        </Flex>
+                        :
+                        <Grid templateColumns="repeat(12, 1fr)" gap={3}>
+                            <GridItem colSpan={{ base: 12, md: 6 }} >
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                    Title<Text color={"red"}>*</Text>
+                                </FormLabel>
+                                <Input
+                                    fontSize='sm'
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.title}
+                                    name="title"
+                                    placeholder='Title'
+                                    fontWeight='500'
+                                    borderColor={errors?.title && touched?.title ? "red.300" : null}
+                                />
+                                <Text mb='10px' color={'red'}> {errors.title && touched.title && errors.title}</Text>
+                            </GridItem>
+                            <GridItem colSpan={{ base: 12, md: 6 }} >
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                    Related
+                                </FormLabel>
+                                <RadioGroup onChange={(e) => { setFieldValue('category', e); setFieldValue('assignmentTo', null); setFieldValue('assignmentToLead', null); }} value={values.category}>
+                                    <Stack direction='row'>
+                                        <Radio value='None' >None</Radio>
+                                        <Radio value='contact'>Contact</Radio>
+                                        <Radio value='lead'>Lead</Radio>
+                                    </Stack>
+                                </RadioGroup>
+                                <Text mb='10px' color={'red'}> {errors.category && touched.category && errors.category}</Text>
+                            </GridItem>
+                            <GridItem colSpan={{ base: 12, md: values.category === "None" ? 12 : 6 }} >
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                    Description
+                                </FormLabel>
+                                <Input
+                                    fontSize='sm'
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.description}
+                                    name="description"
+                                    placeholder='Description'
+                                    fontWeight='500'
+                                    borderColor={errors?.description && touched?.description ? "red.300" : null}
+                                />
+                                <Text mb='10px' color={'red'}> {errors.description && touched.description && errors.description}</Text>
+                            </GridItem>
+                            {values.category === "contact" ?
                                 <>
                                     <GridItem colSpan={{ base: 12, md: 6 }} >
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                            Assignment To Lead
+                                            Assignment To  Contact
                                         </FormLabel>
                                         <Flex justifyContent={'space-between'}>
                                             <Select
-                                                value={values.assignmentToLead}
-                                                name="assignmentToLead"
+                                                value={values.assignmentTo}
+                                                name="assignmentTo"
                                                 onChange={handleChange}
-                                                mb={errors.assignmentToLead && touched.assignmentToLead ? undefined : '10px'}
+                                                mb={errors.assignmentTo && touched.assignmentTo ? undefined : '10px'}
                                                 fontWeight='500'
                                                 placeholder={'Assignment To'}
-                                                borderColor={errors.assignmentToLead && touched.assignmentToLead ? "red.300" : null}
+                                                borderColor={errors.assignmentTo && touched.assignmentTo ? "red.300" : null}
                                             >
                                                 {assignmentToData?.map((item) => {
-                                                    return <option value={item._id} key={item._id}>{item.leadName}</option>
+                                                    return <option value={item._id} key={item._id}>{values.category === 'contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
                                                 })}
                                             </Select>
-                                            <IconButton onClick={() => setLeadModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
+                                            <IconButton onClick={() => setContactModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
                                         </Flex>
-                                        <Text mb='10px' color={'red'}> {errors.assignmentToLead && touched.assignmentToLead && errors.assignmentToLead}</Text>
+                                        <Text mb='10px' color={'red'}> {errors.assignmentTo && touched.assignmentTo && errors.assignmentTo}</Text>
                                     </GridItem>
                                 </>
-                                : ''
-                        }
-                        <GridItem colSpan={{ base: 12 }} >
-                            <Checkbox isChecked={isChecked} onChange={(e) => setIsChecked(e.target.checked)}>All Day Task ? </Checkbox>
-                        </GridItem>
-                        <GridItem colSpan={{ base: 12, md: 6 }} >
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Start Date
-                            </FormLabel>
-                            <Input
-                                type={isChecked ? 'date' : 'datetime-local'}
-                                fontSize='sm'
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.start}
-                                name="start"
-                                fontWeight='500'
-                                borderColor={errors?.start && touched?.start ? "red.300" : null}
-                            />
-                            <Text mb='10px' color={'red'}> {errors.start && touched.start && errors.start}</Text>
-                        </GridItem>
-                        <GridItem colSpan={{ base: 12, md: 6 }} >
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                End Date
-                            </FormLabel>
-                            <Input
-                                type={isChecked ? 'date' : 'datetime-local'}
-                                fontSize='sm'
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.end}
-                                name="end"
-                                fontWeight='500'
-                                borderColor={errors?.end && touched?.end ? "red.300" : null}
-                            />
-                            <Text mb='10px' color={'red'}> {errors.end && touched.end && errors.end}</Text>
-                        </GridItem>
-                        <GridItem colSpan={{ base: 12, sm: 4 }} >
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Background-Color
-                            </FormLabel>
-                            <Input
-                                type='color'
-                                fontSize='sm'
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.backgroundColor}
-                                name="backgroundColor"
-                                fontWeight='500'
-                                borderColor={errors?.backgroundColor && touched?.backgroundColor ? "red.300" : null}
-                            />
-                            <Text mb='10px' color={'red'}> {errors.backgroundColor && touched.backgroundColor && errors.backgroundColor}</Text>
-                        </GridItem>
-                        <GridItem colSpan={{ base: 12, sm: 4 }} >
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Border-Color
-                            </FormLabel>
-                            <Input
-                                fontSize='sm'
-                                type='color'
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.borderColor}
-                                name="borderColor"
-                                placeholder='borderColor'
-                                fontWeight='500'
-                                borderColor={errors?.borderColor && touched?.borderColor ? "red.300" : null}
-                            />
-                            <Text mb='10px' color={'red'}> {errors.borderColor && touched.borderColor && errors.borderColor}</Text>
-                        </GridItem>
-                        <GridItem colSpan={{ base: 12, sm: 4 }} >
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Text-Color
-                            </FormLabel>
-                            <Input
-                                fontSize='sm'
-                                type='color'
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.textColor}
-                                name="textColor"
-                                placeholder='textColor'
-                                fontWeight='500'
-                                textColor={errors?.textColor && touched?.textColor ? "red.300" : null}
-                            />
-                            <Text mb='10px' color={'red'}> {errors.textColor && touched.textColor && errors.textColor}</Text>
-                        </GridItem>
-                        <GridItem colSpan={{ base: 12 }} >
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Reminder
-                            </FormLabel>
-                            <RadioGroup onChange={(e) => setFieldValue('reminder', e)} value={values.reminder}>
-                                <Stack direction='row'>
-                                    <Radio value='None' >None</Radio>
-                                    <Radio value='email'>Email</Radio>
-                                    <Radio value='sms'>Sms</Radio>
-                                </Stack>
-                            </RadioGroup>
-                            <Text mb='10px' color={'red'}> {errors.reminder && touched.reminder && errors.reminder}</Text>
-                        </GridItem>
+                                : values.category === "lead" ?
+                                    <>
+                                        <GridItem colSpan={{ base: 12, md: 6 }} >
+                                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                                Assignment To Lead
+                                            </FormLabel>
+                                            <Flex justifyContent={'space-between'}>
+                                                <Select
+                                                    value={values.assignmentToLead}
+                                                    name="assignmentToLead"
+                                                    onChange={handleChange}
+                                                    mb={errors.assignmentToLead && touched.assignmentToLead ? undefined : '10px'}
+                                                    fontWeight='500'
+                                                    placeholder={'Assignment To'}
+                                                    borderColor={errors.assignmentToLead && touched.assignmentToLead ? "red.300" : null}
+                                                >
+                                                    {assignmentToData?.map((item) => {
+                                                        return <option value={item._id} key={item._id}>{item.leadName}</option>
+                                                    })}
+                                                </Select>
+                                                <IconButton onClick={() => setLeadModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
+                                            </Flex>
+                                            <Text mb='10px' color={'red'}> {errors.assignmentToLead && touched.assignmentToLead && errors.assignmentToLead}</Text>
+                                        </GridItem>
+                                    </>
+                                    : ''
+                            }
+                            <GridItem colSpan={{ base: 12 }} >
+                                <Checkbox isChecked={isChecked} onChange={(e) => setIsChecked(e.target.checked)}>All Day Task ? </Checkbox>
+                            </GridItem>
+                            <GridItem colSpan={{ base: 12, md: 6 }} >
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                    Start Date
+                                </FormLabel>
+                                <Input
+                                    type={isChecked ? 'date' : 'datetime-local'}
+                                    fontSize='sm'
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.start}
+                                    name="start"
+                                    fontWeight='500'
+                                    borderColor={errors?.start && touched?.start ? "red.300" : null}
+                                />
+                                <Text mb='10px' color={'red'}> {errors.start && touched.start && errors.start}</Text>
+                            </GridItem>
+                            <GridItem colSpan={{ base: 12, md: 6 }} >
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                    End Date
+                                </FormLabel>
+                                <Input
+                                    type={isChecked ? 'date' : 'datetime-local'}
+                                    fontSize='sm'
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.end}
+                                    name="end"
+                                    fontWeight='500'
+                                    borderColor={errors?.end && touched?.end ? "red.300" : null}
+                                />
+                                <Text mb='10px' color={'red'}> {errors.end && touched.end && errors.end}</Text>
+                            </GridItem>
+                            <GridItem colSpan={{ base: 12, sm: 4 }} >
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                    Background-Color
+                                </FormLabel>
+                                <Input
+                                    type='color'
+                                    fontSize='sm'
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.backgroundColor}
+                                    name="backgroundColor"
+                                    fontWeight='500'
+                                    borderColor={errors?.backgroundColor && touched?.backgroundColor ? "red.300" : null}
+                                />
+                                <Text mb='10px' color={'red'}> {errors.backgroundColor && touched.backgroundColor && errors.backgroundColor}</Text>
+                            </GridItem>
+                            <GridItem colSpan={{ base: 12, sm: 4 }} >
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                    Border-Color
+                                </FormLabel>
+                                <Input
+                                    fontSize='sm'
+                                    type='color'
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.borderColor}
+                                    name="borderColor"
+                                    placeholder='borderColor'
+                                    fontWeight='500'
+                                    borderColor={errors?.borderColor && touched?.borderColor ? "red.300" : null}
+                                />
+                                <Text mb='10px' color={'red'}> {errors.borderColor && touched.borderColor && errors.borderColor}</Text>
+                            </GridItem>
+                            <GridItem colSpan={{ base: 12, sm: 4 }} >
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                    Text-Color
+                                </FormLabel>
+                                <Input
+                                    fontSize='sm'
+                                    type='color'
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.textColor}
+                                    name="textColor"
+                                    placeholder='textColor'
+                                    fontWeight='500'
+                                    textColor={errors?.textColor && touched?.textColor ? "red.300" : null}
+                                />
+                                <Text mb='10px' color={'red'}> {errors.textColor && touched.textColor && errors.textColor}</Text>
+                            </GridItem>
+                            <GridItem colSpan={{ base: 12 }} >
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                    Reminder
+                                </FormLabel>
+                                <RadioGroup onChange={(e) => setFieldValue('reminder', e)} value={values.reminder}>
+                                    <Stack direction='row'>
+                                        <Radio value='None' >None</Radio>
+                                        <Radio value='email'>Email</Radio>
+                                        <Radio value='sms'>Sms</Radio>
+                                    </Stack>
+                                </RadioGroup>
+                                <Text mb='10px' color={'red'}> {errors.reminder && touched.reminder && errors.reminder}</Text>
+                            </GridItem>
 
-                        <GridItem colSpan={{ base: 12 }} >
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Url
-                            </FormLabel>
-                            <Input
-                                fontSize='sm'
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.url}
-                                name="url"
-                                placeholder='Enter url'
-                                fontWeight='500'
-                                borderColor={errors?.url && touched?.url ? "red.300" : null}
-                            />
-                            <Text mb='10px' color={'red'}> {errors.url && touched.url && errors.url}</Text>
-                        </GridItem>
-                        <GridItem colSpan={{ base: 12 }} >
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Notes
-                            </FormLabel>
-                            <Textarea
-                                resize={'none'}
-                                fontSize='sm'
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.notes}
-                                name="notes"
-                                placeholder='Notes'
-                                fontWeight='500'
-                                borderColor={errors?.notes && touched?.notes ? "red.300" : null}
-                            />
-                            <Text mb='10px' color={'red'}> {errors.notes && touched.notes && errors.notes}</Text>
-                        </GridItem>
-                    </Grid>
-
+                            <GridItem colSpan={{ base: 12 }} >
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                    Url
+                                </FormLabel>
+                                <Input
+                                    fontSize='sm'
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.url}
+                                    name="url"
+                                    placeholder='Enter url'
+                                    fontWeight='500'
+                                    borderColor={errors?.url && touched?.url ? "red.300" : null}
+                                />
+                                <Text mb='10px' color={'red'}> {errors.url && touched.url && errors.url}</Text>
+                            </GridItem>
+                            <GridItem colSpan={{ base: 12 }} >
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                    Notes
+                                </FormLabel>
+                                <Textarea
+                                    resize={'none'}
+                                    fontSize='sm'
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.notes}
+                                    name="notes"
+                                    placeholder='Notes'
+                                    fontWeight='500'
+                                    borderColor={errors?.notes && touched?.notes ? "red.300" : null}
+                                />
+                                <Text mb='10px' color={'red'}> {errors.notes && touched.notes && errors.notes}</Text>
+                            </GridItem>
+                        </Grid>
+                    }
                 </ModalBody>
                 <ModalFooter>
                     <Button variant='brand' onClick={handleSubmit}>Edit</Button>

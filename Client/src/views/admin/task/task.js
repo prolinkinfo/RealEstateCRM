@@ -8,7 +8,7 @@ import AddTask from './components/addTask'
 const Task = (props) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const columns = [
+    const tableColumns = [
         {
             Header: "#",
             accessor: "_id",
@@ -20,15 +20,19 @@ const Task = (props) => {
         { Header: "Assignment To", accessor: "assignmentToName", },
         { Header: "Start Date", accessor: "start", },
         { Header: "End Date", accessor: "end", },
+        { Header: "Action", isSortable: false, center: true },
     ];
-
-    const handleClick = () => {
-        onOpen()
-    }
-
+    const [dynamicColumns, setDynamicColumns] = useState([...tableColumns]);
+    const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
+    const [action, setAction] = useState(false)
     const [data, setData] = useState([])
     const user = JSON.parse(localStorage.getItem("user"))
     const [isLoding, setIsLoding] = useState(false)
+    const [columns, setColumns] = useState([]);
+    const [displaySearchData, setDisplaySearchData] = useState(false);
+    const [searchedData, setSearchedData] = useState([]);
+
+
 
     const fetchData = async () => {
         setIsLoding(true)
@@ -38,17 +42,34 @@ const Task = (props) => {
     }
 
     useEffect(() => {
-        fetchData()
-    }, [])
+        setColumns(tableColumns)
+    }, [action])
 
 
     return (
         <div>
-            <Flex alignItems={'center'} justifyContent={"right"} flexWrap={'wrap'} mb={3}>
+            {/* <Flex alignItems={'center'} justifyContent={"right"} flexWrap={'wrap'} mb={3}>
                 <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Create Task</Button>
-            </Flex>
-            <CheckTable columnsData={columns} fetchData={fetchData} data={data} isLoding={isLoding} className='table-fix-container' />
-            <AddTask isOpen={isOpen} fetchData={fetchData} onClose={onClose} />
+            </Flex> */}
+            <CheckTable
+                isLoding={isLoding}
+                columnsData={columns}
+                isOpen={isOpen}
+                setAction={setAction}
+                action={action}
+                setSearchedData={setSearchedData}
+                allData={data}
+                displaySearchData={displaySearchData}
+                tableData={displaySearchData ? searchedData : data}
+                fetchData={fetchData}
+                setDisplaySearchData={setDisplaySearchData}
+                setDynamicColumns={setDynamicColumns}
+                dynamicColumns={dynamicColumns}
+                selectedColumns={selectedColumns}
+                setSelectedColumns={setSelectedColumns}
+                className='table-fix-container'
+            />
+            {/* <AddTask isOpen={isOpen} fetchData={fetchData} onClose={onClose} /> */}
         </div>
     )
 }
