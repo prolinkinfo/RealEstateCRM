@@ -261,7 +261,7 @@ export default function CheckTable(props) {
                 </MenuItem>
               </MenuList>
             </Menu>
-            <Button onClick={() => handleClick()} size={"sm"} variant="brand">Add</Button>
+            <Button onClick={() => handleClick()} size={"sm"} variant="brand">Add Contact</Button>
           </GridItem>
           <HStack spacing={4}>
             {getTagValues && getTagValues.map((item) => (
