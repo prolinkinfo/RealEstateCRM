@@ -39,75 +39,43 @@ import { Link } from "react-router-dom";
 import { getApi } from "services/api";
 import ChangeAccess from "../changeAccess";
 import RolePanel from "./rolePanel";
+import PenalTable from "./penalTable";
 
 export default function CheckTable(props) {
   const { columnsData, action, setAction, onOpen, isOpen, onClose } = props;
 
+  const columns = [
+    {
+      Header: "#",
+      accessor: "_id",
+      isSortable: false,
+      width: 10,
+      display: false
+    },
+    { Header: "title", accessor: "title" },
+    { Header: "create", accessor: "create", width: '20px' },
+    { Header: "view", accessor: "view", width: '20px' },
+    { Header: "update", accessor: "update", width: '20px' },
+    { Header: "delete", accessor: "delete", width: '20px' },
+  ];
+
+
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
-  const columns = useMemo(() => columnsData, [columnsData]);
+  // const columns = useMemo(() => columnsData, [columnsData]);
   const [selectedValues, setSelectedValues] = useState([]);
   const user = JSON.parse(localStorage.getItem("user"));
   const [deleteModel, setDelete] = useState(false);
   // const data = useMemo(() => tableData, [tableData]);
-  const [data, setData] = useState([
-    {
-      title: "Lead",
-      create: false,
-      delete: false,
-      update: false,
-      view: false,
-    },
-    {
-      title: "Contacts",
-      create: false,
-      delete: false,
-      update: false,
-      view: false,
-    },
-    {
-      title: "Property",
-      create: false,
-      delete: false,
-      update: false,
-      view: false,
-    },
-    {
-      title: "Task",
-      create: false,
-      delete: false,
-      update: false,
-      view: false,
-    },
-    {
-      title: "Meeting",
-      create: false,
-      delete: false,
-      update: false,
-      view: false,
-    },
-    {
-      title: "Call",
-      create: false,
-      delete: false,
-      update: false,
-      view: false,
-    },
-    {
-      title: "Email",
-      create: false,
-      delete: false,
-      update: false,
-      view: false,
-    },
-  ]);
+  const [data, setData] = useState([]);
+
   const [isLoding, setIsLoding] = useState(false);
   const [userRole, setUserRole] = useState([]);
   const [adminRole, setAdminRole] = useState([]);
   const [teamleaderRole, setTeamleaderRole] = useState([]);
-  const [managerRole , setManagerRole] = useState([]);
-  const [executiveRole , setExecutiveRole] = useState([]);
-  const [telecallerRole , setTelecallerRole] = useState([]);
+  const [managerRole, setManagerRole] = useState([]);
+  const [executiveRole, setExecutiveRole] = useState([]);
+  const [telecallerRole, setTelecallerRole] = useState([]);
   const [gopageValue, setGopageValue] = useState();
 
   const fetchData = async () => {
@@ -123,53 +91,52 @@ export default function CheckTable(props) {
     setIsLoding(false);
   };
 
-  console.log(data)
 
-  const tableInstance = useTable(
-    {
-      columns,
-      data,
-      initialState: { pageIndex: 0 },
-    },
-    useGlobalFilter,
-    useSortBy,
-    usePagination
-  );
+  // const tableInstance = useTable(
+  //   {
+  //     columns,
+  //     data,
+  //     initialState: { pageIndex: 0 },
+  //   },
+  //   useGlobalFilter,
+  //   useSortBy,
+  //   usePagination
+  // );
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    prepareRow,
-    page,
-    canPreviousPage,
-    canNextPage,
-    pageOptions,
-    pageCount,
-    gotoPage,
-    nextPage,
-    previousPage,
-    setPageSize,
-    state: { pageIndex, pageSize },
-  } = tableInstance;
+  // const {
+  //   getTableProps,
+  //   getTableBodyProps,
+  //   headerGroups,
+  //   prepareRow,
+  //   page,
+  //   canPreviousPage,
+  //   canNextPage,
+  //   pageOptions,
+  //   pageCount,
+  //   gotoPage,
+  //   nextPage,
+  //   previousPage,
+  //   setPageSize,
+  //   state: { pageIndex, pageSize },
+  // } = tableInstance;
 
   useEffect(() => {
     if (fetchData) fetchData();
   }, [props.isOpen]);
 
-  if (pageOptions.length < gopageValue) {
-    setGopageValue(pageOptions.length);
-  }
+  // if (pageOptions.length < gopageValue) {
+  //   setGopageValue(pageOptions.length);
+  // }
 
-  const handleCheckboxChange = (event, value) => {
-    if (event.target.checked) {
-      setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
-    } else {
-      setSelectedValues((prevSelectedValues) =>
-        prevSelectedValues.filter((selectedValue) => selectedValue !== value)
-      );
-    }
-  };
+  // const handleCheckboxChange = (event, value) => {
+  //   if (event.target.checked) {
+  //     setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
+  //   } else {
+  //     setSelectedValues((prevSelectedValues) =>
+  //       prevSelectedValues.filter((selectedValue) => selectedValue !== value)
+  //     );
+  //   }
+  // };
 
   const handleClick = () => {
     props.onOpen();
@@ -197,9 +164,14 @@ export default function CheckTable(props) {
                 },
               }}
             >
-              {data.map((item) => (
+              {/* {data.map((item) => (
                 <Tab>{item.roleName}</Tab>
-              ))}
+              ))} */}
+              <Tab>Admin</Tab>
+              <Tab>Team Leads</Tab>
+              <Tab>Managers</Tab>
+              <Tab>Executives</Tab>
+              <Tab>Tele Callers</Tab>
             </TabList>
           </GridItem>
         </Grid>
@@ -214,21 +186,22 @@ export default function CheckTable(props) {
               <TabPanel key={index} pt={4} p={0}>
                 <RolePanel
                   name={item.roleName}
-                  borderColor={borderColor}
-                  data={page}
+                  // borderColor={borderColor}
+                  // // data={page}
                   // data={item.access}
-                  headerGroups={headerGroups}
-                  textColor={textColor}
-                  column={columns}
-                  getTableBodyProps={getTableBodyProps}
-                  page={data}
-                  isLoding={isLoding}
-                  prepareRow={prepareRow}
-                  handleCheckboxChange={handleCheckboxChange}
-                  selectedValues={selectedValues}
-                  setDelete={setDelete}
+                  // headerGroups={headerGroups}
+                  // textColor={textColor}
+                  // column={columns}
+                  // getTableBodyProps={getTableBodyProps}
+                  // page={data}
+                  // isLoding={isLoding}
+                  // prepareRow={prepareRow}
+                  // handleCheckboxChange={handleCheckboxChange}
+                  // selectedValues={selectedValues}
+                  // setDelete={setDelete}
                   handleClick={handleClick}
-                  userRole={userRole}
+                  // userRole={userRole}
+                  isLoding={isLoding} columnsData={columns} isOpen={isOpen} tableData={item.access} fetchData={fetchData} setAction={setAction}
                 />
               </TabPanel>
             ))}
@@ -307,7 +280,7 @@ export default function CheckTable(props) {
           </TabPanels>
         </Card>
       </Tabs>
-      <ChangeAccess
+      {/* <ChangeAccess
         isOpen={isOpen}
         onClose={onClose}
         onOpen={onOpen}
@@ -321,7 +294,7 @@ export default function CheckTable(props) {
         setData={setData}
         isLoding={isLoding}
         prepareRow={prepareRow}
-      />
+      /> */}
     </>
   );
 }

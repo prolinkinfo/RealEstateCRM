@@ -53,7 +53,7 @@ function ChangeAccess({
 
   return (
     <>
-      <Modal onClose={onClose} isOpen={isOpen} isCentered size={"xl"}>
+      {/* <Modal onClose={onClose} isOpen={isOpen} isCentered size={"xl"}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Change Access</ModalHeader>
@@ -78,19 +78,6 @@ function ChangeAccess({
                           color="gray.400"
                         >
                           {column.display !== false && column.render("Header")}
-                          {/* {column.isSortable !== false && (
-                              <span>
-                                {column.isSorted ? (
-                                  column.isSortedDesc ? (
-                                    <FaSortDown />
-                                  ) : (
-                                    <FaSortUp />
-                                  )
-                                ) : (
-                                  <FaSort />
-                                )}
-                              </span>
-                            )} */}
                         </Flex>
                       </Th>
                     ))}
@@ -213,7 +200,7 @@ function ChangeAccess({
                               fontSize={{ sm: "14px" }}
                               minW={{ sm: "150px", md: "200px", lg: "auto" }}
                               borderColor="transparent"
-                              sx={{display : cell?.column.Header === '#' && 'none'}}
+                              sx={{ display: cell?.column.Header === '#' && 'none' }}
                             >
                               {data}
                             </Td>
@@ -243,7 +230,7 @@ function ChangeAccess({
             </Button>
           </ModalFooter>
         </ModalContent>
-      </Modal>
+      </Modal> */}
     </>
   );
 }
