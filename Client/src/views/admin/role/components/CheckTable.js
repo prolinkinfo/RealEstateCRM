@@ -102,7 +102,28 @@ export default function CheckTable(props) {
     },
   ]);
   const [isLoding, setIsLoding] = useState(false);
+  const [userRole, setUserRole] = useState([]);
+  const [adminRole, setAdminRole] = useState([]);
+  const [teamleaderRole, setTeamleaderRole] = useState([]);
+  const [managerRole , setManagerRole] = useState([]);
+  const [executiveRole , setExecutiveRole] = useState([]);
+  const [telecallerRole , setTelecallerRole] = useState([]);
   const [gopageValue, setGopageValue] = useState();
+
+  const fetchData = async () => {
+    setIsLoding(true);
+    let result = await getApi("api/role-access");
+    setUserRole(result.data[0]?.access);
+    setAdminRole(result.data[1]?.access);
+    setTeamleaderRole(result.data[2]?.access);
+    setManagerRole(result.data[3]?.access);
+    setExecutiveRole(result.data[4]?.access);
+    setTelecallerRole(result.data[5]?.access);
+    setData(result.data);
+    setIsLoding(false);
+  };
+
+  console.log(data)
 
   const tableInstance = useTable(
     {
@@ -131,6 +152,10 @@ export default function CheckTable(props) {
     setPageSize,
     state: { pageIndex, pageSize },
   } = tableInstance;
+
+  useEffect(() => {
+    if (fetchData) fetchData();
+  }, [props.isOpen]);
 
   if (pageOptions.length < gopageValue) {
     setGopageValue(pageOptions.length);
@@ -172,11 +197,9 @@ export default function CheckTable(props) {
                 },
               }}
             >
-              <Tab>Admin</Tab>
-              <Tab>Team Leads</Tab>
-              <Tab>Managers</Tab>
-              <Tab>Executives</Tab>
-              <Tab>Tele Callers</Tab>
+              {data.map((item) => (
+                <Tab>{item.roleName}</Tab>
+              ))}
             </TabList>
           </GridItem>
         </Grid>
@@ -187,25 +210,29 @@ export default function CheckTable(props) {
           overflowX={{ sm: "scroll", lg: "hidden" }}
         >
           <TabPanels>
-            <TabPanel pt={4} p={0}>
-              <RolePanel
-                name={"Admin"}
-                borderColor={borderColor}
-                data={page}
-                headerGroups={headerGroups}
-                textColor={textColor}
-                column={columns}
-                getTableBodyProps={getTableBodyProps}
-                page={data}
-                isLoding={isLoding}
-                prepareRow={prepareRow}
-                handleCheckboxChange={handleCheckboxChange}
-                selectedValues={selectedValues}
-                setDelete={setDelete}
-                handleClick={handleClick}
-              />
-            </TabPanel>
-            <TabPanel pt={4} p={0}>
+            {data.map((item, index) => (
+              <TabPanel key={index} pt={4} p={0}>
+                <RolePanel
+                  name={item.roleName}
+                  borderColor={borderColor}
+                  data={page}
+                  // data={item.access}
+                  headerGroups={headerGroups}
+                  textColor={textColor}
+                  column={columns}
+                  getTableBodyProps={getTableBodyProps}
+                  page={data}
+                  isLoding={isLoding}
+                  prepareRow={prepareRow}
+                  handleCheckboxChange={handleCheckboxChange}
+                  selectedValues={selectedValues}
+                  setDelete={setDelete}
+                  handleClick={handleClick}
+                  userRole={userRole}
+                />
+              </TabPanel>
+            ))}
+            {/* <TabPanel pt={4} p={0}>
             <RolePanel
                 name={"Team Leads"}
                 borderColor={borderColor}
@@ -276,7 +303,7 @@ export default function CheckTable(props) {
                 setDelete={setDelete}
                 handleClick={handleClick}
               />
-            </TabPanel>
+            </TabPanel> */}
           </TabPanels>
         </Card>
       </Tabs>

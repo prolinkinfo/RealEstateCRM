@@ -28,9 +28,8 @@ const RolePanel = ({
   selectedValues,
   handleCheckboxChange,
   handleClick,
-  setDelete, name
+  setDelete, name,userRole
 }) => {
-    
   return (
     <>
       <Flex px="25px" justify="space-between" mb="20px" align="center">
