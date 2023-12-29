@@ -10,7 +10,7 @@ import LeadModel from "components/commonTableModel/LeadModel";
 import Spinner from 'components/spinner/Spinner';
 
 const EditTask = (props) => {
-    const { onClose, isOpen, fetchData } = props
+    const { onClose, isOpen, fetchData, setAction } = props
     const [isChecked, setIsChecked] = useState();
     const userId = JSON.parse(localStorage.getItem('user'))._id
     const user = JSON.parse(localStorage.getItem("user"))
@@ -54,7 +54,8 @@ const EditTask = (props) => {
                 formik.resetForm()
                 props.viewClose();
                 onClose(false)
-                fetchData()
+                // fetchData()
+                setAction((pre) => !pre)
             }
         } catch (e) {
             console.log(e);
@@ -370,7 +371,7 @@ const EditTask = (props) => {
                     }
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' onClick={handleSubmit}>Edit</Button>
+                    <Button variant='brand' onClick={handleSubmit}>Update</Button>
                     <Button ml={2} onClick={() => onClose(false)}>Close</Button>
                 </ModalFooter>
             </ModalContent>

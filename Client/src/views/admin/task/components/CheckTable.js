@@ -192,9 +192,6 @@ export default function CheckTable(props) {
         px="0px"
         overflowX={{ sm: "scroll", lg: "hidden" }}
       >
-        <EventView fetchData={fetchData} isOpen={eventView} onClose={setEventView} info={id} />
-
-
         <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={4} mx={4}>
           <GridItem colSpan={8} >
             <Flex alignItems={"center"} flexWrap={"wrap"}>
@@ -417,15 +414,15 @@ export default function CheckTable(props) {
           </Table>
         </Box>
         {data?.length > 5 && <Pagination gotoPage={gotoPage} gopageValue={gopageValue} setGopageValue={setGopageValue} pageCount={pageCount} canPreviousPage={canPreviousPage} previousPage={previousPage} canNextPage={canNextPage} pageOptions={pageOptions} setPageSize={setPageSize} nextPage={nextPage} pageSize={pageSize} pageIndex={pageIndex} />}
-
-
       </Card>
+
+
       <AddTask isOpen={isOpen} fetchData={fetchData} onClose={onClose} />
-      <EditTask isOpen={edit} onClose={setEdit} viewClose={onClose} id={selectedId} />
+      <EditTask isOpen={edit} onClose={setEdit} viewClose={onClose} id={selectedId} setAction={setAction} />
+      <EventView fetchData={fetchData} isOpen={eventView} onClose={setEventView} info={id} setAction={setAction} action={action} />
       <DeleteTask isOpen={deleteModel} onClose={setDelete} viewClose={onClose} url='api/task/delete/' method='one' id={selectedValues} redirectPage={"/task"} setAction={setAction} />
-      {/* <EditTask isOpen={edit} onClose={setEdit} viewClose={onClose} id={id?.event ? id?.event?._def?.extendedProps?._id : id} /> */}
       <ImportModal text='Lead file' fetchData={fetchData} isOpen={isImportLead} onClose={setIsImportLead} />
-      {/* Advance filter */}
+      {/* Advance filter modal*/}
       <Modal onClose={() => { setAdvaceSearch(false); resetForm() }} isOpen={advaceSearch} isCentered>
         <ModalOverlay />
         <ModalContent>
@@ -521,7 +518,7 @@ export default function CheckTable(props) {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      {/* Manage Columns */}
+      {/* Manage Columns modal*/}
       <Modal onClose={() => { setManageColumns(false); resetForm() }} isOpen={manageColumns} isCentered>
         <ModalOverlay />
         <ModalContent>

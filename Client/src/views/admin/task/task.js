@@ -45,7 +45,7 @@ const Task = (props) => {
         setColumns(tableColumns)
     }, [action])
 
-
+    console.log(action, "action")
     return (
         <div>
             {/* <Flex alignItems={'center'} justifyContent={"right"} flexWrap={'wrap'} mb={3}>

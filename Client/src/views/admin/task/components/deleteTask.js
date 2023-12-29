@@ -44,7 +44,7 @@ const DeleteTask = (props) => {
             }
         }
     };
-    console.log(props.id, "props.id")
+
     const handleClose = () => {
         props.onClose(false)
     }
