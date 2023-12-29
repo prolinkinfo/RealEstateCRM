@@ -62,7 +62,7 @@ import Edit from "../Edit";
 export default function CheckTable(props) {
   const { columnsData, setAction, tableData, fetchData, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, action } = props;
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const textColor = useColorModeValue("secondaryGray.900", "white");
+  const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   // const columns = useMemo(() => columnsData, [columnsData]);
   const columns = useMemo(() => selectedColumns, [selectedColumns]);
@@ -159,10 +159,10 @@ export default function CheckTable(props) {
           (!values?.listingPrice || (item?.listingPrice && item?.listingPrice.toString().includes(values?.listingPrice?.toLowerCase()))) &&
           (!values?.squareFootage || (item?.squareFootage && item?.squareFootage.toString().includes(values?.squareFootage))) &&
           (!values?.yearBuilt || (item?.yearBuilt && item?.yearBuilt.toString().includes(values?.yearBuilt))) &&
-          (!values?.numberOfBedrooms || (item?.numberOfBedrooms && item?.numberOfBedrooms.toString() === values?.numberOfBedrooms)) &&
-          (!values?.numberOfBathrooms || (item?.numberOfBathrooms && item?.numberOfBathrooms.toString().includes(values?.numberOfBathrooms))),
+          (!values?.numberOfBedrooms || (item?.numberofBedrooms && item?.numberofBedrooms.toString() === values?.numberOfBedrooms)) &&
+          (!values?.numberOfBathrooms || (item?.numberofBathrooms && item?.numberofBathrooms.toString() === values?.numberOfBathrooms)),
       )
-      console.log(typeof (values?.numberOfBedrooms))
+
       let getValue = [values.propertyType, values?.numberOfBedrooms, values?.numberOfBathrooms, values?.listingPrice, values?.squareFootage, values?.yearBuilt].filter(value => value);
       setGetTagValues(getValue)
       setSearchedData(searchResult);
@@ -207,10 +207,9 @@ export default function CheckTable(props) {
           <GridItem colSpan={8} >
             <Flex alignItems={"center"} flexWrap={"wrap"}>
               <Text
-                color={textColor}
+                color={"secondaryGray.900"}
                 fontSize="22px"
                 fontWeight="700"
-                lineHeight="100%"
               >
                 Properties (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
               </Text>

@@ -11,7 +11,7 @@ import EditTask from './components/editTask'
 import { useNavigate } from 'react-router-dom';
 
 const EventView = (props) => {
-    const { onClose, isOpen, info, fetchData } = props
+    const { onClose, isOpen, info, fetchData, setAction, action } = props
     const [data, setData] = useState()
     const [edit, setEdit] = useState(false);
     const [deleteModel, setDelete] = useState(false);
@@ -30,7 +30,7 @@ const EventView = (props) => {
 
     useEffect(() => {
         fetchViewData()
-    }, [info])
+    }, [action, info])
 
     const handleViewOpen = () => {
         if (info?.event) {
@@ -110,7 +110,7 @@ const EventView = (props) => {
                             <IconButton variant='outline' onClick={() => setEdit(true)} ml={3} borderRadius="10px" size="md" icon={<EditIcon />} />
                             <IconButton colorScheme='red' onClick={() => setDelete(true)} ml={3} borderRadius="10px" size="md" icon={<DeleteIcon />} />
 
-                            <EditTask fetchData={fetchData} isOpen={edit} onClose={setEdit} viewClose={onClose} id={info?.event ? info?.event?._def?.extendedProps?._id : info} from="view" />
+                            <EditTask setAction={setAction} isOpen={edit} onClose={setEdit} viewClose={onClose} id={info?.event ? info?.event?._def?.extendedProps?._id : info} from="view" />
                             <DeleteTask fetchData={props.fetchData} isOpen={deleteModel} onClose={setDelete} viewClose={onClose} url='api/task/delete/' method='one' id={info?.event ? info?.event?._def?.extendedProps?._id : info} />
                         </DrawerFooter>
                     </>}
