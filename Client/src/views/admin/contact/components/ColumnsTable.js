@@ -12,7 +12,7 @@ import {
   useColorModeValue
 } from "@chakra-ui/react";
 import moment from 'moment';
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import {
   useGlobalFilter,
   usePagination,
@@ -27,12 +27,11 @@ import Pagination from "components/pagination/Pagination";
 import { BsFillSendFill } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
 import AddEmailHistory from "../../emailHistory/components/AddEmail";
-
 export default function ColumnsTable(props) {
   const { columnsData, tableData, title, fetchData } = props;
-
   const columns = useMemo(() => columnsData, [columnsData]);
   const data = useMemo(() => tableData, [tableData]);
+
   const [addEmailHistory, setAddEmailHistory] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"))
   const [gopageValue, setGopageValue] = useState()
@@ -71,6 +70,13 @@ export default function ColumnsTable(props) {
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   const param = useParams()
 
+  useEffect(() => {
+    // Update gopageValue only after the initial render 
+    if (gopageValue === undefined && pageOptions.length < gopageValue) {
+      setGopageValue(pageOptions.length);
+    }
+  }, [pageOptions, gopageValue]);
+
   return (
     <Card
       direction='column'
@@ -79,7 +85,7 @@ export default function ColumnsTable(props) {
       style={{ border: '1px solid gray.200' }}
       overflowX={{ sm: "scroll", lg: "hidden" }}
     >
-      <Flex px='25px' justify='space-between' mb='20px' align='center'>
+      <Flex px='25px' justify='space-between' mb='10px' align='center'>
         <Text
           color={textColor}
           fontSize='22px'
@@ -127,7 +133,7 @@ export default function ColumnsTable(props) {
               prepareRow(row);
               return (
                 <Tr {...row?.getRowProps()} key={index}>
-                  {row?.cells.map((cell, index) => {
+                  {row?.cells?.map((cell, index) => {
                     let data = "";
                     if (cell?.column.Header === "sender") {
                       data = (
@@ -178,8 +184,10 @@ export default function ColumnsTable(props) {
                   })}
                 </Tr>
               );
+
             })}
           </Tbody>
+
         </Table>
       </Box>
 
