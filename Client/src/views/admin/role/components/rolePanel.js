@@ -1,6 +1,6 @@
 import { DeleteIcon } from "@chakra-ui/icons";
 import {
-    Button,
+  Button,
   Checkbox,
   Flex,
   Table,
@@ -9,27 +9,100 @@ import {
   Text,
   Th,
   Thead,
+  useColorModeValue,
   Tr,
+  useDisclosure,
 } from "@chakra-ui/react";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
 import Spinner from "components/spinner/Spinner";
-import React from "react";
+import { useMemo, useState } from "react";
+import {
+  useGlobalFilter,
+  usePagination,
+  useSortBy,
+  useTable,
+} from "react-table";
+import ChangeAccess from "../changeAccess";
 
-const RolePanel = ({
-  data,
-  headerGroups,
-  textColor,
-  page,
-  borderColor,
-  columns,
-  prepareRow,
-  isLoding,
-  getTableBodyProps,
-  selectedValues,
-  handleCheckboxChange,
-  handleClick,
-  setDelete, name,userRole
-}) => {
+// const RolePanel = ({
+//   // data,
+//   // headerGroups,
+//   // textColor,
+//   // page,
+//   // borderColor,
+//   // columns,
+//   // prepareRow,
+//   // isLoding,
+//   // getTableBodyProps,
+//   // selectedValues,
+//   // handleCheckboxChange,
+//   // handleClick,
+//   // setDelete, name, userRole
+// }) => {
+const RolePanel = (props) => {
+
+  const { columnsData, name, tableData, handleClick, fetchData, isLoding, setAction,_id , } = props;
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const textColor = useColorModeValue("secondaryGray.900", "white");
+  const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
+  const columns = useMemo(() => columnsData, [columnsData]);
+  const [selectedValues, setSelectedValues] = useState([]);
+
+  const [deleteModel, setDelete] = useState(false);
+  const [selectedId, setSelectedId] = useState()
+  const [gopageValue, setGopageValue] = useState()
+  // const [data, setData] = useState([])
+  const data = useMemo(() => tableData, [tableData]);
+
+  // const fetchData = async () => {
+  //   let result = await getApi('api/contact/');
+  //   setData(result.data);
+  // }
+  const user = JSON.parse(localStorage.getItem("user"))
+
+
+  const tableInstance = useTable(
+    {
+      columns, data,
+      initialState: { pageIndex: 0 }
+    },
+    useGlobalFilter,
+    useSortBy,
+    usePagination
+  );
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    prepareRow,
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    state: { pageIndex, pageSize }
+  } = tableInstance;
+
+  if (pageOptions.length < gopageValue) {
+    setGopageValue(pageOptions.length)
+  }
+
+  const handleCheckboxChange = (event, value) => {
+    if (event.target.checked) {
+      setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
+    } else {
+      setSelectedValues((prevSelectedValues) =>
+        prevSelectedValues.filter((selectedValue) => selectedValue !== value)
+      );
+    }
+  };
+
   return (
     <>
       <Flex px="25px" justify="space-between" mb="20px" align="center">
@@ -43,11 +116,7 @@ const RolePanel = ({
           <CountUpComponent key={data?.length} targetNumber={data?.length} />)
         </Text>
         {/* <Menu /> */}
-        {selectedValues.length > 0 && (
-          <DeleteIcon onClick={() => setDelete(true)} color={"red"} />
-        )}
-
-        <Button variant="brand" onClick={handleClick}>
+        <Button variant="brand" onClick={()  => {onOpen();}}>
           Change Access
         </Button>
       </Flex>
@@ -119,7 +188,7 @@ const RolePanel = ({
               </Td>
             </Tr>
           ) : (
-            data?.map((row, i) => {
+            page?.map((row, i) => {
               prepareRow(row);
               return (
                 <Tr {...row?.getRowProps()} key={i}>
@@ -128,7 +197,7 @@ const RolePanel = ({
                     if (cell?.column.Header === "#") {
                       data = (
                         <Flex align="center">
-                          <Checkbox
+                          {/* <Checkbox
                             colorScheme="brandScheme"
                             value={selectedValues}
                             isChecked={selectedValues.includes(cell?.value)}
@@ -136,7 +205,7 @@ const RolePanel = ({
                               handleCheckboxChange(event, cell?.value)
                             }
                             me="10px"
-                          />
+                          /> */}
                           <Text
                             color={textColor}
                             fontSize="sm"
@@ -200,6 +269,13 @@ const RolePanel = ({
           )}
         </Tbody>
       </Table>
+
+       <ChangeAccess
+        isOpen={isOpen}
+        onClose={onClose}
+        onOpen={onOpen}
+        isLoding={isLoding} columnsData={columns} name={name} _id={_id} tableData={data} fetchData={fetchData} setAction={setAction}
+       /> 
     </>
   );
 };

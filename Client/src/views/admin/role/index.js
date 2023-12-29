@@ -19,13 +19,13 @@ const Index = () => {
     { Header: "update", accessor: "update",width: '20px'},
     { Header: "delete", accessor: "delete",width: '20px' },
   ];
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  // const { isOpen, onOpen, onClose } = useDisclosure();
   const [action, setAction] = useState(false);
   const size = "lg";
 
-  const handleClick = () => {
-    onOpen();
-  };
+  // const handleClick = () => {
+  //   onOpen();
+  // };
 
   return (
     <div>
@@ -35,10 +35,10 @@ const Index = () => {
                 </GridItem>
             </Grid> */}
       <CheckTable
-        isOpen={isOpen}
-        onClose={onClose}
+        // isOpen={isOpen}
+        // onClose={onClose}
         setAction={setAction}
-        onOpen={onOpen}
+        // onOpen={onOpen}
         action={action}
         columnsData={columns}
       />
