@@ -34,8 +34,9 @@ import {
   Th,
   Thead,
   Tr,
+  MenuDivider,
   useColorModeValue,
-  useDisclosure
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -44,6 +45,7 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
+import * as XLSX from 'xlsx'
 
 // Custom components
 import { CloseIcon, DeleteIcon, DownloadIcon, EditIcon, EmailIcon, PhoneIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
@@ -92,6 +94,15 @@ export default function CheckTable(props) {
   const [searchbox, setSearchbox] = useState('');
   const [manageColumns, setManageColumns] = useState(false);
   const [tempSelectedColumns, setTempSelectedColumns] = useState(selectedColumns); // State to track changes
+
+  const csvColumns = [
+    { Header: 'Name', accessor: 'leadName' },
+    { Header: "Status", accessor: "leadStatus" },
+    { Header: "Email", accessor: "leadEmail" },
+    { Header: "Phone Number", accessor: "leadPhoneNumber" },
+    { Header: "Owner", accessor: "leadOwner" },
+    { Header: "Score", accessor: "leadScore" },
+  ];
 
   const toggleColumnVisibility = (columnKey) => {
     const isColumnSelected = tempSelectedColumns.some((column) => column.accessor === columnKey);
@@ -198,10 +209,63 @@ export default function CheckTable(props) {
       );
     }
   };
+
   const handleClick = () => {
     onOpen()
   }
+
   const size = "lg";
+
+  const handleExportLeads = (extension) => {
+    if (selectedValues && selectedValues?.length > 0) {
+      downloadCsvOrExcel(extension, selectedValues);
+    }
+    else {
+      downloadCsvOrExcel(extension);
+    }
+  }
+
+  const downloadCsvOrExcel = async (extension, selectedIds) => {
+    try {
+      if (selectedIds && selectedIds?.length > 0) {
+        const selectedRecordsWithSpecificFileds = tableData?.filter((rec) => selectedIds.includes(rec._id))?.map((rec) => {
+          const selectedFieldsData = {};
+          csvColumns.forEach((property) => {
+            selectedFieldsData[property.accessor] = rec[property.accessor];
+          });
+          return selectedFieldsData;
+        });
+        convertJsonToCsvOrExcel(selectedRecordsWithSpecificFileds, csvColumns, 'lead', extension);
+      } else {
+        const AllRecordsWithSpecificFileds = tableData?.map((rec) => {
+          const selectedFieldsData = {};
+          csvColumns.forEach((property) => {
+            selectedFieldsData[property.accessor] = rec[property.accessor];
+          });
+          return selectedFieldsData;
+        });
+        convertJsonToCsvOrExcel(AllRecordsWithSpecificFileds, csvColumns, 'lead', extension);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const convertJsonToCsvOrExcel = (jsonArray, csvColumns, fileName, extension) => {
+    const csvHeader = csvColumns.map((col) => col.Header);
+
+    const csvContent = [
+      csvHeader,
+      ...jsonArray.map((row) => csvColumns.map((col) => row[col.accessor]))
+    ];
+
+    const ws = XLSX.utils.aoa_to_sheet(csvContent);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
+
+    XLSX.writeFile(wb, `${fileName}.${extension}`);    // .csv, .xlsx
+  };
+
   useEffect(() => {
     if (fetchData) fetchData()
   }, [action])
@@ -272,6 +336,9 @@ export default function CheckTable(props) {
               </MenuItem>
               <MenuItem width={"165px"} onClick={() => setIsImportLead(true)}> Import Leads
               </MenuItem>
+              <MenuDivider />
+              <MenuItem width={"165px"} onClick={() => handleExportLeads('csv')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as CSV' : 'Export as CSV'}</MenuItem>
+              <MenuItem width={"165px"} onClick={() => handleExportLeads('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem>
             </MenuList>
           </Menu>
           <Button onClick={() => handleClick()} size="sm"
