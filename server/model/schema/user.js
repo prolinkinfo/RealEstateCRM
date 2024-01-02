@@ -18,6 +18,11 @@ const user = new mongoose.Schema({
     phoneNumber: { type: Number },
     firstName: String,
     lastName: String,
+    roles: [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'roleAccess',
+        required: true
+    }],
     updatedDate: {
         type: Date,
         default: Date.now
