@@ -41,16 +41,24 @@ const Index = () => {
 
     return (
         <div>
-            <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
+            {/* <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
                 <GridItem colStart={6} textAlign={"right"}>
                     <Button onClick={() => setMeeting(true)} leftIcon={<AddIcon />} variant="brand">Add</Button>
                 </GridItem>
-            </Grid>
+            </Grid> */}
 
             {/* <CheckTable columnsData={columns} tableData={data} /> */}
-            <CheckTable isOpen={addMeeting} isLoding={isLoding} data={data} columnsData={columns} className='table-fix-container' />
+            <CheckTable
+                isOpen={addMeeting}
+                isLoding={isLoding}
+                data={data}
+                setMeeting={setMeeting}
+                addMeeting={addMeeting}
+                columnsData={columns}
+                from="index"
+                setAction={setAction}
+                className='table-fix-container' />
             {/* Add Form */}
-            <AddMeeting setAction={setAction} isOpen={addMeeting} onClose={setMeeting} />
         </div>
     )
 }
