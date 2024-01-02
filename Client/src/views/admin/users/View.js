@@ -132,10 +132,10 @@ const View = () => {
 
                     </Grid>
                     <Card mt={3}>
-                        <RoleTable fetchData={fetchData} columnsData={RoleColumn} roleModal={roleModal} setRoleModal={setRoleModal} tableData={roleData} title={'Role'} />
+                        <RoleTable fetchData={fetchData} columnsData={RoleColumn} roleModal={roleModal} setRoleModal={setRoleModal} tableData={data?.roles || []} title={'Role'} />
                     </Card>
 
-                    <RoleModal fetchData={fetchData} isOpen={roleModal} onClose={setRoleModal} columnsData={RoleColumn} tableData={roleData} />
+                    <RoleModal fetchData={fetchData} isOpen={roleModal} onClose={setRoleModal} columnsData={RoleColumn} id={param.id} tableData={roleData} interestRoles={data?.roles.map((item) => item._id)} />
 
                     <Card mt={3}>
                         <Grid templateColumns="repeat(6, 1fr)" gap={1}>

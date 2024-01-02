@@ -1,9 +1,9 @@
 import { AddIcon } from '@chakra-ui/icons'
-import { Button, Flex, Modal,Thead,Tbody, ModalBody,Tr,Th,Text,Td,Box, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Table, useColorModeValue, Checkbox } from '@chakra-ui/react'
+import { Button, Flex, Modal, Thead, Tbody, ModalBody, Tr, Th, Text, Td, Box, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Table, useColorModeValue, Checkbox } from '@chakra-ui/react'
 import Spinner from 'components/spinner/Spinner'
 import { useEffect, useMemo, useState } from 'react'
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
-import { getApi, postApi } from 'services/api'
+import { getApi, postApi, putApi } from 'services/api'
 
 const RoleModal = (props) => {
     const {
@@ -14,24 +14,25 @@ const RoleModal = (props) => {
         fetchData,
         isOpen,
         setAction,
-        _id,
+        id,
         onClose,
         onOpen,
-      } = props;
-    
-      const textColor = useColorModeValue("secondaryGray.900", "white");
-      const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
-      const columns = useMemo(() => columnsData, [columnsData]);
-      const [selectedValues, setSelectedValues] = useState([]);
-      const [isLoding, setIsLoding] = useState(false);
-    
-      const [deleteModel, setDelete] = useState(false);
-      const [selectedId, setSelectedId] = useState();
-      const [gopageValue, setGopageValue] = useState();
-      const data = useMemo(() => tableData, [tableData]);
-      const user = JSON.parse(localStorage.getItem("user"));
-    
-      const tableInstance = useTable(
+        interestRoles
+    } = props;
+
+    const textColor = useColorModeValue("secondaryGray.900", "white");
+    const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
+    const columns = useMemo(() => columnsData, [columnsData]);
+    const [selectedValues, setSelectedValues] = useState([]);
+    const [isLoding, setIsLoding] = useState(false);
+
+    const [deleteModel, setDelete] = useState(false);
+    const [selectedId, setSelectedId] = useState();
+    const [gopageValue, setGopageValue] = useState();
+    const data = useMemo(() => tableData, [tableData]);
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    const tableInstance = useTable(
         {
           columns,
           data,
@@ -71,7 +72,30 @@ const RoleModal = (props) => {
             prevSelectedValues.filter((selectedValue) => selectedValue !== value)
           );
         }
-      };
+    };
+
+    const uniqueValues = [...new Set(selectedValues)];
+
+    const handleSubmit = async () => {
+        try {
+            setIsLoding(true)
+            let result = await putApi(`api/user/change-roles/${id}`, uniqueValues);
+            if (result && result.status == 200) {
+                fetchData()
+                onClose()
+            }
+        }
+        catch (e) {
+            console.log(e)
+        }
+        finally {
+            setIsLoding(false)
+        }
+    }
+
+    useEffect(() => {
+        interestRoles?.map((item) => setSelectedValues((prevSelectedValues) => [...prevSelectedValues, item]))
+    }, [interestRoles])
 
     return (
         <Modal onClose={onClose} size='full' isOpen={isOpen} >
@@ -190,13 +214,13 @@ const RoleModal = (props) => {
                     }
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand'  disabled={isLoding ? true : false} leftIcon={<AddIcon />}> {isLoding ? <Spinner /> : 'Add'}</Button>
-                    <Button    variant="outline"
-            colorScheme="red"
-            sx={{
-              marginLeft: 2,
-              textTransform: "capitalize",
-            }} onClick={() => onClose()}>Close</Button>
+                    <Button variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} leftIcon={<AddIcon />}> {isLoding ? <Spinner /> : 'Add'}</Button>
+                    <Button variant="outline"
+                        colorScheme="red"
+                        sx={{
+                            marginLeft: 2,
+                            textTransform: "capitalize",
+                        }} onClick={() => onClose()}>Close</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>
