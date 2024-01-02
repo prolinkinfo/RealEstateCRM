@@ -7,7 +7,7 @@ import CheckTable from './components/CheckTable';
 
 
 const Index = () => {
-    const columns = [
+    const tableColumns = [
         {
             Header: "#",
             accessor: "_id",
@@ -15,7 +15,7 @@ const Index = () => {
             width: 10
         },
         { Header: 'agenda', accessor: 'agenda' },
-        { Header: "date Time", accessor: "dateTime", },
+        { Header: "date & Time", accessor: "dateTime", },
         { Header: "times tamp", accessor: "timestamp", },
         { Header: "create By", accessor: "createdByName", },
 
@@ -25,6 +25,12 @@ const Index = () => {
     const user = JSON.parse(localStorage.getItem("user"))
     const [isLoding, setIsLoding] = useState(false)
     const [action, setAction] = useState(false)
+    const [addMeeting, setMeeting] = useState(false);
+    const [searchedData, setSearchedData] = useState([]);
+    const [dynamicColumns, setDynamicColumns] = useState([...tableColumns]);
+    const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
+    const [columns, setColumns] = useState([]);
+    const [displaySearchData, setDisplaySearchData] = useState(false);
 
     const fetchData = async () => {
         setIsLoding(true)
@@ -33,30 +39,40 @@ const Index = () => {
         setIsLoding(false)
     }
 
-    const [addMeeting, setMeeting] = useState(false);
+
+    // useEffect(() => {
+    //     fetchData()
+    // }, [action])
+
 
     useEffect(() => {
-        fetchData()
+        setColumns(tableColumns)
     }, [action])
 
     return (
         <div>
-            {/* <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
-                <GridItem colStart={6} textAlign={"right"}>
-                    <Button onClick={() => setMeeting(true)} leftIcon={<AddIcon />} variant="brand">Add</Button>
-                </GridItem>
-            </Grid> */}
 
             {/* <CheckTable columnsData={columns} tableData={data} /> */}
             <CheckTable
                 isOpen={addMeeting}
                 isLoding={isLoding}
-                data={data}
+                // data={data}
+                allData={data}
+                setSearchedData={setSearchedData}
                 setMeeting={setMeeting}
                 addMeeting={addMeeting}
                 columnsData={columns}
                 from="index"
                 setAction={setAction}
+                action={action}
+                displaySearchData={displaySearchData}
+                tableData={displaySearchData ? searchedData : data}
+                fetchData={fetchData}
+                setDisplaySearchData={setDisplaySearchData}
+                setDynamicColumns={setDynamicColumns}
+                dynamicColumns={dynamicColumns}
+                selectedColumns={selectedColumns}
+                setSelectedColumns={setSelectedColumns}
                 className='table-fix-container' />
             {/* Add Form */}
         </div>
