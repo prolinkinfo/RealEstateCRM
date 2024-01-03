@@ -28,6 +28,7 @@ import {
   Th,
   Thead,
   Tr,
+  MenuDivider,
   useColorModeValue,
   useDisclosure
 } from "@chakra-ui/react";
@@ -55,6 +56,7 @@ import ImportModal from "views/admin/lead/components/ImportModal";
 import { CiMenuKebab } from "react-icons/ci";
 import EditTask from "./editTask";
 import DeleteTask from "./deleteTask";
+import * as XLSX from 'xlsx'
 
 export default function CheckTable(props) {
   const { tableData, fetchData, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action, className } = props;
@@ -81,6 +83,13 @@ export default function CheckTable(props) {
   const data = useMemo(() => tableData, [tableData]);
   const navigate = useNavigate();
 
+  const csvColumns = [
+    { Header: 'Title', accessor: 'title' },
+    { Header: "Related", accessor: "category" },
+    { Header: "Assignment To", accessor: "assignmentTo" },
+    { Header: "Start Date", accessor: "start" },
+    { Header: "End Date", accessor: "end" },
+  ];
 
   const toggleColumnVisibility = (columnKey) => {
     const isColumnSelected = tempSelectedColumns.some((column) => column.accessor === columnKey);
@@ -181,6 +190,57 @@ export default function CheckTable(props) {
   const handleClick = () => {
     onOpen()
   }
+
+  const handleExportTasks = (extension) => {
+    if (selectedValues && selectedValues?.length > 0) {
+      downloadCsvOrExcel(extension, selectedValues);
+    }
+    else {
+      downloadCsvOrExcel(extension);
+    }
+  }
+
+  const downloadCsvOrExcel = async (extension, selectedIds) => {
+    try {
+      if (selectedIds && selectedIds?.length > 0) {
+        const selectedRecordsWithSpecificFileds = tableData?.filter((rec) => selectedIds.includes(rec._id))?.map((rec) => {
+          const selectedFieldsData = {};
+          csvColumns.forEach((property) => {
+            selectedFieldsData[property.accessor] = rec[property.accessor];
+          });
+          return selectedFieldsData;
+        });
+        convertJsonToCsvOrExcel(selectedRecordsWithSpecificFileds, csvColumns, 'task', extension);
+      } else {
+        const AllRecordsWithSpecificFileds = tableData?.map((rec) => {
+          const selectedFieldsData = {};
+          csvColumns.forEach((property) => {
+            selectedFieldsData[property.accessor] = rec[property.accessor];
+          });
+          return selectedFieldsData;
+        });
+        convertJsonToCsvOrExcel(AllRecordsWithSpecificFileds, csvColumns, 'task', extension);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const convertJsonToCsvOrExcel = (jsonArray, csvColumns, fileName, extension) => {
+    const csvHeader = csvColumns.map((col) => col.Header);
+
+    const csvContent = [
+      csvHeader,
+      ...jsonArray.map((row) => csvColumns.map((col) => row[col.accessor]))
+    ];
+
+    const ws = XLSX.utils.aoa_to_sheet(csvContent);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
+    XLSX.writeFile(wb, `${fileName}.${extension}`);    // .csv, .xlsx
+    setSelectedValues([])
+  };
+
   useEffect(() => {
     if (fetchData) fetchData()
   }, [action])
@@ -248,6 +308,9 @@ export default function CheckTable(props) {
                 </MenuItem>
                 {/* <MenuItem width={"165px"} onClick={() => setIsImportLead(true)}> Import Leads
                 </MenuItem> */}
+                <MenuDivider />
+                <MenuItem width={"165px"} onClick={() => handleExportTasks('csv')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as CSV' : 'Export as CSV'}</MenuItem>
+                <MenuItem width={"165px"} onClick={() => handleExportTasks('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem>
               </MenuList>
             </Menu>
             <Button onClick={() => handleClick()} size="sm" variant="brand">Create Task</Button>

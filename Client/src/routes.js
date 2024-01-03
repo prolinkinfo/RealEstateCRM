@@ -23,12 +23,14 @@ const UserDashboard = React.lazy(() => import("views/admin/default"));
 // My component
 const Contact = React.lazy(() => import('views/admin/contact'));
 const ContactView = React.lazy(() => import('views/admin/contact/View'));
+const ContactImport = React.lazy(() => import("views/admin/contact/components/ContactImport"));
 
 const User = React.lazy(() => import("views/admin/users"));
 const UserView = React.lazy(() => import("views/admin/users/View"));
 
 const Property = React.lazy(() => import("views/admin/property"));
 const PropertyView = React.lazy(() => import("views/admin/property/View"));
+const PropertyImport = React.lazy(() => import("views/admin/property/components/PropertyImport"))
 
 const Lead = React.lazy(() => import("views/admin/lead"));
 const LeadView = React.lazy(() => import("views/admin/lead/View"));
@@ -122,6 +124,15 @@ const routes = [
     path: "/contactView/:id",
     component: ContactView,
   },
+  {
+    name: "Contact Import",
+    layout: "/admin",
+    both: true,
+    under: "contacts",
+    parentName: "Contacts",
+    path: "/contactImport",
+    component: ContactImport,
+  },
   // ------------- Property Routes ------------------------
   {
     name: "Property",
@@ -139,6 +150,15 @@ const routes = [
     under: "properties",
     path: "/propertyView/:id",
     component: PropertyView,
+  },
+  {
+    name: "Property Import",
+    layout: "/admin",
+    both: true,
+    under: "properties",
+    parentName: "Property",
+    path: "/propertyImport",
+    component: PropertyImport,
   },
 
   // // ------------- Communication Integration Routes ------------------------

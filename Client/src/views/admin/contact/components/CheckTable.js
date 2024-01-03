@@ -31,6 +31,7 @@ import {
   Th,
   Thead,
   Tr,
+  MenuDivider,
   useColorModeValue
 } from "@chakra-ui/react";
 import * as yup from "yup"
@@ -41,6 +42,7 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
+import * as XLSX from 'xlsx'
 
 // Custom components
 import { DeleteIcon, EditIcon, EmailIcon, PhoneIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
@@ -58,6 +60,7 @@ import { BsColumnsGap } from "react-icons/bs";
 import { useFormik } from "formik";
 import { CiMenuKebab } from "react-icons/ci";
 import Edit from "../Edit";
+import ImportModal from "./ImportModel";
 
 export default function CheckTable(props) {
   const { columnsData, tableData, fetchData, isLoding, setAction, allData, onClose, setSearchedData, onOpen, isOpen, displaySearchData, dynamicColumns, action, setDisplaySearchData, selectedColumns, setSelectedColumns } = props;
@@ -80,6 +83,16 @@ export default function CheckTable(props) {
   // const [data, setData] = useState([])
   const [edit, setEdit] = useState(false);
   const data = useMemo(() => tableData, [tableData]);
+  const [isImportContact, setIsImportContact] = useState(false);
+
+  const csvColumns = [
+    { Header: 'Title', accessor: 'title', width: 20 },
+    { Header: "First Name", accessor: "firstName" },
+    { Header: "Last Name", accessor: "lastName" },
+    { Header: "Phone Number", accessor: "phoneNumber" },
+    { Header: "Email Address", accessor: "email" },
+    { Header: "Contact Method", accessor: "preferredContactMethod" },
+  ];
 
   const columns = useMemo(() => selectedColumns, [selectedColumns]);
   // const fetchData = async () => {
@@ -188,9 +201,61 @@ export default function CheckTable(props) {
       setTempSelectedColumns([...tempSelectedColumns, columnToAdd]);
     }
   };
+
+  const handleExportContacts = (extension) => {
+    if (selectedValues && selectedValues?.length > 0) {
+      downloadCsvOrExcel(extension, selectedValues);
+    }
+    else {
+      downloadCsvOrExcel(extension);
+    }
+  }
+
+  const downloadCsvOrExcel = async (extension, selectedIds) => {
+    try {
+      if (selectedIds && selectedIds?.length > 0) {
+        const selectedRecordsWithSpecificFileds = tableData?.filter((rec) => selectedIds.includes(rec._id))?.map((rec) => {
+          const selectedFieldsData = {};
+          csvColumns.forEach((property) => {
+            selectedFieldsData[property.accessor] = rec[property.accessor];
+          });
+          return selectedFieldsData;
+        });
+        convertJsonToCsvOrExcel(selectedRecordsWithSpecificFileds, csvColumns, 'contact', extension);
+      } else {
+        const AllRecordsWithSpecificFileds = tableData?.map((rec) => {
+          const selectedFieldsData = {};
+          csvColumns.forEach((property) => {
+            selectedFieldsData[property.accessor] = rec[property.accessor];
+          });
+          return selectedFieldsData;
+        });
+        convertJsonToCsvOrExcel(AllRecordsWithSpecificFileds, csvColumns, 'contact', extension);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const convertJsonToCsvOrExcel = (jsonArray, csvColumns, fileName, extension) => {
+    const csvHeader = csvColumns.map((col) => col.Header);
+
+    const csvContent = [
+      csvHeader,
+      ...jsonArray.map((row) => csvColumns.map((col) => row[col.accessor]))
+    ];
+
+    const ws = XLSX.utils.aoa_to_sheet(csvContent);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
+    XLSX.writeFile(wb, `${fileName}.${extension}`);    // .csv, .xlsx
+    setSelectedValues([])
+  };
+
   useEffect(() => {
     if (fetchData) fetchData()
   }, [action])
+
   return (
     <>
       <Card
@@ -256,8 +321,11 @@ export default function CheckTable(props) {
               <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} >
                 <MenuItem onClick={() => setManageColumns(true)} width={"165px"}> Manage Columns
                 </MenuItem>
-                <MenuItem width={"165px"}> Import Leads
+                <MenuItem width={"165px"} onClick={() => setIsImportContact(true)}> Import Contacts
                 </MenuItem>
+                <MenuDivider />
+                <MenuItem width={"165px"} onClick={() => handleExportContacts('csv')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as CSV' : 'Export as CSV'}</MenuItem>
+                <MenuItem width={"165px"} onClick={() => handleExportContacts('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem>
               </MenuList>
             </Menu>
             <Button onClick={() => handleClick()} size={"sm"} variant="brand">Add Contact</Button>
@@ -462,6 +530,7 @@ export default function CheckTable(props) {
       <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={selectedId} />
       <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} id={selectedId} />
       <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} selectedId={selectedId} setSelectedId={setSelectedId} />
+      <ImportModal text='Contact file' fetchData={fetchData} isOpen={isImportContact} onClose={setIsImportContact} />
       {/* Advance filter */}
       <Modal onClose={() => { setAdvaceSearch(false); resetForm(); }} isOpen={advaceSearch} isCentered>
         <ModalOverlay />

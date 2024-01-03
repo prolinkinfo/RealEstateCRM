@@ -31,6 +31,7 @@ import {
   Th,
   Thead,
   Tr,
+  MenuDivider,
   useColorModeValue,
   useDisclosure
 } from "@chakra-ui/react";
@@ -41,6 +42,7 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
+import * as XLSX from 'xlsx'
 
 // Custom components
 import { DeleteIcon, EditIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
@@ -58,7 +60,9 @@ import * as yup from "yup"
 import { useFormik } from "formik";
 import { CiMenuKebab } from "react-icons/ci";
 import Edit from "../Edit";
+import ImportModal from "./ImportModal";
 // import '.\src\assets\css\App.css' 
+
 export default function CheckTable(props) {
   const { columnsData, setAction, tableData, fetchData, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, action } = props;
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -73,7 +77,7 @@ export default function CheckTable(props) {
   const [getTagValues, setGetTagValues] = useState([]);
   const [manageColumns, setManageColumns] = useState(false);
   const [tempSelectedColumns, setTempSelectedColumns] = useState(selectedColumns);
-  const [isImportLead, setIsImportLead] = useState(false);
+  const [isImportProperty, setIsImportProperty] = useState(false);
   const [searchClear, setSearchClear] = useState(false);
   const [edit, setEdit] = useState(false);
   const [selectedId, setSelectedId] = useState();
@@ -84,6 +88,16 @@ export default function CheckTable(props) {
   const [gopageValue, setGopageValue] = useState()
   const size = "lg";
   const navigate = useNavigate();
+
+  const csvColumns = [
+    { Header: 'Property Type', accessor: 'propertyType' },
+    { Header: "Listing Price", accessor: "listingPrice" },
+    { Header: "Square Footage", accessor: "squareFootage" },
+    { Header: "Year Built", accessor: "yearBuilt" },
+    { Header: "Number of Bedrooms", accessor: "numberofBedrooms" },
+    { Header: "Number of Bathrooms", accessor: "numberofBathrooms" },
+  ];
+
   // const fetchData = async () => {
   //   setIsLoding(true)
   //   let result = await getApi(user.role === 'admin' ? 'api/property/' : `api/property/?createBy=${user._id}`);
@@ -190,10 +204,60 @@ export default function CheckTable(props) {
   const handleClick = () => {
     onOpen()
   }
+
+  const handleExportProperties = (extension) => {
+    if (selectedValues && selectedValues?.length > 0) {
+      downloadCsvOrExcel(extension, selectedValues);
+    }
+    else {
+      downloadCsvOrExcel(extension);
+    }
+  }
+
+  const downloadCsvOrExcel = async (extension, selectedIds) => {
+    try {
+      if (selectedIds && selectedIds?.length > 0) {
+        const selectedRecordsWithSpecificFileds = tableData?.filter((rec) => selectedIds.includes(rec._id))?.map((rec) => {
+          const selectedFieldsData = {};
+          csvColumns.forEach((property) => {
+            selectedFieldsData[property.accessor] = rec[property.accessor];
+          });
+          return selectedFieldsData;
+        });
+        convertJsonToCsvOrExcel(selectedRecordsWithSpecificFileds, csvColumns, 'property', extension);
+      } else {
+        const AllRecordsWithSpecificFileds = tableData?.map((rec) => {
+          const selectedFieldsData = {};
+          csvColumns.forEach((property) => {
+            selectedFieldsData[property.accessor] = rec[property.accessor];
+          });
+          return selectedFieldsData;
+        });
+        convertJsonToCsvOrExcel(AllRecordsWithSpecificFileds, csvColumns, 'property', extension);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const convertJsonToCsvOrExcel = (jsonArray, csvColumns, fileName, extension) => {
+    const csvHeader = csvColumns.map((col) => col.Header);
+
+    const csvContent = [
+      csvHeader,
+      ...jsonArray.map((row) => csvColumns.map((col) => row[col.accessor]))
+    ];
+
+    const ws = XLSX.utils.aoa_to_sheet(csvContent);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
+    XLSX.writeFile(wb, `${fileName}.${extension}`);    // .csv, .xlsx
+    setSelectedValues([])
+  };
+
   useEffect(() => {
     fetchData()
   }, [action])
-
 
   return (
     <>
@@ -260,8 +324,11 @@ export default function CheckTable(props) {
               <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} >
                 <MenuItem onClick={() => setManageColumns(true)} width={"165px"}> Manage Columns
                 </MenuItem>
-                <MenuItem width={"165px"} onClick={() => setIsImportLead(true)}> Import Leads
+                <MenuItem width={"165px"} onClick={() => setIsImportProperty(true)}> Import Properties
                 </MenuItem>
+                <MenuDivider />
+                <MenuItem width={"165px"} onClick={() => handleExportProperties('csv')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as CSV' : 'Export as CSV'}</MenuItem>
+                <MenuItem width={"165px"} onClick={() => handleExportProperties('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem>
               </MenuList>
             </Menu>
             <Button onClick={() => handleClick()} size="sm"
@@ -450,6 +517,8 @@ export default function CheckTable(props) {
       </Card>
       <Add isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} />
       <Edit isOpen={edit} size={size} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} />
+      <ImportModal text='Property file' fetchData={fetchData} isOpen={isImportProperty} onClose={setIsImportProperty} />
+
       {/* Advance filter */}
       <Modal onClose={() => { setAdvaceSearch(false); resetForm() }} isOpen={advaceSearch} isCentered>
         <ModalOverlay />
