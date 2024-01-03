@@ -18,6 +18,7 @@ const Index = () => {
         { Header: "date & Time", accessor: "dateTime", },
         { Header: "times tamp", accessor: "timestamp", },
         { Header: "create By", accessor: "createdByName", },
+        { Header: "Action", isSortable: false, center: true },
 
     ];
 

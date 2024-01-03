@@ -48,12 +48,13 @@ import moment from "moment";
 import { useState } from "react";
 import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 import { SiGooglemeet } from "react-icons/si";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AddMeeting from "./Addmeeting";
-import { DeleteIcon, SearchIcon } from "@chakra-ui/icons";
+import { DeleteIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
 import { BsColumnsGap } from "react-icons/bs";
 import * as yup from "yup"
 import { useFormik } from "formik";
+import { CiMenuKebab } from "react-icons/ci";
 export default function CheckTable(props) {
   const { setMeeting, className, addMeeting, from, columnsData, tableData, fetchData, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action } = props;
   const textColor = useColorModeValue("gray.500", "white");
@@ -71,7 +72,7 @@ export default function CheckTable(props) {
   const [searchClear, setSearchClear] = useState(false);
 
   const [deleteModel, setDelete] = useState(false);
-
+  const navigate = useNavigate()
 
   const tableInstance = useTable(
     {
@@ -356,6 +357,17 @@ export default function CheckTable(props) {
 
                             </Text>
                           );
+                        } else if (cell?.column.Header === "Action") {
+                          data = (
+                            <Text fontSize="md" fontWeight="900" textAlign={"center"} >
+                              <Menu isLazy  >
+                                <MenuButton><CiMenuKebab /></MenuButton>
+                                <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
+                                  <MenuItem py={2.5} color={'green'} onClick={() => navigate(user?.role !== 'admin' ? `/metting/${cell?.row?.values._id}` : `/admin/metting/${cell?.row?.values._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>
+                                </MenuList>
+                              </Menu>
+                            </Text>
+                          )
                         }
                         return (
                           <Td
