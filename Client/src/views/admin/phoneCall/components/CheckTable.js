@@ -83,13 +83,13 @@ export default function CheckTable(props) {
   const [searchbox, setSearchbox] = useState('');
   const navigate = useNavigate()
   const toggleColumnVisibility = (columnKey) => {
-    const isColumnSelected = tempSelectedColumns.some((column) => column.accessor === columnKey);
+    const isColumnSelected = tempSelectedColumns.some((column) => column.Header === columnKey);
 
     if (isColumnSelected) {
-      const updatedColumns = tempSelectedColumns.filter((column) => column.accessor !== columnKey);
+      const updatedColumns = tempSelectedColumns.filter((column) => column.Header !== columnKey);
       setTempSelectedColumns(updatedColumns);
     } else {
-      const columnToAdd = dynamicColumns.find((column) => column.accessor === columnKey);
+      const columnToAdd = dynamicColumns.find((column) => column.Header === columnKey);
       setTempSelectedColumns([...tempSelectedColumns, columnToAdd]);
     }
   };
@@ -493,10 +493,10 @@ export default function CheckTable(props) {
           <ModalBody>
             <div>
               {dynamicColumns.map((column) => (
-                <Text display={"flex"} key={column.accessor} py={2}>
+                <Text display={"flex"} key={column.Header} py={2}>
                   <Checkbox
-                    defaultChecked={selectedColumns.some((selectedColumn) => selectedColumn.accessor === column.accessor)}
-                    onChange={() => toggleColumnVisibility(column.accessor)}
+                    defaultChecked={selectedColumns.some((selectedColumn) => selectedColumn.Header === column.Header)}
+                    onChange={() => toggleColumnVisibility(column.Header)}
                     pe={2}
                   />
                   {column.Header}

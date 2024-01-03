@@ -12,9 +12,9 @@ const Index = () => {
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
         { Header: 'sender Name', accessor: 'senderName' },
         { Header: "recipient", accessor: "createByName", },
-        { Header: "Realeted To", accessor: undefined },
+        { Header: "Realeted To", },
         { Header: "timestamp", accessor: "timestamp", },
-        { Header: "Created", accessor: undefined },
+        { Header: "Created", },
         { Header: "Action", isSortable: false, center: true },
     ];
     const columnsToExclude = ['Realeted To', 'Created'];
