@@ -77,7 +77,6 @@ export default function CheckTable(props) {
   const [manageColumns, setManageColumns] = useState(false);
   const [advaceSearch, setAdvaceSearch] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [addPhoneCall, setAddPhoneCall] = useState(false);
   const [searchClear, setSearchClear] = useState(false);
   const [tempSelectedColumns, setTempSelectedColumns] = useState(selectedColumns);
   const [getTagValues, setGetTagValues] = useState([]);
@@ -393,7 +392,6 @@ export default function CheckTable(props) {
                                 <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
                                   <MenuItem py={2.5} color={'green'} onClick={() => navigate(user?.role !== 'admin' ? `/phone-call/${cell?.row?.values._id}` : `/admin/phone-call/${cell?.row?.values._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>
                                   <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(cell?.row?.original?.createBy ? user?.role !== 'admin' ? `/contactView/${cell?.row?.original.createBy}` : `/admin/contactView/${cell?.row?.original.createBy}` : user?.role !== 'admin' ? `/leadView/${cell?.row?.original.createByLead}` : `/admin/leadView/${cell?.row?.original.createByLead}`)} icon={cell?.row?.original.createBy ? <IoIosContact fontSize={15} /> : cell?.row?.original.createByLead && <MdLeaderboard fontSize={15} />}>{cell?.row?.original.createBy ? "contact" : cell?.row?.original.createByLead && 'lead'}</MenuItem>
-
                                 </MenuList>
                               </Menu>
                             </Text>
