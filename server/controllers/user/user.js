@@ -106,8 +106,6 @@ const edit = async (req, res) => {
     try {
         let { username, firstName, lastName, phoneNumber } = req.body
 
-        // Hash the password
-        // const hashedPassword = await bcrypt.hash(password, 10);
         let result = await User.updateOne(
             { _id: req.params.id },
             {
