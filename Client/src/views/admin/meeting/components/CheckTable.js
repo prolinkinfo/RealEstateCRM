@@ -1,9 +1,29 @@
 import {
   Box,
   Button,
+  Checkbox,
   Flex,
+  FormLabel,
+  Grid,
   GridItem,
-  Table, Tbody,
+  HStack,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Select,
+  Table, Tag, TagLabel, Tbody,
   Td,
   Text,
   Th,
@@ -11,7 +31,7 @@ import {
   Tr,
   useColorModeValue
 } from "@chakra-ui/react";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import {
   useGlobalFilter,
   usePagination,
@@ -28,17 +48,31 @@ import moment from "moment";
 import { useState } from "react";
 import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 import { SiGooglemeet } from "react-icons/si";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AddMeeting from "./Addmeeting";
-
+import { DeleteIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
+import { BsColumnsGap } from "react-icons/bs";
+import * as yup from "yup"
+import { useFormik } from "formik";
+import { CiMenuKebab } from "react-icons/ci";
 export default function CheckTable(props) {
-  const { columnsData, data, isLoding, setMeeting, className, setAction, addMeeting, from } = props;
-
+  const { setMeeting, className, addMeeting, from, columnsData, tableData, fetchData, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action } = props;
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
-  const columns = useMemo(() => columnsData, [columnsData]);
+  // const columns = useMemo(() => columnsData, [columnsData]);
+  const columns = useMemo(() => selectedColumns, [selectedColumns]);
+  const data = useMemo(() => tableData, [tableData]);
   const user = JSON.parse(localStorage.getItem("user"))
   const [gopageValue, setGopageValue] = useState()
+  const [searchbox, setSearchbox] = useState('');
+  const [tempSelectedColumns, setTempSelectedColumns] = useState(selectedColumns);
+  const [manageColumns, setManageColumns] = useState(false);
+  const [getTagValues, setGetTagValues] = useState([]);
+  const [advaceSearch, setAdvaceSearch] = useState(false);
+  const [searchClear, setSearchClear] = useState(false);
+
+  const [deleteModel, setDelete] = useState(false);
+  const navigate = useNavigate()
 
   const tableInstance = useTable(
     {
@@ -70,6 +104,55 @@ export default function CheckTable(props) {
   if (pageOptions.length < gopageValue) {
     setGopageValue(pageOptions.length)
   }
+  const toggleColumnVisibility = (columnKey) => {
+    const isColumnSelected = tempSelectedColumns.some((column) => column.accessor === columnKey);
+
+    if (isColumnSelected) {
+      const updatedColumns = tempSelectedColumns.filter((column) => column.accessor !== columnKey);
+      setTempSelectedColumns(updatedColumns);
+    } else {
+      const columnToAdd = dynamicColumns.find((column) => column.accessor === columnKey);
+      setTempSelectedColumns([...tempSelectedColumns, columnToAdd]);
+    }
+  };
+  const initialValues = {
+    agenda: '',
+    createBy: '',
+  }
+  const validationSchema = yup.object({
+    agenda: yup.string(),
+    createBy: yup.string().email('Invalid email format'),
+  });
+  const formik = useFormik({
+    initialValues: initialValues,
+    validationSchema: validationSchema,
+    onSubmit: (values, { resetForm }) => {
+      const searchResult = allData?.filter(
+        (item) =>
+          (!values?.agenda || (item?.agenda && item?.agenda.toLowerCase().includes(values?.agenda?.toLowerCase()))) &&
+          (!values?.createBy || (item?.createBy && item?.createBy.toLowerCase().includes(values?.createBy?.toLowerCase())))
+      )
+      let getValue = [values.agenda, values?.createBy].filter(value => value);
+      setGetTagValues(getValue)
+      setSearchedData(searchResult);
+      setDisplaySearchData(true)
+      setAdvaceSearch(false)
+      setSearchClear(true)
+      resetForm();
+    }
+  })
+  const handleClear = () => {
+    setDisplaySearchData(false)
+  }
+  useEffect(() => {
+    setSearchedData && setSearchedData(data);
+  }, []);
+  const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
+
+
+  useEffect(() => {
+    if (fetchData) fetchData()
+  }, [action])
 
 
   return (
@@ -80,21 +163,92 @@ export default function CheckTable(props) {
         px="0px"
         overflowX={{ sm: "scroll", lg: "hidden" }}
       >
-        <Flex px="25px" justify="space-between" mb="20px" align="center">
-          <Text
-            color={textColor}
-            fontSize="22px"
-            fontWeight="700"
-            lineHeight="100%"
-          >
-            Meetings (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
-          </Text>
-          {from !== "index" ? <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button> :
-            <GridItem colStart={6} textAlign={"right"}>
-              <Button onClick={() => setMeeting(true)} variant="brand" size="sm">Add Meeting</Button>
-            </GridItem>}
-        </Flex>
-        {console.log("addmeeting", addMeeting)}
+        <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={4} mx={4}>
+          <GridItem colSpan={8} >
+            <Flex alignItems={"center"} flexWrap={"wrap"}>
+              <Text
+                color={textColor}
+                fontSize="22px"
+                fontWeight="700"
+                lineHeight="100%"
+              >
+                Meetings (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
+              </Text>
+              <InputGroup width={"30%"} mx={3}>
+                <InputLeftElement
+                  size="sm"
+                  top={"-3px"}
+                  pointerEvents="none"
+                  children={<SearchIcon color="gray.300" borderRadius="16px" />}
+                />
+                <Input type="text"
+                  size="sm"
+                  fontSize='sm'
+                  value={searchbox}
+                  onChange={(e) => {
+                    const results = allData.filter((item) => {
+                      // Iterate through each property of the object
+                      for (const key in item) {
+                        // Check if the value of the property contains the search term
+                        if (
+                          item[key] &&
+                          typeof item[key] === "string" &&
+                          item[key].toLowerCase().includes(e.target.value.toLowerCase())
+                        ) {
+                          return true; // If found, include in the results
+                        }
+                      }
+                      return false; // If not found in any field, exclude from the results
+                    });
+                    setSearchedData(results)
+                    setSearchbox(e.target.value)
+                    setDisplaySearchData(e.target.value === "" ? false : true)
+
+                  }}
+                  fontWeight='500'
+                  placeholder="Search..." borderRadius="16px" />
+              </InputGroup>
+              {/* <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} size="sm">Advance Search</Button> */}
+              {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>clear</Button> : ""}
+              {/* {selectedValues.length > 0 && <DeleteIcon onClick={() => setDelete(true)} color={'red'} ms={2} />} */}
+            </Flex>
+          </GridItem>
+          <GridItem colSpan={4} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
+            <Menu isLazy  >
+              <MenuButton p={4}>
+                <BsColumnsGap />
+              </MenuButton>
+              <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} >
+                <MenuItem onClick={() => setManageColumns(true)} width={"165px"}> Manage Columns
+                </MenuItem>
+                {/* <MenuItem width={"165px"} onClick={() => setIsImportLead(true)}> Import Leads
+                </MenuItem> */}
+                <MenuDivider />
+                {/* <MenuItem width={"165px"} onClick={() => handleExportLeads('csv')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as CSV' : 'Export as CSV'}</MenuItem>
+                <MenuItem width={"165px"} onClick={() => handleExportLeads('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem> */}
+              </MenuList>
+            </Menu>
+            {from !== "index" ? <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button> :
+              <GridItem colStart={6} textAlign={"right"}>
+                <Button onClick={() => setMeeting(true)} variant="brand" size="sm">Add Meeting</Button>
+              </GridItem>}
+          </GridItem>
+          <HStack spacing={4}>
+            {getTagValues && getTagValues.map((item) => (
+              <Tag
+                size={"md"}
+                p={2}
+                key={item}
+                borderRadius='full'
+                variant='solid'
+                colorScheme="gray"
+              >
+                <TagLabel>{item}</TagLabel>
+                {/* <TagCloseButton /> */}
+              </Tag>
+            ))}
+          </HStack>
+        </Grid>
         <Box overflowY={"auto"} className={className}>
           <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
             <Thead>
@@ -172,7 +326,7 @@ export default function CheckTable(props) {
                               </Text>
                             </Link>
                           );
-                        } else if (cell?.column.Header === "date Time") {
+                        } else if (cell?.column.Header === "date & Time") {
                           data = (
                             <Text
                               me="10px"
@@ -203,6 +357,17 @@ export default function CheckTable(props) {
 
                             </Text>
                           );
+                        } else if (cell?.column.Header === "Action") {
+                          data = (
+                            <Text fontSize="md" fontWeight="900" textAlign={"center"} >
+                              <Menu isLazy  >
+                                <MenuButton><CiMenuKebab /></MenuButton>
+                                <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
+                                  <MenuItem py={2.5} color={'green'} onClick={() => navigate(user?.role !== 'admin' ? `/metting/${cell?.row?.values._id}` : `/admin/metting/${cell?.row?.values._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>
+                                </MenuList>
+                              </Menu>
+                            </Text>
+                          )
                         }
                         return (
                           <Td
@@ -226,7 +391,101 @@ export default function CheckTable(props) {
 
       </Card>
       <AddMeeting setAction={setAction} isOpen={addMeeting} onClose={setMeeting} />
+      {/* Advance filter */}
+      <Modal onClose={() => { setAdvaceSearch(false); resetForm() }} isOpen={advaceSearch} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Advance Search</ModalHeader>
+          <ModalCloseButton onClick={() => { setAdvaceSearch(false); resetForm() }} />
+          <ModalBody>
+            <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={2}>
+              <GridItem colSpan={{ base: 12, md: 6 }}>
+                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
+                  Agenda
+                </FormLabel>
+                <Input
+                  fontSize='sm'
+                  onChange={handleChange} onBlur={handleBlur}
+                  value={values?.agenda}
+                  name="agenda"
+                  placeholder='Enter Lead Name'
+                  fontWeight='500'
+                />
+                <Text mb='10px' color={'red'}> {errors.agenda && touched.agenda && errors.agenda}</Text>
 
+              </GridItem>
+
+              <GridItem colSpan={{ base: 12, md: 6 }}>
+                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2} >
+                  Create By
+                </FormLabel>
+                <Input
+                  fontSize='sm'
+                  onChange={handleChange} onBlur={handleBlur}
+                  value={values?.createBy}
+                  name="createBy"
+                  placeholder='Enter Lead Email'
+                  fontWeight='500'
+                />
+                <Text mb='10px' color={'red'}> {errors.createBy && touched.createBy && errors.createBy}</Text>
+
+              </GridItem>
+              {/* <GridItem colSpan={{ base: 12, md: 6 }}>
+                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
+                  Date & time
+                </FormLabel>
+                <Input
+                  fontSize='sm'
+                  onChange={handleChange} onBlur={handleBlur}
+                  value={values?.leadPhoneNumber}
+                  name="leadPhoneNumber"
+                  placeholder='Enter Lead PhoneNumber'
+                  fontWeight='500'
+                />
+                <Text mb='10px' color={'red'}> {errors.leadPhoneNumber && touched.leadPhoneNumber && errors.leadPhoneNumber}</Text>
+
+              </GridItem> */}
+
+
+
+            </Grid>
+          </ModalBody>
+          <ModalFooter>
+            <Button variant="outline" colorScheme='green' mr={2} onClick={handleSubmit} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
+            <Button colorScheme="red" onClick={() => resetForm()}>Clear</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      {/* Manage Columns */}
+      <Modal onClose={() => { setManageColumns(false); resetForm() }} isOpen={manageColumns} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Manage Column</ModalHeader>
+          <ModalCloseButton onClick={() => { setManageColumns(false); resetForm() }} />
+          <ModalBody>
+            <div>
+              {dynamicColumns.map((column) => (
+                <Text display={"flex"} key={column.accessor} py={2}>
+                  <Checkbox
+                    defaultChecked={selectedColumns.some((selectedColumn) => selectedColumn.accessor === column.accessor)}
+                    onChange={() => toggleColumnVisibility(column.accessor)}
+                    pe={2}
+                  />
+                  {column.Header}
+                </Text>
+              ))}
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <Button variant="outline" colorScheme='green' mr={2} onClick={() => {
+              setSelectedColumns(tempSelectedColumns);
+              setManageColumns(false);
+              resetForm();
+            }} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
+            <Button colorScheme="red" onClick={() => resetForm()}>Clear</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 }

@@ -585,7 +585,7 @@ export default function CheckTable(props) {
       <Modal onClose={() => { setManageColumns(false); resetForm() }} isOpen={manageColumns} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Advance Search</ModalHeader>
+          <ModalHeader>Manage Column</ModalHeader>
           <ModalCloseButton onClick={() => { setManageColumns(false); resetForm() }} />
           <ModalBody>
             <div>
