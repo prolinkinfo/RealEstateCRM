@@ -62,6 +62,7 @@ function SignIn() {
         navigate('/admin')
         toast.success("Login Successfully!")
         resetForm();
+        // window.location.reload(); 
       } else {
         toast.error(response.response.data?.error)
       }

@@ -24,7 +24,7 @@ function SidebarContent(props) {
         //  ps='20px'
         // pe={{ md: "16px", "2xl": "1px" }}
         >
-          <Links routes={routes} openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
+          <Links routes={routes} key={routes} openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
         </Box>
       </Stack>
 

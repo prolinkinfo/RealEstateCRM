@@ -182,7 +182,7 @@ export default function CheckTable(props) {
                         );
                       } else if (cell?.column.Header === "property Type") {
                         data = (
-                          <Link to={user?.role !== 'admin' ? `/propertyView/${cell?.row?.values._id}` : `/admin/propertyView/${cell?.row?.values._id}`}>
+                          <Link to={`/propertyView/${cell?.row?.values._id}`}>
                             <Text
                               className="tableData"
                               me="10px"

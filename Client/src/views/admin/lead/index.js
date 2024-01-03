@@ -11,6 +11,10 @@ import CheckTable from './components/CheckTable';
 import * as yup from 'yup';
 import { FiUpload } from 'react-icons/fi';
 import ImportModal from "./components/ImportModal";
+import { fetchRoles } from "../../../redux/roleSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { hasAccess } from "../../../redux/accessUtils";
+import { useRole } from "contexts/RoleContext";
 
 const Index = () => {
     const [columns, setColumns] = useState([]);
@@ -20,6 +24,19 @@ const Index = () => {
     const [searchedData, setSearchedData] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"));
     const [isImportLead, setIsImportLead] = useState(false);
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        // Dispatch the fetchRoles action on component mount
+        dispatch(fetchRoles(user?._id));
+    }, [dispatch]);
+
+    const roles = useSelector((state) => state.roles.roles);
+
+    const roleName = roles?.map(item => item.roleName)
+
+    const userCanCreateTask = hasAccess(roles, roleName, 'lead');
 
     const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
@@ -110,7 +127,7 @@ const Index = () => {
         <div>
             <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={4}>
                 <GridItem colStart={6} textAlign={"right"}>
-                    <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>
+                    {userCanCreateTask?.lead?.create ? <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button> : ''}
                     <Button leftIcon={<FiUpload />} onClick={() => setIsImportLead(true)} variant="brand" ms="4px">Import</Button>
                 </GridItem>
                 <GridItem colSpan={6} >
@@ -271,7 +288,7 @@ const Index = () => {
                     </Card>
                 </GridItem>
                 <GridItem colSpan={6}>
-                    <CheckTable isLoding={isLoding} columnsData={columns} isOpen={isOpen} tableData={searchedData?.length > 0 ? searchedData : data} fetchData={fetchData} />
+                    <CheckTable isLoding={isLoding} access={userCanCreateTask?.lead} columnsData={columns} isOpen={isOpen} tableData={searchedData?.length > 0 ? searchedData : data} fetchData={fetchData} />
                 </GridItem>
             </Grid>
             {/* Add Form */}

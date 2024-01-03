@@ -143,7 +143,7 @@ export default function PhoneCall(props) {
                     } else if (cell?.column.Header === "recipient") {
                       data = (
                         <Flex align='center'>
-                          <Link to={user?.role !== 'admin' ? props.text ? `/text-msg/${cell?.row?.original._id}` : `/phone-call/${cell?.row?.original._id}` : props.text ? `/admin/text-msg/${cell?.row?.original._id}` : `/admin/phone-call/${cell?.row?.original._id}`}>
+                          <Link to={props.text ? `/text-msg/${cell?.row?.original._id}` : `/phone-call/${cell?.row?.original._id}`}>
                             <Text
                               me='10px'
                               sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}

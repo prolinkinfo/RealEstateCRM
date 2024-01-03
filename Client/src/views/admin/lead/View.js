@@ -34,11 +34,16 @@ import AddTask from "../task/components/addTask";
 import Add from "./Add";
 import Delete from "./Delete";
 import Edit from "./Edit";
+import { fetchRoles } from "../../../redux/roleSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { hasAccess } from "../../../redux/accessUtils";
 
 
 const View = () => {
 
     const param = useParams()
+
+    const user = JSON.parse(localStorage.getItem("user"));
 
     const [data, setData] = useState()
     const [allData, setAllData] = useState([])
@@ -57,6 +62,19 @@ const View = () => {
 
     const [addEmailHistory, setAddEmailHistory] = useState(false);
     const [addPhoneCall, setAddPhoneCall] = useState(false);
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        // Dispatch the fetchRoles action on component mount
+        dispatch(fetchRoles(user?._id));
+    }, [dispatch]);
+
+    const roles = useSelector((state) => state.roles.roles);
+
+    const roleName = roles?.map(item => item.roleName)
+
+    const userCanCreateTask = hasAccess(roles, roleName, 'lead');
 
     const columnsDataColumns = [
         { Header: "sender", accessor: "senderName", },
@@ -383,7 +401,9 @@ const View = () => {
                                         <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
                                             <GridItem colSpan={{ base: 6 }}>
                                                 <Card >
-                                                    {allData?.Email && allData?.Email?.length ? <ColumnsTable fetchData={fetchData} columnsData={columnsDataColumns} lead='true' tableData={showEmail ? allData.Email : [allData.Email[0]]} title={'Email '} /> : <Button onClick={() => setAddEmailHistory(true)} leftIcon={<BsFillSendFill />} colorScheme="gray" >Send Email </Button>}
+                                                    {allData?.Email && allData?.Email?.length ?
+                                                        <ColumnsTable fetchData={fetchData} columnsData={columnsDataColumns} lead='true' tableData={showEmail ? allData.Email : [allData.Email[0]]} title={'Email '} />
+                                                        : <Button onClick={() => setAddEmailHistory(true)} leftIcon={<BsFillSendFill />} colorScheme="gray" >Send Email </Button>}
                                                     <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} lead='true' id={param.id} />
                                                     {allData.Email?.length > 1 &&
                                                         <div style={{ display: "flex", justifyContent: "end" }}>
@@ -448,8 +468,8 @@ const View = () => {
                         <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                             <GridItem colStart={6} >
                                 <Flex justifyContent={"right"}>
-                                    <Button onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button>
-                                    <Button style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>
+                                    {userCanCreateTask.lead?.update ? <Button onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button> : ''}
+                                    {userCanCreateTask.lead?.delete ? <Button style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button> : ''}
                                 </Flex>
                             </GridItem>
                         </Grid>

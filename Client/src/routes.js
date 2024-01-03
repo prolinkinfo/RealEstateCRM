@@ -16,10 +16,10 @@ import { LuBuilding2 } from "react-icons/lu";
 import { PiPhoneCallBold } from "react-icons/pi";
 import { LiaCriticalRole } from "react-icons/lia";
 import { SiGooglemeet } from "react-icons/si";
+import { ROLE_PATH } from "./roles";
 
 // Admin Imports
 const MainDashboard = React.lazy(() => import("views/admin/default"));
-const UserDashboard = React.lazy(() => import("views/admin/default"));
 
 // My component
 const Contact = React.lazy(() => import('views/admin/contact'));
@@ -62,36 +62,63 @@ const TextMsgView = React.lazy(() => import("views/admin/textMsg/View"));
 // Auth Imports
 const SignInCentered = React.lazy(() => import("views/auth/signIn"));
 
-const routes = [
+
+const user = JSON.parse(localStorage.getItem('user'))// Example array of ROLE_PATH values
+
+const filterAccess = (rolesData) => {
+  return rolesData?.map(role => {
+    role.access = role?.access?.filter(access => (access.create || access.update || access.delete || access.view));
+    return role;
+  });
+};
+
+// Example usage:
+const updatedRolesData = filterAccess(user?.roles);
+let access = []
+updatedRolesData?.map((item) => {
+  item?.access?.map((data) => access.push(data))
+})
+
+const mergedPermissions = {};
+
+access.forEach((permission) => {
+  const { title, ...rest } = permission;
+
+  if (!mergedPermissions[title]) {
+    mergedPermissions[title] = { ...rest };
+  } else {
+    // Merge with priority to true values
+    Object.keys(rest).forEach((key) => {
+      if (mergedPermissions[title][key] !== true) {
+        mergedPermissions[title][key] = rest[key];
+      }
+    });
+  }
+});
+
+const data = user?.roles && user?.roles?.map(data => `/${data.roleName}`)
+
+const newRoute = [
   // ========================== Dashboard ==========================
   {
     name: "Dashboard",
-    layout: "/admin",
+    layout: data,
     path: "/default",
     icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
     component: MainDashboard,
-  },
-  {
-    name: "Dashboard",
-    layout: "/user",
-    path: "/default",
-    icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
-    component: UserDashboard,
   },
   // ========================== Admin Layout ==========================
   // ------------- lead Routes ------------------------
   {
     name: "Lead",
-    layout: "/admin",
-    both: true,
+    layout: data,
     path: "/lead",
     icon: <Icon as={MdLeaderboard} width='20px' height='20px' color='inherit' />,
     component: Lead,
   },
   {
     name: "Lead View",
-    layout: "/admin",
-    both: true,
+    layout: data,
     under: "lead",
     parentName: "Lead",
     path: "/leadView/:id",
@@ -99,8 +126,7 @@ const routes = [
   },
   {
     name: "Lead Import",
-    layout: "/admin",
-    both: true,
+    layout: data,
     under: "lead",
     parentName: "Lead",
     path: "/leadImport",
@@ -109,16 +135,14 @@ const routes = [
   // --------------- contact Routes --------------------
   {
     name: "Contacts",
-    layout: "/admin",
-    both: true,
+    layout: data,
     path: "/contacts",
     icon: <Icon as={MdContacts} width='20px' height='20px' color='inherit' />,
     component: Contact,
   },
   {
     name: "Contact View",
-    layout: "/admin",
-    both: true,
+    layout: data,
     under: "contacts",
     parentName: "Contacts",
     path: "/contactView/:id",
@@ -127,16 +151,14 @@ const routes = [
   // ------------- Property Routes ------------------------
   {
     name: "Property",
-    layout: "/admin",
-    both: true,
+    layout: data,
     path: "/properties",
     icon: <Icon as={LuBuilding2} width='20px' height='20px' color='inherit' />,
     component: Property,
   },
   {
     name: "Property View",
-    layout: "/admin",
-    both: true,
+    layout: data,
     parentName: "Property",
     under: "properties",
     path: "/propertyView/:id",
@@ -146,25 +168,23 @@ const routes = [
   // // ------------- Communication Integration Routes ------------------------
   // {
   //   name: "Communication Integration",
-  //   layout: "/admin",
-  //   both: true,
+  //   layout: data,
+
   //   path: "/communication-integration",
   //   icon: <Icon as={GiSatelliteCommunication} width='20px' height='20px' color='inherit' />,
   //   component: Communication,
   // },
   // ------------- Task Routes ------------------------
   {
-    name: " Task",
-    layout: "/admin",
-    both: true,
+    name: "Task",
+    layout: data,
     path: "/task",
     icon: <Icon as={FaTasks} width='20px' height='20px' color='inherit' />,
     component: Task,
   },
   {
     name: "Task View",
-    layout: "/admin",
-    both: true,
+    layout: data,
     under: "task",
     parentName: "Task",
     path: "/view/:id",
@@ -173,16 +193,14 @@ const routes = [
   // ------------- Meeting Routes ------------------------
   {
     name: "Meeting",
-    layout: "/admin",
-    both: true,
+    layout: data,
     path: "/metting",
     icon: <Icon as={SiGooglemeet} width='20px' height='20px' color='inherit' />,
     component: Meeting,
   },
   {
     name: "Meeting View",
-    layout: "/admin",
-    both: true,
+    layout: data,
     under: "metting",
     parentName: "Meeting",
     path: "/metting/:id",
@@ -191,16 +209,14 @@ const routes = [
   // ------------- Phone Routes ------------------------
   {
     name: "Call",
-    layout: "/admin",
-    both: true,
+    layout: data,
     path: "/phone-call",
     icon: <Icon as={PiPhoneCallBold} width='20px' height='20px' color='inherit' />,
     component: PhoneCall,
   },
   {
     name: "Call View",
-    layout: "/admin",
-    both: true,
+    layout: data,
     under: "phone-call",
     parentName: "Call",
     path: "/phone-call/:id",
@@ -210,16 +226,14 @@ const routes = [
   {
     // separator: 'History',
     name: "Email",
-    layout: "/admin",
-    both: true,
+    layout: data,
     path: "/email",
     icon: <Icon as={AiOutlineMail} width='20px' height='20px' color='inherit' />,
     component: EmailHistory,
   },
   {
     name: "Email View",
-    layout: "/admin",
-    both: true,
+    layout: data,
     under: "email",
     parentName: "Email",
     path: "/Email/:id",
@@ -228,8 +242,7 @@ const routes = [
   // ------------- Calender Routes ------------------------
   {
     name: "Calender",
-    layout: "/admin",
-    both: true,
+    layout: data,
     path: "/calender",
     icon: <Icon as={FaCalendarAlt} width='20px' height='20px' color='inherit' />,
     component: Calender,
@@ -237,17 +250,16 @@ const routes = [
   // ------------- Payments Routes ------------------------
   {
     name: "Payments",
-    layout: "/admin",
-    both: true,
+    layout: data,
     path: "/payments",
     icon: <Icon as={FaRupeeSign} width='20px' height='20px' color='inherit' />,
     component: Payments,
   },
 
-   // ------------- Roles Routes ------------------------
-   {
+  // ------------- Roles Routes ------------------------
+  {
     name: "Roles",
-    layout: "/admin",
+    layout: data,
     path: "/role",
     icon: <Icon as={LiaCriticalRole} width='20px' height='20px' color='inherit' />,
     component: Role,
@@ -255,25 +267,24 @@ const routes = [
   // // ------------- Text message Routes ------------------------
   // {
   //   name: "Text Msg",
-  //   layout: "/admin",
-  //   both: true,
+  //   layout: data,
+  //
   //   path: "/text-msg",
   //   icon: <Icon as={MdOutlineMessage} width='20px' height='20px' color='inherit' />,
   //   component: TextMsg,
   // },
   // {
   //   name: "Text Msg View",
-  //   layout: "/admin",
-  //   both: true,
+  //   layout: data,
+  //
   //   under: "text-msg",
-  //   path: "/text-msg/:id",
+  //   path:  text-msg/:id",
   //   component: TextMsgView,
   // },
   // ------------- Document Routes ------------------------
   {
     name: "Documents",
-    layout: "/admin",
-    both: true,
+    layout: data,
     path: "/documents",
     icon: <Icon as={AiFillFolderOpen} width='20px' height='20px' color='inherit' />,
     component: Document,
@@ -281,8 +292,7 @@ const routes = [
   // ----------------- Reporting Layout -----------------
   {
     name: "Reporting and Analytics",
-    layout: "/admin",
-    both: true,
+    layout: data,
     path: "/reporting-analytics",
     icon: <Icon as={MdInsertChartOutlined} width='20px' height='20px' color='inherit' />,
     component: Report,
@@ -290,15 +300,14 @@ const routes = [
   // ------------- user Routes ------------------------
   {
     name: "Users",
-    layout: "/admin",
+    layout: data,
     path: "/user",
     icon: <Icon as={HiUsers} width='20px' height='20px' color='inherit' />,
     component: User,
   },
   {
     name: "User View",
-    both: true,
-    layout: "/admin",
+    layout: data,
     parentName: "Email",
     under: "user",
     path: "/userView/:id",
@@ -315,5 +324,25 @@ const routes = [
     component: SignInCentered,
   },
 ];
+
+let routes = user?.role !== "admin" ?
+  [
+    {
+      name: "Dashboard",
+      layout: data,
+      path: "/default",
+      icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
+      component: MainDashboard,
+    }, {
+      name: "Sign In",
+      layout: "/auth",
+      path: "/sign-in",
+      icon: <Icon as={MdLock} width='20px' height='20px' color='inherit' />,
+      component: SignInCentered,
+    }
+  ] : newRoute
+
+const accessRoute = user?.role !== "admin" && newRoute?.filter(item => Object.keys(mergedPermissions)?.find(data => data === item?.name?.toLowerCase()))
+user?.role !== "admin" && routes.push(...accessRoute)
 
 export default routes;

@@ -33,7 +33,7 @@ import AddEmailHistory from "views/admin/emailHistory/components/AddEmail";
 import AddPhoneCall from "views/admin/phoneCall/components/AddPhoneCall";
 
 export default function CheckTable(props) {
-  const { columnsData, tableData, fetchData, isLoding } = props;
+  const { columnsData, tableData, fetchData, isLoding, access } = props;
   const textColor = useColorModeValue("gray.500", "white");
   // const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -182,7 +182,7 @@ export default function CheckTable(props) {
                         );
                       } else if (cell?.column.Header === "Lead Name") {
                         data = (
-                          <Link to={user?.role !== 'admin' ? `/leadView/${cell?.row?.values._id}` : `/admin/leadView/${cell?.row?.values._id}`}>
+                          access.view ? <Link to={`/leadView/${cell?.row?.values._id}`}>
                             <Text
                               me="10px"
                               sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
@@ -192,7 +192,16 @@ export default function CheckTable(props) {
                             >
                               {cell?.value}
                             </Text>
-                          </Link>
+                          </Link> :
+                            <Text
+                              me="10px"
+                              sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                              color='brand.600'
+                              fontSize="sm"
+                              fontWeight="500"
+                            >
+                              {cell?.value}
+                            </Text>
                         );
                       } else if (cell?.column.Header === "Lead Email") {
                         data = (
