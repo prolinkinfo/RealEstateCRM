@@ -129,7 +129,9 @@ const login = async (req, res) => {
     try {
         const { username, password } = req.body;
         // Find the user by username
-        const user = await User.findOne({ username, deleted: false });
+        const user = await User.findOne({ username, deleted: false }).populate({
+            path: 'roles'
+        });
         if (!user) {
             res.status(401).json({ error: 'Authentication failed, invalid username' });
             return;
