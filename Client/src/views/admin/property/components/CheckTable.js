@@ -598,7 +598,7 @@ export default function CheckTable(props) {
                   onChange={handleChange} onBlur={handleBlur}
                   value={values?.numberOfBedrooms}
                   name="numberOfBedrooms"
-                  placeholder='Enter Lead Owner'
+                  placeholder='Enter Number of Bedrooms'
                   fontWeight='500'
                 />
                 <Text mb='10px' color={'red'}> {errors.numberOfBedrooms && touched.numberOfBedrooms && errors.numberOfBedrooms}</Text>
@@ -613,7 +613,7 @@ export default function CheckTable(props) {
                   onChange={handleChange} onBlur={handleBlur}
                   value={values?.numberOfBathrooms}
                   name="numberOfBathrooms"
-                  placeholder='Enter Lead Owner'
+                  placeholder='Enter Number of Bathrooms'
                   fontWeight='500'
                 />
                 <Text mb='10px' color={'red'}> {errors.numberOfBathrooms && touched.numberOfBathrooms && errors.numberOfBathrooms}</Text>

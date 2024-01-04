@@ -555,7 +555,7 @@ export default function CheckTable(props) {
                   onChange={handleChange} onBlur={handleBlur}
                   value={values?.createByName}
                   name="createByName"
-                  placeholder='Enter createByName'
+                  placeholder='Enter Recipient'
                   fontWeight='500'
                 />
                 <Text mb='10px' color={'red'}> {errors.createByName && touched.createByName && errors.createByName}</Text>
