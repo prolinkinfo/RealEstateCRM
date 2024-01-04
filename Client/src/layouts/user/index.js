@@ -29,6 +29,8 @@ export default function User(props) {
 
     const layoutName = user?.roles?.map(item => `/${item.roleName}`)
 
+    console.log(layoutName)
+
 
     const filterAccess = (rolesData) => {
         return rolesData?.map(role => {
@@ -168,10 +170,11 @@ export default function User(props) {
         return activeNavbar;
     };
 
+
     const getRoutes = (routes) => {
         return routes.map((prop, key) => {
             // if (!prop.under && prop.layout === '/admin') {
-            if (!prop.under && prop.layout !== '/auth' && layoutName?.includes(ROLE_PATH.user)) {
+            if (!prop.under && prop.layout !== '/auth') {
                 return <Route path={prop.path} element={<prop.component />} key={key} />;
             } else if (prop.under) {
                 return <Route path={prop.path} element={<prop.component />} key={key} />
