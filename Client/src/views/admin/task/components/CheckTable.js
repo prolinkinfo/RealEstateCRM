@@ -28,7 +28,7 @@ import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 import EventView from "../eventView";
 
 export default function CheckTable(props) {
-  const { columnsData, fetchData, data, isLoding, setTaskModel, className } = props;
+  const { columnsData, fetchData, data, isLoding, setTaskModel, className, access } = props;
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -161,7 +161,7 @@ export default function CheckTable(props) {
                       } else if (cell?.column.Header === "Title") {
                         data = (
                           <Text
-                            onClick={() => handleDateClick(cell)}
+                            onClick={() => access?.view && handleDateClick(cell)}
                             me="10px"
                             sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
                             color='green.400'

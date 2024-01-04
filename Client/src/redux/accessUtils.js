@@ -1,19 +1,20 @@
-export const hasAccess = (roles, rolesToCheck, action) => {
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchRoles } from "./roleSlice";
 
-    // const updatedAccessData = roles.reduce((acc, role) => {
-    //     if (rolesToCheck.includes(role.roleName)) {
-    //         const updatedRole = {
-    //             ...role,
-    //             access: role.access.filter(item => !(item.title === 'call' && item.view === false && item.create === false && item.update === false && item.delete === false)),
-    //         };
-    //         acc.push(updatedRole);
-    //     } else {
-    //         acc.push(role);
-    //     }
-    //     return acc;
-    // }, []);
+export const HasAccess = (action) => {
 
-    // console.log(updatedAccessData)
+    const user = JSON.parse(localStorage.getItem('user'))
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        // Dispatch the fetchRoles action on component mount
+        dispatch(fetchRoles(user?._id));
+    }, [dispatch]);
+
+    const roles = useSelector((state) => state.roles.roles);
+    const rolesToCheck = roles?.map(item => item.roleName)
 
     const access = rolesToCheck.map((roleToCheck) => {
         const role = roles.find((r) => r.roleName === roleToCheck);
@@ -37,5 +38,5 @@ export const hasAccess = (roles, rolesToCheck, action) => {
         }
     });
 
-    return mergedPermissions;
+    return mergedPermissions[action];
 };

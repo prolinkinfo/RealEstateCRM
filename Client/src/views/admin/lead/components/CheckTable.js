@@ -111,7 +111,7 @@ export default function CheckTable(props) {
           Leads  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
         </Text>
         {/* <Menu /> */}
-        {selectedValues.length > 0 && <DeleteIcon onClick={() => setDelete(true)} color={'red'} />}
+        {(selectedValues.length > 0 && access.delete) && <DeleteIcon onClick={() => setDelete(true)} color={'red'} />}
       </Flex>
       {/* Delete model */}
       <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/lead/deleteMany' data={selectedValues} method='many' />
@@ -195,8 +195,8 @@ export default function CheckTable(props) {
                           </Link> :
                             <Text
                               me="10px"
-                              sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                              color='brand.600'
+                              // sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                              // color='brand.600'
                               fontSize="sm"
                               fontWeight="500"
                             >

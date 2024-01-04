@@ -36,7 +36,7 @@ import Delete from "./Delete";
 import Edit from "./Edit";
 import { fetchRoles } from "../../../redux/roleSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { hasAccess } from "../../../redux/accessUtils";
+import { HasAccess } from "../../../redux/accessUtils";
 
 
 const View = () => {
@@ -63,18 +63,8 @@ const View = () => {
     const [addEmailHistory, setAddEmailHistory] = useState(false);
     const [addPhoneCall, setAddPhoneCall] = useState(false);
 
-    const dispatch = useDispatch();
 
-    useEffect(() => {
-        // Dispatch the fetchRoles action on component mount
-        dispatch(fetchRoles(user?._id));
-    }, [dispatch]);
-
-    const roles = useSelector((state) => state.roles.roles);
-
-    const roleName = roles?.map(item => item.roleName)
-
-    const userCanCreateTask = hasAccess(roles, roleName, 'lead');
+    const permission = HasAccess('lead');
 
     const columnsDataColumns = [
         { Header: "sender", accessor: "senderName", },
@@ -188,15 +178,16 @@ const View = () => {
                             <GridItem  >
                                 <Flex justifyContent={"right"}>
                                     <Menu>
-                                        <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
+                                        {(permission?.create || permission?.update || permission?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
                                             Actions
-                                        </MenuButton>
+                                        </MenuButton>}
                                         <MenuDivider />
                                         <MenuList>
-                                            <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>
-                                            <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>
-                                            <MenuDivider />
-                                            <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
+                                            {permission?.create && <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
+                                            {permission?.update && <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
+                                            {permission?.delete && <>
+                                                <MenuDivider /> <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
+                                            </>}
                                         </MenuList>
                                     </Menu>
                                     <Link to="/lead">
@@ -464,16 +455,16 @@ const View = () => {
 
                         </TabPanels>
                     </Tabs>
-                    <Card mt={3}>
+                    {permission?.update || permission?.delete && <Card mt={3}>
                         <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                             <GridItem colStart={6} >
                                 <Flex justifyContent={"right"}>
-                                    {userCanCreateTask.lead?.update ? <Button onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button> : ''}
-                                    {userCanCreateTask.lead?.delete ? <Button style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button> : ''}
+                                    {permission?.update ? <Button onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button> : ''}
+                                    {permission?.delete ? <Button style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button> : ''}
                                 </Flex>
                             </GridItem>
                         </Grid>
-                    </Card>
+                    </Card>}
                 </>
             }
         </>

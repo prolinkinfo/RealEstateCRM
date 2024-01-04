@@ -6,6 +6,7 @@ import CheckTable from './components/CheckTable';
 import Add from "./Add";
 import Card from "components/card/Card";
 import { useFormik } from "formik";
+import { HasAccess } from "../../../redux/accessUtils";
 
 
 const Index = () => {
@@ -29,6 +30,8 @@ const Index = () => {
 
     const user = JSON.parse(localStorage.getItem("user"))
 
+    const permission = HasAccess('contacts');
+
     const fetchData = async () => {
         setIsLoding(true)
         let result = await getApi(user.role === 'admin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`);
@@ -48,10 +51,10 @@ const Index = () => {
         <div>
             <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={4}>
                 <GridItem colStart={6} textAlign={"right"}>
-                    <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>
+                    {permission?.create && <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>}
                 </GridItem>
                 <GridItem colSpan={6}>
-                    <CheckTable isLoding={isLoding} columnsData={columns} isOpen={isOpen} tableData={data} fetchData={fetchData} setAction={setAction} />
+                    <CheckTable isLoding={isLoding} access={permission} columnsData={columns} isOpen={isOpen} tableData={data} fetchData={fetchData} setAction={setAction} />
                 </GridItem>
             </Grid>
             {/* Add Form */}

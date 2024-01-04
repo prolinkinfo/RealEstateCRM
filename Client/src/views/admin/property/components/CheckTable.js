@@ -31,7 +31,7 @@ import { getApi } from "services/api";
 import Delete from "../Delete";
 // import '.\src\assets\css\App.css' 
 export default function CheckTable(props) {
-  const { columnsData, action, setAction } = props;
+  const { columnsData, action, setAction, access } = props;
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   const columns = useMemo(() => columnsData, [columnsData]);
@@ -80,7 +80,6 @@ export default function CheckTable(props) {
   if (pageOptions.length < gopageValue) {
     setGopageValue(pageOptions.length)
   }
-
 
   const handleCheckboxChange = (event, value) => {
     if (event.target.checked) {
@@ -182,7 +181,7 @@ export default function CheckTable(props) {
                         );
                       } else if (cell?.column.Header === "property Type") {
                         data = (
-                          <Link to={`/propertyView/${cell?.row?.values._id}`}>
+                          access?.view ? <Link to={`/propertyView/${cell?.row?.values._id}`}>
                             <Text
                               className="tableData"
                               me="10px"
@@ -193,7 +192,15 @@ export default function CheckTable(props) {
                             >
                               {cell?.value}
                             </Text>
-                          </Link>
+                          </Link> : <Text
+                            className="tableData"
+                            me="10px"
+                            color={textColor}
+                            fontSize="sm"
+                            fontWeight="700"
+                          >
+                            {cell?.value}
+                          </Text>
                         );
                       } else if (cell?.column.Header === "property Address") {
                         data = (
