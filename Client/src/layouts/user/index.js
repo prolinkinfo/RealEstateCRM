@@ -78,8 +78,6 @@ export default function User(props) {
             }
         ]
 
-    console.log(newRoute)
-
     const accessRoute = newRoute?.filter(item => Object.keys(mergedPermissions)?.find(data => (data === item?.name?.toLowerCase()) || (data === item.parentName?.toLowerCase())))
 
     routes.push(...accessRoute)
