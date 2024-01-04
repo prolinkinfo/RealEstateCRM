@@ -62,7 +62,6 @@ function SignIn() {
         navigate('/admin')
         toast.success("Login Successfully!")
         resetForm();
-        // window.location.reload(); 
       } else {
         toast.error(response.response.data?.error)
       }
@@ -127,7 +126,7 @@ function SignIn() {
                 fontSize='sm'
                 onChange={handleChange} onBlur={handleBlur}
                 value={values.username}
-                name="username"
+                name="username" 
                 ms={{ base: "0px", md: "0px" }}
                 type='email'
                 placeholder='mail@simmmple.com'

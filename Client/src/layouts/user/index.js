@@ -1,5 +1,5 @@
 // Chakra imports
-import { Portal, Box, useDisclosure, Text, Button, Link, Flex, Spinner } from '@chakra-ui/react';
+import { Portal, Box, useDisclosure, Text, Button, Link, Flex, Spinner, Icon } from '@chakra-ui/react';
 import Footer from 'components/footer/FooterAdmin.js';
 // Layout components
 import Navbar from 'components/navbar/NavbarAdmin.js';
@@ -8,7 +8,11 @@ import { SidebarContext } from 'contexts/SidebarContext';
 import React, { Suspense, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { ROLE_PATH } from '../../roles';
-import routes from 'routes.js';
+import newRoute from 'routes.js';
+import { MdHome, MdLock } from 'react-icons/md';
+
+const MainDashboard = React.lazy(() => import("views/admin/default"));
+const SignInCentered = React.lazy(() => import("views/auth/signIn"));
 
 // Custom Chakra theme
 export default function User(props) {
@@ -22,6 +26,64 @@ export default function User(props) {
     const getRoute = () => {
         return window.location.pathname !== '/admin/full-screen-maps';
     };
+
+    const layoutName = user?.roles?.map(item => `/${item.roleName}`)
+
+
+    const filterAccess = (rolesData) => {
+        return rolesData?.map(role => {
+            role.access = role?.access?.filter(access => (access.create || access.update || access.delete || access.view));
+            return role;
+        });
+    };
+
+    // Example usage:
+    const updatedRolesData = filterAccess(user?.roles);
+    let access = []
+    updatedRolesData?.map((item) => {
+        item?.access?.map((data) => access.push(data))
+    })
+
+    let mergedPermissions = {};
+
+    access.forEach((permission) => {
+        const { title, ...rest } = permission;
+
+        if (!mergedPermissions[title]) {
+            mergedPermissions[title] = { ...rest };
+        } else {
+            // Merge with priority to true values
+            Object.keys(rest).forEach((key) => {
+                if (mergedPermissions[title][key] !== true) {
+                    mergedPermissions[title][key] = rest[key];
+                }
+            });
+        }
+    });
+
+    let routes =
+        [
+            {
+                name: "Dashboard",
+                layout: [ROLE_PATH.user],
+                path: "/default",
+                icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
+                component: MainDashboard,
+            }, {
+                name: "Sign In",
+                layout: "/auth",
+                path: "/sign-in",
+                icon: <Icon as={MdLock} width='20px' height='20px' color='inherit' />,
+                component: SignInCentered,
+            }
+        ]
+
+    console.log(newRoute)
+
+    const accessRoute = newRoute?.filter(item => Object.keys(mergedPermissions)?.find(data => (data === item?.name?.toLowerCase()) || (data === item.parentName?.toLowerCase())))
+
+    routes.push(...accessRoute)
+
     const getActiveRoute = (routes) => {
         let activeRoute = 'Prolink';
         for (let i = 0; i < routes.length; i++) {
@@ -111,7 +173,7 @@ export default function User(props) {
     const getRoutes = (routes) => {
         return routes.map((prop, key) => {
             // if (!prop.under && prop.layout === '/admin') {
-            if (!prop.under && prop.layout?.includes(ROLE_PATH.user)) {
+            if (!prop.under && prop.layout !== '/auth' && layoutName?.includes(ROLE_PATH.user)) {
                 return <Route path={prop.path} element={<prop.component />} key={key} />;
             } else if (prop.under) {
                 return <Route path={prop.path} element={<prop.component />} key={key} />
