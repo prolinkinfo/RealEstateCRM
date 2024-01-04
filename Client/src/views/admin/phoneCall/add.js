@@ -56,6 +56,7 @@ const AddPhoneCall = (props) => {
             setIsLoding(false)
         }
     };
+
     useEffect(async () => {
         values.start = props?.date
         try {
@@ -70,7 +71,8 @@ const AddPhoneCall = (props) => {
         catch (e) {
             console.log(e);
         }
-    }, [props, values.category])
+    }, [props?.date, values.category])
+
     const fetchRecipientData = async () => {
         if (values.createBy) {
             let response = await getApi('api/contact/view/', values.createBy)

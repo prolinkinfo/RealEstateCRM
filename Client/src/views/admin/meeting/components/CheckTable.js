@@ -38,6 +38,7 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
+import * as XLSX from 'xlsx';
 
 // Custom components
 import Card from "components/card/Card";
@@ -55,6 +56,7 @@ import { BsColumnsGap } from "react-icons/bs";
 import * as yup from "yup"
 import { useFormik } from "formik";
 import { CiMenuKebab } from "react-icons/ci";
+
 export default function CheckTable(props) {
   const { setMeeting, className, addMeeting, from, columnsData, tableData, fetchData, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action } = props;
   const textColor = useColorModeValue("gray.500", "white");
@@ -70,9 +72,16 @@ export default function CheckTable(props) {
   const [getTagValues, setGetTagValues] = useState([]);
   const [advaceSearch, setAdvaceSearch] = useState(false);
   const [searchClear, setSearchClear] = useState(false);
-
+  const [selectedValues, setSelectedValues] = useState([]);
   const [deleteModel, setDelete] = useState(false);
   const navigate = useNavigate()
+
+  const csvColumns = [
+    { Header: 'Agenda', accessor: 'agenda' },
+    { Header: "Date & Time", accessor: "dateTime" },
+    { Header: "Time Stamp", accessor: "timestamp" },
+    { Header: "Create By", accessor: "createdByName" }
+  ];
 
   const tableInstance = useTable(
     {
@@ -144,6 +153,78 @@ export default function CheckTable(props) {
   const handleClear = () => {
     setDisplaySearchData(false)
   }
+
+  const handleCheckboxChange = (event, value) => {
+    if (event.target.checked) {
+      setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
+    } else {
+      setSelectedValues((prevSelectedValues) =>
+        prevSelectedValues.filter((selectedValue) => selectedValue !== value)
+      );
+    }
+  };
+
+  const handleExportMeetings = (extension) => {
+    if (selectedValues && selectedValues?.length > 0) {
+      downloadCsvOrExcel(extension, selectedValues);
+    }
+    else {
+      downloadCsvOrExcel(extension);
+    }
+  }
+
+  const downloadCsvOrExcel = async (extension, selectedIds) => {
+    try {
+      if (selectedIds && selectedIds?.length > 0) {
+        const selectedRecordsWithSpecificFileds = tableData?.filter((rec) => selectedIds.includes(rec._id))?.map((rec) => {
+          const selectedFieldsData = {};
+          csvColumns.forEach((property) => {
+            if (property.accessor === "dateTime" || property.accessor === "timestamp") {
+              selectedFieldsData[property.accessor] = moment(rec?.accessor).format('D/MM/YYYY LT');
+            } else {
+              selectedFieldsData[property.accessor] = rec[property.accessor];
+            }
+          });
+
+          return selectedFieldsData;
+        });
+        convertJsonToCsvOrExcel(selectedRecordsWithSpecificFileds, csvColumns, 'meeting', extension);
+      } else {
+        const AllRecordsWithSpecificFileds = tableData?.map((rec) => {
+          const selectedFieldsData = {};
+          csvColumns.forEach((property) => {
+            if (property.accessor === "dateTime" || property.accessor === "timestamp") {
+              selectedFieldsData[property.accessor] = moment(rec?.accessor).format('D/MM/YYYY LT');
+            } else {
+              selectedFieldsData[property.accessor] = rec[property.accessor];
+            }
+          });
+          return selectedFieldsData;
+        });
+        convertJsonToCsvOrExcel(AllRecordsWithSpecificFileds, csvColumns, 'meeting', extension);
+      }
+
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const convertJsonToCsvOrExcel = (jsonArray, csvColumns, fileName, extension) => {
+    const csvHeader = csvColumns.map((col) => col.Header);
+
+    const csvContent = [
+      csvHeader,
+      ...jsonArray.map((row) => csvColumns.map((col) => row[col.accessor]))
+    ];
+
+    const ws = XLSX.utils.aoa_to_sheet(csvContent);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
+    XLSX.writeFile(wb, `${fileName}.${extension}`);    // .csv, .xlsx
+    setSelectedValues([])
+  };
+
+
   useEffect(() => {
     setSearchedData && setSearchedData(data);
   }, []);
@@ -224,8 +305,8 @@ export default function CheckTable(props) {
                 {/* <MenuItem width={"165px"} onClick={() => setIsImportLead(true)}> Import Leads
                 </MenuItem> */}
                 <MenuDivider />
-                {/* <MenuItem width={"165px"} onClick={() => handleExportLeads('csv')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as CSV' : 'Export as CSV'}</MenuItem>
-                <MenuItem width={"165px"} onClick={() => handleExportLeads('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem> */}
+                <MenuItem width={"165px"} onClick={() => handleExportMeetings('csv')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as CSV' : 'Export as CSV'}</MenuItem>
+                <MenuItem width={"165px"} onClick={() => handleExportMeetings('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem>
               </MenuList>
             </Menu>
             {from !== "index" ? <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button> :
@@ -307,6 +388,7 @@ export default function CheckTable(props) {
                         if (cell?.column.Header === "#") {
                           data = (
                             <Flex align="center">
+                              <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />
                               <Text color={textColor} fontSize="sm" fontWeight="700">
                                 {cell?.row?.index + 1}
                               </Text>
@@ -349,7 +431,7 @@ export default function CheckTable(props) {
                             </Text>
 
                           );
-                        } else if (cell?.column.Header === "times tamp") {
+                        } else if (cell?.column.Header === "time stamp") {
                           data = (
                             <Text color={textColor} fontSize="sm" fontWeight="700">
                               {/* {moment(cell?.value).toNow()} */}

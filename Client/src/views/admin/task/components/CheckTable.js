@@ -187,6 +187,17 @@ export default function CheckTable(props) {
     setId(cell?.row?.values?._id)
     setEventView(true)
   }
+
+  const handleCheckboxChange = (event, value) => {
+    if (event.target.checked) {
+      setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
+    } else {
+      setSelectedValues((prevSelectedValues) =>
+        prevSelectedValues.filter((selectedValue) => selectedValue !== value)
+      );
+    }
+  };
+
   const handleClick = () => {
     onOpen()
   }
@@ -391,7 +402,7 @@ export default function CheckTable(props) {
                         if (cell?.column.Header === "#") {
                           data = (
                             <Flex align="center">
-                              {/* <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" /> */}
+                              <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />
                               <Text color={textColor} fontSize="sm" fontWeight="700">
                                 {cell?.row?.index + 1}
                               </Text>
