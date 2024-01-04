@@ -72,7 +72,6 @@ export function SidebarResponsive(props) {
   const { routes, setOpenSidebar, openSidebar } = props;
   // let isWindows = navigator.platform.startsWith("Win");
   //  BRAND
-
   return (
     <Flex display={{ sm: "flex", xl: "none" }} alignItems='center'>
       <Flex ref={btnRef} w='max-content' h='max-content' onClick={() => setOpenSidebar(!openSidebar)}>

@@ -8,6 +8,7 @@ import CheckTable from './components/CheckTable';
 import * as yup from 'yup';
 import { FiUpload } from 'react-icons/fi';
 import ImportModal from "./components/ImportModal";
+import { HasAccess } from "../../../redux/accessUtils";
 
 const Index = () => {
     const [columns, setColumns] = useState([]);
@@ -16,6 +17,8 @@ const Index = () => {
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"));
+
+    const permission = HasAccess('lead');
 
     const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
@@ -47,7 +50,6 @@ const Index = () => {
     return (
         <div>
             <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={4}>
-
                 <GridItem colSpan={6}>
                     <CheckTable
                         isLoding={isLoding}
@@ -64,6 +66,7 @@ const Index = () => {
                         setDynamicColumns={setDynamicColumns}
                         dynamicColumns={dynamicColumns}
                         selectedColumns={selectedColumns}
+                        access={permission}
                         setSelectedColumns={setSelectedColumns}
                     />
                 </GridItem>

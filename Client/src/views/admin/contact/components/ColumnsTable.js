@@ -150,7 +150,7 @@ export default function ColumnsTable(props) {
                     } else if (cell?.column.Header === "recipient") {
                       data = (
                         <Flex align='center'>
-                          <Link to={user?.role !== 'admin' ? `/Email/${cell?.row?.original._id}` : `/admin/Email/${cell?.row?.original._id}`}>
+                          <Link to={`/Email/${cell?.row?.original._id}`}>
                             <Text sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
                               color='green.400' fontSize='sm' fontWeight='700'>
                               {cell?.value}

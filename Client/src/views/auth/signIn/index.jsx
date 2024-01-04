@@ -126,7 +126,7 @@ function SignIn() {
                 fontSize='sm'
                 onChange={handleChange} onBlur={handleBlur}
                 value={values.username}
-                name="username"
+                name="username" 
                 ms={{ base: "0px", md: "0px" }}
                 type='email'
                 placeholder='mail@simmmple.com'

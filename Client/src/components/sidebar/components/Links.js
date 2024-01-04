@@ -23,7 +23,7 @@ export function SidebarLinks(props) {
 
   // verifies if routeName is the one active (in browser input)
   const activeRoute = (routeName) => {
-    return location.pathname.includes(routeName);
+    return location.pathname?.includes(routeName);
   };
 
 
@@ -50,9 +50,9 @@ export function SidebarLinks(props) {
             {createLinks(route.items)}
           </>
         );
-      } else if (!route.under && user?.role && route.layout === `/${user.role}` || `/admin` && !route.under && user?.role && route.both === true) {
+      } else if (!route.under && user?.role && route.layout?.includes(`/${user.role}`)) {
         return (
-          <NavLink key={index} to={route.both === true ? route.path : route.layout + route.path}>
+          <NavLink key={index} to={route.path}>
             {route.separator &&
               <Box position='relative'
                 margin='20px 0'

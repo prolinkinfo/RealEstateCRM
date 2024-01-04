@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Add from "./Add";
 import CheckTable from './components/CheckTable';
 import { getApi } from "services/api";
+import { HasAccess } from "../../../redux/accessUtils";
 
 const Index = () => {
     const [columns, setColumns] = useState([]);
@@ -43,10 +44,17 @@ const Index = () => {
     useEffect(() => {
         setColumns(tableColumns)
     }, [onClose])
+    const permission = HasAccess('property');
+
+
 
     return (
         <div>
-
+            {/* <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
+                <GridItem colStart={6} textAlign={"right"}>
+                    {permission?.create && <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>}
+                </GridItem>
+            </Grid> */}
             <CheckTable
                 isLoding={isLoding}
                 columnsData={columns}
@@ -62,8 +70,10 @@ const Index = () => {
                 setDynamicColumns={setDynamicColumns}
                 dynamicColumns={dynamicColumns}
                 selectedColumns={selectedColumns}
+                access={permission}
                 setSelectedColumns={setSelectedColumns}
             />
+            {/* <Add isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} /> */}
         </div>
     )
 }

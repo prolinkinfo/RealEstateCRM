@@ -48,7 +48,12 @@ const register = async (req, res) => {
 
 const index = async (req, res) => {
     try {
-        let user = await User.find({ deleted: false })
+        const query = { ...req.query, deleted: false };
+
+        let user = await User.find(query).populate({
+            path: 'roles'
+        }).exec()
+
         res.status(200).json({ user });
     } catch (error) {
         res.status(500).json({ error });
@@ -57,7 +62,9 @@ const index = async (req, res) => {
 
 const view = async (req, res) => {
     try {
-        let user = await User.findOne({ _id: req.params.id })
+        let user = await User.findOne({ _id: req.params.id }).populate({
+            path: 'roles'
+        })
         if (!user) return res.status(404).json({ message: "no Data Found." })
         res.status(200).json(user)
     } catch (error) {
@@ -99,8 +106,6 @@ const edit = async (req, res) => {
     try {
         let { username, firstName, lastName, phoneNumber } = req.body
 
-        // Hash the password
-        // const hashedPassword = await bcrypt.hash(password, 10);
         let result = await User.updateOne(
             { _id: req.params.id },
             {
@@ -122,7 +127,9 @@ const login = async (req, res) => {
     try {
         const { username, password } = req.body;
         // Find the user by username
-        const user = await User.findOne({ username, deleted: false });
+        const user = await User.findOne({ username, deleted: false }).populate({
+            path: 'roles'
+        });
         if (!user) {
             res.status(401).json({ error: 'Authentication failed, invalid username' });
             return;
@@ -142,4 +149,18 @@ const login = async (req, res) => {
     }
 }
 
-module.exports = { register, login, adminRegister, index, deleteMany, view, deleteData, edit }
+const changeRoles = async (req, res) => {
+    try {
+        const userId = req.params.id;
+
+        let result = await User.updateOne({ _id: userId }, { $set: { roles: req.body } });
+
+        res.status(200).json(result);
+
+    } catch (error) {
+        console.error('Failed to Change Role:', error);
+        res.status(400).json({ error: 'Failed to Change Role' });
+    }
+}
+
+module.exports = { register, login, adminRegister, index, deleteMany, view, deleteData, edit, changeRoles }

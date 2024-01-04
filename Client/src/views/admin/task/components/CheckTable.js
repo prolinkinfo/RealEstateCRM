@@ -59,7 +59,7 @@ import DeleteTask from "./deleteTask";
 import * as XLSX from 'xlsx'
 
 export default function CheckTable(props) {
-  const { tableData, fetchData, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action, className } = props;
+  const { tableData, fetchData, isLoding, allData, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action, className } = props;
 
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -411,7 +411,7 @@ export default function CheckTable(props) {
                         } else if (cell?.column.Header === "Title") {
                           data = (
                             <Text
-                              onClick={() => handleDateClick(cell)}
+                              onClick={() => access?.view && handleDateClick(cell)}
                               me="10px"
                               sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
                               color='brand.600'

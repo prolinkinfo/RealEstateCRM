@@ -396,7 +396,7 @@ export default function CheckTable(props) {
                           );
                         } else if (cell?.column.Header === "agenda") {
                           data = (
-                            <Link to={user?.role !== 'admin' ? `/metting/${cell?.row?.values._id}` : `/admin/metting/${cell?.row?.values._id}`}>
+                            <Link to={`/metting/${cell?.row?.values._id}`}>
                               <Text
                                 me="10px"
                                 sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}

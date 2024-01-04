@@ -52,7 +52,7 @@ const View = () => {
                                 </GridItem>
                                 <GridItem colSpan={{ base: 2, md: 1 }}>
                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Create to </Text>
-                                    <Link to={user?.role !== 'admin' ? `/contactView/${data?.createFor}` : `/admin/contactView/${data?.createFor}`}>
+                                    <Link to={`/contactView/${data?.createFor}`}>
                                         <Text color='green.400' sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.createByName ? data?.createByName : ' - '}</Text>
                                     </Link>
                                 </GridItem>

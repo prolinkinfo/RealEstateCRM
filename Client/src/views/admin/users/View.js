@@ -10,15 +10,26 @@ import { getApi } from "services/api";
 import Add from "./Add";
 import Delete from "./Delete";
 import Edit from "./Edit";
+import RoleTable from "./components/roleTable";
+import { LiaCriticalRole } from "react-icons/lia";
+import RoleModal from "./components/roleModal";
 
 const View = () => {
+
+    const RoleColumn = [
+        { Header: '#', accessor: '_id', width: 10, display: false },
+        { Header: 'Role Name', accessor: 'roleName' },
+        { Header: "Description", accessor: "description", }
+    ];
 
     const param = useParams()
 
     const [data, setData] = useState()
+    const [roleData, setRoleData] = useState([])
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [edit, setEdit] = useState(false);
     const [deleteModel, setDelete] = useState(false);
+    const [roleModal, setRoleModal] = useState(false);
     const [isLoding, setIsLoding] = useState(false)
     const [action, setAction] = useState(false)
 
@@ -34,6 +45,13 @@ const View = () => {
     useEffect(() => {
         fetchData()
     }, [action])
+
+    useEffect(async () => {
+        setIsLoding(true);
+        let result = await getApi("api/role-access");
+        setRoleData(result.data);
+        setIsLoding(false);
+    }, [])
 
     return (
         <>
@@ -104,16 +122,22 @@ const View = () => {
                                             <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> User Email </Text>
                                             <Text>{data?.username ? data?.username : ' - '}</Text>
                                         </GridItem>
-                                        <GridItem colSpan={{ base: 2, md: 1 }}>
+                                        {/* <GridItem colSpan={{ base: 2, md: 1 }}>
                                             <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Role </Text>
                                             <Text>{data?.role ? data?.role : ' - '}</Text>
-                                        </GridItem>
+                                        </GridItem> */}
                                     </Grid>
                                 </Grid>
                             </Card>
                         </GridItem>
 
                     </Grid>
+                    <Card mt={3}>
+                        <RoleTable fetchData={fetchData} columnsData={RoleColumn} roleModal={roleModal} setRoleModal={setRoleModal} tableData={data?.roles || []} title={'Role'} />
+                    </Card>
+
+                    <RoleModal fetchData={fetchData} isOpen={roleModal} onClose={setRoleModal} columnsData={RoleColumn} id={param.id} tableData={roleData} interestRoles={data?.roles.map((item) => item._id)} />
+
                     <Card mt={3}>
                         <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                             <GridItem colStart={6} >

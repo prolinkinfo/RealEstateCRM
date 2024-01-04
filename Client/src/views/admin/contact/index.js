@@ -6,6 +6,7 @@ import CheckTable from './components/CheckTable';
 import Add from "./Add";
 import Card from "components/card/Card";
 import { useFormik } from "formik";
+import { HasAccess } from "../../../redux/accessUtils";
 
 
 const Index = () => {
@@ -31,6 +32,8 @@ const Index = () => {
     const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
 
     const user = JSON.parse(localStorage.getItem("user"))
+
+    const permission = HasAccess('contacts');
 
     const fetchData = async () => {
         setIsLoding(true)
@@ -70,8 +73,15 @@ const Index = () => {
                         onOpen={onOpen}
                         onClose={onClose}
                         selectedColumns={selectedColumns}
+                        access={permission}
                         setSelectedColumns={setSelectedColumns} />
                 </GridItem>
+                {/* <GridItem colStart={6} textAlign={"right"}>
+                    {permission?.create && <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>}
+                </GridItem>
+                <GridItem colSpan={6}>
+                    <CheckTable isLoding={isLoding}  columnsData={columns} isOpen={isOpen} tableData={data} fetchData={fetchData} setAction={setAction} />
+                </GridItem> */}
             </Grid>
             {/* Add Form */}
             {/* <Add isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} /> */}

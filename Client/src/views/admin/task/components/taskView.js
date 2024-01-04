@@ -100,7 +100,7 @@ const TaskView = (props) => {
                     </GridItem>
                     <GridItem colSpan={{ base: 12, md: 6 }} >
                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> assignment To  </Text>
-                        <Link to={data?.assignmentTo ? user?.role !== 'admin' ? `/contactView/${data?.assignmentTo}` : `/admin/contactView/${data?.assignmentTo}` : user?.role !== 'admin' ? `/leadView/${data?.assignmentToLead}` : `/admin/leadView/${data?.assignmentToLead}`}>
+                        <Link to={data?.assignmentTo ? `/contactView/${data?.assignmentTo}` : `/leadView/${data?.assignmentToLead}`}>
                             <Text color='green.400' sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.assignmentToName ? data?.assignmentToName : ' - '}</Text>
                         </Link>
                     </GridItem>

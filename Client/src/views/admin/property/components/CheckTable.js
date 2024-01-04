@@ -64,7 +64,7 @@ import ImportModal from "./ImportModal";
 // import '.\src\assets\css\App.css' 
 
 export default function CheckTable(props) {
-  const { columnsData, setAction, tableData, fetchData, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, action } = props;
+  const { columnsData, setAction, tableData, fetchData, access, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, action } = props;
   const { isOpen, onOpen, onClose } = useDisclosure()
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");

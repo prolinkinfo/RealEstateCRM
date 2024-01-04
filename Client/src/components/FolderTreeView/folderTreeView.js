@@ -59,8 +59,8 @@ const FolderTreeView = ({ data, deleteFile, item, download, name, isFile, childr
                                 <MenuButton><CiMenuKebab /></MenuButton>
                                 <MenuList position={'absolute'} right={-5} pl={'0.5em'} minW={'fit-content'} >
                                     {!from && data?.linkContact ?
-                                        <MenuItem pr={2} w={'180px'} onClick={() => navigate(user?.role !== 'admin' ? `/contactView/${data?.linkContact}` : `/admin/contactView/${data?.linkContact}`)} icon={<IoIosContact fontSize={15} />}>Linked Contact</MenuItem>
-                                        : !from && data?.linkLead && <MenuItem pr={2} w={'180px'} onClick={() => navigate(user?.role !== 'admin' ? `/leadView/${data?.linkLead}` : `/admin/leadView/${data?.linkLead}`)} icon={<MdLeaderboard fontSize={15} />}>Linked Lead</MenuItem>
+                                        <MenuItem pr={2} w={'180px'} onClick={() => navigate(`/contactView/${data?.linkContact}`)} icon={<IoIosContact fontSize={15} />}>Linked Contact</MenuItem>
+                                        : !from && data?.linkLead && <MenuItem pr={2} w={'180px'} onClick={() => navigate(`/leadView/${data?.linkLead}`)} icon={<MdLeaderboard fontSize={15} />}>Linked Lead</MenuItem>
                                     }
                                     {!from && <MenuItem pr={10} color={'blue'} onClick={() => handleLinkClick(data?._id)} icon={<LinkIcon fontSize={15} />}>Link</MenuItem>}
                                     {isImageUrl(data?.img) && <MenuItem pr={10} color={'green'} onClick={() => window.open(data?.img)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>}

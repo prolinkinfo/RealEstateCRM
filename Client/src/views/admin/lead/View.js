@@ -34,11 +34,16 @@ import AddTask from "../task/components/addTask";
 import Add from "./Add";
 import Delete from "./Delete";
 import Edit from "./Edit";
+import { fetchRoles } from "../../../redux/roleSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { HasAccess } from "../../../redux/accessUtils";
 
 
 const View = () => {
 
     const param = useParams()
+
+    const user = JSON.parse(localStorage.getItem("user"));
 
     const [data, setData] = useState()
     const [allData, setAllData] = useState([])
@@ -57,6 +62,9 @@ const View = () => {
 
     const [addEmailHistory, setAddEmailHistory] = useState(false);
     const [addPhoneCall, setAddPhoneCall] = useState(false);
+
+
+    const permission = HasAccess('lead');
 
     const columnsDataColumns = [
         { Header: "sender", accessor: "senderName", },
@@ -147,15 +155,17 @@ const View = () => {
                             <GridItem  >
                                 <Flex justifyContent={"right"}>
                                     <Menu>
-                                        <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
+                                        {(permission?.create || permission?.update || permission?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
                                             Actions
-                                        </MenuButton>
+                                        </MenuButton>}
                                         <MenuDivider />
                                         <MenuList>
-                                            <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>
-                                            <MenuItem color={'green'} onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>
-                                            <MenuDivider />
-                                            <MenuItem color={'red'} onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
+                                            {permission?.create && <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
+                                            {permission?.update && <MenuItem color={'green'} onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
+                                            {permission?.delete && <>
+                                                <MenuDivider />
+                                                <MenuItem color={'red'} onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
+                                            </>}
                                         </MenuList>
                                     </Menu>
                                     <Link to="/lead">
@@ -356,7 +366,9 @@ const View = () => {
                                         <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
                                             <GridItem colSpan={{ base: 6 }}>
                                                 <Card >
-                                                    {allData?.Email && allData?.Email?.length ? <ColumnsTable fetchData={fetchData} columnsData={columnsDataColumns} lead='true' tableData={showEmail ? allData.Email : [allData.Email[0]]} title={'Email '} /> : <Button onClick={() => setAddEmailHistory(true)} leftIcon={<BsFillSendFill />} colorScheme="gray" >Send Email </Button>}
+                                                    {allData?.Email && allData?.Email?.length ?
+                                                        <ColumnsTable fetchData={fetchData} columnsData={columnsDataColumns} lead='true' tableData={showEmail ? allData.Email : [allData.Email[0]]} title={'Email '} />
+                                                        : <Button onClick={() => setAddEmailHistory(true)} leftIcon={<BsFillSendFill />} colorScheme="gray" >Send Email </Button>}
                                                     <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} lead='true' id={param.id} />
                                                     {allData.Email?.length > 1 &&
                                                         <div style={{ display: "flex", justifyContent: "end" }}>
@@ -417,16 +429,16 @@ const View = () => {
 
                         </TabPanels>
                     </Tabs>
-                    <Card mt={3}>
+                    {permission?.update || permission?.delete && <Card mt={3}>
                         <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                             <GridItem colStart={6} >
                                 <Flex justifyContent={"right"}>
-                                    <Button onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button>
-                                    <Button style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>
+                                    {permission?.update ? <Button onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button> : ''}
+                                    {permission?.delete ? <Button style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button> : ''}
                                 </Flex>
                             </GridItem>
                         </Grid>
-                    </Card>
+                    </Card>}
                 </>
             }
         </>
