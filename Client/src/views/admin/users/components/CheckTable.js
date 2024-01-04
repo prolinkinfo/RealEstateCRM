@@ -183,7 +183,7 @@ export default function CheckTable(props) {
                         );
                       } else if (cell?.column.Header === "email Id") {
                         data = (
-                          <Link to={user?.role !== 'admin' ? `/userView/${cell?.row?.values._id}` : `/admin/userView/${cell?.row?.values._id}`}>
+                          <Link to={`/userView/${cell?.row?.values._id}`}>
                             <Text
                               me="10px"
                               sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}

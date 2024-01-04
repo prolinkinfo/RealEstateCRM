@@ -1,5 +1,5 @@
 // Chakra imports
-import { Portal, Box, useDisclosure, Text, Button, Link } from '@chakra-ui/react';
+import { Portal, Box, useDisclosure, Text, Button, Link, Flex, Spinner, Icon } from '@chakra-ui/react';
 import Footer from 'components/footer/FooterAdmin.js';
 // Layout components
 import Navbar from 'components/navbar/NavbarAdmin.js';
@@ -7,7 +7,12 @@ import Sidebar from 'components/sidebar/Sidebar.js';
 import { SidebarContext } from 'contexts/SidebarContext';
 import React, { Suspense, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import routes from 'routes.js';
+import { ROLE_PATH } from '../../roles';
+import newRoute from 'routes.js';
+import { MdHome, MdLock } from 'react-icons/md';
+
+const MainDashboard = React.lazy(() => import("views/admin/default"));
+const SignInCentered = React.lazy(() => import("views/auth/signIn"));
 
 // Custom Chakra theme
 export default function User(props) {
@@ -15,10 +20,70 @@ export default function User(props) {
     // states and functions
     const [fixed] = useState(false);
     const [toggleSidebar, setToggleSidebar] = useState(false);
+    const [openSidebar, setOpenSidebar] = useState(false)
+    const user = JSON.parse(localStorage.getItem("user"))
     // functions for changing the states from components
     const getRoute = () => {
         return window.location.pathname !== '/admin/full-screen-maps';
     };
+
+    const layoutName = user?.roles?.map(item => `/${item.roleName}`)
+
+    console.log(layoutName)
+
+
+    const filterAccess = (rolesData) => {
+        return rolesData?.map(role => {
+            role.access = role?.access?.filter(access => (access.create || access.update || access.delete || access.view));
+            return role;
+        });
+    };
+
+    // Example usage:
+    const updatedRolesData = filterAccess(user?.roles);
+    let access = []
+    updatedRolesData?.map((item) => {
+        item?.access?.map((data) => access.push(data))
+    })
+
+    let mergedPermissions = {};
+
+    access.forEach((permission) => {
+        const { title, ...rest } = permission;
+
+        if (!mergedPermissions[title]) {
+            mergedPermissions[title] = { ...rest };
+        } else {
+            // Merge with priority to true values
+            Object.keys(rest).forEach((key) => {
+                if (mergedPermissions[title][key] !== true) {
+                    mergedPermissions[title][key] = rest[key];
+                }
+            });
+        }
+    });
+
+    let routes =
+        [
+            {
+                name: "Dashboard",
+                layout: [ROLE_PATH.user],
+                path: "/default",
+                icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
+                component: MainDashboard,
+            }, {
+                name: "Sign In",
+                layout: "/auth",
+                path: "/sign-in",
+                icon: <Icon as={MdLock} width='20px' height='20px' color='inherit' />,
+                component: SignInCentered,
+            }
+        ]
+
+    const accessRoute = newRoute?.filter(item => Object.keys(mergedPermissions)?.find(data => (data === item?.name?.toLowerCase()) || (data === item.parentName?.toLowerCase())))
+
+    routes.push(...accessRoute)
+
     const getActiveRoute = (routes) => {
         let activeRoute = 'Prolink';
         for (let i = 0; i < routes.length; i++) {
@@ -33,14 +98,13 @@ export default function User(props) {
                     return categoryActiveRoute;
                 }
             } else {
-                if (window.location.href.indexOf(routes[i].both === true ? routes[i].path.replace("/:id", "") : routes[i].layout + routes[i].path.replace("/:id", "")) !== -1) {
+                if (window.location.href.indexOf(routes[i].path.replace("/:id", "")) !== -1) {
                     return routes[i].name;
                 }
             }
         }
         return activeRoute;
     };
-
     const under = (routes) => {
         let activeRoute = false
         for (let i = 0; i < routes.length; i++) {
@@ -55,7 +119,7 @@ export default function User(props) {
                     return categoryActiveRoute;
                 }
             } else {
-                if (window.location.href.indexOf(routes[i].layout + routes[i].path.replace("/:id", "")) !== -1) {
+                if (window.location.href.indexOf(routes[i].path.replace("/:id", "")) !== -1) {
                     return routes[i];
                 }
             }
@@ -77,7 +141,7 @@ export default function User(props) {
                     return categoryActiveNavbar;
                 }
             } else {
-                if (window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1) {
+                if (window.location.href.indexOf(routes[i].path) !== -1) {
                     return routes[i].secondary;
                 }
             }
@@ -98,7 +162,7 @@ export default function User(props) {
                     return categoryActiveNavbar;
                 }
             } else {
-                if (window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1) {
+                if (window.location.href.indexOf(routes[i].path) !== -1) {
                     return routes[i].messageNavbar;
                 }
             }
@@ -106,14 +170,14 @@ export default function User(props) {
         return activeNavbar;
     };
 
+
     const getRoutes = (routes) => {
         return routes.map((prop, key) => {
-            if (prop.layout === '/user') {
-                return <Route path={prop.layout + prop.path} element={<prop.component />} key={key} />;
-            } else if (prop.layout === '/user/sub') {
-                return <Route path={prop.path} element={<prop.component />} key={key} />
-            } else if (prop.both === true) {
+            // if (!prop.under && prop.layout === '/admin') {
+            if (!prop.under && prop.layout !== '/auth') {
                 return <Route path={prop.path} element={<prop.component />} key={key} />;
+            } else if (prop.under) {
+                return <Route path={prop.path} element={<prop.component />} key={key} />
             }
             if (prop.collapse) {
                 return getRoutes(prop.items);
@@ -136,7 +200,7 @@ export default function User(props) {
                         toggleSidebar,
                         setToggleSidebar
                     }}>
-                    <Sidebar routes={routes} display='none' {...rest} />
+                    <Sidebar routes={routes} display='none' {...rest} openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
                     <Box
                         float='right'
                         minHeight='100vh'
@@ -144,8 +208,9 @@ export default function User(props) {
                         overflow='auto'
                         position='relative'
                         maxHeight='100%'
-                        w={{ base: '100%', xl: 'calc( 100% - 290px )' }}
-                        maxWidth={{ base: '100%', xl: 'calc( 100% - 290px )' }}
+                        // w={{ base: '100%', xl: 'calc( 100% - 290px )' }}
+                        w={{ base: '100%', xl: openSidebar === true ? 'calc( 100% - 290px )' : 'calc( 100% - 80px )' }}
+                        maxWidth={{ base: '100%', xl: openSidebar === true ? 'calc( 100% - 290px )' : 'calc( 100% - 80px )' }}
                         transition='all 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1)'
                         transitionDuration='.2s, .2s, .35s'
                         transitionProperty='top, bottom, width'
@@ -158,20 +223,24 @@ export default function User(props) {
                                     brandText={getActiveRoute(routes)}
                                     secondary={getActiveNavbar(routes)}
                                     message={getActiveNavbarText(routes)}
-                                    under={under(routes)}
                                     fixed={fixed}
+                                    under={under(routes)}
+                                    openSidebar={openSidebar} setOpenSidebar={setOpenSidebar}
                                     {...rest}
                                 />
                             </Box>
                         </Portal>
-                        <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
-
+                        <Box pt={{ base: "150px", md: "95px", xl: "95px" }}>
                             {getRoute() ? (
-                                <Box mx='auto' p={{ base: '20px', md: '30px' }} pe='20px' minH='100vh' pt='50px'>
-                                    <Suspense fallback={<div>Loading...</div>}>
+                                <Box mx='auto' p={{ base: '20px', md: '30px' }} pe='20px' minH='84vh' pt='50px'>
+                                    <Suspense fallback={
+                                        <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
+                                            <Spinner />
+                                        </Flex>
+                                    }>
                                         <Routes>
                                             {getRoutes(routes)}
-                                            <Route path="/*" element={<Navigate to="/user/default" />} />
+                                            <Route path="/*" element={<Navigate to="/default" />} />
                                         </Routes>
                                     </Suspense>
                                 </Box>

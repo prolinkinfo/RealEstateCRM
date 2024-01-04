@@ -32,7 +32,7 @@ import AddPhoneCall from "views/admin/phoneCall/components/AddPhoneCall";
 import Delete from "../Delete";
 
 export default function CheckTable(props) {
-  const { columnsData, tableData, fetchData, isLoding, setAction } = props;
+  const { columnsData, tableData, fetchData, isLoding, setAction, access } = props;
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -196,7 +196,7 @@ export default function CheckTable(props) {
                         );
                       } else if (cell?.column.Header === "first Name") {
                         data = (
-                          <Link to={user?.role !== 'admin' ? `/contactView/${cell?.row?.original._id}` : `/admin/contactView/${cell?.row?.original._id}`}>
+                          access?.view ? <Link to={`/contactView/${cell?.row?.original._id}`}>
                             <Text
                               me="10px"
                               sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
@@ -206,7 +206,15 @@ export default function CheckTable(props) {
                             >
                               {cell?.value}
                             </Text>
-                          </Link>
+                          </Link> :
+                            <Text
+                              me="10px"
+                              color={textColor}
+                              fontSize="sm"
+                              fontWeight="700"
+                            >
+                              {cell?.value}
+                            </Text>
                         );
                       } else if (cell?.column.Header === "last Name") {
                         data = (

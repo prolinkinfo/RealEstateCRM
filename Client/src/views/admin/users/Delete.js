@@ -14,7 +14,7 @@ const Delete = (props) => {
                 setIsLoding(true)
                 const response = await deleteApi(props.url, props.id)
                 if (response.status === 200) {
-                    navigate('/admin/user')
+                    navigate('/user')
                 }
             } catch (error) {
                 console.log(error)

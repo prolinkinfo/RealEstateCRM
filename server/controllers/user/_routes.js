@@ -12,6 +12,7 @@ router.post('/deleteMany', auth, user.deleteMany)
 router.get('/view/:id', auth, user.view)
 router.delete('/delete/:id', auth, user.deleteData)
 router.put('/edit/:id', auth, user.edit)
+router.put('/change-roles/:id', auth, user.changeRoles)
 
 
 

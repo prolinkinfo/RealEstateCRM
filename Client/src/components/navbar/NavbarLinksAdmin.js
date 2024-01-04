@@ -334,11 +334,7 @@ export default function HeaderLinks(props) {
 								fontSize="sm"
 								onClick={() =>
 									navigate(
-										JSON.parse(localStorage.getItem("user"))?.role === "admin"
-											? `/admin/userView/${JSON.parse(localStorage.getItem("user"))?._id
-											}`
-											: `/userView/${JSON.parse(localStorage.getItem("user"))?._id
-											}`
+										`/userView/${JSON.parse(localStorage.getItem("user"))?._id}`
 									)
 								}
 							>
