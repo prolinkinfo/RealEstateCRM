@@ -471,7 +471,7 @@ export default function CheckTable(props) {
                   onChange={handleChange} onBlur={handleBlur}
                   value={values?.start}
                   name="start"
-                  placeholder='Enter Lead Email'
+                  placeholder='Enter Start Date'
                   fontWeight='500'
                 />
                 <Text mb='10px' color={'red'}> {errors.start && touched.start && errors.start}</Text>
@@ -486,7 +486,7 @@ export default function CheckTable(props) {
                   onChange={handleChange} onBlur={handleBlur}
                   value={values?.end}
                   name="end"
-                  placeholder='Enter Lead PhoneNumber'
+                  placeholder='Enter  End Date'
                   fontWeight='500'
                 />
                 <Text mb='10px' color={'red'}> {errors.end && touched.end && errors.end}</Text>
@@ -502,7 +502,7 @@ export default function CheckTable(props) {
                   onChange={handleChange} onBlur={handleBlur}
                   value={values?.assignmentToName}
                   name="assignmentToName"
-                  placeholder='Enter Lead Owner'
+                  placeholder='Enter Assignment To'
                   fontWeight='500'
                 />
                 <Text mb='10px' color={'red'}> {errors.assignmentToName && touched.assignmentToName && errors.assignmentToName}</Text>

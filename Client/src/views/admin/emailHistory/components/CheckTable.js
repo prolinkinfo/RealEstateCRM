@@ -439,7 +439,7 @@ export default function CheckTable(props) {
                   onChange={handleChange} onBlur={handleBlur}
                   value={values?.senderName}
                   name="senderName"
-                  placeholder='Enter Lead Name'
+                  placeholder='Enter Sender Name'
                   fontWeight='500'
                 />
                 <Text mb='10px' color={'red'}> {errors.senderName && touched.senderName && errors.senderName}</Text>
@@ -473,7 +473,7 @@ export default function CheckTable(props) {
                   onChange={handleChange} onBlur={handleBlur}
                   value={values?.createByName}
                   name="createByName"
-                  placeholder='Enter Lead Email'
+                  placeholder='Enter CreateBy Name'
                   fontWeight='500'
                 />
                 <Text mb='10px' color={'red'}> {errors.createByName && touched.createByName && errors.createByName}</Text>
