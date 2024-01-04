@@ -143,7 +143,7 @@ export default function CheckTable(props) {
                     );
                   } else if (cell?.column.Header === "sender") {
                     data = (
-                      <Link to={user?.role !== 'admin' ? `/text-msg/${cell?.row?.values._id}` : `/admin/text-msg/${cell?.row?.values._id}`}>
+                      <Link to={`/text-msg/${cell?.row?.values._id}`}>
                         <Text
                           me="10px"
                           sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
@@ -168,7 +168,7 @@ export default function CheckTable(props) {
                     );
                   } else if (cell?.column.Header === "create From") {
                     data = (
-                      <Link to={user?.role !== 'admin' ? `/contactView/${cell?.row?.original?.createFor}` : `/admin/contactView/${cell?.row?.original?.createFor}`}>
+                      <Link to={`/contactView/${cell?.row?.original?.createFor}`}>
                         <Text
                           me="10px"
                           sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}

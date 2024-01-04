@@ -9,6 +9,7 @@ import { SidebarContext } from 'contexts/SidebarContext';
 import { Suspense } from 'react';
 import { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { ROLE_PATH } from '../../roles';
 import routes from 'routes.js';
 
 // Custom Chakra theme
@@ -17,6 +18,9 @@ export default function Dashboard(props) {
 	// states and functions
 	const [fixed] = useState(false);
 	const [toggleSidebar, setToggleSidebar] = useState(false);
+	const [openSidebar, setOpenSidebar] = useState(false)
+	const user = JSON.parse(localStorage.getItem("user"))
+
 	// functions for changing the states from components
 	const getRoute = () => {
 		return window.location.pathname !== '/admin/full-screen-maps';
@@ -35,7 +39,7 @@ export default function Dashboard(props) {
 					return categoryActiveRoute;
 				}
 			} else {
-				if (window.location.href.indexOf(routes[i].both === true ? routes[i].path.replace("/:id", "") : routes[i].layout + routes[i].path.replace("/:id", "")) !== -1) {
+				if (window.location.href.indexOf(routes[i].path.replace("/:id", "")) !== -1) {
 					return routes[i].name;
 				}
 			}
@@ -56,7 +60,7 @@ export default function Dashboard(props) {
 					return categoryActiveRoute;
 				}
 			} else {
-				if (window.location.href.indexOf(routes[i].layout + routes[i].path.replace("/:id", "")) !== -1) {
+				if (window.location.href.indexOf(routes[i].path.replace("/:id", "")) !== -1) {
 					return routes[i];
 				}
 			}
@@ -78,7 +82,7 @@ export default function Dashboard(props) {
 					return categoryActiveNavbar;
 				}
 			} else {
-				if (window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1) {
+				if (window.location.href.indexOf(routes[i].path) !== -1) {
 					return routes[i].secondary;
 				}
 			}
@@ -99,7 +103,7 @@ export default function Dashboard(props) {
 					return categoryActiveNavbar;
 				}
 			} else {
-				if (window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1) {
+				if (window.location.href.indexOf(routes[i].path) !== -1) {
 					return routes[i].messageNavbar;
 				}
 			}
@@ -109,10 +113,11 @@ export default function Dashboard(props) {
 
 	const getRoutes = (routes) => {
 		return routes.map((prop, key) => {
-			if (!prop.under && prop.layout === '/admin') {
-				return <Route path={prop.both === true ? prop.path : prop.layout + prop.path} element={<prop.component />} key={key} />;
+			// if (!prop.under && prop.layout === '/admin') {
+			if (!prop.under && prop.layout?.includes(ROLE_PATH.admin)) {
+				return <Route path={prop.path} element={<prop.component />} key={key} />;
 			} else if (prop.under) {
-				return <Route path={prop.layout + prop.path} element={<prop.component />} key={key} />
+				return <Route path={prop.path} element={<prop.component />} key={key} />
 			}
 			if (prop.collapse) {
 				return getRoutes(prop.items);
@@ -135,7 +140,7 @@ export default function Dashboard(props) {
 						toggleSidebar,
 						setToggleSidebar
 					}}>
-					<Sidebar routes={routes} display='none' {...rest} />
+					<Sidebar routes={routes} display='none' {...rest} openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
 					<Box
 						float='right'
 						minHeight='100vh'
@@ -143,8 +148,9 @@ export default function Dashboard(props) {
 						overflow='auto'
 						position='relative'
 						maxHeight='100%'
-						w={{ base: '100%', xl: 'calc( 100% - 290px )' }}
-						maxWidth={{ base: '100%', xl: 'calc( 100% - 290px )' }}
+						// w={{ base: '100%', xl: 'calc( 100% - 290px )' }}
+						w={{ base: '100%', xl: openSidebar === true ? 'calc( 100% - 290px )' : 'calc( 100% - 80px )' }}
+						maxWidth={{ base: '100%', xl: openSidebar === true ? 'calc( 100% - 290px )' : 'calc( 100% - 80px )' }}
 						transition='all 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1)'
 						transitionDuration='.2s, .2s, .35s'
 						transitionProperty='top, bottom, width'
@@ -159,6 +165,7 @@ export default function Dashboard(props) {
 									message={getActiveNavbarText(routes)}
 									fixed={fixed}
 									under={under(routes)}
+									openSidebar={openSidebar} setOpenSidebar={setOpenSidebar}
 									{...rest}
 								/>
 							</Box>
@@ -173,7 +180,7 @@ export default function Dashboard(props) {
 									}>
 										<Routes>
 											{getRoutes(routes)}
-											<Route path="/*" element={<Navigate to="/admin/default" />} />
+											<Route path="/*" element={<Navigate to="/default" />} />
 										</Routes>
 									</Suspense>
 								</Box>

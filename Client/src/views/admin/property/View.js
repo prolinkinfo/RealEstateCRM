@@ -13,6 +13,7 @@ import Add from "./Add";
 import Delete from "./Delete";
 import Edit from "./Edit";
 import PropertyPhoto from "./components/propertyPhoto";
+import { HasAccess } from "../../../redux/accessUtils";
 
 
 
@@ -61,6 +62,8 @@ const View = () => {
         fetchData()
     }, [action])
 
+    const permission = HasAccess('property');
+
     return (
         <>
             <Add isOpen={isOpen} size={size} onClose={onClose} />
@@ -75,15 +78,20 @@ const View = () => {
                         <GridItem colStart={6} >
                             <Flex justifyContent={"right"}>
                                 <Menu>
-                                    <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
+                                    {(permission?.create || permission?.update || permission?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
                                         Actions
-                                    </MenuButton>
+                                    </MenuButton>}
                                     <MenuDivider />
                                     <MenuList>
-                                        <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>
-                                        <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>
-                                        <MenuDivider />
-                                        <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
+                                        {permission?.create && <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
+                                        {permission?.update && <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
+
+                                        {permission?.delete &&
+                                            <>
+                                                <MenuDivider />
+                                                <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
+                                            </>
+                                        }
                                     </MenuList>
                                 </Menu>
                                 <Link to="/properties">
@@ -451,16 +459,16 @@ const View = () => {
 
                     </Tabs>
 
-                    <Card mt={3}>
+                    {permission?.delete || permission?.update && <Card mt={3}>
                         <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                             <GridItem colStart={6} >
                                 <Flex justifyContent={"right"}>
-                                    <Button onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button>
-                                    <Button style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>
+                                    {permission?.update && <Button onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button>}
+                                    {permission?.delete && <Button style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>}
                                 </Flex>
                             </GridItem>
                         </Grid>
-                    </Card>
+                    </Card>}
                 </>}
         </>
     );

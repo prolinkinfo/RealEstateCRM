@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 // chakra imports
 import {
@@ -26,7 +26,7 @@ import PropTypes from "prop-types";
 import { IoMenuOutline } from "react-icons/io5";
 
 function Sidebar(props) {
-  const { routes } = props;
+  const { routes, setOpenSidebar, openSidebar } = props;
 
   let variantChange = "0.2s linear";
   let shadow = useColorModeValue(
@@ -36,14 +36,15 @@ function Sidebar(props) {
   // Chakra Color Mode
   let sidebarBg = useColorModeValue("white", "navy.800");
   let sidebarMargins = "0px";
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
   // SIDEBAR
   return (
     <Box display={{ sm: "none", xl: "block" }} w="100%" position='fixed' minH='100%'>
       <Box
         bg={sidebarBg}
         transition={variantChange}
-        w='300px'
+        // w='280px'
+        w={openSidebar ? '280px' : "80px"}
         h='100vh'
         m={sidebarMargins}
         minH='100%'
@@ -54,7 +55,7 @@ function Sidebar(props) {
           renderTrackVertical={renderTrack}
           renderThumbVertical={renderThumb}
           renderView={renderView}>
-          <Content routes={routes} />
+          <Content routes={routes} openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
         </Scrollbars>
       </Box>
     </Box>
@@ -68,14 +69,12 @@ export function SidebarResponsive(props) {
   // // SIDEBAR
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
-
-  const { routes } = props;
+  const { routes, setOpenSidebar, openSidebar } = props;
   // let isWindows = navigator.platform.startsWith("Win");
   //  BRAND
-
   return (
     <Flex display={{ sm: "flex", xl: "none" }} alignItems='center'>
-      <Flex ref={btnRef} w='max-content' h='max-content' onClick={onOpen}>
+      <Flex ref={btnRef} w='max-content' h='max-content' onClick={() => setOpenSidebar(!openSidebar)}>
         <Icon
           as={IoMenuOutline}
           color={menuColor}
@@ -88,7 +87,7 @@ export function SidebarResponsive(props) {
       </Flex>
 
       <Drawer
-        isOpen={isOpen}
+        isOpen={openSidebar}
         onClose={onClose}
         placement={document.documentElement.dir === "rtl" ? "right" : "left"}
         finalFocusRef={btnRef}>
@@ -106,7 +105,7 @@ export function SidebarResponsive(props) {
               renderTrackVertical={renderTrack}
               renderThumbVertical={renderThumb}
               renderView={renderView}>
-              <Content routes={routes} />
+              <Content routes={routes} openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
             </Scrollbars>
           </DrawerBody>
         </DrawerContent>

@@ -3,6 +3,7 @@ import { Button, Grid, GridItem, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import Add from "./Add";
 import CheckTable from './components/CheckTable';
+import { HasAccess } from "../../../redux/accessUtils";
 
 const Index = () => {
     const [columns, setColumns] = useState([]);
@@ -36,14 +37,16 @@ const Index = () => {
         onOpen()
     }
 
+    const permission = HasAccess('property');
+
     return (
         <div>
             <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
                 <GridItem colStart={6} textAlign={"right"}>
-                    <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>
+                    {permission?.create && <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>}
                 </GridItem>
             </Grid>
-            <CheckTable columnsData={columns} isOpen={isOpen} action={action} setAction={setAction} />
+            <CheckTable columnsData={columns} access={permission} isOpen={isOpen} action={action} setAction={setAction} />
             {/* Add Form */}
             <Add isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} />
         </div>

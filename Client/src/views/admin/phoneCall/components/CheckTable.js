@@ -165,7 +165,7 @@ export default function CheckTable(props) {
                         );
                       } else if (cell?.column.Header === "sender") {
                         data = (
-                          <Link to={user?.role !== 'admin' ? `/phone-call/${cell?.row?.values._id}` : `/admin/phone-call/${cell?.row?.values._id}`}>
+                          <Link to={`/phone-call/${cell?.row?.values._id}`}>
                             <Text
                               me="10px"
                               sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
@@ -190,7 +190,7 @@ export default function CheckTable(props) {
                         );
                       } else if (cell?.column.Header === "Realeted To") {
                         data = (
-                          <Link to={cell?.row?.original?.createBy ? user?.role !== 'admin' ? `/contactView/${cell?.row?.original.createBy}` : `/admin/contactView/${cell?.row?.original.createBy}` : user?.role !== 'admin' ? `/leadView/${cell?.row?.original.createByLead}` : `/admin/leadView/${cell?.row?.original.createByLead}`}>
+                          <Link to={cell?.row?.original?.createBy ? `/contactView/${cell?.row?.original.createBy}` : `/leadView/${cell?.row?.original.createByLead}`}>
                             <Text
                               me="10px"
                               sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
