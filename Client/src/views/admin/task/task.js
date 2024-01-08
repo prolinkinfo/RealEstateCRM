@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { getApi } from 'services/api'
 import CheckTable from './components/CheckTable'
 import AddTask from './components/addTask'
+import { HasAccess } from '../../../redux/accessUtils'
 
 const Task = (props) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -32,7 +33,7 @@ const Task = (props) => {
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
 
-
+    const permission = HasAccess('task')
 
     const fetchData = async () => {
         setIsLoding(true)
@@ -45,7 +46,6 @@ const Task = (props) => {
         setColumns(tableColumns)
     }, [action])
 
-    console.log(action, "action")
     return (
         <div>
             {/* <Flex alignItems={'center'} justifyContent={"right"} flexWrap={'wrap'} mb={3}>
@@ -68,6 +68,7 @@ const Task = (props) => {
                 selectedColumns={selectedColumns}
                 setSelectedColumns={setSelectedColumns}
                 className='table-fix-container'
+                access={permission}
             />
             {/* <AddTask isOpen={isOpen} fetchData={fetchData} onClose={onClose} /> */}
         </div>
