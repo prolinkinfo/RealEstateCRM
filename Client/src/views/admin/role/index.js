@@ -1,7 +1,8 @@
 import { AddIcon } from "@chakra-ui/icons";
 import { Button, Grid, GridItem, useDisclosure } from "@chakra-ui/react";
 import CheckTable from "./components/CheckTable";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getApi } from "services/api";
 
 const Index = () => {
   const columns = [
@@ -10,22 +11,31 @@ const Index = () => {
       accessor: "_id",
       isSortable: false,
       width: 10,
-      display:false
+      display: false
     },
 
-    { Header: "title", accessor: "title" },
-    { Header: "create", accessor: "create", width: '20px'},
-    { Header: "view", accessor: "view",width: '20px' },
-    { Header: "update", accessor: "update",width: '20px'},
-    { Header: "delete", accessor: "delete",width: '20px' },
+    { Header: "Role Name", accessor: "roleName" },
+    { Header: "Description", accessor: "description" }
   ];
   // const { isOpen, onOpen, onClose } = useDisclosure();
   const [action, setAction] = useState(false);
+  const [isLoding, setIsLoding] = useState(false);
+  const [data, setData] = useState([]);
   const size = "lg";
 
   // const handleClick = () => {
   //   onOpen();
   // };
+
+
+  const fetchData = async () => {
+    setIsLoding(true);
+    let result = await getApi("api/role-access");
+    setData(result.data);
+    setIsLoding(false);
+  };
+
+
 
   return (
     <div>
@@ -37,8 +47,9 @@ const Index = () => {
       <CheckTable
         // isOpen={isOpen}
         // onClose={onClose}
+        tableData={data}
         setAction={setAction}
-        // onOpen={onOpen}
+        fetchData={fetchData}
         action={action}
         columnsData={columns}
       />
