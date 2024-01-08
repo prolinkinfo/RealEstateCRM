@@ -13,7 +13,8 @@ function SidebarContent(props) {
 
   // SIDEBAR
   return (
-    <Flex direction='column' height='100%' pt='25px'
+    <Flex direction='column' height='100%'
+      pt='2px'
       // px="16px"
       borderRadius='30px'>
       <Brand openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />

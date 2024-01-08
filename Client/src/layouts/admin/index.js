@@ -145,6 +145,7 @@ export default function Dashboard(props) {
 						float='right'
 						minHeight='100vh'
 						height='100%'
+
 						overflow='auto'
 						position='relative'
 						maxHeight='100%'
@@ -155,8 +156,8 @@ export default function Dashboard(props) {
 						transitionDuration='.2s, .2s, .35s'
 						transitionProperty='top, bottom, width'
 						transitionTimingFunction='linear, linear, ease'>
-						<Portal>
-							<Box>
+						<Portal >
+							<Box className="header">
 								<Navbar
 									onOpen={onOpen}
 									logoText={'Horizon UI Dashboard PRO'}

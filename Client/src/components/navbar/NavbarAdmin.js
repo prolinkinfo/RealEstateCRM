@@ -31,6 +31,7 @@ export default function AdminNavbar(props) {
 	let secondaryMargin = '0px';
 	let paddingX = '15px';
 	let gap = '0px';
+	let size = "sm";
 	const changeNavbar = () => {
 		if (window.scrollY > 1) {
 			setScrolled(true);
@@ -41,7 +42,6 @@ export default function AdminNavbar(props) {
 
 	return (
 		<Box
-
 			position={navbarPosition}
 			boxShadow={navbarShadow}
 			bg={navbarBg}
@@ -50,7 +50,7 @@ export default function AdminNavbar(props) {
 			backdropFilter={navbarBackdrop}
 			backgroundPosition='center'
 			backgroundSize='cover'
-			borderRadius='16px'
+			// borderRadius='16px'
 			borderWidth='1.5px'
 			borderStyle='solid'
 			// zIndex='99999'
@@ -66,7 +66,8 @@ export default function AdminNavbar(props) {
 			mx='auto'
 			mt={secondaryMargin}
 			pb='8px'
-			right={{ base: '12px', md: '30px', lg: '30px', xl: '30px' }}
+			right={{ base: '0px' }}
+			// right={{ base: '12px', md: '30px', lg: '30px', xl: '30px' }}
 			px={{
 				sm: paddingX,
 				md: '10px'
@@ -75,13 +76,14 @@ export default function AdminNavbar(props) {
 				xl: '12px'
 			}}
 			pt='8px'
-			top={{ base: '12px', md: '16px', lg: '20px', xl: '20px' }}
+			top={{ base: '0px' }}
+			// top={{ base: '12px', md: '16px', lg: '20px', xl: '20px' }}
 			w={{
-				base: 'calc(100vw - 6%)',
-				md: 'calc(100vw - 8%)',
-				lg: 'calc(100vw - 6%)',
-				xl: openSidebar === true ? 'calc(100vw - 350px)' : 'calc(100vw - 142px)',
-				'2xl': openSidebar === true ? 'calc(100vw - 360px)' : 'calc(100vw - 145px)'
+				base: 'calc(100vw - 0%)',
+				md: 'calc(100vw - 0%)',
+				lg: 'calc(100vw - 0%)',
+				xl: openSidebar === true ? 'calc(100vw - 350px)' : 'calc(100vw - 80px)',
+				'2xl': openSidebar === true ? 'calc(100vw - 360px)' : 'calc(100vw - 80px)'
 			}}
 		>
 			<Flex
@@ -92,7 +94,7 @@ export default function AdminNavbar(props) {
 				}}
 				alignItems={{ xl: 'center' }}
 				mb={gap}>
-				<Box mb={{ sm: '8px', md: '0px' }}>
+				<Box mb={{ sm: '8px', md: '10px' }} pt="15px">
 					{/*
 					<Breadcrumb>
 						<BreadcrumbItem color={secondaryText} fontSize='sm' mb='5px'>
@@ -119,7 +121,9 @@ export default function AdminNavbar(props) {
 					<Link
 						color={mainText}
 						href='#'
+						pt="2px"
 						bg='inherit'
+						ps="5px"
 						borderRadius='inherit'
 						fontWeight='bold'
 						fontSize='34px'
@@ -137,6 +141,8 @@ export default function AdminNavbar(props) {
 				</Box>
 				<Box ms='auto' w={{ sm: '100%', md: 'unset' }}>
 					<AdminNavbarLinks
+						setOpenSidebar={setOpenSidebar}
+						openSidebar={openSidebar}
 						onOpen={props.onOpen}
 						logoText={props.logoText}
 						secondary={props.secondary}

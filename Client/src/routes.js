@@ -117,7 +117,7 @@ const routes = [
   },
   {
     name: "Contact Import",
-    layout: "/admin",
+    layout: [ROLE_PATH.admin, ROLE_PATH.user],
     both: true,
     under: "contacts",
     parentName: "Contacts",
@@ -142,7 +142,7 @@ const routes = [
   },
   {
     name: "Property Import",
-    layout: "/admin",
+    layout: [ROLE_PATH.admin, ROLE_PATH.user],
     both: true,
     under: "properties",
     parentName: "Property",
