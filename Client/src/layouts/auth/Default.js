@@ -62,7 +62,7 @@ function AuthIllustration(props) {
         </Box>
         <Footer />
       </Flex>
-      {/* CHANGE THEME COLOR BUTTON */}
+      {/* CHANGE THEME COLOR BUTTON LIGHT-DARK */}
       {/* <FixedPlugin /> */}
     </Flex>
   );

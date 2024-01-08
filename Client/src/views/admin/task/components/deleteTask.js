@@ -17,7 +17,7 @@ const DeleteTask = (props) => {
                     props.onClose(false)
                     !props.redirectPage && props.fetchData()
                     navigate(props.redirectPage)
-                    console.log(props.redirectPage)
+                    props.setAction((pre) => !pre)
                 }
 
             } catch (error) {
@@ -34,6 +34,7 @@ const DeleteTask = (props) => {
                     props.viewClose();
                     props.onClose(false)
                     props.fetchData()
+                    props.setAction((pre) => !pre)
                 }
             } catch (error) {
                 console.log(error)

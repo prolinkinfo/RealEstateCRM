@@ -128,7 +128,7 @@ const View = () => {
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                     <Spinner />
                 </Flex> : <>
-                    <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
+                    {/* <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
                         <GridItem colStart={6} >
                             <Flex justifyContent={"right"}>
                                 <Menu>
@@ -150,18 +150,56 @@ const View = () => {
                                 </Link>
                             </Flex>
                         </GridItem>
-                    </Grid>
+                    </Grid> */}
 
                     <Tabs >
-                        <TabList
-                            sx={{ '& button:focus': { boxShadow: 'none', }, }}
-                        >
+                        <TabList sx={{ '& button:focus': { boxShadow: 'none', }, }}>
                             <Tab>Information</Tab>
                             <Tab>Activity</Tab>
                             <Tab>Document</Tab>
                             <Tab>Social Media</Tab>
-                        </TabList>
+                        </TabList> */}
+                        <Grid templateColumns="repeat(3, 1fr)" mb={3} gap={1}>
+                            <GridItem colSpan={2}>
+                                <TabList sx={{
+                                    border: "none",
+                                    '& button:focus': { boxShadow: 'none', },
+                                    '& button': {
+                                        margin: "0 5px", border: '2px solid #8080803d', borderTopLeftRadius: "10px", borderTopRightRadius: "10px", borderBottom: 0
+                                    },
+                                    '& button[aria-selected="true"]': {
+                                        border: "2px solid brand.200", borderBottom: 0
+                                    },
+                                }} >
+                                    <Tab >Information</Tab>
+                                    <Tab>Activity</Tab>
+                                    <Tab>Document</Tab>
+                                    <Tab>Social Media</Tab>
+                                </TabList>
 
+                            </GridItem>
+                            <GridItem  >
+                                <Flex justifyContent={"right"}>
+                                    <Menu>
+                                        <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
+                                            Actions
+                                        </MenuButton>
+                                        <MenuDivider />
+                                        <MenuList>
+                                            <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>
+                                            <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>
+                                            <MenuDivider />
+                                            <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
+                                        </MenuList>
+                                    </Menu>
+                                    <Link to="/contacts">
+                                        <Button leftIcon={<IoIosArrowBack />} variant="brand">
+                                            Back
+                                        </Button>
+                                    </Link>
+                                </Flex>
+                            </GridItem>
+                        </Grid>
                         <TabPanels>
                             <TabPanel pt={4} p={0}>
 
@@ -354,20 +392,20 @@ const View = () => {
                                                         <HSeparator />
                                                     </Box>
                                                 </GridItem>
-                                                <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
-                                                    <GridItem colSpan={{ base: 2 }}>
+                                                <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
+                                                    <GridItem colSpan={{ base: 6 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Date Of Birth </Text>
                                                         <Text>{data?.contact?.dob ? moment(data?.contact?.dob).format('LL') : 'N/A'}</Text>
                                                     </GridItem>
-                                                    <GridItem colSpan={{ base: 2 }}>
+                                                    <GridItem colSpan={{ base: 6 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Gender </Text>
                                                         <Text>{data?.contact?.gender ? data?.contact?.gender : 'N/A'}</Text>
                                                     </GridItem>
-                                                    <GridItem colSpan={{ base: 2 }}>
+                                                    <GridItem colSpan={{ base: 6 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Occupation </Text>
                                                         <Text>{data?.contact?.occupation ? data?.contact?.occupation : 'N/A'}</Text>
                                                     </GridItem>
-                                                    <GridItem colSpan={{ base: 2 }}>
+                                                    <GridItem colSpan={{ base: 6 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Interests Or Hobbies </Text>
                                                         <Text>{data?.contact?.interestsOrHobbies ? data?.contact?.interestsOrHobbies : 'N/A'}</Text>
                                                     </GridItem>
@@ -453,43 +491,51 @@ const View = () => {
                             </TabPanel>
                             <TabPanel pt={4} p={0}>
                                 <GridItem colSpan={{ base: 12 }} >
-                                    <Card overflow={'scroll'}>
-                                        <Grid templateColumns={{ base: "1fr" }} gap={4}>
-                                            <GridItem colSpan={2}>
-                                                <Box>
-                                                    <Heading size="md" mb={3}>
-                                                        Communication
-                                                    </Heading>
-                                                    <HSeparator />
-                                                </Box>
-                                            </GridItem>
-                                            <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
-                                                <GridItem colSpan={{ base: 12 }}>
+                                    <Grid templateColumns={{ base: "1fr" }} gap={4}>
+                                        <GridItem colSpan={2}>
+                                            <Box>
+                                                <Heading size="md" mb={3}>
+                                                    Communication
+                                                </Heading>
+                                                <HSeparator />
+                                            </Box>
+                                        </GridItem>
+                                        <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
+                                            <GridItem colSpan={{ base: 12, sm: 6 }}>
+                                                <Card overflow={'scroll'}>
                                                     {data?.EmailHistory.length > 0 ? <ColumnsTable fetchData={fetchData} columnsData={columnsDataColumns} tableData={data?.EmailHistory} title={'Email '} /> : <Button onClick={() => setAddEmailHistory(true)} leftIcon={<BsFillSendFill />} colorScheme="gray" >Send Email </Button>}
                                                     <AddEmailHistory fetchData={fetchData} setAction={setAction} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} id={param.id} />
-                                                </GridItem>
-                                                <GridItem colSpan={{ base: 12 }}>
+                                                </Card>
+                                            </GridItem>
+                                            <GridItem colSpan={{ base: 12, sm: 6 }}>
+                                                <Card overflow={'scroll'}>
                                                     {data?.phoneCallHistory?.length > 0 ? <PhoneCall fetchData={fetchData} columnsData={columnsDataColumns} tableData={data?.phoneCallHistory} title={'Call '} /> : <Button onClick={() => setAddPhoneCall(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" > Call </Button>}
                                                     <AddPhoneCall fetchData={fetchData} setAction={setAction} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param.id} />
-                                                </GridItem>
-                                                <GridItem colSpan={{ base: 12 }}>
+                                                </Card>
+                                            </GridItem>
+                                            <GridItem colSpan={{ base: 12, sm: 6 }}>
+                                                <Card overflow={'scroll'}>
                                                     {data?.meetingHistory.length > 0 ? <MeetingTable className='table-container' fetchData={fetchData} setMeeting={setMeeting} columnsData={MeetingColumns} data={data?.meetingHistory} title={'Meeting '} /> : <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>}
                                                     <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="contact" id={param.id} />
-                                                </GridItem>
-                                                <GridItem colSpan={{ base: 12 }}>
+                                                </Card>
+                                            </GridItem>
+                                            <GridItem colSpan={{ base: 12, sm: 6 }}>
+                                                <Card overflow={'scroll'}>
                                                     {data?.task.length > 0 ? <TaskTable fetchData={fetchData} className='table-container' setTaskModel={setTaskModel} columnsData={taskColumns} data={data?.task} title={'Task '} /> : <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>}
                                                     <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="contact" id={param.id} />
-                                                </GridItem>
-                                                <GridItem colSpan={{ base: 12 }}>
+                                                </Card>
+                                            </GridItem>
+                                            <GridItem colSpan={{ base: 12 }}>
+                                                <Card overflow={'scroll'}>
                                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Notes and Comments </Text>
                                                     <Text>{data?.contact?.notesandComments ? data?.contact?.notesandComments : 'N/A'}</Text>
-                                                </GridItem>
-                                                {/* <GridItem colSpan={{ base: 2 }}>
+                                                </Card>
+                                            </GridItem>
+                                            {/* <GridItem colSpan={{ base: 2 }}>
                                                     {data?.textMsg?.length > 0 ? <PhoneCall text='true' fetchData={fetchData} columnsData={textColumnsDataColumns} tableData={data?.textMsg} title={'Text Msg '} /> : <Button onClick={() => navigate('/communication-integration')} leftIcon={<MdOutlineMessage />} colorScheme="gray" >send text Msg</Button>}
                                                 </GridItem> */}
-                                            </Grid>
                                         </Grid>
-                                    </Card>
+                                    </Grid>
                                 </GridItem>
 
                             </TabPanel>

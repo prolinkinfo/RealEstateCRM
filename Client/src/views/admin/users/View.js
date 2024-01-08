@@ -63,31 +63,6 @@ const View = () => {
                     <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} />
                     <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/user/delete/' id={param.id} />
 
-                    <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
-                        <GridItem colStart={6} >
-                            <Flex justifyContent={"right"}>
-                                <Menu>
-                                    <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
-                                        Actions
-                                    </MenuButton>
-                                    <MenuDivider />
-                                    <MenuList>
-                                        <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>
-                                        <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>
-                                        {data?.role !== 'admin' && JSON.parse(localStorage.getItem('user'))?.role === 'admin' && <>
-                                            <MenuDivider />
-                                            <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
-                                        </>}
-                                    </MenuList>
-                                </Menu>
-                                <Link to="/admin/user">
-                                    <Button leftIcon={<IoIosArrowBack />} variant="brand">
-                                        Back
-                                    </Button>
-                                </Link>
-                            </Flex>
-                        </GridItem>
-                    </Grid>
 
 
                     <Grid templateColumns="repeat(4, 1fr)" gap={3}>
@@ -97,12 +72,38 @@ const View = () => {
                             <Card >
                                 <Grid templateColumns={{ base: "1fr" }} gap={4}>
                                     <GridItem colSpan={2}>
-                                        <Box>
+                                        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                                             <Heading size="md" mb={3} textTransform={'capitalize'}>
                                                 {data?.firstName || data?.lastName ? `${data?.firstName} ${data?.lastName}` : 'User'} Information
                                             </Heading>
-                                            <HSeparator />
+                                            <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
+                                                <GridItem colStart={6} >
+                                                    <Flex justifyContent={"right"}>
+                                                        <Menu>
+                                                            <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
+                                                                Actions
+                                                            </MenuButton>
+                                                            <MenuDivider />
+                                                            <MenuList>
+                                                                <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>
+                                                                <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />} color='green'>Edit</MenuItem>
+                                                                {data?.role !== 'admin' && JSON.parse(localStorage.getItem('user'))?.role === 'admin' && <>
+                                                                    <MenuDivider />
+                                                                    <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
+                                                                </>}
+                                                            </MenuList>
+                                                        </Menu>
+                                                        <Link to="/admin/user">
+                                                            <Button leftIcon={<IoIosArrowBack />} variant="brand">
+                                                                Back
+                                                            </Button>
+                                                        </Link>
+                                                    </Flex>
+                                                </GridItem>
+                                            </Grid>
+
                                         </Box>
+                                        <HSeparator />
                                     </GridItem>
                                     <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                         <GridItem colSpan={{ base: 2, md: 1 }}>

@@ -11,6 +11,80 @@ const index = async (req, res) => {
     }
 }
 
+const add = async (req, res) => {
+    try {
+        const { roleName, description } = req.body;
+
+        const existingRole = await RoleAccess.findOne({ roleName: { $regex: new RegExp(`^${roleName}$`, 'i') } }).exec();
+
+        if (existingRole) {
+            return res.status(400).json({ message: `${roleName} Role already exist` });
+        }
+        else {
+            const createdDate = new Date();
+
+            const access = [
+                {
+                    title: 'email',
+                    create: false,
+                    update: false,
+                    delete: false,
+                    view: false
+                },
+                {
+                    title: 'call',
+                    create: false,
+                    update: false,
+                    delete: false,
+                    view: false
+                },
+                {
+                    title: 'meeting',
+                    create: false,
+                    update: false,
+                    delete: false,
+                    view: false
+                },
+                {
+                    title: 'task',
+                    create: false,
+                    update: false,
+                    delete: false,
+                    view: false
+                },
+                {
+                    title: 'property',
+                    create: false,
+                    update: false,
+                    delete: false,
+                    view: false
+                },
+                {
+                    title: 'contacts',
+                    create: false,
+                    update: false,
+                    delete: false,
+                    view: false
+                },
+                {
+                    title: 'lead',
+                    create: false,
+                    update: false,
+                    delete: false,
+                    view: false
+                },
+            ];
+
+            const role = new RoleAccess({ roleName, description, access, createdDate });
+            await role.save();
+            return res.status(200).json({ message: `${roleName} Role created successfully` });
+        }
+    } catch (err) {
+        console.error('Failed to create role:', err);
+        return res.status(400).json({ error: `Failed to create role : `, err: err.toString() });
+    }
+}
+
 const edit = async (req, res) => {
     try {
         req.body.modifyDate = new Date();
@@ -25,4 +99,4 @@ const edit = async (req, res) => {
     }
 }
 
-module.exports = { index, edit }
+module.exports = { index, add, edit }

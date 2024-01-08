@@ -36,6 +36,17 @@ const add = async (req, res) => {
     }
 }
 
+const addMany = async (req, res) => {
+    try {
+        const data = req.body;
+        const insertedContact = await Contact.insertMany(data);
+        res.status(200).json(insertedContact);
+    } catch (err) {
+        console.error('Failed to create Contact :', err);
+        res.status(400).json({ error: 'Failed to create Contact' });
+    }
+};
+
 const addPropertyInterest = async (req, res) => {
     try {
         const { id } = req.params
@@ -388,4 +399,4 @@ const deleteMany = async (req, res) => {
     }
 }
 
-module.exports = { index, add, addPropertyInterest, view, edit, deleteData, deleteMany }
+module.exports = { index, add, addPropertyInterest, view, edit, deleteData, deleteMany, addMany }

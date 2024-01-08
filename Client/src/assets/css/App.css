@@ -79,3 +79,7 @@ option {
 .tableData {
   padding: 10px !important;
 }
+
+/* .leadRow td {
+  border-bottom: 1px solid #e2e8f0;
+} */
