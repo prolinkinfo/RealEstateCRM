@@ -1,0 +1,71 @@
+import { AddIcon } from '@chakra-ui/icons'
+import { Button, Grid, GridItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react'
+import Spinner from 'components/spinner/Spinner'
+import { useFormik } from 'formik'
+import { useState } from 'react'
+import UploadImport from './UploadImport'
+import { useNavigate } from 'react-router-dom'
+
+const ImportModal = (props) => {
+    const { onClose, isOpen, fetchData, text } = props
+    const [isLoding, setIsLoding] = useState(false)
+    const navigate = useNavigate();
+
+    const initialValues = {
+        property: ''
+    }
+
+    const formik = useFormik({
+        initialValues: initialValues,
+        onSubmit: (values, { resetForm }) => {
+            AddData()
+            resetForm();
+        },
+    });
+    const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
+
+    const AddData = async () => {
+        try {
+            setIsLoding(true)
+            resetForm()
+
+            if (values.property) {
+                onClose();
+                navigate('/admin/propertyImport', { state: { fileData: values.property } });
+            }
+
+        } catch (e) {
+            console.log(e);
+        }
+        finally {
+            setIsLoding(false)
+        }
+    };
+
+    return (
+        <Modal onClose={onClose} isOpen={isOpen} isCentered>
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>Import Properties</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                    <Grid templateColumns="repeat(12, 1fr)" gap={3}>
+                        <GridItem colSpan={{ base: 12 }}>
+                            <UploadImport count={values.property.length} onFileSelect={(file) => setFieldValue('property', file)} text={text} />
+                            <Text mb='10px' color={'red'}> {errors.property && touched.property && <>Please Select {text}</>}</Text>
+                        </GridItem>
+                    </Grid>
+                </ModalBody>
+                <ModalFooter>
+                    <Button variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} rightIcon={<AddIcon />}>{isLoding ? <Spinner /> : 'Add'}</Button>
+                    <Button onClick={() => {
+                        onClose()
+                        formik.resetForm()
+                    }}>Close</Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
+    )
+}
+
+export default ImportModal

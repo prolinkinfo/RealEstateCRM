@@ -20,7 +20,7 @@ import { toast } from 'react-toastify';
 import moment from 'moment';
 import ExcelJS from 'exceljs';
 
-function LeadImport() {
+function ContactImport() {
 
     const location = useLocation();
     const { fileData } = location.state || {};
@@ -29,6 +29,7 @@ function LeadImport() {
     const [importedFileData, setImportedFileData] = useState([]);
     const [isLoding, setIsLoding] = useState(false);
     const navigate = useNavigate();
+    const userId = JSON.parse(localStorage.getItem('user'))._id;
 
     const columns = [
         { Header: 'Fields In Crm', accessor: 'crmFields' },
@@ -36,119 +37,147 @@ function LeadImport() {
     ];
 
     const fieldsInCrm = [
-        { Header: 'Lead Name', accessor: 'leadName', width: 20 },
-        { Header: "Lead Email", accessor: "leadEmail" },
-        { Header: "Lead PhoneNumber", accessor: "leadPhoneNumber" },
-        { Header: "Lead Address", accessor: "leadAddress" },
-        { Header: "Lead Owner", accessor: "leadOwner" },
-        { Header: "Lead Score", accessor: "leadScore" },
+        { Header: 'First Name', accessor: 'firstName' },
+        { Header: "Last Name", accessor: "lastName" },
+        { Header: "Title", accessor: "title" },
+        { Header: "Email", accessor: "email" },
+        { Header: "Phone Number", accessor: "phoneNumber" },
+        { Header: "Mobile Number", accessor: "mobileNumber" },
+        { Header: "Physical Address", accessor: "physicalAddress" },
+        { Header: "Mailling Address", accessor: "mailingAddress" },
+        { Header: "Preferred Contact Method", accessor: "preferredContactMethod" },
         { Header: "Lead Source", accessor: "leadSource" },
+        { Header: "Referral Source", accessor: "referralSource" },
+        { Header: "Campaign Source", accessor: "campaignSource" },
         { Header: "Lead Status", accessor: "leadStatus" },
-        { Header: "Lead Source Channel", accessor: "leadSourceChannel" },
-        { Header: "Lead Assigned Agent", accessor: "leadAssignedAgent" },
-        { Header: "Lead Creation Date", accessor: "leadCreationDate" },
-        { Header: "Lead conversion Date", accessor: "leadConversionDate" },
-        { Header: "Lead FollowUp Date", accessor: "leadFollowUpDate" },
-        { Header: "Lead FollowUp Status", accessor: "leadFollowUpStatus" },
-        { Header: "Lead Communication Preferences", accessor: "leadCommunicationPreferences" },
-        { Header: "Lead Engagement Level", accessor: "leadEngagementLevel" },
-        { Header: "Lead Conversion Rate", accessor: "leadConversionRate" },
-        { Header: "Lead Nurturing Stage", accessor: "leadNurturingStage" },
+        { Header: "Lead Rating", accessor: "leadRating" },
+        { Header: "Lead Conversion Probability", accessor: "leadConversionProbability" },
+        { Header: "Notes and Comments", accessor: "notesandComments" },
+        { Header: "Tags Or Labels For Categorizing Contacts", accessor: "tagsOrLabelsForcategorizingcontacts" },
+        { Header: "Birthday", accessor: "birthday" },
+        { Header: "Anniversary", accessor: "anniversary" },
+        { Header: "Key Milestones", accessor: "keyMilestones" },
+        { Header: "Date of Birth", accessor: "dob" },
+        { Header: "Gender", accessor: "gender" },
+        { Header: "Occupation", accessor: "occupation" },
+        { Header: "Interests Or Hobbies", accessor: "interestsOrHobbies" },
+        { Header: "Communication Frequency", accessor: "communicationFrequency" },
+        { Header: "Preferences", accessor: "preferences" },
+        { Header: "LinkedIn Profile URL", accessor: "linkedInProfile" },
+        { Header: "Facebook", accessor: "facebookProfile" },
+        { Header: "Twitter Username", accessor: "twitterHandle" },
+        { Header: "Other Social Media Profiles URL", accessor: "otherProfiles" },
+        { Header: "Assigned Agent or Team Member", accessor: "agentOrTeamMember" },
+        { Header: "Internal Notes or Comments for Team Collaboration", accessor: "internalNotesOrComments" },
         { Header: "Lead Deleted", accessor: "deleted" },
-        { Header: "Lead Next Action", accessor: "leadNextAction" },
-        { Header: "Lead Nurturing Workflow", accessor: "leadNurturingWorkflow" },
-        { Header: "Lead Campaign", accessor: "leadCampaign" },
-        { Header: "Lead Source Medium", accessor: "leadSourceMedium" },
     ];
 
     const initialValues = {
-        leadName: '',
-        leadEmail: '',
-        leadPhoneNumber: '',
-        leadAddress: '',
-        leadOwner: '',
-        leadScore: '',
-        leadSource: '',
-        leadStatus: '',
-        leadSourceChannel: '',
-        leadAssignedAgent: '',
-        leadOwner: '',
-        leadCreationDate: '',
-        leadConversionDate: '',
-        leadFollowUpDate: '',
-        leadFollowUpStatus: '',
-        leadCommunicationPreferences: '',
-        leadEngagementLevel: '',
-        leadConversionRate: '',
-        leadNurturingStage: '',
-        deleted: '',
-        createBy: '',
-        leadNextAction: '',
-        leadNurturingWorkflow: '',
-        leadCampaign: '',
-        leadSourceMedium: '',
-        createdDate: ''
+        firstName: "",
+        lastName: "",
+        title: "",
+        email: "",
+        phoneNumber: "",
+        mobileNumber: "",
+        physicalAddress: "",
+        mailingAddress: "",
+        preferredContactMethod: "",
+        leadSource: "",
+        referralSource: "",
+        campaignSource: "",
+        leadStatus: "",
+        leadRating: "",
+        leadConversionProbability: "",
+        notesandComments: "",
+        tagsOrLabelsForcategorizingcontacts: "",
+        birthday: "",
+        anniversary: "",
+        keyMilestones: "",
+        dob: "",
+        gender: "",
+        occupation: "",
+        interestsOrHobbies: "",
+        communicationFrequency: "",
+        preferences: "",
+        linkedInProfile: "",
+        facebookProfile: "",
+        twitterHandle: "",
+        otherProfiles: "",
+        agentOrTeamMember: "",
+        internalNotesOrComments: "",
+        createBy: "",
+        deleted: "",
+        createBy: "",
     };
 
     const formik = useFormik({
         initialValues: initialValues,
         onSubmit: (values, { resetForm }) => {
 
-            const leadsData = importedFileData?.map((item, ind) => {
-                const leadCreationDate = moment(item[values.leadCreationDate || "leadCreationDate"]);
-                const leadConversionDate = moment(item[values.leadConversionDate || "leadConversionDate"]);
-                const leadFollowUpDate = moment(item[values.leadFollowUpDate || "leadFollowUpDate"]);
-                
+            const contactsData = importedFileData?.map((item, ind) => {
+                const birthday = moment(item[values.birthday || "birthday"]);
+                const anniversary = moment(item[values.anniversary || "anniversary"]);
+                const dob = moment(item[values.dob || "dob"]);
+
                 return {
-                    leadName: item[values.leadName || "leadName"] || '',
-                    leadEmail: item[values.leadEmail || "leadEmail"] || '',
-                    leadPhoneNumber: item[values.leadPhoneNumber || "leadPhoneNumber"] || '',
-                    leadAddress: item[values.leadAddress || "leadAddress"] || '',
-                    leadOwner: item[values.leadOwner || "leadOwner"] || '',
-                    leadScore: item[values.leadScore || "leadScore"] || '',
+                    firstName: item[values.firstName || "firstName"] || '',
+                    lastName: item[values.lastName || "lastName"] || '',
+                    title: item[values.title || "title"] || '',
+                    email: item[values.email || "email"] || '',
+                    phoneNumber: item[values.phoneNumber || "phoneNumber"] || '',
+                    mobileNumber: item[values.mobileNumber || "mobileNumber"] || '',
+                    physicalAddress: item[values.physicalAddress || "physicalAddress"] || '',
+                    mailingAddress: item[values.mailingAddress || "mailingAddress"] || '',
+                    preferredContactMethod: item[values.preferredContactMethod || "preferredContactMethod"] || '',
                     leadSource: item[values.leadSource || "leadSource"] || '',
+                    referralSource: item[values.referralSource || "referralSource"] || '',
+                    campaignSource: item[values.campaignSource || "campaignSource"] || '',
                     leadStatus: item[values.leadStatus || "leadStatus"] || '',
-                    leadSourceChannel: item[values.leadSourceChannel || "leadSourceChannel"] || '',
-                    leadAssignedAgent: item[values.leadAssignedAgent || "leadAssignedAgent"] || '',
-                    leadOwner: item[values.leadOwner || "leadOwner"] || '',
-                    leadCreationDate: leadCreationDate.isValid() ? item[values.leadCreationDate || "leadCreationDate"] || '' : '',
-                    leadConversionDate: leadConversionDate.isValid() ? item[values.leadConversionDate || "leadConversionDate"] || '' : '',
-                    leadFollowUpDate: leadFollowUpDate.isValid() ? item[values.leadFollowUpDate || "leadFollowUpDate"] || '' : '',
-                    leadFollowUpStatus: item[values.leadFollowUpStatus || "leadFollowUpStatus"] || '',
-                    leadCommunicationPreferences: item[values.leadCommunicationPreferences || "leadCommunicationPreferences"] || '',
-                    leadEngagementLevel: item[values.leadEngagementLevel || "leadEngagementLevel"] || '',
-                    leadConversionRate: item[values.leadConversionRate || "leadConversionRate"] || '',
-                    leadNurturingStage: item[values.leadNurturingStage || "leadNurturingStage"] || '',
+                    leadRating: item[values.leadRating || "leadRating"] || '',
+                    leadConversionProbability: item[values.leadConversionProbability || "leadConversionProbability"] || '',
+                    notesandComments: item[values.notesandComments || "notesandComments"] || '',
+                    tagsOrLabelsForcategorizingcontacts: item[values.tagsOrLabelsForcategorizingcontacts || "tagsOrLabelsForcategorizingcontacts"] || '',
+                    birthday: birthday.isValid() ? item[values.birthday || "birthday"] || '' : '',
+                    anniversary: anniversary.isValid() ? item[values.anniversary || "anniversary"] || '' : '',
+                    keyMilestones: item[values.keyMilestones || "keyMilestones"] || '',
+                    dob: dob.isValid() ? item[values.dob || "dob"] || '' : '',
+                    gender: item[values.gender || "gender"] || '',
+                    occupation: item[values.occupation || "occupation"] || '',
+                    interestsOrHobbies: item[values.interestsOrHobbies || "interestsOrHobbies"] || '',
+                    communicationFrequency: item[values.communicationFrequency || "communicationFrequency"] || '',
+                    preferences: item[values.preferences || "preferences"] || '',
+                    linkedInProfile: item[values.linkedInProfile || "linkedInProfile"] || '',
+                    facebookProfile: item[values.facebookProfile || "facebookProfile"] || '',
+                    twitterHandle: item[values.twitterHandle || "twitterHandle"] || '',
+                    otherProfiles: item[values.otherProfiles || "otherProfiles"] || '',
+                    agentOrTeamMember: item[values.agentOrTeamMember || "agentOrTeamMember"] || '',
+                    internalNotesOrComments: item[values.internalNotesOrComments || "internalNotesOrComments"] || '',
                     deleted: item[values.deleted || "deleted"] || false,
                     createBy: JSON.parse(localStorage.getItem('user'))._id,
-                    leadNextAction: item[values.leadNextAction || "leadNextAction"] || '',
-                    leadNurturingWorkflow: item[values.leadNurturingWorkflow || "leadNurturingWorkflow"] || '',
-                    leadCampaign: item[values.leadCampaign || "leadCampaign"] || '',
-                    leadSourceMedium: item[values.leadSourceMedium || "leadSourceMedium"] || '',
                     createdDate: new Date()
                 }
             });
 
-            AddData(leadsData);
+            AddData(contactsData);
         }
     })
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
 
-    const AddData = async (leads) => {
+    const AddData = async (contacts) => {
         try {
             setIsLoding(true);
-            let response = await postApi('api/lead/addMany', leads)
+            let response = await postApi('api/contact/addMany', contacts)
             if (response.status === 200) {
-                toast.success(`Leads imported successfully`)
+                toast.success(`Contacts imported successfully`)
                 resetForm();
-                navigate('/lead');
+                navigate('/contacts');
             }
         } catch (e) {
             console.error(e);
-            toast.success(`Leads import failed`)
+            toast.success(`Contacts import failed`)
             resetForm();
-            navigate('/lead');
+            navigate('/contacts');
         }
         finally {
             setIsLoding(false)
@@ -269,4 +298,4 @@ function LeadImport() {
     )
 }
 
-export default LeadImport
+export default ContactImport

@@ -30,6 +30,17 @@ const add = async (req, res) => {
     }
 }
 
+const addMany = async (req, res) => {
+    try {
+        const data = req.body;
+        const insertedProperty = await Property.insertMany(data);
+        res.status(200).json(insertedProperty);
+    } catch (err) {
+        console.error('Failed to create Property :', err);
+        res.status(400).json({ error: 'Failed to create Property' });
+    }
+};
+
 const edit = async (req, res) => {
     try {
         let result = await Property.updateOne(
@@ -281,4 +292,4 @@ const PropertyDocuments = async (req, res) => {
 
 
 
-module.exports = { index, add, view, edit, deleteData, deleteMany, upload, propertyPhoto, virtualTours, VirtualToursorVideos, FloorPlansStorage, FloorPlans, PropertyDocumentsStorage, PropertyDocuments }
+module.exports = { index, add, addMany, view, edit, deleteData, deleteMany, upload, propertyPhoto, virtualTours, VirtualToursorVideos, FloorPlansStorage, FloorPlans, PropertyDocumentsStorage, PropertyDocuments }

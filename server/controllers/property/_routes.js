@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get('/', auth, property.index)
 router.post('/add', auth, property.add)
+router.post('/addMany', auth, property.addMany)
 router.get('/view/:id', auth, property.view)
 router.put('/edit/:id', auth, property.edit)
 router.delete('/delete/:id', auth, property.deleteData)

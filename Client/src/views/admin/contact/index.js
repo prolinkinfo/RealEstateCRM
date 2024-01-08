@@ -10,23 +10,26 @@ import { HasAccess } from "../../../redux/accessUtils";
 
 
 const Index = () => {
-    const columns = [
+    const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-        { Header: 'title', accessor: 'title' },
-        { Header: "first Name", accessor: "firstName", },
-        { Header: "last Name", accessor: "lastName", },
-        { Header: "phone Number", accessor: "phoneNumber", },
+        { Header: 'Title', accessor: 'title' },
+        { Header: "First Name", accessor: "firstName", },
+        { Header: "Last Name", accessor: "lastName", },
+        { Header: "Phone Number", accessor: "phoneNumber", },
         { Header: "Email Address", accessor: "email", },
-        { Header: "physical Address", accessor: "physicalAddress", },
-        { Header: "mailing Address", accessor: "mailingAddress", },
         { Header: "Contact Method", accessor: "preferredContactMethod", },
+        { Header: "Action", isSortable: false, center: true },
     ];
 
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const size = "lg";
     const [data, setData] = useState([])
     const [isLoding, setIsLoding] = useState(false)
     const [action, setAction] = useState(false)
+    const [columns, setColumns] = useState([]);
+    const [searchedData, setSearchedData] = useState([]);
+    const [displaySearchData, setDisplaySearchData] = useState(false);
+    const [dynamicColumns, setDynamicColumns] = useState([...tableColumns]);
+    const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
 
     const user = JSON.parse(localStorage.getItem("user"))
 
@@ -39,26 +42,49 @@ const Index = () => {
         setIsLoding(false)
     }
 
-    const handleClick = () => {
-        onOpen()
-    }
 
     useEffect(() => {
         fetchData()
+        setColumns(tableColumns)
     }, [action])
 
     return (
         <div>
             <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={4}>
-                <GridItem colStart={6} textAlign={"right"}>
+                {/* <GridItem colStart={6} textAlign={"right"}>
+                    <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>
+                </GridItem> */}
+                <GridItem colSpan={6}>
+                    <CheckTable
+                        isLoding={isLoding}
+                        columnsData={columns}
+                        isOpen={isOpen}
+                        setAction={setAction}
+                        action={action}
+                        setSearchedData={setSearchedData}
+                        displaySearchData={displaySearchData}
+                        setDisplaySearchData={setDisplaySearchData}
+                        allData={data}
+                        // tableData={data}
+                        setDynamicColumns={setDynamicColumns}
+                        dynamicColumns={dynamicColumns}
+                        tableData={displaySearchData ? searchedData : data}
+                        fetchData={fetchData}
+                        onOpen={onOpen}
+                        onClose={onClose}
+                        selectedColumns={selectedColumns}
+                        access={permission}
+                        setSelectedColumns={setSelectedColumns} />
+                </GridItem>
+                {/* <GridItem colStart={6} textAlign={"right"}>
                     {permission?.create && <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>}
                 </GridItem>
                 <GridItem colSpan={6}>
-                    <CheckTable isLoding={isLoding} access={permission} columnsData={columns} isOpen={isOpen} tableData={data} fetchData={fetchData} setAction={setAction} />
-                </GridItem>
+                    <CheckTable isLoding={isLoding}  columnsData={columns} isOpen={isOpen} tableData={data} fetchData={fetchData} setAction={setAction} />
+                </GridItem> */}
             </Grid>
             {/* Add Form */}
-            <Add isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} />
+            {/* <Add isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} /> */}
         </div>
     )
 }
