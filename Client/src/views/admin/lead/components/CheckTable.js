@@ -111,7 +111,7 @@ export default function CheckTable(props) {
           Leads  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
         </Text>
         {/* <Menu /> */}
-        {(selectedValues.length > 0 && access.delete) && <DeleteIcon onClick={() => setDelete(true)} color={'red'} />}
+        {(selectedValues.length > 0 && access?.delete) && <DeleteIcon onClick={() => setDelete(true)} color={'red'} />}
       </Flex>
       {/* Delete model */}
       <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/lead/deleteMany' data={selectedValues} method='many' />
@@ -182,7 +182,7 @@ export default function CheckTable(props) {
                         );
                       } else if (cell?.column.Header === "Lead Name") {
                         data = (
-                          access.view ? <Link to={`/leadView/${cell?.row?.values._id}`}>
+                          access?.view ? <Link to={`/leadView/${cell?.row?.values._id}`}>
                             <Text
                               me="10px"
                               sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
