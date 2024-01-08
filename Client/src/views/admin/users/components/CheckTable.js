@@ -195,7 +195,7 @@ export default function CheckTable(props) {
           <GridItem colSpan={8} >
             <Flex alignItems={"center"} flexWrap={"wrap"}>
               <Text
-                color={textColor}
+                color={"secondaryGray.900"}
                 fontSize="22px"
                 fontWeight="700"
                 lineHeight="100%"

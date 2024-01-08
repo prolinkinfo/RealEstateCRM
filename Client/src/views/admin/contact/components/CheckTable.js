@@ -366,7 +366,7 @@ export default function CheckTable(props) {
                         justifyContent={column.center ? "center" : "start"}
                         align="center"
                         fontSize={{ sm: "14px", lg: "16px" }}
-                        color="gray.400"
+                        color="secondaryGray.900"
                       >
                         <span style={{ textTransform: "capitalize", marginRight: "8px" }}>
                           {column.render("Header")}
