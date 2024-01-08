@@ -153,9 +153,7 @@ const View = () => {
                     </Grid> */}
 
                     <Tabs >
-                        {/* <TabList
-                            sx={{ '& button:focus': { boxShadow: 'none', }, }}
-                        >
+                        <TabList sx={{ '& button:focus': { boxShadow: 'none', }, }}>
                             <Tab>Information</Tab>
                             <Tab>Activity</Tab>
                             <Tab>Document</Tab>
