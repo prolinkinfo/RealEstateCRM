@@ -36,6 +36,10 @@ const roleAccess = new mongoose.Schema({
     },
     createdDate: {
         type: Date,
+    },
+    description: {
+        type: String,
+        required: true
     }
 });
 

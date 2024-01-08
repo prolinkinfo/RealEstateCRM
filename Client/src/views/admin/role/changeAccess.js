@@ -158,7 +158,7 @@ function ChangeAccess(props) {
     <Modal onClose={() => setEditModal(false)} isOpen={editModal} isCentered size={"xl"}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Change Access</ModalHeader>
+        <ModalHeader>{name} Access</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Table>
