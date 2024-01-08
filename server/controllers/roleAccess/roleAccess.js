@@ -81,7 +81,7 @@ const add = async (req, res) => {
         }
     } catch (err) {
         console.error('Failed to create role:', err);
-        return res.status(400).json({ error: `Failed to create role : `, err: err.toString() });
+        return res.status(400).json({ message: `Failed to create role`, err: err.toString() });
     }
 }
 
