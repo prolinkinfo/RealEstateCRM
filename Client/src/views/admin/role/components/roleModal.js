@@ -100,7 +100,7 @@ function RoleModal(props) {
       <Modal onClose={() => setRoleModal(false)} isOpen={isOpen} isCentered size={"xl"}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Role Access</ModalHeader>
+          <ModalHeader>{name} Access</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Table>
