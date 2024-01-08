@@ -94,66 +94,6 @@ function RoleModal(props) {
     setGopageValue(pageOptions.length);
   }
 
-  // const initialValues = {
-  //   roleName: name,
-  //   access: tableData,
-  // };
-  // const param = useParams();
-
-  // const formik = useFormik({
-  //   initialValues: initialValues,
-  //   onSubmit: (values, { resetForm }) => {
-  //     EditData();
-  //   },
-  // });
-
-
-  // const {
-  //   errors,
-  //   touched,
-  //   values,
-  //   handleBlur,
-  //   handleChange,
-  //   handleSubmit,
-  //   setFieldValue,
-  // } = formik;
-
-
-  // const handleCheckboxChange = (index, fieldName) => (event) => {
-  //   const { checked } = event.target;
-  //   const updatedAccess = values.access.map((item, idx) => {
-  //     if (idx === index) {
-  //       return {
-  //         ...item,
-  //         [fieldName]: checked,
-  //       };
-  //     }
-  //     return item;
-  //   });
-
-  //   setFieldValue('access', updatedAccess);
-  // };
-
-
-  // const EditData = async () => {
-  //   try {
-  //     setIsLoding(true);
-  //     let response = await putApi(`api/role-access/edit/${_id}`, values);
-  //     if (response.status === 200) {
-  //       props.onClose();
-  //       fetchData()
-  //       props.setAction((pre) => !pre);
-  //     }
-  //   } catch (e) {
-  //     console.log(e);
-  //   } finally {
-  //     setIsLoding(false);
-  //   }
-  // };
-
-  // const handleClose = () => {
-  //   props.onClose(false);
-  // };
 
   return (
     <>
