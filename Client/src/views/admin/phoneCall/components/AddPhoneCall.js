@@ -89,6 +89,7 @@ const AddPhoneCall = (props) => {
                             <Input
                                 fontSize='sm'
                                 type='number'
+                                disabled
                                 onChange={handleChange} onBlur={handleBlur}
                                 value={values.recipient}
                                 name="recipient"

@@ -2,10 +2,11 @@ import { Button, Grid, GridItem, useDisclosure } from '@chakra-ui/react';
 import CheckTable from './components/CheckTable';
 import { AddIcon } from '@chakra-ui/icons';
 import Add from './add'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getApi } from 'services/api';
 
 const Index = () => {
-    const columns = [
+    const tableColumns = [
         {
             Header: "#",
             accessor: "_id",
@@ -17,27 +18,58 @@ const Index = () => {
         { Header: "Realeted To", },
         { Header: "timestamp", accessor: "timestamp", },
         { Header: "Created" },
+        { Header: "Action", isSortable: false, center: true },
 
     ];
     const [action, setAction] = useState(false)
-
+    const [columns, setColumns] = useState([]);
+    const [isLoding, setIsLoding] = useState(false);
+    const [data, setData] = useState([]);
+    const [displaySearchData, setDisplaySearchData] = useState(false);
+    const [searchedData, setSearchedData] = useState([]);
+    const [dynamicColumns, setDynamicColumns] = useState([...tableColumns]);
+    const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
     const { isOpen, onOpen, onClose } = useDisclosure()
     const size = "lg";
+    const user = JSON.parse(localStorage.getItem("user"));
 
-    const handleClick = () => {
-        onOpen()
+    const fetchData = async () => {
+        setIsLoding(true)
+        let result = await getApi(user.role === 'admin' ? 'api/phoneCall' : `api/phoneCall?sender=${user._id}`);
+        setData(result?.data);
+        setIsLoding(false)
     }
+
+    useEffect(() => {
+        setColumns(tableColumns)
+    }, [action])
 
     return (
         <div>
-            <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
+            {/* <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
                 <GridItem colStart={6} textAlign={"right"}>
                     <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>
                 </GridItem>
-            </Grid>
-            <CheckTable action={action} columnsData={columns} />
+            </Grid> */}
+            <CheckTable
+                // action={action} columnsData={columns}
+                isLoding={isLoding}
+                columnsData={columns}
+                isOpen={isOpen}
+                setAction={setAction}
+                action={action}
+                setSearchedData={setSearchedData}
+                allData={data}
+                displaySearchData={displaySearchData}
+                tableData={displaySearchData ? searchedData : data}
+                fetchData={fetchData}
+                setDisplaySearchData={setDisplaySearchData}
+                setDynamicColumns={setDynamicColumns}
+                dynamicColumns={dynamicColumns}
+                selectedColumns={selectedColumns}
+                setSelectedColumns={setSelectedColumns}
+            />
             {/* Add Form */}
-            <Add isOpen={isOpen} size={size} setAction={setAction} onClose={onClose} />
         </div>
     )
 }

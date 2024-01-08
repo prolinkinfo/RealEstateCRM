@@ -1,10 +1,10 @@
 // Chakra imports
-import { Portal, Box, useDisclosure, Flex, Spinner } from '@chakra-ui/react';
+import { Portal, Box, useDisclosure, Flex } from '@chakra-ui/react';
 import Footer from 'components/footer/FooterAdmin.js';
 // Layout components
 import Navbar from 'components/navbar/NavbarAdmin.js';
 import Sidebar from 'components/sidebar/Sidebar.js';
-// import Spinner from 'components/spinner/Spinner';
+import Spinner from 'components/spinner/Spinner';
 import { SidebarContext } from 'contexts/SidebarContext';
 import { Suspense } from 'react';
 import { useState } from 'react';

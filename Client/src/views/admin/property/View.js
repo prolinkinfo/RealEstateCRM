@@ -74,7 +74,7 @@ const View = () => {
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                     <Spinner />
                 </Flex> : <>
-                    <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
+                    {/* <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
                         <GridItem colStart={6} >
                             <Flex justifyContent={"right"}>
                                 <Menu>
@@ -101,13 +101,48 @@ const View = () => {
                                 </Link>
                             </Flex>
                         </GridItem>
-                    </Grid>
+                    </Grid> */}
 
                     <Tabs >
-                        <TabList sx={{ '& button:focus': { boxShadow: 'none', }, }} >
-                            <Tab>Information</Tab>
-                            <Tab>gallery</Tab>
-                        </TabList>
+                        <Grid templateColumns="repeat(3, 1fr)" mb={3} gap={1}>
+                            <GridItem colSpan={2}>
+                                <TabList sx={{
+                                    border: "none",
+                                    '& button:focus': { boxShadow: 'none', },
+                                    '& button': {
+                                        margin: "0 5px", border: '2px solid #8080803d', borderTopLeftRadius: "10px", borderTopRightRadius: "10px", borderBottom: 0
+                                    },
+                                    '& button[aria-selected="true"]': {
+                                        border: "2px solid brand.200", borderBottom: 0
+                                    },
+                                }} >
+                                    <Tab >Information</Tab>
+                                    <Tab>gallery</Tab>
+                                </TabList>
+
+                            </GridItem>
+                            <GridItem  >
+                                <Flex justifyContent={"right"}>
+                                    <Menu>
+                                        <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
+                                            Actions
+                                        </MenuButton>
+                                        <MenuDivider />
+                                        <MenuList>
+                                            <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>
+                                            <MenuItem color={'green'} onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>
+                                            <MenuDivider />
+                                            <MenuItem color={'red'} onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
+                                        </MenuList>
+                                    </Menu>
+                                    <Link to="/properties">
+                                        <Button leftIcon={<IoIosArrowBack />} variant="brand">
+                                            Back
+                                        </Button>
+                                    </Link>
+                                </Flex>
+                            </GridItem>
+                        </Grid>
 
                         <TabPanels>
                             <TabPanel pt={4} p={0}>
@@ -343,7 +378,7 @@ const View = () => {
 
                             <TabPanel pt={4} p={0}>
                                 <Grid templateColumns="repeat(12, 1fr)" gap={3}>
-                                    <GridItem colSpan={{ base: 12 }}>
+                                    <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <Card >
                                             <Grid templateColumns="repeat(12, 1fr)" gap={4}>
                                                 <GridItem colSpan={12}>
@@ -361,14 +396,14 @@ const View = () => {
                                                 <GridItem colSpan={{ base: 12 }} >
                                                     <Flex flexWrap={'wrap'} justifyContent={'center'} alingItem={'center'} >
                                                         {data?.propertyPhotos?.map((item) => (
-                                                            <Image width={'30%'} m={1} src={item.img} alt="Your Image" />
+                                                            <Image width={'150px'} m={1} src={item.img} alt="Your Image" />
                                                         ))}
                                                     </Flex>
                                                 </GridItem>
                                             </Grid>
                                         </Card>
                                     </GridItem>
-                                    <GridItem colSpan={{ base: 12 }}>
+                                    <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <Card >
                                             <Grid templateColumns="repeat(12, 1fr)" gap={4}>
                                                 <GridItem colSpan={12}>
@@ -400,7 +435,7 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
-                                    <GridItem colSpan={{ base: 12 }}>
+                                    <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <Card >
                                             <Grid templateColumns="repeat(12, 1fr)" gap={4}>
                                                 <GridItem colSpan={12}>
@@ -425,7 +460,7 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
-                                    <GridItem colSpan={{ base: 12 }}>
+                                    <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <Card >
                                             <Grid templateColumns="repeat(12, 1fr)" gap={4}>
                                                 <GridItem colSpan={12}>
