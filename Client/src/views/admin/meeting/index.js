@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { getApi } from 'services/api';
 import AddMeeting from "./components/Addmeeting";
 import CheckTable from './components/CheckTable';
+import { HasAccess } from "../../../redux/accessUtils";
 
 
 const Index = () => {
@@ -40,6 +41,8 @@ const Index = () => {
         setIsLoding(false)
     }
 
+    const permission = HasAccess('meeting')
+
 
     // useEffect(() => {
     //     fetchData()
@@ -62,6 +65,7 @@ const Index = () => {
                 setSearchedData={setSearchedData}
                 setMeeting={setMeeting}
                 addMeeting={addMeeting}
+                access={permission}
                 columnsData={columns}
                 from="index"
                 setAction={setAction}

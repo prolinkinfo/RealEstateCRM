@@ -12,11 +12,14 @@ import { IoIosArrowBack } from "react-icons/io";
 import AddTask from './addTask'
 import DeleteTask from './deleteTask'
 import EditTask from './editTask'
+import { HasAccess } from '../../../../redux/accessUtils';
 
 const TaskView = (props) => {
     const params = useParams()
     const { id } = params
     const user = JSON.parse(localStorage.getItem("user"))
+
+    const permission = HasAccess('task')
 
     const [data, setData] = useState()
     const [isLoding, setIsLoding] = useState(false)
@@ -46,14 +49,14 @@ const TaskView = (props) => {
                 <GridItem colStart={6} >
                     <Flex justifyContent={"right"}>
                         <Menu>
-                            <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
+                            {(permission?.create || permission?.update || permission?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
                                 Actions
-                            </MenuButton>
+                            </MenuButton>}
                             <MenuDivider />
                             <MenuList>
-                                <MenuItem onClick={() => handleClick()} icon={<AddIcon />}>Add</MenuItem>
-                                <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>
-                                {data?.role !== 'admin' && JSON.parse(localStorage.getItem('user'))?.role === 'admin' && <>
+                                {permission?.create && <MenuItem onClick={() => handleClick()} icon={<AddIcon />}>Add</MenuItem>}
+                                {permission?.update && <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
+                                {permission?.deleteModel && <>
                                     <MenuDivider />
                                     <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
                                 </>}
@@ -118,16 +121,16 @@ const TaskView = (props) => {
                     </GridItem>
                 </Grid>
             </Card>
-            <Card mt={3}>
+            {(permission?.update || permission?.delete) && <Card mt={3}>
                 <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                     <GridItem colStart={6} >
                         <Flex justifyContent={"right"}>
-                            <Button onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button>
-                            {data?.role !== 'admin' && JSON.parse(localStorage.getItem('user'))?.role === 'admin' && <Button style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>}
+                            {permission?.update && <Button onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button>}
+                            {permission?.delete && <Button style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>}
                         </Flex>
                     </GridItem>
                 </Grid>
-            </Card>
+            </Card>}
             {/* Addtask modal */}
             <AddTask isOpen={isOpen} onClose={onClose} />
             {/* Edittask modal */}

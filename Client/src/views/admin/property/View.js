@@ -124,15 +124,17 @@ const View = () => {
                             <GridItem  >
                                 <Flex justifyContent={"right"}>
                                     <Menu>
-                                        <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
+                                        {(permission?.create || permission?.update || permission?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
                                             Actions
-                                        </MenuButton>
+                                        </MenuButton>}
                                         <MenuDivider />
                                         <MenuList>
-                                            <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>
-                                            <MenuItem color={'green'} onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>
-                                            <MenuDivider />
-                                            <MenuItem color={'red'} onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
+                                            {permission?.create && <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
+                                            {permission?.update && <MenuItem color={'green'} onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
+                                            {permission?.delete && <>
+                                                <MenuDivider />
+                                                <MenuItem color={'red'} onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
+                                            </>}
                                         </MenuList>
                                     </Menu>
                                     <Link to="/properties">
@@ -494,7 +496,7 @@ const View = () => {
 
                     </Tabs>
 
-                    {permission?.delete || permission?.update && <Card mt={3}>
+                    {(permission?.delete || permission?.update) && <Card mt={3}>
                         <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                             <GridItem colStart={6} >
                                 <Flex justifyContent={"right"}>

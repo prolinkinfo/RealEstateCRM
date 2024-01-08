@@ -5,6 +5,7 @@ import { AddIcon } from '@chakra-ui/icons';
 
 import { useEffect, useState } from 'react';
 import { getApi } from 'services/api';
+import { HasAccess } from '../../../redux/accessUtils';
 
 
 const Index = () => {
@@ -40,6 +41,9 @@ const Index = () => {
     useEffect(() => {
         setColumns(tableColumns)
     }, [action])
+
+    const permission = HasAccess('email')
+
     return (
         <div>
 
@@ -61,6 +65,7 @@ const Index = () => {
                 selectedColumns={selectedColumns}
                 setSelectedColumns={setSelectedColumns}
                 columnsToExclude={columnsToExclude}
+                access={permission}
             />
         </div>
     )

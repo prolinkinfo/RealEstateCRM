@@ -58,7 +58,7 @@ import { useFormik } from "formik";
 import { CiMenuKebab } from "react-icons/ci";
 
 export default function CheckTable(props) {
-  const { setMeeting, className, addMeeting, from, columnsData, tableData, fetchData, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action } = props;
+  const { setMeeting, className, addMeeting, from, columnsData, tableData, fetchData, access, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action } = props;
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   // const columns = useMemo(() => columnsData, [columnsData]);
@@ -309,9 +309,9 @@ export default function CheckTable(props) {
                 <MenuItem width={"165px"} onClick={() => handleExportMeetings('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem>
               </MenuList>
             </Menu>
-            {from !== "index" ? <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button> :
+            {from !== "index" ? (access?.create && <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>) :
               <GridItem colStart={6} textAlign={"right"}>
-                <Button onClick={() => setMeeting(true)} variant="brand" size="sm">Add Meeting</Button>
+                {access?.create && <Button onClick={() => setMeeting(true)} variant="brand" size="sm">Add Meeting</Button>}
               </GridItem>}
           </GridItem>
           <HStack spacing={4}>
@@ -396,7 +396,7 @@ export default function CheckTable(props) {
                           );
                         } else if (cell?.column.Header === "agenda") {
                           data = (
-                            <Link to={`/metting/${cell?.row?.values._id}`}>
+                            access?.view ? <Link to={`/metting/${cell?.row?.values._id}`}>
                               <Text
                                 me="10px"
                                 sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
@@ -406,7 +406,14 @@ export default function CheckTable(props) {
                               >
                                 {cell?.value ? cell?.value : ' - '}
                               </Text>
-                            </Link>
+                            </Link> : <Text
+                              me="10px"
+                              color={textColor}
+                              fontSize="sm"
+                              fontWeight="700"
+                            >
+                              {cell?.value ? cell?.value : ' - '}
+                            </Text>
                           );
                         } else if (cell?.column.Header === "date & Time") {
                           data = (
@@ -445,7 +452,7 @@ export default function CheckTable(props) {
                               <Menu isLazy  >
                                 <MenuButton><CiMenuKebab /></MenuButton>
                                 <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
-                                  <MenuItem py={2.5} color={'green'} onClick={() => navigate(user?.role !== 'admin' ? `/metting/${cell?.row?.values._id}` : `/admin/metting/${cell?.row?.values._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>
+                                  {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/metting/${cell?.row?.values._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>}
                                 </MenuList>
                               </Menu>
                             </Text>
