@@ -23,6 +23,13 @@ export const HasAccess = (action) => {
 
     const mergedPermissions = {};
 
+    const superAdminPermission = {
+        "create": true,
+        "update": true,
+        "delete": true,
+        "view": true,
+    }
+
     access.forEach((permission) => {
         const { title, ...rest } = permission;
 
@@ -38,5 +45,5 @@ export const HasAccess = (action) => {
         }
     });
 
-    return mergedPermissions[action];
+    return user?.role === "superAdmin" ? superAdminPermission : mergedPermissions[action];
 };
