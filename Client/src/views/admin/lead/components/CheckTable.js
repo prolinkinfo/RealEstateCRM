@@ -72,10 +72,8 @@ import { HasAccess } from "../../../../redux/accessUtils";
 export default function CheckTable(props) {
   const { columnsData, tableData, fetchData, isLoding, allData, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, callAccess, emailAccess, setAction, action } = props;
   const textColor = useColorModeValue("gray.500", "white");
-  // const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   const columns = useMemo(() => selectedColumns, [selectedColumns]);
-  // const columns = useMemo(() => columnsData, [columnsData]);
   const [selectedValues, setSelectedValues] = useState([]);
   const [getTagValues, setGetTagValues] = useState([]);
   const [gopageValue, setGopageValue] = useState()
@@ -104,7 +102,6 @@ export default function CheckTable(props) {
     { Header: "Owner", accessor: "leadOwner" },
     { Header: "Score", accessor: "leadScore" },
   ];
-  // console.log(columns)
 
   const toggleColumnVisibility = (columnKey) => {
     const isColumnSelected = tempSelectedColumns.some((column) => column.accessor === columnKey);
@@ -271,7 +268,6 @@ export default function CheckTable(props) {
   useEffect(() => {
     if (fetchData) fetchData()
   }, [action])
-  // }, [deleteModel, props.isOpen])
 
   return (
     <>
@@ -444,8 +440,6 @@ export default function CheckTable(props) {
                             </Link> :
                               <Text
                                 me="10px"
-                                // sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                                // color='brand.600'
                                 fontSize="sm"
                                 fontWeight="500"
                               >
@@ -469,8 +463,6 @@ export default function CheckTable(props) {
                               {cell?.value}
                             </Text> : <Text
                               me="10px"
-                              // sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                              // color='brand.600'
                               fontSize="sm"
                               fontWeight="500"
                             >
@@ -494,8 +486,6 @@ export default function CheckTable(props) {
                               {cell?.value}
                             </Text> : <Text
                               me="10px"
-                              // sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                              // color='brand.600'
                               fontSize="sm"
                               fontWeight="500"
                             >

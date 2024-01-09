@@ -34,20 +34,12 @@ const Index = () => {
     const emailAccess = HasAccess('email')
     const callAccess = HasAccess('call')
 
-    // if ((callAccess?.create || permission?.view || permission?.delete || permission?.update || emailAccess?.create)) {
-    //     tableColumns.push({ Header: "Action", isSortable: false, center: true })
-    // } else if (user.role === 'superAdmin') {
-    //     tableColumns.push({ Header: "Action", isSortable: false, center: true })
-    // }
-
     const [dynamicColumns, setDynamicColumns] = useState([...tableColumns]);
     const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
     const [action, setAction] = useState(false)
     const [columns, setColumns] = useState(tableColumns);
     const { isOpen, onOpen, onClose } = useDisclosure()
     const size = "lg";
-
-
 
     const fetchData = async () => {
         setIsLoding(true)
@@ -57,11 +49,8 @@ const Index = () => {
     }
 
     useEffect(() => {
-
         setColumns(tableColumns)
     }, [action])
-
-    // console.log(columns)
 
     return (
         <div>
