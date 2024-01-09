@@ -52,14 +52,14 @@ const Link = (props) => {
 
     const fetchData = async () => {
         if (values.linkWith === 'contact') {
-            let result = await getApi(user.role === 'admin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`);
+            let result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`);
             values.createBy = result?._id;
             setData(prevData => [
                 // ...prevData,
                 ...(result?.data?.map(item => ({ label: item.firstName + ' ' + item.lastName, value: item._id })) || [])
             ]);
         } else if (values.linkWith === 'lead') {
-            let result = await getApi(user.role === 'admin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
+            let result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
             values.createBy = result?._id;
             setData(prevData => [
                 // ...prevData,

@@ -1,6 +1,7 @@
 export const ROLE_PATH = {
     user: "/user",
     admin: "/admin",
+    superAdmin: "/superAdmin",
     manager: "/manager",
     teamleader: "/teamleader",
     executive: "/executive",
@@ -16,5 +17,3 @@ export const ROLE = {
     executive: "executive",
 }
 
-
-// Admin, Team Leads, Managers, Executives, Tele callers

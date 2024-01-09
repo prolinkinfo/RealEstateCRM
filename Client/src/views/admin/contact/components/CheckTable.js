@@ -310,7 +310,7 @@ export default function CheckTable(props) {
               </InputGroup>
               <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} size="sm">Advance Search</Button>
               {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setGetTagValues([]); setSearchbox(''); }}>clear</Button> : ""}
-              {selectedValues.length > 0 && <DeleteIcon onClick={() => setDelete(true)} color={'red'} ms={2} />}
+              {(selectedValues.length > 0 && access?.delete) && <DeleteIcon onClick={() => setDelete(true)} color={'red'} ms={2} />}
             </Flex>
           </GridItem>
           <GridItem colSpan={4} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
@@ -328,7 +328,7 @@ export default function CheckTable(props) {
                 <MenuItem width={"165px"} onClick={() => handleExportContacts('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem>
               </MenuList>
             </Menu>
-            <Button onClick={() => handleClick()} size={"sm"} variant="brand">Add Contact</Button>
+            {access?.create && <Button onClick={() => handleClick()} size={"sm"} variant="brand">Add Contact</Button>}
           </GridItem>
           <HStack spacing={4}>
             {getTagValues && getTagValues.map((item) => (
@@ -427,7 +427,7 @@ export default function CheckTable(props) {
                           );
                         } else if (cell?.column.Header === "First Name") {
                           data = (
-                            <Link to={user?.role !== 'admin' ? `/contactView/${cell?.row?.original._id}` : `/admin/contactView/${cell?.row?.original._id}`}>
+                            access?.view ? <Link to={`/contactView/${cell?.row?.original._id}`}>
                               <Text
                                 me="10px"
                                 sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
@@ -437,7 +437,17 @@ export default function CheckTable(props) {
                               >
                                 {cell?.value}
                               </Text>
-                            </Link>
+                            </Link> :
+                              <Text
+                                me="10px"
+                                // sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                                // color='brand.600'
+                                color={textColor}
+                                fontSize="sm"
+                                fontWeight="700"
+                              >
+                                {cell?.value}
+                              </Text>
                           );
                         } else if (cell?.column.Header === "Last Name") {
                           data = (
@@ -484,7 +494,7 @@ export default function CheckTable(props) {
                               <Menu isLazy  >
                                 <MenuButton><CiMenuKebab /></MenuButton>
                                 <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
-                                  <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>
+                                  {access?.update && <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>}
                                   <MenuItem py={2.5} width={"165px"} onClick={() => {
                                     setAddPhoneCall(true)
                                     setSelectedId(cell?.row?.values._id)
@@ -493,8 +503,8 @@ export default function CheckTable(props) {
                                     setAddEmailHistory(true)
                                     setSelectedId(cell?.row?.values._id)
                                   }} icon={<EmailIcon fontSize={15} />}>Send Email</MenuItem>
-                                  <MenuItem py={2.5} color={'green'} onClick={() => navigate(user?.role !== 'admin' ? `/contactView/${cell?.row?.original._id}` : `/admin/contactView/${cell?.row?.original._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>
-                                  <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>
+                                  {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/contactView/${cell?.row?.original._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>}
+                                  {access?.delete && <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>}
                                 </MenuList>
                               </Menu>
                             </Text>

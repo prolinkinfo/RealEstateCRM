@@ -15,7 +15,7 @@ const Report = () => {
         { Header: "Outbound Calls", accessor: "outboundcall" },
     ];
 
-    if (user.role === 'admin') {
+    if (user.role === 'superAdmin') {
         tableColumns.unshift({
             Header: "#",
             accessor: "_id",
@@ -26,7 +26,7 @@ const Report = () => {
 
 
     const fetchData = async () => {
-        let result = await getApi(user.role === 'admin' ? 'api/reporting' : `api/reporting?_id=${user._id}`);
+        let result = await getApi(user.role === 'superAdmin' ? 'api/reporting' : `api/reporting?_id=${user._id}`);
         if (result && result.status === 200) {
             setData(result?.data)
         }

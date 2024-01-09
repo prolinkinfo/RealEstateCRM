@@ -44,6 +44,7 @@ function ChangeAccess(props) {
     setAction,
     _id,
     onClose,
+    editModal, setEditModal,
     onOpen,
   } = props;
 
@@ -93,13 +94,15 @@ function ChangeAccess(props) {
 
   const initialValues = {
     roleName: name,
-    access: data,
+    access: tableData,
   };
   const param = useParams();
 
   const formik = useFormik({
     initialValues: initialValues,
+    enableReinitialize: true,
     onSubmit: (values, { resetForm }) => {
+      console.log(values)
       EditData();
     },
   });
@@ -114,7 +117,6 @@ function ChangeAccess(props) {
     handleSubmit,
     setFieldValue,
   } = formik;
-  
 
   const handleCheckboxChange = (index, fieldName) => (event) => {
     const { checked } = event.target;
@@ -130,16 +132,16 @@ function ChangeAccess(props) {
 
     setFieldValue('access', updatedAccess);
   };
- 
-  
+
+
   const EditData = async () => {
     try {
       setIsLoding(true);
       let response = await putApi(`api/role-access/edit/${_id}`, values);
       if (response.status === 200) {
-        props.onClose();
+        setEditModal(false)
         fetchData()
-        props.setAction((pre) => !pre);
+        setAction((pre) => !pre);
       }
     } catch (e) {
       console.log(e);
@@ -153,10 +155,10 @@ function ChangeAccess(props) {
   };
 
   return (
-    <Modal onClose={onClose} isOpen={isOpen} isCentered size={"xl"}>
+    <Modal onClose={() => setEditModal(false)} isOpen={editModal} isCentered size={"xl"}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Change Access</ModalHeader>
+        <ModalHeader>{name} Access</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Table>
@@ -316,7 +318,7 @@ function ChangeAccess(props) {
             Save
           </Button>
           <Button
-            onClick={onClose}
+            onClick={() => setEditModal(false)}
             variant="outline"
             colorScheme="red"
             sx={{

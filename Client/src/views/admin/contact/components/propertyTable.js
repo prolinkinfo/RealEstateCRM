@@ -155,7 +155,7 @@ export default function PropertyTable(props) {
                       );
                     } else if (cell?.column.Header === "property Address") {
                       data = (
-                        <Link to={user?.role !== 'admin' ? `/propertyView/${cell?.row?.original?._id}` : `/admin/propertyView/${cell?.row?.original?._id}`}>
+                        <Link to={user?.role !== 'superAdmin' ? `/propertyView/${cell?.row?.original?._id}` : `/admin/propertyView/${cell?.row?.original?._id}`}>
                           <Text
                             me="10px"
                             sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}

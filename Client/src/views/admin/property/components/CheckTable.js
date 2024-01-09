@@ -100,7 +100,7 @@ export default function CheckTable(props) {
 
   // const fetchData = async () => {
   //   setIsLoding(true)
-  //   let result = await getApi(user.role === 'admin' ? 'api/property/' : `api/property/?createBy=${user._id}`);
+  //   let result = await getApi(user.role === 'superAdmin' ? 'api/property/' : `api/property/?createBy=${user._id}`);
   //   setData(result.data);
   //   setIsLoding(false)
   // }
@@ -331,8 +331,8 @@ export default function CheckTable(props) {
                 <MenuItem width={"165px"} onClick={() => handleExportProperties('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem>
               </MenuList>
             </Menu>
-            <Button onClick={() => handleClick()} size="sm"
-              variant="brand">Add Property</Button>
+            {access?.create && <Button onClick={() => handleClick()} size="sm"
+              variant="brand">Add Property</Button>}
           </GridItem>
           <HStack spacing={4}>
             {getTagValues && getTagValues?.map((item) => (
@@ -417,7 +417,7 @@ export default function CheckTable(props) {
                           );
                         } else if (cell?.column.Header === "property Type") {
                           data = (
-                            <Link to={user?.role !== 'admin' ? `/propertyView/${cell?.row?.values._id}` : `/admin/propertyView/${cell?.row?.values._id}`}>
+                            access?.view ? <Link to={`/propertyView/${cell?.row?.values._id}`}>
                               <Text
                                 className="tableData"
                                 me="10px"
@@ -428,7 +428,15 @@ export default function CheckTable(props) {
                               >
                                 {cell?.value}
                               </Text>
-                            </Link>
+                            </Link> : <Text
+                              className="tableData"
+                              me="10px"
+                              color={textColor}
+                              fontSize="sm"
+                              fontWeight="700"
+                            >
+                              {cell?.value}
+                            </Text>
                           );
                         } else if (cell?.column.Header === "property Address") {
                           data = (
@@ -484,9 +492,9 @@ export default function CheckTable(props) {
                               <Menu isLazy  >
                                 <MenuButton><CiMenuKebab /></MenuButton>
                                 <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
-                                  <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>
-                                  <MenuItem py={2.5} color={'green'} onClick={() => navigate(user?.role !== 'admin' ? `/propertyView/${cell?.row?.values._id}` : `/admin/propertyView/${cell?.row?.values._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>
-                                  <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>
+                                  {access?.update && <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>}
+                                  {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(user?.role !== 'superAdmin' ? `/propertyView/${cell?.row?.values._id}` : `/admin/propertyView/${cell?.row?.values._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>}
+                                  {access?.delete && <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>}
                                 </MenuList>
                               </Menu>
                             </Text>

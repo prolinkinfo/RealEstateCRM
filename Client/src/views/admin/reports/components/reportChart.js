@@ -25,7 +25,7 @@ const ReportChart = (props) => {
             endDate: moment(endDate).format('YYYY-MM-DD'),
             filter: selection
         }
-        let result = await postApi(user.role === 'admin' ? 'api/reporting/index' : `api/reporting/index?sender=${user._id}`, data);
+        let result = await postApi(user.role === 'superAdmin' ? 'api/reporting/index' : `api/reporting/index?sender=${user._id}`, data);
         if (result && result.status === 200) {
             setReportChart(result?.data)
         }

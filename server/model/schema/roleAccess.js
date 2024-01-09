@@ -26,12 +26,20 @@ const accessSchema = new mongoose.Schema({
 const roleAccess = new mongoose.Schema({
     roleName: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     access: [accessSchema],
     modifyDate: {
         type: Date,
         default: Date.now,
+    },
+    createdDate: {
+        type: Date,
+    },
+    description: {
+        type: String,
+        required: true
     }
 });
 

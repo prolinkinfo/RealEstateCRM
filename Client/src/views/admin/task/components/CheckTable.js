@@ -324,7 +324,7 @@ export default function CheckTable(props) {
                 <MenuItem width={"165px"} onClick={() => handleExportTasks('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem>
               </MenuList>
             </Menu>
-            <Button onClick={() => handleClick()} size="sm" variant="brand">Create Task</Button>
+            {access?.create && <Button onClick={() => handleClick()} size="sm" variant="brand">Create Task</Button>}
             {/* {setTaskModel && <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>} */}
           </GridItem>
           <HStack spacing={4}>
@@ -411,7 +411,7 @@ export default function CheckTable(props) {
                         } else if (cell?.column.Header === "Title") {
                           data = (
                             <Text
-                              onClick={() => access?.view && handleDateClick(cell)}
+                              onClick={() => handleDateClick(cell)}
                               me="10px"
                               sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
                               color='brand.600'
@@ -461,9 +461,9 @@ export default function CheckTable(props) {
                               <Menu isLazy  >
                                 <MenuButton><CiMenuKebab /></MenuButton>
                                 <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
-                                  <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>
-                                  <MenuItem py={2.5} color={'green'} onClick={() => navigate(user?.role !== 'admin' ? `/view/${cell?.row?.original._id}` : `/admin/view/${cell?.row?.original._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>
-                                  <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>
+                                  {access?.update && <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>}
+                                  {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/view/${cell?.row?.original._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>}
+                                  {access?.delete && <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>}
                                 </MenuList>
                               </Menu>
                             </Text>
@@ -493,7 +493,7 @@ export default function CheckTable(props) {
 
       <AddTask isOpen={isOpen} fetchData={fetchData} onClose={onClose} />
       <EditTask isOpen={edit} onClose={setEdit} viewClose={onClose} id={selectedId} setAction={setAction} />
-      <EventView fetchData={fetchData} isOpen={eventView} onClose={setEventView} info={id} setAction={setAction} action={action} />
+      <EventView fetchData={fetchData} isOpen={eventView} access={access} onClose={setEventView} info={id} setAction={setAction} action={action} />
       <DeleteTask isOpen={deleteModel} onClose={setDelete} viewClose={onClose} url='api/task/delete/' method='one' id={selectedValues} redirectPage={"/task"} setAction={setAction} />
       <ImportModal text='Lead file' fetchData={fetchData} isOpen={isImportLead} onClose={setIsImportLead} />
       {/* Advance filter modal*/}

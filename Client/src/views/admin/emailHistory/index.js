@@ -5,6 +5,7 @@ import { AddIcon } from '@chakra-ui/icons';
 
 import { useEffect, useState } from 'react';
 import { getApi } from 'services/api';
+import { HasAccess } from '../../../redux/accessUtils';
 
 
 const Index = () => {
@@ -33,13 +34,16 @@ const Index = () => {
 
     const fetchData = async () => {
         setIsLoding(true)
-        let result = await getApi(user.role === 'admin' ? 'api/email/' : `api/email/?sender=${user._id}`);
+        let result = await getApi(user.role === 'superAdmin' ? 'api/email/' : `api/email/?sender=${user._id}`);
         setData(result?.data);
         setIsLoding(false)
     }
     useEffect(() => {
         setColumns(tableColumns)
     }, [action])
+
+    const permission = HasAccess('email')
+
     return (
         <div>
 
@@ -61,6 +65,7 @@ const Index = () => {
                 selectedColumns={selectedColumns}
                 setSelectedColumns={setSelectedColumns}
                 columnsToExclude={columnsToExclude}
+                access={permission}
             />
         </div>
     )

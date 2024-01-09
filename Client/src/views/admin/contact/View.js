@@ -153,9 +153,7 @@ const View = () => {
                     </Grid> */}
 
                     <Tabs >
-                        {/* <TabList
-                            sx={{ '& button:focus': { boxShadow: 'none', }, }}
-                        >
+                        {/* <TabList sx={{ '& button:focus': { boxShadow: 'none', }, }}>
                             <Tab>Information</Tab>
                             <Tab>Activity</Tab>
                             <Tab>Document</Tab>
@@ -183,15 +181,19 @@ const View = () => {
                             <GridItem  >
                                 <Flex justifyContent={"right"}>
                                     <Menu>
-                                        <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
+                                        {(permission?.create || permission?.update || permission?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
                                             Actions
-                                        </MenuButton>
+                                        </MenuButton>}
                                         <MenuDivider />
                                         <MenuList>
-                                            <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>
-                                            <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>
-                                            <MenuDivider />
-                                            <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
+                                            {permission?.create && <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
+                                            {permission?.update && <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
+                                            {permission?.delete &&
+                                                <>
+                                                    <MenuDivider />
+                                                    <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
+                                                </>
+                                            }
                                         </MenuList>
                                     </Menu>
                                     <Link to="/contacts">
