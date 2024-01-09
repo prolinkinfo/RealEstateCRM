@@ -153,7 +153,7 @@ export default function LeadTable(props) {
                       );
                     } else if (cell?.column.Header === "Lead Name") {
                       data = (
-                        <Link to={user?.role !== 'admin' ? `/leadView/${cell?.row?.values._id}` : `/admin/leadView/${cell?.row?.values._id}`}>
+                        <Link to={user?.role !== 'superAdmin' ? `/leadView/${cell?.row?.values._id}` : `/admin/leadView/${cell?.row?.values._id}`}>
                           <Text
                             me="10px"
                             sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}

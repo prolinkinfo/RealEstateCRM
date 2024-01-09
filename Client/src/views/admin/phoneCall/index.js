@@ -4,6 +4,7 @@ import { AddIcon } from '@chakra-ui/icons';
 import Add from './add'
 import { useEffect, useState } from 'react';
 import { getApi } from 'services/api';
+import { HasAccess } from '../../../redux/accessUtils';
 
 const Index = () => {
     const tableColumns = [
@@ -35,7 +36,7 @@ const Index = () => {
 
     const fetchData = async () => {
         setIsLoding(true)
-        let result = await getApi(user.role === 'admin' ? 'api/phoneCall' : `api/phoneCall?sender=${user._id}`);
+        let result = await getApi(user.role === 'superAdmin' ? 'api/phoneCall' : `api/phoneCall?sender=${user._id}`);
         setData(result?.data);
         setIsLoding(false)
     }
@@ -43,6 +44,8 @@ const Index = () => {
     useEffect(() => {
         setColumns(tableColumns)
     }, [action])
+
+    const permission = HasAccess('call')
 
     return (
         <div>
@@ -68,6 +71,7 @@ const Index = () => {
                 dynamicColumns={dynamicColumns}
                 selectedColumns={selectedColumns}
                 setSelectedColumns={setSelectedColumns}
+                access={permission}
             />
             {/* Add Form */}
         </div>

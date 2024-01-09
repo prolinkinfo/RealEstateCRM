@@ -24,7 +24,7 @@ const Index = () => {
 
     const fetchData = async () => {
         setIsLoding(true)
-        let result = await getApi(user.role === 'admin' ? 'api/document' : `api/document?createBy=${user._id}`);
+        let result = await getApi(user.role === 'superAdmin' ? 'api/document' : `api/document?createBy=${user._id}`);
         setData(result?.data);
         setIsLoding(false)
     }

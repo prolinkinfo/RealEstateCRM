@@ -23,7 +23,7 @@ const PropertyModel = (props) => {
     const user = JSON.parse(localStorage.getItem("user"))
     const fetchPropertyData = async () => {
         setIsLoding(true)
-        let result = await getApi(user.role === 'admin' ? 'api/property/' : `api/property/?createBy=${user._id}`);
+        let result = await getApi(user.role === 'superAdmin' ? 'api/property/' : `api/property/?createBy=${user._id}`);
         if (result && result.status == 200) {
             setData(result?.data);
         }

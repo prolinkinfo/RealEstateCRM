@@ -38,18 +38,18 @@ export default function UserReports() {
 
   const fetchData = async () => {
     let taskData = await getApi(
-      user.role === "admin" ? "api/task/" : `api/task/?createBy=${user._id}`
+      user.role === "superAdmin" ? "api/task/" : `api/task/?createBy=${user._id}`
     );
     let contact = await getApi(
-      user.role === "admin"
+      user.role === "superAdmin"
         ? "api/contact/"
         : `api/contact/?createBy=${user._id}`
     );
     let lead = await getApi(
-      user.role === "admin" ? "api/lead/" : `api/lead/?createBy=${user._id}`
+      user.role === "superAdmin" ? "api/lead/" : `api/lead/?createBy=${user._id}`
     );
     let property = await getApi(
-      user.role === "admin"
+      user.role === "superAdmin"
         ? "api/property/"
         : `api/property/?createBy=${user._id}`
     );

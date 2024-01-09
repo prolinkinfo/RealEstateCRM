@@ -66,7 +66,7 @@ import { IoIosContact } from 'react-icons/io';
 import { MdLeaderboard } from 'react-icons/md';
 
 export default function CheckTable(props) {
-  const { columnsData, tableData, fetchData, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action } = props;
+  const { columnsData, tableData, fetchData, isLoding, allData, setSearchedData, access, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action } = props;
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   // const columns = useMemo(() => columnsData, [columnsData]);
@@ -332,7 +332,7 @@ export default function CheckTable(props) {
               </MenuList>
             </Menu>
             <GridItem colStart={6} textAlign={"right"}>
-              <Button onClick={() => handleClick()} variant="brand">Add Call</Button>
+              {access?.create && <Button onClick={() => handleClick()} variant="brand">Add Call</Button>}
             </GridItem>
           </GridItem>
           <HStack spacing={4}>
@@ -418,7 +418,7 @@ export default function CheckTable(props) {
                           );
                         } else if (cell?.column.Header === "sender") {
                           data = (
-                            <Link to={`/phone-call/${cell?.row?.values._id}`}>
+                            access?.view ? <Link to={`/phone-call/${cell?.row?.values._id}`}>
                               <Text
                                 me="10px"
                                 sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
@@ -428,7 +428,15 @@ export default function CheckTable(props) {
                               >
                                 {cell?.value ? cell?.value : ' - '}
                               </Text>
-                            </Link>
+                            </Link> :
+                              <Text
+                                me="10px"
+                                color={textColor}
+                                fontSize="sm"
+                                fontWeight="700"
+                              >
+                                {cell?.value ? cell?.value : ' - '}
+                              </Text>
                           );
                         } else if (cell?.column.Header === "recipient") {
                           data = (
@@ -474,8 +482,8 @@ export default function CheckTable(props) {
                               <Menu isLazy  >
                                 <MenuButton><CiMenuKebab /></MenuButton>
                                 <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
-                                  <MenuItem py={2.5} color={'green'} onClick={() => navigate(user?.role !== 'admin' ? `/phone-call/${cell?.row?.values._id}` : `/admin/phone-call/${cell?.row?.values._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>
-                                  <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(cell?.row?.original?.createBy ? user?.role !== 'admin' ? `/contactView/${cell?.row?.original.createBy}` : `/admin/contactView/${cell?.row?.original.createBy}` : user?.role !== 'admin' ? `/leadView/${cell?.row?.original.createByLead}` : `/admin/leadView/${cell?.row?.original.createByLead}`)} icon={cell?.row?.original.createBy ? <IoIosContact fontSize={15} /> : cell?.row?.original.createByLead && <MdLeaderboard fontSize={15} />}>{cell?.row?.original.createBy ? "contact" : cell?.row?.original.createByLead && 'lead'}</MenuItem>
+                                  {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/phone-call/${cell?.row?.values._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>}
+                                  <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(cell?.row?.original?.createBy ? `/contactView/${cell?.row?.original.createBy}` : `/leadView/${cell?.row?.original.createByLead}`)} icon={cell?.row?.original.createBy ? <IoIosContact fontSize={15} /> : cell?.row?.original.createByLead && <MdLeaderboard fontSize={15} />}>{cell?.row?.original.createBy ? "contact" : cell?.row?.original.createByLead && 'lead'}</MenuItem>
                                 </MenuList>
                               </Menu>
                             </Text>

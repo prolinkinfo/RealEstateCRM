@@ -66,9 +66,9 @@ const AddMeeting = (props) => {
     const fetchAllData = async () => {
         let result
         if (values.related === "contact") {
-            result = await getApi(user.role === 'admin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
+            result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
         } else if (values.related === "lead") {
-            result = await getApi(user.role === 'admin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
+            result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
         }
         setData(result?.data);
     }

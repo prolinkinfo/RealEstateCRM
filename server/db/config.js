@@ -11,7 +11,7 @@ const connectDB = async (DATABASE_URL, DATABASE) => {
         mongoose.set("strictQuery", false);
         await mongoose.connect(DATABASE_URL, DB_OPTIONS);
 
-        let adminExisting = await User.find({ role: 'admin' });
+        let adminExisting = await User.find({ role: 'superAdmin' });
         if (adminExisting.length <= 0) {
             const phoneNumber = 7874263694
             const firstName = 'Prolink'
@@ -21,7 +21,7 @@ const connectDB = async (DATABASE_URL, DATABASE) => {
             // Hash the password
             const hashedPassword = await bcrypt.hash(password, 10);
             // Create a new user
-            const user = new User({ _id: new mongoose.Types.ObjectId('64d33173fd7ff3fa0924a109'), username, password: hashedPassword, firstName, lastName, phoneNumber, role: 'admin' });
+            const user = new User({ _id: new mongoose.Types.ObjectId('64d33173fd7ff3fa0924a109'), username, password: hashedPassword, firstName, lastName, phoneNumber, role: 'superAdmin' });
             // Save the user to the database
             await user.save();
             console.log("Admin created successfully..");

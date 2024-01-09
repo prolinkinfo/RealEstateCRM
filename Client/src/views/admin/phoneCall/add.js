@@ -62,9 +62,9 @@ const AddPhoneCall = (props) => {
         try {
             let result
             if (values.category === "contact") {
-                result = await getApi(user.role === 'admin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
+                result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
             } else if (values.category === "lead") {
-                result = await getApi(user.role === 'admin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
+                result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
             }
             setAssignmentToData(result?.data)
         }

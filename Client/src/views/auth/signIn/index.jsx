@@ -59,7 +59,7 @@ function SignIn() {
       setIsLoding(true)
       let response = await postApi('api/user/login', values, checkBox)
       if (response && response.status === 200) {
-        navigate('/admin')
+        navigate('/superAdmin')
         toast.success("Login Successfully!")
         resetForm();
       } else {
