@@ -30,7 +30,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import AddPhoneCall from "../../phoneCall/components/AddPhoneCall";
 
 export default function PhoneCall(props) {
-  const { columnsData, tableData, title, fetchData } = props;
+  const { columnsData, tableData, title, fetchData, callAccess } = props;
 
   const columns = useMemo(() => columnsData, [columnsData]);
   const data = useMemo(() => tableData, [tableData]);
@@ -88,7 +88,7 @@ export default function PhoneCall(props) {
           {title} (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
         </Text>
         {/* <Menu /> */}
-        {!props.text ? <Button onClick={() => setAddModel(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" >Call</Button> : <Button onClick={() => navigate('/communication-integration')} leftIcon={<MdOutlineMessage />} colorScheme="gray" >send text Msg</Button>}
+        {!props.text ? callAccess?.create && <Button onClick={() => setAddModel(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" >Call</Button> : <Button onClick={() => navigate('/communication-integration')} leftIcon={<MdOutlineMessage />} colorScheme="gray" >send text Msg</Button>}
         <AddPhoneCall lead={props.lead} fetchData={fetchData} isOpen={addModel} onClose={setAddModel} id={param.id} />
       </Flex>
       <Box overflowY={'auto'} className="table-container" >

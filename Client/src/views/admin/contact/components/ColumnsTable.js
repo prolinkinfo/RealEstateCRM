@@ -27,8 +27,9 @@ import Pagination from "components/pagination/Pagination";
 import { BsFillSendFill } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
 import AddEmailHistory from "../../emailHistory/components/AddEmail";
+
 export default function ColumnsTable(props) {
-  const { columnsData, tableData, title, fetchData } = props;
+  const { columnsData, tableData, title, fetchData, emailAccess } = props;
   const columns = useMemo(() => columnsData, [columnsData]);
   const data = useMemo(() => tableData, [tableData]);
 
@@ -93,7 +94,7 @@ export default function ColumnsTable(props) {
           lineHeight='100%'>
           {title}  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
         </Text>
-        <Button onClick={() => setAddEmailHistory(true)} rightIcon={<BsFillSendFill />} colorScheme="gray" >Send Email</Button>
+        {emailAccess?.create && <Button onClick={() => setAddEmailHistory(true)} rightIcon={<BsFillSendFill />} colorScheme="gray" >Send Email</Button>}
         <AddEmailHistory lead={props.lead} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} />
       </Flex>
       <Box overflowY={'auto'} className="table-container p0" >
