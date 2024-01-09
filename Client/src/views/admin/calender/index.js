@@ -10,7 +10,7 @@ const Index = () => {
 
 
     const fetchData = async () => {
-        let result = await getApi(user.role === 'admin' ? 'api/task/' : `api/task/?createBy=${user._id}`);
+        let result = await getApi(user.role === 'superAdmin' ? 'api/task/' : `api/task/?createBy=${user._id}`);
         setData(result.data);
     }
 

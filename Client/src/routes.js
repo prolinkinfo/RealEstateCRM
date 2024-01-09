@@ -69,7 +69,7 @@ const routes = [
   // ========================== Dashboard ==========================
   {
     name: "Dashboard",
-    layout: [ROLE_PATH.admin, ROLE_PATH.user],
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/default",
     icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
     component: MainDashboard,
@@ -78,14 +78,14 @@ const routes = [
   // ------------- lead Routes ------------------------
   {
     name: "Lead",
-    layout: [ROLE_PATH.admin, ROLE_PATH.user],
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/lead",
     icon: <Icon as={MdLeaderboard} width='20px' height='20px' color='inherit' />,
     component: Lead,
   },
   {
     name: "Lead View",
-    layout: [ROLE_PATH.admin, ROLE_PATH.user],
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     under: "lead",
     parentName: "Lead",
     path: "/leadView/:id",
@@ -93,7 +93,7 @@ const routes = [
   },
   {
     name: "Lead Import",
-    layout: [ROLE_PATH.admin, ROLE_PATH.user],
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     under: "lead",
     parentName: "Lead",
     path: "/leadImport",
@@ -102,14 +102,14 @@ const routes = [
   // --------------- contact Routes --------------------
   {
     name: "Contacts",
-    layout: [ROLE_PATH.admin, ROLE_PATH.user],
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/contacts",
     icon: <Icon as={MdContacts} width='20px' height='20px' color='inherit' />,
     component: Contact,
   },
   {
     name: "Contact View",
-    layout: [ROLE_PATH.admin, ROLE_PATH.user],
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     under: "contacts",
     parentName: "Contacts",
     path: "/contactView/:id",
@@ -117,7 +117,7 @@ const routes = [
   },
   {
     name: "Contact Import",
-    layout: "/admin",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     both: true,
     under: "contacts",
     parentName: "Contacts",
@@ -127,14 +127,14 @@ const routes = [
   // ------------- Property Routes ------------------------
   {
     name: "Property",
-    layout: [ROLE_PATH.admin, ROLE_PATH.user],
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/properties",
     icon: <Icon as={LuBuilding2} width='20px' height='20px' color='inherit' />,
     component: Property,
   },
   {
     name: "Property View",
-    layout: [ROLE_PATH.admin, ROLE_PATH.user],
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     parentName: "Property",
     under: "properties",
     path: "/propertyView/:id",
@@ -142,7 +142,7 @@ const routes = [
   },
   {
     name: "Property Import",
-    layout: "/admin",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     both: true,
     under: "properties",
     parentName: "Property",
@@ -162,14 +162,14 @@ const routes = [
   // ------------- Task Routes ------------------------
   {
     name: "Task",
-    layout: [ROLE_PATH.admin, ROLE_PATH.user],
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/task",
     icon: <Icon as={FaTasks} width='20px' height='20px' color='inherit' />,
     component: Task,
   },
   {
     name: "Task View",
-    layout: [ROLE_PATH.admin, ROLE_PATH.user],
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     under: "task",
     parentName: "Task",
     path: "/view/:id",
@@ -178,14 +178,14 @@ const routes = [
   // ------------- Meeting Routes ------------------------
   {
     name: "Meeting",
-    layout: [ROLE_PATH.admin, ROLE_PATH.user],
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/metting",
     icon: <Icon as={SiGooglemeet} width='20px' height='20px' color='inherit' />,
     component: Meeting,
   },
   {
     name: "Meeting View",
-    layout: [ROLE_PATH.admin, ROLE_PATH.user],
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     under: "metting",
     parentName: "Meeting",
     path: "/metting/:id",
@@ -194,14 +194,14 @@ const routes = [
   // ------------- Phone Routes ------------------------
   {
     name: "Call",
-    layout: [ROLE_PATH.admin, ROLE_PATH.user],
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/phone-call",
     icon: <Icon as={PiPhoneCallBold} width='20px' height='20px' color='inherit' />,
     component: PhoneCall,
   },
   {
     name: "Call View",
-    layout: [ROLE_PATH.admin, ROLE_PATH.user],
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     under: "phone-call",
     parentName: "Call",
     path: "/phone-call/:id",
@@ -211,14 +211,14 @@ const routes = [
   {
     // separator: 'History',
     name: "Email",
-    layout: [ROLE_PATH.admin, ROLE_PATH.user],
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/email",
     icon: <Icon as={AiOutlineMail} width='20px' height='20px' color='inherit' />,
     component: EmailHistory,
   },
   {
     name: "Email View",
-    layout: [ROLE_PATH.admin, ROLE_PATH.user],
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     under: "email",
     parentName: "Email",
     path: "/Email/:id",
@@ -227,7 +227,7 @@ const routes = [
   // ------------- Calender Routes ------------------------
   {
     name: "Calender",
-    layout: [ROLE_PATH.admin, ROLE_PATH.user],
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/calender",
     icon: <Icon as={FaCalendarAlt} width='20px' height='20px' color='inherit' />,
     component: Calender,
@@ -235,7 +235,7 @@ const routes = [
   // ------------- Payments Routes ------------------------
   {
     name: "Payments",
-    layout: [ROLE_PATH.admin, ROLE_PATH.user],
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/payments",
     icon: <Icon as={FaRupeeSign} width='20px' height='20px' color='inherit' />,
     component: Payments,
@@ -244,7 +244,7 @@ const routes = [
   // ------------- Roles Routes ------------------------
   {
     name: "Roles",
-    layout: [ROLE_PATH.admin, ROLE_PATH.user],
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/role",
     icon: <Icon as={LiaCriticalRole} width='20px' height='20px' color='inherit' />,
     component: Role,
@@ -269,7 +269,7 @@ const routes = [
   // ------------- Document Routes ------------------------
   {
     name: "Documents",
-    layout: [ROLE_PATH.admin, ROLE_PATH.user],
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/documents",
     icon: <Icon as={AiFillFolderOpen} width='20px' height='20px' color='inherit' />,
     component: Document,
@@ -277,7 +277,7 @@ const routes = [
   // ----------------- Reporting Layout -----------------
   {
     name: "Reporting and Analytics",
-    layout: [ROLE_PATH.admin, ROLE_PATH.user],
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/reporting-analytics",
     icon: <Icon as={MdInsertChartOutlined} width='20px' height='20px' color='inherit' />,
     component: Report,
@@ -285,14 +285,14 @@ const routes = [
   // ------------- user Routes ------------------------
   {
     name: "Users",
-    layout: [ROLE_PATH.admin, ROLE_PATH.user],
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/user",
     icon: <Icon as={HiUsers} width='20px' height='20px' color='inherit' />,
     component: User,
   },
   {
     name: "User View",
-    layout: [ROLE_PATH.admin, ROLE_PATH.user],
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     parentName: "Email",
     under: "user",
     path: "/userView/:id",

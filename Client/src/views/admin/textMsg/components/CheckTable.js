@@ -36,7 +36,7 @@ export default function CheckTable(props) {
   const user = JSON.parse(localStorage.getItem("user"))
 
   const fetchData = async () => {
-    let result = await getApi(user.role === 'admin' ? 'api/text-msg' : `api/text-msg?sender=${user._id}`);
+    let result = await getApi(user.role === 'superAdmin' ? 'api/text-msg' : `api/text-msg?sender=${user._id}`);
     setData(result?.data);
   }
 

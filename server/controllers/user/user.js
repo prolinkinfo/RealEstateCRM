@@ -14,7 +14,7 @@ const adminRegister = async (req, res) => {
             // Hash the password
             const hashedPassword = await bcrypt.hash(password, 10);
             // Create a new user
-            const user = new User({ username, password: hashedPassword, firstName, lastName, phoneNumber, role: 'admin' });
+            const user = new User({ username, password: hashedPassword, firstName, lastName, phoneNumber, role: 'superAdmin' });
             // Save the user to the database
             await user.save();
             res.status(200).json({ message: 'Admin created successfully' });
@@ -81,7 +81,7 @@ let deleteData = async (req, res) => {
         if (!user) {
             return res.status(404).json({ success: false, message: 'User not found', });
         }
-        if (user.role !== 'admin') {
+        if (user.role !== 'superAdmin') {
             // Update the user's 'deleted' field to true
             await User.updateOne({ _id: userId }, { $set: { deleted: true } });
             res.send({ message: 'Record deleted Successfully', });
@@ -95,7 +95,7 @@ let deleteData = async (req, res) => {
 
 const deleteMany = async (req, res) => {
     try {
-        const updatedUsers = await User.updateMany({ _id: { $in: req.body }, role: { $ne: 'admin' } }, { $set: { deleted: true } });
+        const updatedUsers = await User.updateMany({ _id: { $in: req.body }, role: { $ne: 'superAdmin' } }, { $set: { deleted: true } });
         res.status(200).json({ message: "done", updatedUsers })
     } catch (err) {
         res.status(404).json({ message: "error", err })

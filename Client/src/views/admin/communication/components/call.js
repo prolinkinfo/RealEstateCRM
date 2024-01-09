@@ -59,7 +59,7 @@ const Call = () => {
 
     const fetchData = async () => {
 
-        let result = await getApi(user.role === 'admin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`);
+        let result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`);
         values.createBy = result?._id;
         setData(result.data);
     }

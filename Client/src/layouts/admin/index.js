@@ -113,8 +113,8 @@ export default function Dashboard(props) {
 
 	const getRoutes = (routes) => {
 		return routes.map((prop, key) => {
-			// if (!prop.under && prop.layout === '/admin') {
-			if (!prop.under && prop.layout?.includes(ROLE_PATH.admin)) {
+			// if (!prop.under && prop.layout === '/superAdmin') {
+			if (!prop.under && prop.layout?.includes(ROLE_PATH.superAdmin)) {
 				return <Route path={prop.path} element={<prop.component />} key={key} />;
 			} else if (prop.under) {
 				return <Route path={prop.path} element={<prop.component />} key={key} />

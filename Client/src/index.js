@@ -27,7 +27,7 @@ function App() {
 				{token && user?.role ? (
 					user?.role == 'user' ?
 						<Route path="/*" element={<UserLayout />} />
-						: user?.role === 'admin' ?
+						: user?.role === 'superAdmin' ?
 							<Route path="/*" element={<AdminLayout />} />
 							: ''
 				) : (

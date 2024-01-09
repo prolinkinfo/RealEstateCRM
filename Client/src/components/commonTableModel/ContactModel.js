@@ -28,7 +28,7 @@ const ContactModel = (props) => {
     const user = JSON.parse(localStorage.getItem("user"))
     const fetchContactData = async () => {
         setIsLoding(true)
-        let result = await getApi(user.role === 'admin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`);
+        let result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`);
         if (result && result.status == 200) {
             setData(result?.data);
         }
