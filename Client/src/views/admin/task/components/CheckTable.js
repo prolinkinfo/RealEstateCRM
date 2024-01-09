@@ -57,6 +57,7 @@ import { CiMenuKebab } from "react-icons/ci";
 import EditTask from "./editTask";
 import DeleteTask from "./deleteTask";
 import * as XLSX from 'xlsx'
+import { HasAccess } from "../../../../redux/accessUtils";
 
 export default function CheckTable(props) {
   const { tableData, fetchData, isLoding, allData, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action, className } = props;
@@ -82,6 +83,9 @@ export default function CheckTable(props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const data = useMemo(() => tableData, [tableData]);
   const navigate = useNavigate();
+
+  const contactAccess = HasAccess('contacts')
+  const leadAccess = HasAccess('lead')
 
   const csvColumns = [
     { Header: 'Title', accessor: 'title' },
@@ -493,7 +497,7 @@ export default function CheckTable(props) {
 
       <AddTask isOpen={isOpen} fetchData={fetchData} onClose={onClose} />
       <EditTask isOpen={edit} onClose={setEdit} viewClose={onClose} id={selectedId} setAction={setAction} />
-      <EventView fetchData={fetchData} isOpen={eventView} access={access} onClose={setEventView} info={id} setAction={setAction} action={action} />
+      <EventView fetchData={fetchData} isOpen={eventView} access={access} contactAccess={contactAccess} leadAccess={leadAccess} onClose={setEventView} info={id} setAction={setAction} action={action} />
       <DeleteTask isOpen={deleteModel} onClose={setDelete} viewClose={onClose} url='api/task/delete/' method='one' id={selectedValues} redirectPage={"/task"} setAction={setAction} />
       <ImportModal text='Lead file' fetchData={fetchData} isOpen={isImportLead} onClose={setIsImportLead} />
       {/* Advance filter modal*/}
