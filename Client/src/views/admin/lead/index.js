@@ -11,7 +11,7 @@ import ImportModal from "./components/ImportModal";
 import { HasAccess } from "../../../redux/accessUtils";
 
 const Index = () => {
-    const [columns, setColumns] = useState([]);
+
     const [isLoding, setIsLoding] = useState(false);
     const [data, setData] = useState([]);
     const [displaySearchData, setDisplaySearchData] = useState(false);
@@ -30,11 +30,24 @@ const Index = () => {
         { Header: "Score", accessor: "leadScore", },
         { Header: "Action", isSortable: false, center: true },
     ];
+
+    const emailAccess = HasAccess('email')
+    const callAccess = HasAccess('call')
+
+    // if ((callAccess?.create || permission?.view || permission?.delete || permission?.update || emailAccess?.create)) {
+    //     tableColumns.push({ Header: "Action", isSortable: false, center: true })
+    // } else if (user.role === 'superAdmin') {
+    //     tableColumns.push({ Header: "Action", isSortable: false, center: true })
+    // }
+
     const [dynamicColumns, setDynamicColumns] = useState([...tableColumns]);
     const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
     const [action, setAction] = useState(false)
+    const [columns, setColumns] = useState(tableColumns);
     const { isOpen, onOpen, onClose } = useDisclosure()
     const size = "lg";
+
+
 
     const fetchData = async () => {
         setIsLoding(true)
@@ -44,8 +57,11 @@ const Index = () => {
     }
 
     useEffect(() => {
+
         setColumns(tableColumns)
     }, [action])
+
+    // console.log(columns)
 
     return (
         <div>
@@ -53,7 +69,7 @@ const Index = () => {
                 <GridItem colSpan={6}>
                     <CheckTable
                         isLoding={isLoding}
-                        columnsData={columns}
+                        columnsData={tableColumns}
                         isOpen={isOpen}
                         setAction={setAction}
                         action={action}
@@ -68,6 +84,8 @@ const Index = () => {
                         selectedColumns={selectedColumns}
                         access={permission}
                         setSelectedColumns={setSelectedColumns}
+                        emailAccess={emailAccess}
+                        callAccess={callAccess}
                     />
                 </GridItem>
             </Grid>

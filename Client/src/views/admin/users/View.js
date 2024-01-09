@@ -132,10 +132,9 @@ const View = () => {
                         </GridItem>
 
                     </Grid>
-                    <Card mt={3}>
+                    {data?.role !== 'superAdmin' && <Card mt={3}>
                         <RoleTable fetchData={fetchData} columnsData={RoleColumn} roleModal={roleModal} setRoleModal={setRoleModal} tableData={data?.roles || []} title={'Role'} />
-                    </Card>
-
+                    </Card>}
                     <RoleModal fetchData={fetchData} isOpen={roleModal} onClose={setRoleModal} columnsData={RoleColumn} id={param.id} tableData={roleData} interestRoles={data?.roles.map((item) => item._id)} />
 
                     <Card mt={3}>

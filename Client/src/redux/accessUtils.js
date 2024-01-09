@@ -28,6 +28,8 @@ export const HasAccess = (action) => {
         "update": true,
         "delete": true,
         "view": true,
+        "import": true,
+        "export": true,
     }
 
     access.forEach((permission) => {

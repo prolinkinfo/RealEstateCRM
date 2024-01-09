@@ -102,7 +102,6 @@ function ChangeAccess(props) {
     initialValues: initialValues,
     enableReinitialize: true,
     onSubmit: (values, { resetForm }) => {
-      console.log(values)
       EditData();
     },
   });
@@ -129,6 +128,18 @@ function ChangeAccess(props) {
       }
       return item;
     });
+
+    const updatedAccess1 = values.access.map((item, idx) => {
+      if (idx === index) {
+        return {
+          ...item,
+          [fieldName]: true,
+        };
+      }
+      return item;
+    });
+
+    const accessData = user.role === 'superAdmin' ? updatedAccess1 : updatedAccess
 
     setFieldValue('access', updatedAccess);
   };

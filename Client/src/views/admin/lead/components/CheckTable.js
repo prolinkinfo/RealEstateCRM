@@ -67,9 +67,10 @@ import { Formik, useFormik } from "formik";
 import { BsColumnsGap } from "react-icons/bs";
 import * as yup from "yup"
 import ImportModal from "./ImportModal";
+import { HasAccess } from "../../../../redux/accessUtils";
 
 export default function CheckTable(props) {
-  const { columnsData, tableData, fetchData, isLoding, allData, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action } = props;
+  const { columnsData, tableData, fetchData, isLoding, allData, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, callAccess, emailAccess, setAction, action } = props;
   const textColor = useColorModeValue("gray.500", "white");
   // const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -103,6 +104,7 @@ export default function CheckTable(props) {
     { Header: "Owner", accessor: "leadOwner" },
     { Header: "Score", accessor: "leadScore" },
   ];
+  // console.log(columns)
 
   const toggleColumnVisibility = (columnKey) => {
     const isColumnSelected = tempSelectedColumns.some((column) => column.accessor === columnKey);
@@ -452,7 +454,7 @@ export default function CheckTable(props) {
                           );
                         } else if (cell?.column.Header === "Email") {
                           data = (
-                            <Text
+                            emailAccess?.create ? <Text
                               me="10px"
                               fontSize="sm"
                               fontWeight="500"
@@ -465,11 +467,19 @@ export default function CheckTable(props) {
                               }
                             >
                               {cell?.value}
+                            </Text> : <Text
+                              me="10px"
+                              // sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                              // color='brand.600'
+                              fontSize="sm"
+                              fontWeight="500"
+                            >
+                              {cell?.value}
                             </Text>
                           );
                         } else if (cell?.column.Header === "Phone Number") {
                           data = (
-                            <Text
+                            callAccess?.create ? <Text
                               me="10px"
                               fontSize="sm"
                               fontWeight="500"
@@ -480,6 +490,14 @@ export default function CheckTable(props) {
                                 setCallSelectedId(cell?.row?.values._id)
                               }
                               }
+                            >
+                              {cell?.value}
+                            </Text> : <Text
+                              me="10px"
+                              // sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                              // color='brand.600'
+                              fontSize="sm"
+                              fontWeight="500"
                             >
                               {cell?.value}
                             </Text>
@@ -522,8 +540,8 @@ export default function CheckTable(props) {
                                 <MenuButton><CiMenuKebab /></MenuButton>
                                 <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
                                   {access?.update && <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>}
-                                  <MenuItem py={2.5} width={"165px"} onClick={() => { setAddPhoneCall(true); setCallSelectedId(cell?.row?.values._id) }} icon={<PhoneIcon fontSize={15} />}>Create Call</MenuItem>
-                                  <MenuItem py={2.5} width={"165px"} onClick={() => { setAddEmailHistory(true); setSelectedId(cell?.row?.values._id) }} icon={<EmailIcon fontSize={15} />}>Send Email</MenuItem>
+                                  {callAccess?.create && <MenuItem py={2.5} width={"165px"} onClick={() => { setAddPhoneCall(true); setCallSelectedId(cell?.row?.values._id) }} icon={<PhoneIcon fontSize={15} />}>Create Call</MenuItem>}
+                                  {emailAccess?.create && <MenuItem py={2.5} width={"165px"} onClick={() => { setAddEmailHistory(true); setSelectedId(cell?.row?.values._id) }} icon={<EmailIcon fontSize={15} />}>Send Email</MenuItem>}
                                   {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(user?.role !== 'superAdmin' ? `/leadView/${cell?.row?.original._id}` : `/admin/leadView/${cell?.row?.original._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>}
                                   {access?.delete && <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>}
                                 </MenuList>

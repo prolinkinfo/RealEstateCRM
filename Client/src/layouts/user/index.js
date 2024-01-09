@@ -29,9 +29,6 @@ export default function User(props) {
 
     const layoutName = user?.roles?.map(item => `/${item.roleName}`)
 
-    console.log(layoutName)
-
-
     const filterAccess = (rolesData) => {
         return rolesData?.map(role => {
             role.access = role?.access?.filter(access => (access.create || access.update || access.delete || access.view));
