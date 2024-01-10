@@ -63,7 +63,7 @@ import Edit from "../Edit";
 import ImportModal from "./ImportModel";
 
 export default function CheckTable(props) {
-  const { columnsData, tableData, fetchData, isLoding, setAction, allData, access, onClose, emailAccess, callAccess, setSearchedData, onOpen, isOpen, displaySearchData, dynamicColumns, action, setDisplaySearchData, selectedColumns, setSelectedColumns } = props;
+  const { columnsData, tableData, fetchData, isLoding, setAction, allData, access, onClose, emailAccess, callAccess, setSearchedData, onOpen, isOpen, displaySearchData, dynamicColumns, action, setDisplaySearchData, selectedColumns, setSelectedColumns, isHide } = props;
   const navigate = useNavigate();
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -274,61 +274,67 @@ export default function CheckTable(props) {
               >
                 Contacts (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
               </Text>
-              <InputGroup width={"30%"} mx={3}>
-                <InputLeftElement
-                  size="sm"
-                  top={"-3px"}
-                  pointerEvents="none"
-                  children={<SearchIcon color="gray.300" borderRadius="16px" />}
-                />
-                <Input type="text"
-                  size="sm"
-                  fontSize='sm'
-                  value={searchbox}
-                  onChange={(e) => {
-                    const results = allData.filter((item) => {
-                      // Iterate through each property of the object
-                      for (const key in item) {
-                        // Check if the value of the property contains the search term
-                        if (
-                          item[key] &&
-                          (typeof item[key] === "string" ?
-                            item[key].toLowerCase().includes(e.target.value.toLowerCase()) :
-                            (typeof item[key] === "number" && item[key].toString().includes(e.target.value)))
-                        ) {
-                          return true; // If found, include in the results
-                        }
-                      }
-                      return false; // If not found in any field, exclude from the results
-                    });
-                    setSearchbox(e.target.value)
-                    setSearchedData(results)
-                    setDisplaySearchData(true)
-                  }}
-                  fontWeight='500'
-                  placeholder="Search..." borderRadius="16px" />
-              </InputGroup>
-              <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} size="sm">Advance Search</Button>
+              {isHide ? null :
+                <>
+                  <InputGroup width={"30%"} mx={3}>
+                    <InputLeftElement
+                      size="sm"
+                      top={"-3px"}
+                      pointerEvents="none"
+                      children={<SearchIcon color="gray.300" borderRadius="16px" />}
+                    />
+                    <Input type="text"
+                      size="sm"
+                      fontSize='sm'
+                      value={searchbox}
+                      onChange={(e) => {
+                        const results = allData.filter((item) => {
+                          // Iterate through each property of the object
+                          for (const key in item) {
+                            // Check if the value of the property contains the search term
+                            if (
+                              item[key] &&
+                              (typeof item[key] === "string" ?
+                                item[key].toLowerCase().includes(e.target.value.toLowerCase()) :
+                                (typeof item[key] === "number" && item[key].toString().includes(e.target.value)))
+                            ) {
+                              return true; // If found, include in the results
+                            }
+                          }
+                          return false; // If not found in any field, exclude from the results
+                        });
+                        setSearchbox(e.target.value)
+                        setSearchedData(results)
+                        setDisplaySearchData(true)
+                      }}
+                      fontWeight='500'
+                      placeholder="Search..." borderRadius="16px" />
+                  </InputGroup>
+                  <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} size="sm">Advance Search</Button>
+                </>
+              }
               {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setGetTagValues([]); setSearchbox(''); }}>clear</Button> : ""}
               {(selectedValues.length > 0 && access?.delete) && <DeleteIcon onClick={() => setDelete(true)} color={'red'} ms={2} />}
             </Flex>
           </GridItem>
           <GridItem colSpan={4} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
-            <Menu isLazy  >
-              <MenuButton p={4}>
-                <BsColumnsGap />
-              </MenuButton>
-              <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} >
-                <MenuItem onClick={() => setManageColumns(true)} width={"165px"}> Manage Columns
-                </MenuItem>
-                <MenuItem width={"165px"} onClick={() => setIsImportContact(true)}> Import Contacts
-                </MenuItem>
-                <MenuDivider />
-                <MenuItem width={"165px"} onClick={() => handleExportContacts('csv')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as CSV' : 'Export as CSV'}</MenuItem>
-                <MenuItem width={"165px"} onClick={() => handleExportContacts('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem>
-              </MenuList>
-            </Menu>
-            {access?.create && <Button onClick={() => handleClick()} size={"sm"} variant="brand">Add Contact</Button>}
+            {isHide ? null :
+              <Menu isLazy  >
+                <MenuButton p={4}>
+                  <BsColumnsGap />
+                </MenuButton>
+                <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} >
+                  <MenuItem onClick={() => setManageColumns(true)} width={"165px"}> Manage Columns
+                  </MenuItem>
+                  <MenuItem width={"165px"} onClick={() => setIsImportContact(true)}> Import Contacts
+                  </MenuItem>
+                  <MenuDivider />
+                  <MenuItem width={"165px"} onClick={() => handleExportContacts('csv')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as CSV' : 'Export as CSV'}</MenuItem>
+                  <MenuItem width={"165px"} onClick={() => handleExportContacts('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem>
+                </MenuList>
+              </Menu>
+            }
+            {!isHide && access?.create && <Button onClick={() => handleClick()} size={"sm"} variant="brand">Add Contact</Button>}
           </GridItem>
           <HStack spacing={4}>
             {getTagValues && getTagValues.map((item) => (
