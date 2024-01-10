@@ -86,9 +86,13 @@ const EventView = (props) => {
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, md: 6 }} >
                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> assignment To  </Text>
-                                    <Link to={data?.assignmentTo ? contactAccess?.view && `/contactView/${data?.assignmentTo}` : leadAccess?.view && `/leadView/${data?.assignmentToLead}`}>
-                                        <Text color={(data?.category === 'contact' && contactAccess?.view) ? 'green.400' : (leadAccess?.view && data?.category === 'lead') ? 'green.400' : 'blackAlpha.900'} sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.assignmentToName ? data?.assignmentToName : ' - '}</Text>
-                                    </Link>
+                                    {data?.assignmentTo ?
+                                        <Link to={`/contactView/${data?.assignmentTo}`}>
+                                            <Text color={contactAccess?.view ? 'green.400' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }}>{data?.assignmentToName ? data?.assignmentToName : ' - '}</Text>
+                                        </Link> : <Link to={`/leadView/${data?.assignmentToLead}`}>
+                                            <Text color={leadAccess?.view ? 'green.400' : 'blackAlpha.900'} sx={{ '&:hover': { color: leadAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: leadAccess?.view ? 'underline' : 'none' } }}>{data?.assignmentToName ? data?.assignmentToName : ' - '}</Text>
+                                        </Link>
+                                    }
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, md: 6 }} >
                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task createBy </Text>
