@@ -13,7 +13,7 @@ import { getApi } from 'services/api';
 const Edit = (props) => {
     const [isLoding, setIsLoding] = useState(false);
     const [initialValues, setInitialValues] = useState({
-        // Lead Information:
+    // Lead Information:
         leadName: '',
         leadEmail: '',
         leadPhoneNumber: '',
@@ -77,6 +77,7 @@ const Edit = (props) => {
     const handleClose = () => {
         props.onClose(false)
         props.setSelectedId && props?.setSelectedId()
+        formik.resetForm();
     }
 
     let response
