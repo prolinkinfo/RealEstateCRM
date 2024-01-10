@@ -6,6 +6,7 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { Link, useParams } from "react-router-dom";
+import { HasAccess } from "../../../redux/accessUtils";
 import { getApi } from "services/api";
 
 const View = () => {
@@ -30,6 +31,9 @@ const View = () => {
     useEffect(() => {
         fetchData()
     }, [])
+
+    const contactAccess = HasAccess('contacts')
+    const leadAccess = HasAccess('lead')
 
     return (
         <>
@@ -76,9 +80,13 @@ const View = () => {
                                         </GridItem>
                                         <GridItem colSpan={{ base: 2, md: 1 }}>
                                             <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Create From </Text>
-                                            <Link to={data?.createBy ? `/contactView/${data?.createBy}` : `/leadView/${data?.createByLead}`}>
-                                                <Text color='green.400' sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.createByName ? data?.createByName : ' - '}</Text>
-                                            </Link>
+                                            {data?.createBy ?
+                                                <Link to={`/contactView/${data?.createBy}`}>
+                                                    <Text color={contactAccess?.view ? 'green.400' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }}>{data?.createByName ? data?.createByName : ' - '}</Text>
+                                                </Link> : <Link to={`/leadView/${data?.createByLead}`}>
+                                                    <Text color={leadAccess?.view ? 'green.400' : 'blackAlpha.900'} sx={{ '&:hover': { color: leadAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: leadAccess?.view ? 'underline' : 'none' } }}>{data?.createByName ? data?.createByName : ' - '}</Text>
+                                                </Link>
+                                            }
                                         </GridItem>
                                         <GridItem colSpan={{ base: 2, md: 1 }}>
                                             <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Realeted To </Text>

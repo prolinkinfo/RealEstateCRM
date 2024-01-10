@@ -58,6 +58,8 @@ import { BsColumnsGap } from "react-icons/bs";
 import { SearchIcon, ViewIcon } from "@chakra-ui/icons";
 import { MdLeaderboard } from "react-icons/md";
 import { IoIosContact } from "react-icons/io";
+import { HasAccess } from "../../../../redux/accessUtils";
+
 export default function CheckTable(props) {
   // const { columnsData, action } = props;
   const { columnsData, tableData, fetchData, isLoding, allData, access, setSearchedData, setDisplaySearchData, displaySearchData, columnsToExclude, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action } = props;
@@ -163,6 +165,9 @@ export default function CheckTable(props) {
   useEffect(() => {
     fetchData()
   }, [action])
+
+  const contactAccess = HasAccess('contacts')
+  const leadAccess = HasAccess('lead')
 
   return (
     <>
@@ -368,17 +373,44 @@ export default function CheckTable(props) {
                           );
                         } else if (cell?.column.Header === "Realeted To") {
                           data = (
-                            <Link to={cell?.row?.original?.createBy ? `/contactView/${cell?.row?.original.createBy}` : `/leadView/${cell?.row?.original.createByLead}`}>
-                              <Text
+                            <>
+                              {cell?.row?.original.createBy && contactAccess?.view ? <Link to={`/contactView/${cell?.row?.original.createBy}`}>
+                                <Text
+                                  me="10px"
+                                  sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                                  color={'brand.600'}
+                                  fontSize="sm"
+                                  fontWeight="700"
+                                >
+                                  {cell?.row?.original.createBy && "contact"}
+                                </Text>
+                              </Link> :
+                                <Text
+                                  me="10px"
+                                  fontSize="sm"
+                                  fontWeight="700"
+                                >
+                                  {cell?.row?.original.createBy && "contact"}
+                                </Text>}
+
+                              {leadAccess?.view && cell?.row?.original.createByLead ? <Link to={`/leadView/${cell?.row?.original.createByLead}`}>
+                                <Text
+                                  me="10px"
+                                  sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                                  color={'brand.600'}
+                                  fontSize="sm"
+                                  fontWeight="700"
+                                >
+                                  {cell?.row?.original.createByLead && "lead"}
+                                </Text>
+                              </Link> : <Text
                                 me="10px"
-                                sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                                color='brand.600'
                                 fontSize="sm"
                                 fontWeight="700"
                               >
-                                {cell?.row?.original.createBy ? "contact" : cell?.row?.original.createByLead && "lead"}
-                              </Text>
-                            </Link>
+                                {cell?.row?.original.createByLead && "lead"}
+                              </Text>}
+                            </>
 
                           );
                         } else if (cell?.column.Header === "timestamp") {
@@ -400,7 +432,11 @@ export default function CheckTable(props) {
                                 <MenuButton><CiMenuKebab /></MenuButton>
                                 <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
                                   {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/Email/${cell?.row?.values._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>}
-                                  <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(cell?.row?.original?.createBy ? `/contactView/${cell?.row?.original.createBy}` : `/leadView/${cell?.row?.original.createByLead}`)} icon={cell?.row?.original.createBy ? <IoIosContact fontSize={15} /> : cell?.row?.original.createByLead && <MdLeaderboard fontSize={15} />}>{cell?.row?.original.createBy ? "contact" : cell?.row?.original.createByLead && 'lead'}</MenuItem>
+                                  {cell?.row?.original?.createBy && contactAccess?.view ?
+                                    <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(cell?.row?.original?.createBy && `/contactView/${cell?.row?.original.createBy}`)} icon={cell?.row?.original.createBy && <IoIosContact fontSize={15} />}>  {(cell?.row?.original.createBy && contactAccess?.view) && "contact"}
+                                    </MenuItem>
+                                    : ''}
+                                  {cell?.row?.original.createByLead && leadAccess?.view ? <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(`/leadView/${cell?.row?.original.createByLead}`)} icon={cell?.row?.original.createByLead && leadAccess?.view && <MdLeaderboard fontSize={15} />}>{cell?.row?.original.createByLead && leadAccess?.view && 'lead'}</MenuItem> : ''}
                                 </MenuList>
                               </Menu>
                             </Text>
