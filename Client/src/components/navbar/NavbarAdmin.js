@@ -1,10 +1,8 @@
 // Chakra Imports
-import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Flex, Link, Text, useColorModeValue } from '@chakra-ui/react';
-import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
+import { Box, Flex, Link, Text, useColorModeValue } from '@chakra-ui/react';
 import AdminNavbarLinks from 'components/navbar/NavbarLinksAdmin';
-import * as rrd from 'react-router-dom';
-import { AiTwotoneHome } from 'react-icons/ai';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 
 export default function AdminNavbar(props) {
 	const [scrolled, setScrolled] = useState(false);
@@ -82,8 +80,8 @@ export default function AdminNavbar(props) {
 				base: 'calc(100vw - 0%)',
 				md: 'calc(100vw - 0%)',
 				lg: 'calc(100vw - 0%)',
-				xl: openSidebar === true ? 'calc(100vw - 350px)' : 'calc(100vw - 80px)',
-				'2xl': openSidebar === true ? 'calc(100vw - 360px)' : 'calc(100vw - 80px)'
+				xl: openSidebar === true ? 'calc(100vw - 270px)' : 'calc(100vw - 80px)',
+				'2xl': openSidebar === true ? 'calc(100vw - 270px)' : 'calc(100vw - 80px)'
 			}}
 		>
 			<Flex
@@ -123,7 +121,7 @@ export default function AdminNavbar(props) {
 						href='#'
 						pt="2px"
 						bg='inherit'
-						ps="5px"
+						ps="30px"
 						borderRadius='inherit'
 						fontWeight='bold'
 						fontSize='34px'
