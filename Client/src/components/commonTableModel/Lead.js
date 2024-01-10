@@ -153,17 +153,17 @@ export default function LeadTable(props) {
                       );
                     } else if (cell?.column.Header === "Lead Name") {
                       data = (
-                        <Link to={user?.role !== 'superAdmin' ? `/leadView/${cell?.row?.values._id}` : `/admin/leadView/${cell?.row?.values._id}`}>
-                          <Text
-                            me="10px"
-                            sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                            color='green.400'
-                            fontSize="sm"
-                            fontWeight="700"
-                          >
-                            {cell?.value}
-                          </Text>
-                        </Link>
+                        // <Link to={user?.role !== 'superAdmin' ? `/leadView/${cell?.row?.values._id}` : `/admin/leadView/${cell?.row?.values._id}`}>
+                        <Text
+                          me="10px"
+                          // sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                          color={textColor}
+                          fontSize="sm"
+                          fontWeight="700"
+                        >
+                          {cell?.value}
+                        </Text>
+                        // </Link>
                       );
                     } else if (cell?.column.Header === "Lead Email") {
                       data = (

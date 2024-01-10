@@ -155,17 +155,17 @@ export default function PropertyTable(props) {
                       );
                     } else if (cell?.column.Header === "property Address") {
                       data = (
-                        <Link to={user?.role !== 'superAdmin' ? `/propertyView/${cell?.row?.original?._id}` : `/admin/propertyView/${cell?.row?.original?._id}`}>
-                          <Text
-                            me="10px"
-                            sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                            color='green.400'
-                            fontSize="sm"
-                            fontWeight="700"
-                          >
-                            {cell?.value}
-                          </Text>
-                        </Link>
+                        // <Link to={user?.role !== 'superAdmin' ? `/propertyView/${cell?.row?.original?._id}` : `/admin/propertyView/${cell?.row?.original?._id}`}>
+                        <Text
+                          me="10px"
+                          // sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                          color={textColor}
+                          fontSize="sm"
+                          fontWeight="700"
+                        >
+                          {cell?.value}
+                        </Text>
+                        // </Link>
                       );
                     } else if (cell?.column.Header === "listing Price") {
                       data = (
