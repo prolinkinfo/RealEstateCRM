@@ -1,14 +1,8 @@
-import { AddIcon } from "@chakra-ui/icons";
-import { Box, Button, Flex, FormLabel, Grid, GridItem, Input, Select, useDisclosure, Text } from '@chakra-ui/react';
-import Card from "components/card/Card";
-import { useFormik } from "formik";
+import { Grid, GridItem, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { getApi } from "services/api";
-import CheckTable from './components/CheckTable';
-import * as yup from 'yup';
-import { FiUpload } from 'react-icons/fi';
-import ImportModal from "./components/ImportModal";
 import { HasAccess } from "../../../redux/accessUtils";
+import CheckTable from './components/CheckTable';
 
 const Index = () => {
 

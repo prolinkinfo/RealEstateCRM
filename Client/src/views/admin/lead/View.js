@@ -24,6 +24,8 @@ import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getApi } from "services/api";
 import ColumnsTable from "../contact/components/ColumnsTable";
+import TaskColumnsTable from "../task/components/ColumnsTable";
+import MeetingColumnsTable from "../meeting/components/ColumnsTable";
 import PhoneCall from "../contact/components/phonCall";
 import AddEmailHistory from "../emailHistory/components/AddEmail";
 import AddMeeting from "../meeting/components/Addmeeting";
@@ -63,8 +65,9 @@ const View = () => {
     const [addEmailHistory, setAddEmailHistory] = useState(false);
     const [addPhoneCall, setAddPhoneCall] = useState(false);
 
-
     const permission = HasAccess('lead');
+    const taskPermission = HasAccess('task');
+    const meetingPermission = HasAccess('meeting');
     const callAccess = HasAccess('call');
     const emailAccess = HasAccess('email');
     const taskAccess = HasAccess('task');
@@ -85,14 +88,12 @@ const View = () => {
     ];
 
     const MeetingColumns = [
-        { Header: "#", accessor: "_id", isSortable: false, width: 10 },
         { Header: 'agenda', accessor: 'agenda' },
         { Header: "date Time", accessor: "dateTime", },
         { Header: "times tamp", accessor: "timestamp", },
         { Header: "create By", accessor: "createdByName", },
     ];
     const taskColumns = [
-        { Header: "#", accessor: "_id", isSortable: false, width: 5 },
         { Header: 'Title', accessor: 'title' },
         { Header: "Category", accessor: "category", },
         { Header: "Assignment To", accessor: "assignmentToName", },
@@ -119,13 +120,16 @@ const View = () => {
         setAllData(response.data);
         setIsLoding(false)
     }
+
     useEffect(() => {
         fetchData()
-    }, [edit, addEmailHistory, addPhoneCall])
+    }, [action])
+    // }, [edit, addEmailHistory, addPhoneCall])
 
     function toCamelCase(text) {
         return text?.replace(/([a-z])([A-Z])/g, '$1 $2');
     }
+
     return (
         <>
             <Add isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} />
@@ -381,7 +385,7 @@ const View = () => {
                                                 </Card>
                                             </GridItem>}
                                             {callAccess?.view && <GridItem colSpan={{ base: 6 }}>
-                                                <Card >
+                                                <Card>
                                                     {allData?.phoneCall?.length > 0 ? <PhoneCall callAccess={callAccess} fetchData={fetchData} columnsData={columnsDataColumns} lead='true' tableData={showCall ? allData?.phoneCall : [allData?.phoneCall[0]]} title={'Call '} /> : callAccess?.create && <Button onClick={() => setAddPhoneCall(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" > Call </Button>}
                                                     {allData?.phoneCall?.lenght > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                         <Button colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showCall ? setShowCall(false) : setShowCall(true)}>{showCall ? "Show less" : "Show more"}</Button>
@@ -390,27 +394,30 @@ const View = () => {
                                                 </Card>
                                             </GridItem>}
                                             {taskAccess?.view && <GridItem colSpan={{ base: 6 }}>
-                                                <Card >
-                                                    {allData?.task?.length > 0 ? <TaskTable className='table-container' setTaskModel={setTaskModel} fetchData={fetchData} columnsData={taskColumns} data={showTasks ? allData?.task : [allData?.task[0]]} title={'Task '} /> : taskAccess?.create && <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>}
-                                                    {allData?.task?.lenght > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
-                                                        <Button colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showTasks ? setShowTasks(false) : setShowTasks(true)}>{showTasks ? "Show less" : "Show more"}</Button>
-                                                    </div>}
+                                                <Card>
+                                                    {allData?.task?.length > 0 ? <TaskColumnsTable fetchData={fetchData} columnsData={taskColumns} lead='true' tableData={showTasks ? allData?.task : [allData?.task[0]]} title={'Task '} action={action} setAction={setAction} access={taskAccess} /> : taskAccess?.create && <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>}
+                                                    {
+                                                        allData?.task?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
+                                                            <Button colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showTasks ? setShowTasks(false) : setShowTasks(true)}>{showTasks ? "Show less" : "Show more"}</Button>
+                                                        </div>}
                                                     <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="lead" id={param.id} />
                                                 </Card>
-                                            </GridItem>}
-                                            {meetingAccess?.view && <GridItem colSpan={{ base: 6 }}>
-                                                <Card >
-                                                    {allData?.meeting?.length > 0 ? <MeetingTable className='table-container' setMeeting={setMeeting} fetchData={fetchData} columnsData={MeetingColumns} data={showMeetings ? allData?.meeting : [allData?.meeting[0]]} title={'meeting '} /> : meetingAccess?.create && <Button Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>}
-                                                    {allData?.meeting?.lenght > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
-                                                        <Button colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showMeetings ? setShowMeetings(false) : setShowMeetings(true)}>{showMeetings ? "Show less" : "Show more"}</Button>
-                                                    </div>}
-                                                    <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="lead" id={param.id} />
-                                                </Card>
-                                            </GridItem>}
-                                        </Grid>
-                                    </Grid>
-                                </GridItem>
-                            </TabPanel>
+                                            </GridItem >}
+                                            {
+                                                meetingAccess?.view && <GridItem colSpan={{ base: 6 }}>
+                                                    <Card>
+                                                        {allData?.meeting?.length > 0 ? <MeetingColumnsTable fetchData={fetchData} columnsData={MeetingColumns} lead='true' tableData={showMeetings ? allData?.meeting : [allData?.meeting[0]]} title={'Meeting '} action={action} setAction={setAction} access={meetingAccess} /> : meetingAccess?.create && <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>}
+                                                        {
+                                                            allData?.meeting?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
+                                                                <Button colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showMeetings ? setShowMeetings(false) : setShowMeetings(true)}>{showMeetings ? "Show less" : "Show more"}</Button>
+                                                            </div>}
+                                                        <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="lead" id={param.id} setAction={setAction} />
+                                                    </Card>
+                                                </GridItem >}
+                                        </Grid >
+                                    </Grid >
+                                </GridItem >
+                            </TabPanel >
                             <TabPanel pt={4} p={0}>
                                 <GridItem colSpan={{ base: 4 }} >
                                     <Card minH={'50vh'} >
@@ -431,8 +438,8 @@ const View = () => {
                                 </GridItem>
                             </TabPanel>
 
-                        </TabPanels>
-                    </Tabs>
+                        </TabPanels >
+                    </Tabs >
                     {(user.role === 'superAdmin' || (permission?.update || permission?.delete)) && <Card mt={3}>
                         <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                             <GridItem colStart={6} >
@@ -442,7 +449,8 @@ const View = () => {
                                 </Flex>
                             </GridItem>
                         </Grid>
-                    </Card>}
+                    </Card>
+                    }
                 </>
             }
         </>

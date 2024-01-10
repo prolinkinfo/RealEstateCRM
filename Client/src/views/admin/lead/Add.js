@@ -54,6 +54,7 @@ const Add = (props) => {
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
 
+
     const AddData = async () => {
         try {
             setIsLoding(true)
@@ -141,7 +142,7 @@ const Add = (props) => {
                                         value={values.leadPhoneNumber}
                                         name="leadPhoneNumber"
                                         fontWeight='500'
-                                        borderColor={errors.title && touched.title ? "red.300" : null}
+                                        borderColor={errors.leadPhoneNumber && touched.leadPhoneNumber ? "red.300" : null}
                                         placeholder="Phone number" borderRadius="16px" />
                                 </InputGroup>
                                 <Text mb='10px' color={'red'}>{errors.leadPhoneNumber && touched.leadPhoneNumber && errors.leadPhoneNumber}</Text>
