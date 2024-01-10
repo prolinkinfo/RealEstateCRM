@@ -5,7 +5,7 @@ import { HasAccess } from "../../../redux/accessUtils";
 import CheckTable from './components/CheckTable';
 
 const Index = () => {
-    const [columns, setColumns] = useState([]);
+
     const [isLoding, setIsLoding] = useState(false);
     const [data, setData] = useState([]);
     const [displaySearchData, setDisplaySearchData] = useState(false);
@@ -24,9 +24,14 @@ const Index = () => {
         { Header: "Score", accessor: "leadScore", },
         { Header: "Action", isSortable: false, center: true },
     ];
+
+    const emailAccess = HasAccess('email')
+    const callAccess = HasAccess('call')
+
     const [dynamicColumns, setDynamicColumns] = useState([...tableColumns]);
     const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
     const [action, setAction] = useState(false)
+    const [columns, setColumns] = useState(tableColumns);
     const { isOpen, onOpen, onClose } = useDisclosure()
     const size = "lg";
 
@@ -47,7 +52,7 @@ const Index = () => {
                 <GridItem colSpan={6}>
                     <CheckTable
                         isLoding={isLoding}
-                        columnsData={columns}
+                        columnsData={tableColumns}
                         isOpen={isOpen}
                         setAction={setAction}
                         action={action}
@@ -62,6 +67,8 @@ const Index = () => {
                         selectedColumns={selectedColumns}
                         access={permission}
                         setSelectedColumns={setSelectedColumns}
+                        emailAccess={emailAccess}
+                        callAccess={callAccess}
                     />
                 </GridItem>
             </Grid>

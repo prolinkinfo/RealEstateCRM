@@ -54,6 +54,10 @@ const View = () => {
     const navigate = useNavigate()
 
     const permission = HasAccess('contacts');
+    const callAccess = HasAccess('call');
+    const emailAccess = HasAccess('email');
+    const taskAccess = HasAccess('task');
+    const meetingAccess = HasAccess('meeting');
 
     const columnsDataColumns = [
         { Header: "sender", accessor: "senderName", },
@@ -242,7 +246,7 @@ const View = () => {
                                                         <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
                                                             Phone Number
                                                         </Text>
-                                                        <Text onClick={() => setAddPhoneCall(true)} color='green.400' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.contact?.phoneNumber ? data?.contact?.phoneNumber : 'N/A'}</Text>
+                                                        {callAccess?.create ? <Text onClick={() => setAddPhoneCall(true)} color='green.400' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.contact?.phoneNumber ? data?.contact?.phoneNumber : 'N/A'}</Text> : <Text>{data?.contact?.phoneNumber ? data?.contact?.phoneNumber : 'N/A'}</Text>}
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                                         <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
@@ -254,7 +258,7 @@ const View = () => {
                                                         <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
                                                             Email Address
                                                         </Text>
-                                                        <Text onClick={() => setAddEmailHistory(true)} color='green.400' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.contact?.email ? data?.contact?.email : 'N/A'}</Text>
+                                                        {emailAccess?.create ? <Text onClick={() => setAddEmailHistory(true)} color='green.400' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.contact?.email ? data?.contact?.email : 'N/A'}</Text> : <Text>{data?.contact?.email ? data?.contact?.email : 'N/A'}</Text>}
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2 }}>
                                                         <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
@@ -505,30 +509,34 @@ const View = () => {
                                             </Box>
                                         </GridItem>
                                         <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
-                                            <GridItem colSpan={{ base: 12, sm: 6 }}>
+                                            {emailAccess?.view && <GridItem colSpan={{ base: 12, sm: 6 }}>
                                                 <Card overflow={'scroll'}>
-                                                    {data?.EmailHistory.length > 0 ? <ColumnsTable fetchData={fetchData} columnsData={columnsDataColumns} tableData={data?.EmailHistory} title={'Email '} /> : <Button onClick={() => setAddEmailHistory(true)} leftIcon={<BsFillSendFill />} colorScheme="gray" >Send Email </Button>}
+                                                    {data?.EmailHistory.length > 0 ?
+                                                        <ColumnsTable fetchData={fetchData} emailAccess={emailAccess} columnsData={columnsDataColumns} tableData={data?.EmailHistory} title={'Email '} />
+                                                        :
+                                                        (emailAccess?.create && <Button onClick={() => setAddEmailHistory(true)} leftIcon={<BsFillSendFill />} colorScheme="gray" >Send Email </Button>)
+                                                    }
                                                     <AddEmailHistory fetchData={fetchData} setAction={setAction} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} id={param.id} />
                                                 </Card>
-                                            </GridItem>
-                                            <GridItem colSpan={{ base: 12, sm: 6 }}>
+                                            </GridItem>}
+                                            {callAccess?.view && <GridItem colSpan={{ base: 12, sm: 6 }}>
                                                 <Card overflow={'scroll'}>
-                                                    {data?.phoneCallHistory?.length > 0 ? <PhoneCall fetchData={fetchData} columnsData={columnsDataColumns} tableData={data?.phoneCallHistory} title={'Call '} /> : <Button onClick={() => setAddPhoneCall(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" > Call </Button>}
+                                                    {data?.phoneCallHistory?.length > 0 ? <PhoneCall callAccess={callAccess} fetchData={fetchData} columnsData={columnsDataColumns} tableData={data?.phoneCallHistory} title={'Call '} /> : (callAccess?.create && <Button onClick={() => setAddPhoneCall(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" > Call </Button>)}
                                                     <AddPhoneCall fetchData={fetchData} setAction={setAction} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param.id} />
                                                 </Card>
-                                            </GridItem>
-                                            <GridItem colSpan={{ base: 12, sm: 6 }}>
+                                            </GridItem>}
+                                            {meetingAccess?.view && <GridItem colSpan={{ base: 12, sm: 6 }}>
                                                 <Card overflow={'scroll'}>
-                                                    {data?.meetingHistory.length > 0 ? <MeetingTable className='table-container' fetchData={fetchData} setMeeting={setMeeting} columnsData={MeetingColumns} data={data?.meetingHistory} title={'Meeting '} /> : <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>}
+                                                    {data?.meetingHistory.length > 0 ? <MeetingTable className='table-container' fetchData={fetchData} setMeeting={setMeeting} columnsData={MeetingColumns} data={data?.meetingHistory} title={'Meeting '} /> : meetingAccess?.create && <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>}
                                                     <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="contact" id={param.id} />
                                                 </Card>
-                                            </GridItem>
-                                            <GridItem colSpan={{ base: 12, sm: 6 }}>
+                                            </GridItem>}
+                                            {taskAccess?.view && <GridItem colSpan={{ base: 12, sm: 6 }}>
                                                 <Card overflow={'scroll'}>
-                                                    {data?.task.length > 0 ? <TaskTable fetchData={fetchData} className='table-container' setTaskModel={setTaskModel} columnsData={taskColumns} data={data?.task} title={'Task '} /> : <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>}
+                                                    {data?.task.length > 0 ? <TaskTable fetchData={fetchData} className='table-container' setTaskModel={setTaskModel} columnsData={taskColumns} data={data?.task} title={'Task '} /> : taskAccess?.create && <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>}
                                                     <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="contact" id={param.id} />
                                                 </Card>
-                                            </GridItem>
+                                            </GridItem>}
                                             <GridItem colSpan={{ base: 12 }}>
                                                 <Card overflow={'scroll'}>
                                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Notes and Comments </Text>

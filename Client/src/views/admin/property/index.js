@@ -46,8 +46,6 @@ const Index = () => {
     }, [onClose])
     const permission = HasAccess('property');
 
-
-
     return (
         <div>
             {/* <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>

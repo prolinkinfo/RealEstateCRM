@@ -63,7 +63,7 @@ import Edit from "../Edit";
 import ImportModal from "./ImportModel";
 
 export default function CheckTable(props) {
-  const { columnsData, tableData, fetchData, isLoding, setAction, allData, access, onClose, setSearchedData, onOpen, isOpen, displaySearchData, dynamicColumns, action, setDisplaySearchData, selectedColumns, setSelectedColumns } = props;
+  const { columnsData, tableData, fetchData, isLoding, setAction, allData, access, onClose, emailAccess, callAccess, setSearchedData, onOpen, isOpen, displaySearchData, dynamicColumns, action, setDisplaySearchData, selectedColumns, setSelectedColumns } = props;
   const navigate = useNavigate();
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -462,23 +462,29 @@ export default function CheckTable(props) {
                           );
                         } else if (cell?.column.Header === "Phone Number") {
                           data = (
-                            <Text fontSize="sm" fontWeight="700"
+                            callAccess?.create ? <Text fontSize="sm" fontWeight="700"
                               onClick={() => {
                                 setAddPhoneCall(true)
                                 setSelectedId(cell?.row?.values._id)
                               }}
                               color='brand.600' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>
                               {cell?.value}
+                            </Text> : <Text fontSize="sm" fontWeight="700"
+                              color={textColor}>
+                              {cell?.value}
                             </Text>
                           );
                         } else if (cell?.column.Header === "Email Address") {
                           data = (
-                            <Text fontSize="sm" fontWeight="700"
+                            emailAccess?.create ? <Text fontSize="sm" fontWeight="700"
                               onClick={() => {
                                 setAddEmailHistory(true)
                                 setSelectedId(cell?.row?.values._id)
                               }}
                               color='brand.600' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>
+                              {cell?.value}
+                            </Text> : <Text fontSize="sm" fontWeight="700"
+                              color={textColor}>
                               {cell?.value}
                             </Text>
                           );
@@ -495,14 +501,14 @@ export default function CheckTable(props) {
                                 <MenuButton><CiMenuKebab /></MenuButton>
                                 <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
                                   {access?.update && <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>}
-                                  <MenuItem py={2.5} width={"165px"} onClick={() => {
+                                  {callAccess?.create && <MenuItem py={2.5} width={"165px"} onClick={() => {
                                     setAddPhoneCall(true)
                                     setSelectedId(cell?.row?.values._id)
-                                  }} icon={<PhoneIcon fontSize={15} />}>Create Call</MenuItem>
-                                  <MenuItem py={2.5} width={"165px"} onClick={() => {
+                                  }} icon={<PhoneIcon fontSize={15} />}>Create Call</MenuItem>}
+                                  {emailAccess?.create && <MenuItem py={2.5} width={"165px"} onClick={() => {
                                     setAddEmailHistory(true)
                                     setSelectedId(cell?.row?.values._id)
-                                  }} icon={<EmailIcon fontSize={15} />}>Send Email</MenuItem>
+                                  }} icon={<EmailIcon fontSize={15} />}>Send Email</MenuItem>}
                                   {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/contactView/${cell?.row?.original._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>}
                                   {access?.delete && <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>}
                                 </MenuList>

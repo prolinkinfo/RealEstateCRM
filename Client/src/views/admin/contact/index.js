@@ -34,6 +34,8 @@ const Index = () => {
     const user = JSON.parse(localStorage.getItem("user"))
 
     const permission = HasAccess('contacts');
+    const emailAccess = HasAccess('email')
+    const callAccess = HasAccess('call')
 
     const fetchData = async () => {
         setIsLoding(true)
@@ -66,6 +68,8 @@ const Index = () => {
                         setDisplaySearchData={setDisplaySearchData}
                         allData={data}
                         // tableData={data}
+                        emailAccess={emailAccess}
+                        callAccess={callAccess}
                         setDynamicColumns={setDynamicColumns}
                         dynamicColumns={dynamicColumns}
                         tableData={displaySearchData ? searchedData : data}

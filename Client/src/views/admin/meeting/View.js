@@ -6,6 +6,7 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { Link, useParams } from "react-router-dom";
+import { HasAccess } from "../../../redux/accessUtils";
 import { getApi } from "services/api";
 
 const View = () => {
@@ -30,6 +31,9 @@ const View = () => {
     useEffect(() => {
         fetchData()
     }, [])
+
+    const contactAccess = HasAccess('contacts')
+    const leadAccess = HasAccess('lead')
 
     return (
         <>
@@ -80,17 +84,25 @@ const View = () => {
                                         </GridItem>
                                         <GridItem colSpan={{ base: 2, md: 1 }}>
                                             <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Attendes </Text>
-                                            {data?.related === 'contact' ? data?.attendes && data?.attendes.map((item) => {
+                                            {data?.related === 'contact' && contactAccess?.view ? data?.attendes && data?.attendes.map((item) => {
                                                 return (
                                                     <Link to={`/contactView/${item._id}`}>
                                                         <Text color='green.400' sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{item.firstName + ' ' + item.lastName}</Text>
                                                     </Link>
                                                 )
-                                            }) : data?.related === 'lead' ? data?.attendesLead && data?.attendesLead.map((item) => {
+                                            }) : data?.related === 'lead' && leadAccess?.view ? data?.attendesLead && data?.attendesLead.map((item) => {
                                                 return (
                                                     <Link to={`/leadView/${item._id}`}>
                                                         <Text color='green.400' sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{item.leadName}</Text>
                                                     </Link>
+                                                )
+                                            }) : data?.related === 'contact' ? data?.attendes && data?.attendes.map((item) => {
+                                                return (
+                                                    <Text color='blackAlpha.900' >{item.firstName + ' ' + item.lastName}</Text>
+                                                )
+                                            }) : data?.related === 'lead' ? data?.attendesLead && data?.attendesLead.map((item) => {
+                                                return (
+                                                    <Text color='blackAlpha.900' >{item.leadName}</Text>
                                                 )
                                             }) : '-'}
                                         </GridItem>
