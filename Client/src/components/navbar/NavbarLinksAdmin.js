@@ -136,7 +136,6 @@ export default function HeaderLinks(props) {
 				>
 					<Icon color={ethColor} w="9px" h="14px" as={FaEthereum} />
 				</Flex>
-				
 				<Text
 					w="max-content"
 					color={ethColor}
