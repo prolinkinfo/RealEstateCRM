@@ -93,7 +93,7 @@ const View = () => {
                                                                 </>}
                                                             </MenuList>
                                                         </Menu>
-                                                        <Link to="/admin/user">
+                                                        <Link to="/user">
                                                             <Button leftIcon={<IoIosArrowBack />} variant="brand">
                                                                 Back
                                                             </Button>
