@@ -37,16 +37,16 @@ const View = () => {
     const size = "lg";
 
     const contactColumns = [
-        { Header: 'title', accessor: 'title' },
-        { Header: "first Name", accessor: "firstName", },
-        { Header: "last Name", accessor: "lastName", },
-        { Header: "phone Number", accessor: "phoneNumber", },
-        { Header: "Email Address", accessor: "email", },
-        { Header: "physical Address", accessor: "physicalAddress", },
-        { Header: "mailing Address", accessor: "mailingAddress", },
-        { Header: "Contact Method", accessor: "preferredContactMethod", },
-
+        { Header: 'Title', accessor: 'title' },
+        { Header: "First Name", accessor: "firstName" },
+        { Header: "Last Name", accessor: "lastName" },
+        { Header: "Phone Number", accessor: "phoneNumber" },
+        { Header: "Email Address", accessor: "email" },
+        { Header: "Contact Method", accessor: "preferredContactMethod" },
     ];
+
+    const [dynamicColumns, setDynamicColumns] = useState([...contactColumns]);
+    const [selectedColumns, setSelectedColumns] = useState([...contactColumns]);
 
     const [addEmailHistory, setAddEmailHistory] = useState(false);
     const [addPhoneCall, setAddPhoneCall] = useState(false);
@@ -63,6 +63,9 @@ const View = () => {
     }, [action])
 
     const permission = HasAccess('property');
+    const contactAccess = HasAccess('contacts');
+    const emailAccess = HasAccess('email');
+    const callAccess = HasAccess('call');
 
     return (
         <>
@@ -366,7 +369,7 @@ const View = () => {
                                                         </Box>
                                                         <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                                             <GridItem colSpan={{ base: 2 }}>
-                                                                <CheckTable columnsData={contactColumns} tableData={filteredContacts} />
+                                                                <CheckTable columnsData={contactColumns} tableData={filteredContacts} dynamicColumns={dynamicColumns} setDynamicColumns={setDynamicColumns} selectedColumns={selectedColumns} setSelectedColumns={setSelectedColumns} access={contactAccess} emailAccess={emailAccess} callAccess={callAccess} isHide={true} />
                                                             </GridItem>
                                                         </Grid>
                                                     </GridItem>
