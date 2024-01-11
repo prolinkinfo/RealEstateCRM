@@ -58,7 +58,7 @@ const PropertyModel = (props) => {
         <Modal onClose={onClose} size='full' isOpen={isOpen} >
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Select Intrasted Property</ModalHeader>
+                <ModalHeader>Select Interested Property</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     {isLoding ?

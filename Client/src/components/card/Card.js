@@ -9,5 +9,4 @@ function Card(props) {
     </Box>
   );
 }
-
 export default Card;
