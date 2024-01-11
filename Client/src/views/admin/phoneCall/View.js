@@ -70,9 +70,9 @@ const View = () => {
                                             <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Create to </Text>
                                             {data?.createBy ?
                                                 <Link to={`/contactView/${data?.createBy}`}>
-                                                    <Text color={contactAccess?.view ? 'green.400' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }}>{data?.createByName ? data?.createByName : ' - '}</Text>
+                                                    <Text color={contactAccess?.view ? 'brand.600' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }}>{data?.createByName ? data?.createByName : ' - '}</Text>
                                                 </Link> : <Link to={`/leadView/${data?.createByLead}`}>
-                                                    <Text color={leadAccess?.view ? 'green.400' : 'blackAlpha.900'} sx={{ '&:hover': { color: leadAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: leadAccess?.view ? 'underline' : 'none' } }}>{data?.createByName ? data?.createByName : ' - '}</Text>
+                                                    <Text color={leadAccess?.view ? 'brand.600' : 'blackAlpha.900'} sx={{ '&:hover': { color: leadAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: leadAccess?.view ? 'underline' : 'none' } }}>{data?.createByName ? data?.createByName : ' - '}</Text>
                                                 </Link>
                                             }
                                         </GridItem>
