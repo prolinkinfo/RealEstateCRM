@@ -23,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 import { getApi } from "services/api";
 import ReportChart from "../reports/components/reportChart";
 import Chart from "../reports/components/chart";
+import { HasAccess } from "../../../redux/accessUtils";
 
 export default function UserReports() {
   // Chakra Color Mode

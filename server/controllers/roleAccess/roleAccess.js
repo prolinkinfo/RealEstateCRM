@@ -25,49 +25,49 @@ const add = async (req, res) => {
 
             const access = [
                 {
-                    title: 'email',
+                    title: 'Email',
                     create: false,
                     update: false,
                     delete: false,
                     view: false
                 },
                 {
-                    title: 'call',
+                    title: 'Call',
                     create: false,
                     update: false,
                     delete: false,
                     view: false
                 },
                 {
-                    title: 'meeting',
+                    title: 'Meeting',
                     create: false,
                     update: false,
                     delete: false,
                     view: false
                 },
                 {
-                    title: 'task',
+                    title: 'Task',
                     create: false,
                     update: false,
                     delete: false,
                     view: false
                 },
                 {
-                    title: 'property',
+                    title: 'Property',
                     create: false,
                     update: false,
                     delete: false,
                     view: false
                 },
                 {
-                    title: 'contacts',
+                    title: 'Contacts',
                     create: false,
                     update: false,
                     delete: false,
                     view: false
                 },
                 {
-                    title: 'lead',
+                    title: 'Lead',
                     create: false,
                     update: false,
                     delete: false,
@@ -75,9 +75,7 @@ const add = async (req, res) => {
                 },
             ];
 
-            const capitalizedRoleName = roleName?.trim()?.charAt(0)?.toUpperCase() + roleName?.trim()?.slice(1);
-
-            const role = new RoleAccess({ roleName: capitalizedRoleName, description, access, createdDate });
+            const role = new RoleAccess({ roleName: roleName, description, access, createdDate });
             await role.save();
             return res.status(200).json({ message: `${roleName} Role created successfully` });
         }

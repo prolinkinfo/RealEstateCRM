@@ -65,13 +65,13 @@ const View = () => {
     const [addEmailHistory, setAddEmailHistory] = useState(false);
     const [addPhoneCall, setAddPhoneCall] = useState(false);
 
-    const permission = HasAccess('lead');
-    const taskPermission = HasAccess('task');
-    const meetingPermission = HasAccess('meeting');
-    const callAccess = HasAccess('call');
-    const emailAccess = HasAccess('email');
-    const taskAccess = HasAccess('task');
-    const meetingAccess = HasAccess('meeting');
+    const permission = HasAccess('Lead');
+    const taskPermission = HasAccess('Task');
+    const meetingPermission = HasAccess('Meeting');
+    const callAccess = HasAccess('Call');
+    const emailAccess = HasAccess('Email');
+    const taskAccess = HasAccess('Task');
+    const meetingAccess = HasAccess('Meeting');
 
     const columnsDataColumns = [
         { Header: "sender", accessor: "senderName", },

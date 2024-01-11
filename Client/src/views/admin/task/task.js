@@ -33,7 +33,7 @@ const Task = (props) => {
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
 
-    const permission = HasAccess('task')
+    const permission = HasAccess('Task')
 
     const fetchData = async () => {
         setIsLoding(true)

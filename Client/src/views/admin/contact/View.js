@@ -59,11 +59,11 @@ const View = () => {
     const size = "lg";
     const navigate = useNavigate()
 
-    const permission = HasAccess('contacts');
-    const callAccess = HasAccess('call');
-    const emailAccess = HasAccess('email');
-    const taskAccess = HasAccess('task');
-    const meetingAccess = HasAccess('meeting');
+    const permission = HasAccess('Contacts');
+    const callAccess = HasAccess('Call');
+    const emailAccess = HasAccess('Email');
+    const taskAccess = HasAccess('Task');
+    const meetingAccess = HasAccess('Meeting');
 
     const columnsDataColumns = [
         { Header: "sender", accessor: "senderName", },
