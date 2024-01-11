@@ -15,8 +15,6 @@ import { FaCalendarAlt, FaRupeeSign, FaTasks } from "react-icons/fa";
 import { LuBuilding2 } from "react-icons/lu";
 import { PiPhoneCallBold } from "react-icons/pi";
 import { FaCreativeCommonsBy } from "react-icons/fa";
-
-import { LiaCriticalRole } from "react-icons/lia";
 import { SiGooglemeet } from "react-icons/si";
 import { ROLE_PATH } from "./roles";
 
