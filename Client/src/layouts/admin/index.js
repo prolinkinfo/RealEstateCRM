@@ -18,7 +18,7 @@ export default function Dashboard(props) {
 	// states and functions
 	const [fixed] = useState(false);
 	const [toggleSidebar, setToggleSidebar] = useState(false);
-	const [openSidebar, setOpenSidebar] = useState(true)
+	const [openSidebar, setOpenSidebar] = useState(false)
 	const user = JSON.parse(localStorage.getItem("user"))
 
 	// functions for changing the states from components
