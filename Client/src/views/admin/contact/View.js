@@ -31,7 +31,8 @@ import PhoneCall from "./components/phonCall";
 import PropertyModel from "./components/propertyModel";
 import PropertyTable from "./components/propertyTable";
 import { HasAccess } from "../../../redux/accessUtils";
-
+import MeetingColumnsTable from "../meeting/components/ColumnsTable";
+import TaskColumnsTable from "../task/components/ColumnsTable";
 
 const View = () => {
 
@@ -81,14 +82,12 @@ const View = () => {
     ];
 
     const MeetingColumns = [
-        { Header: "#", accessor: "_id", isSortable: false, width: 10 },
         { Header: 'agenda', accessor: 'agenda' },
         { Header: "date Time", accessor: "dateTime", },
         { Header: "times tamp", accessor: "timestamp", },
         { Header: "create By", accessor: "createdByName", },
     ];
     const taskColumns = [
-        { Header: "#", accessor: "_id", isSortable: false, width: 5 },
         { Header: 'Title', accessor: 'title' },
         { Header: "Category", accessor: "category", },
         { Header: "Assignment To", accessor: "assignmentToName", },
@@ -527,13 +526,13 @@ const View = () => {
                                             </GridItem>}
                                             {meetingAccess?.view && <GridItem colSpan={{ base: 12, sm: 6 }}>
                                                 <Card overflow={'scroll'}>
-                                                    {data?.meetingHistory.length > 0 ? <MeetingTable className='table-container' fetchData={fetchData} setMeeting={setMeeting} columnsData={MeetingColumns} data={data?.meetingHistory} title={'Meeting '} /> : meetingAccess?.create && <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>}
+                                                    {data?.meetingHistory?.length > 0 ? <MeetingColumnsTable fetchData={fetchData} columnsData={MeetingColumns} lead='true' tableData={data?.meetingHistory} title={'Meeting '} action={action} setAction={setAction} access={meetingAccess} /> : meetingAccess?.create && <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>}
                                                     <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="contact" id={param.id} />
                                                 </Card>
                                             </GridItem>}
                                             {taskAccess?.view && <GridItem colSpan={{ base: 12, sm: 6 }}>
                                                 <Card overflow={'scroll'}>
-                                                    {data?.task.length > 0 ? <TaskTable fetchData={fetchData} className='table-container' setTaskModel={setTaskModel} columnsData={taskColumns} data={data?.task} title={'Task '} /> : taskAccess?.create && <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>}
+                                                    {data?.task?.length > 0 ? <TaskColumnsTable fetchData={fetchData} columnsData={taskColumns} lead='true' tableData={data?.task} title={'Task '} action={action} setAction={setAction} access={taskAccess} /> : taskAccess?.create && <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>}
                                                     <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="contact" id={param.id} />
                                                 </Card>
                                             </GridItem>}
