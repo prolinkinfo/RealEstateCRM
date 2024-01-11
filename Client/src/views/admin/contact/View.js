@@ -59,11 +59,11 @@ const View = () => {
     const size = "lg";
     const navigate = useNavigate()
 
-    const permission = HasAccess('contacts');
-    const callAccess = HasAccess('call');
-    const emailAccess = HasAccess('email');
-    const taskAccess = HasAccess('task');
-    const meetingAccess = HasAccess('meeting');
+    const permission = HasAccess('Contacts');
+    const callAccess = HasAccess('Call');
+    const emailAccess = HasAccess('Email');
+    const taskAccess = HasAccess('Task');
+    const meetingAccess = HasAccess('Meeting');
 
     const columnsDataColumns = [
         { Header: "sender", accessor: "senderName", },
@@ -251,7 +251,7 @@ const View = () => {
                                                         <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
                                                             Phone Number
                                                         </Text>
-                                                        {callAccess?.create ? <Text onClick={() => setAddPhoneCall(true)} color='green.400' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.phoneNumber ? data?.phoneNumber : 'N/A'}</Text> : <Text>{data?.phoneNumber ? data?.phoneNumber : 'N/A'}</Text>}
+                                                        {callAccess?.create ? <Text onClick={() => setAddPhoneCall(true)} color='brand.600' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.phoneNumber ? data?.phoneNumber : 'N/A'}</Text> : <Text>{data?.phoneNumber ? data?.phoneNumber : 'N/A'}</Text>}
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                                         <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
@@ -263,7 +263,7 @@ const View = () => {
                                                         <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
                                                             Email Address
                                                         </Text>
-                                                        {emailAccess?.create ? <Text onClick={() => setAddEmailHistory(true)} color='green.400' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.email ? data?.email : 'N/A'}</Text> : <Text>{data?.email ? data?.email : 'N/A'}</Text>}
+                                                        {emailAccess?.create ? <Text onClick={() => setAddEmailHistory(true)} color='brand.600' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.email ? data?.email : 'N/A'}</Text> : <Text>{data?.email ? data?.email : 'N/A'}</Text>}
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2 }}>
                                                         <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">

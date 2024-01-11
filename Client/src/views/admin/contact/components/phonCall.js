@@ -147,7 +147,7 @@ export default function PhoneCall(props) {
                             <Text
                               me='10px'
                               sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                              color='green.400'
+                              color='brand.600'
                               fontSize='sm'
                               fontWeight='700'>
                               {cell?.value}

@@ -94,8 +94,8 @@ export default function CheckTable(props) {
     { Header: "Created", accessor: "timestamp" }
   ];
 
-  const contactAccess = HasAccess('contacts')
-  const leadAccess = HasAccess('lead')
+  const contactAccess = HasAccess('Contacts')
+  const leadAccess = HasAccess('Lead')
 
   const toggleColumnVisibility = (columnKey) => {
     const isColumnSelected = tempSelectedColumns.some((column) => column.Header === columnKey);
@@ -338,7 +338,7 @@ export default function CheckTable(props) {
               </MenuList>
             </Menu>
             <GridItem colStart={6} textAlign={"right"}>
-              {access?.create && <Button onClick={() => handleClick()} variant="brand">Add Call</Button>}
+              {access?.create && <Button size="sm" onClick={() => handleClick()} variant="brand">Add Call</Button>}
             </GridItem>
           </GridItem>
           <HStack spacing={4}>

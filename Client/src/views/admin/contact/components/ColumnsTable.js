@@ -153,7 +153,7 @@ export default function ColumnsTable(props) {
                         <Flex align='center'>
                           <Link to={`/Email/${cell?.row?.original._id}`}>
                             <Text sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                              color='green.400' fontSize='sm' fontWeight='700'>
+                              color='brand.600' fontSize='sm' fontWeight='700'>
                               {cell?.value}
                             </Text>
                           </Link>

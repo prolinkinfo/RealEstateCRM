@@ -146,7 +146,7 @@ export default function ColumnsTable(props) {
                                         if (cell?.column.Header === "Title") {
                                             data = (
                                                 <Text sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                                                    color='green.400' fontSize='sm' fontWeight='700' onClick={() => handleDateClick(cell)}>
+                                                    color='brand.600' fontSize='sm' fontWeight='700' onClick={() => handleDateClick(cell)}>
                                                     {cell?.value}
                                                 </Text>
                                             );

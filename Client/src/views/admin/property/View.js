@@ -62,10 +62,10 @@ const View = () => {
         fetchData()
     }, [action])
 
-    const permission = HasAccess('property');
-    const contactAccess = HasAccess('contacts');
-    const emailAccess = HasAccess('email');
-    const callAccess = HasAccess('call');
+    const permission = HasAccess('Property');
+    const contactAccess = HasAccess('Contacts');
+    const emailAccess = HasAccess('Email');
+    const callAccess = HasAccess('Call');
 
     return (
         <>

@@ -44,7 +44,7 @@ const Index = () => {
     useEffect(() => {
         setColumns(tableColumns)
     }, [onClose])
-    const permission = HasAccess('property');
+    const permission = HasAccess('Property');
 
     return (
         <div>

@@ -33,9 +33,9 @@ const Index = () => {
 
     const user = JSON.parse(localStorage.getItem("user"))
 
-    const permission = HasAccess('contacts');
-    const emailAccess = HasAccess('email')
-    const callAccess = HasAccess('call')
+    const permission = HasAccess('Contacts');
+    const emailAccess = HasAccess('Email')
+    const callAccess = HasAccess('Call')
 
     const fetchData = async () => {
         setIsLoding(true)
