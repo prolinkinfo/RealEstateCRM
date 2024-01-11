@@ -43,9 +43,17 @@ const View = () => {
                                 <Grid templateColumns={{ base: "1fr" }} gap={4}>
                                     <GridItem colSpan={2}>
                                         <Box>
-                                            <Heading size="md" mb={3}>
-                                                Call View page
-                                            </Heading>
+                                            <Box display={"flex"} justifyContent={"space-between"}>
+                                                <Heading size="md" mb={3}>
+                                                    Call View page
+                                                </Heading>
+                                                <Link to="/phone-call" >
+                                                    <Button mb={"5px"} size="sm" leftIcon={<IoIosArrowBack />} variant="brand">
+                                                        Back
+                                                    </Button>
+                                                </Link>
+
+                                            </Box>
                                             <HSeparator />
                                         </Box>
                                     </GridItem>

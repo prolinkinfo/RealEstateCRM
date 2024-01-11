@@ -173,7 +173,7 @@ export default function Dashboard(props) {
 						</Portal>
 						<Box pt={{ base: "150px", md: "95px", xl: "95px" }}>
 							{getRoute() ? (
-								<Box mx='auto' p={{ base: '20px', md: '30px' }} pe='20px' minH='84vh' pt='50px'>
+								<Box mx='auto' p={{ base: '8px 20px', md: '8px 20px' }} pe='20px' minH='84vh' pt='50px'>
 									<Suspense fallback={
 										<Flex justifyContent={'center'} alignItems={'center'} width="100%" >
 											<Spinner />

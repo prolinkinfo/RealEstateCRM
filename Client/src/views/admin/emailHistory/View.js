@@ -42,7 +42,7 @@ const View = () => {
                     <Spinner />
                 </Flex> : <>
 
-                    <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
+                    {/* <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
                         <GridItem colStart={6} >
                             <Flex justifyContent={'right'} >
                                 <Link to={"/email"}>
@@ -52,7 +52,7 @@ const View = () => {
                                 </Link>
                             </Flex>
                         </GridItem>
-                    </Grid>
+                    </Grid> */}
 
 
                     <Grid templateColumns="repeat(4, 1fr)" gap={3}>
@@ -63,9 +63,16 @@ const View = () => {
                                 <Grid templateColumns={{ base: "1fr" }} gap={4}>
                                     <GridItem colSpan={2}>
                                         <Box>
-                                            <Heading size="md" mb={3}>
-                                                Email View page
-                                            </Heading>
+                                            <Box display={"flex"} justifyContent={"space-between"}>
+                                                <Heading size="md" mb={3}>
+                                                    Email View page
+                                                </Heading>
+                                                <Link to={"/email"}>
+                                                    <Button mb={"5px"} size="sm" leftIcon={<IoIosArrowBack />} variant="brand">
+                                                        Back
+                                                    </Button>
+                                                </Link>
+                                            </Box>
                                             <HSeparator />
                                         </Box>
                                     </GridItem>
