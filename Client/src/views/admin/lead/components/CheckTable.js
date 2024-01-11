@@ -439,7 +439,7 @@ export default function CheckTable(props) {
                                 // fontWeight="500"
                                 fontWeight="700"
                               >
-                                {cell?.value}
+                                {cell?.value.charAt(0).toUpperCase() + cell?.value.slice(1)}
                               </Text>
                             </Link> :
                               <Text
@@ -448,7 +448,7 @@ export default function CheckTable(props) {
                                 // fontWeight="500"
                                 fontWeight="700"
                               >
-                                {cell?.value}
+                                {cell?.value.charAt(0).toUpperCase() + cell?.value.slice(1)}
                               </Text>
                           );
                         } else if (cell?.column.Header === "Email") {
