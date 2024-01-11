@@ -65,9 +65,9 @@ const AddMeeting = (props) => {
 
     const fetchAllData = async () => {
         let result
-        if (values.related === "contact") {
+        if (values.related === "Contact") {
             result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
-        } else if (values.related === "lead") {
+        } else if (values.related === "Lead") {
             result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
         }
         setData(result?.data);
@@ -84,7 +84,7 @@ const AddMeeting = (props) => {
     const countriesWithEmailAsLabel = data?.map((item) => ({
         ...item,
         value: item._id,
-        label: values.related === "contact" ? `${item.firstName} ${item.lastName}` : item.leadName,
+        label: values.related === "Contact" ? `${item.firstName} ${item.lastName}` : item.leadName,
     }));
 
     return (
@@ -121,8 +121,8 @@ const AddMeeting = (props) => {
                             </FormLabel>
                             <RadioGroup onChange={(e) => setFieldValue('related', e)} value={values.related}>
                                 <Stack direction='row'>
-                                    <Radio value='contact'>Contact</Radio>
-                                    <Radio value='lead'>Lead</Radio>
+                                    <Radio value='Contact'>Contact</Radio>
+                                    <Radio value='Lead'>Lead</Radio>
                                 </Stack>
                             </RadioGroup>
                             <Text mb='10px' color={'red'}> {errors.related && touched.related && errors.related}</Text>
@@ -132,18 +132,18 @@ const AddMeeting = (props) => {
                                 <Flex alignItems={'end'} justifyContent={'space-between'} >
                                     <Text w={'100%'} >
                                         <CUIAutoComplete
-                                            label={`Choose Preferred Attendes ${values.related === "contact" ? "Contact" : values.related === "lead" && "Lead"}`}
+                                            label={`Choose Preferred Attendes ${values.related === "Contact" ? "Contact" : values.related === "Lead" && "Lead"}`}
                                             placeholder="Type a Name"
                                             name="attendes"
                                             items={countriesWithEmailAsLabel}
-                                            selectedItems={countriesWithEmailAsLabel?.filter((item) => values.related === "contact" ? values?.attendes.includes(item._id) : values.related === "lead" && values?.attendesLead.includes(item._id))}
+                                            selectedItems={countriesWithEmailAsLabel?.filter((item) => values.related === "Contact" ? values?.attendes.includes(item._id) : values.related === "Lead" && values?.attendesLead.includes(item._id))}
                                             onSelectedItemsChange={(changes) => {
                                                 const selectedLabels = extractLabels(changes.selectedItems);
-                                                values.related === "contact" ? setFieldValue('attendes', selectedLabels) : values.related === "lead" && setFieldValue('attendesLead', selectedLabels)
+                                                values.related === "Contact" ? setFieldValue('attendes', selectedLabels) : values.related === "Lead" && setFieldValue('attendesLead', selectedLabels)
                                             }}
                                         />
                                     </Text>
-                                    <IconButton mb={6} onClick={() => values.related === "contact" ? setContactModel(true) : values.related === "lead" && setLeadModel(true)} fontSize='25px' icon={<LiaMousePointerSolid />} />
+                                    <IconButton mb={6} onClick={() => values.related === "Contact" ? setContactModel(true) : values.related === "Lead" && setLeadModel(true)} fontSize='25px' icon={<LiaMousePointerSolid />} />
                                 </Flex>
                                 <Text color={'red'}> {errors.attendes && touched.attendes && errors.attendes}</Text>
                             </GridItem>

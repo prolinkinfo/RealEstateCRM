@@ -61,9 +61,9 @@ const AddPhoneCall = (props) => {
         values.start = props?.date
         try {
             let result
-            if (values.category === "contact") {
+            if (values.category === "Contact") {
                 result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
-            } else if (values.category === "lead") {
+            } else if (values.category === "Lead") {
                 result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
             }
             setAssignmentToData(result?.data)
@@ -112,14 +112,14 @@ const AddPhoneCall = (props) => {
                             </FormLabel>
                             <RadioGroup onChange={(e) => { setFieldValue('category', e); setFieldValue('createBy', ''); setFieldValue('createByLead', ''); }} value={values.category}>
                                 <Stack direction='row'>
-                                    <Radio value='contact'>Contact</Radio>
-                                    <Radio value='lead'>Lead</Radio>
+                                    <Radio value='Contact'>Contact</Radio>
+                                    <Radio value='Lead'>Lead</Radio>
                                 </Stack>
                             </RadioGroup>
                             <Text mb='10px' color={'red'}> {errors.category && touched.category && errors.category}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
-                            {values.category === "contact" ?
+                            {values.category === "Contact" ?
                                 <>
                                     <GridItem colSpan={{ base: 12, md: 6 }} >
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -136,7 +136,7 @@ const AddPhoneCall = (props) => {
                                                 borderColor={errors.createBy && touched.createBy ? "red.300" : null}
                                             >
                                                 {assignmentToData?.map((item) => {
-                                                    return <option value={item._id} key={item._id}>{values.category === 'contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
+                                                    return <option value={item._id} key={item._id}>{values.category === 'Contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
                                                 })}
                                             </Select>
                                             <IconButton onClick={() => setContactModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
@@ -144,7 +144,7 @@ const AddPhoneCall = (props) => {
                                         <Text mb='10px' color={'red'}> {errors.createBy && touched.createBy && errors.createBy}</Text>
                                     </GridItem>
                                 </>
-                                : values.category === "lead" ?
+                                : values.category === "Lead" ?
                                     <>
                                         <GridItem colSpan={{ base: 12, md: 6 }} >
 
@@ -162,7 +162,7 @@ const AddPhoneCall = (props) => {
                                                     borderColor={errors.createByLead && touched.createByLead ? "red.300" : null}
                                                 >
                                                     {assignmentToData?.map((item) => {
-                                                        return <option value={item._id} key={item._id}>{values.category === 'contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
+                                                        return <option value={item._id} key={item._id}>{values.category === 'Contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
                                                     })}
                                                 </Select>
                                                 <IconButton onClick={() => setLeadModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
