@@ -22,7 +22,7 @@ const AddTask = (props) => {
 
     const initialValues = {
         title: '',
-        category: props.from === 'contact' ? 'contact' : props.from === 'lead' ? 'lead' : 'None',
+        category: props.from === 'Contact' ? 'Contact' : props.from === 'Lead' ? 'Lead' : 'None',
         description: '',
         notes: '',
         assignmentTo: props.from === 'contact' && props.id ? props.id : '',
@@ -69,9 +69,9 @@ const AddTask = (props) => {
         values.start = props?.date
         try {
             let result
-            if (values.category === "contact") {
+            if (values.category === "Contact") {
                 result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
-            } else if (values.category === "lead") {
+            } else if (values.category === "Lead") {
                 result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
             }
             setAssignmentToData(result?.data)
@@ -119,8 +119,8 @@ const AddTask = (props) => {
                             <RadioGroup onChange={(e) => { setFieldValue('category', e); setFieldValue('assignmentTo', null); setFieldValue('assignmentToLead', null); }} value={values.category}>
                                 <Stack direction='row'>
                                     <Radio value='None' >None</Radio>
-                                    <Radio value='contact'>Contact</Radio>
-                                    <Radio value='lead'>Lead</Radio>
+                                    <Radio value='Contact'>Contact</Radio>
+                                    <Radio value='Lead'>Lead</Radio>
                                 </Stack>
                             </RadioGroup>
                             <Text mb='10px' color={'red'}> {errors.category && touched.category && errors.category}</Text>
@@ -141,7 +141,7 @@ const AddTask = (props) => {
                             />
                             <Text mb='10px' color={'red'}> {errors.description && touched.description && errors.description}</Text>
                         </GridItem>
-                        {values.category === "contact" ?
+                        {values.category === "Contact" ?
                             <>
                                 <GridItem colSpan={{ base: 12, md: 6 }} >
                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -158,7 +158,7 @@ const AddTask = (props) => {
                                             borderColor={errors.assignmentTo && touched.assignmentTo ? "red.300" : null}
                                         >
                                             {assignmentToData?.map((item) => {
-                                                return <option value={item._id} key={item._id}>{values.category === 'contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
+                                                return <option value={item._id} key={item._id}>{values.category === 'Contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
                                             })}
                                         </Select>
                                         <IconButton onClick={() => setContactModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
@@ -166,7 +166,7 @@ const AddTask = (props) => {
                                     <Text mb='10px' color={'red'}> {errors.assignmentTo && touched.assignmentTo && errors.assignmentTo}</Text>
                                 </GridItem>
                             </>
-                            : values.category === "lead" ?
+                            : values.category === "Lead" ?
                                 <>
                                     <GridItem colSpan={{ base: 12, md: 6 }} >
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -183,7 +183,7 @@ const AddTask = (props) => {
                                                 borderColor={errors.assignmentToLead && touched.assignmentToLead ? "red.300" : null}
                                             >
                                                 {assignmentToData?.map((item) => {
-                                                    return <option value={item._id} key={item._id}>{values.category === 'contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
+                                                    return <option value={item._id} key={item._id}>{values.category === 'Contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
                                                 })}
                                             </Select>
                                             <IconButton onClick={() => setLeadModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />

@@ -123,7 +123,7 @@ export default function UserReports() {
               }
             />
           }
-          name="property"
+          name="Property"
           value={propertyData?.length || 0}
         />
       </SimpleGrid>

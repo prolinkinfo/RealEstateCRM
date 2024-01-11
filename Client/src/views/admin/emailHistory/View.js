@@ -97,7 +97,7 @@ const View = () => {
                                         </GridItem>
                                         <GridItem colSpan={{ base: 2, md: 1 }}>
                                             <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Realeted To </Text>
-                                            <Text>{data?.createBy ? "contact" : data?.createByLead && "lead"}</Text>
+                                            <Text>{data?.createBy ? "Contact" : data?.createByLead && "Lead"}</Text>
                                         </GridItem>
 
                                         <GridItem colSpan={{ base: 2, md: 1 }}>

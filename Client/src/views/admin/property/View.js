@@ -120,7 +120,7 @@ const View = () => {
                                     },
                                 }} >
                                     <Tab >Information</Tab>
-                                    <Tab>gallery</Tab>
+                                    <Tab>Gallery</Tab>
                                 </TabList>
 
                             </GridItem>
