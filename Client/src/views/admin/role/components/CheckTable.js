@@ -36,7 +36,7 @@ import CountUpComponent from "components/countUpComponent/countUpComponent";
 import Pagination from "components/pagination/Pagination";
 import Spinner from "components/spinner/Spinner";
 import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getApi } from "services/api";
 import ChangeAccess from "../changeAccess";
 import RoleModal from "./roleModal";
@@ -59,7 +59,7 @@ export default function CheckTable(props) {
   // const [data, setData] = useState([])
   const data = useMemo(() => tableData, [tableData]);
   const [addRoleModal, setAddRoleModal] = useState(false);
-
+  const navigate = useNavigate();
   // const fetchData = async () => {
   //   let result = await getApi('api/contact/');
   //   setData(result.data);
@@ -151,6 +151,7 @@ export default function CheckTable(props) {
           </GridItem>
           <GridItem colSpan={4} justifyContent="end" alignItems="center" textAlign="right">
             <Button onClick={() => setAddRoleModal(true)} variant="brand">Add</Button>
+            <Button onClick={() => navigate('/admin-setting')} variant="brand" ml={2}>Back</Button>
           </GridItem>
         </Grid>
 

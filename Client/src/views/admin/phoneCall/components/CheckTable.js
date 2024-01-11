@@ -226,6 +226,8 @@ export default function CheckTable(props) {
           csvColumns.forEach((property) => {
             if (property.Header === "Realeted To") {
               selectedFieldsData[property.accessor] = rec?.createByLead ? 'lead' : rec.createBy ? 'contact' : '';
+            } else if (property.Header === "Created") {
+              selectedFieldsData[property.accessor] = moment(rec?.timestamp).format('D/MM/YYYY LT');
             } else {
               selectedFieldsData[property.accessor] = rec[property.accessor];
             }
