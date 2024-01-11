@@ -87,13 +87,13 @@ const View = () => {
                                             {data?.related === 'contact' && contactAccess?.view ? data?.attendes && data?.attendes.map((item) => {
                                                 return (
                                                     <Link to={`/contactView/${item._id}`}>
-                                                        <Text color='green.400' sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{item.firstName + ' ' + item.lastName}</Text>
+                                                        <Text color='brand.600' sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{item.firstName + ' ' + item.lastName}</Text>
                                                     </Link>
                                                 )
                                             }) : data?.related === 'lead' && leadAccess?.view ? data?.attendesLead && data?.attendesLead.map((item) => {
                                                 return (
                                                     <Link to={`/leadView/${item._id}`}>
-                                                        <Text color='green.400' sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{item.leadName}</Text>
+                                                        <Text color='brand.600' sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{item.leadName}</Text>
                                                     </Link>
                                                 )
                                             }) : data?.related === 'contact' ? data?.attendes && data?.attendes.map((item) => {

@@ -324,21 +324,23 @@ export default function HeaderLinks(props) {
 								Home
 							</Text>
 						</MenuItem>
-						<MenuItem
-							_hover={{ bg: "none" }}
-							_focus={{ bg: "none" }}
-							borderRadius="8px"
-							px="14px"
-						>
-							<Text
-								fontSize="sm"
-								onClick={() =>
-									navigate('/admin-setting')
-								}
+
+						{loginUser?.role === "superAdmin" &&
+							<MenuItem
+								_hover={{ bg: "none" }}
+								_focus={{ bg: "none" }}
+								borderRadius="8px"
+								px="14px"
 							>
-								Admin Settings
-							</Text>
-						</MenuItem>
+								<Text
+									fontSize="sm"
+									onClick={() =>
+										navigate('/admin-setting')
+									}
+								>
+									Admin Settings
+								</Text>
+							</MenuItem>}
 						<MenuItem
 							_hover={{ bg: "none" }}
 							_focus={{ bg: "none" }}

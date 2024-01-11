@@ -139,7 +139,7 @@ export default function ColumnsTable(props) {
                                         if (cell?.column.Header === "agenda") {
                                             data = (access?.view ?
                                                 <Link to={`/metting/${cell?.row?.original._id}`}>
-                                                    <Text sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }} color='green.400' fontSize='sm' fontWeight='700'>
+                                                    <Text sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }} color='brand.600' fontSize='sm' fontWeight='700'>
                                                         {cell?.value ? cell?.value : ' - '}
                                                     </Text>
                                                 </Link> :
@@ -188,6 +188,6 @@ export default function ColumnsTable(props) {
 
             {data?.length > 5 && <Pagination gotoPage={gotoPage} gopageValue={gopageValue} setGopageValue={setGopageValue} pageCount={pageCount} canPreviousPage={canPreviousPage} previousPage={previousPage} canNextPage={canNextPage} pageOptions={pageOptions} setPageSize={setPageSize} nextPage={nextPage} pageSize={pageSize} pageIndex={pageIndex} />}
 
-        </Card>
+        </Card >
     );
 }
