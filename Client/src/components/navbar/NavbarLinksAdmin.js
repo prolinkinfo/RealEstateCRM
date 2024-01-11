@@ -26,7 +26,7 @@ import { toast } from "react-toastify";
 import jwtDecode from "jwt-decode";
 
 export default function HeaderLinks(props) {
-	const { secondary } = props;
+	const { secondary, setOpenSidebar, openSidebar } = props;
 	// Chakra Color Mode
 	const navbarIcon = useColorModeValue("gray.400", "white");
 	let menuBg = useColorModeValue("white", "navy.800");
@@ -151,7 +151,7 @@ export default function HeaderLinks(props) {
 				</Text>
 			</Flex>
 
-			<SidebarResponsive routes={routes} />
+			<SidebarResponsive routes={routes} setOpenSidebar={setOpenSidebar} openSidebar={openSidebar} />
 
 			<Menu>
 				<MenuButton p="0px">
