@@ -333,6 +333,21 @@ export default function HeaderLinks(props) {
 							<Text
 								fontSize="sm"
 								onClick={() =>
+									navigate('/admin-setting')
+								}
+							>
+								Admin Settings
+							</Text>
+						</MenuItem>
+						<MenuItem
+							_hover={{ bg: "none" }}
+							_focus={{ bg: "none" }}
+							borderRadius="8px"
+							px="14px"
+						>
+							<Text
+								fontSize="sm"
+								onClick={() =>
 									navigate(
 										`/userView/${JSON.parse(localStorage.getItem("user"))?._id}`
 									)
