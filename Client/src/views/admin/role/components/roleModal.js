@@ -111,8 +111,6 @@ function RoleModal(props) {
   const userFetchData = async () => {
     if (_id) {
       let result = await getApi('api/role-access/assignedUsers/', _id);
-      // let result = await getApi('api/user/');
-      console.log(result?.data)
       setUserData(result?.data);
     }
   }
@@ -120,7 +118,6 @@ function RoleModal(props) {
     userFetchData()
   }, [_id])
 
-  console.log(_id, "_id")
   return (
     <>
       <Modal onClose={() => setRoleModal(false)} isOpen={isOpen} isCentered size={"xl"}>
