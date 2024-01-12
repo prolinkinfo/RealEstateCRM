@@ -56,7 +56,7 @@ const edit = async (req, res) => {
 
 const roleAssignedUsers = async (req, res) => {
     try {
-        let result = await User.find({ roles: { $in: [req.params.id] } });
+        let result = await User.find({ roles: { $in: [req.params.id] }, deleted: false });
         res.send(result);
 
     } catch (err) {
@@ -65,4 +65,34 @@ const roleAssignedUsers = async (req, res) => {
     }
 }
 
-module.exports = { index, add, edit, roleAssignedUsers }
+const assignRoleToUsers = async (req, res) => {
+    try {
+        // const updatedUsers = await User.updateMany({ _id: { $in: req.body } }, { $addToSet: { roles: req.params.id } });    // add if not already exist
+        // const updatedUsers2 = await User.updateMany({ _id: { $nin: req.body }, roles: req.params.id }, { $pull: { roles: req.params.id } });      // remove
+
+        const bulkOperations = [];
+
+        bulkOperations.push({
+            updateMany: {
+                filter: { _id: { $in: req.body }, deleted: false },
+                update: { $addToSet: { roles: req.params.id } }
+            }
+        });
+
+        bulkOperations.push({
+            updateMany: {
+                filter: { _id: { $nin: req.body }, deleted: false },
+                update: { $pull: { roles: req.params.id } }
+            }
+        });
+
+        const result = await User.bulkWrite(bulkOperations);
+        return res.send({ message: "Role changed successfully", result });
+
+    } catch (err) {
+        console.error('Error :', err);
+        res.status(400).json({ err, error: 'Something wents wrong' });
+    }
+}
+
+module.exports = { index, add, edit, roleAssignedUsers, assignRoleToUsers }
