@@ -57,6 +57,7 @@ import { useFormik } from "formik";
 import * as yup from "yup"
 import { BsColumnsGap } from "react-icons/bs";
 import { CiMenuKebab } from "react-icons/ci";
+import { IoIosArrowBack } from "react-icons/io";
 
 
 export default function CheckTable(props) {
@@ -256,8 +257,8 @@ export default function CheckTable(props) {
                 <MenuItem width={"165px"} onClick={() => handleExportLeads('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem> */}
               </MenuList>
             </Menu>
-            <Button onClick={() => handleClick()} variant="brand">Add</Button>
-            <Button onClick={() => navigate('/admin-setting')} variant="brand" ml={2}>Back</Button>
+            <Button onClick={() => handleClick()} variant="brand" size="sm">Add</Button>
+            <Button onClick={() => navigate('/admin-setting')} variant="brand" size="sm" leftIcon={<IoIosArrowBack />} ml={2}>Back</Button>
           </GridItem>
           <HStack spacing={4}>
             {getTagValues && getTagValues.map((item) => (
