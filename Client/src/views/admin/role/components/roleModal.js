@@ -30,7 +30,7 @@ import {
   useTable,
 } from "react-table";
 import { useFormik } from "formik";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { putApi } from "services/api";
 import ChangeAccess from "../changeAccess";
 
@@ -57,7 +57,7 @@ function RoleModal(props) {
   const [isLoding, setIsLoding] = useState(false);
 
   const [editModal, setEditModal] = useState(false);
-  const [selectedId, setSelectedId] = useState();
+  const [openUser, setOpenUser] = useState();
   const [gopageValue, setGopageValue] = useState();
   const data = useMemo(() => tableData, [tableData]);
   const user = JSON.parse(localStorage.getItem("user"));
@@ -100,8 +100,21 @@ function RoleModal(props) {
       <Modal onClose={() => setRoleModal(false)} isOpen={isOpen} isCentered size={"xl"}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{name} Access</ModalHeader>
-          <ModalCloseButton />
+          <ModalHeader>
+            <Flex justifyContent={'space-between'}>
+              <Text>{name} Access</Text>
+              <Text style={{
+                marginRight: "20px",
+                fontSize: "15px",
+                fontWeight: "700",
+                marginTop: '5px',
+                color: 'blue',
+                cursor: 'pointer',
+                textDecoration: 'underline'
+              }} onClick={() => setOpenUser(true)}>View user's in {name} role</Text>
+              <ModalCloseButton mt='2' />
+            </Flex>
+          </ModalHeader>
           <ModalBody>
             <Table>
               <Thead>

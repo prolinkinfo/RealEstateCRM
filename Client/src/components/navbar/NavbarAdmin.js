@@ -26,7 +26,7 @@ export default function AdminNavbar(props) {
 	let navbarShadow = 'none';
 	let navbarBg = useColorModeValue('#fff', 'rgba(11,20,55,0.5)');
 	let navbarBorder = 'transparent';
-	let secondaryMargin = '0px';
+	let secondaryMargin = '-2px';
 	let paddingX = '15px';
 	let gap = '0px';
 	let size = "sm";
