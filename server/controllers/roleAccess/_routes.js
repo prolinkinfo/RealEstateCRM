@@ -5,6 +5,7 @@ const auth = require('../../middelwares/auth');
 const router = express.Router();
 
 router.get('/', auth, roleAccess.index)
+router.get("/assignedUsers/:id", auth, roleAccess.roleAssignedUsers)
 router.post("/add", auth, roleAccess.add)
 router.put('/edit/:id', auth, roleAccess.edit)
 

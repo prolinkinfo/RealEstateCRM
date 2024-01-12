@@ -1,4 +1,5 @@
-const RoleAccess = require('../../model/schema/roleAccess')
+const RoleAccess = require('../../model/schema/roleAccess');
+const User = require('../../model/schema/user');
 
 const index = async (req, res) => {
     try {
@@ -6,8 +7,8 @@ const index = async (req, res) => {
         let result = await RoleAccess.find(query);
         res.send(result);
     } catch (err) {
-        console.error('Failed :', err);
-        res.status(400).json({ err, error: 'Failed ' });
+        console.error('Error :', err);
+        res.status(400).json({ err, error: 'Something wents wrong' });
     }
 }
 
@@ -53,4 +54,15 @@ const edit = async (req, res) => {
     }
 }
 
-module.exports = { index, add, edit }
+const roleAssignedUsers = async (req, res) => {
+    try {
+        let result = await User.find({ roles: { $in: [req.params.id] } });
+        res.send(result);
+
+    } catch (err) {
+        console.error('Error :', err);
+        res.status(400).json({ err, error: 'Something wents wrong' });
+    }
+}
+
+module.exports = { index, add, edit, roleAssignedUsers }
