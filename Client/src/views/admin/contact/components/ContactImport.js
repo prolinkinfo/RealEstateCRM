@@ -175,7 +175,7 @@ function ContactImport() {
             }
         } catch (e) {
             console.error(e);
-            toast.success(`Contacts import failed`)
+            toast.error(`Contacts import failed`)
             resetForm();
             navigate('/contacts');
         }
@@ -195,10 +195,15 @@ function ContactImport() {
                     header: true,
                 });
                 const parsedData = csv?.data;
-                setImportedFileData(parsedData);
 
-                const fileHeadingFields = Object.keys(parsedData[0]);
-                setImportedFileFields(fileHeadingFields);
+                if (parsedData && parsedData.length > 0) {
+                    setImportedFileData(parsedData);
+                    const fileHeadingFields = Object.keys(parsedData[0]);
+                    setImportedFileFields(fileHeadingFields);
+                } else {
+                    toast.error("Empty or invalid CSV file");
+                    navigate("/contacts");
+                }
 
             } else if (extension === 'xlsx') {
                 const data = new Uint8Array(target.result);
@@ -219,8 +224,13 @@ function ContactImport() {
                 });
                 setImportedFileData(jsonData);
 
-                const fileHeadingFields = Object.keys(jsonData[0]);
-                setImportedFileFields(fileHeadingFields);
+                if (jsonData && jsonData.length > 0) {
+                    const fileHeadingFields = Object.keys(jsonData[0]);
+                    setImportedFileFields(fileHeadingFields);
+                } else {
+                    toast.error("Empty or invalid XLSX file");
+                    navigate("/contacts");
+                }
             }
         };
 

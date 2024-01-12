@@ -179,7 +179,7 @@ function PropertyImport() {
             }
         } catch (e) {
             console.error(e);
-            toast.success(`Properties import failed`)
+            toast.error(`Properties import failed`)
             resetForm();
             navigate('/properties');
         }
@@ -199,10 +199,15 @@ function PropertyImport() {
                     header: true,
                 });
                 const parsedData = csv?.data;
-                setImportedFileData(parsedData);
 
-                const fileHeadingFields = Object.keys(parsedData[0]);
-                setImportedFileFields(fileHeadingFields);
+                if (parsedData && parsedData.length > 0) {
+                    setImportedFileData(parsedData);
+                    const fileHeadingFields = Object.keys(parsedData[0]);
+                    setImportedFileFields(fileHeadingFields);
+                } else {
+                    toast.error("Empty or invalid CSV file");
+                    navigate("/properties");
+                }
 
             } else if (extension === 'xlsx') {
                 const data = new Uint8Array(target.result);
@@ -223,8 +228,13 @@ function PropertyImport() {
                 });
                 setImportedFileData(jsonData);
 
-                const fileHeadingFields = Object.keys(jsonData[0]);
-                setImportedFileFields(fileHeadingFields);
+                if (jsonData && jsonData.length > 0) {
+                    const fileHeadingFields = Object.keys(jsonData[0]);
+                    setImportedFileFields(fileHeadingFields);
+                } else {
+                    toast.error("Empty or invalid XLSX file");
+                    navigate("/properties");
+                }
             }
         };
 

@@ -146,7 +146,7 @@ function LeadImport() {
             }
         } catch (e) {
             console.error(e);
-            toast.success(`Leads import failed`)
+            toast.error(`Leads import failed`)
             resetForm();
             navigate('/lead');
         }
@@ -166,10 +166,15 @@ function LeadImport() {
                     header: true,
                 });
                 const parsedData = csv?.data;
-                setImportedFileData(parsedData);
 
-                const fileHeadingFields = Object.keys(parsedData[0]);
-                setImportedFileFields(fileHeadingFields);
+                if (parsedData && parsedData.length > 0) {
+                    setImportedFileData(parsedData);
+                    const fileHeadingFields = Object.keys(parsedData[0]);
+                    setImportedFileFields(fileHeadingFields);
+                } else {
+                    toast.error("Empty or invalid CSV file");
+                    navigate("/lead");
+                }
 
             } else if (extension === 'xlsx') {
                 const data = new Uint8Array(target.result);
@@ -190,8 +195,13 @@ function LeadImport() {
                 });
                 setImportedFileData(jsonData);
 
-                const fileHeadingFields = Object.keys(jsonData[0]);
-                setImportedFileFields(fileHeadingFields);
+                if (jsonData && jsonData.length > 0) {
+                    const fileHeadingFields = Object.keys(jsonData[0]);
+                    setImportedFileFields(fileHeadingFields);
+                } else {
+                    toast.error("Empty or invalid XLSX file");
+                    navigate("/lead");
+                }
             }
         };
 
