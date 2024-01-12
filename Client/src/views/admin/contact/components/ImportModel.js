@@ -31,7 +31,7 @@ const ImportModal = (props) => {
 
             if (values.contact) {
                 onClose();
-                navigate('/admin/contactImport', { state: { fileData: values.contact } });
+                navigate('/contactImport', { state: { fileData: values.contact } });
             }
 
         } catch (e) {

@@ -1,4 +1,5 @@
-const RoleAccess = require('../../model/schema/roleAccess')
+const RoleAccess = require('../../model/schema/roleAccess');
+const User = require('../../model/schema/user');
 
 const index = async (req, res) => {
     try {
@@ -6,8 +7,8 @@ const index = async (req, res) => {
         let result = await RoleAccess.find(query);
         res.send(result);
     } catch (err) {
-        console.error('Failed :', err);
-        res.status(400).json({ err, error: 'Failed ' });
+        console.error('Error :', err);
+        res.status(400).json({ err, error: 'Something wents wrong' });
     }
 }
 
@@ -22,58 +23,12 @@ const add = async (req, res) => {
         }
         else {
             const createdDate = new Date();
+            const titles = ['Email', 'Call', 'Meeting', 'Task', 'Property', 'Contacts', 'Lead'];
+            const access = [];
 
-            const access = [
-                {
-                    title: 'Email',
-                    create: false,
-                    update: false,
-                    delete: false,
-                    view: false
-                },
-                {
-                    title: 'Call',
-                    create: false,
-                    update: false,
-                    delete: false,
-                    view: false
-                },
-                {
-                    title: 'Meeting',
-                    create: false,
-                    update: false,
-                    delete: false,
-                    view: false
-                },
-                {
-                    title: 'Task',
-                    create: false,
-                    update: false,
-                    delete: false,
-                    view: false
-                },
-                {
-                    title: 'Property',
-                    create: false,
-                    update: false,
-                    delete: false,
-                    view: false
-                },
-                {
-                    title: 'Contacts',
-                    create: false,
-                    update: false,
-                    delete: false,
-                    view: false
-                },
-                {
-                    title: 'Lead',
-                    create: false,
-                    update: false,
-                    delete: false,
-                    view: false
-                },
-            ];
+            titles?.forEach((item) => {
+                access.push({ title: item, create: false, update: false, delete: false, view: false });
+            })
 
             const role = new RoleAccess({ roleName: roleName, description, access, createdDate });
             await role.save();
@@ -99,4 +54,15 @@ const edit = async (req, res) => {
     }
 }
 
-module.exports = { index, add, edit }
+const roleAssignedUsers = async (req, res) => {
+    try {
+        let result = await User.find({ roles: { $in: [req.params.id] } });
+        res.send(result);
+
+    } catch (err) {
+        console.error('Error :', err);
+        res.status(400).json({ err, error: 'Something wents wrong' });
+    }
+}
+
+module.exports = { index, add, edit, roleAssignedUsers }

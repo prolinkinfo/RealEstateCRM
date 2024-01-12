@@ -32,7 +32,7 @@ const ImportModal = (props) => {
 
             if (values.lead) {
                 onClose();
-                navigate('/admin/leadImport', { state: { fileData: values.lead } });
+                navigate('/leadImport', { state: { fileData: values.lead } });
             }
 
         } catch (e) {
