@@ -31,7 +31,7 @@ const ImportModal = (props) => {
 
             if (values.property) {
                 onClose();
-                navigate('/admin/propertyImport', { state: { fileData: values.property } });
+                navigate('/propertyImport', { state: { fileData: values.property } });
             }
 
         } catch (e) {
