@@ -80,7 +80,7 @@ const View = () => {
                                                 <GridItem colStart={6} >
                                                     <Flex justifyContent={"right"}>
                                                         <Menu>
-                                                            <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
+                                                            <MenuButton variant="outline" colorScheme='blackAlpha' size="sm" va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
                                                                 Actions
                                                             </MenuButton>
                                                             <MenuDivider />
@@ -94,7 +94,7 @@ const View = () => {
                                                             </MenuList>
                                                         </Menu>
                                                         <Link to="/user">
-                                                            <Button leftIcon={<IoIosArrowBack />} variant="brand">
+                                                            <Button leftIcon={<IoIosArrowBack />} variant="brand" size="sm">
                                                                 Back
                                                             </Button>
                                                         </Link>
@@ -141,7 +141,7 @@ const View = () => {
                         <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                             <GridItem colStart={6} >
                                 <Flex justifyContent={"right"}>
-                                    <Button onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button>
+                                    <Button onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" size="sm" colorScheme="green">Edit</Button>
                                     {data?.role !== 'superAdmin' && JSON.parse(localStorage.getItem('user'))?.role === 'superAdmin' && <Button style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>}
                                 </Flex>
                             </GridItem>
