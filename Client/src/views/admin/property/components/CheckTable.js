@@ -264,7 +264,6 @@ export default function CheckTable(props) {
       <Card
         direction="column"
         w="100%"
-        px="0px"
         overflowX={{ sm: "scroll", lg: "hidden" }}
       >
         <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={4} mx={4}>

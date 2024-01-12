@@ -259,7 +259,6 @@ export default function CheckTable(props) {
       <Card
         direction="column"
         w="100%"
-        px="0px"
         overflowX={{ sm: "scroll", lg: "hidden" }}
       >
 
