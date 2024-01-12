@@ -72,9 +72,15 @@ export function SidebarResponsive(props) {
   const { routes, setOpenSidebar, openSidebar } = props;
   // let isWindows = navigator.platform.startsWith("Win");
   //  BRAND
+  const handlesidebarClose = () => {
+    // setOpenSidebar(false)
+    onClose();
+  }
   return (
     <Flex display={{ sm: "flex", xl: "none" }} alignItems='center'>
-      <Flex ref={btnRef} w='max-content' h='max-content' onClick={() => setOpenSidebar(!openSidebar)}>
+      <Flex
+        ref={btnRef}
+        w='max-content' h='max-content' onClick={() => { onOpen(); setOpenSidebar(true) }}>
         <Icon
           as={IoMenuOutline}
           color={menuColor}
@@ -87,15 +93,15 @@ export function SidebarResponsive(props) {
       </Flex>
 
       <Drawer
-        isOpen={openSidebar}
-        onClose={onClose}
+        isOpen={isOpen}
+        onClose={handlesidebarClose}
         placement={document.documentElement.dir === "rtl" ? "right" : "left"}
         finalFocusRef={btnRef}>
         <DrawerOverlay />
         <DrawerContent w='285px' maxW='285px' bg={sidebarBackgroundColor}>
           <DrawerCloseButton
             zIndex='3'
-            onClose={onClose}
+            onClose={handlesidebarClose}
             _focus={{ boxShadow: "none" }}
             _hover={{ boxShadow: "none" }}
           />
@@ -105,7 +111,7 @@ export function SidebarResponsive(props) {
               renderTrackVertical={renderTrack}
               renderThumbVertical={renderThumb}
               renderView={renderView}>
-              <Content routes={routes} openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
+              <Content from={"modal"} routes={routes} openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
             </Scrollbars>
           </DrawerBody>
         </DrawerContent>

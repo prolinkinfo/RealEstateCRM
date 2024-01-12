@@ -33,7 +33,7 @@ export default function Default(props) {
             lineHeight='100%'
             color={textColorSecondary}
             fontSize={{
-              base: "sm",
+              base: props.fontsize ? props.fontsize : "sm",
             }}>
             {name}
           </StatLabel>

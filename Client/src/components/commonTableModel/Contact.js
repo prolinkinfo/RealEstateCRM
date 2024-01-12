@@ -163,17 +163,17 @@ export default function ContactTable(props) {
                       );
                     } else if (cell?.column.Header === "first Name") {
                       data = (
-                        <Link to={`/contactView/${cell?.row?.original._id}`}>
-                          <Text
-                            me="10px"
-                            sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                            color='green.400'
-                            fontSize="sm"
-                            fontWeight="700"
-                          >
-                            {cell?.value}
-                          </Text>
-                        </Link>
+                        // <Link to={`/contactView/${cell?.row?.original._id}`}>
+                        <Text
+                          me="10px"
+                          // sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                          color={textColor}
+                          fontSize="sm"
+                          fontWeight="700"
+                        >
+                          {cell?.value}
+                        </Text>
+                        // </Link>
                       );
                     } else if (cell?.column.Header === "last Name") {
                       data = (

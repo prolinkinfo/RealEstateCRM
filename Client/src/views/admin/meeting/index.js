@@ -41,7 +41,7 @@ const Index = () => {
         setIsLoding(false)
     }
 
-    const permission = HasAccess('meeting')
+    const permission = HasAccess('Meeting')
 
 
     // useEffect(() => {

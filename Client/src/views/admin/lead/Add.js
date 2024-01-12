@@ -54,6 +54,7 @@ const Add = (props) => {
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
 
+
     const AddData = async () => {
         try {
             setIsLoding(true)
@@ -141,7 +142,7 @@ const Add = (props) => {
                                         value={values.leadPhoneNumber}
                                         name="leadPhoneNumber"
                                         fontWeight='500'
-                                        borderColor={errors.title && touched.title ? "red.300" : null}
+                                        borderColor={errors.leadPhoneNumber && touched.leadPhoneNumber ? "red.300" : null}
                                         placeholder="Phone number" borderRadius="16px" />
                                 </InputGroup>
                                 <Text mb='10px' color={'red'}>{errors.leadPhoneNumber && touched.leadPhoneNumber && errors.leadPhoneNumber}</Text>
@@ -196,9 +197,9 @@ const Add = (props) => {
                                     placeholder={'Select Lead Source'}
                                     borderColor={errors.leadStatus && touched.leadStatus ? "red.300" : null}
                                 >
-                                    <option value='active'>active</option>
-                                    <option value='pending'>pending</option>
-                                    <option value='sold'>sold</option>
+                                    <option value='active'>Active</option>
+                                    <option value='pending'>Pending</option>
+                                    <option value='sold'>Sold</option>
                                 </Select>
                                 <Text mb='10px' color={'red'}>{errors.leadStatus && touched.leadStatus && errors.leadStatus}</Text>
                             </GridItem>
@@ -264,7 +265,7 @@ const Add = (props) => {
                             </GridItem>
                             <GridItem colSpan={{ base: 12, sm: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    lead Source Campaign
+                                    Lead Source Campaign
                                 </FormLabel>
                                 <Input
                                     fontSize='sm'

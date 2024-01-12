@@ -13,15 +13,16 @@ import AddTask from './addTask'
 import DeleteTask from './deleteTask'
 import EditTask from './editTask'
 import { HasAccess } from '../../../../redux/accessUtils';
+import { HSeparator } from 'components/separator/Separator';
 
 const TaskView = (props) => {
     const params = useParams()
     const { id } = params
     const user = JSON.parse(localStorage.getItem("user"))
 
-    const permission = HasAccess('task')
-    const contactAccess = HasAccess('contacts')
-    const leadAccess = HasAccess('lead')
+    const permission = HasAccess('Task')
+    const contactAccess = HasAccess('Contacts')
+    const leadAccess = HasAccess('Lead')
 
     const [data, setData] = useState()
     const [isLoding, setIsLoding] = useState(false)
@@ -47,33 +48,38 @@ const TaskView = (props) => {
     }
     return (
         <div>
-            <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
-                <GridItem colStart={6} >
-                    <Flex justifyContent={"right"}>
-                        <Menu>
-                            {(permission?.create || permission?.update || permission?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
-                                Actions
-                            </MenuButton>}
-                            <MenuDivider />
-                            <MenuList>
-                                {permission?.create && <MenuItem onClick={() => handleClick()} icon={<AddIcon />}>Add</MenuItem>}
-                                {permission?.update && <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
-                                {permission?.deleteModel && <>
-                                    <MenuDivider />
-                                    <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
-                                </>}
-                            </MenuList>
-                        </Menu>
-                        <Link to="/task">
-                            <Button leftIcon={<IoIosArrowBack />} variant="brand">
-                                Back
-                            </Button>
-                        </Link>
-                    </Flex>
-                </GridItem>
-            </Grid>
             <Card>
-                <Grid templateColumns="repeat(12, 1fr)" gap={3} >
+                <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={1} justifyContent={"space-between"} alignItem={"center"}>
+                    <GridItem colSpan={{ base: 12, md: 6 }}>
+                        <Text fontSize="xl" fontWeight="bold" color={'blackAlpha.900'}> Task View </Text>
+
+                    </GridItem>
+                    <GridItem colSpan={{ base: 12, md: 6 }}>
+                        <Flex justifyContent={"right"}>
+                            <Menu>
+                                {(permission?.create || permission?.update || permission?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
+                                    Actions
+                                </MenuButton>}
+                                <MenuDivider />
+                                <MenuList>
+                                    {permission?.create && <MenuItem onClick={() => handleClick()} icon={<AddIcon />}>Add</MenuItem>}
+                                    {permission?.update && <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
+                                    {permission?.deleteModel && <>
+                                        <MenuDivider />
+                                        <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
+                                    </>}
+                                </MenuList>
+                            </Menu>
+                            <Link to="/task">
+                                <Button leftIcon={<IoIosArrowBack />} variant="brand">
+                                    Back
+                                </Button>
+                            </Link>
+                        </Flex>
+                    </GridItem>
+                </Grid>
+                <HSeparator />
+                <Grid templateColumns="repeat(12, 1fr)" gap={3} pt={3}>
 
                     <GridItem colSpan={{ base: 12, md: 6 }} >
                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Title </Text>
@@ -106,7 +112,7 @@ const TaskView = (props) => {
                     <GridItem colSpan={{ base: 12, md: 6 }} >
                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> assignment To  </Text>
                         <Link to={data?.assignmentTo ? contactAccess?.view && `/contactView/${data?.assignmentTo}` : leadAccess?.view && `/leadView/${data?.assignmentToLead}`}>
-                            <Text color={(data?.category === 'contact' && contactAccess?.view) ? 'green.400' : (leadAccess?.view && data?.category === 'lead') ? 'green.400' : 'blackAlpha.900'} sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.assignmentToName ? data?.assignmentToName : ' - '}</Text>
+                            <Text color={(data?.category === 'contact' && contactAccess?.view) ? 'brand.600' : (leadAccess?.view && data?.category === 'lead') ? 'brand.600' : 'blackAlpha.900'} sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.assignmentToName ? data?.assignmentToName : ' - '}</Text>
                         </Link>
                     </GridItem>
                     <GridItem colSpan={{ base: 12, md: 6 }} >

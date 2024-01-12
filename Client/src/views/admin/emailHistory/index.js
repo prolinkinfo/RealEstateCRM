@@ -42,7 +42,7 @@ const Index = () => {
         setColumns(tableColumns)
     }, [action])
 
-    const permission = HasAccess('email')
+    const permission = HasAccess('Email')
 
     return (
         <div>

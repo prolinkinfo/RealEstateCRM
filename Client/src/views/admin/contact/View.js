@@ -31,13 +31,15 @@ import PhoneCall from "./components/phonCall";
 import PropertyModel from "./components/propertyModel";
 import PropertyTable from "./components/propertyTable";
 import { HasAccess } from "../../../redux/accessUtils";
-
+import MeetingColumnsTable from "../meeting/components/ColumnsTable";
+import TaskColumnsTable from "../task/components/ColumnsTable";
 
 const View = () => {
 
     const param = useParams()
 
-    const [data, setData] = useState()
+    const [data, setData] = useState([])
+    const [allData, setAllData] = useState([]);
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [edit, setEdit] = useState(false);
     const [deleteModel, setDelete] = useState(false);
@@ -49,15 +51,19 @@ const View = () => {
     const [addEmailHistory, setAddEmailHistory] = useState(false);
     const [addPhoneCall, setAddPhoneCall] = useState(false);
     const [addMeeting, setMeeting] = useState(false);
+    const [showEmail, setShowEmail] = useState(false);
+    const [showCall, setShowCall] = useState(false);
+    const [showTasks, setShowTasks] = useState(false);
+    const [showMeetings, setShowMeetings] = useState(false);
 
     const size = "lg";
     const navigate = useNavigate()
 
-    const permission = HasAccess('contacts');
-    const callAccess = HasAccess('call');
-    const emailAccess = HasAccess('email');
-    const taskAccess = HasAccess('task');
-    const meetingAccess = HasAccess('meeting');
+    const permission = HasAccess('Contacts');
+    const callAccess = HasAccess('Call');
+    const emailAccess = HasAccess('Email');
+    const taskAccess = HasAccess('Task');
+    const meetingAccess = HasAccess('Meeting');
 
     const columnsDataColumns = [
         { Header: "sender", accessor: "senderName", },
@@ -81,14 +87,12 @@ const View = () => {
     ];
 
     const MeetingColumns = [
-        { Header: "#", accessor: "_id", isSortable: false, width: 10 },
         { Header: 'agenda', accessor: 'agenda' },
         { Header: "date Time", accessor: "dateTime", },
         { Header: "times tamp", accessor: "timestamp", },
         { Header: "create By", accessor: "createdByName", },
     ];
     const taskColumns = [
-        { Header: "#", accessor: "_id", isSortable: false, width: 5 },
         { Header: 'Title', accessor: 'title' },
         { Header: "Category", accessor: "category", },
         { Header: "Assignment To", accessor: "assignmentToName", },
@@ -111,7 +115,8 @@ const View = () => {
     const fetchData = async () => {
         setIsLoding(true)
         let response = await getApi('api/contact/view/', param.id)
-        setData(response.data);
+        setData(response.data?.contact);
+        setAllData(response.data);
         setIsLoding(false)
     }
     useEffect(() => {
@@ -228,55 +233,55 @@ const View = () => {
                                                         <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
                                                             First Name
                                                         </Text>
-                                                        <Text>{data?.contact?.firstName ? data?.contact?.firstName : 'N/A'}</Text>
+                                                        <Text>{data?.firstName ? data?.contact?.firstName : 'N/A'}</Text>
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                                         <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
                                                             Last Name
                                                         </Text>
-                                                        <Text>{data?.contact?.lastName ? data?.contact?.lastName : 'N/A'}</Text>
+                                                        <Text>{data?.lastName ? data?.lastName : 'N/A'}</Text>
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                                         <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
                                                             Title
                                                         </Text>
-                                                        <Text>{data?.contact?.title ? data?.contact?.title : 'N/A'}</Text>
+                                                        <Text>{data?.title ? data?.title : 'N/A'}</Text>
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                                         <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
                                                             Phone Number
                                                         </Text>
-                                                        {callAccess?.create ? <Text onClick={() => setAddPhoneCall(true)} color='green.400' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.contact?.phoneNumber ? data?.contact?.phoneNumber : 'N/A'}</Text> : <Text>{data?.contact?.phoneNumber ? data?.contact?.phoneNumber : 'N/A'}</Text>}
+                                                        {callAccess?.create ? <Text onClick={() => setAddPhoneCall(true)} color='brand.600' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.phoneNumber ? data?.phoneNumber : 'N/A'}</Text> : <Text>{data?.phoneNumber ? data?.phoneNumber : 'N/A'}</Text>}
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                                         <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
                                                             Mobile Number
                                                         </Text>
-                                                        <Text>{data?.contact?.mobileNumber ? data?.contact?.mobileNumber : 'N/A'}</Text>
+                                                        <Text>{data?.mobileNumber ? data?.mobileNumber : 'N/A'}</Text>
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2 }}>
                                                         <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
                                                             Email Address
                                                         </Text>
-                                                        {emailAccess?.create ? <Text onClick={() => setAddEmailHistory(true)} color='green.400' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.contact?.email ? data?.contact?.email : 'N/A'}</Text> : <Text>{data?.contact?.email ? data?.contact?.email : 'N/A'}</Text>}
+                                                        {emailAccess?.create ? <Text onClick={() => setAddEmailHistory(true)} color='brand.600' sx={{ cursor: 'pointer', '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.email ? data?.email : 'N/A'}</Text> : <Text>{data?.email ? data?.email : 'N/A'}</Text>}
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2 }}>
                                                         <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
                                                             Physical Address
                                                         </Text>
-                                                        <Text>{data?.contact?.physicalAddress ? data?.contact?.physicalAddress : 'N/A'}</Text>
+                                                        <Text>{data?.physicalAddress ? data?.physicalAddress : 'N/A'}</Text>
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2 }}>
                                                         <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
                                                             Mailing Address
                                                         </Text>
-                                                        <Text>{data?.contact?.mailingAddress ? data?.contact?.mailingAddress : data?.contact?.physicalAddress}</Text>
+                                                        <Text>{data?.mailingAddress ? data?.mailingAddress : data?.physicalAddress}</Text>
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2 }}>
                                                         <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
                                                             Preferred Contact Method
                                                         </Text>
-                                                        <Text>{data?.contact?.preferredContactMethod ? data?.contact?.preferredContactMethod : 'N/A'}</Text>
+                                                        <Text>{data?.preferredContactMethod ? data?.preferredContactMethod : 'N/A'}</Text>
                                                     </GridItem>
                                                 </Grid>
                                             </Grid>
@@ -296,15 +301,15 @@ const View = () => {
                                                 <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Lead Source </Text>
-                                                        <Text textTransform={'capitalize'}>{data?.contact?.leadSource ? toCamelCase(data?.contact?.leadSource) : 'N/A'}</Text>
+                                                        <Text textTransform={'capitalize'}>{data?.leadSource ? toCamelCase(data?.leadSource) : 'N/A'}</Text>
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Referral Source </Text>
-                                                        <Text textTransform={'capitalize'}>{data?.contact?.referralSource ? toCamelCase(data?.contact?.referralSource) : 'N/A'}</Text>
+                                                        <Text textTransform={'capitalize'}>{data?.referralSource ? toCamelCase(data?.referralSource) : 'N/A'}</Text>
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Campaing Source </Text>
-                                                        <Text textTransform={'capitalize'}>{data?.contact?.campaignSource ? toCamelCase(data?.contact?.campaignSource) : 'N/A'}</Text>
+                                                        <Text textTransform={'capitalize'}>{data?.campaignSource ? toCamelCase(data?.campaignSource) : 'N/A'}</Text>
                                                     </GridItem>
                                                 </Grid>
                                             </Grid>
@@ -324,18 +329,18 @@ const View = () => {
                                                 <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Lead Status </Text>
-                                                        <Text textTransform={'capitalize'}>{data?.contact?.leadStatus ? toCamelCase(data?.contact?.leadStatus) : 'N/A'}</Text>
+                                                        <Text textTransform={'capitalize'}>{data?.leadStatus ? toCamelCase(data?.leadStatus) : 'N/A'}</Text>
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Lead Rating </Text>
                                                         <Flex alignItems={'center'}>
                                                             <AiFillStar color="gold" />
-                                                            <Text>{data?.contact?.leadRating ? data?.contact?.leadRating : '0'}</Text>
+                                                            <Text>{data?.leadRating ? data?.leadRating : '0'}</Text>
                                                         </Flex>
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Lead Conversion Probability </Text>
-                                                        <Text textTransform={'capitalize'}>{data?.contact?.leadConversionProbability ? toCamelCase(data?.contact?.leadConversionProbability) : 'N/A'}</Text>
+                                                        <Text textTransform={'capitalize'}>{data?.leadConversionProbability ? toCamelCase(data?.leadConversionProbability) : 'N/A'}</Text>
                                                     </GridItem>
                                                 </Grid>
                                             </Grid>
@@ -355,7 +360,7 @@ const View = () => {
                                                 <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                                     <GridItem colSpan={{ base: 2 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Tags Or Labels For Categorizing Contacts </Text>
-                                                        <Text>{data?.contact?.tagsOrLabelsForcategorizingcontacts ? data?.contact?.tagsOrLabelsForcategorizingcontacts : 'N/A'}</Text>
+                                                        <Text>{data?.tagsOrLabelsForcategorizingcontacts ? data?.tagsOrLabelsForcategorizingcontacts : 'N/A'}</Text>
                                                     </GridItem>
                                                 </Grid>
                                             </Grid>
@@ -375,15 +380,15 @@ const View = () => {
                                                 <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Birthday </Text>
-                                                        <Text>{data?.contact?.birthday ? moment(data?.contact?.birthday).format('LL') : 'N/A'}</Text>
+                                                        <Text>{data?.birthday ? moment(data?.birthday).format('LL') : 'N/A'}</Text>
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Anniversary </Text>
-                                                        <Text>{data?.contact?.anniversary ? moment(data?.contact?.anniversary).format('LL') : 'N/A'}</Text>
+                                                        <Text>{data?.anniversary ? moment(data?.anniversary).format('LL') : 'N/A'}</Text>
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Key Milestones </Text>
-                                                        <Text>{data?.contact?.keyMilestones ? data?.contact?.keyMilestones : 'N/A'}</Text>
+                                                        <Text>{data?.keyMilestones ? data?.keyMilestones : 'N/A'}</Text>
                                                     </GridItem>
                                                 </Grid>
                                             </Grid>
@@ -403,19 +408,19 @@ const View = () => {
                                                 <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
                                                     <GridItem colSpan={{ base: 6 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Date Of Birth </Text>
-                                                        <Text>{data?.contact?.dob ? moment(data?.contact?.dob).format('LL') : 'N/A'}</Text>
+                                                        <Text>{data?.dob ? moment(data?.dob).format('LL') : 'N/A'}</Text>
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 6 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Gender </Text>
-                                                        <Text>{data?.contact?.gender ? data?.contact?.gender : 'N/A'}</Text>
+                                                        <Text>{data?.gender ? data?.gender : 'N/A'}</Text>
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 6 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Occupation </Text>
-                                                        <Text>{data?.contact?.occupation ? data?.contact?.occupation : 'N/A'}</Text>
+                                                        <Text>{data?.occupation ? data?.occupation : 'N/A'}</Text>
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 6 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Interests Or Hobbies </Text>
-                                                        <Text>{data?.contact?.interestsOrHobbies ? data?.contact?.interestsOrHobbies : 'N/A'}</Text>
+                                                        <Text>{data?.interestsOrHobbies ? data?.interestsOrHobbies : 'N/A'}</Text>
                                                     </GridItem>
                                                 </Grid>
                                             </Grid>
@@ -435,11 +440,11 @@ const View = () => {
                                                 <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                                     <GridItem colSpan={{ base: 2 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Agent Or TeamMember </Text>
-                                                        <Text>{data?.contact?.agentOrTeamMember ? data?.contact?.agentOrTeamMember : 'N/A'}</Text>
+                                                        <Text>{data?.agentOrTeamMember ? data?.agentOrTeamMember : 'N/A'}</Text>
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> InternalNotes Or Comments </Text>
-                                                        <Text>{data?.contact?.internalNotesOrComments ? data?.contact?.internalNotesOrComments : 'N/A'}</Text>
+                                                        <Text>{data?.internalNotesOrComments ? data?.internalNotesOrComments : 'N/A'}</Text>
                                                     </GridItem>
                                                 </Grid>
                                             </Grid>
@@ -459,11 +464,11 @@ const View = () => {
                                                 <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Communication Frequency </Text>
-                                                        <Text>{data?.contact?.communicationFrequency ? data?.contact?.communicationFrequency : 'N/A'}</Text>
+                                                        <Text>{data?.communicationFrequency ? data?.communicationFrequency : 'N/A'}</Text>
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Preferences </Text>
-                                                        <Text>{data?.contact?.preferences ? data?.contact?.preferences : 'N/A'}</Text>
+                                                        <Text>{data?.preferences ? data?.preferences : 'N/A'}</Text>
                                                     </GridItem>
                                                 </Grid>
                                             </Grid>
@@ -479,14 +484,14 @@ const View = () => {
                                                                 Property of Interest
                                                             </Heading>
                                                             <Button onClick={() => setPropertyModel(true)} leftIcon={<LuBuilding2 />} colorScheme="gray" >Select Interested Property  </Button>
-                                                            <PropertyModel fetchData={fetchData} isOpen={propertyModel} onClose={setPropertyModel} id={param.id} interestProperty={data?.contact?.interestProperty} />
+                                                            <PropertyModel fetchData={fetchData} isOpen={propertyModel} onClose={setPropertyModel} id={param.id} interestProperty={data?.interestProperty} />
                                                         </Flex>
                                                         <HSeparator />
                                                     </Box>
 
                                                     <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                                         <GridItem colSpan={{ base: 2 }}>
-                                                            {data?.interestProperty?.interestProperty?.length > 0 && <PropertyTable fetchData={fetchData} columnsData={PropertyColumn} tableData={data?.interestProperty?.interestProperty} title={'Interested Property'} />}
+                                                            {allData?.interestProperty?.interestProperty?.length > 0 && <PropertyTable fetchData={fetchData} columnsData={PropertyColumn} tableData={allData?.interestProperty?.interestProperty} title={'Interested Property'} />}
                                                         </GridItem>
                                                     </Grid>
                                                 </GridItem>
@@ -511,36 +516,45 @@ const View = () => {
                                         <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
                                             {emailAccess?.view && <GridItem colSpan={{ base: 12, sm: 6 }}>
                                                 <Card overflow={'scroll'}>
-                                                    {data?.EmailHistory.length > 0 ?
-                                                        <ColumnsTable fetchData={fetchData} emailAccess={emailAccess} columnsData={columnsDataColumns} tableData={data?.EmailHistory} title={'Email '} />
-                                                        :
-                                                        (emailAccess?.create && <Button onClick={() => setAddEmailHistory(true)} leftIcon={<BsFillSendFill />} colorScheme="gray" >Send Email </Button>)
-                                                    }
-                                                    <AddEmailHistory fetchData={fetchData} setAction={setAction} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} id={param.id} />
+                                                    {(allData?.EmailHistory && allData?.EmailHistory?.length) ? <ColumnsTable fetchData={fetchData} emailAccess={emailAccess} columnsData={columnsDataColumns} tableData={showEmail ? allData.EmailHistory : [allData.EmailHistory[0]]} title={'Email '} /> : emailAccess?.create && <Button onClick={() => setAddEmailHistory(true)} leftIcon={<BsFillSendFill />} colorScheme="gray" >Send Email </Button>}
+                                                    <AddEmailHistory fetchData={fetchData} setAction={setAction} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} />
+                                                    {allData?.EmailHistory?.length > 1 &&
+                                                        <div style={{ display: "flex", justifyContent: "end" }}>
+                                                            <Button colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showEmail ? setShowEmail(false) : setShowEmail(true)}>{showEmail ? "Show less" : "Show more"}</Button>
+                                                        </div>}
                                                 </Card>
                                             </GridItem>}
                                             {callAccess?.view && <GridItem colSpan={{ base: 12, sm: 6 }}>
                                                 <Card overflow={'scroll'}>
-                                                    {data?.phoneCallHistory?.length > 0 ? <PhoneCall callAccess={callAccess} fetchData={fetchData} columnsData={columnsDataColumns} tableData={data?.phoneCallHistory} title={'Call '} /> : (callAccess?.create && <Button onClick={() => setAddPhoneCall(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" > Call </Button>)}
+                                                    {allData?.phoneCallHistory?.length > 0 ? <PhoneCall callAccess={callAccess} fetchData={fetchData} columnsData={columnsDataColumns} tableData={showCall ? allData?.phoneCallHistory : [allData?.phoneCallHistory[0]]} title={'Call '} /> : callAccess?.create && <Button onClick={() => setAddPhoneCall(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" > Call </Button>}
                                                     <AddPhoneCall fetchData={fetchData} setAction={setAction} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param.id} />
-                                                </Card>
-                                            </GridItem>}
-                                            {meetingAccess?.view && <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                                <Card overflow={'scroll'}>
-                                                    {data?.meetingHistory.length > 0 ? <MeetingTable className='table-container' fetchData={fetchData} setMeeting={setMeeting} columnsData={MeetingColumns} data={data?.meetingHistory} title={'Meeting '} /> : meetingAccess?.create && <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>}
-                                                    <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="contact" id={param.id} />
+                                                    {allData?.phoneCallHistory?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
+                                                        <Button colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showCall ? setShowCall(false) : setShowCall(true)}>{showCall ? "Show less" : "Show more"}</Button>
+                                                    </div>}
                                                 </Card>
                                             </GridItem>}
                                             {taskAccess?.view && <GridItem colSpan={{ base: 12, sm: 6 }}>
                                                 <Card overflow={'scroll'}>
-                                                    {data?.task.length > 0 ? <TaskTable fetchData={fetchData} className='table-container' setTaskModel={setTaskModel} columnsData={taskColumns} data={data?.task} title={'Task '} /> : taskAccess?.create && <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>}
+                                                    {allData?.task?.length > 0 ? <TaskColumnsTable fetchData={fetchData} columnsData={taskColumns} tableData={showTasks ? allData?.task : [allData?.task[0]]} title={'Task '} action={action} setAction={setAction} access={taskAccess} /> : taskAccess?.create && <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>}
                                                     <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="contact" id={param.id} />
+                                                    {allData?.task?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
+                                                        <Button colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showTasks ? setShowTasks(false) : setShowTasks(true)}>{showTasks ? "Show less" : "Show more"}</Button>
+                                                    </div>}
+                                                </Card>
+                                            </GridItem >}
+                                            {meetingAccess?.view && <GridItem colSpan={{ base: 12, sm: 6 }}>
+                                                <Card overflow={'scroll'}>
+                                                    {allData?.meetingHistory?.length > 0 ? <MeetingColumnsTable fetchData={fetchData} columnsData={MeetingColumns} tableData={showMeetings ? allData?.meetingHistory : [allData?.meetingHistory[0]]} title={'Meeting '} action={action} setAction={setAction} access={meetingAccess} /> : meetingAccess?.create && <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>}
+                                                    <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="contact" id={param.id} setAction={setAction} />
+                                                    {allData?.meetingHistory?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
+                                                        <Button colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showMeetings ? setShowMeetings(false) : setShowMeetings(true)}>{showMeetings ? "Show less" : "Show more"}</Button>
+                                                    </div>}
                                                 </Card>
                                             </GridItem>}
                                             <GridItem colSpan={{ base: 12 }}>
                                                 <Card overflow={'scroll'}>
                                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Notes and Comments </Text>
-                                                    <Text>{data?.contact?.notesandComments ? data?.contact?.notesandComments : 'N/A'}</Text>
+                                                    <Text>{data?.notesandComments ? data?.notesandComments : 'N/A'}</Text>
                                                 </Card>
                                             </GridItem>
                                             {/* <GridItem colSpan={{ base: 2 }}>
@@ -559,7 +573,7 @@ const View = () => {
                                         </Heading>
                                         <HSeparator />
                                         <VStack mt={4} alignItems="flex-start">
-                                            {data?.Document?.length > 0 ? data?.Document?.map((item) => (
+                                            {allData?.Document?.length > 0 ? allData?.Document?.map((item) => (
                                                 <FolderTreeView name={item.folderName} item={item}>
                                                     {item?.files?.map((file) => (
                                                         <FolderTreeView download={download} data={file} name={file.fileName} isFile from="contact" />
@@ -584,28 +598,28 @@ const View = () => {
                                                     <HSeparator />
                                                 </Box>
                                             </GridItem>
-                                            {data?.contact?.linkedInProfile || data?.contact?.facebookProfile || data?.contact?.twitterHandle || data?.contact?.otherProfiles ?
+                                            {data?.linkedInProfile || data?.facebookProfile || data?.twitterHandle || data?.otherProfiles ?
                                                 <Grid templateColumns={'repeat(4, 1fr)'} gap={4} my={3} flexWrap={'wrap'} display={'flex'} justifyContent={'center'}>
-                                                    {data?.contact?.linkedInProfile && <GridItem textAlign={'center'} colSpan={{ base: 2, md: 1 }}>
-                                                        <a target='_blank' href={data?.contact?.linkedInProfile}>
+                                                    {data?.linkedInProfile && <GridItem textAlign={'center'} colSpan={{ base: 2, md: 1 }}>
+                                                        <a target='_blank' href={data?.linkedInProfile}>
                                                             <IconButton colorScheme="brand" aria-label="Call Fred" borderRadius="10px" size="md" icon={<BiLogoLinkedin />} />
                                                         </a>
                                                         <Text fontSize="sm" mt={2} fontWeight="bold" color={'blackAlpha.900'}> LinkedIn Profile  </Text>
                                                     </GridItem>}
-                                                    {data?.contact?.facebookProfile && <GridItem textAlign={'center'} colSpan={{ base: 2, md: 1 }}>
-                                                        <a target='_blank' href={`https://www.facebook.com/${data?.contact?.facebookProfile}`}>
+                                                    {data?.facebookProfile && <GridItem textAlign={'center'} colSpan={{ base: 2, md: 1 }}>
+                                                        <a target='_blank' href={`https://www.facebook.com/${data.facebookProfile}`}>
                                                             <IconButton colorScheme="brand" aria-label="Call Fred" borderRadius="10px" size="md" icon={<FaFacebook />} />
                                                         </a>
                                                         <Text fontSize="sm" mt={2} fontWeight="bold" color={'blackAlpha.900'}> Facebook Profile  </Text>
                                                     </GridItem>}
-                                                    {data?.contact?.linkedInProfile && <GridItem textAlign={'center'} colSpan={{ base: 2, md: 1 }}>
-                                                        <a target='_blank' href={'https://twitter.com/' + data?.contact?.twitterHandle}>
+                                                    {data?.linkedInProfile && <GridItem textAlign={'center'} colSpan={{ base: 2, md: 1 }}>
+                                                        <a target='_blank' href={'https://twitter.com/' + data?.twitterHandle}>
                                                             <IconButton colorScheme="brand" aria-label="Call Fred" borderRadius="10px" size="md" icon={<BsTwitter />} />
                                                         </a>
                                                         <Text fontSize="sm" mt={2} fontWeight="bold" color={'blackAlpha.900'}> Twitter Handle  </Text>
                                                     </GridItem>}
-                                                    {data?.contact?.linkedInProfile && <GridItem textAlign={'center'} colSpan={{ base: 2, md: 1 }}>
-                                                        <a target='_blank' href={data?.contact?.otherProfiles}>
+                                                    {data?.linkedInProfile && <GridItem textAlign={'center'} colSpan={{ base: 2, md: 1 }}>
+                                                        <a target='_blank' href={data?.otherProfiles}>
                                                             <IconButton colorScheme="brand" aria-label="Call Fred" borderRadius="10px" size="md" icon={<BiLink />} />
                                                         </a>
                                                         <Text fontSize="sm" mt={2} fontWeight="bold" color={'blackAlpha.900'}> Other Profiles  </Text>

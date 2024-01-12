@@ -1,14 +1,8 @@
-import { AddIcon } from "@chakra-ui/icons";
-import { Box, Button, Flex, FormLabel, Grid, GridItem, Input, Select, useDisclosure, Text } from '@chakra-ui/react';
-import Card from "components/card/Card";
-import { useFormik } from "formik";
+import { Grid, GridItem, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { getApi } from "services/api";
-import CheckTable from './components/CheckTable';
-import * as yup from 'yup';
-import { FiUpload } from 'react-icons/fi';
-import ImportModal from "./components/ImportModal";
 import { HasAccess } from "../../../redux/accessUtils";
+import CheckTable from './components/CheckTable';
 
 const Index = () => {
 
@@ -18,8 +12,7 @@ const Index = () => {
     const [searchedData, setSearchedData] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"));
 
-    const permission = HasAccess('lead');
-
+    const permission = HasAccess('Lead');
     const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
         { Header: 'Name', accessor: 'leadName', width: 20 },
@@ -31,8 +24,8 @@ const Index = () => {
         { Header: "Action", isSortable: false, center: true },
     ];
 
-    const emailAccess = HasAccess('email')
-    const callAccess = HasAccess('call')
+    const emailAccess = HasAccess('Email')
+    const callAccess = HasAccess('Call')
 
     const [dynamicColumns, setDynamicColumns] = useState([...tableColumns]);
     const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);

@@ -29,6 +29,7 @@ export function SidebarLinks(props) {
 
   // this function creates the links from the secondary accordions (for example auth -> sign-in -> default)
   const createLinks = (routes) => {
+
     return routes.map((route, index) => {
       if (route.category) {
         return (
@@ -68,16 +69,16 @@ export function SidebarLinks(props) {
                 <Box backgroundColor={activeRoute(route.path.toLowerCase())
                   ? sidebarBgColor
                   : ""}
-                  // h='36px'
                   ps={"25px"} py={"9px"}>
+
                   <HStack
                     spacing={activeRoute(route.path.toLowerCase()) ? "22px" : "26px"}
                     py='5px'
-                  // ps='10px'
                   >
-
-                    {openSidebar == true ?
-                      <Flex w='100%' alignItems='center' justifyContent='center' onClick={() => setOpenSidebar(!openSidebar)}>
+                    {openSidebar === true ?
+                      <Flex w='100%' alignItems='center' justifyContent='center'
+                      // onClick={() => setOpenSidebar(!openSidebar)}
+                      >
                         <Box
                           color={
                             activeRoute(route.path.toLowerCase())
@@ -104,7 +105,9 @@ export function SidebarLinks(props) {
                         </Text>
                       </Flex>
                       :
-                      <Flex w='100%' alignItems='center' justifyContent='center' onClick={() => setOpenSidebar(!openSidebar)}>
+                      <Flex w='100%' alignItems='center' justifyContent='center'
+                      //  onClick={() => setOpenSidebar(!openSidebar)}
+                      >
                         <Box
                           color={
                             activeRoute(route.path.toLowerCase())

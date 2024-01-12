@@ -77,6 +77,7 @@ const Edit = (props) => {
     const handleClose = () => {
         props.onClose(false)
         props.setSelectedId && props?.setSelectedId()
+        formik.resetForm();
     }
 
     let response
@@ -297,7 +298,7 @@ const Edit = (props) => {
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, sm: 6 }}>
                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                        lead Source Campaign
+                                        Lead Source Campaign
                                     </FormLabel>
                                     <Input
                                         fontSize='sm'
@@ -444,7 +445,7 @@ const Edit = (props) => {
                                         onChange={handleChange} onBlur={handleBlur}
                                         value={values.leadFollowUpStatus}
                                         name="leadFollowUpStatus"
-                                        placeholder='lead FollowUp Status'
+                                        placeholder='Lead FollowUp Status'
                                         fontWeight='500'
                                         borderColor={errors.leadFollowUpStatus && touched.leadFollowUpStatus ? "red.300" : null}
                                     />
@@ -467,7 +468,7 @@ const Edit = (props) => {
                                         onChange={handleChange} onBlur={handleBlur}
                                         value={values.leadScore}
                                         name="leadScore"
-                                        placeholder='lead Score'
+                                        placeholder='Lead Score'
                                         type='number'
                                         fontWeight='500'
                                         borderColor={errors.leadScore && touched.leadScore ? "red.300" : null}
@@ -483,7 +484,7 @@ const Edit = (props) => {
                                         onChange={handleChange} onBlur={handleBlur}
                                         value={values.leadNurturingWorkflow}
                                         name="leadNurturingWorkflow"
-                                        placeholder=' lead Nurturing Workflow'
+                                        placeholder='Lead Nurturing Workflow'
                                         fontWeight='500'
                                         borderColor={errors.leadNurturingWorkflow && touched.leadNurturingWorkflow ? "red.300" : null}
                                     />
@@ -529,7 +530,7 @@ const Edit = (props) => {
                                         onChange={handleChange} onBlur={handleBlur}
                                         value={values.leadNurturingStage}
                                         name="leadNurturingStage"
-                                        placeholder='lead Nurturing Stage'
+                                        placeholder='Lead Nurturing Stage'
                                         fontWeight='500'
                                         borderColor={errors.leadNurturingStage && touched.leadNurturingStage ? "red.300" : null}
                                     />

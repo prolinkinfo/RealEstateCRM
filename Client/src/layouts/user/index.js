@@ -20,7 +20,7 @@ export default function User(props) {
     // states and functions
     const [fixed] = useState(false);
     const [toggleSidebar, setToggleSidebar] = useState(false);
-    const [openSidebar, setOpenSidebar] = useState(false)
+    const [openSidebar, setOpenSidebar] = useState(true)
     const user = JSON.parse(localStorage.getItem("user"))
     // functions for changing the states from components
     const getRoute = () => {
@@ -77,7 +77,7 @@ export default function User(props) {
             }
         ]
 
-    const accessRoute = newRoute?.filter(item => Object.keys(mergedPermissions)?.find(data => (data === item?.name?.toLowerCase()) || (data === item.parentName?.toLowerCase())))
+    const accessRoute = newRoute?.filter(item => Object.keys(mergedPermissions)?.find(data => (data?.toLowerCase() === item?.name?.toLowerCase()) || (data?.toLowerCase() === item.parentName?.toLowerCase())))
 
     routes.push(...accessRoute)
 
