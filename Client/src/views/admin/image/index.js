@@ -1,7 +1,6 @@
 import { Box, Button, Flex, Grid, GridItem, Image } from '@chakra-ui/react'
 import Card from 'components/card/Card'
 import React, { useEffect } from 'react'
-import img1 from '../../../assets/img/1.webp'
 import { fetchImage } from "../../../redux/imageSlice";
 import { useDispatch, useSelector } from 'react-redux'
 
