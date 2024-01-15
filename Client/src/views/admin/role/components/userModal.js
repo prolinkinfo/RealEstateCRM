@@ -104,12 +104,7 @@ function UserModal(props) {
     userFetchData()
   }, [])
 
-  useEffect(() => {
-    tableData?.map((item) => setSelectedValues((prevSelectedValues) => [...prevSelectedValues, item._id]))
-    userFetchData();
-  }, [tableData])
 
-  console.log(tableData)
 
   return (
     <>
@@ -120,7 +115,7 @@ function UserModal(props) {
             <Flex justifyContent={'space-between'}>
               <Text>Users</Text>
               <Button variant="brand" size="sm" me={'2rem'} onClick={() => { setOpenUser(false); setUserModal(true) }}>Manage Users</Button>
-              <ModalCloseButton mt='2' onClick={() => setSelectedValues([])} />
+              <ModalCloseButton mt='2' />
             </Flex>
           </ModalHeader>
           <ModalBody>
@@ -193,17 +188,14 @@ function UserModal(props) {
                             );
                           } else if (cell?.column.Header === "email Id") {
                             data = (
-                              <Link to={`/userView/${cell?.row?.values._id}`}>
-                                <Text
-                                  me="10px"
-                                  sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                                  color='brand.600'
-                                  fontSize="sm"
-                                  fontWeight="700"
-                                >
-                                  {cell?.value}
-                                </Text>
-                              </Link>
+                              <Text
+                                me="10px"
+                                color={textColor}
+                                fontSize="sm"
+                                fontWeight="700"
+                              >
+                                {cell?.value}
+                              </Text>
                             );
                           } else if (cell?.column.Header === "first Name") {
                             data = (
@@ -255,11 +247,8 @@ function UserModal(props) {
 
           </ModalBody>
           <ModalFooter>
-            {/* <Button variant="brand" onClick={() => { setEditModal(true); setOpenUser(false) }}>
-              Change Access
-            </Button> */}
             <Button
-              onClick={() => { setOpenUser(false); setSelectedValues([]); setRoleModal(true) }}
+              onClick={() => { setOpenUser(false); setRoleModal(true) }}
               variant="outline"
               colorScheme="red"
               sx={{
@@ -272,7 +261,7 @@ function UserModal(props) {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <RoleUser fetchData={fetchData} setSelectedValues={setSelectedValues} selectedValues={selectedValues} userModal={userModal} setOpenUser={setOpenUser} _id={_id} setUserModal={setUserModal} userFetchData={userFetchData} userRole={tableData} tableData={userData} columnsData={columnsData} />
+      <RoleUser fetchData={fetchData} userModal={userModal} setOpenUser={setOpenUser} _id={_id} setUserModal={setUserModal} userFetchData={userFetchData} userRole={tableData} tableData={userData} columnsData={columnsData} />
     </>
   );
 }

@@ -8,17 +8,15 @@ import { putApi } from 'services/api';
 
 const RoleUser = (props) => {
 
-    const { setUserModal, userModal, tableData, userFetchData, columnsData, setSelectedValues, setOpenUser, selectedValues, _id, userRole, fetchData } = props;
+    const { setUserModal, userModal, tableData, userFetchData, columnsData, setOpenUser, _id, userRole, fetchData } = props;
 
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
     const columns = useMemo(() => columnsData, [columnsData]);
     const [isLoding, setIsLoding] = useState(false);
+    const [selectedValues, setSelectedValues] = useState([]);
     const data = useMemo(() => tableData, [tableData]);
     const [gopageValue, setGopageValue] = useState();
-
-    // Filter roles from the first array based on the _id values in the second array
-    const filteredRoles = userRole.filter(item => item.roles.find(role => role === _id));
 
     const tableInstance = useTable(
         {
@@ -64,6 +62,10 @@ const RoleUser = (props) => {
         }
     };
 
+    useEffect(() => {
+        const pre = userRole?.map((item) => item._id)
+        setSelectedValues(pre)
+    }, [userModal])
 
 
     const addUser = async () => {
@@ -74,8 +76,6 @@ const RoleUser = (props) => {
         }
     }
 
-    console.log(selectedValues, 'llll')
-
     return (
         <Modal onClose={() => setUserModal(false)} isOpen={userModal} isCentered size={"4xl"} style={{ height: "560px" }}>
             <ModalOverlay />
@@ -83,7 +83,7 @@ const RoleUser = (props) => {
                 <ModalHeader>
                     <Flex justifyContent={'space-between'}>
                         <Text>Users</Text>
-                        <ModalCloseButton mt='2' onClick={() => setSelectedValues([])} />
+                        <ModalCloseButton mt='2' />
                     </Flex>
                 </ModalHeader>
                 <ModalBody>
@@ -156,17 +156,14 @@ const RoleUser = (props) => {
                                                     );
                                                 } else if (cell?.column.Header === "email Id") {
                                                     data = (
-                                                        <Link to={`/userView/${cell?.row?.values._id}`}>
-                                                            <Text
-                                                                me="10px"
-                                                                sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                                                                color='brand.600'
-                                                                fontSize="sm"
-                                                                fontWeight="700"
-                                                            >
-                                                                {cell?.value}
-                                                            </Text>
-                                                        </Link>
+                                                        <Text
+                                                            me="10px"
+                                                            color={textColor}
+                                                            fontSize="sm"
+                                                            fontWeight="700"
+                                                        >
+                                                            {cell?.value}
+                                                        </Text>
                                                     );
                                                 } else if (cell?.column.Header === "first Name") {
                                                     data = (
