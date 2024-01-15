@@ -42,6 +42,7 @@ function ChangeAccess(props) {
     fetchData,
     isOpen,
     setAction,
+    setAccess,
     _id,
     onClose,
     setRoleModal,
@@ -107,7 +108,6 @@ function ChangeAccess(props) {
     },
   });
 
-
   const {
     errors,
     touched,
@@ -130,21 +130,9 @@ function ChangeAccess(props) {
       return item;
     });
 
-    const updatedAccess1 = values.access.map((item, idx) => {
-      if (idx === index) {
-        return {
-          ...item,
-          [fieldName]: true,
-        };
-      }
-      return item;
-    });
-
-    const accessData = user.role === 'superAdmin' ? updatedAccess1 : updatedAccess
-
     setFieldValue('access', updatedAccess);
+    setAccess(updatedAccess)
   };
-
 
   const EditData = async () => {
     try {
@@ -152,9 +140,8 @@ function ChangeAccess(props) {
       let response = await putApi(`api/role-access/edit/${_id}`, values);
       if (response.status === 200) {
         setEditModal(false)
-        setRoleModal(true)
         fetchData()
-        setAction((pre) => !pre);
+        setRoleModal(true)
       }
     } catch (e) {
       console.log(e);
@@ -166,6 +153,10 @@ function ChangeAccess(props) {
   const handleClose = () => {
     props.onClose(false);
   };
+
+  useEffect(() => {
+    fetchData()
+  }, [editModal])
 
   return (
     <Modal onClose={() => setEditModal(false)} isOpen={editModal} isCentered size={"xl"}>

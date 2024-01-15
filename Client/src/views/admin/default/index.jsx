@@ -37,9 +37,16 @@ export default function UserReports() {
   const [propertyData, setPropertyData] = useState([]);
   const navigate = useNavigate();
 
+  const contactView = HasAccess("Contacts");
+  const taskView = HasAccess("Task");
+  const leadView = HasAccess("Lead");
+  const proprtyView = HasAccess("Property");
+
   const fetchData = async () => {
     let taskData = await getApi(
-      user.role === "superAdmin" ? "api/task/" : `api/task/?createBy=${user._id}`
+      user.role === "superAdmin"
+        ? "api/task/"
+        : `api/task/?createBy=${user._id}`
     );
     let contact = await getApi(
       user.role === "superAdmin"
@@ -47,7 +54,9 @@ export default function UserReports() {
         : `api/contact/?createBy=${user._id}`
     );
     let lead = await getApi(
-      user.role === "superAdmin" ? "api/lead/" : `api/lead/?createBy=${user._id}`
+      user.role === "superAdmin"
+        ? "api/lead/"
+        : `api/lead/?createBy=${user._id}`
     );
     let property = await getApi(
       user.role === "superAdmin"
@@ -55,10 +64,10 @@ export default function UserReports() {
         : `api/property/?createBy=${user._id}`
     );
 
-    setPropertyData(property?.data);
-    setLeadData(lead?.data);
-    setContactData(contact?.data);
-    setTask(taskData?.data);
+    setPropertyData(proprtyView && property?.data);
+    setLeadData(leadView && lead?.data);
+    setContactData(contactView && contact?.data);
+    setTask(taskView && taskData?.data);
   };
 
   useEffect(() => {

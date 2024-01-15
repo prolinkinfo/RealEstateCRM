@@ -45,6 +45,7 @@ function RoleModal(props) {
     columnsData,
     isOpen,
     setAction,
+    setAccess,
     _id,
     onOpen,
     onClose,
@@ -88,6 +89,7 @@ function RoleModal(props) {
     usePagination
   );
 
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -114,6 +116,7 @@ function RoleModal(props) {
       setUserData(result?.data);
     }
   }
+
   useEffect(() => {
     userFetchData()
   }, [_id])
@@ -294,7 +297,7 @@ function RoleModal(props) {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <ChangeAccess tableData={tableData} setRoleModal={setRoleModal} columnsData={columnsData} _id={_id} fetchData={fetchData} name={name} setEditModal={setEditModal} setAction={setAction} editModal={editModal} />
+      <ChangeAccess tableData={tableData} setAccess={setAccess} setRoleModal={setRoleModal} columnsData={columnsData} _id={_id} fetchData={fetchData} name={name} setEditModal={setEditModal} setAction={setAction} editModal={editModal} />
       <UserModal isOpen={openUser}
         setRoleModal={setRoleModal}
         setOpenUser={setOpenUser}
