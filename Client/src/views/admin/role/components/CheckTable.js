@@ -127,7 +127,7 @@ export default function CheckTable(props) {
 
   useEffect(() => {
     fetchData()
-  }, [action])
+  }, [])
 
   return (
     <>
@@ -288,7 +288,7 @@ export default function CheckTable(props) {
         {access && <RoleModal isOpen={roleModal}
           setRoleModal={setRoleModal}
           onOpen={onOpen}
-          isLoding={isLoding} columnsData={rowColumns} name={roleName} _id={roleId} tableData={access} fetchData={fetchData} setAction={setAction} />}
+          isLoding={isLoding} columnsData={rowColumns} name={roleName} _id={roleId} tableData={access} setAccess={setAccess} fetchData={fetchData} setAction={setAction} />}
       </Card>
 
       <AddRole isOpen={addRoleModal} size={"sm"} setAction={setAction} onClose={setAddRoleModal} />
