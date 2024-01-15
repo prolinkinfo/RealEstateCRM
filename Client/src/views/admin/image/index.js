@@ -32,30 +32,7 @@ const ChangeImage = () => {
                             </div>
                         </GridItem>
                     ))}
-                    {/* <GridItem colSpan={{ base: 12, md: 4, lg: 3 }}>
-                        <div className="imageCard">
-                            <Image src={img1} height={"200px"} width={"500px"} />
-                            <div className='imageContent'>
-                                <Button size='sm' variant="brand">Set Image</Button>
-                            </div>
-                        </div>
-                    </GridItem>
-                    <GridItem colSpan={{ base: 12, md: 4, lg: 3 }}>
-                        <div className="imageCard">
-                            <Image src={img1} height={"200px"} width={"500px"} />
-                            <div className='imageContent'>
-                                <Button size='sm' variant="brand">Set Image</Button>
-                            </div>
-                        </div>
-                    </GridItem>
-                    <GridItem colSpan={{ base: 12, md: 4, lg: 3 }}>
-                        <div className="imageCard">
-                            <Image src={img1} height={"200px"} width={"500px"} />
-                            <div className='imageContent'>
-                                <Button size='sm' variant="brand">Set Image</Button>
-                            </div>
-                        </div>
-                    </GridItem> */}
+                  
                 </Grid>
             </Card>
         </Card>
