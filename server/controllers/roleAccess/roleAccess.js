@@ -5,10 +5,10 @@ const index = async (req, res) => {
     try {
         const query = req.query;
         let result = await RoleAccess.find(query);
-        res.send(result);
+        return res.send(result);
     } catch (err) {
         console.error('Error :', err);
-        res.status(400).json({ err, error: 'Something wents wrong' });
+        return res.status(400).json({ err, error: 'Something wents wrong' });
     }
 }
 
@@ -47,21 +47,21 @@ const edit = async (req, res) => {
             { _id: req.params.id },
             { $set: req.body }
         );
-        res.status(200).json(result);
+        return res.status(200).json(result);
     } catch (err) {
         console.error('Failed to Update Role Access:', err);
-        res.status(400).json({ error: 'Failed to Update Role Access' });
+        return res.status(400).json({ error: 'Failed to Update Role Access' });
     }
 }
 
 const roleAssignedUsers = async (req, res) => {
     try {
         let result = await User.find({ roles: { $in: [req.params.id] }, deleted: false });
-        res.send(result);
+        return res.send(result);
 
     } catch (err) {
         console.error('Error :', err);
-        res.status(400).json({ err, error: 'Something wents wrong' });
+        return res.status(400).json({ err, error: 'Something wents wrong' });
     }
 }
 
@@ -91,7 +91,7 @@ const assignRoleToUsers = async (req, res) => {
 
     } catch (err) {
         console.error('Error :', err);
-        res.status(400).json({ err, error: 'Something wents wrong' });
+        return res.status(400).json({ err, error: 'Something wents wrong' });
     }
 }
 
