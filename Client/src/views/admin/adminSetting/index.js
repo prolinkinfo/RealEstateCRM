@@ -1,11 +1,9 @@
-import { Icon, SimpleGrid, useColorModeValue } from '@chakra-ui/react'
+import { Icon, SimpleGrid, useColorModeValue } from '@chakra-ui/react';
 import MiniStatistics from "components/card/MiniStatistics";
-import { HiUsers } from "react-icons/hi";
-import { FaCreativeCommonsBy } from "react-icons/fa";
-
 import IconBox from 'components/icons/IconBox';
-import React from 'react'
-
+import { FaCreativeCommonsBy } from "react-icons/fa";
+import { HiUsers } from "react-icons/hi";
+import { TbExchange } from "react-icons/tb";
 import { useNavigate } from 'react-router-dom';
 
 const Index = () => {
@@ -44,6 +42,20 @@ const Index = () => {
                     }
                     name="Role"
                 // value={contactData?.length || 0}
+                />
+                <MiniStatistics
+                    fontsize="md"
+                    onClick={() => navigate("/change-image")}
+                    startContent={
+                        <IconBox
+                            w="56px"
+                            h="56px"
+                            bg="linear-gradient(90deg, #4481EB 0%, #04BEFE 100%)"
+                            icon={<Icon w="28px" h="28px" as={TbExchange} color="white" />}
+                        />
+
+                    }
+                    name="Change Images"
                 />
             </SimpleGrid>
         </div>
