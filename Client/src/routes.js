@@ -17,6 +17,7 @@ import { PiPhoneCallBold } from "react-icons/pi";
 import { FaCreativeCommonsBy } from "react-icons/fa";
 import { SiGooglemeet } from "react-icons/si";
 import { ROLE_PATH } from "./roles";
+import ChangeImage from "views/admin/image";
 
 // Admin Imports
 const MainDashboard = React.lazy(() => import("views/admin/default"));
@@ -260,6 +261,15 @@ const routes = [
     under: "role",
     icon: <Icon as={FaCreativeCommonsBy} width='20px' height='20px' color='inherit' />,
     component: Role,
+  },
+
+  {
+    name: "Images",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/change-image",
+    under: "image",
+    icon: <Icon as={FaCreativeCommonsBy} width='20px' height='20px' color='inherit' />,
+    component: ChangeImage,
   },
   // // ------------- Text message Routes ------------------------
   // {
