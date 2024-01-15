@@ -8,12 +8,11 @@ import { putApi } from 'services/api';
 
 const RoleUser = (props) => {
 
-    const { setUserModal, userModal, tableData, userFetchData, columnsData, setOpenUser, _id, userRole, fetchData } = props;
+    const { setUserModal, userModal, tableData, userFetchData, columnsData, setSelectedValues, setOpenUser, selectedValues, _id, userRole, fetchData } = props;
 
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
     const columns = useMemo(() => columnsData, [columnsData]);
-    const [selectedValues, setSelectedValues] = useState([]);
     const [isLoding, setIsLoding] = useState(false);
     const data = useMemo(() => tableData, [tableData]);
     const [gopageValue, setGopageValue] = useState();
@@ -65,10 +64,7 @@ const RoleUser = (props) => {
         }
     };
 
-    useEffect(() => {
-        filteredRoles?.map((item) => setSelectedValues((prevSelectedValues) => [...prevSelectedValues, item._id]))
-        userFetchData();
-    }, [userRole])
+
 
     const addUser = async () => {
         const response = await putApi(`api/role-access/assignedUsers/${_id}`, uniqueValues)
@@ -78,6 +74,8 @@ const RoleUser = (props) => {
         }
     }
 
+    console.log(selectedValues, 'llll')
+
     return (
         <Modal onClose={() => setUserModal(false)} isOpen={userModal} isCentered size={"4xl"} style={{ height: "560px" }}>
             <ModalOverlay />
@@ -85,7 +83,7 @@ const RoleUser = (props) => {
                 <ModalHeader>
                     <Flex justifyContent={'space-between'}>
                         <Text>Users</Text>
-                        <ModalCloseButton mt='2' />
+                        <ModalCloseButton mt='2' onClick={() => setSelectedValues([])} />
                     </Flex>
                 </ModalHeader>
                 <ModalBody>
@@ -220,7 +218,7 @@ const RoleUser = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant="brand" onClick={() => addUser()}>
+                    <Button variant="brand" onClick={() => { addUser(); setOpenUser(true) }}>
                         Save
                     </Button>
                     <Button

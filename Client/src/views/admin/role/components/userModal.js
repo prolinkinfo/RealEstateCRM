@@ -104,6 +104,13 @@ function UserModal(props) {
     userFetchData()
   }, [])
 
+  useEffect(() => {
+    tableData?.map((item) => setSelectedValues((prevSelectedValues) => [...prevSelectedValues, item._id]))
+    userFetchData();
+  }, [tableData])
+
+  console.log(tableData)
+
   return (
     <>
       <Modal onClose={() => setOpenUser(false)} isOpen={isOpen} isCentered size={"4xl"} style={{ height: "560px" }}>
@@ -113,7 +120,7 @@ function UserModal(props) {
             <Flex justifyContent={'space-between'}>
               <Text>Users</Text>
               <Button variant="brand" size="sm" me={'2rem'} onClick={() => { setOpenUser(false); setUserModal(true) }}>Manage Users</Button>
-              <ModalCloseButton mt='2' />
+              <ModalCloseButton mt='2' onClick={() => setSelectedValues([])} />
             </Flex>
           </ModalHeader>
           <ModalBody>
@@ -252,7 +259,7 @@ function UserModal(props) {
               Change Access
             </Button> */}
             <Button
-              onClick={() => { setOpenUser(false); setRoleModal(true) }}
+              onClick={() => { setOpenUser(false); setSelectedValues([]); setRoleModal(true) }}
               variant="outline"
               colorScheme="red"
               sx={{
@@ -265,7 +272,7 @@ function UserModal(props) {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <RoleUser fetchData={fetchData} userModal={userModal} setOpenUser={setOpenUser} _id={_id} setUserModal={setUserModal} userFetchData={userFetchData} userRole={tableData} tableData={userData} columnsData={columnsData} />
+      <RoleUser fetchData={fetchData} setSelectedValues={setSelectedValues} selectedValues={selectedValues} userModal={userModal} setOpenUser={setOpenUser} _id={_id} setUserModal={setUserModal} userFetchData={userFetchData} userRole={tableData} tableData={userData} columnsData={columnsData} />
     </>
   );
 }
