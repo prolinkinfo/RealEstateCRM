@@ -192,7 +192,7 @@ export default function Dashboard(props) {
 						</Box>
 					</Box>
 				</SidebarContext.Provider>
-			</Box >
-		</Box >
+			</Box>
+		</Box>
 	);
 }

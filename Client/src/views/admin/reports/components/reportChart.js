@@ -85,7 +85,7 @@ const ReportChart = (props) => {
 
     const selectedSeries = select === 'all' ? series : series.filter(series => series.name === select);
     return (
-        <Card>
+        <>
             {!dashboard &&
                 <Box display='flex' alignItems='center' flexWrap={'wrap'} justifyContent='space-between' mb={4}>
                     <Select value={select} onChange={(e) => setSelect(e.target.value)} width={{ base: '100%', md: '15%' }} mb={{ base: 3, md: 'auto' }}>
@@ -118,7 +118,7 @@ const ReportChart = (props) => {
                             // type='bar'
                             // type='line'
                             type='area'
-                            height={350}
+                            height={300}
                         />
                     )}
                 </div>
@@ -126,7 +126,7 @@ const ReportChart = (props) => {
 
 
 
-        </Card>
+        </>
     )
 }
 
