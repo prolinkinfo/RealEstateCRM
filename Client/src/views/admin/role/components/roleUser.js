@@ -13,13 +13,10 @@ const RoleUser = (props) => {
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
     const columns = useMemo(() => columnsData, [columnsData]);
-    const [selectedValues, setSelectedValues] = useState([]);
     const [isLoding, setIsLoding] = useState(false);
+    const [selectedValues, setSelectedValues] = useState([]);
     const data = useMemo(() => tableData, [tableData]);
     const [gopageValue, setGopageValue] = useState();
-
-    // Filter roles from the first array based on the _id values in the second array
-    const filteredRoles = userRole.filter(item => item.roles.find(role => role === _id));
 
     const tableInstance = useTable(
         {
@@ -66,9 +63,10 @@ const RoleUser = (props) => {
     };
 
     useEffect(() => {
-        filteredRoles?.map((item) => setSelectedValues((prevSelectedValues) => [...prevSelectedValues, item._id]))
-        userFetchData();
-    }, [userRole])
+        const pre = userRole?.map((item) => item._id)
+        setSelectedValues(pre)
+    }, [userModal])
+
 
     const addUser = async () => {
         const response = await putApi(`api/role-access/assignedUsers/${_id}`, uniqueValues)
@@ -158,17 +156,14 @@ const RoleUser = (props) => {
                                                     );
                                                 } else if (cell?.column.Header === "email Id") {
                                                     data = (
-                                                        <Link to={`/userView/${cell?.row?.values._id}`}>
-                                                            <Text
-                                                                me="10px"
-                                                                sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                                                                color='brand.600'
-                                                                fontSize="sm"
-                                                                fontWeight="700"
-                                                            >
-                                                                {cell?.value}
-                                                            </Text>
-                                                        </Link>
+                                                        <Text
+                                                            me="10px"
+                                                            color={textColor}
+                                                            fontSize="sm"
+                                                            fontWeight="700"
+                                                        >
+                                                            {cell?.value}
+                                                        </Text>
                                                     );
                                                 } else if (cell?.column.Header === "first Name") {
                                                     data = (
@@ -220,7 +215,7 @@ const RoleUser = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant="brand" onClick={() => addUser()}>
+                    <Button variant="brand" onClick={() => { addUser(); setOpenUser(true) }}>
                         Save
                     </Button>
                     <Button

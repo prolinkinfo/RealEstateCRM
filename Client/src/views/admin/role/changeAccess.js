@@ -44,6 +44,7 @@ function ChangeAccess(props) {
     setAction,
     _id,
     onClose,
+    setRoleModal,
     editModal, setEditModal,
     onOpen,
   } = props;
@@ -151,6 +152,7 @@ function ChangeAccess(props) {
       let response = await putApi(`api/role-access/edit/${_id}`, values);
       if (response.status === 200) {
         setEditModal(false)
+        setRoleModal(true)
         fetchData()
         setAction((pre) => !pre);
       }
@@ -329,7 +331,7 @@ function ChangeAccess(props) {
             Save
           </Button>
           <Button
-            onClick={() => setEditModal(false)}
+            onClick={() => { setEditModal(false); setRoleModal(true) }}
             variant="outline"
             colorScheme="red"
             sx={{

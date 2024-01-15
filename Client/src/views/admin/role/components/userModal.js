@@ -104,6 +104,8 @@ function UserModal(props) {
     userFetchData()
   }, [])
 
+
+
   return (
     <>
       <Modal onClose={() => setOpenUser(false)} isOpen={isOpen} isCentered size={"4xl"} style={{ height: "560px" }}>
@@ -186,17 +188,14 @@ function UserModal(props) {
                             );
                           } else if (cell?.column.Header === "email Id") {
                             data = (
-                              <Link to={`/userView/${cell?.row?.values._id}`}>
-                                <Text
-                                  me="10px"
-                                  sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                                  color='brand.600'
-                                  fontSize="sm"
-                                  fontWeight="700"
-                                >
-                                  {cell?.value}
-                                </Text>
-                              </Link>
+                              <Text
+                                me="10px"
+                                color={textColor}
+                                fontSize="sm"
+                                fontWeight="700"
+                              >
+                                {cell?.value}
+                              </Text>
                             );
                           } else if (cell?.column.Header === "first Name") {
                             data = (
@@ -248,9 +247,6 @@ function UserModal(props) {
 
           </ModalBody>
           <ModalFooter>
-            {/* <Button variant="brand" onClick={() => { setEditModal(true); setOpenUser(false) }}>
-              Change Access
-            </Button> */}
             <Button
               onClick={() => { setOpenUser(false); setRoleModal(true) }}
               variant="outline"
