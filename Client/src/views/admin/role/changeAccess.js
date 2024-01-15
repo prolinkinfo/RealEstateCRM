@@ -145,14 +145,13 @@ function ChangeAccess(props) {
     setFieldValue('access', updatedAccess);
   };
 
-
   const EditData = async () => {
     try {
       setIsLoding(true);
       let response = await putApi(`api/role-access/edit/${_id}`, values);
       if (response.status === 200) {
         setEditModal(false)
-        setRoleModal(true)
+        // setRoleModal(true)
         fetchData()
         setAction((pre) => !pre);
       }
