@@ -33,7 +33,7 @@ export function SidebarBrand(props) {
       <Flex>
         {/* <Heading my={4}
           cursor={"pointer"} onClick={() => !from && setOpenSidebar(!openSidebar)} userSelect={"none"}>{openSidebar === true ? "Prolink" : "Pr"}</Heading> */}
-        <Image
+        {(image[0]?.logoLgImg && image[0]?.logoSmImg) ? <Image
           style={{ width: "150px", height: '60px' }}
           src={openSidebar === true ? image[0]?.logoLgImg : image[0]?.logoSmImg} // Set the source path of your image
           alt="Logo" // Set the alt text for accessibility
@@ -41,7 +41,8 @@ export function SidebarBrand(props) {
           onClick={() => !from && setOpenSidebar(!openSidebar)}
           userSelect="none"
           my={2}
-        />
+        /> : <Heading my={4}
+          cursor={"pointer"} onClick={() => !from && setOpenSidebar(!openSidebar)} userSelect={"none"}>{openSidebar === true ? "Prolink" : "Pr"}</Heading>}
         {/* <Text border={"1px solid gray"} borderRadius={"50%"} my={4} onClick={() => setOpenSidebar(!openSidebar)} cursor={"pointer"} userSelect={"none"}
           display={{ sm: "none", xl: "inline-flex" }} fontSize={"22px"}
         >{openSidebar === true ? <HiOutlineChevronLeft /> : <HiOutlineChevronRight />}</Text> */}
