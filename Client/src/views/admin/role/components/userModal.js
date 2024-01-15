@@ -29,16 +29,19 @@ import {
 import { Link } from "react-router-dom";
 import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 import Pagination from "components/pagination/Pagination";
+import RoleUser from "./roleUser";
+import { getApi } from "services/api";
 
 function UserModal(props) {
   const {
     tableData,
     columnsData,
     isOpen,
+    _id,
+    setRoleModal,
     setOpenUser,
+    fetchData,
   } = props;
-
-
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -46,7 +49,8 @@ function UserModal(props) {
   const [selectedValues, setSelectedValues] = useState([]);
   const [isLoding, setIsLoding] = useState(false);
   const data = useMemo(() => tableData, [tableData]);
-  const [editModal, setEditModal] = useState(false);
+  const [userModal, setUserModal] = useState(false);
+  const [userData, setUserData] = useState([]);
   const [gopageValue, setGopageValue] = useState();
 
   const tableInstance = useTable(
@@ -91,6 +95,14 @@ function UserModal(props) {
     }
   };
 
+  const userFetchData = async () => {
+    let result = await getApi('api/user/');
+    setUserData(result?.data?.user);
+  }
+
+  useEffect(() => {
+    userFetchData()
+  }, [])
 
   return (
     <>
@@ -100,7 +112,7 @@ function UserModal(props) {
           <ModalHeader>
             <Flex justifyContent={'space-between'}>
               <Text>Users</Text>
-
+              <Button variant="brand" size="sm" me={'2rem'} onClick={() => { setOpenUser(false); setUserModal(true) }}>Manage Users</Button>
               <ModalCloseButton mt='2' />
             </Flex>
           </ModalHeader>
@@ -240,7 +252,7 @@ function UserModal(props) {
               Change Access
             </Button> */}
             <Button
-              onClick={() => setOpenUser(false)}
+              onClick={() => { setOpenUser(false); setRoleModal(true) }}
               variant="outline"
               colorScheme="red"
               sx={{
@@ -253,6 +265,7 @@ function UserModal(props) {
           </ModalFooter>
         </ModalContent>
       </Modal>
+      <RoleUser fetchData={fetchData} userModal={userModal} setOpenUser={setOpenUser} _id={_id} setUserModal={setUserModal} userFetchData={userFetchData} userRole={tableData} tableData={userData} columnsData={columnsData} />
     </>
   );
 }
