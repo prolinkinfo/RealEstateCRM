@@ -23,7 +23,7 @@ const Task = new mongoose.Schema({
     url: String,
     createBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
+        ref: 'User',
         required: true
     },
     updatedDate: {
