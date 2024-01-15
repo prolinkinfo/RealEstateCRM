@@ -38,6 +38,7 @@ function UserModal(props) {
     columnsData,
     isOpen,
     _id,
+    setRoleModal,
     setOpenUser,
     fetchData,
   } = props;
@@ -111,7 +112,7 @@ function UserModal(props) {
           <ModalHeader>
             <Flex justifyContent={'space-between'}>
               <Text>Users</Text>
-              <Button variant="brand" size="sm" me={'1rem'} onClick={() => { setOpenUser(false); setUserModal(true) }}>Add</Button>
+              <Button variant="brand" size="sm" me={'2rem'} onClick={() => { setOpenUser(false); setUserModal(true) }}>Manage Users</Button>
               <ModalCloseButton mt='2' />
             </Flex>
           </ModalHeader>
@@ -251,7 +252,7 @@ function UserModal(props) {
               Change Access
             </Button> */}
             <Button
-              onClick={() => setOpenUser(false)}
+              onClick={() => { setOpenUser(false); setRoleModal(true) }}
               variant="outline"
               colorScheme="red"
               sx={{
@@ -264,7 +265,7 @@ function UserModal(props) {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <RoleUser fetchData={fetchData} userModal={userModal} _id={_id} setUserModal={setUserModal} userFetchData={userFetchData} userRole={tableData} tableData={userData} columnsData={columnsData} />
+      <RoleUser fetchData={fetchData} userModal={userModal} setOpenUser={setOpenUser} _id={_id} setUserModal={setUserModal} userFetchData={userFetchData} userRole={tableData} tableData={userData} columnsData={columnsData} />
     </>
   );
 }

@@ -8,7 +8,7 @@ import { putApi } from 'services/api';
 
 const RoleUser = (props) => {
 
-    const { setUserModal, userModal, tableData, userFetchData, columnsData, _id, userRole, fetchData } = props;
+    const { setUserModal, userModal, tableData, userFetchData, columnsData, setOpenUser, _id, userRole, fetchData } = props;
 
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -224,7 +224,7 @@ const RoleUser = (props) => {
                         Save
                     </Button>
                     <Button
-                        onClick={() => { setUserModal(false); setSelectedValues([]) }}
+                        onClick={() => { setUserModal(false); setSelectedValues([]); setOpenUser(true) }}
                         variant="outline"
                         colorScheme="red"
                         sx={{
