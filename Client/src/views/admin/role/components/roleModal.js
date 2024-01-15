@@ -302,6 +302,8 @@ function RoleModal(props) {
         columnsData={tableColumns}
         tableData={userdata}
         setAction={setAction}
+        _id={_id}
+        fetchData={userFetchData}
         userdata={userdata}
       />
     </>
