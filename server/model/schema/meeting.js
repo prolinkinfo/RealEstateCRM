@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 const meetingHistory = new mongoose.Schema({
     agenda: { type: String, required: true },
     attendes: [{
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'contacts',
     }],
     attendesLead: [{
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Lead',
     }],
     location: String,
@@ -16,14 +16,18 @@ const meetingHistory = new mongoose.Schema({
     notes: String,
     // meetingReminders: { type: String, required: true },
     createdBy: {
-        type: mongoose.Schema.ObjectId,
-        ref: "users",
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
         require: true,
     },
     timestamp: {
         type: Date,
         default: Date.now
-    }
+    },
+    deleted: {
+        type: Boolean,
+        default: false,
+    },
 })
 
 module.exports = mongoose.model('meetingHistory', meetingHistory);

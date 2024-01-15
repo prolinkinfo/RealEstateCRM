@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const phoneCall = new mongoose.Schema({
     sender: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
+        ref: 'User',
         required: true
     },
     recipient: { type: String },
@@ -23,7 +23,11 @@ const phoneCall = new mongoose.Schema({
     timestamp: {
         type: Date,
         default: Date.now
-    }
+    },
+    deleted: {
+        type: Boolean,
+        default: false,
+    },
 })
 
 module.exports = mongoose.model('PhoneCall', phoneCall);
