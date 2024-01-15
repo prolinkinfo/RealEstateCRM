@@ -22,7 +22,8 @@ import { MdAddTask, MdContacts, MdLeaderboard } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { getApi } from "services/api";
 import ReportChart from "../reports/components/reportChart";
-import Chart from "../reports/components/chart";
+import Chart from "components/charts/LineChart.js";
+// import Chart from "../reports/components/chart";
 import { HasAccess } from "../../../redux/accessUtils";
 
 export default function UserReports() {
@@ -139,7 +140,7 @@ export default function UserReports() {
       </SimpleGrid>
 
       <Grid templateColumns="repeat(12, 1fr)" gap={3}>
-        <GridItem rowSpan={2} colSpan={{ base: 12, md: 8 }}>
+        <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
           <Card>
             <Flex mb={3} alignItems={"center"} justifyContent={"space-between"}>
               <Heading size="md">Report</Heading>
@@ -156,7 +157,7 @@ export default function UserReports() {
             <ReportChart dashboard={"dashboard"} />
           </Card>
         </GridItem>
-        <GridItem rowSpan={2} colSpan={{ base: 12, md: 4 }}>
+        <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
           <Card>
             <Flex mb={3} alignItems={"center"} justifyContent={"space-between"}>
               <Heading size="md">Report</Heading>
@@ -174,6 +175,13 @@ export default function UserReports() {
           </Card>
         </GridItem>
       </Grid>
+      {/* <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} my="20px">
+        <Card style={{ borderRadius: "0", borderRight: "2px solid #e6e6e6" }}>1</Card>
+        <Card style={{ borderRadius: "0", borderRight: "2px solid #e6e6e6" }}>1</Card>
+        <Card style={{ borderRadius: "0", borderRight: "2px solid #e6e6e6" }}>1</Card>
+        <Card style={{ borderRadius: "0" }}>1</Card>
+      </SimpleGrid> */}
+
     </>
   );
 }

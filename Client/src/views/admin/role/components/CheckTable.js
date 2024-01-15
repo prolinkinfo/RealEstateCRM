@@ -150,7 +150,7 @@ export default function CheckTable(props) {
             </Flex>
           </GridItem>
           <GridItem colSpan={4} justifyContent="end" alignItems="center" textAlign="right">
-            <Button onClick={() => setAddRoleModal(true)} variant="brand" size="sm">Add</Button>
+            <Button onClick={() => setAddRoleModal(true)} variant="brand" size="sm">Add Role</Button>
             <Button onClick={() => navigate('/admin-setting')} variant="brand" size="sm" ml={2} leftIcon={<IoIosArrowBack />}>Back</Button>
           </GridItem>
         </Grid>

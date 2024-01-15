@@ -44,7 +44,7 @@ function Sidebar(props) {
         bg={sidebarBg}
         transition={variantChange}
         // w='280px'
-        w={openSidebar ? '280px' : "80px"}
+        w={openSidebar ? '260px' : "80px"}
         h='100vh'
         m={sidebarMargins}
         minH='100%'

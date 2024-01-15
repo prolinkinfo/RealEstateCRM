@@ -256,7 +256,7 @@ export default function CheckTable(props) {
                 <MenuItem width={"165px"} onClick={() => handleExportLeads('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem> */}
               </MenuList>
             </Menu>
-            <Button onClick={() => handleClick()} variant="brand" size="sm">Add</Button>
+            <Button onClick={() => handleClick()} variant="brand" size="sm">Add User</Button>
             <Button onClick={() => navigate('/admin-setting')} variant="brand" size="sm" leftIcon={<IoIosArrowBack />} ml={2}>Back</Button>
           </GridItem>
           <HStack spacing={4}>
