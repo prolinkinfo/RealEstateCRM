@@ -166,12 +166,12 @@ export default function UserReports() {
           </Card>
         </GridItem>
       </Grid>
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} my="20px">
+      {/* <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} my="20px">
         <Card style={{ borderRadius: "0", borderRight: "2px solid #e6e6e6" }}>1</Card>
         <Card style={{ borderRadius: "0", borderRight: "2px solid #e6e6e6" }}>1</Card>
         <Card style={{ borderRadius: "0", borderRight: "2px solid #e6e6e6" }}>1</Card>
         <Card style={{ borderRadius: "0" }}>1</Card>
-      </SimpleGrid>
+      </SimpleGrid> */}
 
     </>
   );
