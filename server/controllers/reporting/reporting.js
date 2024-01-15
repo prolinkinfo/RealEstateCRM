@@ -19,11 +19,12 @@ const index = async (req, res) => {
 const lineChart = async (req, res) => {
     const query = req.query
     query.deleted = false;
+    const senderQuery = query
     if (query.createdBy) {
         query.createdBy = new mongoose.Types.ObjectId(query.createdBy);
     }
-    if (query.sender) {
-        query.sender = new mongoose.Types.ObjectId(query.sender);
+    if (query.createdBy) {
+        senderQuery.sender = new mongoose.Types.ObjectId(query.createdBy);
     }
 
     let lead = await Lead.find(query).populate({
@@ -56,13 +57,13 @@ const lineChart = async (req, res) => {
     }).exec()
     const meetingHistoryData = meetingHistory.filter(item => item.createdBy !== null);
 
-    let email = await EmailHistory.find(query).populate({
+    let email = await EmailHistory.find(senderQuery).populate({
         path: 'sender',
         match: { deleted: false } // Populate only if createBy.deleted is false
     }).exec()
     const emailData = email.filter(item => item.sender !== null);
 
-    let phoneCall = await PhoneCall.find(query).populate({
+    let phoneCall = await PhoneCall.find(senderQuery).populate({
         path: 'sender',
         match: { deleted: false } // Populate only if createBy.deleted is false
     }).exec()
