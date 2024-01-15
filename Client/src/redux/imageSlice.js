@@ -9,9 +9,9 @@ const initialState = {
 };
 
 // Create an asynchronous thunk
-export const fetchImage = createAsyncThunk('roles/fetchRoles', async (userId) => {
+export const fetchImage = createAsyncThunk('roles/fetchRoles', async (active) => {
     try {
-        const response = await getApi(`api/images/${userId}`);
+        const response = await getApi(`api/images/${active ? active : ""}`);
         return response.data;
     } catch (error) {
         throw error;
