@@ -80,8 +80,8 @@ export default function AdminNavbar(props) {
 				base: 'calc(100vw - 0%)',
 				md: 'calc(100vw - 0%)',
 				lg: 'calc(100vw - 0%)',
-				xl: openSidebar === true ? 'calc(100vw - 270px)' : 'calc(100vw - 80px)',
-				'2xl': openSidebar === true ? 'calc(100vw - 270px)' : 'calc(100vw - 80px)'
+				xl: openSidebar === true ? 'calc(100vw - 267px)' : 'calc(100vw - 80px)',
+				'2xl': openSidebar === true ? 'calc(100vw - 267px)' : 'calc(100vw - 80px)'
 			}}
 		>
 			<Flex
