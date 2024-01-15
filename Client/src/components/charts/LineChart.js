@@ -1,12 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
+import { getApi } from "services/api";
 
 const ApexChart = () => {
+
+  const [chartData, setChartData] = useState([])
+
+  const featchChart = async () => {
+    // let result = await getApi('api/reporting/line-chart');
+    let result = await getApi(user.role === 'superAdmin' ? 'api/reporting/line-chart' : `api/reporting/line-chart?createBy=${user._id}`);
+    if (result && result.status === 200) {
+      setChartData(result?.data)
+    }
+  }
+  useEffect(() => {
+    featchChart()
+  }, [])
+
   const state = {
     series: [
       {
         name: 'Data',
-        data: [14, 35, 41, 40, 22, 33, 11, 5]
+        data: chartData?.map((item) => item.length)
       }
     ],
     options: {
@@ -18,7 +33,7 @@ const ApexChart = () => {
       plotOptions: {
         bar: {
           borderRadius: 10,
-          columnWidth: '50%',
+          columnWidth: '40%',
         }
       },
       stroke: {
@@ -30,11 +45,7 @@ const ApexChart = () => {
         }
       },
       xaxis: {
-        labels: {
-          rotate: -45
-        },
-        categories: ['Leads', 'Contact', 'Property', 'Task', 'Meeting', 'Email',
-          'Call', 'Report'],
+        categories: chartData?.map((item) => item.name),
         tickPlacement: 'on'
       },
 
@@ -44,7 +55,6 @@ const ApexChart = () => {
           shade: 'light',
           type: "horizontal",
           shadeIntensity: 0.25,
-          gradientToColors: undefined,
           inverseColors: true,
           opacityFrom: 0.85,
           opacityTo: 0.85,
@@ -53,7 +63,6 @@ const ApexChart = () => {
       }
     },
   };
-
   return (
     <div id="chart">
       <ReactApexChart options={state.options} series={state.series} type="bar" height={300} />
