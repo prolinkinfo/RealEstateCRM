@@ -3,6 +3,7 @@ import ReactApexChart from "react-apexcharts";
 import { getApi } from "services/api";
 
 const ApexChart = () => {
+  const user = JSON.parse(localStorage.getItem("user"))
 
   const [chartData, setChartData] = useState([])
 
