@@ -21,10 +21,6 @@ export function SidebarBrand(props) {
       <Flex>
         <Heading my={4}
           cursor={"pointer"} onClick={() => !from && setOpenSidebar(!openSidebar)} userSelect={"none"}>{openSidebar === true ? "Prolink" : "Pr"}</Heading>
-        {/* <Text border={"1px solid gray"} borderRadius={"50%"} my={4} onClick={() => setOpenSidebar(!openSidebar)} cursor={"pointer"} userSelect={"none"}
-          display={{ sm: "none", xl: "inline-flex" }} fontSize={"22px"}
-        >{openSidebar === true ? <HiOutlineChevronLeft /> : <HiOutlineChevronRight />}</Text> */}
-
       </Flex>
       <HSeparator
       />
