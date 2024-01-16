@@ -65,12 +65,10 @@ export default function UserReports() {
         : (proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view) && `api/property/?createBy=${user._id}`
     );
 
-
     setTask(taskData?.data);
     setPropertyData(property?.data);
     setLeadData(lead?.data);
     setContactData(contact?.data);
-
   };
 
   useEffect(() => {
