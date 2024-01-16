@@ -65,15 +65,11 @@ export default function UserReports() {
         : (proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view) && `api/property/?createBy=${user._id}`
     );
 
-    if (taskData?.status === 200) {
-      setTask(taskData?.data);
-    } else if (property?.status === 200) {
-      setPropertyData(property?.data);
-    } else if (lead.status === 200) {
-      setLeadData(lead?.data);
-    } else if (contact.status === 200) {
-      setContactData(contact?.data);
-    }
+
+    setTask(taskData?.data);
+    setPropertyData(property?.data);
+    setLeadData(lead?.data);
+    setContactData(contact?.data);
 
   };
 
