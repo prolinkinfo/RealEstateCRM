@@ -4,6 +4,9 @@ import AdminNavbarLinks from 'components/navbar/NavbarLinksAdmin';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 
+import { AiOutlineMenuUnfold } from "react-icons/ai";
+import { AiOutlineMenuFold } from "react-icons/ai";
+
 export default function AdminNavbar(props) {
 	const [scrolled, setScrolled] = useState(false);
 
@@ -92,7 +95,7 @@ export default function AdminNavbar(props) {
 				}}
 				alignItems={{ xl: 'center' }}
 				mb={gap}>
-				<Box mb={{ sm: '8px', md: '10px' }} pt="15px">
+				<Box mb={{ sm: '8px', md: '10px' }} pt="15px" display={"flex"} alignItems={"center"}>
 					{/*
 					<Breadcrumb>
 						<BreadcrumbItem color={secondaryText} fontSize='sm' mb='5px'>
@@ -116,6 +119,7 @@ export default function AdminNavbar(props) {
 
 					</Breadcrumb>
 					*/}
+					<Box display={{ sm: "none", xl: "flex" }} onClick={() => setOpenSidebar(!openSidebar)} style={{ fontSize: "25px" }}>{openSidebar ? <AiOutlineMenuFold /> : <AiOutlineMenuUnfold />}</Box>
 					<Link
 						color={mainText}
 						href='#'
