@@ -9,8 +9,6 @@ const ImageView = (props) => {
     const { data } = props;
     const [isLoding, setIsLoding] = useState(false)
 
-
-
     const setImageData = async () => {
         try {
             setIsLoding(true)
@@ -26,7 +24,7 @@ const ImageView = (props) => {
             setIsLoding(false)
         }
     }
-    console.log(data._id, "data._id")
+
     return (
         <div>
             <Modal onClose={props.onClose} isOpen={props.isOpen} isCentered>

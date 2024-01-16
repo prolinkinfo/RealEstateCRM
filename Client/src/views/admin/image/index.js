@@ -14,7 +14,6 @@ const ChangeImage = () => {
     const [data, setData] = useState(false)
     const [isLoding, setIsLoding] = useState(false)
 
-
     useEffect(() => {
         dispatch(fetchImage());
     }, [dispatch]);
@@ -40,7 +39,7 @@ const ChangeImage = () => {
         <>
             <Card>
                 <Flex justifyContent={'end'}>
-                    <Button variant='brand' size='sm'>New Image</Button>
+                    <Button variant='brand' size='sm' onClick={() => setImageModal(true)}>New Image</Button>
                 </Flex>
                 <Card>
                     <Grid templateColumns={'repeat(12, 1fr)'} gap={5}>

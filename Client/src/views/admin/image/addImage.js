@@ -4,8 +4,9 @@ import Spinner from 'components/spinner/Spinner'
 import { useFormik } from 'formik'
 import { useState } from 'react'
 import { postApi } from 'services/api'
-import Upload from '../property/components/Upload'
+import UploadImg from './components/Upload';
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const AddImage = (props) => {
     const { imageModal, setImageModal, fetchData } = props
@@ -13,7 +14,9 @@ const AddImage = (props) => {
     const navigate = useNavigate();
 
     const initialValues = {
-        authImg: ''
+        authImg: '',
+        logoSmImg: '',
+        logoLgImg: ''
     }
 
     const formik = useFormik({
@@ -27,15 +30,32 @@ const AddImage = (props) => {
 
     const AddData = async () => {
         try {
-            setIsLoding(true)
-            resetForm()
+            setIsLoding(true);
+            const formData = new FormData();
 
-            const response = await postApi('api/images/change-authImg', values)
-            if (response.status === 200) {
-                setImageModal(false)
-                console.log(response)
+            if (values?.authImg) {
+                formData?.append('authImg', values?.authImg?.[0]);
             }
 
+            if (values?.logoSmImg) {
+                formData?.append('logoSmImg', values?.logoSmImg?.[0]);
+            }
+
+            if (values?.logoLgImg) {
+                formData?.append('logoLgImg', values?.logoLgImg?.[0]);
+            }
+
+            if (values?.authImg || values?.logoSmImg || values?.logoLgImg) {
+                const response = await postApi('api/images/add-auth-logo-img', formData);
+
+                if (response.status === 200) {
+                    setImageModal(false);
+                    resetForm();
+                    toast.success(response?.data?.message);
+                } else {
+                    toast.error(response?.response?.data?.message);
+                }
+            }
 
         } catch (e) {
             console.log(e);
@@ -44,8 +64,6 @@ const AddImage = (props) => {
             setIsLoding(false)
         }
     };
-
-    console.log(values)
 
     return (
         <Modal onClose={() => setImageModal(false)} isOpen={imageModal} isCentered>
@@ -56,7 +74,9 @@ const AddImage = (props) => {
                 <ModalBody>
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12 }}>
-                            <Upload count={values?.image?.length} onFileSelect={(file) => setFieldValue('authImg', file)} />
+                            <UploadImg id='authImg' count={values?.authImg?.length} onFileSelect={(file) => setFieldValue('authImg', file)} text="Image for Authentication Display" />
+                            <UploadImg id='logoSmImg' count={values?.logoSmImg?.length} onFileSelect={(file) => setFieldValue('logoSmImg', file)} text="Small Logo Image" />
+                            <UploadImg id='logoLgImg' count={values?.logoLgImg?.length} onFileSelect={(file) => setFieldValue('logoLgImg', file)} text="Large Logo Image" />
                             <Text mb='10px' color={'red'}> {errors.lead && touched.lead && <>Please Select </>}</Text>
                         </GridItem>
                     </Grid>
