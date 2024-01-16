@@ -21,7 +21,6 @@ export function SidebarBrand(props) {
       <Flex>
         <Heading my={4}
           cursor={"pointer"} onClick={() => !from && setOpenSidebar(!openSidebar)} userSelect={"none"}>{openSidebar === true ? "Prolink" : "Pr"}</Heading>
-
       </Flex>
       <HSeparator
       />

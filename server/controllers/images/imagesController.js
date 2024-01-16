@@ -10,6 +10,20 @@ const index = async (req, res) => {
     return res.send(result);
 };
 
+const view = async (req, res) => {
+    try {
+        let result = await Img.findOne({ _id: req.params.id, deleted: false });
+
+        if (!result) return res.status(404).json({ message: "No Data Found." });
+
+        return res.status(200).json(result);
+
+    } catch (error) {
+        console.error('Failed :', error);
+        res.status(400).json({ success: false, message: 'Failed to display ', err: error });
+    }
+};
+
 const addAuthImg = async (req, res) => {
     try {
         if (!req.file) {
@@ -169,4 +183,4 @@ const upload = multer({
 });
 
 
-module.exports = { index, upload, addAuthImg, UpdateAuthImg, changeLogoImg, deleteData, setActiveImg };
+module.exports = { index, view, upload, addAuthImg, UpdateAuthImg, changeLogoImg, deleteData, setActiveImg };
