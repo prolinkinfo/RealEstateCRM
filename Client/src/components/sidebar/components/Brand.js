@@ -1,15 +1,28 @@
 
 // Chakra imports
-import { Flex, Heading, useColorModeValue } from "@chakra-ui/react";
+import { Flex, Heading, Image, useColorModeValue } from "@chakra-ui/react";
 
 // Custom components
 import { HSeparator } from "components/separator/Separator";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchImage } from "../../../redux/imageSlice";
 
 export function SidebarBrand(props) {
   const { setOpenSidebar, openSidebar, from } = props;
 
   //   Chakra color mode
   let logoColor = useColorModeValue("navy.700", "white");
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // Dispatch the fetchRoles action on component mount
+    dispatch(fetchImage("?isActive=true"));
+  }, [dispatch]);
+
+  const largeLogo = useSelector((state) => state?.images?.image[0]?.logoLgImg);
+  const smallLogo = useSelector((state) => state?.images?.image[0]?.logoSmImg);
 
   return (
     <Flex align='center' direction='column' style={{
@@ -19,8 +32,16 @@ export function SidebarBrand(props) {
       background: "#fff"
     }}>
       <Flex>
-        <Heading my={4}
-          cursor={"pointer"} onClick={() => !from && setOpenSidebar(!openSidebar)} userSelect={"none"}>{openSidebar === true ? "Prolink" : "Pr"}</Heading>
+        {(largeLogo || smallLogo) ? <Image
+          style={{ width: "150px", height: '60px' }}
+          src={openSidebar === true ? largeLogo : smallLogo} // Set the source path of your image
+          alt="Logo" // Set the alt text for accessibility
+          cursor="pointer"
+          onClick={() => !from && setOpenSidebar(!openSidebar)}
+          userSelect="none"
+          my={2}
+        /> : <Heading my={4}
+          cursor={"pointer"} onClick={() => !from && setOpenSidebar(!openSidebar)} userSelect={"none"}>{openSidebar === true ? "Prolink" : "Pr"}</Heading>}
       </Flex>
       <HSeparator
       />
