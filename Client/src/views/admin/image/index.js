@@ -22,7 +22,7 @@ const ChangeImage = () => {
             </Flex>
             <Card>
                 <Grid templateColumns={'repeat(12, 1fr)'} gap={5}>
-                    {image?.map((item, i) => (
+                    {image && image?.map((item, i) => (
                         <GridItem colSpan={{ base: 12, md: 4, lg: 3 }}>
                             <div className="imageCard">
                                 <Image src={item?.authImg} height={"200px"} width={"400px"} />
@@ -32,7 +32,7 @@ const ChangeImage = () => {
                             </div>
                         </GridItem>
                     ))}
-                  
+
                 </Grid>
             </Card>
         </Card>

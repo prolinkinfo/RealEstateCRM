@@ -15,8 +15,8 @@ function SidebarContent(props) {
   // SIDEBAR
   return (
     <Flex direction='column' height='100%'
-      onMouseOver={() => setOpenSidebar(true)}
-      onMouseOut={() => setOpenSidebar(false)}
+      // onMouseOver={() => setOpenSidebar(true)}
+      // onMouseOut={() => setOpenSidebar(false)}
       pt='2px'
       borderRadius='30px'>
       <Brand from={from}
