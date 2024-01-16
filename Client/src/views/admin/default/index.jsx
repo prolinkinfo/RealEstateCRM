@@ -47,28 +47,28 @@ export default function UserReports() {
     let taskData = await getApi(
       user.role === "superAdmin"
         ? "api/task/"
-        : `api/task/?createBy=${user._id}`
+        : (taskView?.create || taskView?.update || taskView?.delete || taskView?.view) && `api/task/?createBy=${user._id}`
     );
     let contact = await getApi(
       user.role === "superAdmin"
         ? "api/contact/"
-        : `api/contact/?createBy=${user._id}`
+        : (contactView?.create || contactView?.update || contactView?.delete || contactView?.view) && `api/contact/?createBy=${user._id}`
     );
     let lead = await getApi(
       user.role === "superAdmin"
         ? "api/lead/"
-        : `api/lead/?createBy=${user._id}`
+        : (leadView?.create || leadView?.update || leadView?.delete || leadView?.view) && `api/lead/?createBy=${user._id}`
     );
     let property = await getApi(
       user.role === "superAdmin"
         ? "api/property/"
-        : `api/property/?createBy=${user._id}`
+        : (proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view) && `api/property/?createBy=${user._id}`
     );
 
-    setPropertyData(proprtyView && property?.data);
-    setLeadData(leadView && lead?.data);
-    setContactData(contactView && contact?.data);
-    setTask(taskView && taskData?.data);
+    setTask(taskData?.data);
+    setPropertyData(property?.data);
+    setLeadData(lead?.data);
+    setContactData(contact?.data);
   };
 
   useEffect(() => {
@@ -79,7 +79,7 @@ export default function UserReports() {
     <>
       <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} gap="20px" mb="20px">
         {/* , "2xl": 6 */}
-        <MiniStatistics
+        {(taskView?.create || taskView?.update || taskView?.delete || taskView?.view) && <MiniStatistics
           onClick={() => navigate("/task")}
           startContent={
             <IconBox
@@ -91,8 +91,8 @@ export default function UserReports() {
           }
           name="Tasks"
           value={task?.length || 0}
-        />
-        <MiniStatistics
+        />}
+        {(contactView?.create || contactView?.update || contactView?.delete || contactView?.view) && <MiniStatistics
           onClick={() => navigate("/contacts")}
           startContent={
             <IconBox
@@ -106,8 +106,8 @@ export default function UserReports() {
           }
           name="Contacts"
           value={contactData?.length || 0}
-        />
-        <MiniStatistics
+        />}
+        {(leadView?.create || leadView?.update || leadView?.delete || leadView?.view) && <MiniStatistics
           onClick={() => navigate("/lead")}
           startContent={
             <IconBox
@@ -121,8 +121,8 @@ export default function UserReports() {
           }
           name="Leads"
           value={leadData?.length || 0}
-        />
-        <MiniStatistics
+        />}
+        {(proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view) && <MiniStatistics
           onClick={() => navigate("/properties")}
           startContent={
             <IconBox
@@ -136,7 +136,7 @@ export default function UserReports() {
           }
           name="Property"
           value={propertyData?.length || 0}
-        />
+        />}
       </SimpleGrid>
 
       <Grid templateColumns="repeat(12, 1fr)" gap={3}>

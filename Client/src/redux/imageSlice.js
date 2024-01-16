@@ -7,6 +7,7 @@ const initialState = {
     error: null,
 };
 
+// Create an asynchronous thunk
 export const fetchImage = createAsyncThunk('images/fetchImage', async (active) => {
     try {
         const response = await getApi(`api/images/${active ? active : ""}`);
