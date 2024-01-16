@@ -3,9 +3,14 @@ import Card from 'components/card/Card'
 import React, { useEffect, useState } from 'react'
 import { fetchImage } from "../../../redux/imageSlice";
 import { useDispatch, useSelector } from 'react-redux'
+<<<<<<< HEAD
 import ImageView from './imageView';
+=======
+import AddImage from './addImage';
+>>>>>>> 874206ad6040724511bc293891ea96039c92efaf
 
 const ChangeImage = () => {
+    const [imageModal, setImageModal] = useState(false)
     const dispatch = useDispatch();
     const [imageview, setImageView] = useState(false)
 
@@ -50,6 +55,7 @@ const ChangeImage = () => {
                 onClose={handleViewClose}
                 image={image}
             />
+            <AddImage imageModal={imageModal} setImageModal={setImageModal} fetchData={fetchImage} />
         </>
     )
 }
