@@ -12,7 +12,7 @@ import { fetchImage } from '../../../redux/imageSlice'
 import { useDispatch } from 'react-redux'
 
 const AddImage = (props) => {
-    const { imageModal, setImageModal, fetchData, setAction } = props
+    const { imageModal, setImageModal, fetchData } = props
     const [isLoding, setIsLoding] = useState(false)
     const navigate = useNavigate();
 
@@ -57,7 +57,6 @@ const AddImage = (props) => {
                     setImageModal(false);
                     resetForm();
                     dispatch(fetchImage());
-                    setAction((pre) => !pre)
                     toast.success(response?.data?.message);
                 } else {
                     toast.error(response?.response?.data?.message);

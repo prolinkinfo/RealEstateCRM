@@ -10,7 +10,7 @@ const ChangeImage = () => {
     const [imageModal, setImageModal] = useState(false)
     const dispatch = useDispatch();
     const [imageview, setImageView] = useState(false)
-    const [action, setAction] = useState(false)
+
     useEffect(() => {
         dispatch(fetchImage());
     }, [dispatch]);
@@ -50,7 +50,7 @@ const ChangeImage = () => {
                 onClose={handleViewClose}
                 image={image}
             />
-            <AddImage imageModal={imageModal} setAction={setAction} setImageModal={setImageModal} fetchData={fetchImage} />
+            <AddImage imageModal={imageModal} setImageModal={setImageModal} fetchData={fetchImage} />
         </>
     )
 }
