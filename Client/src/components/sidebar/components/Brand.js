@@ -21,7 +21,8 @@ export function SidebarBrand(props) {
     dispatch(fetchImage("?isActive=true"));
   }, [dispatch]);
 
-  const image = useSelector((state) => state?.images?.image);
+  const largeLogo = useSelector((state) => state?.images?.image[0]?.logoLgImg);
+  const smallLogo = useSelector((state) => state?.images?.image[0]?.logoSmImg);
 
   return (
     <Flex align='center' direction='column' style={{
@@ -31,9 +32,9 @@ export function SidebarBrand(props) {
       background: "#fff"
     }}>
       <Flex>
-        {(image[0]?.logoLgImg || image[0]?.logoSmImg) ? <Image
+        {(largeLogo || smallLogo) ? <Image
           style={{ width: "150px", height: '60px' }}
-          src={openSidebar === true ? image[0]?.logoLgImg : image[0]?.logoSmImg} // Set the source path of your image
+          src={openSidebar === true ? largeLogo : smallLogo} // Set the source path of your image
           alt="Logo" // Set the alt text for accessibility
           cursor="pointer"
           onClick={() => !from && setOpenSidebar(!openSidebar)}
