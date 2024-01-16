@@ -1,10 +1,12 @@
 import { Box, Button, Flex, Grid, GridItem, Image } from '@chakra-ui/react'
 import Card from 'components/card/Card'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { fetchImage } from "../../../redux/imageSlice";
 import { useDispatch, useSelector } from 'react-redux'
+import AddImage from './addImage';
 
 const ChangeImage = () => {
+    const [imageModal, setImageModal] = useState(false)
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -18,7 +20,7 @@ const ChangeImage = () => {
     return (
         <Card>
             <Flex justifyContent={'end'}>
-                <Button variant='brand' size='sm'>New Image</Button>
+                <Button variant='brand' size='sm' onClick={() => setImageModal(true)}>New Image</Button>
             </Flex>
             <Card>
                 <Grid templateColumns={'repeat(12, 1fr)'} gap={5}>
@@ -35,6 +37,7 @@ const ChangeImage = () => {
 
                 </Grid>
             </Card>
+            <AddImage imageModal={imageModal} setImageModal={setImageModal} fetchData={fetchImage} />
         </Card>
     )
 }
