@@ -10,7 +10,7 @@ const ImageView = (props) => {
     const [isLoding, setIsLoding] = useState(false)
 
     const navigate = useNavigate()
-    console.log(props.image)
+
     return (
         <div>
             <Modal onClose={props.onClose} isOpen={props.isOpen} isCentered>

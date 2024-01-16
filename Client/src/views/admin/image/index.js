@@ -11,7 +11,6 @@ const ChangeImage = () => {
     const dispatch = useDispatch();
     const [imageview, setImageView] = useState(false)
 
-
     useEffect(() => {
         dispatch(fetchImage());
     }, [dispatch]);
@@ -24,7 +23,6 @@ const ChangeImage = () => {
         setImageView(!imageview)
     }
 
-    console.log(image, "image");
     return (
         <>
             <Card>
