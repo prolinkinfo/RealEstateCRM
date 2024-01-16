@@ -5,26 +5,37 @@ import { fetchImage } from "../../../redux/imageSlice";
 import { useDispatch, useSelector } from 'react-redux'
 import ImageView from './imageView';
 import AddImage from './addImage';
+import { getApi } from 'services/api';
 
 const ChangeImage = () => {
     const [imageModal, setImageModal] = useState(false)
     const dispatch = useDispatch();
     const [imageview, setImageView] = useState(false)
+    const [data, setData] = useState(false)
+    const [isLoding, setIsLoding] = useState(false)
 
 
     useEffect(() => {
         dispatch(fetchImage());
     }, [dispatch]);
 
+
+
+    const fetchData = async (selectedId) => {
+        setIsLoding(true)
+        let result = await getApi(`api/images/view/${selectedId}`);
+        setData(result.data)
+        setIsLoding(false)
+    }
     const image = useSelector((state) => state?.images?.image);
-    const handleViewOpen = () => {
+    const handleViewOpen = (item) => {
+        fetchData(item._id)
         setImageView(!imageview)
     }
     const handleViewClose = () => {
-        setImageView(!imageview)
+        setImageView(false)
     }
 
-    console.log(image, "image");
     return (
         <>
             <Card>
@@ -39,7 +50,7 @@ const ChangeImage = () => {
                                     <Image src={item?.authImg} height={"200px"} width={"400px"} />
                                     <div className='imageContent'>
                                         <Button size='sm' variant="brand">Set Image</Button>
-                                        <Button size='sm' variant="brand" ms={1} onClick={() => handleViewOpen()}>View</Button>
+                                        <Button size='sm' variant="brand" ms={1} onClick={() => handleViewOpen(item)}>View</Button>
                                     </div>
                                 </div>
                             </GridItem>
@@ -51,6 +62,8 @@ const ChangeImage = () => {
             <ImageView isOpen={imageview}
                 onClose={handleViewClose}
                 image={image}
+                // fetchData={fetchData}
+                data={data}
             />
             <AddImage imageModal={imageModal} setImageModal={setImageModal} fetchData={fetchImage} />
         </>
