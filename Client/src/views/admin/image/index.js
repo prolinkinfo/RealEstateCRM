@@ -32,7 +32,6 @@ const ChangeImage = () => {
                             </div>
                         </GridItem>
                     ))}
-
                 </Grid>
             </Card>
         </Card>
