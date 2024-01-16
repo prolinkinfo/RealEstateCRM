@@ -12,6 +12,7 @@ const initialState = {
 export const fetchImage = createAsyncThunk('roles/fetchRoles', async (active) => {
     try {
         const response = await getApi(`api/images/${active ? active : ""}`);
+        console.log(response.data)
         return response.data;
     } catch (error) {
         throw error;

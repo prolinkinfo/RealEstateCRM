@@ -4,7 +4,7 @@ import Spinner from 'components/spinner/Spinner'
 import { useFormik } from 'formik'
 import { useState } from 'react'
 import { postApi } from 'services/api'
-import Upload from '../lead/components/Upload'
+import Upload from '../property/components/Upload'
 import { useNavigate } from 'react-router-dom'
 
 const AddImage = (props) => {
@@ -30,10 +30,12 @@ const AddImage = (props) => {
             setIsLoding(true)
             resetForm()
 
-            if (values.lead) {
+            const response = await postApi('api/images/change-authImg', values)
+            if (response.status === 200) {
                 setImageModal(false)
-                navigate('/api/images/change-authImg', { state: { fileData: values.authImg } });
+                console.log(response)
             }
+
 
         } catch (e) {
             console.log(e);
@@ -43,16 +45,18 @@ const AddImage = (props) => {
         }
     };
 
+    console.log(values)
+
     return (
         <Modal onClose={() => setImageModal(false)} isOpen={imageModal} isCentered>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Import Leads</ModalHeader>
+                <ModalHeader>Add Image</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12 }}>
-                            <Upload count={values.lead.length} onFileSelect={(file) => setFieldValue('lead', file)} />
+                            <Upload count={values?.image?.length} onFileSelect={(file) => setFieldValue('authImg', file)} />
                             <Text mb='10px' color={'red'}> {errors.lead && touched.lead && <>Please Select </>}</Text>
                         </GridItem>
                     </Grid>
