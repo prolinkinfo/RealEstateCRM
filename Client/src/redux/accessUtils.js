@@ -16,7 +16,7 @@ export const HasAccess = (action) => {
     const roles = useSelector((state) => state.roles.roles);
     const rolesToCheck = roles?.map(item => item.roleName)
 
-    const access = rolesToCheck.map((roleToCheck) => {
+    const access = rolesToCheck?.map((roleToCheck) => {
         const role = roles.find((r) => r.roleName === roleToCheck);
         return role?.access?.find((a) => a.title === action);
     });
@@ -32,7 +32,7 @@ export const HasAccess = (action) => {
         "export": true,
     }
 
-    access.forEach((permission) => {
+    access?.forEach((permission) => {
         const { title, ...rest } = permission;
 
         if (!mergedPermissions[title]) {

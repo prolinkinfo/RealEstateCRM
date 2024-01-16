@@ -1,15 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getApi } from 'services/api';
 
-// Assume you have an initialState for roles
 const initialState = {
-    image: [], // Initial empty array for roles
-    status: 'idle', // Possible statuses: 'idle', 'loading', 'succeeded', 'failed'
+    image: [],
+    status: 'idle',
     error: null,
 };
 
-// Create an asynchronous thunk
-export const fetchImage = createAsyncThunk('roles/fetchRoles', async (active) => {
+export const fetchImage = createAsyncThunk('images/fetchImage', async (active) => {
     try {
         const response = await getApi(`api/images/${active ? active : ""}`);
         return response.data;
@@ -18,7 +16,6 @@ export const fetchImage = createAsyncThunk('roles/fetchRoles', async (active) =>
     }
 });
 
-// Create a slice with reducers and the initial state
 const imageSlice = createSlice({
     name: 'images',
     initialState,
@@ -30,7 +27,7 @@ const imageSlice = createSlice({
             })
             .addCase(fetchImage.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.image = action.payload; // Set roles in the state
+                state.image = action.payload;
             })
             .addCase(fetchImage.rejected, (state, action) => {
                 state.status = 'failed';
@@ -38,5 +35,4 @@ const imageSlice = createSlice({
             });
     },
 });
-
 export default imageSlice.reducer;
