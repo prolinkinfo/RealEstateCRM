@@ -11,6 +11,8 @@ const ChangeImage = () => {
     const [imageModal, setImageModal] = useState(false)
     const dispatch = useDispatch();
     const [imageview, setImageView] = useState(false)
+    const [data, setData] = useState(false)
+    const [isLoding, setIsLoding] = useState(false)
 
     useEffect(() => {
         dispatch(fetchImage());
