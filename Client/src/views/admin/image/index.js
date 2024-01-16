@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import ImageView from './imageView';
 import AddImage from './addImage';
 import { getApi } from 'services/api';
+import { IoIosArrowBack } from 'react-icons/io';
+import { useNavigate } from 'react-router-dom';
 
 const ChangeImage = () => {
     const [imageModal, setImageModal] = useState(false)
@@ -13,6 +15,7 @@ const ChangeImage = () => {
     const [imageview, setImageView] = useState(false)
     const [data, setData] = useState(false)
     const [isLoding, setIsLoding] = useState(false)
+    const navigate = useNavigate()
 
     useEffect(() => {
         dispatch(fetchImage());
@@ -38,6 +41,7 @@ const ChangeImage = () => {
             <Card>
                 <Flex justifyContent={'end'}>
                     <Button variant='brand' size='sm' onClick={() => setImageModal(true)}>New Image</Button>
+                    <Button onClick={() => navigate('/admin-setting')} variant="brand" size="sm" leftIcon={<IoIosArrowBack />} ml={2}>Back</Button>
                 </Flex>
                 <Card>
                     <Grid templateColumns={'repeat(12, 1fr)'} gap={5}>
