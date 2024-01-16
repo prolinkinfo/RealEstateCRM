@@ -18,8 +18,6 @@ const ChangeImage = () => {
         dispatch(fetchImage());
     }, [dispatch]);
 
-
-
     const fetchData = async (selectedId) => {
         setIsLoding(true)
         let result = await getApi(`api/images/view/${selectedId}`);
@@ -64,7 +62,7 @@ const ChangeImage = () => {
                 // fetchData={fetchData}
                 data={data}
             />
-            <AddImage imageModal={imageModal} setImageModal={setImageModal} fetchData={fetchImage} />
+            <AddImage imageModal={imageModal} setAction={setAction} setImageModal={setImageModal} fetchData={fetchImage} />
         </>
     )
 }
