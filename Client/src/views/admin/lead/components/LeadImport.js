@@ -105,7 +105,7 @@ function LeadImport() {
                     leadPhoneNumber: item[values.leadPhoneNumber || "leadPhoneNumber"] || '',
                     leadAddress: item[values.leadAddress || "leadAddress"] || '',
                     leadOwner: item[values.leadOwner || "leadOwner"] || '',
-                    leadScore: item[values.leadScore || "leadScore"] || '',
+                    leadScore: parseInt(item[values.leadScore || "leadScore"] || '', 10),
                     leadSource: item[values.leadSource || "leadSource"] || '',
                     leadStatus: item[values.leadStatus || "leadStatus"] || '',
                     leadSourceChannel: item[values.leadSourceChannel || "leadSourceChannel"] || '',
@@ -193,6 +193,7 @@ function LeadImport() {
                     });
                     jsonData.push(rowData);
                 });
+                jsonData?.splice(0, 1);
                 setImportedFileData(jsonData);
 
                 if (jsonData && jsonData.length > 0) {
