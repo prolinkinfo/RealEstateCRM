@@ -164,8 +164,6 @@ export default function AdminNavbar(props) {
 						_focus={{
 							boxShadow: 'none'
 						}}>
-
-
 						{brandText}
 					</Link>
 				</Box>
