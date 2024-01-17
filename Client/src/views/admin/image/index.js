@@ -29,7 +29,6 @@ const ChangeImage = () => {
         setIsLoding(false)
     }
     const image = useSelector((state) => state?.images?.image);
-    console.log(image, "image")
     const handleViewOpen = (item) => {
         fetchData(item._id)
         setImageView(!imageview)
@@ -42,7 +41,6 @@ const ChangeImage = () => {
         try {
             setIsLoding(true)
             let response = await putApi(`api/images/isActive/${item?._id}`, { isActive: true });
-            console.log(response)
             if (response.status === 200) {
                 handleViewClose();
                 dispatch(fetchImage());
