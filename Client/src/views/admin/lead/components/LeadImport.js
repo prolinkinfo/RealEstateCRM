@@ -98,14 +98,16 @@ function LeadImport() {
                 const leadCreationDate = moment(item[values.leadCreationDate || "leadCreationDate"]);
                 const leadConversionDate = moment(item[values.leadConversionDate || "leadConversionDate"]);
                 const leadFollowUpDate = moment(item[values.leadFollowUpDate || "leadFollowUpDate"]);
-                
+                const leadScore = item[values.leadScore || "leadScore"] || '';
+                const leadConversionRate = item[values.leadConversionRate || "leadConversionRate"] || '';
+
                 return {
                     leadName: item[values.leadName || "leadName"] || '',
                     leadEmail: item[values.leadEmail || "leadEmail"] || '',
                     leadPhoneNumber: item[values.leadPhoneNumber || "leadPhoneNumber"] || '',
                     leadAddress: item[values.leadAddress || "leadAddress"] || '',
                     leadOwner: item[values.leadOwner || "leadOwner"] || '',
-                    leadScore: item[values.leadScore || "leadScore"] || '',
+                    leadScore: parseInt(leadScore, 10) || null,
                     leadSource: item[values.leadSource || "leadSource"] || '',
                     leadStatus: item[values.leadStatus || "leadStatus"] || '',
                     leadSourceChannel: item[values.leadSourceChannel || "leadSourceChannel"] || '',
@@ -117,7 +119,7 @@ function LeadImport() {
                     leadFollowUpStatus: item[values.leadFollowUpStatus || "leadFollowUpStatus"] || '',
                     leadCommunicationPreferences: item[values.leadCommunicationPreferences || "leadCommunicationPreferences"] || '',
                     leadEngagementLevel: item[values.leadEngagementLevel || "leadEngagementLevel"] || '',
-                    leadConversionRate: item[values.leadConversionRate || "leadConversionRate"] || '',
+                    leadConversionRate: parseFloat(leadConversionRate) || null,
                     leadNurturingStage: item[values.leadNurturingStage || "leadNurturingStage"] || '',
                     deleted: item[values.deleted || "deleted"] || false,
                     createBy: JSON.parse(localStorage.getItem('user'))._id,
@@ -193,6 +195,7 @@ function LeadImport() {
                     });
                     jsonData.push(rowData);
                 });
+                jsonData?.splice(0, 1);
                 setImportedFileData(jsonData);
 
                 if (jsonData && jsonData.length > 0) {

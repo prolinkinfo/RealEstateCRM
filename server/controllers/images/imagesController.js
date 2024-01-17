@@ -43,7 +43,69 @@ const addAuthImg = async (req, res) => {
         fs.unlinkSync(path.join(__dirname, '../../uploads/images/', req?.file?.filename));
         return res.status(400).json({ success: false, message: 'Failed to add auth image' });
     }
-}
+};
+
+const addAuthAndLogoImg = async (req, res) => {
+    try {
+        if (!req.files?.authImg && !req?.files?.logoLgImg && !req?.files?.logoSmImg) {
+            return res.status(400).send({ success: false, message: 'No files uploaded.' });
+
+        } else if (!req.files?.authImg) {
+            req?.files && Object.values(req?.files).forEach((fileArray) => {
+                if (fileArray?.[0]?.filename) {
+                    const filePath = path.join(__dirname, '../../uploads/images/', fileArray?.[0]?.filename);
+                    fs.unlinkSync(filePath);
+                }
+            });
+
+            return res.status(400).send({ success: false, message: 'No auth file uploaded' });
+
+        } else if (!req?.files?.logoLgImg && !req?.files?.logoSmImg) {
+            req?.files && Object.values(req?.files).forEach((fileArray) => {
+                if (fileArray?.[0]?.filename) {
+                    const filePath = path.join(__dirname, '../../uploads/images/', fileArray?.[0]?.filename);
+                    fs.unlinkSync(filePath);
+                }
+            });
+
+            return res.status(400).send({ success: false, message: 'No logo files uploaded' });
+        }
+
+        const { logoLgImg, logoSmImg, authImg } = req.files;
+
+        const createdDate = new Date();
+        const url = req.protocol + '://' + req.get('host');
+
+        const authFile = `${url}/api/images/authImg/${authImg?.[0]?.filename}`;
+        let smFile = '';
+        let lgFile = '';
+
+        if (logoLgImg && logoSmImg) {
+            smFile = `${url}/api/images/logoImg/${logoSmImg?.[0]?.filename}`;
+            lgFile = `${url}/api/images/logoImg/${logoLgImg?.[0]?.filename}`;
+        } else {
+            smFile = `${url}/api/images/logoImg/${logoSmImg ? logoSmImg?.[0]?.filename : logoLgImg?.[0]?.filename}`;
+            lgFile = `${url}/api/images/logoImg/${logoSmImg ? logoSmImg?.[0]?.filename : logoLgImg?.[0]?.filename}`;
+        }
+
+        const newImgDocument = new Img({ authImg: authFile, logoSmImg: smFile, logoLgImg: lgFile, createdDate, isActive: true });
+        await newImgDocument.save();
+        await Img.updateMany({ _id: { $ne: newImgDocument._id } }, { $set: { isActive: false } });
+        return res.send({ data: newImgDocument, message: 'Files uploaded successfully' });
+
+    } catch (err) {
+        console.error('Failed to add auth Image:', err);
+
+        req?.files && Object.values(req?.files).forEach((fileArray) => {
+            if (fileArray?.[0]?.filename) {
+                const filePath = path.join(__dirname, '../../uploads/images/', fileArray?.[0]?.filename);
+                fs.unlinkSync(filePath);
+            }
+        });
+
+        return res.status(400).json({ success: false, message: 'Failed to add auth image' });
+    }
+};
 
 const UpdateAuthImg = async (req, res) => {
     try {
@@ -128,6 +190,63 @@ const changeLogoImg = async (req, res) => {  // add, edit
     }
 };
 
+const updateAuthAndLogoImg = async (req, res) => {
+    try {
+        const { id } = req.params;
+        let updateData = {};
+
+        if (!req?.files?.logoLgImg && !req?.files?.logoSmImg && !req.files?.authImg) {
+            return res.status(400).send({ success: false, message: 'No files uploaded.' });
+        }
+
+        const existingDocument = await Img.findOne({ _id: id });
+
+        if (existingDocument) {
+            const { logoLgImg, logoSmImg, authImg } = req?.files;
+
+            const url = req.protocol + '://' + req.get('host');
+
+            if (authImg) {
+                updateData.authImg = `${url}/api/images/authImg/${authImg?.[0]?.filename}`;
+            }
+
+            if (logoLgImg) {
+                updateData.logoLgImg = `${url}/api/images/logoImg/${logoLgImg?.[0]?.filename}`;
+            }
+
+            if (logoSmImg) {
+                updateData.logoSmImg = `${url}/api/images/logoImg/${logoSmImg?.[0]?.filename}`;
+            }
+
+            let result = await Img.findByIdAndUpdate({ _id: id }, { $set: { ...updateData } }, { new: true });
+            return res.send({ data: result, message: 'Files updated successfully.' });
+
+        }
+        else {
+            req?.files && Object.values(req?.files).forEach((fileArray) => {
+                if (fileArray?.[0]?.filename) {
+                    const filePath = path.join(__dirname, '../../uploads/images/', fileArray?.[0]?.filename);
+                    fs.unlinkSync(filePath);
+                }
+            });
+
+            return res.status(404).send({ success: false, message: 'No Data Found.' });
+        }
+
+    } catch (err) {
+        console.error('Failed to update images :', err);
+
+        req?.files && Object.values(req?.files).forEach((fileArray) => {
+            if (fileArray?.[0]?.filename) {
+                const filePath = path.join(__dirname, '../../uploads/images/', fileArray?.[0]?.filename);
+                fs.unlinkSync(filePath);
+            }
+        });
+
+        return res.status(400).json({ success: false, message: 'Failed to update images' });
+    }
+};
+
 const setActiveImg = async (req, res) => {
     try {
         const { isActive } = req.body;
@@ -137,12 +256,14 @@ const setActiveImg = async (req, res) => {
             return res.status(404).send({ success: false, message: "No Data Found" })
         }
 
+        await Img.updateMany({ _id: { $ne: req.params.id } }, { $set: { isActive: false } });
+
         return res.status(200).json({ message: "done", data: imageData });
 
     } catch (err) {
 
     }
-}
+};
 
 const deleteData = async (req, res) => {
     try {
@@ -183,4 +304,4 @@ const upload = multer({
 });
 
 
-module.exports = { index, view, upload, addAuthImg, UpdateAuthImg, changeLogoImg, deleteData, setActiveImg };
+module.exports = { index, view, upload, addAuthImg, addAuthAndLogoImg, UpdateAuthImg, updateAuthAndLogoImg, changeLogoImg, deleteData, setActiveImg };
