@@ -44,7 +44,6 @@ const ChangeImage = () => {
             if (response.status === 200) {
                 handleViewClose();
                 dispatch(fetchImage());
-                // setAction((pre) => !pre)
             }
         } catch (e) {
             console.log(e);
