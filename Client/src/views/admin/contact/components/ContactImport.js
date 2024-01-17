@@ -118,14 +118,17 @@ function ContactImport() {
                 const birthday = moment(item[values.birthday || "birthday"]);
                 const anniversary = moment(item[values.anniversary || "anniversary"]);
                 const dob = moment(item[values.dob || "dob"]);
+                const phoneNumber = item[values.phoneNumber || 'phoneNumber'] || '';
+                const mobileNumber = item[values.mobileNumber || 'mobileNumber'] || '';
+                const leadRating = item[values.leadRating || 'leadRating' ] || '';
 
                 return {
                     firstName: item[values.firstName || "firstName"] || '',
                     lastName: item[values.lastName || "lastName"] || '',
                     title: item[values.title || "title"] || '',
                     email: item[values.email || "email"] || '',
-                    phoneNumber: item[values.phoneNumber || "phoneNumber"] || '',
-                    mobileNumber: item[values.mobileNumber || "mobileNumber"] || '',
+                    phoneNumber: parseInt(phoneNumber, 10) || null,
+                    mobileNumber: parseInt(mobileNumber, 10) || null,
                     physicalAddress: item[values.physicalAddress || "physicalAddress"] || '',
                     mailingAddress: item[values.mailingAddress || "mailingAddress"] || '',
                     preferredContactMethod: item[values.preferredContactMethod || "preferredContactMethod"] || '',
@@ -133,7 +136,7 @@ function ContactImport() {
                     referralSource: item[values.referralSource || "referralSource"] || '',
                     campaignSource: item[values.campaignSource || "campaignSource"] || '',
                     leadStatus: item[values.leadStatus || "leadStatus"] || '',
-                    leadRating: item[values.leadRating || "leadRating"] || '',
+                    leadRating: parseFloat(leadRating) || null,
                     leadConversionProbability: item[values.leadConversionProbability || "leadConversionProbability"] || '',
                     notesandComments: item[values.notesandComments || "notesandComments"] || '',
                     tagsOrLabelsForcategorizingcontacts: item[values.tagsOrLabelsForcategorizingcontacts || "tagsOrLabelsForcategorizingcontacts"] || '',
