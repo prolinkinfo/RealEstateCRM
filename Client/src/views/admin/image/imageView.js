@@ -1,4 +1,4 @@
-import { Button, Flex, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react';
+import { Button, Flex, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
@@ -77,7 +77,7 @@ const ImageView = (props) => {
                     <ModalBody>
                         <Flex wrap='wrap' justifyContent={"center"}>
                             <div>
-                                <label>Small Logo Image</label>
+                                <Text textAlign={"center"} fontWeight={"600"}>Small Logo Image</Text>
                                 <div className="imageCard" style={{ margin: "10px" }}>
                                     <Image src={data?.logoSmImg} height={"100px"} width={"180px"} />
                                     <div className='imageContent'>
@@ -93,7 +93,7 @@ const ImageView = (props) => {
                                 </div>
                             </div>
                             <div>
-                                <label>Large Logo Image</label>
+                                <Text textAlign={"center"} fontWeight={"600"}>Large Logo Image</Text>
                                 <div className="imageCard" style={{ margin: "10px" }}>
                                     <Image src={data?.logoLgImg} height={"100px"} width={"180px"} />
                                     <div className='imageContent'>
@@ -109,7 +109,7 @@ const ImageView = (props) => {
                                 </div>
                             </div>
                             <div>
-                                <label>Auth Image</label>
+                                <Text textAlign={"center"} fontWeight={"600"}>Auth Image</Text>
                                 <div className="imageCard" style={{ margin: "10px" }}>
                                     <Image src={data?.authImg} height={"100px"} width={"180px"} />
                                     <div className='imageContent'>
