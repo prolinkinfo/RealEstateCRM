@@ -46,7 +46,7 @@ export default function AdminNavbar(props) {
 
 	useEffect(() => {
 		// Dispatch the fetchRoles action on component mount
-		dispatch(fetchImage());
+		dispatch(fetchImage(window.location.pathname === '/change-image' ? '' : "?isActive=true"));
 	}, [dispatch]);
 
 	const largeLogo = useSelector((state) => state?.images?.image[0]?.logoLgImg);
