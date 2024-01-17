@@ -13,22 +13,6 @@ const ImageView = (props) => {
     const [isLoding, setIsLoding] = useState(false)
     const dispatch = useDispatch()
 
-    // const setImageData = async () => {
-    //     try {
-    //         setIsLoding(true)
-    //         let response = await putApi(`api/images/isActive/${data?._id}`, { isActive: true });
-    //         if (response.status === 200) {
-    //             props.onClose();
-    //             props.setAction((pre) => !pre)
-    //         }
-    //     } catch (e) {
-    //         console.log(e);
-    //     }
-    //     finally {
-    //         setIsLoding(false)
-    //     }
-    // }
-
     const authimg = 'authimage';
     const logoimg = 'logoimg'
     const largelogoimg = 'largelogoimg'
@@ -59,8 +43,7 @@ const ImageView = (props) => {
                     toast.error(response?.response?.data?.message);
                 }
             }
-
-        } catch (e) {
+                } catch (e) {
             console.log(e);
         }
         finally {

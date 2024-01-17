@@ -43,7 +43,7 @@ const ChangeImage = () => {
             let response = await putApi(`api/images/isActive/${item?._id}`, { isActive: true });
             if (response.status === 200) {
                 handleViewClose();
-                // setAction((pre) => !pre)
+                dispatch(fetchImage());
             }
         } catch (e) {
             console.log(e);
