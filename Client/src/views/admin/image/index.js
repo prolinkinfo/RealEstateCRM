@@ -42,8 +42,10 @@ const ChangeImage = () => {
         try {
             setIsLoding(true)
             let response = await putApi(`api/images/isActive/${item?._id}`, { isActive: true });
+            console.log(response)
             if (response.status === 200) {
                 handleViewClose();
+                dispatch(fetchImage());
                 // setAction((pre) => !pre)
             }
         } catch (e) {
