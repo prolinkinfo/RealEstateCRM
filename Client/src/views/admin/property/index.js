@@ -34,6 +34,8 @@ const Index = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const size = "lg";
 
+    const dataColumn = dynamicColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
+
     const fetchData = async () => {
         setIsLoding(true)
         let result = await getApi(user.role === 'superAdmin' ? 'api/property/' : `api/property/?createBy=${user._id}`);
@@ -59,6 +61,7 @@ const Index = () => {
                 isOpen={isOpen}
                 setAction={setAction}
                 action={action}
+                dataColumn={dataColumn}
                 setSearchedData={setSearchedData}
                 allData={data}
                 displaySearchData={displaySearchData}

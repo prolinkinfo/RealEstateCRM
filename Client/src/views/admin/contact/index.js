@@ -37,6 +37,8 @@ const Index = () => {
     const emailAccess = HasAccess('Email')
     const callAccess = HasAccess('Call')
 
+    const dataColumn = dynamicColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
+
     const fetchData = async () => {
         setIsLoding(true)
         let result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`);
@@ -57,6 +59,7 @@ const Index = () => {
                     <CheckTable
                         isLoding={isLoding}
                         columnsData={columns}
+                        dataColumn={dataColumn}
                         isOpen={isOpen}
                         setAction={setAction}
                         action={action}

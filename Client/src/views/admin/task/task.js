@@ -35,6 +35,8 @@ const Task = (props) => {
 
     const permission = HasAccess('Task')
 
+    const dataColumn = dynamicColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
+
     const fetchData = async () => {
         setIsLoding(true)
         let result = await getApi(user.role === 'superAdmin' ? 'api/task/' : `api/task/?createBy=${user._id}`);
@@ -55,6 +57,7 @@ const Task = (props) => {
                 isLoding={isLoding}
                 columnsData={columns}
                 isOpen={isOpen}
+                dataColumn={dataColumn}
                 setAction={setAction}
                 action={action}
                 setSearchedData={setSearchedData}
