@@ -63,7 +63,7 @@ const ChangeImage = () => {
             <ImageView isOpen={imageview}
                 onClose={handleViewClose}
                 image={image}
-                // fetchData={fetchData}
+                fetchData={fetchData}
                 data={data}
             />
             <AddImage imageModal={imageModal} setImageModal={setImageModal} fetchData={fetchImage} />

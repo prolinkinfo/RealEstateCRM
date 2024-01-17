@@ -33,7 +33,7 @@ export function SidebarBrand(props) {
     }}>
       <Flex>
         {(largeLogo || smallLogo) ? <Image
-          style={{ width: "150px", height: '60px' }}
+          style={{ width: "100%", height: '52px' }}
           src={openSidebar === true ? largeLogo : smallLogo} // Set the source path of your image
           alt="Logo" // Set the alt text for accessibility
           cursor="pointer"
