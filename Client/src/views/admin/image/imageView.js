@@ -1,4 +1,4 @@
-import { Button, Flex, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react';
+import { Button, Flex, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
@@ -9,25 +9,25 @@ import { useDispatch } from 'react-redux';
 import { fetchImage } from '../../../redux/imageSlice'
 
 const ImageView = (props) => {
-    const { data, fetchData } = props;
+    const { data, fetchData, setImageData } = props;
     const [isLoding, setIsLoding] = useState(false)
     const dispatch = useDispatch()
 
-    const setImageData = async () => {
-        try {
-            setIsLoding(true)
-            let response = await putApi(`api/images/isActive/${data?._id}`, { isActive: true });
-            if (response.status === 200) {
-                props.onClose();
-                props.setAction((pre) => !pre)
-            }
-        } catch (e) {
-            console.log(e);
-        }
-        finally {
-            setIsLoding(false)
-        }
-    }
+    // const setImageData = async () => {
+    //     try {
+    //         setIsLoding(true)
+    //         let response = await putApi(`api/images/isActive/${data?._id}`, { isActive: true });
+    //         if (response.status === 200) {
+    //             props.onClose();
+    //             props.setAction((pre) => !pre)
+    //         }
+    //     } catch (e) {
+    //         console.log(e);
+    //     }
+    //     finally {
+    //         setIsLoding(false)
+    //     }
+    // }
 
     const authimg = 'authimage';
     const logoimg = 'logoimg'
@@ -77,8 +77,7 @@ const ImageView = (props) => {
                     <ModalBody>
                         <Flex wrap='wrap' justifyContent={"center"}>
                             <div>
-
-                                <label>Small Logo Image</label>
+                                <Text textAlign={"center"} fontWeight={"600"}>Small Logo Image</Text>
                                 <div className="imageCard" style={{ margin: "10px" }}>
                                     <Image src={data?.logoSmImg} height={"100px"} width={"180px"} />
                                     <div className='imageContent'>
@@ -94,8 +93,7 @@ const ImageView = (props) => {
                                 </div>
                             </div>
                             <div>
-
-                                <label>Large Logo Image</label>
+                                <Text textAlign={"center"} fontWeight={"600"}>Large Logo Image</Text>
                                 <div className="imageCard" style={{ margin: "10px" }}>
                                     <Image src={data?.logoLgImg} height={"100px"} width={"180px"} />
                                     <div className='imageContent'>
@@ -111,7 +109,7 @@ const ImageView = (props) => {
                                 </div>
                             </div>
                             <div>
-                                <label>Auth Image</label>
+                                <Text textAlign={"center"} fontWeight={"600"}>Auth Image</Text>
                                 <div className="imageCard" style={{ margin: "10px" }}>
                                     <Image src={data?.authImg} height={"100px"} width={"180px"} />
                                     <div className='imageContent'>
@@ -129,7 +127,7 @@ const ImageView = (props) => {
                         </Flex>
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme="brand" mr={2} size='sm' onClick={() => { setImageData() }} disabled={isLoding ? true : false}>{isLoding ? <Spinner /> : 'Set Image'}</Button>
+                        <Button colorScheme="brand" mr={2} size='sm' onClick={() => setImageData(data)} disabled={isLoding ? true : false}>{isLoding ? <Spinner /> : 'Set Image'}</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

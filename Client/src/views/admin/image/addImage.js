@@ -79,19 +79,20 @@ const AddImage = (props) => {
                 <ModalBody>
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 6, md: 12, sm: 12, lg: 6 }}>
-                            <UploadImg id='authImg' count={values?.authImg?.length} onFileSelect={(file) => setFieldValue('authImg', file)} text="Image for Authentication Display" />
+                            <UploadImg id='logoLgImg' count={values?.logoLgImg?.length} onFileSelect={(file) => setFieldValue('logoLgImg', file)} text="Large Logo " />
                         </GridItem>
                         <GridItem colSpan={{ base: 6, md: 12, sm: 12, lg: 6 }}>
-                            <UploadImg id='logoSmImg' count={values?.logoSmImg?.length} onFileSelect={(file) => setFieldValue('logoSmImg', file)} text="Small Logo Image" />
+                            <UploadImg id='logoSmImg' count={values?.logoSmImg?.length} onFileSelect={(file) => setFieldValue('logoSmImg', file)} text="Small Logo " />
                         </GridItem>
                         <GridItem display={{ lg: 'flex' }} justifyContent={{ lg: 'center' }} colSpan={{ base: 12, md: 12, sm: 12, lg: 12 }}>
-                            <UploadImg id='logoLgImg' count={values?.logoLgImg?.length} onFileSelect={(file) => setFieldValue('logoLgImg', file)} text="Large Logo Image" />
+                            <UploadImg id='authImg' count={values?.authImg?.length} onFileSelect={(file) => setFieldValue('authImg', file)} text="Login Page Image" />
                         </GridItem>
                     </Grid>
                 </ModalBody>
                 <ModalFooter>
-                    <Button me={2} variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} rightIcon={<AddIcon />}>{isLoding ? <Spinner /> : 'Add'}</Button>
+                    <Button me={2} variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} size='sm' >{isLoding ? <Spinner /> : 'Add'}</Button>
                     <Button variant="outline"
+                        size='sm'
                         colorScheme="red" onClick={() => {
                             setImageModal(false)
                             formik.resetForm()
