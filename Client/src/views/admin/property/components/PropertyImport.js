@@ -226,6 +226,7 @@ function PropertyImport() {
                     });
                     jsonData.push(rowData);
                 });
+                jsonData?.splice(0, 1);
                 setImportedFileData(jsonData);
 
                 if (jsonData && jsonData.length > 0) {
