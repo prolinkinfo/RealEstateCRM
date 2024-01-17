@@ -8,6 +8,7 @@ import AddImage from './addImage';
 import { getApi } from 'services/api';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
+import { putApi } from 'services/api';
 
 const ChangeImage = () => {
     const [imageModal, setImageModal] = useState(false)
@@ -36,6 +37,22 @@ const ChangeImage = () => {
         setImageView(false)
     }
 
+    const setImageData = async (item) => {
+        try {
+            setIsLoding(true)
+            let response = await putApi(`api/images/isActive/${item?._id}`, { isActive: true });
+            if (response.status === 200) {
+                handleViewClose();
+                // setAction((pre) => !pre)
+            }
+        } catch (e) {
+            console.log(e);
+        }
+        finally {
+            setIsLoding(false)
+        }
+    }
+
     return (
         <>
             <Card>
@@ -50,7 +67,7 @@ const ChangeImage = () => {
                                 <div className="imageCard">
                                     <Image src={item?.authImg} height={"200px"} width={"400px"} />
                                     <div className='imageContent'>
-                                        <Button size='sm' variant="brand">Set Image</Button>
+                                        <Button size='sm' variant="brand" onClick={() => setImageData(item)}>Set Image</Button>
                                         <Button size='sm' variant="brand" ms={1} onClick={() => handleViewOpen(item)}>View</Button>
                                     </div>
                                 </div>
@@ -65,6 +82,7 @@ const ChangeImage = () => {
                 image={image}
                 fetchData={fetchData}
                 data={data}
+                setImageData={setImageData}
             />
             <AddImage imageModal={imageModal} setImageModal={setImageModal} fetchData={fetchImage} />
         </>
