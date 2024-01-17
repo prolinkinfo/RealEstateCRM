@@ -18,7 +18,6 @@ const ImageView = (props) => {
             setIsLoding(true)
             let response = await putApi(`api/images/isActive/${data?._id}`, { isActive: true });
             if (response.status === 200) {
-                // dispatch(fetchImage());
                 props.onClose();
                 props.setAction((pre) => !pre)
             }
@@ -85,7 +84,6 @@ const ImageView = (props) => {
                                     <div className='imageContent'>
                                         <Dropzone
                                             borderRadius="0"
-                                            // img={props.text === 'Property Photos' ? 'img' : ''}
                                             isMultipleAllow={false}
                                             onFileSelect={(file) => changeImage(file, logoimg)}
                                             content={
@@ -103,7 +101,6 @@ const ImageView = (props) => {
                                     <div className='imageContent'>
                                         <Dropzone
                                             borderRadius="0"
-                                            // img={props.text === 'Property Photos' ? 'img' : ''}
                                             isMultipleAllow={false}
                                             onFileSelect={(file) => changeImage(file, largelogoimg)}
                                             content={
@@ -120,14 +117,12 @@ const ImageView = (props) => {
                                     <div className='imageContent'>
                                         <Dropzone
                                             borderRadius="0"
-                                            // img={props.text === 'Property Photos' ? 'img' : ''}
                                             isMultipleAllow={false}
                                             onFileSelect={(file) => changeImage(file, authimg)}
                                             content={
                                                 <Button size='sm' variant="brand" >Change</Button>
                                             }
                                         />
-
                                     </div>
                                 </div>
                             </div>
