@@ -79,7 +79,6 @@ const AddImage = (props) => {
                 <ModalBody>
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 6, md: 12, sm: 12, lg: 6 }}>
-                            {/* <Flex wrap='wrap'> */}
                             <UploadImg id='authImg' count={values?.authImg?.length} onFileSelect={(file) => setFieldValue('authImg', file)} text="Image for Authentication Display" />
                         </GridItem>
                         <GridItem colSpan={{ base: 6, md: 12, sm: 12, lg: 6 }}>
@@ -87,7 +86,6 @@ const AddImage = (props) => {
                         </GridItem>
                         <GridItem display={{ lg: 'flex' }} justifyContent={{ lg: 'center' }} colSpan={{ base: 12, md: 12, sm: 12, lg: 12 }}>
                             <UploadImg id='logoLgImg' count={values?.logoLgImg?.length} onFileSelect={(file) => setFieldValue('logoLgImg', file)} text="Large Logo Image" />
-                            {/* </Flex> */}
                         </GridItem>
                     </Grid>
                 </ModalBody>
