@@ -1,11 +1,13 @@
 // Chakra Imports
-import { Box, Flex, Link, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Flex, Heading, Image, Link, Text, useColorModeValue } from '@chakra-ui/react';
 import AdminNavbarLinks from 'components/navbar/NavbarLinksAdmin';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 
 import { AiOutlineMenuUnfold } from "react-icons/ai";
 import { AiOutlineMenuFold } from "react-icons/ai";
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchImage } from '../../redux/imageSlice';
 
 export default function AdminNavbar(props) {
 	const [scrolled, setScrolled] = useState(false);
@@ -40,7 +42,15 @@ export default function AdminNavbar(props) {
 			setScrolled(false);
 		}
 	};
+	const dispatch = useDispatch();
 
+	useEffect(() => {
+		// Dispatch the fetchRoles action on component mount
+		dispatch(fetchImage("?isActive=true"));
+	}, [dispatch]);
+
+	const largeLogo = useSelector((state) => state?.images?.image[0]?.logoLgImg);
+	const smallLogo = useSelector((state) => state?.images?.image[0]?.logoSmImg);
 	return (
 		<Box
 			position={navbarPosition}
@@ -122,10 +132,26 @@ export default function AdminNavbar(props) {
 					<Box display={{ sm: "none", xl: "flex" }} onClick={() => setOpenSidebar(!openSidebar)} style={{ fontSize: "25px" }}>{openSidebar ? <AiOutlineMenuFold /> : <AiOutlineMenuUnfold />}</Box>
 					<Link
 						color={mainText}
+						display={{ sm: "flex", xl: "none" }}
+					>
+						{largeLogo ? <Image
+							style={{ width: "100%", height: '52px' }}
+							src={largeLogo}
+							alt="Logo"
+							cursor="pointer"
+							userSelect="none"
+							my={2}
+						/> : <Heading my={4}
+							cursor={"pointer"} userSelect={"none"}>{openSidebar === true ? "Prolink" : "Pr"}</Heading>}
+					</Link>
+
+					<Link
+						color={mainText}
 						href='#'
 						pt="2px"
 						bg='inherit'
 						ps="30px"
+						display={{ sm: "none", xl: "flex" }}
 						borderRadius='inherit'
 						fontWeight='bold'
 						fontSize='34px'
@@ -138,6 +164,8 @@ export default function AdminNavbar(props) {
 						_focus={{
 							boxShadow: 'none'
 						}}>
+
+
 						{brandText}
 					</Link>
 				</Box>
