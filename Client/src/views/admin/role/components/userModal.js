@@ -96,7 +96,7 @@ function UserModal(props) {
   };
 
   const userFetchData = async () => {
-    let result = await getApi('api/user/');
+    let result = await getApi('api/user/?role=user');
     setUserData(result?.data?.user);
   }
 
