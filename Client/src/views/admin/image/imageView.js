@@ -8,7 +8,6 @@ import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { fetchImage } from '../../../redux/imageSlice'
 
-
 const ImageView = (props) => {
     const { data, fetchData } = props;
     const [isLoding, setIsLoding] = useState(false)
@@ -140,7 +139,7 @@ const ImageView = (props) => {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
-        </div >
+        </div>
     )
 }
 

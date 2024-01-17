@@ -14,7 +14,6 @@ import { useDispatch } from 'react-redux'
 const AddImage = (props) => {
     const { imageModal, setImageModal, fetchData } = props
     const [isLoding, setIsLoding] = useState(false)
-    const navigate = useNavigate();
 
     const dispatch = useDispatch()
 
@@ -91,9 +90,6 @@ const AddImage = (props) => {
                             {/* </Flex> */}
                         </GridItem>
                     </Grid>
-
-
-
                 </ModalBody>
                 <ModalFooter>
                     <Button me={2} variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} rightIcon={<AddIcon />}>{isLoding ? <Spinner /> : 'Add'}</Button>
@@ -104,7 +100,7 @@ const AddImage = (props) => {
                         }}>Close</Button>
                 </ModalFooter>
             </ModalContent>
-        </Modal >
+        </Modal>
     )
 }
 
