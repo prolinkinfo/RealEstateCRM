@@ -77,7 +77,6 @@ const ImageView = (props) => {
                     <ModalBody>
                         <Flex wrap='wrap' justifyContent={"center"}>
                             <div>
-
                                 <label>Small Logo Image</label>
                                 <div className="imageCard" style={{ margin: "10px" }}>
                                     <Image src={data?.logoSmImg} height={"100px"} width={"180px"} />
@@ -94,7 +93,6 @@ const ImageView = (props) => {
                                 </div>
                             </div>
                             <div>
-
                                 <label>Large Logo Image</label>
                                 <div className="imageCard" style={{ margin: "10px" }}>
                                     <Image src={data?.logoLgImg} height={"100px"} width={"180px"} />
