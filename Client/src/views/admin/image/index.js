@@ -29,6 +29,7 @@ const ChangeImage = () => {
         setIsLoding(false)
     }
     const image = useSelector((state) => state?.images?.image);
+    console.log(image, "image")
     const handleViewOpen = (item) => {
         fetchData(item._id)
         setImageView(!imageview)

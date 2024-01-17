@@ -18,7 +18,7 @@ export function SidebarBrand(props) {
 
   useEffect(() => {
     // Dispatch the fetchRoles action on component mount
-    dispatch(fetchImage("?isActive=true"));
+    dispatch(fetchImage());
   }, [dispatch]);
 
   const largeLogo = useSelector((state) => state?.images?.image[0]?.logoLgImg);
@@ -32,7 +32,7 @@ export function SidebarBrand(props) {
       background: "#fff"
     }}>
       <Flex>
-        {(largeLogo || smallLogo) ? <Image
+        {largeLogo || smallLogo ? <Image
           style={{ width: "100%", height: '52px' }}
           src={openSidebar === true ? largeLogo : smallLogo} // Set the source path of your image
           alt="Logo" // Set the alt text for accessibility
