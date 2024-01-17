@@ -18,11 +18,11 @@ export function SidebarBrand(props) {
 
   useEffect(() => {
     // Dispatch the fetchRoles action on component mount
-    dispatch(fetchImage("?isActive=true"));
+    dispatch(fetchImage());
   }, [dispatch]);
 
-  const largeLogo = useSelector((state) => state?.images?.image[0]?.logoLgImg);
-  const smallLogo = useSelector((state) => state?.images?.image[0]?.logoSmImg);
+  const largeLogo = useSelector((state) => state?.images?.image.filter(item => item.isActive === true));
+
 
   return (
     <Flex align='center' direction='column' style={{
@@ -32,9 +32,9 @@ export function SidebarBrand(props) {
       background: "#fff"
     }}>
       <Flex>
-        {largeLogo || smallLogo ? <Image
+        {largeLogo[0]?.logoLgImg || largeLogo[0]?.logoSmImg ? <Image
           style={{ width: "100%", height: '52px' }}
-          src={openSidebar === true ? largeLogo : smallLogo} // Set the source path of your image
+          src={openSidebar === true ? largeLogo[0]?.logoLgImg : largeLogo[0]?.logoSmImg} // Set the source path of your image
           alt="Logo" // Set the alt text for accessibility
           cursor="pointer"
           onClick={() => !from && setOpenSidebar(!openSidebar)}
