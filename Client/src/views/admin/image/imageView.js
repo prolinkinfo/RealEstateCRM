@@ -52,7 +52,6 @@ const ImageView = (props) => {
             }
             if (type == authimg || type == logoimg || type == largelogoimg) {
                 const response = await putApi(`api/images/change-auth-logo-img/${data?._id}`, formData);
-                console.log(response, "response")
                 if (response.status === 200) {
                     fetchData(data?._id);
                     dispatch(fetchImage());
