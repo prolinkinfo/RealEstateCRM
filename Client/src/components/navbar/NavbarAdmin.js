@@ -49,8 +49,8 @@ export default function AdminNavbar(props) {
 		dispatch(fetchImage(window.location.pathname === '/change-image' ? '' : "?isActive=true"));
 	}, [dispatch]);
 
-	const largeLogo = useSelector((state) => state?.images?.image[0]?.logoLgImg);
-	const smallLogo = useSelector((state) => state?.images?.image[0]?.logoSmImg);
+	const largeLogo = useSelector((state) => state?.images?.image[state?.images?.image.length - 1]);
+	const smallLogo = useSelector((state) => state?.images?.image[state?.images?.image.length - 1]);
 	return (
 		<Box
 			position={navbarPosition}
@@ -134,9 +134,9 @@ export default function AdminNavbar(props) {
 						color={mainText}
 						display={{ sm: "flex", xl: "none" }}
 					>
-						{largeLogo ? <Image
+						{largeLogo?.logoLgImg ? <Image
 							style={{ width: "100%", height: '52px' }}
-							src={largeLogo}
+							src={largeLogo?.logoLgImg}
 							alt="Logo"
 							cursor="pointer"
 							userSelect="none"
