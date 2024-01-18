@@ -41,6 +41,8 @@ const Index = () => {
         setIsLoding(false)
     }
 
+    const dataColumn = dynamicColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
+
     useEffect(() => {
         setColumns(tableColumns)
     }, [action])
@@ -58,6 +60,7 @@ const Index = () => {
                 // action={action} columnsData={columns}
                 isLoding={isLoding}
                 columnsData={columns}
+                dataColumn={dataColumn}
                 isOpen={isOpen}
                 setAction={setAction}
                 action={action}

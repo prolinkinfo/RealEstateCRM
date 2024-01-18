@@ -34,6 +34,8 @@ const Index = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const size = "lg";
 
+    const dataColumn = dynamicColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
+
     const fetchData = async () => {
         setIsLoding(true)
         let result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
@@ -54,6 +56,7 @@ const Index = () => {
                         columnsData={tableColumns}
                         isOpen={isOpen}
                         setAction={setAction}
+                        dataColumn={dataColumn}
                         action={action}
                         setSearchedData={setSearchedData}
                         allData={data}

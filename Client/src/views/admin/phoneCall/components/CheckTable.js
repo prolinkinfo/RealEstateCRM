@@ -67,11 +67,11 @@ import { MdLeaderboard } from 'react-icons/md';
 import { HasAccess } from "../../../../redux/accessUtils";
 
 export default function CheckTable(props) {
-  const { columnsData, tableData, fetchData, isLoding, allData, setSearchedData, access, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action } = props;
+  const { columnsData, tableData, fetchData, isLoding, dataColumn, allData, setSearchedData, access, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action } = props;
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   // const columns = useMemo(() => columnsData, [columnsData]);
-  const columns = useMemo(() => selectedColumns, [selectedColumns]);
+  const columns = useMemo(() => dataColumn, [dataColumn]);
   const data = useMemo(() => tableData, [tableData]);
   // const [data, setData] = useState([])
   const user = JSON.parse(localStorage.getItem("user"))
@@ -80,7 +80,7 @@ export default function CheckTable(props) {
   const [advaceSearch, setAdvaceSearch] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [searchClear, setSearchClear] = useState(false);
-  const [tempSelectedColumns, setTempSelectedColumns] = useState(selectedColumns);
+  const [tempSelectedColumns, setTempSelectedColumns] = useState(dataColumn);
   const [getTagValues, setGetTagValues] = useState([]);
   const [searchbox, setSearchbox] = useState('');
   const [selectedValues, setSelectedValues] = useState([]);
