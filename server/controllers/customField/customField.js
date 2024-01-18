@@ -70,6 +70,7 @@ const view = async (req, res) => {
         if (!customFieldDoc) return res.status(404).json({ success: false, message: "No Data Found." });
         return res.send(customFieldDoc);
     } catch (err) {
+
         console.error('Failed to display:', err);
         return res.status(400).json({ success: false, message: 'Failed to display', error: err });
     }
@@ -129,4 +130,21 @@ const deleteManyFields = async (req, res) => {
     }
 };
 
-module.exports = { index, add, editWholeFieldsArray, editSingleField, view, deleteField, deleteManyFields };
+
+const createNewModule = async (req, res) => {
+    try {
+        const moduleName = req.body.moduleName;
+
+        const newModule = new CustomField({ moduleName, fields: req.body.fields || [] });
+        await newModule.save();
+
+        return res.status(200).json({ message: "Module added successfully", data: newModule });
+
+    } catch (err) {
+        console.error('Failed to create module:', err);
+        return res.status(400).json({ success: false, message: 'Failed to Create module', error: err.toString() });
+    }
+};
+
+
+module.exports = { index, add, editWholeFieldsArray, editSingleField, view, deleteField, deleteManyFields, createNewModule };

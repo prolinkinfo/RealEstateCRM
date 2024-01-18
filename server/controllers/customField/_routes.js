@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get('/', auth, customField.index);
 router.post('/add', auth, customField.add);
+router.use("/add-module", auth, customField.createNewModule);
 router.put('/change-fields/:id', auth, customField.editWholeFieldsArray);
 router.put('/change-single-field/:id', auth, customField.editSingleField);
 router.get('/view/:id', auth, customField.view);
