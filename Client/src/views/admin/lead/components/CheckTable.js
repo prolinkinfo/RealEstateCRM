@@ -104,8 +104,6 @@ export default function CheckTable(props) {
     { Header: "Score", accessor: "leadScore" },
   ];
 
-
-
   const toggleColumnVisibility = (columnKey) => {
     const isColumnSelected = tempSelectedColumns.some((column) => column.accessor === columnKey);
 
@@ -117,7 +115,6 @@ export default function CheckTable(props) {
       setTempSelectedColumns([...tempSelectedColumns, columnToAdd]);
     }
   };
-
 
   const initialValues = {
     leadName: '',
