@@ -31,6 +31,7 @@ const Index = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const size = "lg";
 
+    const dataColumn = dynamicColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 
     const fetchData = async () => {
         setIsLoding(true)
@@ -50,6 +51,7 @@ const Index = () => {
             <CheckTable
                 // action={action} columnsData={columns} 
                 isLoding={isLoding}
+                dataColumn={dataColumn}
                 columnsData={columns}
                 isOpen={isOpen}
                 setAction={setAction}

@@ -58,16 +58,16 @@ import { useFormik } from "formik";
 import { CiMenuKebab } from "react-icons/ci";
 
 export default function CheckTable(props) {
-  const { setMeeting, className, addMeeting, from, columnsData, tableData, fetchData, access, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action } = props;
+  const { setMeeting, className, addMeeting, from, columnsData, dataColumn, tableData, fetchData, access, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action } = props;
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   // const columns = useMemo(() => columnsData, [columnsData]);
-  const columns = useMemo(() => selectedColumns, [selectedColumns]);
+  const columns = useMemo(() => dataColumn, [dataColumn]);
   const data = useMemo(() => tableData, [tableData]);
   const user = JSON.parse(localStorage.getItem("user"))
   const [gopageValue, setGopageValue] = useState()
   const [searchbox, setSearchbox] = useState('');
-  const [tempSelectedColumns, setTempSelectedColumns] = useState(selectedColumns);
+  const [tempSelectedColumns, setTempSelectedColumns] = useState(dataColumn);
   const [manageColumns, setManageColumns] = useState(false);
   const [getTagValues, setGetTagValues] = useState([]);
   const [advaceSearch, setAdvaceSearch] = useState(false);

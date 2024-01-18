@@ -70,10 +70,11 @@ import ImportModal from "./ImportModal";
 import { HasAccess } from "../../../../redux/accessUtils";
 
 export default function CheckTable(props) {
-  const { columnsData, tableData, fetchData, isLoding, allData, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, callAccess, emailAccess, setAction, action } = props;
+  const { columnsData, tableData, dataColumn, fetchData, isLoding, allData, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, callAccess, emailAccess, setAction, action } = props;
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
-  const columns = useMemo(() => selectedColumns, [selectedColumns]);
+
+  const columns = useMemo(() => dataColumn, [dataColumn]);
   const [selectedValues, setSelectedValues] = useState([]);
   const [getTagValues, setGetTagValues] = useState([]);
   const [gopageValue, setGopageValue] = useState()
@@ -92,7 +93,7 @@ export default function CheckTable(props) {
   const [isImportLead, setIsImportLead] = useState(false);
   const [searchbox, setSearchbox] = useState('');
   const [manageColumns, setManageColumns] = useState(false);
-  const [tempSelectedColumns, setTempSelectedColumns] = useState(selectedColumns); // State to track changes
+  const [tempSelectedColumns, setTempSelectedColumns] = useState(dataColumn); // State to track changes
 
   const csvColumns = [
     { Header: 'Name', accessor: 'leadName' },
@@ -102,6 +103,8 @@ export default function CheckTable(props) {
     { Header: "Owner", accessor: "leadOwner" },
     { Header: "Score", accessor: "leadScore" },
   ];
+
+
 
   const toggleColumnVisibility = (columnKey) => {
     const isColumnSelected = tempSelectedColumns.some((column) => column.accessor === columnKey);
@@ -114,6 +117,8 @@ export default function CheckTable(props) {
       setTempSelectedColumns([...tempSelectedColumns, columnToAdd]);
     }
   };
+
+
   const initialValues = {
     leadName: '',
     leadStatus: '',
