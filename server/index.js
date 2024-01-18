@@ -19,7 +19,7 @@ app.use('/api', route);
 
 app.get('/', async (req, res) => {
 
-    res.send('Welcome to my world...')
+    // res.send('Welcome to my world...')
     //! for Delete folder ./uploads
     const folderPath = './uploads'; // Use the appropriate path here
     try {
