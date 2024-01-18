@@ -12,31 +12,52 @@ const index = async (req, res) => {
 
 const add = async (req, res) => {
     try {
-        const existingModule = await CustomField?.findOne({ moduleName: req.body.moduleName });
-        if (existingModule) {
-            const result = await CustomField.updateOne({ moduleName: req.body.moduleName }, { $push: { fields: { $each: req.body.fields } } });
+        const result = await CustomField.updateOne({ _id: req.body.moduleId }, { $push: { fields: { $each: req.body.fields } } });
 
-            if (result?.modifiedCount > 0) {
-                return res.status(200).json({ message: "Fields added successfully", result })
-            } else {
-                return res.status(404).json({ message: 'Failed to add fields', result })
-            }
-
+        if (result?.modifiedCount > 0) {
+            return res.status(200).json({ message: "Fields added successfully", result });
         } else {
-            const newCustomFieldModule = new CustomField(req.body);
-            await newCustomFieldModule.save();
-            return res.status(200).json({ message: "Fields added successfully", data: newCustomFieldModule });
+            return res.status(404).json({ message: 'Failed to add fields', result });
         }
+        
     } catch (err) {
         console.error('Failed to create Custom Field:', err);
         return res.status(400).json({ success: false, message: 'Failed to Create Field', error: err });
     }
 };
 
-const edit = async (req, res) => {
+const editWholeFieldsArray = async (req, res) => {
     try {
-        let result = await CustomField.updateOne({ _id: req.params.id }, { $set: { fields: req.body.fields } });
-        return res.status(200).json(result);
+        let result = await CustomField.updateOne({ _id: req.params.id }, { $set: { fields: req.body } });
+
+        if (result?.modifiedCount > 0) {
+            return res.status(200).json({ message: "Fields updated successfully", result });
+        } else {
+            return res.status(404).json({ message: 'Failed to update fields', result });
+        }
+
+    } catch (err) {
+        console.error('Failed to Update Custom Field:', err);
+        return res.status(400).json({ success: false, message: 'Failed to Update Custom fields', error: err });
+    }
+};
+
+const editSingleField = async (req, res) => {
+    try {
+        const moduleId = req.query.moduleId;
+        const fieldId = req.params.id;
+
+        let result = await CustomField.updateOne(
+            { _id: moduleId, 'fields._id': fieldId },
+            { $set: { 'fields.$': req.body } }
+        );
+
+        if (result?.modifiedCount > 0) {
+            return res.status(200).json({ message: "Field updated successfully", result });
+        } else {
+            return res.status(404).json({ message: 'Failed to update field', result });
+        }
+
     } catch (err) {
         console.error('Failed to Update Custom Field:', err);
         return res.status(400).json({ success: false, message: 'Failed to Update Custom Field', error: err });
@@ -46,7 +67,7 @@ const edit = async (req, res) => {
 const view = async (req, res) => {
     try {
         const customFieldDoc = await CustomField.findOne({ _id: req.params.id });
-        if (!customFieldDoc) return res.status(404).json({ success: false, message: "No Data Found." })
+        if (!customFieldDoc) return res.status(404).json({ success: false, message: "No Data Found." });
         return res.send(customFieldDoc);
     } catch (err) {
         console.error('Failed to display:', err);
@@ -56,11 +77,11 @@ const view = async (req, res) => {
 
 const deleteField = async (req, res) => {
     try {
-        const moduleName = req.query.moduleName;
+        const moduleId = req.query.moduleId;
         const fieldId = req.params.id;
 
         const result = await CustomField.updateOne(
-            { moduleName },
+            { _id: moduleId },
             {
                 $pull: {
                     fields: {
@@ -71,24 +92,24 @@ const deleteField = async (req, res) => {
         );
 
         if (result?.modifiedCount > 0) {
-            return res.status(200).json({ message: "Field removed successfully", result })
+            return res.status(200).json({ message: "Field removed successfully", result });
         } else {
-            return res.status(404).json({ message: 'Failed to remove field', result })
+            return res.status(404).json({ message: 'Failed to remove field', result });
         }
 
     } catch (err) {
-        console.error("Failed to delete field ", err)
-        return res.status(404).json({ success: false, message: "Failed to remove field", error: err, deleteField })
+        console.error("Failed to delete field ", err);
+        return res.status(404).json({ success: false, message: "Failed to remove field", error: err, deleteField });
     }
 };
 
 const deleteManyFields = async (req, res) => {
     try {
-        const moduleName = req.query.moduleName;
+        const moduleId = req.query.moduleId;
         const fieldsIds = req.body;
 
         const result = await CustomField.updateOne(
-            { moduleName },
+            { _id: moduleId },
             {
                 $pull: {
                     fields: { _id: { $in: fieldsIds } }
@@ -97,15 +118,15 @@ const deleteManyFields = async (req, res) => {
         );
 
         if (result?.modifiedCount > 0) {
-            return res.status(200).json({ message: "Field removed successfully", result })
+            return res.status(200).json({ message: "Field removed successfully", result });
         } else {
-            return res.status(404).json({ message: 'Failed to remove field', result })
+            return res.status(404).json({ message: 'Failed to remove field', result });
         }
 
     } catch (err) {
-        console.error("Failed to delete field ", err)
-        return res.status(404).json({ success: false, message: "Failed to remove field", error: err, deleteField })
+        console.error("Failed to delete field ", err);
+        return res.status(404).json({ success: false, message: "Failed to remove field", error: err, deleteField });
     }
 };
 
-module.exports = { index, add, edit, view, deleteField, deleteManyFields };
+module.exports = { index, add, editWholeFieldsArray, editSingleField, view, deleteField, deleteManyFields };
