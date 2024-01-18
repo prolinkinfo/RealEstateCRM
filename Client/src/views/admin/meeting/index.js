@@ -34,6 +34,8 @@ const Index = () => {
     const [columns, setColumns] = useState([]);
     const [displaySearchData, setDisplaySearchData] = useState(false);
 
+    const dataColumn = dynamicColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
+
     const fetchData = async () => {
         setIsLoding(true)
         let result = await getApi(user.role === 'superAdmin' ? 'api/meeting' : `api/meeting?createdBy=${user._id}`);
@@ -60,7 +62,7 @@ const Index = () => {
             <CheckTable
                 isOpen={addMeeting}
                 isLoding={isLoding}
-                // data={data}
+                dataColumn={dataColumn}
                 allData={data}
                 setSearchedData={setSearchedData}
                 setMeeting={setMeeting}

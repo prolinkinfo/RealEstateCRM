@@ -60,11 +60,11 @@ import * as XLSX from 'xlsx'
 import { HasAccess } from "../../../../redux/accessUtils";
 
 export default function CheckTable(props) {
-  const { tableData, fetchData, isLoding, allData, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action, className } = props;
+  const { tableData, fetchData, isLoding, allData, dataColumn, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action, className } = props;
 
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
-  const columns = useMemo(() => selectedColumns, [selectedColumns]);
+  const columns = useMemo(() => dataColumn, [dataColumn]);
   const [selectedValues, setSelectedValues] = useState([]);
   const [getTagValues, setGetTagValues] = useState([]);
   const [deleteModel, setDelete] = useState(false);
@@ -75,7 +75,7 @@ export default function CheckTable(props) {
   const [isImportLead, setIsImportLead] = useState(false);
   const [searchbox, setSearchbox] = useState('');
   const [manageColumns, setManageColumns] = useState(false);
-  const [tempSelectedColumns, setTempSelectedColumns] = useState(selectedColumns);
+  const [tempSelectedColumns, setTempSelectedColumns] = useState(dataColumn);
   const [eventView, setEventView] = useState(false)
   const [id, setId] = useState()
   const [gopageValue, setGopageValue] = useState()
