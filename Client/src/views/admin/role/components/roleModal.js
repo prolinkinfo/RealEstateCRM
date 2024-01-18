@@ -30,9 +30,11 @@ import {
   useTable,
 } from "react-table";
 import { useFormik } from "formik";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { putApi } from "services/api";
 import ChangeAccess from "../changeAccess";
+import UserModal from "./userModal";
+import { getApi } from "services/api";
 
 function RoleModal(props) {
   const {
@@ -43,12 +45,25 @@ function RoleModal(props) {
     columnsData,
     isOpen,
     setAction,
+    setAccess,
     _id,
+    onOpen,
     onClose,
     setRoleModal,
   } = props;
 
-
+  const tableColumns = [
+    {
+      Header: "#",
+      accessor: "_id",
+      isSortable: false,
+      width: 10
+    },
+    { Header: 'email Id', accessor: 'username' },
+    { Header: "first Name", accessor: "firstName", },
+    { Header: "last Name", accessor: "lastName", },
+    { Header: "role", accessor: "role", },
+  ];
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -57,10 +72,11 @@ function RoleModal(props) {
   const [isLoding, setIsLoding] = useState(false);
 
   const [editModal, setEditModal] = useState(false);
-  const [selectedId, setSelectedId] = useState();
+  const [openUser, setOpenUser] = useState();
   const [gopageValue, setGopageValue] = useState();
   const data = useMemo(() => tableData, [tableData]);
   const user = JSON.parse(localStorage.getItem("user"));
+  const [userdata, setUserData] = useState([]);
 
   const tableInstance = useTable(
     {
@@ -72,6 +88,7 @@ function RoleModal(props) {
     useSortBy,
     usePagination
   );
+
 
   const {
     getTableProps,
@@ -93,15 +110,37 @@ function RoleModal(props) {
   if (pageOptions.length < gopageValue) {
     setGopageValue(pageOptions.length);
   }
+  const userFetchData = async () => {
+    if (_id) {
+      let result = await getApi('api/role-access/assignedUsers/', _id);
+      setUserData(result?.data);
+    }
+  }
 
+  useEffect(() => {
+    userFetchData()
+  }, [_id])
 
   return (
     <>
       <Modal onClose={() => setRoleModal(false)} isOpen={isOpen} isCentered size={"xl"}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{name} Access</ModalHeader>
-          <ModalCloseButton />
+          <ModalHeader>
+            <Flex justifyContent={'space-between'}>
+              <Text textTransform={"capitalize"}>{name} Access</Text>
+              <Text style={{
+                marginRight: "25px",
+                fontSize: "15px",
+                fontWeight: "700",
+                marginTop: '5px',
+                color: 'blue',
+                cursor: 'pointer',
+                textDecoration: 'underline'
+              }} onClick={() => { setOpenUser(true); setRoleModal(false); }}>View user's in {name} role</Text>
+              <ModalCloseButton mt='2' />
+            </Flex>
+          </ModalHeader>
           <ModalBody>
             <Table>
               <Thead>
@@ -240,10 +279,11 @@ function RoleModal(props) {
             </Table>
           </ModalBody>
           <ModalFooter>
-            <Button variant="brand" onClick={() => { setEditModal(true); setRoleModal(false) }}>
+            <Button variant="brand" size="sm" onClick={() => { setEditModal(true); setRoleModal(false) }}>
               Change Access
             </Button>
             <Button
+              size="sm"
               onClick={() => setRoleModal(false)}
               variant="outline"
               colorScheme="red"
@@ -257,7 +297,18 @@ function RoleModal(props) {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <ChangeAccess tableData={tableData} columnsData={columnsData} _id={_id} fetchData={fetchData} name={name} setEditModal={setEditModal} setAction={setAction} editModal={editModal} />
+      <ChangeAccess tableData={tableData} setAccess={setAccess} setRoleModal={setRoleModal} columnsData={columnsData} _id={_id} fetchData={fetchData} name={name} setEditModal={setEditModal} setAction={setAction} editModal={editModal} />
+      <UserModal isOpen={openUser}
+        setRoleModal={setRoleModal}
+        setOpenUser={setOpenUser}
+        onOpen={onOpen}
+        columnsData={tableColumns}
+        tableData={userdata}
+        setAction={setAction}
+        _id={_id}
+        fetchData={userFetchData}
+        userdata={userdata}
+      />
     </>
   );
 }

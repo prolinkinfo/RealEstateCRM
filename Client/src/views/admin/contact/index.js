@@ -37,6 +37,8 @@ const Index = () => {
     const emailAccess = HasAccess('Email')
     const callAccess = HasAccess('Call')
 
+    const dataColumn = dynamicColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
+
     const fetchData = async () => {
         setIsLoding(true)
         let result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`);
@@ -53,13 +55,11 @@ const Index = () => {
     return (
         <div>
             <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={4}>
-                {/* <GridItem colStart={6} textAlign={"right"}>
-                    <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>
-                </GridItem> */}
                 <GridItem colSpan={6}>
                     <CheckTable
                         isLoding={isLoding}
                         columnsData={columns}
+                        dataColumn={dataColumn}
                         isOpen={isOpen}
                         setAction={setAction}
                         action={action}
@@ -67,7 +67,6 @@ const Index = () => {
                         displaySearchData={displaySearchData}
                         setDisplaySearchData={setDisplaySearchData}
                         allData={data}
-                        // tableData={data}
                         emailAccess={emailAccess}
                         callAccess={callAccess}
                         setDynamicColumns={setDynamicColumns}
@@ -80,15 +79,7 @@ const Index = () => {
                         access={permission}
                         setSelectedColumns={setSelectedColumns} />
                 </GridItem>
-                {/* <GridItem colStart={6} textAlign={"right"}>
-                    {permission?.create && <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>}
-                </GridItem>
-                <GridItem colSpan={6}>
-                    <CheckTable isLoding={isLoding}  columnsData={columns} isOpen={isOpen} tableData={data} fetchData={fetchData} setAction={setAction} />
-                </GridItem> */}
             </Grid>
-            {/* Add Form */}
-            {/* <Add isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} /> */}
         </div>
     )
 }

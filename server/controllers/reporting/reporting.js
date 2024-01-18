@@ -1,13 +1,84 @@
+const mongoose = require('mongoose');
+const Lead = require('../../model/schema/lead')
+const Contact = require('../../model/schema/contact')
 const EmailHistory = require('../../model/schema/email');
 const User = require('../../model/schema/user')
 const PhoneCall = require('../../model/schema/phoneCall');
+const Property = require('../../model/schema/property')
 const TextMsg = require('../../model/schema/textMsg');
-const mongoose = require('mongoose');
+const Task = require('../../model/schema/task')
+const MeetingHistory = require('../../model/schema/meeting')
 
 const index = async (req, res) => {
     const query = req.query
     query.deleted = false;
     let result = await User.find(query)
+    res.send(result)
+}
+
+const lineChart = async (req, res) => {
+    const query = req.query
+    query.deleted = false;
+    const senderQuery = query
+    if (query.createdBy) {
+        query.createdBy = new mongoose.Types.ObjectId(query.createdBy);
+    }
+    if (query.createdBy) {
+        senderQuery.sender = new mongoose.Types.ObjectId(query.createdBy);
+    }
+
+    let lead = await Lead.find(query).populate({
+        path: 'createBy',
+        match: { deleted: false } // Populate only if createBy.deleted is false
+    }).exec()
+    const leadData = lead.filter(item => item.createBy !== null);
+
+    let contact = await Contact.find(query).populate({
+        path: 'createBy',
+        match: { deleted: false } // Populate only if createBy.deleted is false
+    }).exec()
+    const contactData = contact.filter(item => item.createBy !== null);
+
+    let property = await Property.find(query).populate({
+        path: 'createBy',
+        match: { deleted: false } // Populate only if createBy.deleted is false
+    }).exec()
+    const propertyData = property.filter(item => item.createBy !== null);
+
+    let task = await Task.find(query).populate({
+        path: 'createBy',
+        match: { deleted: false } // Populate only if createBy.deleted is false
+    }).exec()
+    const taskData = task.filter(item => item.createBy !== null);
+
+    let meetingHistory = await MeetingHistory.find(query).populate({
+        path: 'createdBy',
+        match: { deleted: false } // Populate only if createBy.deleted is false
+    }).exec()
+    const meetingHistoryData = meetingHistory.filter(item => item.createdBy !== null);
+
+    let email = await EmailHistory.find(senderQuery).populate({
+        path: 'sender',
+        match: { deleted: false } // Populate only if createBy.deleted is false
+    }).exec()
+    const emailData = email.filter(item => item.sender !== null);
+
+    let phoneCall = await PhoneCall.find(senderQuery).populate({
+        path: 'sender',
+        match: { deleted: false } // Populate only if createBy.deleted is false
+    }).exec()
+    const phoneCallData = phoneCall.filter(item => item.sender !== null);
+
+    const result = [
+        { name: "Lead", length: leadData?.length },
+        { name: "Contact", length: contactData?.length },
+        { name: "Property", length: propertyData?.length },
+        { name: "Task", length: taskData?.length },
+        { name: "Meeting", length: meetingHistoryData?.length },
+        { name: "Email", length: emailData?.length },
+        { name: "Call", length: phoneCallData?.length },
+    ]
+
     res.send(result)
 }
 
@@ -282,5 +353,4 @@ const data = async (req, res) => {
 }
 
 
-module.exports = { index, data }
-
+module.exports = { index, lineChart, data }

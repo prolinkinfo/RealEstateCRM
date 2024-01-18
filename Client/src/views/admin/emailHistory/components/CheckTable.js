@@ -63,18 +63,18 @@ import { HasAccess } from "../../../../redux/accessUtils";
 
 export default function CheckTable(props) {
   // const { columnsData, action } = props;
-  const { columnsData, tableData, fetchData, isLoding, allData, access, setSearchedData, setDisplaySearchData, displaySearchData, columnsToExclude, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action } = props;
+  const { columnsData, tableData, fetchData, isLoding, allData, access, dataColumn, setSearchedData, setDisplaySearchData, displaySearchData, columnsToExclude, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action } = props;
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   // const columns = useMemo(() => columnsData, [columnsData]);
-  const columns = useMemo(() => selectedColumns, [selectedColumns]);
+  const columns = useMemo(() => dataColumn, [dataColumn]);
   const data = useMemo(() => tableData, [tableData]);
   const user = JSON.parse(localStorage.getItem("user"))
   const [gopageValue, setGopageValue] = useState()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [searchbox, setSearchbox] = useState('');
   const [manageColumns, setManageColumns] = useState(false);
-  const [tempSelectedColumns, setTempSelectedColumns] = useState(selectedColumns);
+  const [tempSelectedColumns, setTempSelectedColumns] = useState(dataColumn);
   const [advaceSearch, setAdvaceSearch] = useState(false);
   const [searchClear, setSearchClear] = useState(false);
   const [getTagValues, setGetTagValues] = useState([]);
@@ -259,7 +259,6 @@ export default function CheckTable(props) {
       <Card
         direction="column"
         w="100%"
-        px="0px"
         overflowX={{ sm: "scroll", lg: "hidden" }}
       >
 

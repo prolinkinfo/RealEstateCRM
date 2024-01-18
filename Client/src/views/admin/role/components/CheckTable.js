@@ -41,6 +41,7 @@ import { getApi } from "services/api";
 import ChangeAccess from "../changeAccess";
 import RoleModal from "./roleModal";
 import AddRole from "../Add";
+import { IoIosArrowBack } from "react-icons/io";
 
 export default function CheckTable(props) {
   const { columnsData, name, tableData, handleClick, fetchData, isLoding, setAction, _id, action } = props;
@@ -126,14 +127,13 @@ export default function CheckTable(props) {
 
   useEffect(() => {
     fetchData()
-  }, [action])
+  }, [])
 
   return (
     <>
       <Card
         direction="column"
         w="100%"
-        px="0px"
         overflowX={{ sm: "scroll", lg: "hidden" }}
       >
         <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={4} mx={4}>
@@ -150,8 +150,8 @@ export default function CheckTable(props) {
             </Flex>
           </GridItem>
           <GridItem colSpan={4} justifyContent="end" alignItems="center" textAlign="right">
-            <Button onClick={() => setAddRoleModal(true)} variant="brand">Add</Button>
-            <Button onClick={() => navigate('/admin-setting')} variant="brand" ml={2}>Back</Button>
+            <Button onClick={() => setAddRoleModal(true)} variant="brand" size="sm">Add Role</Button>
+            <Button onClick={() => navigate('/admin-setting')} variant="brand" size="sm" ml={2} leftIcon={<IoIosArrowBack />}>Back</Button>
           </GridItem>
         </Grid>
 
@@ -288,7 +288,7 @@ export default function CheckTable(props) {
         {access && <RoleModal isOpen={roleModal}
           setRoleModal={setRoleModal}
           onOpen={onOpen}
-          isLoding={isLoding} columnsData={rowColumns} name={roleName} _id={roleId} tableData={access} fetchData={fetchData} setAction={setAction} />}
+          isLoding={isLoding} columnsData={rowColumns} name={roleName} _id={roleId} tableData={access} setAccess={setAccess} fetchData={fetchData} setAction={setAction} />}
       </Card>
 
       <AddRole isOpen={addRoleModal} size={"sm"} setAction={setAction} onClose={setAddRoleModal} />

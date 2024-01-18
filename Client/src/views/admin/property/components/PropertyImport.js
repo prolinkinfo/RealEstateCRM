@@ -120,15 +120,19 @@ function PropertyImport() {
 
             const propertiesData = importedFileData?.map((item, ind) => {
                 const listingDate = moment(item[values.listingDate || "listingDate"]);
-                
+                const numberofBedrooms = item[values.numberofBedrooms || "numberofBedrooms"] || '';
+                const numberofBathrooms = item[values.numberofBathrooms || "numberofBathrooms"] || '';
+                const yearBuilt = item[values.yearBuilt || "yearBuilt"] || '';
+                const previousOwners = item[values.previousOwners || "previousOwners"] || '';
+
                 return {
                     propertyType: item[values.propertyType || "propertyType"] || '',
                     propertyAddress: item[values.propertyAddress || "propertyAddress"] || '',
                     listingPrice: item[values.listingPrice || "listingPrice"] || '',
                     squareFootage: item[values.squareFootage || "squareFootage"] || '',
-                    numberofBedrooms: item[values.numberofBedrooms || "numberofBedrooms"] || '',
-                    numberofBathrooms: item[values.numberofBathrooms || "numberofBathrooms"] || '',
-                    yearBuilt: item[values.yearBuilt || "yearBuilt"] || '',
+                    numberofBedrooms: parseInt(numberofBedrooms) || null,
+                    numberofBathrooms: parseInt(numberofBathrooms, 10) || null,
+                    yearBuilt: parseInt(yearBuilt, 10) || '',
                     propertyDescription: item[values.propertyDescription || "propertyDescription"] || '',
                     lotSize: item[values.lotSize || "lotSize"] || '',
                     parkingAvailability: item[values.parkingAvailability || "parkingAvailability"] || '',
@@ -147,7 +151,7 @@ function PropertyImport() {
                     listingDate: listingDate.isValid() ? item[values.listingDate || "listingDate"] || '' : '',
                     marketingDescription: item[values.marketingDescription || "marketingDescription"] || '',
                     multipleListingService: item[values.multipleListingService || "multipleListingService"] || '',
-                    previousOwners: item[values.previousOwners || "previousOwners"] || '',
+                    previousOwners: parseInt(previousOwners, 10) || null,
                     propertyTaxes: item[values.propertyTaxes || "propertyTaxes"] || '',
                     homeownersAssociation: item[values.homeownersAssociation || "homeownersAssociation"] || '',
                     mortgageInformation: item[values.mortgageInformation || "mortgageInformation"] || '',
@@ -179,7 +183,7 @@ function PropertyImport() {
             }
         } catch (e) {
             console.error(e);
-            toast.success(`Properties import failed`)
+            toast.error(`Properties import failed`)
             resetForm();
             navigate('/properties');
         }
@@ -199,10 +203,15 @@ function PropertyImport() {
                     header: true,
                 });
                 const parsedData = csv?.data;
-                setImportedFileData(parsedData);
 
-                const fileHeadingFields = Object.keys(parsedData[0]);
-                setImportedFileFields(fileHeadingFields);
+                if (parsedData && parsedData.length > 0) {
+                    setImportedFileData(parsedData);
+                    const fileHeadingFields = Object.keys(parsedData[0]);
+                    setImportedFileFields(fileHeadingFields);
+                } else {
+                    toast.error("Empty or invalid CSV file");
+                    navigate("/properties");
+                }
 
             } else if (extension === 'xlsx') {
                 const data = new Uint8Array(target.result);
@@ -221,10 +230,16 @@ function PropertyImport() {
                     });
                     jsonData.push(rowData);
                 });
+                jsonData?.splice(0, 1);
                 setImportedFileData(jsonData);
 
-                const fileHeadingFields = Object.keys(jsonData[0]);
-                setImportedFileFields(fileHeadingFields);
+                if (jsonData && jsonData.length > 0) {
+                    const fileHeadingFields = Object.keys(jsonData[0]);
+                    setImportedFileFields(fileHeadingFields);
+                } else {
+                    toast.error("Empty or invalid XLSX file");
+                    navigate("/properties");
+                }
             }
         };
 

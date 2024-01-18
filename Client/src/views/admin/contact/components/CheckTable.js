@@ -63,7 +63,7 @@ import Edit from "../Edit";
 import ImportModal from "./ImportModel";
 
 export default function CheckTable(props) {
-  const { columnsData, tableData, fetchData, isLoding, setAction, allData, access, onClose, emailAccess, callAccess, setSearchedData, onOpen, isOpen, displaySearchData, dynamicColumns, action, setDisplaySearchData, selectedColumns, setSelectedColumns, isHide } = props;
+  const { columnsData, tableData, fetchData, isLoding, setAction, allData, access, dataColumn, onClose, emailAccess, callAccess, setSearchedData, onOpen, isOpen, displaySearchData, dynamicColumns, action, setDisplaySearchData, selectedColumns, setSelectedColumns, isHide } = props;
   const navigate = useNavigate();
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -79,7 +79,7 @@ export default function CheckTable(props) {
   const [manageColumns, setManageColumns] = useState(false);
   const [advaceSearch, setAdvaceSearch] = useState(false);
   const [searchbox, setSearchbox] = useState('');
-  const [tempSelectedColumns, setTempSelectedColumns] = useState(selectedColumns);
+  const [tempSelectedColumns, setTempSelectedColumns] = useState(dataColumn);
   // const [data, setData] = useState([])
   const [edit, setEdit] = useState(false);
   const data = useMemo(() => tableData, [tableData]);
@@ -94,7 +94,7 @@ export default function CheckTable(props) {
     { Header: "Contact Method", accessor: "preferredContactMethod" },
   ];
 
-  const columns = useMemo(() => selectedColumns, [selectedColumns]);
+  const columns = useMemo(() => dataColumn, [dataColumn]);
   // const fetchData = async () => {
   //   let result = await getApi('api/contact/');
   //   setData(result.data);
@@ -261,7 +261,6 @@ export default function CheckTable(props) {
       <Card
         direction="column"
         w="100%"
-        px="0px"
         overflowX={{ sm: "scroll", lg: "hidden" }}
       >
         <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={4} mx={4}>

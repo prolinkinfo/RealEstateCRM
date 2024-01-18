@@ -1,8 +1,13 @@
 // Chakra Imports
-import { Box, Flex, Link, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Flex, Heading, Image, Link, Text, useColorModeValue } from '@chakra-ui/react';
 import AdminNavbarLinks from 'components/navbar/NavbarLinksAdmin';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
+
+import { AiOutlineMenuUnfold } from "react-icons/ai";
+import { AiOutlineMenuFold } from "react-icons/ai";
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchImage } from '../../redux/imageSlice';
 
 export default function AdminNavbar(props) {
 	const [scrolled, setScrolled] = useState(false);
@@ -26,7 +31,7 @@ export default function AdminNavbar(props) {
 	let navbarShadow = 'none';
 	let navbarBg = useColorModeValue('#fff', 'rgba(11,20,55,0.5)');
 	let navbarBorder = 'transparent';
-	let secondaryMargin = '0px';
+	let secondaryMargin = '-2px';
 	let paddingX = '15px';
 	let gap = '0px';
 	let size = "sm";
@@ -37,7 +42,15 @@ export default function AdminNavbar(props) {
 			setScrolled(false);
 		}
 	};
+	const dispatch = useDispatch();
 
+	useEffect(() => {
+		// Dispatch the fetchRoles action on component mount
+		dispatch(fetchImage(window.location.pathname === '/change-image' ? '' : "?isActive=true"));
+	}, [dispatch]);
+
+	const largeLogo = useSelector((state) => state?.images?.image[state?.images?.image.length - 1]);
+	const smallLogo = useSelector((state) => state?.images?.image[state?.images?.image.length - 1]);
 	return (
 		<Box
 			position={navbarPosition}
@@ -80,8 +93,8 @@ export default function AdminNavbar(props) {
 				base: 'calc(100vw - 0%)',
 				md: 'calc(100vw - 0%)',
 				lg: 'calc(100vw - 0%)',
-				xl: openSidebar === true ? 'calc(100vw - 270px)' : 'calc(100vw - 80px)',
-				'2xl': openSidebar === true ? 'calc(100vw - 270px)' : 'calc(100vw - 80px)'
+				xl: openSidebar === true ? 'calc(100vw - 267px)' : 'calc(100vw - 80px)',
+				'2xl': openSidebar === true ? 'calc(100vw - 267px)' : 'calc(100vw - 80px)'
 			}}
 		>
 			<Flex
@@ -92,7 +105,7 @@ export default function AdminNavbar(props) {
 				}}
 				alignItems={{ xl: 'center' }}
 				mb={gap}>
-				<Box mb={{ sm: '8px', md: '10px' }} pt="15px">
+				<Box mb={{ sm: '8px', md: '10px' }} pt="15px" display={"flex"} alignItems={"center"}>
 					{/*
 					<Breadcrumb>
 						<BreadcrumbItem color={secondaryText} fontSize='sm' mb='5px'>
@@ -116,12 +129,29 @@ export default function AdminNavbar(props) {
 
 					</Breadcrumb>
 					*/}
+					<Box display={{ sm: "none", xl: "flex" }} onClick={() => setOpenSidebar(!openSidebar)} style={{ fontSize: "25px" }}>{openSidebar ? <AiOutlineMenuFold /> : <AiOutlineMenuUnfold />}</Box>
+					<Link
+						color={mainText}
+						display={{ sm: "flex", xl: "none" }}
+					>
+						{largeLogo?.logoLgImg ? <Image
+							style={{ width: "100%", height: '52px' }}
+							src={largeLogo?.logoLgImg}
+							alt="Logo"
+							cursor="pointer"
+							userSelect="none"
+							my={2}
+						/> : <Heading my={4}
+							cursor={"pointer"} userSelect={"none"}>{openSidebar === true ? "Prolink" : "Pr"}</Heading>}
+					</Link>
+
 					<Link
 						color={mainText}
 						href='#'
 						pt="2px"
 						bg='inherit'
 						ps="30px"
+						display={{ sm: "none", xl: "flex" }}
 						borderRadius='inherit'
 						fontWeight='bold'
 						fontSize='34px'
