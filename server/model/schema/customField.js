@@ -24,6 +24,15 @@ const validationSchema = new mongoose.Schema({
     }
 });
 
+const radioSelctboxSchema = new mongoose.Schema({
+    name: {
+        type: String,
+    },
+    value: {
+        type: String,
+    }
+});
+
 const fieldsSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -36,9 +45,17 @@ const fieldsSchema = new mongoose.Schema({
         type: String,
         default: 'text'
     },
+    fixed: {
+        type: String
+    },
     delete: {
         type: Boolean,
         default: false
+    },
+    // options: [radioSelctboxSchema],
+    options: {
+        type: [radioSelctboxSchema],
+        default: undefined
     },
     validation: [validationSchema],
 });
@@ -46,7 +63,9 @@ const fieldsSchema = new mongoose.Schema({
 const customFieldSchema = new mongoose.Schema({
     moduleName: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
+        trim: true
     },
     fields: [fieldsSchema]
 });

@@ -8,5 +8,7 @@ router.get('/', auth, customField.index);
 router.post('/add', auth, customField.add);
 router.put('/edit/:id', auth, customField.edit);
 router.get('/view/:id', auth, customField.view);
+router.delete('/delete/:id', auth, customField.deleteField);
+router.delete('/deleteMany', auth, customField.deleteManyFields);
 
 module.exports = router;

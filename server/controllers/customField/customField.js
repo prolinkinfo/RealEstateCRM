@@ -1,4 +1,3 @@
-const { default: mongoose } = require("mongoose");
 const CustomField = require("../../model/schema/customField");
 
 const index = async (req, res) => {
@@ -6,6 +5,7 @@ const index = async (req, res) => {
         const result = await CustomField.find(req.query);
         return res.send(result);
     } catch (err) {
+        console.error('Failed', err);
         return res.status(400).json({ error: 'Failed', err });
     }
 };
@@ -13,16 +13,20 @@ const index = async (req, res) => {
 const add = async (req, res) => {
     try {
         const existingModule = await CustomField?.findOne({ moduleName: req.body.moduleName });
-
         if (existingModule) {
             const result = await CustomField.updateOne({ moduleName: req.body.moduleName }, { $push: { fields: { $each: req.body.fields } } });
-            return res.status(200).json(result);
+
+            if (result?.modifiedCount > 0) {
+                return res.status(200).json({ message: "Fields added successfully", result })
+            } else {
+                return res.status(404).json({ message: 'Failed to add fields', result })
+            }
+
         } else {
             const newCustomFieldModule = new CustomField(req.body);
             await newCustomFieldModule.save();
-            return res.status(200).json(newCustomFieldModule);
+            return res.status(200).json({ message: "Fields added successfully", data: newCustomFieldModule });
         }
-
     } catch (err) {
         console.error('Failed to create Custom Field:', err);
         return res.status(400).json({ success: false, message: 'Failed to Create Field', error: err });
@@ -50,4 +54,58 @@ const view = async (req, res) => {
     }
 };
 
-module.exports = { index, add, edit, view };
+const deleteField = async (req, res) => {
+    try {
+        const moduleName = req.query.moduleName;
+        const fieldId = req.params.id;
+
+        const result = await CustomField.updateOne(
+            { moduleName },
+            {
+                $pull: {
+                    fields: {
+                        _id: fieldId
+                    }
+                }
+            }
+        );
+
+        if (result?.modifiedCount > 0) {
+            return res.status(200).json({ message: "Field removed successfully", result })
+        } else {
+            return res.status(404).json({ message: 'Failed to remove field', result })
+        }
+
+    } catch (err) {
+        console.error("Failed to delete field ", err)
+        return res.status(404).json({ success: false, message: "Failed to remove field", error: err, deleteField })
+    }
+};
+
+const deleteManyFields = async (req, res) => {
+    try {
+        const moduleName = req.query.moduleName;
+        const fieldsIds = req.body;
+
+        const result = await CustomField.updateOne(
+            { moduleName },
+            {
+                $pull: {
+                    fields: { _id: { $in: fieldsIds } }
+                }
+            }
+        );
+
+        if (result?.modifiedCount > 0) {
+            return res.status(200).json({ message: "Field removed successfully", result })
+        } else {
+            return res.status(404).json({ message: 'Failed to remove field', result })
+        }
+
+    } catch (err) {
+        console.error("Failed to delete field ", err)
+        return res.status(404).json({ success: false, message: "Failed to remove field", error: err, deleteField })
+    }
+};
+
+module.exports = { index, add, edit, view, deleteField, deleteManyFields };
