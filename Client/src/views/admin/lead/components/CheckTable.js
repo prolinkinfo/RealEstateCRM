@@ -73,7 +73,7 @@ export default function CheckTable(props) {
   const { columnsData, tableData, dataColumn, fetchData, isLoding, allData, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, callAccess, emailAccess, setAction, action } = props;
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
-
+  const [leadData, setLeadData] = useState([])
   const columns = useMemo(() => dataColumn, [dataColumn]);
   const [selectedValues, setSelectedValues] = useState([]);
   const [getTagValues, setGetTagValues] = useState([]);
@@ -214,6 +214,15 @@ export default function CheckTable(props) {
   const handleClick = () => {
     onOpen()
   }
+
+  const fetchCustomData = async () => {
+    const response = await getApi('api/custom-field?moduleName=lead')
+    setLeadData(response.data)
+  }
+
+  useEffect(() => {
+    if (fetchCustomData) fetchCustomData()
+  }, [action])
 
   const size = "lg";
 
@@ -582,7 +591,7 @@ export default function CheckTable(props) {
         <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} lead='true' id={selectedId} />
         <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={callSelectedId} lead='true' />
 
-        <Add isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} />
+        {isOpen && <Add isOpen={isOpen} size={size} setLeadData={setLeadData} leadData={leadData[0]} onClose={onClose} setAction={setAction} action={action} />}
         <Edit isOpen={edit} size={size} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} />
         <ImportModal text='Lead file' fetchData={fetchData} isOpen={isImportLead} onClose={setIsImportLead} />
 

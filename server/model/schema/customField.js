@@ -1,5 +1,11 @@
 const mongoose = require("mongoose");
 
+const typeValidator = (val) => {
+    const allowedTypes = ['String', 'Number', 'RegExp']
+    const isValidType = allowedTypes.some(type => val instanceof mongoose.Schema.Types[type]);
+    return isValidType;
+}
+
 const validationSchema = new mongoose.Schema({
     require: {
         type: Boolean,
@@ -11,7 +17,8 @@ const validationSchema = new mongoose.Schema({
         type: Boolean,
     },
     value: {
-        type: Number,
+        type: mongoose.Schema.Types.Mixed,
+        validate: [typeValidator, 'Invalid data type for "value" field.']
     },
     message: {
         type: String
