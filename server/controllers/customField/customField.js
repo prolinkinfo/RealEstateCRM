@@ -19,7 +19,7 @@ const add = async (req, res) => {
         } else {
             return res.status(404).json({ message: 'Failed to add fields', result });
         }
-        
+
     } catch (err) {
         console.error('Failed to create Custom Field:', err);
         return res.status(400).json({ success: false, message: 'Failed to Create Field', error: err });
@@ -44,12 +44,12 @@ const editWholeFieldsArray = async (req, res) => {
 
 const editSingleField = async (req, res) => {
     try {
-        const moduleId = req.query.moduleId;
+        const moduleId = req.body.moduleId;
         const fieldId = req.params.id;
 
         let result = await CustomField.updateOne(
             { _id: moduleId, 'fields._id': fieldId },
-            { $set: { 'fields.$': req.body } }
+            { $set: { 'fields.$': req.body.updatedField } }
         );
 
         if (result?.modifiedCount > 0) {
@@ -131,9 +131,15 @@ const deleteManyFields = async (req, res) => {
 };
 
 
-const createNewModule = async (req, res) => {
+const createNewModule = async (req, res) => {  // changes in add new module api
     try {
         const moduleName = req.body.moduleName;
+
+        const existingModule = await CustomField.findOne({ moduleName: { $regex: new RegExp(`^${moduleName}$`, 'i') } }).exec();
+
+        if (existingModule) {
+            return res.status(400).json({ success: false, message: `Module name already exist` });
+        }
 
         const newModule = new CustomField({ moduleName, fields: req.body.fields || [] });
         await newModule.save();
