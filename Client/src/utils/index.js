@@ -41,6 +41,7 @@ import * as yup from 'yup'
 
 export const generateValidationSchema = (fields) => {
     return fields.reduce((acc, field) => {
+        let formikValObj = field?.validation?.find(obj => obj?.hasOwnProperty('formikType'));
 
         acc[field.name] = field.validation.reduce((fieldAcc, rule) => {
             if (rule.require) {
@@ -52,9 +53,10 @@ export const generateValidationSchema = (fields) => {
             if (rule.max) {
                 fieldAcc = fieldAcc.max(rule.value, rule.message);
             }
-            if ((rule.match) && (rule.formikType === 'email')) {
-                const emailPattern = rule.pattern || /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-                fieldAcc = fieldAcc.matches(emailPattern, rule.message);
+            if (rule.match) {
+                const regexPattern = rule?.value?.replace(/^\/|\/$/g, ''); // Remove leading and trailing slashes
+                const regex = new RegExp(regexPattern);
+                fieldAcc = fieldAcc.matches(regex, rule.message);
             }
             if (rule.formikType === 'date') {
                 fieldAcc = fieldAcc.required(rule.message);
@@ -62,9 +64,8 @@ export const generateValidationSchema = (fields) => {
             // Add other formikType cases as needed
 
             return fieldAcc;
-        }, yup.string());
+        }, (formikValObj && formikValObj?.formikType) ? yup?.[formikValObj?.formikType]() : yup.string());
 
         return acc;
     }, {});
 };
-
