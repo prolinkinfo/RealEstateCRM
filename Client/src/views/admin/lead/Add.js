@@ -3,57 +3,66 @@ import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, 
 import { HSeparator } from 'components/separator/Separator';
 import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { leadSchema } from 'schema';
+import { getApi } from 'services/api';
 import { postApi } from 'services/api';
+import { generateValidationSchema } from 'utils';
+import * as yup from 'yup'
 
 const Add = (props) => {
     const [isLoding, setIsLoding] = useState(false)
 
-    const initialValues = {
-        // Lead Information:
-        leadName: '',
-        leadEmail: '',
-        leadPhoneNumber: '',
-        leadAddress: '',
-        // Lead Source and Details:
-        leadSource: '',
-        leadStatus: '',
-        leadSourceDetails: '',
-        leadCampaign: '',
-        leadSourceChannel: '',
-        leadSourceMedium: '',
-        leadSourceCampaign: '',
-        leadSourceReferral: '',
-        // Lead Assignment and Ownership:
-        leadAssignedAgent: '',
-        leadOwner: '',
-        leadCommunicationPreferences: '',
-        // Lead Dates and Follow-up:
-        leadCreationDate: '',
-        leadConversionDate: '',
-        leadFollowUpDate: '',
-        leadFollowUpStatus: '',
-        // Lead Scoring and Nurturing:
-        leadScore: '',
-        leadNurturingWorkflow: '',
-        leadEngagementLevel: '',
-        leadConversionRate: '',
-        leadNurturingStage: '',
-        leadNextAction: '',
-        createBy: JSON.parse(localStorage.getItem('user'))._id,
-    };
+    // const initialValues = {
+    //     // Lead Information:
+    //     leadName: '',
+    //     leadEmail: '',
+    //     leadPhoneNumber: '',
+    //     leadAddress: '',
+    //     // Lead Source and Details:
+    //     leadSource: '',
+    //     leadStatus: '',
+    //     leadSourceDetails: '',
+    //     leadCampaign: '',
+    //     leadSourceChannel: '',
+    //     leadSourceMedium: '',
+    //     leadSourceCampaign: '',
+    //     leadSourceReferral: '',
+    //     // Lead Assignment and Ownership:
+    //     leadAssignedAgent: '',
+    //     leadOwner: '',
+    //     leadCommunicationPreferences: '',
+    //     // Lead Dates and Follow-up:
+    //     leadCreationDate: '',
+    //     leadConversionDate: '',
+    //     leadFollowUpDate: '',
+    //     leadFollowUpStatus: '',
+    //     // Lead Scoring and Nurturing:
+    //     leadScore: '',
+    //     leadNurturingWorkflow: '',
+    //     leadEngagementLevel: '',
+    //     leadConversionRate: '',
+    //     leadNurturingStage: '',
+    //     leadNextAction: '',
+    //     createBy: JSON.parse(localStorage.getItem('user'))._id,
+    // };
+
+    const initialValues = props?.leadData?.fields?.reduce((acc, field) => {
+        acc[field.name] = '';
+        return acc;
+    }, {});
 
     const formik = useFormik({
-        initialValues: initialValues,
-        validationSchema: leadSchema,
+        initialValues: Object.fromEntries(props?.leadData?.fields.map(field => [field.name, ''])),
+        // validationSchema: validationSchema,
+        validationSchema: yup.object().shape(generateValidationSchema(props?.leadData?.fields)),
         onSubmit: (values, { resetForm }) => {
-            AddData();
+            // AddData();
+            console.log(values)
         },
     });
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
-
 
     const AddData = async () => {
         try {
@@ -87,8 +96,32 @@ const Add = (props) => {
                         <IconButton onClick={props.onClose} icon={<CloseIcon />} />
                     </DrawerHeader>
                     <DrawerBody>
-
                         <Grid templateColumns="repeat(12, 1fr)" gap={3}>
+                            {props.leadData.fields?.map(field => (
+                                <GridItem colSpan={{ base: 12, sm: 6 }} key={field?.name}>
+                                    <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px' htmlFor={field.name}>{field.label} {field.validation && field.validation.find((validation) => validation.require) && (
+                                        <span style={{ color: 'red' }}>*</span>
+                                    )}</FormLabel>
+                                    <Input
+                                        fontSize='sm'
+                                        type={field.type}
+                                        id={field.name}
+                                        name={field.name}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        value={formik.values[field.name]}
+                                        fontWeight='500'
+                                        borderColor={errors.leadName && touched.leadName ? "red.300" : null}
+                                    />
+                                    {formik.touched[field.name] && formik.errors[field.name] ? (
+                                        <Text mb='10px' color={'red'}> {formik.errors[field.name]}</Text>
+                                    ) : null}
+                                </GridItem>
+                            ))}
+
+                        </Grid>
+
+                        {/* <Grid templateColumns="repeat(12, 1fr)" gap={3}>
 
                             <GridItem colSpan={{ base: 12 }}>
                                 <Heading as="h1" size="md" >
@@ -514,10 +547,8 @@ const Add = (props) => {
                                 <Text mb='10px' color={'red'}> {errors.leadNextAction && touched.leadNextAction && errors.leadNextAction}</Text>
                             </GridItem>
 
-                        </Grid>
+                        </Grid> */}
                     </DrawerBody>
-
-
                     <DrawerFooter>
                         <Button sx={{ textTransform: "capitalize" }} disabled={isLoding ? true : false} variant="brand" type="submit" onClick={handleSubmit}                        >
                             {isLoding ? <Spinner /> : 'Add Data'}
@@ -534,10 +565,9 @@ const Add = (props) => {
                             Cancel
                         </Button>
                     </DrawerFooter>
-
                 </DrawerContent>
             </Drawer>
-        </div>
+        </div >
     )
 }
 
