@@ -85,6 +85,7 @@ option {
 } */
 .imageCard {
   position: relative;
+  overflow: hidden;
 }
 
 .imageContent {
