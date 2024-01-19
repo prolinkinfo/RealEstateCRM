@@ -9,6 +9,7 @@ import { getApi } from 'services/api';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 import { putApi } from 'services/api';
+import { MdOutlineLocalActivity } from "react-icons/md";
 
 const ChangeImage = () => {
     const [imageModal, setImageModal] = useState(false)
@@ -66,6 +67,9 @@ const ChangeImage = () => {
                             <GridItem colSpan={{ base: 12, md: 4, lg: 3 }}>
                                 <div className="imageCard">
                                     <Image src={item?.authImg} height={"200px"} width={"400px"} />
+                                    {item?.isActive === true ? <Box backgroundColor={"#422afb"} color={"#fff"} height={"20px"} width={"140px"} position={"absolute"} top={"18px"} right={"-40px"} transform={"rotate(45deg)"} fontSize={"16px"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                                        Active
+                                    </Box> : ""}
                                     <div className='imageContent'>
                                         <Button size='sm' variant="brand" onClick={() => setImageData(item)}>Set Image</Button>
                                         <Button size='sm' variant="brand" ms={1} onClick={() => handleViewOpen(item)}>View</Button>
