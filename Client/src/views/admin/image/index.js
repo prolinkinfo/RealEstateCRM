@@ -9,7 +9,6 @@ import { getApi } from 'services/api';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 import { putApi } from 'services/api';
-import { MdOutlineLocalActivity } from "react-icons/md";
 
 const ChangeImage = () => {
     const [imageModal, setImageModal] = useState(false)
