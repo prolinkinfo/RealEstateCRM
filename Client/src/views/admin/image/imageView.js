@@ -43,7 +43,7 @@ const ImageView = (props) => {
                     toast.error(response?.response?.data?.message);
                 }
             }
-                } catch (e) {
+        } catch (e) {
             console.log(e);
         }
         finally {
@@ -60,7 +60,7 @@ const ImageView = (props) => {
                     <ModalBody>
                         <Flex wrap='wrap' justifyContent={"center"}>
                             <div>
-                                <Text textAlign={"center"} fontWeight={"600"}>Small Logo Image</Text>
+                                <Text textAlign={"center"} fontWeight={"600"}>Navbar Small Logo Image</Text>
                                 <div className="imageCard" style={{ margin: "10px" }}>
                                     <Image src={data?.logoSmImg} height={"100px"} width={"180px"} />
                                     <div className='imageContent'>
@@ -76,7 +76,7 @@ const ImageView = (props) => {
                                 </div>
                             </div>
                             <div>
-                                <Text textAlign={"center"} fontWeight={"600"}>Large Logo Image</Text>
+                                <Text textAlign={"center"} fontWeight={"600"}>Navbar Large Logo Image</Text>
                                 <div className="imageCard" style={{ margin: "10px" }}>
                                     <Image src={data?.logoLgImg} height={"100px"} width={"180px"} />
                                     <div className='imageContent'>
@@ -92,7 +92,7 @@ const ImageView = (props) => {
                                 </div>
                             </div>
                             <div>
-                                <Text textAlign={"center"} fontWeight={"600"}>Auth Image</Text>
+                                <Text textAlign={"center"} fontWeight={"600"}>Login page Image</Text>
                                 <div className="imageCard" style={{ margin: "10px" }}>
                                     <Image src={data?.authImg} height={"100px"} width={"180px"} />
                                     <div className='imageContent'>
