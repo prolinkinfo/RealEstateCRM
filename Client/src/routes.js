@@ -18,7 +18,7 @@ import { FaCreativeCommonsBy } from "react-icons/fa";
 import { SiGooglemeet } from "react-icons/si";
 import { ROLE_PATH } from "./roles";
 import ChangeImage from "views/admin/image";
-import CustomFeild from "views/admin/customFeild";
+import CustomField from "views/admin/customField";
 
 // Admin Imports
 const MainDashboard = React.lazy(() => import("views/admin/default"));
@@ -264,11 +264,11 @@ const routes = [
     component: Role,
   },
   {
-    name: "Custom Feild",
+    name: "Custom Field",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-    path: "/custom-feild",
+    path: "/custom-Field",
     icon: <Icon as={FaWpforms} width='20px' height='20px' color='inherit' />,
-    component: CustomFeild,
+    component: CustomField,
   },
   {
     name: "Images",

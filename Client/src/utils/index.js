@@ -65,7 +65,47 @@ export const generateValidationSchema = (fields) => {
 
             return fieldAcc;
         }, (formikValObj && formikValObj?.formikType) ? yup?.[formikValObj?.formikType]() : yup.string());
+    
+        // let fieldValidation;
+
+        // if (field.type === 'text') {
+        //     fieldValidation = yup.string();
+        // } else if (field.type === 'email') {
+        //     fieldValidation = yup.string().email();
+        // } else if (field.type === 'date') {
+        //     fieldValidation = yup.date()
+        // } else {
+        //     fieldValidation = yup.string();
+        // }
+
+        // if (field.validation && Array.isArray(field.validation)) {
+        //     field.validation.forEach((validationRule) => {
+        //         if (validationRule.require) {
+        //             fieldValidation = fieldValidation.required(validationRule.message || 'This field is required');
+        //         }
+        //         if (validationRule.min) {
+        //             fieldValidation = fieldValidation.min(validationRule.value, validationRule.message || 'Value is too small');
+        //         }
+        //         if (validationRule.max) {
+        //             fieldValidation = fieldValidation.max(validationRule.value, validationRule.message || 'Value is too large');
+        //         }
+        //         if (validationRule.match) {
+        //             fieldValidation = fieldValidation.matches(
+        //                 new RegExp(validationRule.match),
+        //                 validationRule.message || 'Value does not match the pattern'
+        //             );
+        //         }
+        //         if (validationRule?.formikType === 'date') {
+        //             fieldValidation = fieldValidation?.required(validationRule.message)
+        //         }
+        //     });
+        // }
+
+        // return {
+        //     ...acc,
+        //     [field.name]: fieldValidation,
+        // };
 
         return acc;
-    }, {});
+    }, {})
 };

@@ -59,7 +59,7 @@ const Index = () => {
                 />
                 <MiniStatistics
                     fontsize="md"
-                    onClick={() => navigate("/custom-feild")}
+                    onClick={() => navigate("/custom-Field")}
                     startContent={
                         <IconBox
                             w="56px"
@@ -69,7 +69,7 @@ const Index = () => {
                         />
 
                     }
-                    name="Add Custom Feild"
+                    name="Add Custom Field"
                 />
             </SimpleGrid>
         </div>

@@ -1,14 +1,16 @@
-import { ChevronDownIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { Box, Button, Flex, Menu, Heading, MenuButton, Select, Checkbox, GridItem, Text, MenuItem, Grid, MenuList, FormLabel, Input } from '@chakra-ui/react';
 import Card from 'components/card/Card'
 import { useFormik } from 'formik';
-import React, { useState } from 'react'
-import * as Yup from 'yup';
+import React, { useEffect, useState } from 'react'
+import Addfield from './addfield'
+import { getApi } from 'services/api';
 
-const CustomFeild = () => {
-
+const CustomField = () => {
+    const [addFieldModel, setAddFieldModel] = useState(false);
     const [moduleName, setModuleName] = useState('')
-
+    const [data, setData] = useState([])
+    console.log(data)
     const fields = [
         {
             id: 1,
@@ -97,6 +99,18 @@ const CustomFeild = () => {
     //     },
     // });
 
+    const fetchData = async () => {
+        if (moduleName) {
+            let response = await getApi(`api/custom-field/?moduleName=${moduleName}`);
+            setData(response?.data);
+        } else if (!moduleName) {
+            setData([])
+        }
+    }
+    useEffect(() => {
+        fetchData()
+    }, [moduleName])
+
     const initialValues = {
         name: '',
         label: '',
@@ -104,88 +118,65 @@ const CustomFeild = () => {
         min: false, minValue: '', minMessage: '',
         max: false, maxValue: '', maxMessage: '',
         match: false, matchValue: '', matchMessage: '',
-
     }
 
     const formik = useFormik({
         initialValues,
         onSubmit: (values) => {
-            // Handle form submission
             console.log('Form values:', values);
         },
     })
 
-
     const { values, handleSubmit, handleChange, handleBlur, touched, errors } = formik;
 
     return (
-        <Card>
+        <>
+            <Card>
+                <Flex justifyContent={'space-between'} alignItems={'center'}>
+                    <Box >
+                        <Text color={"secondaryGray.900"}
+                            fontSize="22px"
+                            fontWeight="700"
+                        >Custom Field</Text>
+                    </Box>
+                    <Box>
+                        <Menu>
+                            <MenuButton as={Button} rightIcon={<ChevronDownIcon />} variant="outline">
+                                {moduleName ? moduleName : 'Select Module'}
+                            </MenuButton>
+                            <MenuList>
+                                <MenuItem onClick={() => setModuleName('')}>Select Module</MenuItem>
+                                {fields?.map((item, id) => (
+                                    <MenuItem key={id} onClick={() => setModuleName(item.name)}>{item.name}</MenuItem>
+                                ))}
+                            </MenuList>
+                        </Menu>
+                    </Box>
+                </Flex>
+                <Grid templateColumns="repeat(12, 1fr)" gap={3} mt={5}>
+                    {data[0]?.fields?.map((item, i) => (
+                        <GridItem colSpan={{ base: 12, md: 6 }}>
+                            <Flex alignItems={"center"} justifyContent={"space-between"} className="CustomFieldName" >
+                                <Text display='flex' size='sm' colorScheme='gray' ms='4px' mt={4} fontSize='md' fontWeight='500' mb='8px' >
+                                    {item?.label}
+                                </Text>
+                                <span className="EditDelete">
+                                    <Button size='sm' variant='outline' me={2}><EditIcon /></Button>
+                                    <Button size='sm' variant='outline' me={2}><DeleteIcon /></Button>
+                                </span>
+                            </Flex>
+                        </GridItem>
+                    ))}
+                </Grid>
+                <Flex justifyContent={'end'} mt='5'>
+                    {data?.length === 0 && <Button onClick={() => setAddFieldModel(true)} variant="brand" size='sm'>Add Field</Button>}
+                </Flex>
+            </Card>
 
-            <Flex justifyContent={'space-between'} alignItems={'center'}>
-                <Box >
-                    <Text color={"secondaryGray.900"}
-                        fontSize="22px"
-                        fontWeight="700">Custom Feild</Text>
-                </Box>
-                <Box>
-                    <Menu>
-                        <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-                            {moduleName ? moduleName : 'Select Module'}
-                        </MenuButton>
-                        <MenuList>
-                            <MenuItem onClick={() => setModuleName('')}>Select Module</MenuItem>
-                            {fields?.map((item, id) => (
-                                <MenuItem key={id} onClick={() => setModuleName(item.name)}>{item.name}</MenuItem>
-                            ))}
+            <Addfield isOpen={addFieldModel} onClose={setAddFieldModel} field={data[0]?.fields} moduleId={data[0]?._id} />
 
-                        </MenuList>
-                    </Menu>
-
-                </Box>
-            </Flex>
-            <Grid templateColumns="repeat(12, 1fr)" gap={3}>
-                <GridItem colSpan={{ base: 6 }}>
-                    <Heading as="h1" size="md" >
-                        1. Basic Lead Information
-                    </Heading>
-                    <Button display='flex' size='sm' colorScheme='gray' ms='4px' mt={4} fontSize='md' fontWeight='500' mb='8px'>
-                        Lead Name
-                    </Button>
-                    <Button display='flex' ms='4px' fontSize='md' fontWeight='500' mb='8px'>
-                        Lead Email
-                    </Button>
-                    <Button display='flex' ms='4px' fontSize='md' fontWeight='500' mb='8px'>
-                        Lead Phone Number
-                    </Button>
-                    <Button display='flex' ms='4px' fontSize='md' fontWeight='500' mb='8px'>
-                        Lead Address
-                    </Button>
-                </GridItem>
-                <GridItem colSpan={{ base: 6 }}>
-                    <Heading as="h1" size="md" >
-                        2. Lead Source and Details
-                    </Heading>
-                    <Button display='flex' ms='4px' mt={4} fontSize='md' fontWeight='500' mb='8px'>
-                        Lead Source
-                    </Button>
-                    <Button display='flex' ms='4px' fontSize='md' fontWeight='500' mb='8px'>
-                        Lead Status
-                    </Button>
-                    <Button display='flex' ms='4px' fontSize='md' fontWeight='500' mb='8px'>
-                        Lead Source Details
-                    </Button>
-                    <Button display='flex' ms='4px' fontSize='md' fontWeight='500' mb='8px'>
-                        Lead Campaign
-                    </Button>
-                </GridItem>
-            </Grid>
-
-
-            <Flex justifyContent={'end'} mt='5'>
-                <Button onClick={handleSubmit} variant="brand" size='sm'>Add Feild</Button>
-            </Flex>
-        </Card>
+        </>
     )
 }
 
-export default CustomFeild
+export default CustomField

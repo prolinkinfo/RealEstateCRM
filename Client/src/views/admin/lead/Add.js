@@ -53,7 +53,7 @@ const Add = (props) => {
     }, {});
 
     const formik = useFormik({
-        initialValues: Object.fromEntries(props?.leadData?.fields.map(field => [field.name, ''])),
+        initialValues: Object.fromEntries(props?.leadData?.fields?.map(field => [field.name, ''])),
         // validationSchema: validationSchema,
         validationSchema: yup.object().shape(generateValidationSchema(props?.leadData?.fields)),
         onSubmit: (values, { resetForm }) => {
