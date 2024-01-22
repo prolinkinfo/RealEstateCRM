@@ -1,111 +1,94 @@
-import { Flex, Grid, GridItem, Heading, Text } from '@chakra-ui/react'
+import { EditIcon, ViewIcon } from '@chakra-ui/icons'
+import { Button, Flex, Grid, GridItem, Heading, Text } from '@chakra-ui/react'
 import Card from 'components/card/Card'
 import { HSeparator } from 'components/separator/Separator'
 import React, { useEffect, useState } from 'react'
 import { getApi } from 'services/api'
+import Edit from './Edit'
+import View from './view'
+import { useNavigate } from 'react-router-dom'
 
 const Index = () => {
-    const [validationData, setValidateData] = useState([
-        {
-            name: "name validation",
-            validation: [
-                { require: true, message: 'Please Enter Name' },
-                { min: true, value: 0, message: '' },
-                { max: true, value: 10, message: '' },
-                { match: true, value: '/^\d{10}$/', message: '' },
-                { formikType: true, value: 'type error ', message: '' }
-            ]
-        },
-        {
-            name: "email validation",
-            validation: [
-                { require: true, message: 'Please Enter Name' },
-                { min: true, value: 0, message: '' },
-                { max: true, value: 10, message: '' },
-                { match: true, value: '/^\d{10}$/', message: '' },
-                { formikType: true, value: 'type error ', message: '' }
-            ]
-        },
-    ])
+    const navigate = useNavigate()
+    const [editModal, setEdit] = useState(false)
+    const [viewModal, setViewModal] = useState(false)
+    const [selectedId, setselectedId] = useState()
+    const [data, setData] = useState([])
+    const [validationData, setValidateData] = useState([])
+
+
     const fetchData = async () => {
-        // if (moduleName) {
-        let response = await getApi(`api/custom-field/?moduleName=${1}}`);
-        // setData(response?.data);
-        // } 
+        let response = await getApi(`api/validation`);
+        setValidateData(response?.data);
     }
     useEffect(() => {
-        // fetchData()
+        fetchData()
     }, [])
+
+    const handleEditClose = () => {
+        setEdit(false)
+    }
+
+    const handleViewOpen = (item) => {
+        setselectedId(item._id)
+        setViewModal(!viewModal)
+    }
+    const handleViewClose = () => {
+        setViewModal(false)
+    }
     return (
         <div>
+            <Flex justifyContent={"end"} mb={2}>
+                <Button size='sm' variant='brand' me={1}>Add </Button>
+                <Button size='sm' variant='brand' onClick={() => navigate(-1)}> Back</Button>
+            </Flex>
             <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                 {validationData?.map((item, i) => (
-                    <GridItem GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
+                    <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }} key={i}>
                         <Card>
-                            <Flex>
+                            <Flex alignItems={"center"} justifyContent={"space-between"}>
                                 <Heading size="md" fontWeight={"500"} textTransform={"capitalize"}
-                                >{item.name}</Heading>
+                                >{item?.name}</Heading>
+                                <Flex>
+                                    <Button size='sm' variant='outline' me={1} onClick={() => setEdit(!editModal)}><EditIcon color={"blue"} /> </Button>
+                                    <Button size='sm' variant='outline' onClick={() => handleViewOpen(item)}> <ViewIcon color={"green"} /></Button>
+                                </Flex>
                             </Flex>
-                            <Text pt={3} textTransform={"capitalize"}>validation</Text>
+                            <Text pt={3} textTransform={"capitalize"}>validations</Text>
                             <HSeparator mb={2} mt={1} />
                             <Flex>
                                 <Text width={"50%"} pr={2} textTransform={"capitalize"}>require:</Text>
-                                {/* <Text width={"50%"} fontWeight={"500"}  >{item?.validation && item?.validation?.length > 0 && item?.validation[0]?.require}</Text> */}
-                                <Text width={"50%"} fontWeight={"500"}  >  {item?.validation && item?.validation.length > 0 && item?.validation[0]?.require
-                                    ? item?.validation[0]?.require
-                                    : "true"}</Text>
+                                <Text width={"50%"} fontWeight={"500"}  > {item?.validations && item?.validations?.length > 0 && item?.validations[0]?.require === true ? "True" : "False"
+                                }</Text>
                             </Flex>
-                            {console.log(item?.validation[0].require)}
                             <Flex>
                                 <Text width={"50%"} pr={2} textTransform={"capitalize"}>min:</Text>
-                                <Text width={"50%"} fontWeight={"500"}  >{item.validation.min}</Text>
+                                <Text width={"50%"} fontWeight={"500"}  >{item?.validations && item?.validations?.length > 0 && item?.validations[1]?.min === true ? "True" : "False"
+                                }</Text>
                             </Flex>
                             <Flex>
                                 <Text width={"50%"} pr={2} textTransform={"capitalize"}>max:</Text>
-                                <Text width={"50%"} fontWeight={"500"}  >{item.validation.max}</Text>
+                                <Text width={"50%"} fontWeight={"500"}  >{item?.validations && item?.validations?.length > 0 && item?.validations[2]?.max === true ? "True" : "False"
+                                }</Text>
                             </Flex>
                             <Flex>
                                 <Text width={"50%"} pr={2} textTransform={"capitalize"}>match:</Text>
-                                <Text width={"50%"} fontWeight={"500"}  >{item.validation.match}</Text>
+                                <Text width={"50%"} fontWeight={"500"}  >{item?.validations && item?.validations?.length > 0 && item?.validations[3]?.match === true ? "True" : "False"
+                                }</Text>
                             </Flex>
                             <Flex>
                                 <Text width={"50%"} pr={2} textTransform={"capitalize"}>formik type:</Text>
-                                <Text width={"50%"} fontWeight={"500"}  >{item.validation.formikType}</Text>
+                                <Text width={"50%"} fontWeight={"500"}  >{item?.validations && item?.validations?.length > 0 && item?.validations[4]?.formikType === true ? "True" : "False"
+                                }</Text>
                             </Flex>
                         </Card>
-                        {/* <Card>
-                             {validationData?.map((item, i) => (
-                    <GridItem key={i} rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
-                        <Card>
-                            <Flex>
-                                <Heading size="md" fontWeight="500" textTransform="capitalize">
-                                    {item.name}
-                                </Heading>
-                            </Flex>
-                            <Text pt={3} textTransform="capitalize">
-                                Validation
-                            </Text>
-                            <HSeparator mb={2} mt={1} />
-
-                            {item.validation.map((rule, index) => (
-                                <Flex key={index}>
-                                    {console.log({ rule[Object.keys(rule)[0]]})}
-                                    <Text width="50%" pr={2} textTransform="capitalize">
-                                        {Object.keys(rule)[0]}:
-                                    </Text>
-                                    <Text width="50%" fontWeight="500">
-                                        {rule[Object.keys(rule)[0]]}
-                                    </Text>
-                                </Flex>
-                            ))}
-                        </Card>
-                    </GridItem>
-                ))}
-                        </Card> */}
-
                     </GridItem>
                 ))}
             </Grid>
+
+            <Edit isOpen={editModal} onClose={handleEditClose} />
+            <View isOpen={viewModal} onClose={handleViewClose} selectedId={selectedId} />
+
         </div>
     )
 }
