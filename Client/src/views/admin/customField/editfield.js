@@ -55,14 +55,10 @@ const EditField = (props) => {
         props.onClose(false);
     }
 
-
-    console.log(updateFiled)
-
     useEffect(() => {
         if (updateFiled) {
             setInitialValues(updateFiled)
         }
-
     }, [updateFiled])
 
     const formik = useFormik({
