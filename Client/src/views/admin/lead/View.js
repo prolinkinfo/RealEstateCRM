@@ -60,6 +60,7 @@ const View = () => {
     const [showTasks, setShowTasks] = useState(false);
     const [showMeetings, setShowMeetings] = useState(false);
     const [action, setAction] = useState(false)
+    const [leadData, setLeadData] = useState([])
     const size = "lg";
 
     const [addEmailHistory, setAddEmailHistory] = useState(false);
@@ -130,9 +131,18 @@ const View = () => {
         return text?.replace(/([a-z])([A-Z])/g, '$1 $2');
     }
 
+    const fetchCustomData = async () => {
+        const response = await getApi('api/custom-field?moduleName=lead')
+        setLeadData(response.data)
+    }
+
+    useEffect(() => {
+        if (fetchCustomData) fetchCustomData()
+    }, [action])
+
     return (
         <>
-            <Add isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} />
+            {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} setLeadData={setLeadData} leadData={leadData[0]} setAction={setAction} />}
             <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} />
             <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/lead/delete/' id={param.id} setAction={setAction} />
 

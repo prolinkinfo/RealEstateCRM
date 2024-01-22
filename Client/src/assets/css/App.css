@@ -109,3 +109,15 @@ option {
 .imageCard:hover .imageContent {
   opacity: 1;
 }
+
+.EditDelete {
+  display: none;
+}
+
+.CustomFieldName {
+  border-bottom: 1px solid rgba(128, 128, 128, 0.705);
+}
+
+.CustomFieldName:hover .EditDelete {
+  display: block;
+}
