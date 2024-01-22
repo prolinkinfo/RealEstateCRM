@@ -1,15 +1,15 @@
 import { Button, Checkbox, Flex, FormLabel, Grid, GridItem, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Spinner, Text } from '@chakra-ui/react'
 import { useFormik } from 'formik'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { addFiledSchema } from 'schema'
-import { postApi } from 'services/api'
+import { putApi } from 'services/api'
 import * as yup from 'yup'
 
 
 
-const Addfield = (props) => {
+const EditField = (props) => {
 
-    const { moduleId, filed } = props;
+    const { moduleId, filed, updateFiled } = props;
 
     const [isLoding, setIsLoding] = useState(false)
     // const [validation, setValidation] = useState(false)
@@ -17,14 +17,10 @@ const Addfield = (props) => {
     // const [minChecked, setmin] = useState(false)
     // const [maxChecked, setMax] = useState(false)
     const [data, setData] = useState([])
-
-    const handleClose = () => {
-        props.onClose(false);
-    }
-    const initialValues = {
-        name: "",
-        label: "",
-        type: "",
+    const [initialValues, setInitialValues] = useState([{
+        name: '',
+        label: '',
+        type: '',
         delete: false,
         validate: false,
         validation: [
@@ -53,11 +49,22 @@ const Addfield = (props) => {
                 message: "",
             },
         ],
-    };
+    }]);
+
+    const handleClose = () => {
+        props.onClose(false);
+    }
+
+    useEffect(() => {
+        if (updateFiled) {
+            setInitialValues(updateFiled)
+        }
+    }, [updateFiled])
 
     const formik = useFormik({
         initialValues: initialValues,
         validationSchema: addFiledSchema,
+        enableReinitialize: true,
         validate: (values) => {
             const errors = {};
 
@@ -101,8 +108,7 @@ const Addfield = (props) => {
             return errors;
         },
         onSubmit: (values, { resetForm }) => {
-            fetchAddData()
-            resetForm()
+            EditData()
         },
     });
 
@@ -112,14 +118,14 @@ const Addfield = (props) => {
     // }
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
-    const fetchAddData = async () => {
+    const EditData = async () => {
         try {
-            const addDataPayload = {
+            const editDataPayload = {
                 moduleId: moduleId,
-                fields: [values]
+                updatedField: values
             }
 
-            let response = await postApi('api/custom-field/add', addDataPayload);
+            let response = await putApi(`api/custom-field/change-single-field/${updateFiled?._id}`, editDataPayload);
             if (response.status === 200) {
                 props.onClose()
                 props.fetchData()
@@ -136,7 +142,7 @@ const Addfield = (props) => {
             <Modal onClose={props.onClose} isOpen={props.isOpen} isCentered>
                 <ModalOverlay />
                 <ModalContent maxWidth={"2xl"}>
-                    <ModalHeader>Add Field</ModalHeader>
+                    <ModalHeader>Edit Field</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <>
@@ -165,7 +171,7 @@ const Addfield = (props) => {
                                         onChange={handleChange} onBlur={handleBlur}
                                         value={values.label}
                                         name="label"
-                                        placeholder={`Enter ${props.moduleName} Name`}
+                                        placeholder='Enter Label Name'
                                         fontWeight='500'
                                         borderColor={errors.label && touched.label ? "red.300" : null}
                                     />
@@ -188,7 +194,6 @@ const Addfield = (props) => {
                                         <option value='radio'>Radio</option>
                                         <option value='check'>Check</option>
                                         <option value='date'>Date</option>
-                                        <option value='email'>Email</option>
                                         <option value='select'>Select</option>
                                     </Select>
                                 </GridItem>
@@ -206,6 +211,7 @@ const Addfield = (props) => {
                                             <Flex>
                                                 <Checkbox colorScheme="brandScheme" me="10px"
                                                     onChange={(e) => setFieldValue(`validation[${0}].require`, e.target.checked)}
+                                                    isChecked={values?.validation[0]?.require}
                                                 />
                                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
                                                     Require
@@ -231,7 +237,7 @@ const Addfield = (props) => {
                                         </GridItem>
                                         <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                             <Flex>
-                                                <Checkbox colorScheme="brandScheme" name={`validation[${1}].min`} me="10px" onChange={(e) => setFieldValue(`validation[${1}].min`, e.target.checked)} />
+                                                <Checkbox colorScheme="brandScheme" isChecked={values?.validation[1]?.min} name={`validation[${1}].min`} me="10px" onChange={(e) => setFieldValue(`validation[${1}].min`, e.target.checked)} />
                                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
                                                     Min
                                                 </FormLabel>
@@ -270,7 +276,7 @@ const Addfield = (props) => {
                                         </GridItem>
                                         <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                             <Flex>
-                                                <Checkbox colorScheme="brandScheme" me="10px" name={`validation[${2}].max`} onChange={(e) => setFieldValue(`validation[${2}].max`, e.target.checked)} />
+                                                <Checkbox colorScheme="brandScheme" isChecked={values?.validation[2]?.max} me="10px" name={`validation[${2}].max`} onChange={(e) => setFieldValue(`validation[${2}].max`, e.target.checked)} />
                                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
                                                     Max
                                                 </FormLabel>
@@ -310,7 +316,7 @@ const Addfield = (props) => {
 
                                         <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                             <Flex>
-                                                <Checkbox colorScheme="brandScheme" me="10px" name={`validation[${3}].match`} onChange={(e) => setFieldValue(`validation[${3}].match`, e.target.checked)} />
+                                                <Checkbox colorScheme="brandScheme" isChecked={values?.validation[3]?.match} me="10px" name={`validation[${3}].match`} onChange={(e) => setFieldValue(`validation[${3}].match`, e.target.checked)} />
                                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
                                                     Match
                                                 </FormLabel>
@@ -351,7 +357,7 @@ const Addfield = (props) => {
 
                                         <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                             <Flex>
-                                                <Checkbox colorScheme="brandScheme" name={`validation[${4}].types`} me="10px" onChange={(e) => setFieldValue(`validation[${4}].types`, e.target.checked)} />
+                                                <Checkbox colorScheme="brandScheme" isChecked={values?.validation[4]?.types} name={`validation[${4}].types`} me="10px" onChange={(e) => setFieldValue(`validation[${4}].types`, e.target.checked)} />
                                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
                                                     Formik Type
                                                 </FormLabel>
@@ -404,8 +410,8 @@ const Addfield = (props) => {
                         </>
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme="brand" size="sm" mr={2} type='submit' disabled={isLoding ? true : false} onClick={handleSubmit} >{isLoding ? <Spinner /> : 'Add'}</Button>
-                        <Button variant="outline" size="sm" onClick={() => { handleClose(); resetForm() }}>Cancel</Button>
+                        <Button colorScheme="brand" size="sm" mr={2} type='submit' disabled={isLoding ? true : false} onClick={handleSubmit} >{isLoding ? <Spinner /> : 'Edit'}</Button>
+                        <Button variant="outline" size="sm" onClick={() => { handleClose() }}>Cancel</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
@@ -413,4 +419,4 @@ const Addfield = (props) => {
     )
 }
 
-export default Addfield
+export default EditField

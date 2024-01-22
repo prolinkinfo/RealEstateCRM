@@ -5,65 +5,72 @@ import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react'
 import Addfield from './addfield'
 import { getApi } from 'services/api';
+import EditField from './editfield';
+import DeleteFiled from './deletefield';
 
 const CustomField = () => {
     const [addFieldModel, setAddFieldModel] = useState(false);
     const [moduleName, setModuleName] = useState('')
     const [data, setData] = useState([])
-    console.log(data)
-    const fields = [
-        {
-            id: 1,
-            name: 'lead',
-            fields: [{
-                name: 'name',
-                label: 'Name',
-                type: 'text',
-                validation: [
-                    { require: true, message: 'Please Enter Name' },
-                    { min: true, value: 0, message: '' },
-                    { max: true, value: 10, message: '' },
-                    { match: true, value: '/^\d{10}$/', message: '' }
-                ]
-            }, {
-                name: 'name',
-                label: 'Name',
-                type: 'text',
-                validation: [
-                    { require: true, message: 'Please Enter Name' },
-                    { min: true, value: 0, message: '' },
-                    { max: true, value: 10, message: '' },
-                    { match: true, value: '/^\d{10}$/', message: '' }
-                ]
-            }]
-        },
-        {
-            id: 2,
-            name: 'contact',
-            fields: [{
-                name: 'fieldname',
-                label: 'Name',
-                type: 'text',
-                validation: [
-                    { require: true, message: 'Please Enter Name' },
-                    { min: true, value: 0, message: '' },
-                    { max: true, value: 10, message: '' },
-                    { match: true, value: '/^\d{10}$/', message: '' }
-                ]
-            }, {
-                name: 'name',
-                label: 'Name',
-                type: 'text',
-                validation: [
-                    { require: true, message: 'Please Enter Name' },
-                    { min: true, value: 0, message: '' },
-                    { max: true, value: 10, message: '' },
-                    { match: true, value: '/^\d{10}$/', message: '' }
-                ]
-            },
-            ]
-        },
-    ];
+    const [fields, setFields] = useState([])
+    const [editModal, setEditModal] = useState(false)
+    const [updateField, setUpdateField] = useState({})
+    const [deleteModal, setDeleteModal] = useState(false)
+    const [selectedId, setSelectedId] = useState('')
+
+    // const fields = [
+    //     {
+    //         id: 1,
+    //         name: 'lead',
+    //         fields: [{
+    //             name: 'name',
+    //             label: 'Name',
+    //             type: 'text',
+    //             validation: [
+    //                 { require: true, message: 'Please Enter Name' },
+    //                 { min: true, value: 0, message: '' },
+    //                 { max: true, value: 10, message: '' },
+    //                 { match: true, value: '/^\d{10}$/', message: '' }
+    //             ]
+    //         }, {
+    //             name: 'name',
+    //             label: 'Name',
+    //             type: 'text',
+    //             validation: [
+    //                 { require: true, message: 'Please Enter Name' },
+    //                 { min: true, value: 0, message: '' },
+    //                 { max: true, value: 10, message: '' },
+    //                 { match: true, value: '/^\d{10}$/', message: '' }
+    //             ]
+    //         }]
+    //     },
+    //     {
+    //         id: 2,
+    //         name: 'contact',
+    //         fields: [{
+    //             name: 'fieldname',
+    //             label: 'Name',
+    //             type: 'text',
+    //             validation: [
+    //                 { require: true, message: 'Please Enter Name' },
+    //                 { min: true, value: 0, message: '' },
+    //                 { max: true, value: 10, message: '' },
+    //                 { match: true, value: '/^\d{10}$/', message: '' }
+    //             ]
+    //         }, {
+    //             name: 'name',
+    //             label: 'Name',
+    //             type: 'text',
+    //             validation: [
+    //                 { require: true, message: 'Please Enter Name' },
+    //                 { min: true, value: 0, message: '' },
+    //                 { max: true, value: 10, message: '' },
+    //                 { match: true, value: '/^\d{10}$/', message: '' }
+    //             ]
+    //         },
+    //         ]
+    //     },
+    // ];
     // const formik = useFormik({
     //     initialValues: {
     //         // Set initial values based on your form fields
@@ -100,6 +107,8 @@ const CustomField = () => {
     // });
 
     const fetchData = async () => {
+        let responseAllData = await getApi(`api/custom-field`);
+        setFields(responseAllData?.data);
         if (moduleName) {
             let response = await getApi(`api/custom-field/?moduleName=${moduleName}`);
             setData(response?.data);
@@ -108,7 +117,7 @@ const CustomField = () => {
         }
     }
     useEffect(() => {
-        fetchData()
+        if (fetchData) fetchData()
     }, [moduleName])
 
     const initialValues = {
@@ -147,7 +156,7 @@ const CustomField = () => {
                             <MenuList>
                                 <MenuItem onClick={() => setModuleName('')}>Select Module</MenuItem>
                                 {fields?.map((item, id) => (
-                                    <MenuItem key={id} onClick={() => setModuleName(item.name)}>{item.name}</MenuItem>
+                                    <MenuItem key={id} onClick={() => setModuleName(item.moduleName)}>{item.moduleName}</MenuItem>
                                 ))}
                             </MenuList>
                         </Menu>
@@ -161,19 +170,21 @@ const CustomField = () => {
                                     {item?.label}
                                 </Text>
                                 <span className="EditDelete">
-                                    <Button size='sm' variant='outline' me={2}><EditIcon /></Button>
-                                    <Button size='sm' variant='outline' me={2}><DeleteIcon /></Button>
+                                    <Button size='sm' variant='outline' me={2} onClick={() => { setEditModal(true); setUpdateField(item) }}><EditIcon /></Button>
+                                    <Button size='sm' variant='outline' me={2} onClick={() => { setDeleteModal(true); setSelectedId(item?._id) }}><DeleteIcon /></Button>
                                 </span>
                             </Flex>
                         </GridItem>
                     ))}
                 </Grid>
                 <Flex justifyContent={'end'} mt='5'>
-                    {data?.length === 0 && <Button onClick={() => setAddFieldModel(true)} variant="brand" size='sm'>Add Field</Button>}
+                    {data?.length > 0 && <Button onClick={() => setAddFieldModel(true)} variant="brand" size='sm'>Add Field</Button>}
                 </Flex>
             </Card>
 
-            <Addfield isOpen={addFieldModel} onClose={setAddFieldModel} field={data[0]?.fields} moduleId={data[0]?._id} />
+            <Addfield isOpen={addFieldModel} onClose={setAddFieldModel} moduleName={moduleName} field={data[0]?.fields} moduleId={data[0]?._id} fetchData={fetchData} />
+            <EditField isOpen={editModal} onClose={setEditModal} field={data[0]?.fields} moduleId={data[0]?._id} fetchData={fetchData} updateFiled={updateField} />
+            <DeleteFiled isOpen={deleteModal} onClose={setDeleteModal} moduleName={moduleName} moduleId={data[0]?._id} selectedId={selectedId} fetchData={fetchData} updateFiled={updateField} />
 
         </>
     )
