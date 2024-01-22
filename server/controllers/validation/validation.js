@@ -3,6 +3,7 @@ const Validation = require('../../model/schema/validation');
 const index = async (req, res) => {
     try {
         const query = req.query;
+        query.deleted = false;
         let result = await Validation.find(query);
         return res.send(result);
     } catch (err) {
@@ -13,6 +14,9 @@ const index = async (req, res) => {
 
 const add = async (req, res) => {
     try {
+        if (!req.body?.name) {
+            return res.status(400).json({ success: false, message: `Validation name is required` });
+        }
 
         let existingValidation = await Validation.findOne({ name: { $regex: new RegExp(`^${req.body.name}$`, 'i') } });
         if (existingValidation) {
@@ -33,7 +37,7 @@ const add = async (req, res) => {
 
 const view = async (req, res) => {
     try {
-        const validationDoc = await Validation.findOne({ _id: req.params.id });
+        const validationDoc = await Validation.findOne({ _id: req.params.id, deleted: false });
         if (!validationDoc) return res.status(404).json({ success: false, message: "No Data Found." });
         return res.send(validationDoc);
     } catch (err) {
@@ -59,81 +63,49 @@ const editWholeValidationsArray = async (req, res) => {
     }
 };
 
-const editSingleValidationsField = async (req, res) => {
+const deleteValidationDocument = async (req, res) => {
     try {
-        const validationId = req.body.validationId;
-        const fieldId = req.params.id;
-
-        let result = await Validation.updateOne(
-            { _id: validationId, 'validations._id': fieldId },
-            { $set: { 'validations.$': req.body.updatedValidationField } }
-        );
-
-        if (result?.modifiedCount > 0) {
-            return res.status(200).json({ message: "Validation field updated successfully", result });
-        } else {
-            return res.status(404).json({ message: 'Failed to update field', result });
-        }
-
-    } catch (err) {
-        console.error('Failed to Update validations Field:', err);
-        return res.status(400).json({ success: false, message: 'Failed to Update validations Field', error: err.toString() });
-    }
-};
-
-const deleteValidationsField = async (req, res) => {
-    try {
-        const validationId = req.query.validationId;
-        const fieldId = req.params.id;
-
+        const validationId = req.params.id;
         const result = await Validation.updateOne(
             { _id: validationId },
             {
-                $pull: {
-                    validations: {
-                        _id: fieldId
-                    }
-                }
+                $set: { deleted: true }
             }
         );
 
         if (result?.modifiedCount > 0) {
-            return res.status(200).json({ message: "Validdations field removed successfully", result });
+            return res.status(200).json({ message: "Validdation removed successfully", result });
         } else {
-            return res.status(404).json({ message: 'Failed to remove validations field', result });
+            return res.status(404).json({ message: 'Failed to remove validation', result });
         }
 
     } catch (err) {
         console.error("Failed to delete field ", err);
-        return res.status(404).json({ success: false, message: "Failed to remove validations field", error: err.toString() });
+        return res.status(404).json({ success: false, message: "Failed to remove validation", error: err.toString() });
     }
-};
+}
 
-const deleteManyValidationsFields = async (req, res) => {
+const deleteManyValidationDocuments = async (req, res) => {
     try {
-        const validationId = req.query.validationId;
-        const fieldsIds = req.body;
-
-        const result = await Validation.updateOne(
-            { _id: validationId },
+        const validationIds = req.body;
+        console.log("validationIds ", validationIds);
+        const result = await Validation.updateMany(
+            { _id: { $in: validationIds } },
             {
-                $pull: {
-                    validations: { _id: { $in: fieldsIds } }
-                }
+                $set: { deleted: true }
             }
         );
 
         if (result?.modifiedCount > 0) {
-            return res.status(200).json({ message: "Validations fields removed successfully", result });
+            return res.status(200).json({ message: "Validations removed successfully", result });
         } else {
-            return res.status(404).json({ message: 'Failed to remove validations fields', result });
+            return res.status(404).json({ message: 'Failed to remove validations', result });
         }
 
     } catch (err) {
-        console.error("Failed to delete field ", err);
-        return res.status(404).json({ success: false, message: "Failed to remove field", error: err.toString() });
+        console.error("Failed to remove validations ", err);
+        return res.status(404).json({ success: false, message: "Failed to remove validations", error: err.toString() });
     }
 };
 
-
-module.exports = { index, add, view, editWholeValidationsArray, editSingleValidationsField, deleteValidationsField, deleteManyValidationsFields };
+module.exports = { index, add, view, editWholeValidationsArray, deleteValidationDocument, deleteManyValidationDocuments };
