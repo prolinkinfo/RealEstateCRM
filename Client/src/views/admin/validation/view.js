@@ -40,46 +40,13 @@ const Edit = (props) => {
                     <ModalCloseButton />
                     <ModalBody>
                         <Box>
-                            {/* <>
-                                <Flex alignItems={"center"} justifyContent={"space-between"}>
-                                    <Heading size="md" fontWeight={"500"} textTransform={"capitalize"}
-                                    >{data?.name}</Heading>
-                                </Flex>
-                                <Text pt={3} textTransform={"capitalize"}>validations</Text>
-                                <HSeparator mb={2} mt={1} />
-                                <Flex>
-                                    <Text fontWeight={"bold"} pr={2} textTransform={"capitalize"}>require:</Text>
-                                    <Text fontWeight={"bold"} fontWeight={"500"}  > {data?.validations && data?.validations?.length > 0 && data?.validations[0]?.require === true ? "True" : "False"
-                                    }</Text>
-                                </Flex>
-                                <Flex>
-                                    <Text fontWeight={"bold"} pr={2} textTransform={"capitalize"}>min:</Text>
-                                    <Text fontWeight={"bold"} fontWeight={"500"}  >{data?.validations && data?.validations?.length > 0 && data?.validations[1]?.min === true ? "True" : "False"
-                                    }</Text>
-                                </Flex>
-                                <Flex>
-                                    <Text fontWeight={"bold"} pr={2} textTransform={"capitalize"}>max:</Text>
-                                    <Text fontWeight={"bold"} fontWeight={"500"}  >{data?.validations && data?.validations?.length > 0 && data?.validations[2]?.max === true ? "True" : "False"
-                                    }</Text>
-                                </Flex>
-                                <Flex>
-                                    <Text fontWeight={"bold"} pr={2} textTransform={"capitalize"}>match:</Text>
-                                    <Text fontWeight={"bold"} fontWeight={"500"}  >{data?.validations && data?.validations?.length > 0 && data?.validations[3]?.match === true ? "True" : "False"
-                                    }</Text>
-                                </Flex>
-                                <Flex>
-                                    <Text fontWeight={"bold"} pr={2} textTransform={"capitalize"}>formik type:</Text>
-                                    <Text fontWeight={"bold"} fontWeight={"500"}  >{data?.validations && data?.validations?.length > 0 && data?.validations[4]?.formikType === true ? "True" : "False"
-                                    }</Text>
-                                </Flex>
-                            </> */}
                             <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                                 <GridItem colSpan={{ base: 12 }} mb={3}>
                                     <Heading
-                                        size="md" fontWeight={"500"} textTransform={"capitalize"}
+                                        size="md" fontWeight={"600"} textTransform={"capitalize"}
                                     >{data?.name}</Heading>
                                 </GridItem>
-                                <GridItem colSpan={{ base: 12 }} >
+                                <GridItem colSpan={{ base: 12 }} borderTop={"1px solid gray"} pt={2}>
                                     <Flex>
                                         <Text fontWeight={"bold"} pr={2} textTransform={"capitalize"}>require:</Text>
                                         <Text fontWeight={"bold"}>
@@ -88,10 +55,10 @@ const Edit = (props) => {
                                     </Flex>
                                 </GridItem>
 
-                                <GridItem colSpan={{ base: 12, sm: 6 }} >
+                                <GridItem colSpan={{ base: 12 }} borderBottom={"1px solid gray"} pb={2}>
                                     <Flex>
                                         <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
-                                            message:
+                                            Message:
                                         </Text>
                                         <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
                                             {data?.validations && data?.validations?.length > 0 && data?.validations[0]?.message}
@@ -128,7 +95,7 @@ const Edit = (props) => {
                                         </Text>
                                     </Flex>
                                 </GridItem>
-                                <GridItem colSpan={{ base: 12 }}>
+                                <GridItem colSpan={{ base: 12 }} borderTop={"1px solid gray"} pt={2}>
                                     <Flex>
                                         <Text fontWeight={"bold"} pr={2} textTransform={"capitalize"}>Max:</Text>
                                         <Text fontWeight={"bold"}>
@@ -157,7 +124,7 @@ const Edit = (props) => {
                                         </Text>
                                     </Flex>
                                 </GridItem>
-                                <GridItem colSpan={{ base: 12 }}>
+                                <GridItem colSpan={{ base: 12 }} borderTop={"1px solid gray"} pt={2}>
                                     <Flex>
                                         <Text fontWeight={"bold"} pr={2} textTransform={"capitalize"}>Match:</Text>
                                         <Text fontWeight={"bold"}>
@@ -187,7 +154,7 @@ const Edit = (props) => {
                                     </Flex>
                                 </GridItem>
 
-                                <GridItem colSpan={{ base: 12 }} >
+                                <GridItem colSpan={{ base: 12 }} borderTop={"1px solid gray"} pt={2}>
                                     <Flex>
                                         <Text fontWeight={"bold"} pr={2} textTransform={"capitalize"}>FormikType:</Text>
                                         <Text fontWeight={"bold"}>
@@ -199,7 +166,7 @@ const Edit = (props) => {
                                 <GridItem colSpan={{ base: 12 }} >
                                     <Flex>
                                         <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
-                                            message:
+                                            Message:
                                         </Text>
                                         <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
                                             {data?.validations && data?.validations?.length > 0 && data?.validations[4]?.message}
