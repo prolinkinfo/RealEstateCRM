@@ -106,8 +106,8 @@ const deleteField = async (req, res) => {
 
 const deleteManyFields = async (req, res) => {
     try {
-        const moduleId = req.query.moduleId;
-        const fieldsIds = req.body;
+        const moduleId = req.body.moduleId;
+        const fieldsIds = req.body.fieldsIds;
 
         const result = await CustomField.updateOne(
             { _id: moduleId },

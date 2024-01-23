@@ -267,6 +267,7 @@ const routes = [
     name: "Custom Field",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/custom-Field",
+    under: "customField",
     icon: <Icon as={FaWpforms} width='20px' height='20px' color='inherit' />,
     component: CustomField,
   },
