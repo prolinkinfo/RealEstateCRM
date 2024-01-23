@@ -9,6 +9,6 @@ router.post('/add', auth, validation.add);
 router.get('/view/:id', auth, validation.view);
 router.put('/edit/:id', auth, validation.editWholeValidationsArray);
 router.delete('/delete/:id', auth, validation.deleteValidationDocument);
-router.delete('/deleteMany', auth, validation.deleteManyValidationDocuments);
+router.post('/deleteMany', auth, validation.deleteManyValidationDocuments);
 
 module.exports = router;
