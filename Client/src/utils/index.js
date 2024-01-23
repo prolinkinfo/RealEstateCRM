@@ -87,8 +87,7 @@ export const generateValidationSchema = (fields) => {
             fieldValidation = yup.string().url()
         } else if (fieldFormikType === 'boolean') {
             fieldValidation = yup.boolean()
-        }
-        else {
+        } else {
             fieldValidation = yup.string()
         }
 
