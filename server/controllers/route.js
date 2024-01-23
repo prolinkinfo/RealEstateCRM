@@ -17,6 +17,7 @@ const paymentRoute = require('./payment/_routes');
 const roleAccessRoute = require('./roleAccess/_routes');
 const imagesRoute = require('./images/_routes');
 const customFieldRoute = require("./customField/_routes");
+const validationRoute = require("./validation/_routes");
 
 //Api`s
 router.use('/contact', contactRoute);
@@ -35,5 +36,6 @@ router.use('/meeting', meetingRoute);
 router.use('/role-access', roleAccessRoute);
 router.use("/images", imagesRoute);
 router.use("/custom-field", customFieldRoute);
+router.use("/validation", validationRoute);
 
 module.exports = router;

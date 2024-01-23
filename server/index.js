@@ -18,33 +18,7 @@ app.use(cors())
 app.use('/api', route);
 
 app.get('/', async (req, res) => {
-
     res.send('Welcome to my world...')
-    //! for Delete folder ./uploads
-    // const folderPath = './uploads'; // Use the appropriate path here
-    // try {
-    //     function removeFolderRecursive(folderPath) {
-    //         if (fs.existsSync(folderPath)) {
-    //             fs.readdirSync(folderPath).forEach(file => {
-    //                 const curPath = path.join(folderPath, file);
-
-    //                 if (fs.lstatSync(curPath).isDirectory()) {
-    //                     removeFolderRecursive(curPath); // Recursive call for subdirectories
-    //                 } else {
-    //                     fs.unlinkSync(curPath); // Delete file
-    //                 }
-    //             });
-
-    //             fs.rmdirSync(folderPath); // Remove empty directory
-    //             console.log(`Folder ${folderPath} and its contents have been removed.`);
-    //         }
-    //     }
-    //     removeFolderRecursive(folderPath);
-    //     res.send({ message: `Folder ${folderPath} and its contents have been removed.` });
-    // } catch (err) {
-    //     console.error(`Error removing folder: ${err.message}`);
-    //     res.status(500).send({ message: `Error removing folder: ${err.message}` });
-    // }
 });
 
 // Get port from environment and store in Express.
