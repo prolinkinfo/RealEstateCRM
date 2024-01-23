@@ -224,7 +224,7 @@ const EditField = (props) => {
                                         <FormLabel ms='4px' fontSize='sm' fontWeight='500' mb={0}>
                                             Fixed
                                         </FormLabel>
-                                        <Checkbox colorScheme="brandScheme" me="10px" onChange={(e) => setFieldValue(`fixed`, e.target.checked)} />
+                                        <Checkbox colorScheme="brandScheme" me="10px" isChecked={values?.fixed} onChange={(e) => setFieldValue(`fixed`, e.target.checked)} />
                                     </Flex>
                                 </GridItem>
                                 {(values?.type === 'radio' || values?.type === 'select') ? <>
