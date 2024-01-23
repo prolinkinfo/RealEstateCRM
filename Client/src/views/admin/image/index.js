@@ -65,7 +65,7 @@ const ChangeImage = () => {
                         {image?.length > 0 && image?.map((item, i) => (
                             <GridItem colSpan={{ base: 12, md: 4, lg: 3 }}>
                                 <div className="imageCard">
-                                    <Image src={item?.authImg} height={"200px"} width={"400px"} />
+                                    <Image src={item?.authImg} height={"200px"} width={"350px"} />
                                     {item?.isActive === true ? <Box backgroundColor={"#422afb"} color={"#fff"} height={"20px"} width={"140px"} position={"absolute"} top={"18px"} right={"-40px"} transform={"rotate(45deg)"} fontSize={"16px"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                                         Active
                                     </Box> : ""}

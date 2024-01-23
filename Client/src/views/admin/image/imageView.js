@@ -1,4 +1,4 @@
-import { Button, Flex, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
+import { Button, Flex, Grid, GridItem, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
@@ -52,62 +52,69 @@ const ImageView = (props) => {
     };
     return (
         <div>
-            <Modal onClose={props.onClose} isOpen={props.isOpen} isCentered>
+            <Modal onClose={props.onClose} isOpen={props.isOpen} isCentered size='xl'>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>View Images</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <Flex wrap='wrap' justifyContent={"center"}>
-                            <div>
-                                <Text textAlign={"center"} fontWeight={"600"}>Navbar Small Logo Image</Text>
-                                <div className="imageCard" style={{ margin: "10px" }}>
-                                    <Image src={data?.logoSmImg} height={"100px"} width={"180px"} />
-                                    <div className='imageContent'>
-                                        <Dropzone
-                                            borderRadius="0"
-                                            isMultipleAllow={false}
-                                            onFileSelect={(file) => changeImage(file, logoimg)}
-                                            content={
-                                                <Button size='sm' variant="brand">Change</Button>
-                                            }
-                                        />
+
+                        <Grid templateColumns={'repeat(12, 1fr)'} gap={5}>
+                            <GridItem colSpan={{ base: 12, md: 6 }} display={"flex"} justifyContent={"center"}>
+                                <div>
+                                    <Text fontWeight={"600"} ps={3}>Navbar Small Logo Image</Text>
+                                    <div className="imageCard" style={{ margin: "10px" }}>
+                                        <Image src={data?.logoSmImg} height={"100px"} width={"100%"} />
+                                        <div className='imageContent'>
+                                            <Dropzone
+                                                borderRadius="0"
+                                                isMultipleAllow={false}
+                                                onFileSelect={(file) => changeImage(file, logoimg)}
+                                                content={
+                                                    <Button size='sm' variant="brand">Change</Button>
+                                                }
+                                            />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div>
-                                <Text textAlign={"center"} fontWeight={"600"}>Navbar Large Logo Image</Text>
-                                <div className="imageCard" style={{ margin: "10px" }}>
-                                    <Image src={data?.logoLgImg} height={"100px"} width={"180px"} />
-                                    <div className='imageContent'>
-                                        <Dropzone
-                                            borderRadius="0"
-                                            isMultipleAllow={false}
-                                            onFileSelect={(file) => changeImage(file, largelogoimg)}
-                                            content={
-                                                <Button size='sm' variant="brand">Change</Button>
-                                            }
-                                        />
+                            </GridItem>
+                            <GridItem colSpan={{ base: 12, md: 6 }} display={"flex"} justifyContent={"center"}>
+                                <div>
+                                    <Text fontWeight={"600"} ps={3}>Navbar Large Logo Image</Text>
+                                    <div className="imageCard" style={{ margin: "10px" }}>
+                                        <Image src={data?.logoLgImg} height={"100px"} width={"100%"} />
+                                        <div className='imageContent'>
+                                            <Dropzone
+                                                borderRadius="0"
+                                                isMultipleAllow={false}
+                                                onFileSelect={(file) => changeImage(file, largelogoimg)}
+                                                content={
+                                                    <Button size='sm' variant="brand">Change</Button>
+                                                }
+                                            />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div>
-                                <Text textAlign={"center"} fontWeight={"600"}>Login page Image</Text>
-                                <div className="imageCard" style={{ margin: "10px" }}>
-                                    <Image src={data?.authImg} height={"100px"} width={"180px"} />
-                                    <div className='imageContent'>
-                                        <Dropzone
-                                            borderRadius="0"
-                                            isMultipleAllow={false}
-                                            onFileSelect={(file) => changeImage(file, authimg)}
-                                            content={
-                                                <Button size='sm' variant="brand" >Change</Button>
-                                            }
-                                        />
+                            </GridItem>
+                            <GridItem colSpan={{ base: 12 }} display={"flex"} justifyContent={"center"}>
+                                <div>
+                                    <Text fontWeight={"600"} ps={3}>Login page Image</Text>
+                                    <div className="imageCard" style={{ margin: "10px" }}>
+                                        <Image src={data?.authImg} height={"100px"} width={"100%"} />
+                                        <div className='imageContent'>
+                                            <Dropzone
+                                                borderRadius="0"
+                                                isMultipleAllow={false}
+                                                onFileSelect={(file) => changeImage(file, authimg)}
+                                                content={
+                                                    <Button size='sm' variant="brand" >Change</Button>
+                                                }
+                                            />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </Flex>
+                            </GridItem>
+                        </Grid>
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme="brand" mr={2} size='sm' onClick={() => setImageData(data)} disabled={isLoding ? true : false}>{isLoding ? <Spinner /> : 'Set Image'}</Button>
