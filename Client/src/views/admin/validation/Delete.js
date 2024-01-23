@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { deleteApi } from 'services/api';
 
 const Delete = (props) => {
-    const { selectedId, fetchData } = props;
+    const { selectedId, fetchData, onClose, isOpen } = props;
     const [isLoding, setIsLoding] = useState(false)
     console.log(selectedId)
 
@@ -17,6 +17,7 @@ const Delete = (props) => {
                 setIsLoding(true)
                 const response = await deleteApi('api/validation/delete/', selectedId)
                 if (response.status === 200) {
+                    onClose()
                     fetchData()
                 }
             }
@@ -35,13 +36,13 @@ const Delete = (props) => {
 
     return (
         <div>
-            <Modal onClose={props.onClose} isOpen={props.isOpen} isCentered>
+            <Modal onClose={onClose} isOpen={isOpen} isCentered>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Delete Validations</ModalHeader>
+                    <ModalHeader>Delete Validation</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        Are You Sure To Delete selected Validations?
+                        Are You Sure To Delete selected Validation?
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme="red" mr={2} onClick={handleDeleteClick} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Yes'}</Button>

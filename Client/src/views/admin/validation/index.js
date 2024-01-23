@@ -19,7 +19,7 @@ const Index = () => {
     const [deleteModal, setDeleteModal] = useState(false)
     const [action, setAction] = useState(false)
     const [selectedId, setselectedId] = useState()
-    const [data, setData] = useState([])
+    const [editdata, setEditData] = useState([])
     const [validationData, setValidateData] = useState([])
 
 
@@ -35,6 +35,11 @@ const Index = () => {
         setEdit(false)
     }
 
+    const handleEditOpen = (item) => {
+        setselectedId(item._id)
+        setEditData(item)
+        setEdit(!editModal)
+    }
     const handleViewOpen = (item) => {
         setselectedId(item._id)
         setViewModal(!viewModal)
@@ -72,7 +77,7 @@ const Index = () => {
                                 <Menu isLazy  >
                                     <MenuButton><CiMenuKebab /></MenuButton>
                                     <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
-                                        <MenuItem py={2.5} onClick={() => setEdit(!editModal)} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>
+                                        <MenuItem py={2.5} onClick={() => handleEditOpen(item)} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>
                                         <MenuItem py={2.5} color={'green'} onClick={() => handleViewOpen(item)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>
                                         <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} />} onClick={() => handleDeleteOpen(item)}>Delete</MenuItem>
                                     </MenuList>
@@ -111,7 +116,7 @@ const Index = () => {
             </Grid>
 
             <Add isOpen={addModal} onClose={handleAddClose} fetchData={fetchData} setAction={setAction} />
-            <Edit isOpen={editModal} onClose={handleEditClose} selectedId={selectedId} />
+            <Edit isOpen={editModal} onClose={handleEditClose} selectedId={selectedId} editdata={editdata} setAction={setAction} fetchData={fetchData} />
             <Delete isOpen={deleteModal} onClose={handleDeleteClose} selectedId={selectedId} fetchData={fetchData} />
             <View isOpen={viewModal} onClose={handleViewClose} selectedId={selectedId} />
 
