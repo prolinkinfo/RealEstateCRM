@@ -20,6 +20,7 @@ const EditField = (props) => {
         name: updateFiled ? updateFiled?.name : '',
         type: updateFiled ? updateFiled?.type : '',
         delete: updateFiled ? updateFiled?.delete : '',
+        fixed: updateFiled ? updateFiled?.fixed ? true : false : '',
         validate: updateFiled?.validation && (updateFiled?.validation[0]?.require || updateFiled?.validation[1]?.min || updateFiled?.validation[2]?.max || updateFiled?.validation[3]?.match || updateFiled?.validation[4]?.formikType) ? true : false,
         options: updateFiled?.options ? updateFiled?.options : '',
         validation: [
@@ -102,7 +103,7 @@ const EditField = (props) => {
                 errors.validation[4].formikType = 'FormikType is required';
             }
 
-            if (values?.options) {
+            if (values?.options && (values?.type === 'radio' || values?.type === 'select')) {
 
                 values?.options?.forEach((option, index) => {
                     if (!option.name) {
@@ -216,6 +217,15 @@ const EditField = (props) => {
                                         <option value='email'>Email</option>
                                         <option value='select'>Select</option>
                                     </Select>
+                                </GridItem>
+                                <GridItem colSpan={{ base: 12, sm: 6, md: 6 }}>
+                                    <Flex alignItems='center'>
+
+                                        <FormLabel ms='4px' fontSize='sm' fontWeight='500' mb={0}>
+                                            Fixed
+                                        </FormLabel>
+                                        <Checkbox colorScheme="brandScheme" me="10px" onChange={(e) => setFieldValue(`fixed`, e.target.checked)} />
+                                    </Flex>
                                 </GridItem>
                                 {(values?.type === 'radio' || values?.type === 'select') ? <>
                                     <GridItem colSpan={{ base: 12, sm: 12, md: 12 }} borderBottom={'1px solid rgba(128, 128, 128, 0.705)'}>
@@ -348,9 +358,9 @@ const EditField = (props) => {
                                                     name={`validation[${1}].value`}
                                                     placeholder='Enter Min Value'
                                                     fontWeight='500'
-                                                    borderColor={errors?.validation && touched?.validation && errors?.validation[1]?.value && touched?.validation[1]?.value ? "red.300" : null}
+                                                    borderColor={values.validation[1].min === true && errors?.validation && touched?.validation && errors?.validation[1]?.value && touched?.validation[1]?.value ? "red.300" : null}
                                                 />
-                                                <Text mb='10px' color={'red'}> {errors?.validation && touched?.validation && touched?.validation[1]?.value && errors?.validation[1]?.value}</Text>
+                                                {values.validation[1].min === true && <Text mb='10px' color={'red'}> {errors?.validation && touched?.validation && touched?.validation[1]?.value && errors?.validation[1]?.value}</Text>}
                                             </GridItem>
                                             <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -401,9 +411,9 @@ const EditField = (props) => {
                                                     name={`validation[${2}].value`}
                                                     placeholder='Enter Max Value'
                                                     fontWeight='500'
-                                                    borderColor={errors?.validation && touched?.validation && errors?.validation[2]?.value && touched?.validation[2]?.value ? "red.300" : null}
+                                                    borderColor={values.validation[2].max === true && errors?.validation && touched?.validation && errors?.validation[2]?.value && touched?.validation[2]?.value ? "red.300" : null}
                                                 />
-                                                <Text mb='10px' color={'red'}> {errors?.validation && touched?.validation && touched?.validation[2]?.value && errors?.validation[2]?.value}</Text>
+                                                {values.validation[2].max === true && <Text mb='10px' color={'red'}> {errors?.validation && touched?.validation && touched?.validation[2]?.value && errors?.validation[2]?.value}</Text>}
                                             </GridItem>
                                             <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -454,9 +464,9 @@ const EditField = (props) => {
                                                     name={`validation[${3}].value`}
                                                     placeholder='Enter Match Value'
                                                     fontWeight='500'
-                                                    borderColor={errors?.validation && touched?.validation && errors?.validation[3]?.value && touched?.validation[3]?.value ? "red.300" : null}
+                                                    borderColor={values.validation[3].match === true && errors?.validation && touched?.validation && errors?.validation[3]?.value && touched?.validation[3]?.value ? "red.300" : null}
                                                 />
-                                                <Text mb='10px' color={'red'}> {errors?.validation && touched?.validation && touched?.validation[3]?.value && errors?.validation[3]?.value}</Text>
+                                                {values.validation[3].match === true && <Text mb='10px' color={'red'}> {errors?.validation && touched?.validation && touched?.validation[3]?.value && errors?.validation[3]?.value}</Text>}
                                             </GridItem>
                                             <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -471,9 +481,9 @@ const EditField = (props) => {
                                                     name={`validation[${3}].message`}
                                                     placeholder='Enter Match Message'
                                                     fontWeight='500'
-                                                    borderColor={errors?.validation && touched?.validation && errors?.validation[3]?.message && touched?.validation[3]?.message ? "red.300" : null}
+                                                    borderColor={values.validation[3].match === true && errors?.validation && touched?.validation && errors?.validation[3]?.message && touched?.validation[3]?.message ? "red.300" : null}
                                                 />
-                                                <Text mb='10px' color={'red'}> {errors?.validation && touched?.validation && touched?.validation[3]?.message && errors?.validation[3]?.message}</Text>
+                                                {values.validation[3].match === true && <Text mb='10px' color={'red'}> {errors?.validation && touched?.validation && touched?.validation[3]?.message && errors?.validation[3]?.message}</Text>}
                                             </GridItem>
 
                                             <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
@@ -508,17 +518,21 @@ const EditField = (props) => {
                                                     onChange={handleChange}
                                                     fontWeight='500'
                                                     placeholder={'Select Type'}
-                                                    borderColor={errors?.validation && touched?.validation && errors?.validation[4]?.formikType && touched?.validation[4]?.formikType ? "red.300" : null}
+                                                    borderColor={values.validation[4].types === true && errors?.validation && touched?.validation && errors?.validation[4]?.formikType && touched?.validation[4]?.formikType ? "red.300" : null}
                                                 >
                                                     <option value='string'>String </option>
-                                                    <option value='number'>Number </option>
-                                                    <option value='boolean'>Boolean </option>
+                                                    <option value='email'>Email </option>
                                                     <option value='date'>Date </option>
+                                                    <option value='number'>Number </option>
                                                     <option value='object'>Object </option>
                                                     <option value='array'>Array </option>
-                                                    <option value='mixed'>Mixed  </option>
+                                                    <option value='url'>Url </option>
+                                                    <option value='boolean'>Boolean </option>
+                                                    <option value='positive'>Positive </option>
+                                                    <option value='negative'>Negative  </option>
+                                                    <option value='integer'>Integer  </option>
                                                 </Select>
-                                                <Text mb='10px' color={'red'}> {errors?.validation && touched?.validation && touched?.validation[4]?.formikType && errors?.validation[4]?.formikType}</Text>
+                                                {values.validation[4].types === true && <Text mb='10px' color={'red'}> {errors?.validation && touched?.validation && touched?.validation[4]?.formikType && errors?.validation[4]?.formikType}</Text>}
                                             </GridItem>
                                             <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
