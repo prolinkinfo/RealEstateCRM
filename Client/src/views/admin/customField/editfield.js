@@ -72,11 +72,6 @@ const EditField = (props) => {
         validate: (values) => {
             const errors = {};
 
-            // if (values?.validation && values.validation[0]?.require && !values.validation[0]?.message) {
-            //     errors.validation = errors.validation || [];
-            //     errors.validation[0] = errors.validation[0] || {};
-            //     errors.validation[0].message = 'Message is required';
-            // }
             if (values?.validation && values.validation[1]?.min && !values.validation[1]?.value) {
                 errors.validation = errors.validation || [];
                 errors.validation[1] = errors.validation[1] || {};
@@ -132,10 +127,6 @@ const EditField = (props) => {
             EditData()
         },
     });
-
-    // const handleCheckValidation = (e) => {
-    //     setValidation(e.target.checked)
-    // }
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
     const EditData = async () => {
@@ -244,7 +235,6 @@ const EditField = (props) => {
                                                         Name
                                                     </FormLabel>
                                                     <Input
-                                                        // disabled={values.option[0].name === true ? false : true}
                                                         fontSize='sm'
                                                         onChange={handleChange} onBlur={handleBlur}
                                                         value={values.options[index]?.name}
@@ -316,13 +306,10 @@ const EditField = (props) => {
                                                 fontSize='sm'
                                                 onChange={handleChange} onBlur={handleBlur}
                                                 value={values.validation[0].require === true ? values.validation[0].message : ''}
-                                                // value={values.validation[0].message}
                                                 name={`validation[${0}].message`}
                                                 placeholder='Enter Require  message'
                                                 fontWeight='500'
-                                            // borderColor={errors?.validation && touched?.validation && errors?.validation[0]?.message && touched?.validation[0]?.message ? "red.300" : null}
                                             />
-                                            {/* <Text mb='10px' color={'red'}> {errors?.validation && touched?.validation && touched?.validation[0]?.message && errors?.validation[0]?.message}</Text> */}
                                         </GridItem>
                                         {!(values?.type === 'radio' || values?.type === 'select') && <>
                                             <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
@@ -353,7 +340,6 @@ const EditField = (props) => {
                                                     fontSize='sm'
                                                     type='number'
                                                     onChange={handleChange} onBlur={handleBlur}
-                                                    // value={values.validation[1].value}
                                                     value={values.validation[1].min === true ? values.validation[1].value : ''}
                                                     name={`validation[${1}].value`}
                                                     placeholder='Enter Min Value'
@@ -370,12 +356,10 @@ const EditField = (props) => {
                                                     disabled={values.validation[1].min === true ? false : true}
                                                     fontSize='sm'
                                                     onChange={handleChange} onBlur={handleBlur}
-                                                    // value={values.validation[1].message}
                                                     value={values.validation[1].min === true ? values.validation[1].message : ''}
                                                     name={`validation[${1}].message`}
                                                     placeholder='Enter Min message'
                                                     fontWeight='500'
-                                                // borderColor={errors.`validation[${1}].message` && touched.validation[1].message ? "red.300" : null}
                                                 />
                                             </GridItem>
                                             <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
@@ -407,7 +391,6 @@ const EditField = (props) => {
                                                     type='number'
                                                     onChange={handleChange} onBlur={handleBlur}
                                                     value={values.validation[2].max === true ? values.validation[2].value : ''}
-                                                    // value={values.validation[2].value}
                                                     name={`validation[${2}].value`}
                                                     placeholder='Enter Max Value'
                                                     fontWeight='500'
@@ -423,7 +406,6 @@ const EditField = (props) => {
                                                     disabled={values.validation[2].max === true ? false : true}
                                                     fontSize='sm'
                                                     onChange={handleChange} onBlur={handleBlur}
-                                                    // value={values.validation[2].message}
                                                     value={values.validation[2].max === true ? values.validation[2].message : ''}
                                                     name={`validation[${2}].message`}
                                                     placeholder='Enter Max Message'
@@ -460,7 +442,6 @@ const EditField = (props) => {
                                                     fontSize='sm'
                                                     onChange={handleChange} onBlur={handleBlur}
                                                     value={values.validation[3].match === true ? values.validation[3].value : ''}
-                                                    // value={values.validation[3].value}
                                                     name={`validation[${3}].value`}
                                                     placeholder='Enter Match Value'
                                                     fontWeight='500'
@@ -476,7 +457,6 @@ const EditField = (props) => {
                                                     disabled={values.validation[3].match === true ? false : true}
                                                     fontSize='sm'
                                                     onChange={handleChange} onBlur={handleBlur}
-                                                    // value={values.validation[3].message}
                                                     value={values.validation[3].match === true ? values.validation[3].message : ''}
                                                     name={`validation[${3}].message`}
                                                     placeholder='Enter Match Message'
@@ -512,7 +492,6 @@ const EditField = (props) => {
                                                 </FormLabel>
                                                 <Select
                                                     disabled={values?.validation[4]?.types === true ? false : true}
-                                                    // value={values.validation[4].formikType}
                                                     value={values.validation[4].types === true ? values.validation[4].formikType : ''}
                                                     name={`validation[${4}].formikType`}
                                                     onChange={handleChange}
@@ -543,13 +522,10 @@ const EditField = (props) => {
                                                     fontSize='sm'
                                                     onChange={handleChange} onBlur={handleBlur}
                                                     value={values.validation[4].types === true ? values.validation[4].message : ''}
-                                                    // value={values.validation[4].message}
                                                     name={`validation[${4}].message`}
                                                     placeholder='Enter Formik Type Message'
                                                     fontWeight='500'
-                                                // borderColor={errors?.validation && touched?.validation && errors?.validation[3]?.message && touched?.validation[3]?.message ? "red.300" : null}
                                                 />
-                                                {/* <Text mb='10px' color={'red'}> {errors?.validation && touched?.validation && touched?.validation[3]?.message && errors?.validation[3]?.message}</Text> */}
                                             </GridItem></>}
                                     </>
                                     :

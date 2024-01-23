@@ -13,10 +13,6 @@ const Addfield = (props) => {
     const { moduleId, filed } = props;
 
     const [isLoding, setIsLoding] = useState(false)
-    // const [validation, setValidation] = useState(false)
-    // const [requiredChecked, setRequired] = useState(false)
-    // const [minChecked, setmin] = useState(false)
-    // const [maxChecked, setMax] = useState(false)
     const [data, setData] = useState([])
 
     const handleClose = () => {
@@ -72,11 +68,6 @@ const Addfield = (props) => {
         validate: (values) => {
             const errors = {};
 
-            // if (values?.validation && values.validation[0]?.require && !values.validation[0]?.message) {
-            //     errors.validation = errors.validation || [];
-            //     errors.validation[0] = errors.validation[0] || {};
-            //     errors.validation[0].message = 'Message is required';
-            // }
             if (values?.validation && values.validation[1]?.min && !values.validation[1]?.value) {
                 errors.validation = errors.validation || [];
                 errors.validation[1] = errors.validation[1] || {};
@@ -142,10 +133,6 @@ const Addfield = (props) => {
         newOptions.splice(index, 1);
         formik.setFieldValue('options', newOptions);
     };
-
-    // const handleCheckValidation = (e) => {
-    //     setValidation(e.target.checked)
-    // }
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
 
@@ -257,7 +244,6 @@ const Addfield = (props) => {
                                                         Name
                                                     </FormLabel>
                                                     <Input
-                                                        // disabled={values.option[0].name === true ? false : true}
                                                         fontSize='sm'
                                                         onChange={handleChange} onBlur={handleBlur}
                                                         value={values.options[index]?.name}
@@ -333,9 +319,7 @@ const Addfield = (props) => {
                                                 name={`validation[${0}].message`}
                                                 placeholder='Enter Require  message'
                                                 fontWeight='500'
-                                            // borderColor={errors?.validation && touched?.validation && errors?.validation[0]?.message && touched?.validation[0]?.message ? "red.300" : null}
                                             />
-                                            {/* <Text mb='10px' color={'red'}> {errors?.validation && touched?.validation && touched?.validation[0]?.message && errors?.validation[0]?.message}</Text> */}
                                         </GridItem>
                                         {!(values?.type === 'radio' || values?.type === 'select') &&
                                             <>
@@ -387,7 +371,6 @@ const Addfield = (props) => {
                                                         name={`validation[${1}].message`}
                                                         placeholder='Enter Min message'
                                                         fontWeight='500'
-                                                    // borderColor={errors.`validation[${1}].message` && touched.validation[1].message ? "red.300" : null}
                                                     />
                                                 </GridItem>
 
@@ -554,9 +537,7 @@ const Addfield = (props) => {
                                                         name={`validation[${3}].message`}
                                                         placeholder='Enter Formik Type Message'
                                                         fontWeight='500'
-                                                    // borderColor={errors?.validation && touched?.validation && errors?.validation[3]?.message && touched?.validation[3]?.message ? "red.300" : null}
                                                     />
-                                                    {/* <Text mb='10px' color={'red'}> {errors?.validation && touched?.validation && touched?.validation[3]?.message && errors?.validation[3]?.message}</Text> */}
                                                 </GridItem>
                                             </>
                                         }

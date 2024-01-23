@@ -24,95 +24,6 @@ const CustomField = () => {
     const [selectedValues, setSelectedValues] = useState([]);
     const [selectedId, setSelectedId] = useState('')
 
-    // const fields = [
-    //     {
-    //         id: 1,
-    //         name: 'lead',
-    //         fields: [{
-    //             name: 'name',
-    //             label: 'Name',
-    //             type: 'text',
-    //             validation: [
-    //                 { require: true, message: 'Please Enter Name' },
-    //                 { min: true, value: 0, message: '' },
-    //                 { max: true, value: 10, message: '' },
-    //                 { match: true, value: '/^\d{10}$/', message: '' }
-    //             ]
-    //         }, {
-    //             name: 'name',
-    //             label: 'Name',
-    //             type: 'text',
-    //             validation: [
-    //                 { require: true, message: 'Please Enter Name' },
-    //                 { min: true, value: 0, message: '' },
-    //                 { max: true, value: 10, message: '' },
-    //                 { match: true, value: '/^\d{10}$/', message: '' }
-    //             ]
-    //         }]
-    //     },
-    //     {
-    //         id: 2,
-    //         name: 'contact',
-    //         fields: [{
-    //             name: 'fieldname',
-    //             label: 'Name',
-    //             type: 'text',
-    //             validation: [
-    //                 { require: true, message: 'Please Enter Name' },
-    //                 { min: true, value: 0, message: '' },
-    //                 { max: true, value: 10, message: '' },
-    //                 { match: true, value: '/^\d{10}$/', message: '' }
-    //             ]
-    //         }, {
-    //             name: 'name',
-    //             label: 'Name',
-    //             type: 'text',
-    //             validation: [
-    //                 { require: true, message: 'Please Enter Name' },
-    //                 { min: true, value: 0, message: '' },
-    //                 { max: true, value: 10, message: '' },
-    //                 { match: true, value: '/^\d{10}$/', message: '' }
-    //             ]
-    //         },
-    //         ]
-    //     },
-    // ];
-    // const formik = useFormik({
-    //     initialValues: {
-    //         // Set initial values based on your form fields
-    //         name: '',
-    //         // Add more fields as needed
-    //     },
-    //     validate: (values) => {
-    //         const errors = {};
-
-    //         fields.forEach((field) => {
-    //             const { name, validation } = field;
-
-    //             validation.forEach(({ require, min, max, match, value, message }) => {
-    //                 const fieldValue = values[name];
-
-    //                 if (require && !fieldValue) {
-    //                     errors[name] = message;
-    //                 } else if (min && fieldValue.length < min) {
-    //                     errors[name] = message;
-    //                 } else if (max && fieldValue.length > max) {
-    //                     errors[name] = message;
-    //                 } else if (match && value instanceof RegExp && fieldValue && !fieldValue.match(value)) {
-    //                     errors[name] = message;
-    //                 }
-    //             });
-    //         });
-
-    //         return errors;
-    //     },
-    //     onSubmit: (values) => {
-    //         // Handle form submission
-    //         console.log('Form values:', values);
-    //     },
-    // });
-
-
     const handleCheckboxChange = (event, value) => {
         if (event.target.checked) {
             setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
@@ -153,24 +64,6 @@ const CustomField = () => {
     useEffect(() => {
         if (fetchData) fetchData()
     }, [moduleName])
-
-    const initialValues = {
-        name: '',
-        label: '',
-        type: '', require: false, message: '',
-        min: false, minValue: '', minMessage: '',
-        max: false, maxValue: '', maxMessage: '',
-        match: false, matchValue: '', matchMessage: '',
-    }
-
-    const formik = useFormik({
-        initialValues,
-        onSubmit: (values) => {
-            console.log('Form values:', values);
-        },
-    })
-
-    const { values, handleSubmit, handleChange, handleBlur, touched, errors } = formik;
 
     return (
         <>
