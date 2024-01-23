@@ -51,7 +51,7 @@ const Delete = (props) => {
                     <ModalHeader>Delete Lead{props.method === 'one' ? '' : 's'}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        Are You Sure To Delete selated Lead{props.method === 'one' ? '' : 's'} ?
+                        Are You Sure To Delete selected Lead{props.method === 'one' ? '' : 's'} ?
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme="red" mr={2} onClick={handleDeleteClick} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Yes'}</Button>

@@ -1,3 +1,4 @@
+import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { Box, Button, Flex, Grid, GridItem, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react'
 import Card from 'components/card/Card';
 import { HSeparator } from 'components/separator/Separator';
@@ -29,156 +30,171 @@ const Edit = (props) => {
     useEffect(() => {
         fetchData()
     }, [selectedId])
-    console.log(data)
 
     return (
         <div>
             <Modal onClose={onClose} isOpen={isOpen} isCentered size="lg">
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>View </ModalHeader>
+                    <ModalHeader textTransform={"capitalize"}>{data?.name} </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <Box>
                             <Grid templateColumns="repeat(12, 1fr)" gap={3}>
-                                <GridItem colSpan={{ base: 12 }} mb={3}>
-                                    <Heading
-                                        size="md" fontWeight={"600"} textTransform={"capitalize"}
-                                    >{data?.name}</Heading>
-                                </GridItem>
-                                <GridItem colSpan={{ base: 12 }} borderTop={"1px solid gray"} pt={2}>
+                                <GridItem colSpan={{ base: 12 }}>
                                     <Flex>
-                                        <Text fontWeight={"bold"} pr={2} textTransform={"capitalize"}>require:</Text>
-                                        <Text fontWeight={"bold"}>
+                                        <Text fontWeight={"bold"} pr={2} textTransform={"capitalize"}>require :</Text>
+                                        <Text >
                                             {data?.validations && data?.validations?.length > 0 && data?.validations[0]?.require === true ? "True" : "False"}
                                         </Text>
                                     </Flex>
                                 </GridItem>
-
-                                <GridItem colSpan={{ base: 12 }} borderBottom={"1px solid gray"} pb={2}>
-                                    <Flex>
-                                        <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
-                                            Message:
-                                        </Text>
-                                        <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
-                                            {data?.validations && data?.validations?.length > 0 && data?.validations[0]?.message}
-                                        </Text>
-                                    </Flex>
-                                </GridItem>
-                                <GridItem colSpan={{ base: 12, sm: 6 }}></GridItem>
+                                {data?.validations && data?.validations?.length > 0 && data?.validations[0]?.require === true &&
+                                    <GridItem colSpan={{ base: 12 }} >
+                                        <Flex>
+                                            <Text display='flex' ms='4px' fontSize='sm' fontWeight={"bold"} mb="0">
+                                                Message :
+                                            </Text>
+                                            <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
+                                                {data?.validations && data?.validations?.length > 0 && data?.validations[0]?.message}
+                                            </Text>
+                                        </Flex>
+                                    </GridItem>
+                                }
+                                <GridItem colSpan={{ base: 12 }} ><HSeparator /></GridItem>
                                 <GridItem colSpan={{ base: 12 }}>
                                     <Flex>
-                                        <Text fontWeight={"bold"} pr={2} textTransform={"capitalize"}>Min:</Text>
-                                        <Text fontWeight={"bold"}>
+                                        <Text fontWeight={"bold"} pr={2} textTransform={"capitalize"}>Min :</Text>
+                                        <Text >
                                             {data?.validations && data?.validations?.length > 0 && data?.validations[1]?.min === true ? "True" : "False"}
                                         </Text>
                                     </Flex>
                                 </GridItem>
+                                {data?.validations && data?.validations?.length > 0 && data?.validations[1]?.min === true &&
+                                    <>
+                                        <GridItem colSpan={{ base: 12, sm: 6 }} >
+                                            <Flex>
+                                                <Text display='flex' ms='4px' fontSize='sm' fontWeight={"bold"} mb="0">
+                                                    Message:
+                                                </Text>
+                                                <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
+                                                    {data?.validations && data?.validations?.length > 0 && data?.validations[1]?.message}
+                                                </Text>
+                                            </Flex>
+                                        </GridItem>
+                                        <GridItem colSpan={{ base: 12, sm: 6 }} >
+                                            <Flex>
+                                                <Text display='flex' ms='4px' fontSize='sm' fontWeight={"bold"} mb="0">
+                                                    Value :
+                                                </Text>
+                                                <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
+                                                    {data?.validations && data?.validations?.length > 0 && data?.validations[1]?.message}
+                                                </Text>
+                                            </Flex>
+                                        </GridItem>
+                                    </>
+                                }
+                                <GridItem colSpan={{ base: 12 }} ><HSeparator /></GridItem>
 
-                                <GridItem colSpan={{ base: 12, sm: 6 }} >
+                                <GridItem colSpan={{ base: 12 }}>
                                     <Flex>
-                                        <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
-                                            Message:
-                                        </Text>
-                                        <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
-                                            {data?.validations && data?.validations?.length > 0 && data?.validations[1]?.message}
-                                        </Text>
-                                    </Flex>
-                                </GridItem>
-                                <GridItem colSpan={{ base: 12, sm: 6 }} >
-                                    <Flex>
-                                        <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
-                                            Value:
-                                        </Text>
-                                        <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
-                                            {data?.validations && data?.validations?.length > 0 && data?.validations[1]?.message}
-                                        </Text>
-                                    </Flex>
-                                </GridItem>
-                                <GridItem colSpan={{ base: 12 }} borderTop={"1px solid gray"} pt={2}>
-                                    <Flex>
-                                        <Text fontWeight={"bold"} pr={2} textTransform={"capitalize"}>Max:</Text>
-                                        <Text fontWeight={"bold"}>
+                                        <Text fontWeight={"bold"} pr={2} textTransform={"capitalize"}>Max :</Text>
+                                        <Text >
                                             {data?.validations && data?.validations?.length > 0 && data?.validations[2]?.max === true ? "True" : "False"}
                                         </Text>
                                     </Flex>
                                 </GridItem>
+                                {data?.validations && data?.validations?.length > 0 && data?.validations[2]?.max === true &&
+                                    <>
+                                        <GridItem colSpan={{ base: 12, sm: 6 }} >
+                                            <Flex>
+                                                <Text display='flex' ms='4px' fontSize='sm' fontWeight={"bold"} mb="0">
+                                                    Message:
+                                                </Text>
+                                                <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
+                                                    {data?.validations && data?.validations?.length > 0 && data?.validations[2]?.message}
+                                                </Text>
+                                            </Flex>
+                                        </GridItem>
+                                        <GridItem colSpan={{ base: 12, sm: 6 }} >
+                                            <Flex>
+                                                <Text display='flex' ms='4px' fontSize='sm' fontWeight={"bold"} mb="0">
+                                                    Value :
+                                                </Text>
+                                                <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
+                                                    {data?.validations && data?.validations?.length > 0 && data?.validations[2]?.message}
+                                                </Text>
+                                            </Flex>
 
-                                <GridItem colSpan={{ base: 12, sm: 6 }} >
-                                    <Flex>
-                                        <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
-                                            Message:
-                                        </Text>
-                                        <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
-                                            {data?.validations && data?.validations?.length > 0 && data?.validations[2]?.message}
-                                        </Text>
-                                    </Flex>
-                                </GridItem>
-                                <GridItem colSpan={{ base: 12, sm: 6 }} >
-                                    <Flex>
-                                        <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
-                                            Value:
-                                        </Text>
-                                        <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
-                                            {data?.validations && data?.validations?.length > 0 && data?.validations[2]?.message}
-                                        </Text>
-                                    </Flex>
-                                </GridItem>
-                                <GridItem colSpan={{ base: 12 }} borderTop={"1px solid gray"} pt={2}>
+                                        </GridItem>
+                                    </>
+                                }
+                                <GridItem colSpan={{ base: 12 }} ><HSeparator /></GridItem>
+                                <GridItem colSpan={{ base: 12 }} >
                                     <Flex>
                                         <Text fontWeight={"bold"} pr={2} textTransform={"capitalize"}>Match:</Text>
-                                        <Text fontWeight={"bold"}>
+                                        <Text >
                                             {data?.validations && data?.validations?.length > 0 && data?.validations[3]?.match === true ? "True" : "False"}
                                         </Text>
                                     </Flex>
                                 </GridItem>
-
-                                <GridItem colSpan={{ base: 12, sm: 6 }} >
-                                    <Flex>
-                                        <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
-                                            Message:
-                                        </Text>
-                                        <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
-                                            {data?.validations && data?.validations?.length > 0 && data?.validations[3]?.message}
-                                        </Text>
-                                    </Flex>
-                                </GridItem>
-                                <GridItem colSpan={{ base: 12, sm: 6 }} >
-                                    <Flex>
-                                        <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
-                                            Value:
-                                        </Text>
-                                        <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
-                                            {data?.validations && data?.validations?.length > 0 && data?.validations[3]?.message}
-                                        </Text>
-                                    </Flex>
-                                </GridItem>
-
-                                <GridItem colSpan={{ base: 12 }} borderTop={"1px solid gray"} pt={2}>
-                                    <Flex>
-                                        <Text fontWeight={"bold"} pr={2} textTransform={"capitalize"}>FormikType:</Text>
-                                        <Text fontWeight={"bold"}>
-                                            {data?.validations && data?.validations?.length > 0 && data?.validations[4]?.formikType === true ? "True" : "False"}
-                                        </Text>
-                                    </Flex>
+                                {data?.validations && data?.validations?.length > 0 && data?.validations[3]?.match === true &&
+                                    <>
+                                        <GridItem colSpan={{ base: 12, sm: 6 }} >
+                                            <Flex>
+                                                <Text display='flex' ms='4px' fontSize='sm' fontWeight={"bold"} mb="0">
+                                                    Message:
+                                                </Text>
+                                                <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
+                                                    {data?.validations && data?.validations?.length > 0 && data?.validations[3]?.message}
+                                                </Text>
+                                            </Flex>
+                                        </GridItem>
+                                        <GridItem colSpan={{ base: 12, sm: 6 }} >
+                                            <Flex>
+                                                <Text display='flex' ms='4px' fontSize='sm' fontWeight={"bold"} mb="0">
+                                                    Value :
+                                                </Text>
+                                                <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
+                                                    {data?.validations && data?.validations?.length > 0 && data?.validations[3]?.message}
+                                                </Text>
+                                            </Flex>
+                                        </GridItem>
+                                    </>
+                                }
+                                <GridItem colSpan={{ base: 12 }} >
+                                    <HSeparator />
                                 </GridItem>
 
                                 <GridItem colSpan={{ base: 12 }} >
                                     <Flex>
-                                        <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
-                                            Message:
-                                        </Text>
-                                        <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
-                                            {data?.validations && data?.validations?.length > 0 && data?.validations[4]?.message}
+                                        <Text fontWeight={"bold"} pr={2} textTransform={"capitalize"}>FormikType :</Text>
+                                        <Text >
+                                            {data?.validations && data?.validations?.length > 0 && data?.validations[4]?.formikType === true ? "True" : "False"}
                                         </Text>
                                     </Flex>
+                                </GridItem>
+                                {data?.validations && data?.validations?.length > 0 && data?.validations[4]?.formikType === true &&
+                                    <GridItem colSpan={{ base: 12 }} >
+                                        <Flex>
+                                            <Text display='flex' ms='4px' fontSize='sm' fontWeight={"bold"} mb="0">
+                                                Message :
+                                            </Text>
+                                            <Text display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
+                                                {data?.validations && data?.validations?.length > 0 && data?.validations[4]?.message}
+                                            </Text>
+                                        </Flex>
+                                    </GridItem>
+                                }
+                                <GridItem colSpan={{ base: 12 }} >
+                                    <HSeparator />
                                 </GridItem>
                             </Grid>
                         </Box>
                     </ModalBody>
                     <ModalFooter>
-                        <Button variant="outline" colorScheme='green' size='sm' me={2} onClick={onClose}>Edit</Button>
-                        <Button colorScheme="red" size='sm' mr={2} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Delete'}</Button>
+                        <Button variant="outline" colorScheme='green' size='sm' me={2} onClick={onClose} leftIcon={<EditIcon />}>Edit</Button>
+                        <Button colorScheme="red" size='sm' mr={2} disabled={isLoding ? true : false} leftIcon={<DeleteIcon />} >{isLoding ? <Spinner /> : 'Delete'}</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

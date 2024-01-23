@@ -1,5 +1,5 @@
-import { EditIcon, ViewIcon } from '@chakra-ui/icons'
-import { Button, Flex, Grid, GridItem, Heading, Text } from '@chakra-ui/react'
+import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons'
+import { Button, Flex, Grid, GridItem, Heading, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react'
 import Card from 'components/card/Card'
 import { HSeparator } from 'components/separator/Separator'
 import React, { useEffect, useState } from 'react'
@@ -7,11 +7,17 @@ import { getApi } from 'services/api'
 import Edit from './Edit'
 import View from './view'
 import { useNavigate } from 'react-router-dom'
+import { CiMenuKebab } from 'react-icons/ci'
+import Add from './add'
+import Delete from './Delete'
 
 const Index = () => {
     const navigate = useNavigate()
     const [editModal, setEdit] = useState(false)
     const [viewModal, setViewModal] = useState(false)
+    const [addModal, setAddModal] = useState(false)
+    const [deleteModal, setDeleteModal] = useState(false)
+    const [action, setAction] = useState(false)
     const [selectedId, setselectedId] = useState()
     const [data, setData] = useState([])
     const [validationData, setValidateData] = useState([])
@@ -23,7 +29,7 @@ const Index = () => {
     }
     useEffect(() => {
         fetchData()
-    }, [])
+    }, [action])
 
     const handleEditClose = () => {
         setEdit(false)
@@ -36,10 +42,23 @@ const Index = () => {
     const handleViewClose = () => {
         setViewModal(false)
     }
+    const handleAddOpen = (item) => {
+        setAddModal(!viewModal)
+    }
+    const handleAddClose = () => {
+        setAddModal(false)
+    }
+    const handleDeleteOpen = (item) => {
+        setselectedId(item._id)
+        setDeleteModal(!viewModal)
+    }
+    const handleDeleteClose = () => {
+        setDeleteModal(false)
+    }
     return (
         <div>
-            <Flex justifyContent={"end"} mb={2}>
-                <Button size='sm' variant='brand' me={1}>Add </Button>
+            <Flex justifyContent={"end"} mb={3}>
+                <Button size='sm' variant='brand' me={1} onClick={() => handleAddOpen()}>Add </Button>
                 <Button size='sm' variant='brand' onClick={() => navigate(-1)}> Back</Button>
             </Flex>
             <Grid templateColumns="repeat(12, 1fr)" gap={3}>
@@ -49,10 +68,15 @@ const Index = () => {
                             <Flex alignItems={"center"} justifyContent={"space-between"}>
                                 <Heading size="md" fontWeight={"500"} textTransform={"capitalize"}
                                 >{item?.name}</Heading>
-                                <Flex>
-                                    <Button size='sm' variant='outline' me={1} onClick={() => setEdit(!editModal)}><EditIcon color={"blue"} /> </Button>
-                                    <Button size='sm' variant='outline' onClick={() => handleViewOpen(item)}> <ViewIcon color={"green"} /></Button>
-                                </Flex>
+
+                                <Menu isLazy  >
+                                    <MenuButton><CiMenuKebab /></MenuButton>
+                                    <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
+                                        <MenuItem py={2.5} onClick={() => setEdit(!editModal)} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>
+                                        <MenuItem py={2.5} color={'green'} onClick={() => handleViewOpen(item)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>
+                                        <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} />} onClick={() => handleDeleteOpen(item)}>Delete</MenuItem>
+                                    </MenuList>
+                                </Menu>
                             </Flex>
                             <Text pt={3} textTransform={"capitalize"}>validations</Text>
                             <HSeparator mb={2} mt={1} />
@@ -78,7 +102,7 @@ const Index = () => {
                             </Flex>
                             <Flex>
                                 <Text width={"50%"} pr={2} textTransform={"capitalize"}>formik type:</Text>
-                                <Text width={"50%"} fontWeight={"500"}  >{item?.validations && item?.validations?.length > 0 && item?.validations[4]?.formikType === true ? "True" : "False"
+                                <Text width={"50%"} fontWeight={"500"}  >{item?.validations && item?.validations?.length > 0 && item?.validations[4]?.formikType ? "True" : "False"
                                 }</Text>
                             </Flex>
                         </Card>
@@ -86,7 +110,9 @@ const Index = () => {
                 ))}
             </Grid>
 
-            <Edit isOpen={editModal} onClose={handleEditClose} />
+            <Add isOpen={addModal} onClose={handleAddClose} fetchData={fetchData} setAction={setAction} />
+            <Edit isOpen={editModal} onClose={handleEditClose} selectedId={selectedId} />
+            <Delete isOpen={deleteModal} onClose={handleDeleteClose} selectedId={selectedId} fetchData={fetchData} />
             <View isOpen={viewModal} onClose={handleViewClose} selectedId={selectedId} />
 
         </div>

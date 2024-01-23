@@ -52,7 +52,7 @@ const DeleteFiled = (props) => {
                     <ModalHeader>Delete Lead</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        Are You Sure To Delete selated {props.moduleName} filed?
+                        Are You Sure To Delete selected {props.moduleName} filed?
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme="red" mr={2} onClick={handleDeleteClick} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Yes'}</Button>
