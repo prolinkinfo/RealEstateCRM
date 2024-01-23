@@ -71,7 +71,7 @@ export const generateValidationSchema = (fields) => {
         let formikValidation = field?.validation?.find(obj => obj?.hasOwnProperty('formikType'));
         let fieldFormikType = formikValidation?.formikType?.toLowerCase();
 
-        if (fieldFormikType === 'text') {
+        if (fieldFormikType === 'string') {
             fieldValidation = yup.string()
         } else if (fieldFormikType === 'email') {
             fieldValidation = yup.string().email()
@@ -87,8 +87,13 @@ export const generateValidationSchema = (fields) => {
             fieldValidation = yup.string().url()
         } else if (fieldFormikType === 'boolean') {
             fieldValidation = yup.boolean()
-        }
-        else {
+        } else if (fieldFormikType === 'positive') {
+            fieldValidation = yup.number().positive()
+        } else if (fieldFormikType === "negative") {
+            fieldValidation = yup.number().negative()
+        } else if (fieldFormikType === "integer") {
+            fieldValidation = yup.number().integer()
+        } else {
             fieldValidation = yup.string()
         }
 

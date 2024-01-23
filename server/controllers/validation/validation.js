@@ -49,7 +49,7 @@ const view = async (req, res) => {
 
 const editWholeValidationsArray = async (req, res) => {
     try {
-        let result = await Validation.updateOne({ _id: req.params.id }, { $set: { validations: req.body } });
+        let result = await Validation.updateOne({ _id: req.params.id }, { $set: req.body });
 
         if (result?.modifiedCount > 0) {
             return res.status(200).json({ message: "Validations updated successfully", result });
