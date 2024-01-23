@@ -102,27 +102,29 @@ const EditField = (props) => {
                 errors.validation[4].formikType = 'FormikType is required';
             }
 
-            values?.options?.forEach((option, index) => {
-                if (!option.name) {
-                    if (!errors.options) {
-                        errors.options = [];
-                    }
-                    if (!errors.options[index]) {
-                        errors.options[index] = {};
-                    }
-                    errors.options[index].name = 'Name is required';
-                }
-                if (!option.value) {
-                    if (!errors.options) {
-                        errors.options = [];
-                    }
-                    if (!errors.options[index]) {
-                        errors.options[index] = {};
-                    }
-                    errors.options[index].value = 'Value is required';
-                }
-            });
+            if (values?.options) {
 
+                values?.options?.forEach((option, index) => {
+                    if (!option.name) {
+                        if (!errors.options) {
+                            errors.options = [];
+                        }
+                        if (!errors.options[index]) {
+                            errors.options[index] = {};
+                        }
+                        errors.options[index].name = 'Name is required';
+                    }
+                    if (!option.value) {
+                        if (!errors.options) {
+                            errors.options = [];
+                        }
+                        if (!errors.options[index]) {
+                            errors.options[index] = {};
+                        }
+                        errors.options[index].value = 'Value is required';
+                    }
+                });
+            }
             return errors;
         },
         onSubmit: (values, { resetForm }) => {
