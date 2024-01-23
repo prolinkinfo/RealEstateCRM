@@ -41,7 +41,7 @@ import * as yup from 'yup'
 
 export const generateValidationSchema = (fields) => {
     return fields.reduce((acc, field) => {
-        let formikValObj = field?.validation?.find(obj => obj?.hasOwnProperty('formikType'));
+        // let formikValObj = field?.validation?.find(obj => obj?.hasOwnProperty('formikType'));
 
         acc[field.name] = field.validation.reduce((fieldAcc, rule) => {
             if (rule.require) {
@@ -64,48 +64,61 @@ export const generateValidationSchema = (fields) => {
             // Add other formikType cases as needed
 
             return fieldAcc;
-        }, (formikValObj && formikValObj?.formikType) ? yup?.[formikValObj?.formikType]() : yup.string());
-    
-        // let fieldValidation;
+        }, yup.string());
+        // }, (formikValObj && formikValObj?.formikType) ? yup?.[formikValObj?.formikType]() : yup.string());
 
-        // if (field.type === 'text') {
-        //     fieldValidation = yup.string();
-        // } else if (field.type === 'email') {
-        //     fieldValidation = yup.string().email();
-        // } else if (field.type === 'date') {
-        //     fieldValidation = yup.date()
-        // } else {
-        //     fieldValidation = yup.string();
-        // }
+        let fieldValidation;
+        let formikValidation = field?.validation?.find(obj => obj?.hasOwnProperty('formikType'));
+        let fieldFormikType = formikValidation?.formikType?.toLowerCase();
 
-        // if (field.validation && Array.isArray(field.validation)) {
-        //     field.validation.forEach((validationRule) => {
-        //         if (validationRule.require) {
-        //             fieldValidation = fieldValidation.required(validationRule.message || 'This field is required');
-        //         }
-        //         if (validationRule.min) {
-        //             fieldValidation = fieldValidation.min(validationRule.value, validationRule.message || 'Value is too small');
-        //         }
-        //         if (validationRule.max) {
-        //             fieldValidation = fieldValidation.max(validationRule.value, validationRule.message || 'Value is too large');
-        //         }
-        //         if (validationRule.match) {
-        //             fieldValidation = fieldValidation.matches(
-        //                 new RegExp(validationRule.match),
-        //                 validationRule.message || 'Value does not match the pattern'
-        //             );
-        //         }
-        //         if (validationRule?.formikType === 'date') {
-        //             fieldValidation = fieldValidation?.required(validationRule.message)
-        //         }
-        //     });
-        // }
+        if (fieldFormikType === 'text') {
+            fieldValidation = yup.string()
+        } else if (fieldFormikType === 'email') {
+            fieldValidation = yup.string().email()
+        } else if (fieldFormikType === 'date') {
+            fieldValidation = yup.date()
+        } else if (fieldFormikType === 'number') {
+            fieldValidation = yup.number()
+        } else if (fieldFormikType === 'object') {
+            fieldValidation = yup.object()
+        } else if (fieldFormikType === 'array') {
+            fieldValidation = yup.array()
+        } else if (fieldFormikType === 'url') {
+            fieldValidation = yup.string().url()
+        } else if (fieldFormikType === 'boolean') {
+            fieldValidation = yup.boolean()
+        } else {
+            fieldValidation = yup.string()
+        }
 
-        // return {
-        //     ...acc,
-        //     [field.name]: fieldValidation,
-        // };
+        if (field.validation && Array.isArray(field.validation)) {
+            field.validation.forEach((validationRule) => {
 
-        return acc;
+                if (validationRule.require) {
+                    fieldValidation = fieldValidation.required(validationRule.message || 'This field is required');
+                }
+                if (validationRule.min) {
+                    fieldValidation = fieldValidation.min(validationRule.value, validationRule.message || 'Value is too small');
+                }
+                if (validationRule.max) {
+                    fieldValidation = fieldValidation.max(validationRule.value, validationRule.message || 'Value is too large');
+                }
+                if (validationRule.match) {
+                    fieldValidation = fieldValidation.matches(
+                        new RegExp(validationRule.match),
+                        validationRule.message || 'Value does not match the pattern'
+                    );
+                }
+                if (validationRule?.formikType && validationRule?.message) {
+                    fieldValidation = fieldValidation.typeError(validationRule.message)
+                }
+            });
+        }
+
+        return {
+            ...acc,
+            [field.name]: fieldValidation,
+        };
+
     }, {})
 };

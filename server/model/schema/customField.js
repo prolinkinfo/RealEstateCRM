@@ -53,7 +53,8 @@ const fieldsSchema = new mongoose.Schema({
         default: 'text'
     },
     fixed: {
-        type: String
+        type: Boolean,
+        default: false
     },
     delete: {
         type: Boolean,

@@ -16,6 +16,8 @@ const CustomField = () => {
     const [editModal, setEditModal] = useState(false)
     const [updateField, setUpdateField] = useState({})
     const [deleteModal, setDeleteModal] = useState(false)
+    const [deleteMany, setDeleteMany] = useState(false)
+    const [selectedValues, setSelectedValues] = useState([]);
     const [selectedId, setSelectedId] = useState('')
 
     // const fields = [
@@ -106,6 +108,17 @@ const CustomField = () => {
     //     },
     // });
 
+
+    const handleCheckboxChange = (event, value) => {
+        if (event.target.checked) {
+            setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
+        } else {
+            setSelectedValues((prevSelectedValues) =>
+                prevSelectedValues.filter((selectedValue) => selectedValue !== value)
+            );
+        }
+    };
+
     const fetchData = async () => {
         let responseAllData = await getApi(`api/custom-field`);
         setFields(responseAllData?.data);
@@ -147,6 +160,7 @@ const CustomField = () => {
                             fontSize="22px"
                             fontWeight="700"
                         >Custom Field</Text>
+                        {/* {selectedValues.length > 0 && <DeleteIcon onClick={() => setDeleteMany(true)} color={'red'} ms={2} />} */}
                     </Box>
                     <Box>
                         <Menu>
@@ -167,24 +181,28 @@ const CustomField = () => {
                         <GridItem colSpan={{ base: 12, md: 6 }}>
                             <Flex alignItems={"center"} justifyContent={"space-between"} className="CustomFieldName" >
                                 <Text display='flex' size='sm' colorScheme='gray' ms='4px' mt={4} fontSize='md' fontWeight='500' mb='8px' >
+                                    <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(item?._id)} onChange={(event) => handleCheckboxChange(event, item?._id)} me="10px" />
                                     {item?.label}
                                 </Text>
                                 <span className="EditDelete">
-                                    <Button size='sm' variant='outline' me={2} onClick={() => { setEditModal(true); setUpdateField(item) }}><EditIcon /></Button>
-                                    <Button size='sm' variant='outline' me={2} onClick={() => { setDeleteModal(true); setSelectedId(item?._id) }}><DeleteIcon /></Button>
+                                    <Button size='sm' variant='outline' me={2} color={'green'} onClick={() => { setEditModal(true); setUpdateField(item) }}><EditIcon /></Button>
+                                    <Button size='sm' variant='outline' me={2} color={'red'} onClick={() => { setDeleteModal(true); setSelectedId(item?._id) }}><DeleteIcon /></Button>
                                 </span>
                             </Flex>
                         </GridItem>
                     ))}
                 </Grid>
                 <Flex justifyContent={'end'} mt='5'>
+                    {selectedValues.length > 0 && <Button colorScheme="red" mr={2} onClick={() => setDeleteMany(true)} size='sm' >Delete</Button>}
+
                     {data?.length > 0 && <Button onClick={() => setAddFieldModel(true)} variant="brand" size='sm'>Add Field</Button>}
                 </Flex>
             </Card>
 
             <Addfield isOpen={addFieldModel} onClose={setAddFieldModel} moduleName={moduleName} field={data[0]?.fields} moduleId={data[0]?._id} fetchData={fetchData} />
             <EditField isOpen={editModal} onClose={setEditModal} field={data[0]?.fields} moduleId={data[0]?._id} fetchData={fetchData} updateFiled={updateField} />
-            <DeleteFiled isOpen={deleteModal} onClose={setDeleteModal} moduleName={moduleName} moduleId={data[0]?._id} selectedId={selectedId} fetchData={fetchData} updateFiled={updateField} />
+            <DeleteFiled method='one' isOpen={deleteModal} onClose={setDeleteModal} moduleName={moduleName} moduleId={data[0]?._id} selectedId={selectedId} fetchData={fetchData} updateFiled={updateField} />
+            <DeleteFiled method='many' isOpen={deleteMany} onClose={setDeleteMany} url={'api/custom-field/deleteMany'} moduleName={moduleName} moduleId={data[0]?._id} selectedId={selectedId} fetchData={fetchData} updateFiled={updateField} setSelectedValues={setSelectedValues} data={selectedValues} />
 
         </>
     )
