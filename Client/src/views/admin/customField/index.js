@@ -91,7 +91,7 @@ const CustomField = () => {
                     <Box>
                         <Flex>
                             <Menu>
-                                <MenuButton as={Button} rightIcon={<ChevronDownIcon />} variant="outline">
+                                <MenuButton as={Button} size='sm' rightIcon={<ChevronDownIcon />} variant="outline">
                                     {moduleName ? moduleName : 'Select Module'}
                                 </MenuButton>
                                 <MenuList>
