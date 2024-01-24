@@ -10,6 +10,8 @@ import EditField from './editfield';
 import DeleteFiled from './deletefield';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { BiGridVertical } from "react-icons/bi";
+import { useNavigate } from 'react-router-dom';
+import { IoIosArrowBack } from 'react-icons/io';
 
 const CustomField = () => {
     const [addFieldModel, setAddFieldModel] = useState(false);
@@ -23,6 +25,18 @@ const CustomField = () => {
     const [deleteMany, setDeleteMany] = useState(false)
     const [selectedValues, setSelectedValues] = useState([]);
     const [selectedId, setSelectedId] = useState('')
+    const [validations, setValidations] = useState([])
+
+    const getValidationData = async () => {
+        const response = await getApi('api/validation')
+        setValidations(response.data)
+    }
+
+    useEffect(() => {
+        getValidationData()
+    }, [])
+
+    const navigate = useNavigate()
 
     const handleCheckboxChange = (event, value) => {
         if (event.target.checked) {
@@ -46,8 +60,7 @@ const CustomField = () => {
         newData.splice(result.destination.index, 0, removed);
         setData([{ fields: newData }]);
 
-        const response = await putApi(`api/custom-field/change-fields/${moduleId}`, newData)
-        console.log(response.data)
+        await putApi(`api/custom-field/change-fields/${moduleId}`, newData)
     };
 
     const fetchData = async () => {
@@ -76,17 +89,20 @@ const CustomField = () => {
                         >Custom Field</Text>
                     </Box>
                     <Box>
-                        <Menu>
-                            <MenuButton as={Button} rightIcon={<ChevronDownIcon />} variant="outline">
-                                {moduleName ? moduleName : 'Select Module'}
-                            </MenuButton>
-                            <MenuList>
-                                <MenuItem onClick={() => setModuleName('')}>Select Module</MenuItem>
-                                {fields?.map((item, id) => (
-                                    <MenuItem key={id} onClick={() => { setModuleName(item.moduleName); setModuleId(item._id) }}>{item.moduleName}</MenuItem>
-                                ))}
-                            </MenuList>
-                        </Menu>
+                        <Flex>
+                            <Menu>
+                                <MenuButton as={Button} rightIcon={<ChevronDownIcon />} variant="outline">
+                                    {moduleName ? moduleName : 'Select Module'}
+                                </MenuButton>
+                                <MenuList>
+                                    <MenuItem onClick={() => setModuleName('')}>Select Module</MenuItem>
+                                    {fields?.map((item, id) => (
+                                        <MenuItem key={id} onClick={() => { setModuleName(item.moduleName); setModuleId(item._id) }}>{item.moduleName}</MenuItem>
+                                    ))}
+                                </MenuList>
+                            </Menu>
+                            <Button onClick={() => navigate('/admin-setting')} variant="brand" size="sm" leftIcon={<IoIosArrowBack />} ml={2}>Back</Button>
+                        </Flex>
                     </Box>
                 </Flex>
 
@@ -153,8 +169,8 @@ const CustomField = () => {
                 </Flex >
             </Card >
 
-            <Addfield isOpen={addFieldModel} onClose={setAddFieldModel} moduleName={moduleName} field={data[0]?.fields} moduleId={data[0]?._id} fetchData={fetchData} />
-            <EditField isOpen={editModal} onClose={setEditModal} field={data[0]?.fields} moduleId={data[0]?._id} fetchData={fetchData} updateFiled={updateField} />
+            <Addfield validations={validations} setValidations={setValidations} isOpen={addFieldModel} onClose={setAddFieldModel} moduleName={moduleName} field={data[0]?.fields} moduleId={data[0]?._id} fetchData={fetchData} />
+            <EditField validations={validations} isOpen={editModal} onClose={setEditModal} field={data[0]?.fields} moduleId={data[0]?._id} fetchData={fetchData} updateFiled={updateField} />
             <DeleteFiled method='one' isOpen={deleteModal} onClose={setDeleteModal} moduleName={moduleName} moduleId={data[0]?._id} selectedId={selectedId} fetchData={fetchData} updateFiled={updateField} />
             <DeleteFiled method='many' isOpen={deleteMany} onClose={setDeleteMany} url={'api/custom-field/deleteMany'} moduleName={moduleName} moduleId={data[0]?._id} selectedId={selectedId} fetchData={fetchData} updateFiled={updateField} setSelectedValues={setSelectedValues} data={selectedValues} />
 

@@ -46,11 +46,11 @@ export default function AdminNavbar(props) {
 
 	useEffect(() => {
 		// Dispatch the fetchRoles action on component mount
-		dispatch(fetchImage(window.location.pathname === '/change-image' ? '' : "?isActive=true"));
+		dispatch(fetchImage());
 	}, [dispatch]);
 
-	const largeLogo = useSelector((state) => state?.images?.image[state?.images?.image.length - 1]);
-	const smallLogo = useSelector((state) => state?.images?.image[state?.images?.image.length - 1]);
+	const largeLogo = useSelector((state) => state?.images?.image.filter(item => item.isActive === true));
+
 	return (
 		<Box
 			position={navbarPosition}
@@ -134,9 +134,9 @@ export default function AdminNavbar(props) {
 						color={mainText}
 						display={{ sm: "flex", xl: "none" }}
 					>
-						{largeLogo?.logoLgImg ? <Image
+						{largeLogo[0]?.logoLgImg ? <Image
 							style={{ width: "100%", height: '52px' }}
-							src={largeLogo?.logoLgImg}
+							src={largeLogo[0]?.logoLgImg}
 							alt="Logo"
 							cursor="pointer"
 							userSelect="none"

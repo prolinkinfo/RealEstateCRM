@@ -1,8 +1,9 @@
 import { DeleteIcon } from '@chakra-ui/icons'
-import { Button, Checkbox, Flex, FormLabel, Grid, GridItem, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Spinner, Text } from '@chakra-ui/react'
+import { Box, Button, Checkbox, Flex, FormLabel, Grid, GridItem, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Spinner, Text } from '@chakra-ui/react'
 import { useFormik } from 'formik'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { addFiledSchema } from 'schema'
+import { getApi } from 'services/api'
 import { postApi } from 'services/api'
 import * as yup from 'yup'
 
@@ -10,10 +11,13 @@ import * as yup from 'yup'
 
 const Addfield = (props) => {
 
-    const { moduleId, filed } = props;
+    const { moduleId, filed, validations, setValidations } = props;
 
     const [isLoding, setIsLoding] = useState(false)
+    const [validationType, setValidationType] = useState('')
     const [data, setData] = useState([])
+
+
 
     const handleClose = () => {
         props.onClose(false);
@@ -59,8 +63,6 @@ const Addfield = (props) => {
             },
         ],
     };
-
-
 
     const formik = useFormik({
         initialValues: initialValues,
@@ -135,8 +137,6 @@ const Addfield = (props) => {
     };
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
-
-    console.log(errors)
 
     const fetchAddData = async () => {
         try {
@@ -218,15 +218,65 @@ const Addfield = (props) => {
                                         <option value='select'>Select</option>
                                     </Select>
                                 </GridItem>
-                                <GridItem colSpan={{ base: 12, sm: 6, md: 6 }}>
+                                <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                     <Flex alignItems='center'>
-
                                         <FormLabel ms='4px' fontSize='sm' fontWeight='500' mb={0}>
                                             Fixed
                                         </FormLabel>
                                         <Checkbox colorScheme="brandScheme" me="10px" onChange={(e) => setFieldValue(`fixed`, e.target.checked)} />
                                     </Flex>
                                 </GridItem>
+                                {/* <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
+                                    <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                        Validations
+                                    </FormLabel>
+                                    <Select
+                                        value={validationType}
+                                        name="validations"
+                                        // onChange={handleChange}
+                                        onChange={(e) => {
+                                            setValidationType(e.target.value)
+                                            if (e.target.value) {
+                                                const validationData = validations.filter(item => item._id === e.target.value)
+                                                const filterData = validationData?.length > 0 ? validationData[0]?.validations : values?.validation
+                                                setFieldValue('validation', filterData)
+                                            } else {
+                                                setFieldValue('validation', [
+                                                    {
+                                                        require: false,
+                                                        message: "",
+                                                    },
+                                                    {
+                                                        min: false,
+                                                        value: "",
+                                                        message: "",
+                                                    },
+                                                    {
+                                                        max: false,
+                                                        value: "",
+                                                        message: "",
+                                                    },
+                                                    {
+                                                        match: false,
+                                                        value: "",
+                                                        message: "",
+                                                    },
+                                                    {
+                                                        types: false,
+                                                        formikType: '',
+                                                        message: "",
+                                                    },])
+                                            }
+
+                                        }}
+                                        fontWeight='500'
+                                        placeholder={'Select Validation'}
+                                    >
+                                        {validations.map((item, index) => (
+                                            <option key={index} value={item._id} >{item.name}</option>
+                                        ))}
+                                    </Select>
+                                </GridItem> */}
                                 {(values?.type === 'radio' || values?.type === 'select') ? <>
                                     <GridItem colSpan={{ base: 12, sm: 12, md: 12 }} borderBottom={'1px solid rgba(128, 128, 128, 0.705)'}>
                                         <Flex justifyContent={'space-between'} alignItems={'center'} mb={'8px'} >
@@ -285,14 +335,64 @@ const Addfield = (props) => {
                                         <Heading as="h1" size="md" >
                                             Validation
                                         </Heading>
-                                        <Checkbox colorScheme="brandScheme" me="10px" onChange={(e) => setFieldValue(`validate`, e.target.checked)} />
+                                        <Flex>
+                                            <Select
+                                                value={validationType}
+                                                name="validations"
+                                                // onChange={handleChange}
+                                                onChange={(e) => {
+                                                    setValidationType(e.target.value)
+                                                    if (e.target.value) {
+                                                        const validationData = validations.filter(item => item._id === e.target.value)
+                                                        const filterData = validationData?.length > 0 ? validationData[0]?.validations : values?.validation
+                                                        setFieldValue('validation', filterData)
+                                                    } else {
+                                                        setFieldValue('validation', [
+                                                            {
+                                                                require: false,
+                                                                message: "",
+                                                            },
+                                                            {
+                                                                min: false,
+                                                                value: "",
+                                                                message: "",
+                                                            },
+                                                            {
+                                                                max: false,
+                                                                value: "",
+                                                                message: "",
+                                                            },
+                                                            {
+                                                                match: false,
+                                                                value: "",
+                                                                message: "",
+                                                            },
+                                                            {
+                                                                types: false,
+                                                                formikType: '',
+                                                                message: "",
+                                                            },])
+                                                    }
+
+                                                }}
+                                                me="10px"
+                                                fontWeight='500'
+                                                size='xs'
+                                                placeholder={'Select Validation'}
+                                            >
+                                                {validations.map((item, index) => (
+                                                    <option key={index} value={item._id} >{item.name}</option>
+                                                ))}
+                                            </Select>
+                                            <Checkbox colorScheme="brandScheme" me="10px" onChange={(e) => setFieldValue(`validate`, e.target.checked)} />
+                                        </Flex>
                                     </Flex>
                                 </GridItem>
                                 {values.validate === true ?
                                     <>
                                         <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                             <Flex>
-                                                <Checkbox colorScheme="brandScheme" me="10px"
+                                                <Checkbox colorScheme="brandScheme" me="10px" isChecked={values?.validation[0]?.require}
                                                     onChange={(e) => {
                                                         const isChecked = e.target.checked;
                                                         setFieldValue(`validation[${0}].require`, isChecked);
@@ -325,7 +425,7 @@ const Addfield = (props) => {
                                             <>
                                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                                     <Flex>
-                                                        <Checkbox colorScheme="brandScheme" name={`validation[${1}].min`} me="10px" onChange={(e) => {
+                                                        <Checkbox colorScheme="brandScheme" isChecked={values?.validation[1]?.min} name={`validation[${1}].min`} me="10px" onChange={(e) => {
                                                             const isChecked = e.target.checked;
                                                             setFieldValue(`validation[${1}].min`, isChecked);
                                                             setFieldValue(
@@ -373,10 +473,9 @@ const Addfield = (props) => {
                                                         fontWeight='500'
                                                     />
                                                 </GridItem>
-
                                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                                     <Flex>
-                                                        <Checkbox colorScheme="brandScheme" me="10px" name={`validation[${2}].max`} onChange={(e) => {
+                                                        <Checkbox colorScheme="brandScheme" me="10px" isChecked={values?.validation[2].max} name={`validation[${2}].max`} onChange={(e) => {
                                                             const isChecked = e.target.checked;
                                                             setFieldValue(`validation[${2}].max`, isChecked);
                                                             setFieldValue(
@@ -428,7 +527,7 @@ const Addfield = (props) => {
 
                                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                                     <Flex>
-                                                        <Checkbox colorScheme="brandScheme" me="10px" name={`validation[${3}].match`} onChange={(e) => {
+                                                        <Checkbox colorScheme="brandScheme" me="10px" isChecked={values?.validation[3].match} name={`validation[${3}].match`} onChange={(e) => {
                                                             const isChecked = e.target.checked;
                                                             setFieldValue(`validation[${3}].match`, isChecked);
                                                             setFieldValue(
@@ -480,16 +579,12 @@ const Addfield = (props) => {
 
                                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                                     <Flex>
-                                                        <Checkbox colorScheme="brandScheme" name={`validation[${4}].types`} me="10px" onChange={(e) => {
+                                                        <Checkbox colorScheme="brandScheme" isChecked={values?.validation[4].formikType ? true : false} name={`validation[${4}].types`} me="10px" onChange={(e) => {
                                                             const isChecked = e.target.checked;
                                                             setFieldValue(`validation[${4}].types`, isChecked);
                                                             setFieldValue(
-                                                                'validation[4].message',
-                                                                isChecked ? values?.validation[4]?.message : ''
-                                                            );
-                                                            setFieldValue(
-                                                                'validation[4].value',
-                                                                isChecked ? values?.validation[4]?.value : ''
+                                                                'validation[4].formikType',
+                                                                isChecked ? values?.validation[4]?.formikType : ''
                                                             );
                                                         }} />
                                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
@@ -500,16 +595,16 @@ const Addfield = (props) => {
 
                                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                                        FormikType{values.validation[4].types === true ? <Text color={"red"}>*</Text> : ''}
+                                                        FormikType{(values?.validation[4]?.types === true || values?.validation[4].formikType) ? <Text color={"red"}>*</Text> : ''}
                                                     </FormLabel>
                                                     <Select
-                                                        disabled={values?.validation[4]?.types === true ? false : true}
-                                                        value={values?.validation[4]?.types === true ? values.validation[4].formikType : ''}
+                                                        disabled={(values?.validation[4]?.types === true || values?.validation[4].formikType) ? false : true}
+                                                        value={values?.validation[4]?.types === true || values?.validation[4].formikType ? values.validation[4].formikType : ''}
                                                         name={`validation[${4}].formikType`}
                                                         onChange={handleChange}
                                                         fontWeight='500'
                                                         placeholder={'Select Type'}
-                                                        borderColor={values?.validation[4]?.types === true && errors?.validation && touched?.validation && errors?.validation[4]?.formikType && touched?.validation[4]?.formikType ? "red.300" : null}
+                                                        borderColor={(values?.validation[4]?.types === true || values?.validation[4].formikType) && errors?.validation && touched?.validation && errors?.validation[4]?.formikType && touched?.validation[4]?.formikType ? "red.300" : null}
                                                     >
                                                         <option value='string'>String </option>
                                                         <option value='email'>Email </option>
@@ -523,17 +618,17 @@ const Addfield = (props) => {
                                                         <option value='negative'>Negative  </option>
                                                         <option value='integer'>Integer  </option>
                                                     </Select>
-                                                    {values?.validation[4]?.types === true && <Text mb='10px' color={'red'}> {errors?.validation && touched?.validation && touched?.validation[4]?.formikType && errors?.validation[4]?.formikType}</Text>}
+                                                    {(values?.validation[4]?.types === true || values?.validation[4].formikType) && <Text mb='10px' color={'red'}> {errors?.validation && touched?.validation && touched?.validation[4]?.formikType && errors?.validation[4]?.formikType}</Text>}
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                                         Message
                                                     </FormLabel>
                                                     <Input
-                                                        disabled={values?.validation[4]?.types === true ? false : true}
+                                                        disabled={(values?.validation[4]?.types === true || values?.validation[4].formikType) ? false : true}
                                                         fontSize='sm'
                                                         onChange={handleChange} onBlur={handleBlur}
-                                                        value={values?.validation[4]?.types === true ? values.validation[3].massage : ''}
+                                                        value={(values?.validation[4]?.types === true || values?.validation[4].formikType) ? values.validation[3].massage : ''}
                                                         name={`validation[${3}].message`}
                                                         placeholder='Enter Formik Type Message'
                                                         fontWeight='500'
@@ -541,7 +636,6 @@ const Addfield = (props) => {
                                                 </GridItem>
                                             </>
                                         }
-
                                     </>
                                     :
                                     ""}
@@ -550,7 +644,7 @@ const Addfield = (props) => {
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme="brand" size="sm" mr={2} type='submit' disabled={isLoding ? true : false} onClick={handleSubmit} >{isLoding ? <Spinner /> : 'Add'}</Button>
-                        <Button variant="outline" size="sm" onClick={() => { handleClose(); resetForm() }}>Cancel</Button>
+                        <Button variant="outline" size="sm" onClick={() => { handleClose(); resetForm(); setValidationType('') }}>Cancel</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
