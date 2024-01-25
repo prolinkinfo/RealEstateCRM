@@ -10,7 +10,6 @@ import { validationAddSchema } from 'schema/validationAddSchema'
 
 const Edit = (props) => {
     const { onClose, isOpen, fetchData, selectedId, editdata, setAction } = props;
-    console.log("data", editdata)
     const [isLoding, setIsLoding] = useState(false)
 
     const initialValues = {

@@ -5,6 +5,7 @@ import { useFormik } from 'formik'
 import { HSeparator } from 'components/separator/Separator'
 import { postApi } from 'services/api'
 import { validationAddSchema } from 'schema/validationAddSchema'
+import { toast } from 'react-toastify'
 
 
 
@@ -77,7 +78,6 @@ const Add = (props) => {
         },
         onSubmit: (values, { resetForm }) => {
             AddData()
-            resetForm()
         },
     });
 
@@ -87,12 +87,14 @@ const Add = (props) => {
     const AddData = async () => {
         try {
             setIsLoding(true)
-            console.log(values)
             let response = await postApi('api/validation/add', values);
             if (response.status === 200) {
-                onClose()
                 fetchData()
+                onClose()
+                resetForm()
                 setAction((pre) => !pre)
+            } else {
+                toast.error(response.response.data.message);
             }
         }
         catch {

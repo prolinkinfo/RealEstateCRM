@@ -8,11 +8,9 @@ import { deleteApi } from 'services/api';
 const Delete = (props) => {
     const { selectedId, fetchData, onClose, isOpen } = props;
     const [isLoding, setIsLoding] = useState(false)
-    console.log(selectedId)
 
     const handleDeleteClick = async () => {
         try {
-            console.log(selectedId)
             if (selectedId) {
                 setIsLoding(true)
                 const response = await deleteApi('api/validation/delete/', selectedId)
