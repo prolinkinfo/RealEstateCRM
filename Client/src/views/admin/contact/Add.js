@@ -1,5 +1,5 @@
 import { CloseIcon, PhoneIcon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormLabel, Grid, GridItem, Heading, IconButton, Input, InputGroup, InputLeftElement, Radio, RadioGroup, Select, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Checkbox, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormLabel, Grid, GridItem, HStack, Heading, IconButton, Input, InputGroup, InputLeftElement, Radio, RadioGroup, Select, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Stack, Text } from '@chakra-ui/react';
 import { HSeparator } from 'components/separator/Separator';
 import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
@@ -7,6 +7,8 @@ import { useState } from 'react';
 import { BiMobile } from 'react-icons/bi';
 import { contactSchema } from 'schema';
 import { postApi } from 'services/api';
+import { generateValidationSchema } from 'utils';
+import * as yup from 'yup'
 
 const Add = (props) => {
     const [isLoding, setIsLoding] = useState(false)
@@ -57,10 +59,13 @@ const Add = (props) => {
     };
 
     const formik = useFormik({
-        initialValues: initialValues,
-        validationSchema: contactSchema,
+        // initialValues: initialValues,
+        // validationSchema: contactSchema,
+        initialValues: Object.fromEntries(props?.contactData?.fields?.map(field => [field.name, ''])),
+        validationSchema: yup.object().shape(generateValidationSchema(props?.contactData?.fields)),
         onSubmit: (values, { resetForm }) => {
-            AddData();
+            // AddData();
+            console.log(values)
             resetForm();
         },
     });
@@ -101,6 +106,89 @@ const Add = (props) => {
                     <DrawerBody>
 
                         <Grid templateColumns="repeat(12, 1fr)" gap={3}>
+                            {props.contactData.fields?.map(field => (
+                                <GridItem colSpan={{ base: 12, sm: 6 }} key={field?.name}>
+                                    {field.type === 'check' ? '' : <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px' htmlFor={field.name}>{field.label} {field.validation && field.validation.find((validation) => validation.require) && (
+                                        <span style={{ color: 'red' }}>*</span>
+                                    )}</FormLabel>}
+                                    {field.type === 'range' ?
+                                        <>
+                                            {values.leadRating || 0}
+                                            <Slider ml={2} aria-label='slider-ex-1' colorScheme='yellow' min={field?.validation[1]?.value} max={field?.validation[2]?.value} step={.1} defaultValue={0} onChange={(value) => setFieldValue(field.name, value)} >
+                                                <SliderTrack>
+                                                    <SliderFilledTrack />
+                                                </SliderTrack>
+                                                <SliderThumb boxSize={6}>
+                                                    <Box color='yellow.300' as={StarIcon} />
+                                                </SliderThumb>
+                                            </Slider>
+                                        </>
+                                        : field.type === 'radio' ?
+                                            <RadioGroup
+                                                name={field.name}
+                                                value={formik.values[field.name]}
+                                                onChange={(value) => setFieldValue(field.name, value)}
+                                            >
+                                                <HStack spacing="24px">
+                                                    {field.options.map(option => (
+                                                        <Radio key={option._id} value={option.value}>
+                                                            {option.name}
+                                                        </Radio>
+                                                    ))}
+                                                </HStack>
+                                            </RadioGroup> :
+                                            field.type === 'select' ? <Select
+                                                fontSize='sm'
+                                                id={field.name}
+                                                name={field.name}
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                value={formik.values[field.name]}
+                                                fontWeight='500'
+                                                borderColor={errors.leadName && touched.leadName ? "red.300" : null}
+                                            >
+                                                <option value="">Select {field.label}</option>
+                                                {field.options.map(option => (
+                                                    <option key={option._id} value={option.value}>
+                                                        {option.name}
+                                                    </option>
+                                                ))}
+                                            </Select> : field.type === 'check' ? <Checkbox
+                                                isChecked={formik.values[field.name]}
+                                                onChange={() => setFieldValue(field.name, !formik.values[field.name])}
+                                            >
+                                                {field.label}
+                                            </Checkbox> :
+                                                <>
+                                                    <InputGroup>
+                                                        {field.type === 'tel' && <InputLeftElement
+                                                            pointerEvents="none"
+                                                            children={<PhoneIcon color="gray.300" borderRadius="16px" />}
+                                                        />}
+                                                        <Input
+                                                            fontSize='sm'
+                                                            type={field.type}
+                                                            id={field.name}
+                                                            name={field.name}
+                                                            onChange={formik.handleChange}
+                                                            onBlur={formik.handleBlur}
+                                                            value={formik.values[field.name]}
+                                                            fontWeight='500'
+                                                            placeholder={`Enter ${field.label}`}
+                                                            borderColor={errors.leadName && touched.leadName ? "red.300" : null}
+                                                        />
+                                                    </InputGroup>
+                                                </>
+                                    }
+                                    {formik.touched[field.name] && formik.errors[field.name] ? (
+                                        <Text mb='10px' color={'red'}> {formik.errors[field.name]}</Text>
+                                    ) : null}
+                                </GridItem>
+                            ))}
+
+                        </Grid>
+
+                        {/* <Grid templateColumns="repeat(12, 1fr)" gap={3}>
 
                             <GridItem colSpan={{ base: 12 }}>
                                 <Heading as="h1" size="md" >
@@ -731,7 +819,7 @@ const Add = (props) => {
                                 <Text mb='10px' color={'red'}> {errors.internalNotesOrComments && touched.internalNotesOrComments && errors.internalNotesOrComments}</Text>
                             </GridItem>
 
-                        </Grid>
+                        </Grid> */}
                     </DrawerBody>
 
 

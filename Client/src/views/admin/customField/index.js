@@ -61,6 +61,7 @@ const CustomField = () => {
         setData([{ fields: newData }]);
 
         await putApi(`api/custom-field/change-fields/${moduleId}`, newData)
+        fetchData()
     };
 
     const fetchData = async () => {
