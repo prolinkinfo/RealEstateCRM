@@ -76,7 +76,7 @@ const Index = () => {
 
                                 <Menu isLazy  >
                                     <MenuButton><CiMenuKebab /></MenuButton>
-                                    <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
+                                    <MenuList minW={'fit-content'} transform={"translate(-71px, 0px) !important;"}>
                                         <MenuItem py={2.5} onClick={() => handleEditOpen(item)} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>
                                         <MenuItem py={2.5} color={'green'} onClick={() => handleViewOpen(item)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>
                                         <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} />} onClick={() => handleDeleteOpen(item)}>Delete</MenuItem>

@@ -9,7 +9,7 @@ import { validationAddSchema } from 'schema/validationAddSchema'
 
 
 const Add = (props) => {
-    const { onClose, isOpen } = props;
+    const { onClose, isOpen, fetchData, setAction } = props;
     const [isLoding, setIsLoding] = useState(false)
 
     const initialValues = {
@@ -35,7 +35,7 @@ const Add = (props) => {
                 message: "",
             },
             {
-                 formikType: '',
+                formikType: '',
                 message: "",
             },
         ],
@@ -90,9 +90,9 @@ const Add = (props) => {
             console.log(values)
             let response = await postApi('api/validation/add', values);
             if (response.status === 200) {
-                props.onClose()
-                props.fetchData()
-                props.setAction((pre) => !pre)
+                onClose()
+                fetchData()
+                setAction((pre) => !pre)
             }
         }
         catch {
@@ -336,7 +336,7 @@ const Add = (props) => {
                         </>
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme="green" size='sm' mr={2} disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Save'}</Button>
+                        <Button colorScheme="brand" size='sm' mr={2} disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Save'}</Button>
                         <Button variant="outline" size='sm' onClick={onClose}>Cancel</Button>
                     </ModalFooter>
                 </ModalContent>
