@@ -3,27 +3,45 @@ import Spinner from 'components/spinner/Spinner';
 import React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { deleteManyApi } from 'services/api';
 import { deleteApi } from 'services/api';
 
 const Delete = (props) => {
-    const { selectedId, fetchData, onClose, isOpen } = props;
+    const { selectedId, fetchData, onClose, isOpen, data, setSelectedValues } = props;
     const [isLoding, setIsLoding] = useState(false)
 
     const handleDeleteClick = async () => {
-        try {
-            if (selectedId) {
+        if (props.method === 'one') {
+            try {
+                if (selectedId) {
+                    setIsLoding(true)
+                    const response = await deleteApi('api/validation/delete/', selectedId)
+                    if (response.status === 200) {
+                        onClose()
+                        fetchData()
+                    }
+                }
+            } catch (error) {
+                console.log(error)
+            }
+            finally {
+                setIsLoding(false)
+            }
+        } else if (props.method === 'many') {
+            try {
                 setIsLoding(true)
-                const response = await deleteApi('api/validation/delete/', selectedId)
+                let response = await deleteManyApi('api/validation/deleteMany', data)
                 if (response.status === 200) {
-                    onClose()
+                    setSelectedValues([])
+                    onClose(false)
                     fetchData()
                 }
+            } catch (error) {
+                console.log(error)
             }
-        } catch (error) {
-            console.log(error)
-        }
-        finally {
-            setIsLoding(false)
+            finally {
+                setIsLoding(false)
+            }
         }
 
     };
