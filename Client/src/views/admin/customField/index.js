@@ -96,22 +96,24 @@ const CustomField = () => {
                     </Box>
                     <Box>
                         <Flex>
-                            <Menu>
-                                <MenuButton as={Button} size='sm' rightIcon={<ChevronDownIcon />} variant="outline">
-                                    {moduleName ? moduleName : 'Select Module'}
-                                </MenuButton>
-                                <MenuList>
-                                    <MenuItem onClick={() => setModuleName('')}>Select Module</MenuItem>
-                                    {fields?.map((item, id) => (
-                                        <MenuItem key={id} onClick={() => { setModuleName(item.moduleName); setModuleId(item._id) }}>{item.moduleName}</MenuItem>
-                                    ))}
-                                </MenuList>
-                            </Menu>
+                            {!isLoading && (
+                                <Menu>
+                                    <MenuButton as={Button} size='sm' rightIcon={<ChevronDownIcon />} variant="outline">
+                                        {moduleName ? moduleName : 'Select Module'}
+                                    </MenuButton>
+                                    <MenuList>
+                                        <MenuItem onClick={() => setModuleName('')}>Select Module</MenuItem>
+                                        {fields?.map((item, id) => (
+                                            <MenuItem key={id} onClick={() => { setModuleName(item.moduleName); setModuleId(item._id) }}>{item.moduleName}</MenuItem>
+                                        ))}
+                                    </MenuList>
+                                </Menu>
+                            )}
                             <Button onClick={() => navigate('/admin-setting')} variant="brand" size="sm" leftIcon={<IoIosArrowBack />} ml={2}>Back</Button>
                         </Flex>
                     </Box>
                 </Flex>
-                {isLoading ? <Flex justifyContent={'center'} alignItems={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                {isLoading && moduleName ? <Flex justifyContent={'center'} alignItems={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
                     <Spinner />
                 </Flex> :
                     <>
