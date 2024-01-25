@@ -61,6 +61,7 @@ import { useFormik } from "formik";
 import { CiMenuKebab } from "react-icons/ci";
 import Edit from "../Edit";
 import ImportModal from "./ImportModel";
+import CustomSearchInput from "components/search/search";
 
 export default function CheckTable(props) {
   const { columnsData, tableData, fetchData, isLoding, setAction, allData, access, dataColumn, onClose, emailAccess, callAccess, setSearchedData, onOpen, isOpen, displaySearchData, dynamicColumns, action, setDisplaySearchData, selectedColumns, setSelectedColumns, isHide } = props;
@@ -256,6 +257,10 @@ export default function CheckTable(props) {
     if (fetchData) fetchData()
   }, [action])
 
+  const handleSearch = (results) => {
+    setSearchedData(results);
+  };
+
   return (
     <>
       <Card
@@ -275,40 +280,7 @@ export default function CheckTable(props) {
               </Text>
               {isHide ? null :
                 <>
-                  <InputGroup width={"30%"} mx={3}>
-                    <InputLeftElement
-                      size="sm"
-                      top={"-3px"}
-                      pointerEvents="none"
-                      children={<SearchIcon color="gray.300" borderRadius="16px" />}
-                    />
-                    <Input type="text"
-                      size="sm"
-                      fontSize='sm'
-                      value={searchbox}
-                      onChange={(e) => {
-                        const results = allData.filter((item) => {
-                          // Iterate through each property of the object
-                          for (const key in item) {
-                            // Check if the value of the property contains the search term
-                            if (
-                              item[key] &&
-                              (typeof item[key] === "string" ?
-                                item[key].toLowerCase().includes(e.target.value.toLowerCase()) :
-                                (typeof item[key] === "number" && item[key].toString().includes(e.target.value)))
-                            ) {
-                              return true; // If found, include in the results
-                            }
-                          }
-                          return false; // If not found in any field, exclude from the results
-                        });
-                        setSearchbox(e.target.value)
-                        setSearchedData(results)
-                        setDisplaySearchData(true)
-                      }}
-                      fontWeight='500'
-                      placeholder="Search..." borderRadius="16px" />
-                  </InputGroup>
+                  <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={dataColumn} onSearch={handleSearch} />
                   <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} size="sm">Advance Search</Button>
                 </>
               }
