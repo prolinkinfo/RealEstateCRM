@@ -4,14 +4,14 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { deleteApi, deleteManyApi } from 'services/api';
 
-const DeleteFiled = (props) => {
+const DeleteHeading = (props) => {
     const [isLoding, setIsLoding] = useState(false)
     const navigate = useNavigate()
     const handleDeleteClick = async () => {
         if (props.method === 'one') {
             try {
                 setIsLoding(true)
-                const response = await deleteApi(`api/custom-field/delete/${props.selectedId}?moduleId=`, props.moduleId)
+                const response = await deleteApi(`api/custom-field/delete-heading/${props.selectedId}?moduleId=`, props.moduleId)
                 if (response.status === 200) {
                     props.onClose(false)
                     props.fetchData()
@@ -27,7 +27,7 @@ const DeleteFiled = (props) => {
                 setIsLoding(true)
                 const payload = {
                     moduleId: props.moduleId,
-                    fieldsIds: props.data
+                    headingsIds: props.data
                 }
                 let response = await deleteManyApi(props.url, payload)
                 if (response.status === 200) {
@@ -56,7 +56,7 @@ const DeleteFiled = (props) => {
                     <ModalHeader>Delete {props.moduleName}{props.method === 'one' ? '' : 's'}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        Are You Sure To Delete selected {props.moduleName}{props.method === 'one' ? '' : 's'} filed?
+                        Are You Sure To Delete selected {props.moduleName}{props.method === 'one' ? '' : 's'} heading?
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme="red" mr={2} onClick={handleDeleteClick} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Yes'}</Button>
@@ -69,4 +69,4 @@ const DeleteFiled = (props) => {
     // }
 }
 
-export default DeleteFiled;
+export default DeleteHeading;

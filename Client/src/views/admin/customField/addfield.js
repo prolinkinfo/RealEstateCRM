@@ -6,11 +6,9 @@ import { addFiledSchema } from 'schema'
 import { postApi } from 'services/api'
 import * as yup from 'yup'
 
-
-
 const Addfield = (props) => {
 
-    const { moduleId, filed } = props;
+    const { moduleId, filed, headingsData } = props;
 
     const [isLoding, setIsLoding] = useState(false)
     const [data, setData] = useState([])
@@ -24,6 +22,7 @@ const Addfield = (props) => {
         type: "",
         delete: false,
         fixed: false,
+        belongsTo: '',
         options: [{
             name: '',
             value: ''
@@ -60,11 +59,14 @@ const Addfield = (props) => {
         ],
     };
 
-
+    const underHeadingSchema = yup.object({
+        belongsTo: yup.string().required("Belongs to field is required")
+    });
 
     const formik = useFormik({
         initialValues: initialValues,
         validationSchema: addFiledSchema,
+        // validationSchema: headingsData?.length > 0 ? addFiledSchema.concat(underHeadingSchema) : addFiledSchema,
         validate: (values) => {
             const errors = {};
 
@@ -135,8 +137,6 @@ const Addfield = (props) => {
     };
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
-
-    console.log(errors)
 
     const fetchAddData = async () => {
         try {
@@ -217,6 +217,30 @@ const Addfield = (props) => {
                                         <option value='email'>Email</option>
                                         <option value='select'>Select</option>
                                     </Select>
+                                    <Text mb='10px' color={'red'}> {errors.type && touched.type && errors.type}</Text>
+                                </GridItem>
+                                <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
+                                    <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                        {/* Belongs To{headingsData?.length > 0 ? <Text color={"red"}>*</Text> : ''} */}
+                                        Belongs To
+                                    </FormLabel>
+                                    <Select
+                                        value={values.belongsTo}
+                                        name="belongsTo"
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        fontWeight='500'
+                                        placeholder={'Select Heading'}
+                                        borderColor={errors.belongsTo && touched.belongsTo ? "red.300" : null}
+                                        isDisabled={headingsData?.length < 1}
+                                    >
+                                        {
+                                            headingsData?.map(item => (
+                                                <option value={item?._id} key={item?._id}>{item?.heading}</option>
+                                            ))
+                                        }
+                                    </Select>
+                                    <Text mb='10px' color={'red'}> {errors.belongsTo && touched.belongsTo && errors.belongsTo}</Text>
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, sm: 6, md: 6 }}>
                                     <Flex alignItems='center'>
