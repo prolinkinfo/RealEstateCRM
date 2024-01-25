@@ -61,6 +61,7 @@ import { useFormik } from "formik";
 import { CiMenuKebab } from "react-icons/ci";
 import Edit from "../Edit";
 import ImportModal from "./ImportModel";
+import { getApi } from "services/api";
 
 export default function CheckTable(props) {
   const { columnsData, tableData, fetchData, isLoding, setAction, allData, access, dataColumn, onClose, emailAccess, callAccess, setSearchedData, onOpen, isOpen, displaySearchData, dynamicColumns, action, setDisplaySearchData, selectedColumns, setSelectedColumns, isHide } = props;
@@ -69,6 +70,7 @@ export default function CheckTable(props) {
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   // const columns = useMemo(() => columnsData, [columnsData]);
   const [selectedValues, setSelectedValues] = useState([]);
+  const [contactData, setContactData] = useState([])
   const [getTagValues, setGetTagValues] = useState([]);
   const [deleteModel, setDelete] = useState(false);
   const [selectedId, setSelectedId] = useState()
@@ -254,6 +256,15 @@ export default function CheckTable(props) {
 
   useEffect(() => {
     if (fetchData) fetchData()
+  }, [action])
+
+  const fetchCustomData = async () => {
+    const response = await getApi('api/custom-field?moduleName=contact')
+    setContactData(response.data)
+  }
+
+  useEffect(() => {
+    if (fetchCustomData) fetchCustomData()
   }, [action])
 
   return (
@@ -543,11 +554,12 @@ export default function CheckTable(props) {
 
       </Card>
       {/* modal */}
-      <Add
+      {isOpen && <Add
         isOpen={isOpen}
         size={size}
+        setContactData={setContactData} contactData={contactData[0]}
         onClose={onClose}
-        setAction={setAction} />
+        setAction={setAction} />}
       <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={selectedId} />
       <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} id={selectedId} />
       <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} selectedId={selectedId} setSelectedId={setSelectedId} />

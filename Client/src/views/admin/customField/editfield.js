@@ -10,10 +10,11 @@ import * as yup from 'yup'
 
 const EditField = (props) => {
 
-    const { moduleId, filed, updateFiled, headingsData } = props;
+    const { moduleId, filed, updateFiled, headingsData, validations } = props;
 
     const [isLoding, setIsLoding] = useState(false)
     const [data, setData] = useState([])
+    const [validationType, setValidationType] = useState('')
 
     const initialValues = {
         label: updateFiled ? updateFiled?.label : '',
@@ -78,12 +79,12 @@ const EditField = (props) => {
         validate: (values) => {
             const errors = {};
 
-            if (values?.validation && values.validation[1]?.min && !values.validation[1]?.value) {
+            if (values?.validation && (values.validation[1]?.min || values?.type === 'range') && values.validation[1]?.value === '') {
                 errors.validation = errors.validation || [];
                 errors.validation[1] = errors.validation[1] || {};
                 errors.validation[1].value = 'Value is required';
             }
-            if (values?.validation && values.validation[2]?.max && !values.validation[2]?.value) {
+            if (values?.validation && (values.validation[2]?.max || values?.type === 'range') && values.validation[2]?.value === '') {
                 errors.validation = errors.validation || [];
                 errors.validation[2] = errors.validation[2] || {};
                 errors.validation[2].value = 'Value is required';
@@ -105,7 +106,6 @@ const EditField = (props) => {
             }
 
             if (values?.options && (values?.type === 'radio' || values?.type === 'select')) {
-
                 values?.options?.forEach((option, index) => {
                     if (!option.name) {
                         if (!errors.options) {
@@ -211,7 +211,11 @@ const EditField = (props) => {
                                         <option value='radio'>Radio</option>
                                         <option value='check'>Check</option>
                                         <option value='date'>Date</option>
+                                        <option value='tel'>Tel</option>
+                                        <option value='range'>Range</option>
+                                        <option value='color'>Color</option>
                                         <option value='email'>Email</option>
+                                        <option value='url'>Url</option>
                                         <option value='select'>Select</option>
                                     </Select>
                                     <Text mb='10px' color={'red'}> {errors.type && touched.type && errors.type}</Text>
@@ -247,6 +251,57 @@ const EditField = (props) => {
                                         <Checkbox colorScheme="brandScheme" me="10px" isChecked={values?.fixed} onChange={(e) => setFieldValue(`fixed`, e.target.checked)} />
                                     </Flex>
                                 </GridItem>
+                                {/* <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
+                                    <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                        Validations
+                                    </FormLabel>
+                                    <Select
+                                        value={validationType}
+                                        name="validations"
+                                        // onChange={handleChange}
+                                        onChange={(e) => {
+                                            setValidationType(e.target.value)
+                                            if (e.target.value) {
+                                                const validationData = validations?.filter(item => item._id === e.target.value)
+                                                const filterData = validationData?.length > 0 ? validationData[0]?.validations : values?.validation
+                                                setFieldValue('validation', filterData)
+                                            } else {
+                                                setFieldValue('validation', [
+                                                    {
+                                                        require: updateFiled?.validation ? updateFiled?.validation[0]?.require : '',
+                                                        message: updateFiled?.validation ? updateFiled?.validation[0]?.message : '',
+                                                    },
+                                                    {
+                                                        min: updateFiled?.validation ? updateFiled?.validation[1]?.min : '',
+                                                        value: updateFiled?.validation ? updateFiled?.validation[1]?.value : '',
+                                                        message: updateFiled?.validation ? updateFiled?.validation[1]?.message : '',
+                                                    },
+                                                    {
+                                                        max: updateFiled?.validation ? updateFiled?.validation[2]?.max : '',
+                                                        value: updateFiled?.validation ? updateFiled?.validation[2]?.value : '',
+                                                        message: updateFiled?.validation ? updateFiled?.validation[2]?.message : '',
+                                                    },
+                                                    {
+                                                        match: updateFiled?.validation ? updateFiled?.validation[3]?.match : '',
+                                                        value: updateFiled?.validation ? updateFiled?.validation[3]?.value : '',
+                                                        message: updateFiled?.validation ? updateFiled?.validation[3]?.message : '',
+                                                    },
+                                                    {
+                                                        types: updateFiled?.validation ? updateFiled?.validation[4]?.formikType ? true : false : '',
+                                                        formikType: updateFiled?.validation ? updateFiled?.validation[4]?.formikType : '',
+                                                        message: updateFiled?.validation ? updateFiled?.validation[4]?.message : '',
+                                                    }])
+                                            }
+
+                                        }}
+                                        fontWeight='500'
+                                        placeholder={'Select Validation'}
+                                    >
+                                        {validations?.map((item, index) => (
+                                            <option key={index} value={item._id}>{item.name}</option>
+                                        ))}
+                                    </Select>
+                                </GridItem> */}
                                 {(values?.type === 'radio' || values?.type === 'select') ? <>
                                     <GridItem colSpan={{ base: 12, sm: 12, md: 12 }} borderBottom={'1px solid rgba(128, 128, 128, 0.705)'}>
                                         <Flex justifyContent={'space-between'} alignItems={'center'} mb={'8px'} >
@@ -297,17 +352,67 @@ const EditField = (props) => {
                                             </>
                                         ))
                                     }
-
                                 </> : ''}
                                 <GridItem colSpan={{ base: 12 }} borderBottom={'1px solid rgba(128, 128, 128, 0.705)'}>
                                     <Flex alignItems="center" justifyContent={"space-between"} mb={'8px'}>
                                         <Heading as="h1" size="md" >
                                             Validation
                                         </Heading>
-                                        <Checkbox isChecked={values?.validate} colorScheme="brandScheme" me="10px" onChange={(e) => { setFieldValue(`validate`, e.target.checked) }} />
+                                        <Flex>
+                                            <Select
+                                                value={validationType}
+                                                name="validations"
+                                                // onChange={handleChange}
+                                                onChange={(e) => {
+                                                    setValidationType(e.target.value)
+                                                    if (e.target.value) {
+                                                        const validationData = validations?.filter(item => item._id === e.target.value)
+                                                        const filterData = validationData?.length > 0 ? validationData[0]?.validations : values?.validation
+                                                        setFieldValue('validation', filterData)
+                                                        setFieldValue('validate', true)
+                                                    } else {
+                                                        setFieldValue('validation', [
+                                                            {
+                                                                require: updateFiled?.validation ? updateFiled?.validation[0]?.require : '',
+                                                                message: updateFiled?.validation ? updateFiled?.validation[0]?.message : '',
+                                                            },
+                                                            {
+                                                                min: updateFiled?.validation ? updateFiled?.validation[1]?.min : '',
+                                                                value: updateFiled?.validation ? updateFiled?.validation[1]?.value : '',
+                                                                message: updateFiled?.validation ? updateFiled?.validation[1]?.message : '',
+                                                            },
+                                                            {
+                                                                max: updateFiled?.validation ? updateFiled?.validation[2]?.max : '',
+                                                                value: updateFiled?.validation ? updateFiled?.validation[2]?.value : '',
+                                                                message: updateFiled?.validation ? updateFiled?.validation[2]?.message : '',
+                                                            },
+                                                            {
+                                                                match: updateFiled?.validation ? updateFiled?.validation[3]?.match : '',
+                                                                value: updateFiled?.validation ? updateFiled?.validation[3]?.value : '',
+                                                                message: updateFiled?.validation ? updateFiled?.validation[3]?.message : '',
+                                                            },
+                                                            {
+                                                                types: updateFiled?.validation ? updateFiled?.validation[4]?.formikType ? true : false : '',
+                                                                formikType: updateFiled?.validation ? updateFiled?.validation[4]?.formikType : '',
+                                                                message: updateFiled?.validation ? updateFiled?.validation[4]?.message : '',
+                                                            }])
+                                                    }
+
+                                                }}
+                                                fontWeight='500'
+                                                me="10px"
+                                                size='xs'
+                                                placeholder={'Select Validation'}
+                                            >
+                                                {validations?.map((item, index) => (
+                                                    <option key={index} value={item._id}>{item.name}</option>
+                                                ))}
+                                            </Select>
+                                            <Checkbox isChecked={(values?.type === 'range' || values.validate) ? true : false} colorScheme="brandScheme" me="10px" onChange={(e) => { setFieldValue(`validate`, e.target.checked) }} />
+                                        </Flex>
                                     </Flex>
                                 </GridItem>
-                                {values?.validate ?
+                                {(values.validate === true || values?.type === 'range') ?
                                     <>
                                         <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                             <Flex>
@@ -343,16 +448,16 @@ const EditField = (props) => {
                                         {!(values?.type === 'radio' || values?.type === 'select') && <>
                                             <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                                 <Flex>
-                                                    <Checkbox colorScheme="brandScheme" name={`validation[${1}].min`} me="10px" isChecked={values?.validation[1]?.min} onChange={(e) => {
+                                                    <Checkbox colorScheme="brandScheme" name={`validation[${1}].min`} me="10px" isChecked={(values?.validation[1]?.min || values?.type === 'range') ? true : false} onChange={(e) => {
                                                         const isChecked = e.target.checked;
                                                         setFieldValue(`validation[${1}].min`, isChecked);
                                                         setFieldValue(
                                                             'validation[1].message',
-                                                            isChecked ? values?.validation[1]?.message : ''
+                                                            (isChecked || values?.type === 'range') ? values?.validation[1]?.message : ''
                                                         );
                                                         setFieldValue(
                                                             'validation[1].value',
-                                                            isChecked ? values?.validation[1]?.value : ''
+                                                            (isChecked || values?.type === 'range') ? values?.validation[1]?.value : ''
                                                         );
                                                     }} />
                                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
@@ -362,30 +467,30 @@ const EditField = (props) => {
                                             </GridItem>
                                             <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                                    Value{values.validation[1].min === true ? <Text color={"red"}>*</Text> : ''}
+                                                    Value{values.validation[1].min === true || values?.type === 'range' ? <Text color={"red"}>*</Text> : ''}
                                                 </FormLabel>
                                                 <Input
-                                                    disabled={values.validation[1].min === true ? false : true}
+                                                    disabled={values.validation[1].min === true || values?.type === 'range' ? false : true}
                                                     fontSize='sm'
                                                     type='number'
                                                     onChange={handleChange} onBlur={handleBlur}
-                                                    value={values.validation[1].min === true ? values.validation[1].value : ''}
+                                                    value={values.validation[1].min === true || values?.type === 'range' ? values.validation[1].value : ''}
                                                     name={`validation[${1}].value`}
                                                     placeholder='Enter Min Value'
                                                     fontWeight='500'
-                                                    borderColor={values.validation[1].min === true && errors?.validation && touched?.validation && errors?.validation[1]?.value && touched?.validation[1]?.value ? "red.300" : null}
+                                                    borderColor={values.validation[1].min === true || values?.type === 'range' && errors?.validation && touched?.validation && errors?.validation[1]?.value && touched?.validation[1]?.value ? "red.300" : null}
                                                 />
-                                                {values.validation[1].min === true && <Text mb='10px' color={'red'}> {errors?.validation && touched?.validation && touched?.validation[1]?.value && errors?.validation[1]?.value}</Text>}
+                                                {values.validation[1].min === true || values?.type === 'range' && <Text mb='10px' color={'red'}> {errors?.validation && touched?.validation && touched?.validation[1]?.value && errors?.validation[1]?.value}</Text>}
                                             </GridItem>
                                             <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                                     Message
                                                 </FormLabel>
                                                 <Input
-                                                    disabled={values.validation[1].min === true ? false : true}
+                                                    disabled={values.validation[1].min === true || values?.type === 'range' ? false : true}
                                                     fontSize='sm'
                                                     onChange={handleChange} onBlur={handleBlur}
-                                                    value={values.validation[1].min === true ? values.validation[1].message : ''}
+                                                    value={values.validation[1].min === true || values?.type === 'range' ? values.validation[1].message : ''}
                                                     name={`validation[${1}].message`}
                                                     placeholder='Enter Min message'
                                                     fontWeight='500'
@@ -393,16 +498,16 @@ const EditField = (props) => {
                                             </GridItem>
                                             <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                                 <Flex>
-                                                    <Checkbox colorScheme="brandScheme" me="10px" isChecked={values?.validation[2]?.max} name={`validation[${2}].max`} onChange={(e) => {
+                                                    <Checkbox colorScheme="brandScheme" me="10px" isChecked={values?.validation[2].max || values?.type === 'range' ? true : false} name={`validation[${2}].max`} onChange={(e) => {
                                                         const isChecked = e.target.checked;
                                                         setFieldValue(`validation[${2}].max`, isChecked);
                                                         setFieldValue(
                                                             'validation[2].message',
-                                                            isChecked ? values?.validation[2]?.message : ''
+                                                            (isChecked || values?.type === 'range') ? values?.validation[2]?.message : ''
                                                         );
                                                         setFieldValue(
                                                             'validation[2].value',
-                                                            isChecked ? values?.validation[2]?.value : ''
+                                                            (isChecked || values?.type === 'range') ? values?.validation[2]?.value : ''
                                                         );
                                                     }} />
                                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
@@ -412,37 +517,36 @@ const EditField = (props) => {
                                             </GridItem>
                                             <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                                    Value{values.validation[2].max === true ? <Text color={"red"}>*</Text> : ''}
+                                                    Value{values.validation[2].max === true || values?.type === 'range' ? <Text color={"red"}>*</Text> : ''}
                                                 </FormLabel>
                                                 <Input
-                                                    disabled={values.validation[2].max === true ? false : true}
+                                                    disabled={values.validation[2].max === true || values?.type === 'range' ? false : true}
                                                     fontSize='sm'
                                                     type='number'
                                                     onChange={handleChange} onBlur={handleBlur}
-                                                    value={values.validation[2].max === true ? values.validation[2].value : ''}
+                                                    value={values.validation[2].max === true || values?.type === 'range' ? values.validation[2].value : ''}
                                                     name={`validation[${2}].value`}
                                                     placeholder='Enter Max Value'
                                                     fontWeight='500'
-                                                    borderColor={values.validation[2].max === true && errors?.validation && touched?.validation && errors?.validation[2]?.value && touched?.validation[2]?.value ? "red.300" : null}
+                                                    borderColor={values.validation[2].max === true || values?.type === 'range' && errors?.validation && touched?.validation && errors?.validation[2]?.value && touched?.validation[2]?.value ? "red.300" : null}
                                                 />
-                                                {values.validation[2].max === true && <Text mb='10px' color={'red'}> {errors?.validation && touched?.validation && touched?.validation[2]?.value && errors?.validation[2]?.value}</Text>}
+                                                {values.validation[2].max === true || values?.type === 'range' && <Text mb='10px' color={'red'}> {errors?.validation && touched?.validation && touched?.validation[2]?.value && errors?.validation[2]?.value}</Text>}
                                             </GridItem>
                                             <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                                     Message
                                                 </FormLabel>
                                                 <Input
-                                                    disabled={values.validation[2].max === true ? false : true}
+                                                    disabled={values.validation[2].max === true || values?.type === 'range' ? false : true}
                                                     fontSize='sm'
                                                     onChange={handleChange} onBlur={handleBlur}
-                                                    value={values.validation[2].max === true ? values.validation[2].message : ''}
+                                                    value={values.validation[2].max === true || values?.type === 'range' ? values.validation[2].message : ''}
                                                     name={`validation[${2}].message`}
                                                     placeholder='Enter Max Message'
                                                     fontWeight='500'
                                                     borderColor={errors.massage && touched.massage ? "red.300" : null}
                                                 />
                                             </GridItem>
-
                                             <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                                 <Flex>
                                                     <Checkbox colorScheme="brandScheme" isChecked={values?.validation[3]?.match} me="10px" name={`validation[${3}].match`} onChange={(e) => {
@@ -494,7 +598,6 @@ const EditField = (props) => {
                                                 />
                                                 {values.validation[3].match === true && <Text mb='10px' color={'red'}> {errors?.validation && touched?.validation && touched?.validation[3]?.message && errors?.validation[3]?.message}</Text>}
                                             </GridItem>
-
                                             <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                                 <Flex>
                                                     <Checkbox colorScheme="brandScheme" isChecked={values?.validation[4]?.types} name={`validation[${4}].types`} me="10px" onChange={(e) => {
@@ -514,7 +617,6 @@ const EditField = (props) => {
                                                     </FormLabel>
                                                 </Flex>
                                             </GridItem>
-
                                             <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                                     FormikType{values.validation[4].types === true ? <Text color={"red"}>*</Text> : ''}
