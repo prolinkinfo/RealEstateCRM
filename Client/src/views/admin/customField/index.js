@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { ChevronDownIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
-import { Box, Button, Flex, Menu, Heading, MenuButton, Select, Checkbox, GridItem, Text, MenuItem, Grid, MenuList, FormLabel, Input } from '@chakra-ui/react';
+import { Box, Button, Flex, Menu, Heading, MenuButton, Select, Checkbox, GridItem, Text, MenuItem, Grid, MenuList, FormLabel, Input, useColorModeValue } from '@chakra-ui/react';
 import Card from 'components/card/Card'
 import { useFormik } from 'formik';
 import Addfield from './addfield'
@@ -12,6 +12,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { BiGridVertical } from "react-icons/bi";
 import { useNavigate } from 'react-router-dom';
 import { IoIosArrowBack } from 'react-icons/io';
+import Spinner from "components/spinner/Spinner";
 
 const CustomField = () => {
     const [addFieldModel, setAddFieldModel] = useState(false);
@@ -26,6 +27,8 @@ const CustomField = () => {
     const [selectedValues, setSelectedValues] = useState([]);
     const [selectedId, setSelectedId] = useState('')
     const [validations, setValidations] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
+    const textColor = useColorModeValue("gray.500", "white");
 
     const getValidationData = async () => {
         const response = await getApi('api/validation')
@@ -65,6 +68,7 @@ const CustomField = () => {
     };
 
     const fetchData = async () => {
+        setIsLoading(true)
         let responseAllData = await getApi(`api/custom-field`);
         setFields(responseAllData?.data);
         if (moduleName) {
@@ -73,6 +77,7 @@ const CustomField = () => {
         } else if (!moduleName) {
             setData([])
         }
+        setIsLoading(false)
     }
 
     useEffect(() => {
@@ -106,49 +111,60 @@ const CustomField = () => {
                         </Flex>
                     </Box>
                 </Flex>
+                {isLoading ? <Flex justifyContent={'center'} alignItems={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                    <Spinner />
+                </Flex> :
+                    <>
+                        <DragDropContext DragDropContext onDragEnd={handleDragEnd} >
+                            <Droppable droppableId="droppable">
+                                {(provided) => (
+                                    <div ref={provided.innerRef} {...provided.droppableProps}>
+                                        <Grid templateColumns="repeat(12, 1fr)" gap={3} mt={5}>
+                                            {data[0]?.fields?.map((item, i) => (
+                                                <GridItem colSpan={{ base: 12, md: 6 }} key={item._id}>
+                                                    <Draggable draggableId={item._id} index={i}>
+                                                        {(provided, snapshot) => (
+                                                            <div
+                                                                ref={provided.innerRef}
+                                                                {...provided.draggableProps}
+                                                            >
+                                                                <Flex
+                                                                    alignItems="center"
+                                                                    justifyContent="space-between"
+                                                                    className="CustomFieldName"
+                                                                >
 
-                <DragDropContext DragDropContext onDragEnd={handleDragEnd} >
-                    <Droppable droppableId="droppable">
-                        {(provided) => (
-                            <div ref={provided.innerRef} {...provided.droppableProps}>
-                                <Grid templateColumns="repeat(12, 1fr)" gap={3} mt={5}>
-                                    {data[0]?.fields?.map((item, i) => (
-                                        <GridItem colSpan={{ base: 12, md: 6 }} key={item._id}>
-                                            <Draggable draggableId={item._id} index={i}>
-                                                {(provided, snapshot) => (
-                                                    <div
-                                                        ref={provided.innerRef}
-                                                        {...provided.draggableProps}
-                                                    >
-                                                        <Flex
-                                                            alignItems="center"
-                                                            justifyContent="space-between"
-                                                            className="CustomFieldName"
-                                                        >
+                                                                    <Text display='flex' alignItems='center' size='sm' colorScheme='gray' ms='4px' mt={4} fontSize='md' fontWeight='500' mb='8px' >
+                                                                        {!item.fixed && <div {...provided.dragHandleProps} style={{ marginRight: '10px', cursor: 'grab' }} size={18} >
+                                                                            {/* Wrap the BiGridVertical icon with the drag handle */}
+                                                                            <BiGridVertical size={18} />
+                                                                        </div>}
+                                                                        {!item.fixed && <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(item?._id)} onChange={(event) => handleCheckboxChange(event, item?._id)} me="10px" />}
+                                                                        {item?.label}
+                                                                    </Text>
+                                                                    <span className="EditDelete">
+                                                                        <Button size='sm' variant='outline' me={2} color={'green'} onClick={() => { setEditModal(true); setUpdateField(item) }}><EditIcon /></Button>
+                                                                        {item.fixed ? <Button size='sm' variant='outline' me={2} color={'gray'}><DeleteIcon /></Button> : <Button size='sm' variant='outline' me={2} color={'red'} onClick={() => { setDeleteModal(true); setSelectedId(item?._id) }}><DeleteIcon /></Button>}
+                                                                    </span>
+                                                                </Flex>
+                                                            </div>
+                                                        )}
+                                                    </Draggable>
+                                                </GridItem>
+                                            ))}
+                                        </Grid>
+                                    </div>
+                                )}
+                            </Droppable>
+                        </DragDropContext>
+                        <Flex Flex justifyContent={'end'} mt='5' >
+                            {selectedValues.length > 0 && <Button colorScheme="red" mr={2} onClick={() => setDeleteMany(true)} size='sm' >Delete</Button>}
 
-                                                            <Text display='flex' alignItems='center' size='sm' colorScheme='gray' ms='4px' mt={4} fontSize='md' fontWeight='500' mb='8px' >
-                                                                {!item.fixed && <div {...provided.dragHandleProps} style={{ marginRight: '10px', cursor: 'grab' }} size={18} >
-                                                                    {/* Wrap the BiGridVertical icon with the drag handle */}
-                                                                    <BiGridVertical size={18} />
-                                                                </div>}
-                                                                {!item.fixed && <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(item?._id)} onChange={(event) => handleCheckboxChange(event, item?._id)} me="10px" />}
-                                                                {item?.label}
-                                                            </Text>
-                                                            <span className="EditDelete">
-                                                                <Button size='sm' variant='outline' me={2} color={'green'} onClick={() => { setEditModal(true); setUpdateField(item) }}><EditIcon /></Button>
-                                                                {item.fixed ? <Button size='sm' variant='outline' me={2} color={'gray'}><DeleteIcon /></Button> : <Button size='sm' variant='outline' me={2} color={'red'} onClick={() => { setDeleteModal(true); setSelectedId(item?._id) }}><DeleteIcon /></Button>}
-                                                            </span>
-                                                        </Flex>
-                                                    </div>
-                                                )}
-                                            </Draggable>
-                                        </GridItem>
-                                    ))}
-                                </Grid>
-                            </div>
-                        )}
-                    </Droppable>
-                </DragDropContext >
+                            {data?.length > 0 && <Button onClick={() => setAddFieldModel(true)} variant="brand" size='sm'>Add Field</Button>}
+                        </Flex>
+                    </>
+                }
+
                 {/* {data[0]?.fields?.map((item, i) => (
                         <GridItem colSpan={{ base: 12, md: 6 }}>
                             <Flex alignItems={"center"} justifyContent={"space-between"} className="CustomFieldName" >
@@ -163,11 +179,7 @@ const CustomField = () => {
                             </Flex>
                         </GridItem>
                     ))} */}
-                <Flex Flex justifyContent={'end'} mt='5' >
-                    {selectedValues.length > 0 && <Button colorScheme="red" mr={2} onClick={() => setDeleteMany(true)} size='sm' >Delete</Button>}
 
-                    {data?.length > 0 && <Button onClick={() => setAddFieldModel(true)} variant="brand" size='sm'>Add Field</Button>}
-                </Flex >
             </Card >
 
             <Addfield validations={validations} setValidations={setValidations} isOpen={addFieldModel} onClose={setAddFieldModel} moduleName={moduleName} field={data[0]?.fields} moduleId={data[0]?._id} fetchData={fetchData} />

@@ -159,7 +159,7 @@ const Addfield = (props) => {
                 <ModalOverlay />
                 <ModalContent maxWidth={"2xl"}>
                     <ModalHeader>Add Field</ModalHeader>
-                    <ModalCloseButton />
+                    <ModalCloseButton onClick={() => resetForm()} />
                     <ModalBody>
                         <>
                             <Grid templateColumns="repeat(12, 1fr)" gap={3}>
