@@ -10,7 +10,7 @@ import * as yup from 'yup'
 
 const EditField = (props) => {
 
-    const { moduleId, filed, updateFiled, validations } = props;
+    const { moduleId, filed, updateFiled, headingsData, validations } = props;
 
     const [isLoding, setIsLoding] = useState(false)
     const [data, setData] = useState([])
@@ -22,6 +22,7 @@ const EditField = (props) => {
         type: updateFiled ? updateFiled?.type : '',
         delete: updateFiled ? updateFiled?.delete : '',
         fixed: updateFiled ? updateFiled?.fixed ? true : false : '',
+        belongsTo: updateFiled ? updateFiled?.belongsTo : '',
         validate: updateFiled?.validation && (updateFiled?.validation[0]?.require || updateFiled?.validation[1]?.min || updateFiled?.validation[2]?.max || updateFiled?.validation[3]?.match || updateFiled?.validation[4]?.formikType) ? true : false,
         options: updateFiled?.options ? updateFiled?.options : '',
         validation: [
@@ -66,9 +67,14 @@ const EditField = (props) => {
         formik.setFieldValue('options', newOptions);
     };
 
+    const underHeadingSchema = yup.object({
+        belongsTo: yup.string().required("Belongs to field is required")
+    });
+
     const formik = useFormik({
         initialValues: initialValues,
-        validationSchema: addFiledSchema,
+        // validationSchema: addFiledSchema,
+        validationSchema: headingsData?.length > 0 ? addFiledSchema.concat(underHeadingSchema) : addFiledSchema,
         enableReinitialize: true,
         validate: (values) => {
             const errors = {};
@@ -212,6 +218,29 @@ const EditField = (props) => {
                                         <option value='url'>Url</option>
                                         <option value='select'>Select</option>
                                     </Select>
+                                    <Text mb='10px' color={'red'}> {errors.type && touched.type && errors.type}</Text>
+                                </GridItem>
+                                <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
+                                    <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                        Belongs To{headingsData?.length > 0 ? <Text color={"red"}>*</Text> : ''}
+                                    </FormLabel>
+                                    <Select
+                                        value={values.belongsTo}
+                                        name="belongsTo"
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        fontWeight='500'
+                                        placeholder={'Select Heading'}
+                                        borderColor={errors.belongsTo && touched.belongsTo ? "red.300" : null}
+                                        isDisabled={headingsData?.length < 1}
+                                    >
+                                        {
+                                            headingsData?.map(item => (
+                                                <option value={item?._id} key={item?._id}>{item?.heading}</option>
+                                            ))
+                                        }
+                                    </Select>
+                                    <Text mb='10px' color={'red'}> {errors.belongsTo && touched.belongsTo && errors.belongsTo}</Text>
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, sm: 6, md: 6 }}>
                                     <Flex alignItems='center'>
@@ -233,7 +262,7 @@ const EditField = (props) => {
                                         onChange={(e) => {
                                             setValidationType(e.target.value)
                                             if (e.target.value) {
-                                                const validationData = validations.filter(item => item._id === e.target.value)
+                                                const validationData = validations?.filter(item => item._id === e.target.value)
                                                 const filterData = validationData?.length > 0 ? validationData[0]?.validations : values?.validation
                                                 setFieldValue('validation', filterData)
                                             } else {
@@ -268,7 +297,7 @@ const EditField = (props) => {
                                         fontWeight='500'
                                         placeholder={'Select Validation'}
                                     >
-                                        {validations.map((item, index) => (
+                                        {validations?.map((item, index) => (
                                             <option key={index} value={item._id}>{item.name}</option>
                                         ))}
                                     </Select>
@@ -337,7 +366,7 @@ const EditField = (props) => {
                                                 onChange={(e) => {
                                                     setValidationType(e.target.value)
                                                     if (e.target.value) {
-                                                        const validationData = validations.filter(item => item._id === e.target.value)
+                                                        const validationData = validations?.filter(item => item._id === e.target.value)
                                                         const filterData = validationData?.length > 0 ? validationData[0]?.validations : values?.validation
                                                         setFieldValue('validation', filterData)
                                                         setFieldValue('validate', true)
@@ -375,7 +404,7 @@ const EditField = (props) => {
                                                 size='xs'
                                                 placeholder={'Select Validation'}
                                             >
-                                                {validations.map((item, index) => (
+                                                {validations?.map((item, index) => (
                                                     <option key={index} value={item._id}>{item.name}</option>
                                                 ))}
                                             </Select>

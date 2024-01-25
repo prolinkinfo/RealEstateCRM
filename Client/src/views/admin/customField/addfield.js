@@ -4,12 +4,11 @@ import { useFormik } from 'formik'
 import React, { useState } from 'react'
 import { addFiledSchema } from 'schema'
 import { postApi } from 'services/api'
-
-
+import * as yup from 'yup'
 
 const Addfield = (props) => {
 
-    const { moduleId, validations } = props;
+    const { moduleId, filed, headingsData, validations } = props;
 
     const [isLoding, setIsLoding] = useState(false)
     const [validationType, setValidationType] = useState('')
@@ -23,6 +22,7 @@ const Addfield = (props) => {
         type: "",
         delete: false,
         fixed: false,
+        belongsTo: '',
         options: [{
             name: '',
             value: ''
@@ -59,9 +59,14 @@ const Addfield = (props) => {
         ],
     };
 
+    const underHeadingSchema = yup.object({
+        belongsTo: yup.string().required("Belongs to field is required")
+    });
+
     const formik = useFormik({
         initialValues: initialValues,
         validationSchema: addFiledSchema,
+        // validationSchema: headingsData?.length > 0 ? addFiledSchema.concat(underHeadingSchema) : addFiledSchema,
         validate: (values) => {
             const errors = {};
             if (values?.validation && (values.validation[1]?.min || values?.type === 'range') && values.validation[1]?.value === '') {
@@ -159,7 +164,7 @@ const Addfield = (props) => {
                 <ModalOverlay />
                 <ModalContent maxWidth={"2xl"}>
                     <ModalHeader>Add Field</ModalHeader>
-                    <ModalCloseButton />
+                    <ModalCloseButton onClick={() => resetForm()} />
                     <ModalBody>
                         <>
                             <Grid templateColumns="repeat(12, 1fr)" gap={3}>
@@ -217,6 +222,30 @@ const Addfield = (props) => {
                                         <option value='url'>Url</option>
                                         <option value='select'>Select</option>
                                     </Select>
+                                    <Text mb='10px' color={'red'}> {errors.type && touched.type && errors.type}</Text>
+                                </GridItem>
+                                <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
+                                    <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                        {/* Belongs To{headingsData?.length > 0 ? <Text color={"red"}>*</Text> : ''} */}
+                                        Belongs To
+                                    </FormLabel>
+                                    <Select
+                                        value={values.belongsTo}
+                                        name="belongsTo"
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        fontWeight='500'
+                                        placeholder={'Select Heading'}
+                                        borderColor={errors.belongsTo && touched.belongsTo ? "red.300" : null}
+                                        isDisabled={headingsData?.length < 1}
+                                    >
+                                        {
+                                            headingsData?.map(item => (
+                                                <option value={item?._id} key={item?._id}>{item?.heading}</option>
+                                            ))
+                                        }
+                                    </Select>
+                                    <Text mb='10px' color={'red'}> {errors.belongsTo && touched.belongsTo && errors.belongsTo}</Text>
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                     <Flex alignItems='center'>
@@ -237,7 +266,7 @@ const Addfield = (props) => {
                                         onChange={(e) => {
                                             setValidationType(e.target.value)
                                             if (e.target.value) {
-                                                const validationData = validations.filter(item => item._id === e.target.value)
+                                                const validationData = validations?.filter(item => item._id === e.target.value)
                                                 const filterData = validationData?.length > 0 ? validationData[0]?.validations : values?.validation
                                                 setFieldValue('validation', filterData)
                                             } else {
@@ -272,7 +301,7 @@ const Addfield = (props) => {
                                         fontWeight='500'
                                         placeholder={'Select Validation'}
                                     >
-                                        {validations.map((item, index) => (
+                                        {validations?.map((item, index) => (
                                             <option key={index} value={item._id} >{item.name}</option>
                                         ))}
                                     </Select>
@@ -343,7 +372,7 @@ const Addfield = (props) => {
                                                 onChange={(e) => {
                                                     setValidationType(e.target.value)
                                                     if (e.target.value) {
-                                                        const validationData = validations.filter(item => item._id === e.target.value)
+                                                        const validationData = validations?.filter(item => item._id === e.target.value)
                                                         const filterData = validationData?.length > 0 ? validationData[0]?.validations : values?.validation
                                                         setFieldValue('validation', filterData)
                                                         setFieldValue('validate', true)
@@ -382,7 +411,7 @@ const Addfield = (props) => {
                                                 size='xs'
                                                 placeholder={'Select Validation'}
                                             >
-                                                {validations.map((item, index) => (
+                                                {validations?.map((item, index) => (
                                                     <option key={index} value={item._id} >{item.name}</option>
                                                 ))}
                                             </Select>

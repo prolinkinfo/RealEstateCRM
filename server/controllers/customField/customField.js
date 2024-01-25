@@ -6,7 +6,7 @@ const index = async (req, res) => {
         return res.send(result);
     } catch (err) {
         console.error('Failed', err);
-        return res.status(400).json({ error: 'Failed', err });
+        return res.status(400).json({ message: 'Failed', error: err.toString() });
     }
 };
 
@@ -22,7 +22,7 @@ const add = async (req, res) => {
 
     } catch (err) {
         console.error('Failed to create Custom Field:', err);
-        return res.status(400).json({ success: false, message: 'Failed to Create Field', error: err });
+        return res.status(400).json({ success: false, message: 'Failed to Create Field', error: err.toString() });
     }
 };
 
@@ -38,7 +38,7 @@ const editWholeFieldsArray = async (req, res) => {
 
     } catch (err) {
         console.error('Failed to Update Custom Field:', err);
-        return res.status(400).json({ success: false, message: 'Failed to Update Custom fields', error: err });
+        return res.status(400).json({ success: false, message: 'Failed to Update Custom fields', error: err.toString() });
     }
 };
 
@@ -60,7 +60,7 @@ const editSingleField = async (req, res) => {
 
     } catch (err) {
         console.error('Failed to Update Custom Field:', err);
-        return res.status(400).json({ success: false, message: 'Failed to Update Custom Field', error: err });
+        return res.status(400).json({ success: false, message: 'Failed to Update Custom Field', error: err.toString() });
     }
 };
 
@@ -72,7 +72,7 @@ const view = async (req, res) => {
     } catch (err) {
 
         console.error('Failed to display:', err);
-        return res.status(400).json({ success: false, message: 'Failed to display', error: err });
+        return res.status(400).json({ success: false, message: 'Failed to display', error: err.toString() });
     }
 };
 
@@ -100,7 +100,7 @@ const deleteField = async (req, res) => {
 
     } catch (err) {
         console.error("Failed to delete field ", err);
-        return res.status(404).json({ success: false, message: "Failed to remove field", error: err, deleteField });
+        return res.status(404).json({ success: false, message: "Failed to remove field", error: err.toString() });
     }
 };
 
@@ -119,19 +119,19 @@ const deleteManyFields = async (req, res) => {
         );
 
         if (result?.modifiedCount > 0) {
-            return res.status(200).json({ message: "Field removed successfully", result });
+            return res.status(200).json({ message: "Fields removed successfully", result });
         } else {
-            return res.status(404).json({ message: 'Failed to remove field', result });
+            return res.status(404).json({ message: 'Failed to remove fields', result });
         }
 
     } catch (err) {
-        console.error("Failed to delete field ", err);
-        return res.status(404).json({ success: false, message: "Failed to remove field", error: err, deleteField });
+        console.error("Failed to delete fields ", err);
+        return res.status(404).json({ success: false, message: "Failed to remove fields", error: err.toString() });
     }
 };
 
 
-const createNewModule = async (req, res) => {  // changes in add new module api
+const createNewModule = async (req, res) => {
     try {
         const moduleName = req.body.moduleName;
 
@@ -152,5 +152,129 @@ const createNewModule = async (req, res) => {  // changes in add new module api
     }
 };
 
+const addHeading = async (req, res) => {
+    try {
+        const result = await CustomField.updateOne({ _id: req.body.moduleId }, { $push: { headings: { $each: req.body.headings } } });
 
-module.exports = { index, add, editWholeFieldsArray, editSingleField, view, deleteField, deleteManyFields, createNewModule };
+        if (result?.modifiedCount > 0) {
+            return res.status(200).json({ message: "Headings added successfully", result });
+        } else {
+            return res.status(404).json({ message: 'Failed to add headings', result });
+        }
+
+    } catch (err) {
+        console.error('Failed to create Custom Heading:', err);
+        return res.status(400).json({ success: false, message: 'Failed to Create Heading', error: err.toString() });
+    }
+};
+
+const editSingleHeading = async (req, res) => {
+    try {
+        const moduleId = req.body.moduleId;
+        const headingId = req.params.id;
+
+        let result = await CustomField.updateOne(
+            { _id: moduleId, 'headings._id': headingId },
+            { $set: { 'headings.$': req.body.updatedHeading } }
+        );
+
+        if (result?.modifiedCount > 0) {
+            return res.status(200).json({ message: "Heading updated successfully", result });
+        } else {
+            return res.status(404).json({ message: 'Failed to update heading', result });
+        }
+
+    } catch (err) {
+        console.error('Failed to Update Custom Heading:', err);
+        return res.status(400).json({ success: false, message: 'Failed to Update Custom Heading', error: err.toString() });
+    }
+};
+
+const editWholeHeadingsArray = async (req, res) => {
+    try {
+        let result = await CustomField.updateOne({ _id: req.params.id }, { $set: { headings: req.body } });
+
+        if (result?.modifiedCount > 0) {
+            return res.status(200).json({ message: "Headings updated successfully", result });
+        } else {
+            return res.status(404).json({ message: 'Failed to update headings', result });
+        }
+
+    } catch (err) {
+        console.error('Failed to Update Custom Headings:', err);
+        return res.status(400).json({ success: false, message: 'Failed to Update Custom Headings', error: err.toString() });
+    }
+};
+
+const deleteHeading = async (req, res) => {
+    try {
+        const moduleId = req.query.moduleId;
+        const headingId = req.params.id;
+
+        const result = await CustomField.updateOne(
+            { _id: moduleId },
+            {
+                $pull: {
+                    headings: {
+                        _id: headingId
+                    }
+                },
+                $set: {
+                    'fields.$[elem].belongsTo': null
+                }
+            },
+            {
+                arrayFilters: [
+                    { 'elem.belongsTo': headingId }
+                ]
+            }
+        );
+
+        if (result?.modifiedCount > 0) {
+            return res.status(200).json({ message: "Heading removed successfully", result });
+        } else {
+            return res.status(404).json({ message: 'Failed to remove heading', result });
+        }
+
+    } catch (err) {
+        console.error("Failed to delete heading ", err);
+        return res.status(404).json({ success: false, message: "Failed to remove heading", error: err.toString() });
+    }
+};
+
+const deleteManyHeadings = async (req, res) => {
+    try {
+        const moduleId = req.body.moduleId;
+        const headingsIds = req.body.headingsIds;
+
+        const result = await CustomField.updateOne(
+            { _id: moduleId },
+            {
+                $pull: {
+                    headings: { _id: { $in: headingsIds } }
+                },
+                $set: {
+                    'fields.$[elem].belongsTo': null
+                }
+            },
+            {
+                arrayFilters: [
+                    { 'elem.belongsTo': { $in: headingsIds } }
+                ]
+            }
+        );
+
+        if (result?.modifiedCount > 0) {
+            return res.status(200).json({ message: "Headings removed successfully", result });
+        } else {
+            return res.status(404).json({ message: 'Failed to remove headings', result });
+        }
+
+    } catch (err) {
+        console.error("Failed to delete headings ", err);
+        return res.status(404).json({ success: false, message: "Failed to remove headings", error: err.toString() });
+    }
+};
+
+
+module.exports = { index, add, editWholeFieldsArray, editSingleField, view, deleteField, deleteManyFields, createNewModule, addHeading, editSingleHeading, editWholeHeadingsArray, deleteHeading, deleteManyHeadings };

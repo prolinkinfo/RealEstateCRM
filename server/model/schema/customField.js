@@ -60,12 +60,21 @@ const fieldsSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    belongsTo: {
+        type: mongoose.Schema.Types.ObjectId,
+    },
     // options: [radioSelctboxSchema],
     options: {
         type: [radioSelctboxSchema],
         default: undefined
     },
     validation: [validationSchema],
+});
+
+const headingsSchema = new mongoose.Schema({
+    heading: {
+        type: String
+    }
 });
 
 const customFieldSchema = new mongoose.Schema({
@@ -75,6 +84,7 @@ const customFieldSchema = new mongoose.Schema({
         unique: true,
         trim: true
     },
+    headings: [headingsSchema],
     fields: [fieldsSchema]
 });
 
