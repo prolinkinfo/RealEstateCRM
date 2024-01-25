@@ -105,7 +105,10 @@ export default function AdminNavbar(props) {
 				}}
 				alignItems={{ xl: 'center' }}
 				mb={gap}>
-				<Box mb={{ sm: '8px', md: '10px' }} pt="15px" display={"flex"} alignItems={"center"}>
+				<Box
+					//  mb={{ sm: '8px', md: '10px' }} 
+					//  pt="15px"
+					display={"flex"} alignItems={"center"}>
 					{/*
 					<Breadcrumb>
 						<BreadcrumbItem color={secondaryText} fontSize='sm' mb='5px'>
