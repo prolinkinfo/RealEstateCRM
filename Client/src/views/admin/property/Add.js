@@ -29,10 +29,10 @@ const Add = (props) => {
         exteriorFeatures: "",
         communityAmenities: "",
         //3. Media and Visuals:
-        propertyPhotos: "",
-        virtualToursOrVideos: "",
-        floorPlans: "",
-        propertyDocuments: "",
+        propertyPhotos: [],
+        virtualToursOrVideos: [],
+        floorPlans: [],
+        propertyDocuments: [],
         //4. Listing and Marketing Details:
         listingStatus: "",
         listingAgentOrTeam: "",
