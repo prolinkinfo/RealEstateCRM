@@ -61,11 +61,8 @@ import { useFormik } from "formik";
 import { CiMenuKebab } from "react-icons/ci";
 import Edit from "../Edit";
 import ImportModal from "./ImportModel";
-<<<<<<< HEAD
 import { getApi } from "services/api";
-=======
 import CustomSearchInput from "components/search/search";
->>>>>>> 5d26cb3b62137dc678c19240bcc0704ae215d2b3
 
 export default function CheckTable(props) {
   const { columnsData, tableData, fetchData, isLoding, setAction, allData, access, dataColumn, onClose, emailAccess, callAccess, setSearchedData, onOpen, isOpen, displaySearchData, dynamicColumns, action, setDisplaySearchData, selectedColumns, setSelectedColumns, isHide } = props;
