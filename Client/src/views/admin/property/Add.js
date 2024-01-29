@@ -29,10 +29,10 @@ const Add = (props) => {
         exteriorFeatures: "",
         communityAmenities: "",
         //3. Media and Visuals:
-        propertyPhotos: "",
-        virtualToursOrVideos: "",
-        floorPlans: "",
-        propertyDocuments: "",
+        propertyPhotos: [],
+        virtualToursOrVideos: [],
+        floorPlans: [],
+        propertyDocuments: [],
         //4. Listing and Marketing Details:
         listingStatus: "",
         listingAgentOrTeam: "",
@@ -65,6 +65,8 @@ const Add = (props) => {
     });
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
+
+    console.log(errors)
 
     const AddData = async () => {
         try {

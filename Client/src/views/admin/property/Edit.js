@@ -64,7 +64,8 @@ const Edit = (props) => {
         },
     });
 
-    const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
+    const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik;
+
     const [isLoding, setIsLoding] = useState(false)
 
     const EditData = async () => {
@@ -145,7 +146,7 @@ const Edit = (props) => {
         }
     }
 
-
+    console.log(errors)
     useEffect(() => {
         fetchData()
     }, [props?.selectedId])
