@@ -146,7 +146,6 @@ const Edit = (props) => {
         }
     }
 
-    console.log(errors)
     useEffect(() => {
         fetchData()
     }, [props?.selectedId])
