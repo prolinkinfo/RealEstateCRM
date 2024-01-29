@@ -8,6 +8,9 @@ import {
   useColorModeValue,
   Grid,
   GridItem,
+  Progress,
+  Box,
+  Text,
 } from "@chakra-ui/react";
 // Assets
 // Custom components
@@ -25,6 +28,7 @@ import ReportChart from "../reports/components/reportChart";
 import Chart from "components/charts/LineChart.js";
 // import Chart from "../reports/components/chart";
 import { HasAccess } from "../../../redux/accessUtils";
+import PieChart from "components/charts/PieChart";
 
 export default function UserReports() {
   // Chakra Color Mode
@@ -35,6 +39,7 @@ export default function UserReports() {
   const [task, setTask] = useState([]);
   const [contactData, setContactData] = useState([]);
   const [leadData, setLeadData] = useState([]);
+  const [data, setData] = useState([]);
   const [propertyData, setPropertyData] = useState([]);
   const navigate = useNavigate();
 
@@ -74,6 +79,17 @@ export default function UserReports() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const fetchProgressChart = async () => {
+    // let result = await getApi('api/reporting/line-chart');
+    let result = await getApi(user.role === 'superAdmin' ? 'api/reporting/line-chart' : `api/reporting/line-chart?createBy=${user._id}`);
+    if (result && result.status === 200) {
+      setData(result?.data)
+    }
+  }
+  useEffect(() => {
+    fetchProgressChart()
+  }, [])
 
   return (
     <>
@@ -175,12 +191,44 @@ export default function UserReports() {
           </Card>
         </GridItem>
       </Grid>
-      {/* <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} my="20px">
-        <Card style={{ borderRadius: "0", borderRight: "2px solid #e6e6e6" }}>1</Card>
-        <Card style={{ borderRadius: "0", borderRight: "2px solid #e6e6e6" }}>1</Card>
-        <Card style={{ borderRadius: "0", borderRight: "2px solid #e6e6e6" }}>1</Card>
-        <Card style={{ borderRadius: "0" }}>1</Card>
-      </SimpleGrid> */}
+      <SimpleGrid gap="20px" columns={{ base: 1, md: 2, lg: 3 }} my="20px">
+        <Card >
+          <Heading size="md" pb={3}>Statistics</Heading>
+          {data?.map((item, i) => (
+            <Box border={"1px solid #e5e5e5"} p={2} m={1}>
+              <Flex justifyContent={"space-between"}>
+                <Text fontSize="sm" fontWeight={600} pb={2}>{item?.name}</Text>
+                <Text fontSize="sm" fontWeight={600} pb={2}>{item?.length}</Text>
+              </Flex>
+              <Progress
+                colorScheme={item?.color}
+                size='sm' value={item?.length} width={"100%"} />
+            </Box>
+          ))}
+        </Card>
+        <Card>
+          <Heading size="md" pb={3}>Lead Statistics</Heading>
+          {(leadView?.create || leadView?.update || leadView?.delete || leadView?.view) &&
+            <Flex justifyContent={"space-evenly"}>
+              <Box border={"1px solid #e5e5e5"} p={2} m={1} width={"40%"} textAlign={"center"}>
+                <Heading size="sm" color="blue" pb={3}>Total Leads</Heading>
+                <Text fontWeight={600}>{leadData?.length || 0}</Text>
+              </Box>
+              <Box border={"1px solid #e5e5e5"} p={2} m={1} width={"40%"} textAlign={"center"}>
+                <Heading size="sm" pb={3} color="blue">Active Leads </Heading>
+                <Text fontWeight={600}>{leadData?.filter(lead => lead?.leadStatus === "active")?.length}</Text>
+              </Box>
+            </Flex>
+          }
+          <Flex justifyContent={"center"} m={3}>
+            <PieChart />
+
+          </Flex>
+
+        </Card>
+
+        <Card >1</Card>
+      </SimpleGrid>
 
     </>
   );

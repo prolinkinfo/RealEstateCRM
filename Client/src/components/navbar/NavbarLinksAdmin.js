@@ -24,6 +24,8 @@ import { useNavigate } from "react-router-dom";
 import { getApi } from "services/api";
 import { toast } from "react-toastify";
 import jwtDecode from "jwt-decode";
+import { ThemeEditor } from "./ThemeEditor";
+import FixedPlugin from "components/fixedPlugin/FixedPlugin";
 
 export default function HeaderLinks(props) {
 	const { secondary, setOpenSidebar, openSidebar } = props;
@@ -275,7 +277,7 @@ export default function HeaderLinks(props) {
 					</Flex>
 				</MenuList>
 			</Menu> */}
-
+			{/* <FixedPlugin /> */}
 			{/* <ThemeEditor navbarIcon={navbarIcon} /> */}
 
 			<Menu style={{ zIndex: 1500 }}>

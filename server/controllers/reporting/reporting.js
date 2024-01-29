@@ -70,13 +70,13 @@ const lineChart = async (req, res) => {
     const phoneCallData = phoneCall.filter(item => item.sender !== null);
 
     const result = [
-        { name: "Lead", length: leadData?.length },
-        { name: "Contact", length: contactData?.length },
-        { name: "Property", length: propertyData?.length },
-        { name: "Task", length: taskData?.length },
-        { name: "Meeting", length: meetingHistoryData?.length },
-        { name: "Email", length: emailData?.length },
-        { name: "Call", length: phoneCallData?.length },
+        { name: "Lead", length: leadData?.length, color: "red" },
+        { name: "Contact", length: contactData?.length, color: "blue" },
+        { name: "Property", length: propertyData?.length, color: "green" },
+        { name: "Task", length: taskData?.length, color: "pink" },
+        { name: "Meeting", length: meetingHistoryData?.length, color: "purple" },
+        { name: "Email", length: emailData?.length, color: "yellow" },
+        { name: "Call", length: phoneCallData?.length, color: "cyan" },
     ]
 
     res.send(result)

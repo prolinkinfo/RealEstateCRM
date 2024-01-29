@@ -7,7 +7,7 @@ const ApexChart = () => {
 
   const [chartData, setChartData] = useState([])
 
-  const featchChart = async () => {
+  const fetchChart = async () => {
     // let result = await getApi('api/reporting/line-chart');
     let result = await getApi(user.role === 'superAdmin' ? 'api/reporting/line-chart' : `api/reporting/line-chart?createBy=${user._id}`);
     if (result && result.status === 200) {
@@ -15,7 +15,7 @@ const ApexChart = () => {
     }
   }
   useEffect(() => {
-    featchChart()
+    fetchChart()
   }, [])
 
   const state = {
@@ -26,7 +26,6 @@ const ApexChart = () => {
       }
     ],
     options: {
-
       chart: {
         height: 350,
         type: 'bar',
