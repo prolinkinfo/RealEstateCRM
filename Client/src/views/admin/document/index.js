@@ -173,7 +173,7 @@ const Index = () => {
                             <Text mb='10px' color={'red'}> {errors.filename && touched.filename && errors.filename}</Text>
                         </GridItem>
                         <Upload count={values.files.length} onFileSelect={(file) => setFieldValue('files', file)} />
-                        <Button disabled={isLoding ? true : false} onClick={handleSubmit} variant='brand' fontWeight='500'>
+                        <Button size="sm" disabled={isLoding ? true : false} onClick={handleSubmit} variant='brand' fontWeight='500'>
                             {isLoding ? <Spinner /> : 'Publish now'}
                         </Button>
                     </Card>

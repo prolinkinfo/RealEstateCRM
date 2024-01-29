@@ -192,12 +192,12 @@ const Add = (props) => {
                         </Grid>
                     </DrawerBody>
                     <DrawerFooter>
-                        <Button sx={{ textTransform: "capitalize" }} disabled={isLoding ? true : false} variant="brand" type="submit" onClick={handleSubmit}                        >
+                        <Button sx={{ textTransform: "capitalize" }} size="sm" disabled={isLoding ? true : false} variant="brand" type="submit" onClick={handleSubmit}                        >
                             {isLoding ? <Spinner /> : 'Add Data'}
                         </Button>
                         <Button
                             variant="outline"
-                            colorScheme='red'
+                            colorScheme='red' size="sm"
                             sx={{
                                 marginLeft: 2,
                                 textTransform: "capitalize",

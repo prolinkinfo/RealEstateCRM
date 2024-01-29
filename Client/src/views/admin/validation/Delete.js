@@ -61,8 +61,8 @@ const Delete = (props) => {
                         Are You Sure To Delete selected Validation?
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme="red" mr={2} onClick={handleDeleteClick} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Yes'}</Button>
-                        <Button variant="outline" onClick={handleClose}>No</Button>
+                        <Button colorScheme="red" size="sm" mr={2} onClick={handleDeleteClick} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Yes'}</Button>
+                        <Button variant="outline" size="sm" onClick={handleClose}>No</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

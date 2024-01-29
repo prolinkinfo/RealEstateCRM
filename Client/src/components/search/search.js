@@ -31,6 +31,7 @@ const CustomSearchInput = ({ allData, setSearchbox, setDisplaySearchData, search
                 size="sm"
                 top="-3px"
                 pointerEvents="none"
+                zIndex='0'
                 children={<SearchIcon color="gray.300" borderRadius="16px" />}
             />
             <Input

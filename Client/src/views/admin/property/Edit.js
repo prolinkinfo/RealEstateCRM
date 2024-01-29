@@ -680,7 +680,7 @@ const Edit = (props) => {
 
 
                     <DrawerFooter>
-                        <Button
+                        <Button size="sm"
                             sx={{ textTransform: "capitalize" }}
                             variant="solid"
                             colorScheme="green"
@@ -690,7 +690,7 @@ const Edit = (props) => {
                         >
                             {isLoding ? <Spinner /> : 'Update Data'}
                         </Button>
-                        <Button
+                        <Button size="sm"
                             variant="outline"
                             colorScheme='red'
                             sx={{

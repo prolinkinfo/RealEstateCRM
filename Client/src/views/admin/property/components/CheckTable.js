@@ -600,8 +600,8 @@ export default function CheckTable(props) {
             </Grid>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" colorScheme='green' mr={2} onClick={handleSubmit} disabled={isLoding || !dirty ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
-            <Button colorScheme="red" onClick={() => resetForm()}>Clear</Button>
+            <Button size="sm" variant="outline" colorScheme='green' mr={2} onClick={handleSubmit} disabled={isLoding || !dirty ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
+            <Button size="sm" colorScheme="red" onClick={() => resetForm()}>Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -626,12 +626,12 @@ export default function CheckTable(props) {
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" colorScheme='green' mr={2} onClick={() => {
+            <Button size="sm" variant="outline" colorScheme='green' mr={2} onClick={() => {
               setSelectedColumns(tempSelectedColumns);
               setManageColumns(false);
               resetForm();
             }} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
-            <Button colorScheme="red" onClick={() => resetForm()}>Clear</Button>
+            <Button size="sm" colorScheme="red" onClick={() => resetForm()}>Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

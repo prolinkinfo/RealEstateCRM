@@ -318,10 +318,10 @@ function ChangeAccess(props) {
           </Table>
         </ModalBody>
         <ModalFooter>
-          <Button variant="brand" onClick={handleSubmit}>
+          <Button size="sm" variant="brand" onClick={handleSubmit}>
             Save
           </Button>
-          <Button
+          <Button size="sm"
             onClick={() => { setEditModal(false); setRoleModal(true) }}
             variant="outline"
             colorScheme="red"

@@ -302,7 +302,7 @@ export default function CheckTable(props) {
                 <MenuItem width={"165px"} onClick={() => handleExportTasks('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem>
               </MenuList>
             </Menu>
-            {access?.create && <Button onClick={() => handleClick()} size="sm" variant="brand">Create Task</Button>}
+            {access?.create && <Button size="sm" onClick={() => handleClick()} size="sm" variant="brand">Create Task</Button>}
             {/* {setTaskModel && <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>} */}
           </GridItem>
           <HStack spacing={4}>
@@ -565,8 +565,8 @@ export default function CheckTable(props) {
             </Grid>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" colorScheme='green' mr={2} onClick={handleSubmit} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
-            <Button colorScheme="red" onClick={() => resetForm()}>Clear</Button>
+            <Button size="sm" variant="outline" colorScheme='green' mr={2} onClick={handleSubmit} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
+            <Button size="sm" colorScheme="red" onClick={() => resetForm()}>Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -591,12 +591,12 @@ export default function CheckTable(props) {
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" colorScheme='green' mr={2} onClick={() => {
+            <Button size="sm" variant="outline" colorScheme='green' mr={2} onClick={() => {
               setSelectedColumns(tempSelectedColumns);
               setManageColumns(false);
               resetForm();
             }} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
-            <Button colorScheme="red" onClick={() => resetForm()}>Clear</Button>
+            <Button size="sm" colorScheme="red" onClick={() => resetForm()}>Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

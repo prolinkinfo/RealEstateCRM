@@ -19,6 +19,7 @@ import { HasAccess } from "../../../redux/accessUtils";
 
 const View = () => {
 
+    const user = JSON.parse(localStorage.getItem("user"))
     const param = useParams()
 
     const [data, setData] = useState()
@@ -116,7 +117,7 @@ const View = () => {
                                         margin: "0 5px", border: '2px solid #8080803d', borderTopLeftRadius: "10px", borderTopRightRadius: "10px", borderBottom: 0
                                     },
                                     '& button[aria-selected="true"]': {
-                                        border: "2px solid brand.200", borderBottom: 0
+                                        border: "2px solid brand.200", borderBottom: 0, zIndex: '0'
                                     },
                                 }} >
                                     <Tab >Information</Tab>
@@ -127,21 +128,21 @@ const View = () => {
                             <GridItem  >
                                 <Flex justifyContent={"right"}>
                                     <Menu>
-                                        {(permission?.create || permission?.update || permission?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
+                                        {(user.role === 'superAdmin' || permission?.create || permission?.update || permission?.delete) && <MenuButton variant="outline" size="sm" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
                                             Actions
                                         </MenuButton>}
                                         <MenuDivider />
                                         <MenuList>
-                                            {permission?.create && <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
-                                            {permission?.update && <MenuItem color={'green'} onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
-                                            {permission?.delete && <>
+                                            {user.role === 'superAdmin' || permission?.create && <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
+                                            {user.role === 'superAdmin' || permission?.update && <MenuItem color={'green'} onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
+                                            {user.role === 'superAdmin' || permission?.delete && <>
                                                 <MenuDivider />
                                                 <MenuItem color={'red'} onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
                                             </>}
                                         </MenuList>
                                     </Menu>
                                     <Link to="/properties">
-                                        <Button leftIcon={<IoIosArrowBack />} variant="brand">
+                                        <Button size="sm" leftIcon={<IoIosArrowBack />} variant="brand">
                                             Back
                                         </Button>
                                     </Link>
@@ -369,7 +370,7 @@ const View = () => {
                                                         </Box>
                                                         <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                                             <GridItem colSpan={{ base: 2 }}>
-                                                                <CheckTable columnsData={contactColumns} tableData={filteredContacts} dynamicColumns={dynamicColumns} setDynamicColumns={setDynamicColumns} selectedColumns={selectedColumns} setSelectedColumns={setSelectedColumns} access={contactAccess} emailAccess={emailAccess} callAccess={callAccess} isHide={true} />
+                                                                <CheckTable dataColumn={contactColumns} tableData={filteredContacts} dynamicColumns={dynamicColumns} setDynamicColumns={setDynamicColumns} selectedColumns={selectedColumns} setSelectedColumns={setSelectedColumns} access={contactAccess} emailAccess={emailAccess} callAccess={callAccess} isHide={true} />
                                                             </GridItem>
                                                         </Grid>
                                                     </GridItem>
@@ -392,7 +393,7 @@ const View = () => {
                                                             <Heading size="md" >
                                                                 Property Photos
                                                             </Heading>
-                                                            <Button leftIcon={<AddIcon />} onClick={() => setPropertyPhoto(true)} variant="brand">Add Property Photos</Button>
+                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setPropertyPhoto(true)} variant="brand">Add Property Photos</Button>
                                                             <PropertyPhoto text='Property Photos' fetchData={fetchData} isOpen={propertyPhoto} onClose={setPropertyPhoto} id={param.id} />
                                                         </Flex>
                                                         <HSeparator />
@@ -417,7 +418,7 @@ const View = () => {
                                                             <Heading size="md" >
                                                                 Virtual Tours or Videos
                                                             </Heading>
-                                                            <Button leftIcon={<AddIcon />} onClick={() => setVirtualToursorVideos(true)} variant="brand">Add Virtual Tours or Videos</Button>
+                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setVirtualToursorVideos(true)} variant="brand">Add Virtual Tours or Videos</Button>
                                                             <PropertyPhoto text='Virtual Tours or Videos' fetchData={fetchData} isOpen={virtualToursorVideos} onClose={setVirtualToursorVideos} id={param.id} />
                                                         </Flex>
                                                         <HSeparator />
@@ -449,7 +450,7 @@ const View = () => {
                                                             <Heading size="md" >
                                                                 Floor Plans
                                                             </Heading>
-                                                            <Button leftIcon={<AddIcon />} onClick={() => setFloorPlans(true)} variant="brand">Add Floor Plans</Button>
+                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setFloorPlans(true)} variant="brand">Add Floor Plans</Button>
                                                             <PropertyPhoto text='Floor Plans' fetchData={fetchData} isOpen={floorPlans} onClose={setFloorPlans} id={param.id} />
                                                         </Flex>
                                                         <HSeparator />
@@ -474,7 +475,7 @@ const View = () => {
                                                             <Heading size="md" >
                                                                 Property Documents
                                                             </Heading>
-                                                            <Button leftIcon={<AddIcon />} onClick={() => setPropertyDocuments(true)} variant="brand">Add Property Documents</Button>
+                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setPropertyDocuments(true)} variant="brand">Add Property Documents</Button>
                                                             <PropertyPhoto text='Property Documents' fetchData={fetchData} isOpen={propertyDocuments} onClose={setPropertyDocuments} id={param.id} />
                                                         </Flex>
                                                         <HSeparator />
@@ -499,12 +500,12 @@ const View = () => {
 
                     </Tabs>
 
-                    {(permission?.delete || permission?.update) && <Card mt={3}>
+                    {(permission?.delete || permission?.update || user?.role === 'superAdmin') && <Card mt={3}>
                         <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                             <GridItem colStart={6} >
                                 <Flex justifyContent={"right"}>
-                                    {permission?.update && <Button onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button>}
-                                    {permission?.delete && <Button style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>}
+                                    {permission?.update && <Button onClick={() => setEdit(true)} size="sm" leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button>}
+                                    {permission?.delete && <Button style={{ background: 'red.800' }} size="sm" onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>}
                                 </Flex>
                             </GridItem>
                         </Grid>

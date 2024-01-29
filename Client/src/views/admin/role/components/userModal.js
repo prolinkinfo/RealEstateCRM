@@ -247,7 +247,7 @@ function UserModal(props) {
 
           </ModalBody>
           <ModalFooter>
-            <Button
+            <Button size="sm"
               onClick={() => { setOpenUser(false); setRoleModal(true) }}
               variant="outline"
               colorScheme="red"

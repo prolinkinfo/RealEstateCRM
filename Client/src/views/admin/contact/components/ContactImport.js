@@ -120,7 +120,7 @@ function ContactImport() {
                 const dob = moment(item[values.dob || "dob"]);
                 const phoneNumber = item[values.phoneNumber || 'phoneNumber'] || '';
                 const mobileNumber = item[values.mobileNumber || 'mobileNumber'] || '';
-                const leadRating = item[values.leadRating || 'leadRating' ] || '';
+                const leadRating = item[values.leadRating || 'leadRating'] || '';
 
                 return {
                     firstName: item[values.firstName || "firstName"] || '',
@@ -306,7 +306,7 @@ function ContactImport() {
                 </Table>
             </Box>
             <Box mt={5}>
-                <Button onClick={() => handleSubmit()} variant="brand">Next</Button>
+                <Button onClick={() => handleSubmit()} variant="brand" size="sm">Next</Button>
             </Box>
         </>
     )

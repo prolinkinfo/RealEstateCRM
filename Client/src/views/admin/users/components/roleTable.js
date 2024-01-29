@@ -78,7 +78,7 @@ import RoleModal from "./roleModal";
             lineHeight='100%'>
             {title}  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
           </Text>
-          <Button onClick={() => setRoleModal(true)} leftIcon={<LiaCriticalRole />} colorScheme="gray" >Change Role</Button>
+          <Button onClick={() => setRoleModal(true)} leftIcon={<LiaCriticalRole />} size="sm" colorScheme="gray" >Change Role</Button>
         </Flex>
         <Box overflowY={'auto'} className="table-container-property" >
         <Table  {...getTableProps()} variant='simple' color='gray.500' mb='24px'>

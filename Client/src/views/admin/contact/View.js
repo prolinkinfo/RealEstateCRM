@@ -38,6 +38,8 @@ const View = () => {
 
     const param = useParams()
 
+    const user = JSON.parse(localStorage.getItem("user"));
+
     const [data, setData] = useState([])
     const [allData, setAllData] = useState([]);
     const [contactData, setContactData] = useState([]);
@@ -187,7 +189,7 @@ const View = () => {
                                         margin: "0 5px", border: '2px solid #8080803d', borderTopLeftRadius: "10px", borderTopRightRadius: "10px", borderBottom: 0
                                     },
                                     '& button[aria-selected="true"]': {
-                                        border: "2px solid brand.200", borderBottom: 0
+                                        border: "2px solid brand.200", borderBottom: 0, zIndex: '0'
                                     },
                                 }} >
                                     <Tab >Information</Tab>
@@ -200,23 +202,23 @@ const View = () => {
                             <GridItem  >
                                 <Flex justifyContent={"right"}>
                                     <Menu>
-                                        {(permission?.create || permission?.update || permission?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
+                                        {(user.role === 'superAdmin' || permission?.create || permission?.update || permission?.delete) && <MenuButton size="sm" variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
                                             Actions
                                         </MenuButton>}
                                         <MenuDivider />
                                         <MenuList>
-                                            {permission?.create && <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
-                                            {permission?.update && <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
-                                            {permission?.delete &&
+                                            {(user.role === 'superAdmin' || permission?.create) && <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
+                                            {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => setEdit(true)} color={'green'} icon={<EditIcon />}>Edit</MenuItem>}
+                                            {(user.role === 'superAdmin' || permission?.delete) &&
                                                 <>
                                                     <MenuDivider />
-                                                    <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
+                                                    <MenuItem onClick={() => setDelete(true)} color={'red'} icon={<DeleteIcon />}>Delete</MenuItem>
                                                 </>
                                             }
                                         </MenuList>
                                     </Menu>
                                     <Link to="/contacts">
-                                        <Button leftIcon={<IoIosArrowBack />} variant="brand">
+                                        <Button leftIcon={<IoIosArrowBack />} size="sm" variant="brand">
                                             Back
                                         </Button>
                                     </Link>
@@ -526,38 +528,38 @@ const View = () => {
                                         <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
                                             {emailAccess?.view && <GridItem colSpan={{ base: 12, sm: 6 }}>
                                                 <Card overflow={'scroll'}>
-                                                    {(allData?.EmailHistory && allData?.EmailHistory?.length) ? <ColumnsTable fetchData={fetchData} emailAccess={emailAccess} columnsData={columnsDataColumns} tableData={showEmail ? allData.EmailHistory : [allData.EmailHistory[0]]} title={'Email '} /> : emailAccess?.create && <Button onClick={() => setAddEmailHistory(true)} leftIcon={<BsFillSendFill />} colorScheme="gray" >Send Email </Button>}
+                                                    {(allData?.EmailHistory && allData?.EmailHistory?.length) ? <ColumnsTable fetchData={fetchData} emailAccess={emailAccess} columnsData={columnsDataColumns} tableData={showEmail ? allData.EmailHistory : [allData.EmailHistory[0]]} title={'Email '} /> : emailAccess?.create && <Button onClick={() => setAddEmailHistory(true)} leftIcon={<BsFillSendFill />} colorScheme="gray" size='sm'>Send Email </Button>}
                                                     <AddEmailHistory fetchData={fetchData} setAction={setAction} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} />
                                                     {allData?.EmailHistory?.length > 1 &&
                                                         <div style={{ display: "flex", justifyContent: "end" }}>
-                                                            <Button colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showEmail ? setShowEmail(false) : setShowEmail(true)}>{showEmail ? "Show less" : "Show more"}</Button>
+                                                            <Button colorScheme="brand" variant="outline" size='sm' display="flex" justifyContant="end" onClick={() => showEmail ? setShowEmail(false) : setShowEmail(true)}>{showEmail ? "Show less" : "Show more"}</Button>
                                                         </div>}
                                                 </Card>
                                             </GridItem>}
                                             {callAccess?.view && <GridItem colSpan={{ base: 12, sm: 6 }}>
                                                 <Card overflow={'scroll'}>
-                                                    {allData?.phoneCallHistory?.length > 0 ? <PhoneCall callAccess={callAccess} fetchData={fetchData} columnsData={columnsDataColumns} tableData={showCall ? allData?.phoneCallHistory : [allData?.phoneCallHistory[0]]} title={'Call '} /> : callAccess?.create && <Button onClick={() => setAddPhoneCall(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" > Call </Button>}
+                                                    {allData?.phoneCallHistory?.length > 0 ? <PhoneCall callAccess={callAccess} fetchData={fetchData} columnsData={columnsDataColumns} tableData={showCall ? allData?.phoneCallHistory : [allData?.phoneCallHistory[0]]} title={'Call '} /> : callAccess?.create && <Button onClick={() => setAddPhoneCall(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" size='sm'> Call </Button>}
                                                     <AddPhoneCall fetchData={fetchData} setAction={setAction} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param.id} />
                                                     {allData?.phoneCallHistory?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
-                                                        <Button colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showCall ? setShowCall(false) : setShowCall(true)}>{showCall ? "Show less" : "Show more"}</Button>
+                                                        <Button colorScheme="brand" variant="outline" size='sm' display="flex" justifyContant="end" onClick={() => showCall ? setShowCall(false) : setShowCall(true)}>{showCall ? "Show less" : "Show more"}</Button>
                                                     </div>}
                                                 </Card>
                                             </GridItem>}
                                             {taskAccess?.view && <GridItem colSpan={{ base: 12, sm: 6 }}>
                                                 <Card overflow={'scroll'}>
-                                                    {allData?.task?.length > 0 ? <TaskColumnsTable fetchData={fetchData} columnsData={taskColumns} tableData={showTasks ? allData?.task : [allData?.task[0]]} title={'Task '} action={action} setAction={setAction} access={taskAccess} /> : taskAccess?.create && <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>}
+                                                    {allData?.task?.length > 0 ? <TaskColumnsTable fetchData={fetchData} columnsData={taskColumns} tableData={showTasks ? allData?.task : [allData?.task[0]]} title={'Task '} action={action} setAction={setAction} access={taskAccess} /> : taskAccess?.create && <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" size='sm'>Create Task</Button>}
                                                     <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="contact" id={param.id} />
                                                     {allData?.task?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
-                                                        <Button colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showTasks ? setShowTasks(false) : setShowTasks(true)}>{showTasks ? "Show less" : "Show more"}</Button>
+                                                        <Button colorScheme="brand" variant="outline" size='sm' display="flex" justifyContant="end" onClick={() => showTasks ? setShowTasks(false) : setShowTasks(true)}>{showTasks ? "Show less" : "Show more"}</Button>
                                                     </div>}
                                                 </Card>
                                             </GridItem >}
                                             {meetingAccess?.view && <GridItem colSpan={{ base: 12, sm: 6 }}>
                                                 <Card overflow={'scroll'}>
-                                                    {allData?.meetingHistory?.length > 0 ? <MeetingColumnsTable fetchData={fetchData} columnsData={MeetingColumns} tableData={showMeetings ? allData?.meetingHistory : [allData?.meetingHistory[0]]} title={'Meeting '} action={action} setAction={setAction} access={meetingAccess} /> : meetingAccess?.create && <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>}
+                                                    {allData?.meetingHistory?.length > 0 ? <MeetingColumnsTable fetchData={fetchData} columnsData={MeetingColumns} tableData={showMeetings ? allData?.meetingHistory : [allData?.meetingHistory[0]]} title={'Meeting '} action={action} setAction={setAction} access={meetingAccess} /> : meetingAccess?.create && <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} size='sm' colorScheme="gray" >Add Meeting </Button>}
                                                     <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="contact" id={param.id} setAction={setAction} />
                                                     {allData?.meetingHistory?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
-                                                        <Button colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showMeetings ? setShowMeetings(false) : setShowMeetings(true)}>{showMeetings ? "Show less" : "Show more"}</Button>
+                                                        <Button colorScheme="brand" size='sm' variant="outline" display="flex" justifyContant="end" onClick={() => showMeetings ? setShowMeetings(false) : setShowMeetings(true)}>{showMeetings ? "Show less" : "Show more"}</Button>
                                                     </div>}
                                                 </Card>
                                             </GridItem>}
@@ -594,7 +596,6 @@ const View = () => {
                                     </Card>
                                 </GridItem>
                             </TabPanel>
-
                             <TabPanel pt={4} p={0}>
 
                                 <GridItem colSpan={{ base: 12 }} >
@@ -650,12 +651,12 @@ const View = () => {
                         </TabPanels>
                     </Tabs>
 
-                    {permission?.update || permission?.delete && <Card mt={3}>
+                    {(user.role === 'superAdmin' || (permission?.update || permission?.delete)) && <Card mt={3}>
                         <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                             <GridItem colStart={6} >
                                 <Flex justifyContent={"right"}>
-                                    {permission?.update && <Button onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button>}
-                                    {permission?.delete && <Button style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>}
+                                    {permission?.update && <Button size="sm" onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button>}
+                                    {permission?.delete && <Button size="sm" style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>}
                                 </Flex>
                             </GridItem>
                         </Grid>

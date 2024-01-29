@@ -279,7 +279,7 @@ export default function CheckTable(props) {
                 <MenuItem width={"165px"} onClick={() => handleExportMeetings('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem>
               </MenuList>
             </Menu>
-            {from !== "index" ? (access?.create && <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>) :
+            {from !== "index" ? (access?.create && <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} size="sm" colorScheme="gray" >Add Meeting </Button>) :
               <GridItem colStart={6} textAlign={"right"}>
                 {access?.create && <Button onClick={() => setMeeting(true)} variant="brand" size="sm">Add Meeting</Button>}
               </GridItem>}
@@ -510,8 +510,8 @@ export default function CheckTable(props) {
             </Grid>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" colorScheme='green' mr={2} onClick={handleSubmit} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
-            <Button colorScheme="red" onClick={() => resetForm()}>Clear</Button>
+            <Button variant="outline" colorScheme='green' size="sm" mr={2} onClick={handleSubmit} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
+            <Button colorScheme="red" size="sm" onClick={() => resetForm()}>Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -536,12 +536,12 @@ export default function CheckTable(props) {
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" colorScheme='green' mr={2} onClick={() => {
+            <Button variant="outline" colorScheme='green' size="sm" mr={2} onClick={() => {
               setSelectedColumns(tempSelectedColumns);
               setManageColumns(false);
               resetForm();
             }} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
-            <Button colorScheme="red" onClick={() => resetForm()}>Clear</Button>
+            <Button colorScheme="red" size="sm" onClick={() => resetForm()}>Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
