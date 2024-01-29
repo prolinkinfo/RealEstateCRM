@@ -62,7 +62,6 @@ import { CiMenuKebab } from "react-icons/ci";
 import Edit from "../Edit";
 import ImportModal from "./ImportModal";
 import CustomSearchInput from "components/search/search";
-// import '.\src\assets\css\App.css' 
 
 export default function CheckTable(props) {
   const { columnsData, setAction, tableData, fetchData, dataColumn, access, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, action } = props;
