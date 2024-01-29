@@ -58,6 +58,7 @@ import EditTask from "./editTask";
 import DeleteTask from "./deleteTask";
 import * as XLSX from 'xlsx'
 import { HasAccess } from "../../../../redux/accessUtils";
+import CustomSearchInput from "components/search/search";
 
 export default function CheckTable(props) {
   const { tableData, fetchData, isLoding, allData, dataColumn, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action, className } = props;
@@ -259,6 +260,11 @@ export default function CheckTable(props) {
   useEffect(() => {
     if (fetchData) fetchData()
   }, [action])
+
+  const handleSearch = (results) => {
+    setSearchedData(results);
+  };
+
   return (
     <>
       <Card
@@ -276,38 +282,7 @@ export default function CheckTable(props) {
               >
                 Task  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
               </Text>
-              <InputGroup width={"30%"} mx={3}>
-                <InputLeftElement
-                  size="sm"
-                  top={"-3px"}
-                  pointerEvents="none"
-                  children={<SearchIcon color="gray.300" borderRadius="16px" />}
-                />
-                <Input type="text"
-                  size="sm"
-                  fontSize='sm'
-                  value={searchbox}
-                  onChange={(e) => {
-                    const results = allData.filter((item) => {
-                      for (const key in item) {
-                        if (
-                          item[key] &&
-                          typeof item[key] === "string" &&
-                          item[key].toLowerCase().includes(e.target.value.toLowerCase())
-                        ) {
-                          return true;
-                        }
-                      }
-                      return false;
-                    });
-                    setSearchedData(results)
-                    setSearchbox(e.target.value)
-                    setDisplaySearchData(e.target.value === "" ? false : true)
-
-                  }}
-                  fontWeight='500'
-                  placeholder="Search..." borderRadius="16px" />
-              </InputGroup>
+              <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={dataColumn} onSearch={handleSearch} />
               <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} size="sm">Advance Search</Button>
               {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>clear</Button> : ""}
             </Flex>
