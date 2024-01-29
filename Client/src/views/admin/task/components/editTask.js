@@ -37,6 +37,7 @@ const EditTask = (props) => {
     };
 
     const formik = useFormik({
+        enableReinitialize: true,
         initialValues: initialValues,
         validationSchema: TaskSchema,
         onSubmit: (values, { resetForm }) => {
@@ -45,7 +46,6 @@ const EditTask = (props) => {
     });
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
-
     const EditData = async () => {
         try {
             setIsLoding(true)
@@ -66,10 +66,12 @@ const EditTask = (props) => {
     };
 
     const fetchTaskData = async () => {
+        console.log('11111111111111111111:');
         if (props.id) {
             try {
                 setIsLoding(true)
                 let result = await getApi('api/task/view/', props.id)
+                console.log('EditData response:', result);
 
                 setFieldValue('title', result?.data?.title)
                 setFieldValue('category', result?.data?.category)
@@ -115,12 +117,12 @@ const EditTask = (props) => {
     }, [values.category])
 
     useEffect(() => {
-        getContactDetails()
         fetchTaskData()
-    }, [props.id])
-
+        getContactDetails()
+    }, [props.id, isOpen])
+    console.log(props.id, "props.id")
     return (
-        <Modal isOpen={isOpen} size={'xl'} isCentered={useBreakpointValue({ base: false, md: true })}>
+        <Modal isOpen={isOpen} size={'xl'} >
             {!props.from && <ModalOverlay />}
             <ModalContent>
                 <ModalHeader justifyContent='space-between' display='flex' >

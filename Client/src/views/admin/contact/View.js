@@ -348,7 +348,7 @@ const View = () => {
                                                             <Text>{data?.leadRating ? data?.leadRating : '0'}</Text>
                                                         </Flex>
                                                     </GridItem>
-                                                    <GridItem colSpan={{ base: 2, md: 1 }}>
+                                                    <GridItem colSpan={{ base: 2 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Lead Conversion Probability </Text>
                                                         <Text textTransform={'capitalize'}>{data?.leadConversionProbability ? toCamelCase(data?.leadConversionProbability) : 'N/A'}</Text>
                                                     </GridItem>
@@ -356,7 +356,39 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
-                                    <GridItem colSpan={{ base: 12, md: 6, lg: 4 }} >
+                                    <GridItem colSpan={{ base: 12, md: 6, lg: 4 }}  >
+                                        <Card >
+                                            <Grid templateColumns={{ base: "1fr" }} gap={4}>
+                                                <GridItem colSpan={2}>
+                                                    <Box>
+                                                        <Heading size="md" mb={3}>
+                                                            Additional Personal Information
+                                                        </Heading>
+                                                        <HSeparator />
+                                                    </Box>
+                                                </GridItem>
+                                                <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
+                                                    <GridItem colSpan={{ base: 12, md: 6 }}>
+                                                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Date Of Birth </Text>
+                                                        <Text>{data?.dob ? moment(data?.dob).format('LL') : 'N/A'}</Text>
+                                                    </GridItem>
+                                                    <GridItem colSpan={{ base: 12, md: 6 }}>
+                                                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Gender </Text>
+                                                        <Text>{data?.gender ? data?.gender : 'N/A'}</Text>
+                                                    </GridItem>
+                                                    <GridItem colSpan={{ base: 12 }}>
+                                                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Occupation </Text>
+                                                        <Text>{data?.occupation ? data?.occupation : 'N/A'}</Text>
+                                                    </GridItem>
+                                                    <GridItem colSpan={{ base: 12 }}>
+                                                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Interests Or Hobbies </Text>
+                                                        <Text>{data?.interestsOrHobbies ? data?.interestsOrHobbies : 'N/A'}</Text>
+                                                    </GridItem>
+                                                </Grid>
+                                            </Grid>
+                                        </Card>
+                                    </GridItem>
+                                    {/* <GridItem colSpan={{ base: 12, md: 6, lg: 4 }} >
                                         <Card >
                                             <Grid templateColumns={{ base: "1fr" }} gap={4}>
                                                 <GridItem colSpan={2}>
@@ -375,7 +407,7 @@ const View = () => {
                                                 </Grid>
                                             </Grid>
                                         </Card>
-                                    </GridItem>
+                                    </GridItem> */}
                                     <GridItem colSpan={{ base: 12, md: 6, lg: 4 }} >
                                         <Card >
                                             <Grid templateColumns={{ base: "1fr" }} gap={4}>
@@ -404,33 +436,22 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
-                                    <GridItem colSpan={{ base: 12, md: 6, lg: 4 }}  >
+
+                                    <GridItem colSpan={{ base: 12, md: 6, lg: 4 }} >
                                         <Card >
                                             <Grid templateColumns={{ base: "1fr" }} gap={4}>
                                                 <GridItem colSpan={2}>
                                                     <Box>
                                                         <Heading size="md" mb={3}>
-                                                            Additional Personal Information
+                                                            Tags or Categories
                                                         </Heading>
                                                         <HSeparator />
                                                     </Box>
                                                 </GridItem>
-                                                <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
-                                                    <GridItem colSpan={{ base: 6 }}>
-                                                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Date Of Birth </Text>
-                                                        <Text>{data?.dob ? moment(data?.dob).format('LL') : 'N/A'}</Text>
-                                                    </GridItem>
-                                                    <GridItem colSpan={{ base: 6 }}>
-                                                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Gender </Text>
-                                                        <Text>{data?.gender ? data?.gender : 'N/A'}</Text>
-                                                    </GridItem>
-                                                    <GridItem colSpan={{ base: 6 }}>
-                                                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Occupation </Text>
-                                                        <Text>{data?.occupation ? data?.occupation : 'N/A'}</Text>
-                                                    </GridItem>
-                                                    <GridItem colSpan={{ base: 6 }}>
-                                                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Interests Or Hobbies </Text>
-                                                        <Text>{data?.interestsOrHobbies ? data?.interestsOrHobbies : 'N/A'}</Text>
+                                                <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
+                                                    <GridItem colSpan={{ base: 2 }}>
+                                                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Tags Or Labels For Categorizing Contacts </Text>
+                                                        <Text>{data?.tagsOrLabelsForcategorizingcontacts ? data?.tagsOrLabelsForcategorizingcontacts : 'N/A'}</Text>
                                                     </GridItem>
                                                 </Grid>
                                             </Grid>
@@ -472,11 +493,11 @@ const View = () => {
                                                     </Box>
                                                 </GridItem>
                                                 <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
-                                                    <GridItem colSpan={{ base: 2, md: 1 }}>
+                                                    <GridItem colSpan={{ base: 2 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Communication Frequency </Text>
                                                         <Text>{data?.communicationFrequency ? data?.communicationFrequency : 'N/A'}</Text>
                                                     </GridItem>
-                                                    <GridItem colSpan={{ base: 2, md: 1 }}>
+                                                    <GridItem colSpan={{ base: 2 }}>
                                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Preferences </Text>
                                                         <Text>{data?.preferences ? data?.preferences : 'N/A'}</Text>
                                                     </GridItem>
