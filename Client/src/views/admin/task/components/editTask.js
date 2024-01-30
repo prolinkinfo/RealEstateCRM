@@ -371,8 +371,12 @@ const EditTask = (props) => {
                     }
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' onClick={handleSubmit}>Update</Button>
-                    <Button ml={2} onClick={() => onClose(false)}>Close</Button>
+                    <Button size="sm" variant='brand' onClick={handleSubmit}>Update</Button>
+                    <Button sx={{
+                        marginLeft: 2,
+                        textTransform: "capitalize",
+                    }} variant="outline"
+                        colorScheme="red" size="sm" ml={2} onClick={() => onClose(false)}>Close</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

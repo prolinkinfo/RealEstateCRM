@@ -146,8 +146,8 @@ const Edit = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Update Data'}</Button>
-                    <Button onClick={() => onClose(false)}>close</Button>
+                    <Button size="sm" variant='brand' disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Update Data'}</Button>
+                    <Button size="sm" onClick={() => onClose(false)}>close</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

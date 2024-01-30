@@ -214,8 +214,8 @@ const RoleModal = (props) => {
                     }
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} leftIcon={<AddIcon />}> {isLoding ? <Spinner /> : 'Add'}</Button>
-                    <Button variant="outline"
+                    <Button size="sm" variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} leftIcon={<AddIcon />}> {isLoding ? <Spinner /> : 'Add'}</Button>
+                    <Button size="sm" variant="outline"
                         colorScheme="red"
                         sx={{
                             marginLeft: 2,

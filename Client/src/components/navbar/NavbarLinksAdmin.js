@@ -103,10 +103,12 @@ export default function HeaderLinks(props) {
 		<Flex
 			w={{ sm: "100%", md: "auto" }}
 			alignItems="center"
+			justifyContent={"end"}
 			flexDirection="row"
 			bg={menuBg}
 			flexWrap={secondary ? { base: "wrap", md: "nowrap" } : "unset"}
-			p="10px"
+			p="6px"
+			mt={2.5}
 			borderRadius="30px"
 			boxShadow={shadow}
 		>

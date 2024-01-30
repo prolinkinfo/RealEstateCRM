@@ -256,11 +256,15 @@ const AddPhoneCall = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' leftIcon={<AddIcon />} disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Add'}</Button>
-                    <Button onClick={() => {
-                        formik.resetForm()
-                        onClose()
-                    }}>Close</Button>
+                    <Button variant='brand' size="sm" leftIcon={<AddIcon />} disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Add'}</Button>
+                    <Button size="sm" sx={{
+                        marginLeft: 2,
+                        textTransform: "capitalize",
+                    }} variant="outline"
+                        colorScheme="red" onClick={() => {
+                            formik.resetForm()
+                            onClose()
+                        }}>Close</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

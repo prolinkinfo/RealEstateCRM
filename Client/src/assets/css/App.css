@@ -86,7 +86,11 @@ option {
 .imageCard {
   position: relative;
   overflow: hidden;
+  margin-right: 12px;
+  /* height: 200px;
+  width: 400px; */
 }
+
 
 .imageContent {
   content: "";

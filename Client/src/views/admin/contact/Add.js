@@ -828,14 +828,14 @@ const Add = (props) => {
                             sx={{ textTransform: "capitalize" }}
                             variant="brand"
                             disabled={isLoding ? true : false}
-                            type="submit"
+                            type="submit" size="sm"
                             onClick={handleSubmit}
                         >
                             {isLoding ? <Spinner /> : 'Add Data'}
                         </Button>
                         <Button
                             variant="outline"
-                            colorScheme='red'
+                            colorScheme='red' size="sm"
                             sx={{
                                 marginLeft: 2,
                                 textTransform: "capitalize",

@@ -142,7 +142,7 @@ const View = () => {
                             <GridItem colStart={6} >
                                 <Flex justifyContent={"right"}>
                                     <Button onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" size="sm" colorScheme="green">Edit</Button>
-                                    {data?.role !== 'superAdmin' && JSON.parse(localStorage.getItem('user'))?.role === 'superAdmin' && <Button style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>}
+                                    {data?.role !== 'superAdmin' && JSON.parse(localStorage.getItem('user'))?.role === 'superAdmin' && <Button style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" size="sm">Delete</Button>}
                                 </Flex>
                             </GridItem>
                         </Grid>

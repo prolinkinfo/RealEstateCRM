@@ -52,11 +52,11 @@ const Delete = (props) => {
                     <ModalHeader>Delete {props.method === 'one' ? 'Property' : 'properties'}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        Are You Sure To Delete selated {props.method === 'one' ? 'Property' : 'properties'} ?
+                        Are You Sure To Delete selected {props.method === 'one' ? 'Property' : 'properties'} ?
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme="red" mr={2} onClick={handleDeleteClick} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Yes'}</Button>
-                        <Button variant="outline" onClick={handleClose}>No</Button>
+                        <Button size="sm" colorScheme="red" mr={2} onClick={handleDeleteClick} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Yes'}</Button>
+                        <Button size="sm" variant="outline" onClick={handleClose}>No</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

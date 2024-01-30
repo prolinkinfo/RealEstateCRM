@@ -276,7 +276,7 @@ function LeadImport() {
                 </Table>
             </Box>
             <Box mt={5}>
-                <Button onClick={() => handleSubmit()} variant="brand">Next</Button>
+                <Button size="sm" onClick={() => handleSubmit()} variant="brand">Next</Button>
             </Box>
         </>
     )

@@ -201,11 +201,14 @@ const AddMeeting = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' me={2} leftIcon={<AddIcon />} disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Add'}</Button>
-                    <Button onClick={() => {
-                        formik.resetForm()
-                        onClose()
-                    }}>Close</Button>
+                    <Button size="sm" variant='brand' me={2} leftIcon={<AddIcon />} disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Add'}</Button>
+                    <Button sx={{
+                        textTransform: "capitalize",
+                    }} variant="outline"
+                        colorScheme="red" size="sm" onClick={() => {
+                            formik.resetForm()
+                            onClose()
+                        }}>Close</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>
