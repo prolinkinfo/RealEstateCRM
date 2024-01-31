@@ -8,6 +8,7 @@ import { BiMobile } from 'react-icons/bi';
 import { contactSchema } from 'schema';
 import { postApi } from 'services/api';
 import { generateValidationSchema } from 'utils';
+import CustomForm from 'utils/customForm';
 import * as yup from 'yup'
 
 const Add = (props) => {
@@ -104,8 +105,9 @@ const Add = (props) => {
                         <IconButton onClick={props.onClose} icon={<CloseIcon />} />
                     </DrawerHeader>
                     <DrawerBody>
+                        <CustomForm leadData={props.contactData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
 
-                        <Grid templateColumns="repeat(12, 1fr)" gap={3}>
+                        {/* <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                             {props.contactData.fields?.map(field => (
                                 <GridItem colSpan={{ base: 12, sm: 6 }} key={field?.name}>
                                     {field.type === 'check' ? '' : <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px' htmlFor={field.name}>{field.label} {field.validation && field.validation.find((validation) => validation.require) && (
@@ -186,7 +188,7 @@ const Add = (props) => {
                                 </GridItem>
                             ))}
 
-                        </Grid>
+                        </Grid> */}
 
                         {/* <Grid templateColumns="repeat(12, 1fr)" gap={3}>
 

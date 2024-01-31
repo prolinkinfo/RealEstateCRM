@@ -8,6 +8,7 @@ import { leadSchema } from 'schema';
 import { getApi } from 'services/api';
 import { postApi } from 'services/api';
 import { generateValidationSchema } from 'utils';
+import CustomForm from 'utils/customForm';
 import * as yup from 'yup'
 
 const Add = (props) => {
@@ -96,7 +97,7 @@ const Add = (props) => {
                         <IconButton onClick={props.onClose} icon={<CloseIcon />} />
                     </DrawerHeader>
                     <DrawerBody>
-                        <Grid templateColumns="repeat(12, 1fr)" gap={3}>
+                        {/* <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                             {props?.leadData?.headings?.length > 0 ?
                                 <>
                                     {
@@ -139,7 +140,7 @@ const Add = (props) => {
                                     {props?.leadData?.headings?.length > 0 &&
                                         props?.leadData?.headings?.map((item, ind) => (
                                             <>
-                                                {props?.leadData?.fields?.filter((itm) => itm?.belongsTo !== item?._id)?.map((field) => (
+                                                {props?.leadData?.fields?.filter((itm) => !itm?.belongsTo)?.map((field) => (
                                                     <GridItem colSpan={{ base: 12, sm: 6 }} key={field?.name}>
                                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px' htmlFor={field?.name}>
                                                             {field.label} {field.validation && field.validation.find((validation) => validation.require) && (
@@ -189,7 +190,8 @@ const Add = (props) => {
                                     </GridItem>
                                 ))
                             }
-                        </Grid>
+                        </Grid> */}
+                        <CustomForm leadData={props.leadData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
                     </DrawerBody>
                     <DrawerFooter>
                         <Button sx={{ textTransform: "capitalize" }} size="sm" disabled={isLoding ? true : false} variant="brand" type="submit" onClick={handleSubmit}                        >
