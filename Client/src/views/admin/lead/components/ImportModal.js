@@ -34,7 +34,6 @@ const ImportModal = (props) => {
                 onClose();
                 navigate('/leadImport', { state: { fileData: values.lead } });
             }
-
         } catch (e) {
             console.log(e);
         }
