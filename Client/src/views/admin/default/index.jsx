@@ -91,6 +91,8 @@ export default function UserReports() {
     fetchProgressChart()
   }, [])
 
+
+
   return (
     <>
       <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} gap="20px" mb="20px">
@@ -155,7 +157,7 @@ export default function UserReports() {
         />}
       </SimpleGrid>
 
-      <Grid templateColumns="repeat(12, 1fr)" gap={3}>
+      <Grid Grid templateColumns="repeat(12, 1fr)" gap={3} >
         <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
           <Card>
             <Flex mb={3} alignItems={"center"} justifyContent={"space-between"}>
@@ -239,10 +241,7 @@ export default function UserReports() {
           </Flex>
 
         </Card>
-        <Card >
-          <Heading size="md" pb={3}>Lead Score Board</Heading>
 
-        </Card>
         <Card >
           <Heading size="md" pb={3}>Statistics</Heading>
           {data && data.length > 0 && data?.map((item, i) => (
@@ -258,6 +257,58 @@ export default function UserReports() {
           ))}
         </Card>
 
+        <Card >
+          <Heading size="md" pb={3}>Task Statistics</Heading>
+          <Grid templateColumns="repeat(12, 1fr)" gap={2}>
+            <GridItem colSpan={{ base: 12, md: 6 }}>
+              <Box backgroundColor={"#ebf5ff"}
+                borderRadius={"10px"}
+                p={2} m={1} textAlign={"center"}>
+                <Heading size="sm" pb={3} color={"#1f7eeb"}>Total Tasks </Heading>
+                <Text fontWeight={600} color={"#1f7eeb"}>45</Text>
+              </Box>
+            </GridItem>
+            <GridItem colSpan={{ base: 12, md: 6 }}>
+              <Box backgroundColor={"#eaf9e6"}
+                borderRadius={"10px"}
+                p={2} m={1} textAlign={"center"}>
+                <Heading size="sm" pb={3} color={"#43882f"} >Active Tasks </Heading>
+                <Text fontWeight={600} color={"#43882f"}>68</Text>
+              </Box>
+            </GridItem>
+            <GridItem colSpan={{ base: 12, md: 6 }}>
+              <Box backgroundColor={"#fbf4dd"}
+                borderRadius={"10px"}
+                p={2} m={1} textAlign={"center"}>
+                <Heading size="sm" pb={3} color={"#a37f08"}>Pending Tasks</Heading>
+                <Text fontWeight={600} color={"#a37f08"}>52</Text>
+              </Box>
+            </GridItem>
+
+            <GridItem colSpan={{ base: 12, md: 6 }}>
+              <Box backgroundColor={"#ffeeeb"}
+                borderRadius={"10px"}
+                p={2} m={1} textAlign={"center"}>
+                <Heading size="sm" pb={3} color={"#d6401d"}>Sold Tasks </Heading>
+                <Text fontWeight={600} color={"#d6401d"}>23</Text>
+              </Box>
+            </GridItem>
+
+          </Grid>
+          {data && data.length > 0 && data?.map((item, i) => (
+            <Box my={3}>
+              <Flex justifyContent={"space-between"} alignItems={"center"}>
+                <Flex alignItems={"center"}>
+                  <Box height={"18px"} width={"18px"} lineHeight={"18px"} textAlign={"center"} border={`1px solid ${item.color}`} display={"flex"} justifyContent={"center"} alignItems={"center"} borderRadius={"50%"} margin={"0 auto"} >
+                    <Box backgroundColor={item.color} height={"10px"} width={"10px"} borderRadius={"50%"}></Box>
+                  </Box>
+                  <Text ps={2} fontWeight={"bold"}>{item.name}</Text>
+                </Flex>
+                <Box fontWeight={"bold"}>{item.length}</Box>
+              </Flex>
+            </Box>
+          ))}
+        </Card>
       </SimpleGrid>
 
     </>

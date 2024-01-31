@@ -38,7 +38,8 @@ const ApexChart = (props) => {
             position: 'bottom'
           }
         }
-      }]
+      }],
+      height: 100,
     },
   };
 
@@ -47,7 +48,6 @@ const ApexChart = (props) => {
       <div id="chart">
         <ReactApexChart options={chartState.options} series={chartState.series} type="donut" width={350} />
       </div>
-      <div id="html-dist"></div>
     </div>
   );
 };
