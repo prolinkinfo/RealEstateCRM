@@ -14,55 +14,62 @@ import * as yup from 'yup'
 const Add = (props) => {
     const [isLoding, setIsLoding] = useState(false)
 
-    const initialValues = {
-        firstName: "",
-        lastName: "",
-        title: "",
-        email: "",
-        phoneNumber: "",
-        mobileNumber: "",
-        physicalAddress: "",
-        mailingAddress: "",
-        preferredContactMethod: "",
-        // 2.Lead Source Information
-        leadSource: "",
-        referralSource: "",
-        campaignSource: "",
-        // 3. Status and Classifications
-        leadStatus: "",
-        leadRating: "",
-        leadConversionProbability: "",
-        // 5. History:
-        notesandComments: "",
-        // 6. Tags or Categories
-        tagsOrLabelsForcategorizingcontacts: "",
-        // 7. Important Dates::
-        birthday: "",
-        anniversary: "",
-        keyMilestones: "",
-        // 8. Additional Personal Information
-        dob: "",
-        gender: "",
-        occupation: "",
-        interestsOrHobbies: "",
-        // 9. Preferred  Communication Preferences:
-        communicationFrequency: "",
-        preferences: "",
-        // 10. Social Media Profiles:
-        linkedInProfile: "",
-        facebookProfile: "",
-        twitterHandle: "",
-        otherProfiles: "",
-        // 11. Lead Assignment and Team Collaboration:
-        agentOrTeamMember: "",
-        internalNotesOrComments: "",
-        createBy: JSON.parse(localStorage.getItem('user'))._id,
-    };
+    // const initialValues = {
+    //     firstName: "",
+    //     lastName: "",
+    //     title: "",
+    //     email: "",
+    //     phoneNumber: "",
+    //     mobileNumber: "",
+    //     physicalAddress: "",
+    //     mailingAddress: "",
+    //     preferredContactMethod: "",
+    //     // 2.Lead Source Information
+    //     leadSource: "",
+    //     referralSource: "",
+    //     campaignSource: "",
+    //     // 3. Status and Classifications
+    //     leadStatus: "",
+    //     leadRating: "",
+    //     leadConversionProbability: "",
+    //     // 5. History:
+    //     notesandComments: "",
+    //     // 6. Tags or Categories
+    //     tagsOrLabelsForcategorizingcontacts: "",
+    //     // 7. Important Dates::
+    //     birthday: "",
+    //     anniversary: "",
+    //     keyMilestones: "",
+    //     // 8. Additional Personal Information
+    //     dob: "",
+    //     gender: "",
+    //     occupation: "",
+    //     interestsOrHobbies: "",
+    //     // 9. Preferred  Communication Preferences:
+    //     communicationFrequency: "",
+    //     preferences: "",
+    //     // 10. Social Media Profiles:
+    //     linkedInProfile: "",
+    //     facebookProfile: "",
+    //     twitterHandle: "",
+    //     otherProfiles: "",
+    //     // 11. Lead Assignment and Team Collaboration:
+    //     agentOrTeamMember: "",
+    //     internalNotesOrComments: "",
+    //     createBy: JSON.parse(localStorage.getItem('user'))._id,
+    // };
 
+    const initialFieldValues = Object.fromEntries(props?.contactData?.fields?.map(field => [field.name, '']))
+
+    const initialValues = {
+        ...initialFieldValues,
+        createBy: JSON.parse(localStorage.getItem('user'))._id
+    };
+    
     const formik = useFormik({
         // initialValues: initialValues,
         // validationSchema: contactSchema,
-        initialValues: Object.fromEntries(props?.contactData?.fields?.map(field => [field.name, ''])),
+        initialValues: initialValues,
         validationSchema: yup.object().shape(generateValidationSchema(props?.contactData?.fields)),
         onSubmit: (values, { resetForm }) => {
             // AddData();

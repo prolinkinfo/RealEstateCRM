@@ -48,17 +48,19 @@ const Add = (props) => {
     //     createBy: JSON.parse(localStorage.getItem('user'))._id,
     // };
 
-    const initialValues = props?.leadData?.fields?.reduce((acc, field) => {
-        acc[field.name] = '';
-        return acc;
-    }, {});
+    const initialFieldValues = Object.fromEntries(props?.leadData?.fields?.map(field => [field.name, '']))
+
+    const initialValues = {
+        ...initialFieldValues,
+        createBy: JSON.parse(localStorage.getItem('user'))._id
+    };
 
     const formik = useFormik({
-        initialValues: Object.fromEntries(props?.leadData?.fields?.map(field => [field.name, ''])),
+        initialValues: initialValues,
         // validationSchema: validationSchema,
         validationSchema: yup.object().shape(generateValidationSchema(props?.leadData?.fields)),
         onSubmit: (values, { resetForm }) => {
-            // AddData();
+            AddData();
             console.log(values)
         },
     });
@@ -211,7 +213,7 @@ const Add = (props) => {
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>
-        </div >
+        </div>
     )
 }
 
