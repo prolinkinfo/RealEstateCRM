@@ -334,7 +334,10 @@ const Edit = (props) => {
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme="brand" size='sm' mr={2} disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Update'}</Button>
-                        <Button variant="outline" size='sm' onClick={onClose}>Cancel</Button>
+                        <Button sx={{
+                            textTransform: "capitalize",
+                        }} variant="outline"
+                            colorScheme="red" size="sm" onClick={onClose}>Cancel</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
