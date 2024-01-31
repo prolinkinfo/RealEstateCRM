@@ -212,7 +212,7 @@ export default function UserReports() {
                   borderRadius={"10px"}
                   p={2} m={1} textAlign={"center"}>
                   <Heading size="sm" pb={3} color={"#43882f"} >Active Leads </Heading>
-                  <Text fontWeight={600} color={"#43882f"}>{leadData && leadData.length > 0 && leadData?.filter(lead => lead?.leadStatus === "active")?.length}</Text>
+                  <Text fontWeight={600} color={"#43882f"}>{leadData && leadData.length > 0 && leadData?.filter(lead => lead?.leadStatus === "active")?.length || 0}</Text>
                 </Box>
               </GridItem>
               <GridItem colSpan={{ base: 12, md: 6 }}>
@@ -220,7 +220,7 @@ export default function UserReports() {
                   borderRadius={"10px"}
                   p={2} m={1} textAlign={"center"}>
                   <Heading size="sm" pb={3} color={"#a37f08"}>Pending Leads</Heading>
-                  <Text fontWeight={600} color={"#a37f08"}>{leadData && leadData.length > 0 && leadData?.filter(lead => lead?.leadStatus === "pending")?.length}</Text>
+                  <Text fontWeight={600} color={"#a37f08"}>{leadData && leadData.length > 0 && leadData?.filter(lead => lead?.leadStatus === "pending")?.length || 0}</Text>
                 </Box>
               </GridItem>
 
@@ -229,7 +229,7 @@ export default function UserReports() {
                   borderRadius={"10px"}
                   p={2} m={1} textAlign={"center"}>
                   <Heading size="sm" pb={3} color={"#d6401d"}>Sold Leads </Heading>
-                  <Text fontWeight={600} color={"#d6401d"}>{leadData && leadData.length > 0 && leadData?.filter(lead => lead?.leadStatus === "sold")?.length}</Text>
+                  <Text fontWeight={600} color={"#d6401d"}>{leadData && leadData.length > 0 && leadData?.filter(lead => lead?.leadStatus === "sold")?.length || 0}</Text>
                 </Box>
               </GridItem>
 
