@@ -192,42 +192,72 @@ export default function UserReports() {
         </GridItem>
       </Grid>
       <SimpleGrid gap="20px" columns={{ base: 1, md: 2, lg: 3 }} my="20px">
+
+        <Card>
+          <Heading size="md" pb={2}>Lead Statistics</Heading>
+          {(leadView?.create || leadView?.update || leadView?.delete || leadView?.view) &&
+            <Grid templateColumns="repeat(12, 1fr)" gap={2}>
+              <GridItem colSpan={{ base: 12, md: 6 }}>
+                <Box backgroundColor={"#ebf5ff"}
+                  borderRadius={"10px"}
+                  p={2} m={1} textAlign={"center"}>
+                  <Heading size="sm" pb={3} color={"#1f7eeb"}>Total Leads </Heading>
+                  <Text fontWeight={600} color={"#1f7eeb"}>{leadData?.length || 0}</Text>
+                </Box>
+              </GridItem>
+              <GridItem colSpan={{ base: 12, md: 6 }}>
+                <Box backgroundColor={"#eaf9e6"}
+                  borderRadius={"10px"}
+                  p={2} m={1} textAlign={"center"}>
+                  <Heading size="sm" pb={3} color={"#43882f"} >Active Leads </Heading>
+                  <Text fontWeight={600} color={"#43882f"}>{leadData && leadData.length > 0 && leadData?.filter(lead => lead?.leadStatus === "active")?.length}</Text>
+                </Box>
+              </GridItem>
+              <GridItem colSpan={{ base: 12, md: 6 }}>
+                <Box backgroundColor={"#fbf4dd"}
+                  borderRadius={"10px"}
+                  p={2} m={1} textAlign={"center"}>
+                  <Heading size="sm" pb={3} color={"#a37f08"}>Pending Leads</Heading>
+                  <Text fontWeight={600} color={"#a37f08"}>{leadData && leadData.length > 0 && leadData?.filter(lead => lead?.leadStatus === "pending")?.length}</Text>
+                </Box>
+              </GridItem>
+
+              <GridItem colSpan={{ base: 12, md: 6 }}>
+                <Box backgroundColor={"#ffeeeb"}
+                  borderRadius={"10px"}
+                  p={2} m={1} textAlign={"center"}>
+                  <Heading size="sm" pb={3} color={"#d6401d"}>Sold Leads </Heading>
+                  <Text fontWeight={600} color={"#d6401d"}>{leadData && leadData.length > 0 && leadData?.filter(lead => lead?.leadStatus === "sold")?.length}</Text>
+                </Box>
+              </GridItem>
+
+            </Grid>
+
+          }
+          <Flex justifyContent={"center"} m={3} >
+            <PieChart leadData={leadData} />
+          </Flex>
+
+        </Card>
+        <Card >
+          <Heading size="md" pb={3}>Lead Score Board</Heading>
+
+        </Card>
         <Card >
           <Heading size="md" pb={3}>Statistics</Heading>
-          {data?.map((item, i) => (
-            <Box border={"1px solid #e5e5e5"} p={2} m={1}>
+          {data && data.length > 0 && data?.map((item, i) => (
+            <Box border={"1px solid #e5e5e5"} p={2} m={1} key={i}>
               <Flex justifyContent={"space-between"}>
                 <Text fontSize="sm" fontWeight={600} pb={2}>{item?.name}</Text>
                 <Text fontSize="sm" fontWeight={600} pb={2}>{item?.length}</Text>
               </Flex>
               <Progress
                 colorScheme={item?.color}
-                size='sm' value={item?.length} width={"100%"} />
+                size='xs' value={item?.length} width={"100%"} />
             </Box>
           ))}
         </Card>
-        <Card>
-          <Heading size="md" pb={3}>Lead Statistics</Heading>
-          {(leadView?.create || leadView?.update || leadView?.delete || leadView?.view) &&
-            <Flex justifyContent={"space-evenly"}>
-              <Box border={"1px solid #e5e5e5"} p={2} m={1} width={"40%"} textAlign={"center"}>
-                <Heading size="sm" color="blue" pb={3}>Total Leads</Heading>
-                <Text fontWeight={600}>{leadData?.length || 0}</Text>
-              </Box>
-              <Box border={"1px solid #e5e5e5"} p={2} m={1} width={"40%"} textAlign={"center"}>
-                <Heading size="sm" pb={3} color="blue">Active Leads </Heading>
-                <Text fontWeight={600}>{leadData?.filter(lead => lead?.leadStatus === "active")?.length}</Text>
-              </Box>
-            </Flex>
-          }
-          <Flex justifyContent={"center"} m={3}>
-            <PieChart />
 
-          </Flex>
-
-        </Card>
-
-        <Card >1</Card>
       </SimpleGrid>
 
     </>

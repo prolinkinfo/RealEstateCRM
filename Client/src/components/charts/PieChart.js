@@ -1,70 +1,33 @@
-// import React from "react";
-// import ReactApexChart from "react-apexcharts";
-
-// class PieChart extends React.Component {
-//   constructor(props) {
-//     super(props);
-
-//     this.state = {
-//       chartData: [],
-//       chartOptions: {},
-//     };
-//   }
-
-//   componentDidMount() {
-//     this.setState({
-//       chartData: this.props.chartData,
-//       chartOptions: this.props.chartOptions,
-//     });
-//   }
-
-//   render() {
-//     return (
-//       <ReactApexChart
-//         options={this.state.chartOptions}
-//         series={this.state.chartData}
-//         type='pie'
-//         width='100%'
-//         height='55%'
-//       />
-//     );
-//   }
-// }
-
-// export default PieChart;
-
-
 import React from "react";
 import ReactApexChart from "react-apexcharts";
 
-const ApexChart = () => {
-  const [chartState, setChartState] = React.useState({
-    series: [44, 41, 17],
-    chartOptions: {
-      labels: ['Apple', 'Mango', 'Orange']
-    },
+const ApexChart = (props) => {
+  const { leadData } = props;
+  let activeLength = leadData && leadData.length > 0 ? leadData?.filter(lead => lead?.leadStatus === "active")?.length : 0;
+  let pendingLength = leadData && leadData.length > 0 ? leadData?.filter(lead => lead?.leadStatus === "pending")?.length : 0;
+  let soldLength = leadData && leadData.length > 0 ? leadData?.filter(lead => lead?.leadStatus === "sold")?.length : 0;
+
+  const chartState = {
+    series: [activeLength, pendingLength, soldLength],
     options: {
+      labels: ['Active', 'Pending', 'Sold'],
+      legend: {
+        formatter: function (val, opts) {
+          const seriesIndex = opts.seriesIndex;
+          return chartState.options.labels[seriesIndex]
+        },
+        position: 'bottom'
+      },
       chart: {
-        width: 380,
         type: 'donut',
       },
-      plotOptions: {
-        pie: {
-          startAngle: -90,
-          endAngle: 270
-        }
-      },
       dataLabels: {
-        enabled: false
+        enabled: true
       },
-      colors: ["#ff5959", "#ECC94B", "#02B574"],
+      colors: ["#02B574", "#ECC94B", "#ff5959"],
       fill: {
         type: 'gradient',
       },
-      legend: {
-        position: 'bottom'
-      },
-
       responsive: [{
         breakpoint: 480,
         options: {
@@ -77,12 +40,12 @@ const ApexChart = () => {
         }
       }]
     },
-  });
+  };
 
   return (
     <div>
       <div id="chart">
-        <ReactApexChart options={chartState.options} series={chartState.series} type="donut" width={380} />
+        <ReactApexChart options={chartState.options} series={chartState.series} type="donut" width={350} />
       </div>
       <div id="html-dist"></div>
     </div>
