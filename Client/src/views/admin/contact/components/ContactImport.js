@@ -72,8 +72,7 @@ function ContactImport() {
         { Header: "Twitter Username", accessor: "twitterHandle" },
         { Header: "Other Social Media Profiles URL", accessor: "otherProfiles" },
         { Header: "Assigned Agent or Team Member", accessor: "agentOrTeamMember" },
-        { Header: "Internal Notes or Comments for Team Collaboration", accessor: "internalNotesOrComments" },
-        { Header: "Lead Deleted", accessor: "deleted" },
+        { Header: "Internal Notes or Comments for Team Collaboration", accessor: "internalNotesOrComments" }
     ];
 
     const initialValues = {
@@ -257,7 +256,8 @@ function ContactImport() {
         }
     }, [fileData]);
 
-    const filterLead = fieldsInCrm.filter(field => importedFileFields.find(data => field.accessor === data || field.Header === data))
+    // const filterLead = fieldsInCrm.filter(field => importedFileFields.find(data => field.accessor === data || field.Header === data))
+    const filterLead = importedFileFields.filter(field => fieldsInCrm.find(data => field === data.accessor || field === data.Header))
 
     return (
         <>
@@ -266,7 +266,7 @@ function ContactImport() {
                     fontSize="22px"
                     fontWeight="700"
                     mb='20px'
-                >Import Leads</Text>
+                >Import Contacts</Text>
                 {/* <Table variant="simple" color="gray.500" mb="24px">
                     <Thead pe="10px" borderColor={borderColor}>
                         <Tr>
@@ -340,7 +340,7 @@ function ContactImport() {
                                         name={item.accessor}
                                         onChange={handleChange}
                                     >
-                                        <option value=''> {importedFileFields ? filterLead.map((data) => data.accessor)[index] ? filterLead.map((data) => data.accessor)[index] : 'Select Field In File' : 'Select Field In File'}</option>
+                                        <option value=''> {filterLead ? filterLead.find((data) => (item.Header === data || item.accessor === data) && data) ? filterLead.find((data) => (item.Header === data || item.accessor === data) && data) : 'Select Field In File' : 'Select Field In File'}</option>
                                         {
                                             importedFileFields?.map(field => (
                                                 <option value={field} key={field}>{field}</option>
