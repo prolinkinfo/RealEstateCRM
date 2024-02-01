@@ -96,6 +96,7 @@ export default function AdminNavbar(props) {
 				xl: openSidebar === true ? 'calc(100vw - 267px)' : 'calc(100vw - 80px)',
 				'2xl': openSidebar === true ? 'calc(100vw - 267px)' : 'calc(100vw - 80px)'
 			}}
+			sx={{ boxShadow: '0 4px 2px -2px rgba(0, 0, 0, 0.2)' }}
 		>
 			<Flex
 				w='100%'
