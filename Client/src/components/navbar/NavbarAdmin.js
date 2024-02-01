@@ -76,7 +76,7 @@ export default function AdminNavbar(props) {
 			lineHeight='25.6px'
 			mx='auto'
 			mt={secondaryMargin}
-			pb='8px'
+			pb='6px'
 			right={{ base: '0px' }}
 			// right={{ base: '12px', md: '30px', lg: '30px', xl: '30px' }}
 			px={{
@@ -93,10 +93,10 @@ export default function AdminNavbar(props) {
 				base: 'calc(100vw - 0%)',
 				md: 'calc(100vw - 0%)',
 				lg: 'calc(100vw - 0%)',
-				xl: openSidebar === true ? 'calc(100vw - 267px)' : 'calc(100vw - 80px)',
-				'2xl': openSidebar === true ? 'calc(100vw - 267px)' : 'calc(100vw - 80px)'
+				xl: openSidebar === true ? 'calc(100vw - 286px)' : 'calc(100vw - 80px)',
+				'2xl': openSidebar === true ? 'calc(100vw - 286px)' : 'calc(100vw - 80px)'
 			}}
-			sx={{ boxShadow: '0 4px 2px -2px rgba(0, 0, 0, 0.2)' }}
+			sx={{ boxShadow: '0 2px 3px -1px rgba(0, 0, 0, 0.2)' }}
 		>
 			<Flex
 				w='100%'
