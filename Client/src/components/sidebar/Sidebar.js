@@ -98,7 +98,7 @@ export function SidebarResponsive(props) {
         placement={document.documentElement.dir === "rtl" ? "right" : "left"}
         finalFocusRef={btnRef}>
         <DrawerOverlay />
-        <DrawerContent w='285px' maxW='285px' bg={sidebarBackgroundColor}>
+        <DrawerContent boxShadow={'xl'} w='285px' maxW='285px' bg={sidebarBackgroundColor}>
           <DrawerCloseButton
             zIndex='3'
             onClose={handlesidebarClose}
