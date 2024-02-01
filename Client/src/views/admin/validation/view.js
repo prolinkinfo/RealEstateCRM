@@ -6,15 +6,21 @@ import Spinner from 'components/spinner/Spinner'
 import React, { useEffect, useState } from 'react'
 import { useParams } from "react-router-dom";
 import { getApi } from 'services/api';
+import Edit from './Edit';
 
 
 
-const Edit = (props) => {
-    const { onClose, isOpen, selectedId } = props;
+const View = (props) => {
+    const { onClose, isOpen, selectedId, fetchData, setAction } = props;
     const [isLoding, setIsLoding] = useState(false)
     const [data, setData] = useState(false)
+    const [editModal, setEditModal] = useState(false)
 
-    const fetchData = async () => {
+    const handleEditClose = () => {
+        setEditModal(false)
+    }
+
+    const fetchViewData = async () => {
         setIsLoding(true)
         try {
             if (selectedId) {
@@ -28,8 +34,8 @@ const Edit = (props) => {
         }
     }
     useEffect(() => {
-        fetchData()
-    }, [selectedId])
+        fetchViewData()
+    }, [selectedId, editModal])
 
     return (
         <div>
@@ -170,11 +176,11 @@ const Edit = (props) => {
                                     <Flex>
                                         <Text fontWeight={"bold"} pr={2} textTransform={"capitalize"}>FormikType :</Text>
                                         <Text >
-                                            {data?.validations && data?.validations?.length > 0 && data?.validations[4]?.formikType === true ? "True" : "False"}
+                                            {data?.validations && data?.validations?.length > 0 && data?.validations[4]?.formikType ? "True" : "False"}
                                         </Text>
                                     </Flex>
                                 </GridItem>
-                                {data?.validations && data?.validations?.length > 0 && data?.validations[4]?.formikType === true &&
+                                {data?.validations && data?.validations?.length > 0 && data?.validations[4]?.formikType &&
                                     <GridItem colSpan={{ base: 12 }} >
                                         <Flex>
                                             <Text display='flex' ms='4px' fontSize='sm' fontWeight={"bold"} mb="0">
@@ -193,13 +199,14 @@ const Edit = (props) => {
                         </Box>
                     </ModalBody>
                     <ModalFooter>
-                        <Button variant="outline" colorScheme='green' size='sm' me={2} onClick={onClose} leftIcon={<EditIcon />}>Edit</Button>
+                        <Button variant="outline" colorScheme='green' size='sm' me={2} onClick={() => { onClose(); setEditModal(true) }} leftIcon={<EditIcon />}>Edit</Button>
                         <Button colorScheme="red" size='sm' mr={2} disabled={isLoding ? true : false} leftIcon={<DeleteIcon />} >{isLoding ? <Spinner /> : 'Delete'}</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
+            <Edit isOpen={editModal} onClose={handleEditClose} selectedId={props.selectedId} editdata={data} setAction={setAction} fetchData={fetchData} fetchViewData={fetchViewData} />
         </div>
     )
 }
 
-export default Edit
+export default View

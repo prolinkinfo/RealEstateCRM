@@ -134,7 +134,7 @@ const Index = () => {
             <Edit isOpen={editModal} onClose={handleEditClose} selectedId={selectedId} editdata={editdata} setAction={setAction} fetchData={fetchData} />
             <Delete method='one' isOpen={deleteModal} onClose={handleDeleteClose} selectedId={selectedId} fetchData={fetchData} />
             <Delete method='many' isOpen={deleteMany} onClose={setDeleteMany} selectedId={selectedId} fetchData={fetchData} setSelectedValues={setSelectedValues} data={selectedValues} />
-            <View isOpen={viewModal} onClose={handleViewClose} selectedId={selectedId} />
+            <View isOpen={viewModal} onClose={handleViewClose} selectedId={selectedId} setAction={setAction} fetchData={fetchData} />
         </div>
     )
 }

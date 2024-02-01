@@ -142,7 +142,15 @@ const Add = (props) => {
                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                     <Flex>
                                         <Checkbox colorScheme="brandScheme" me="10px"
-                                            onChange={(e) => setFieldValue(`validations[${0}].require`, e.target.checked)}
+                                            isChecked={values?.validations[0]?.require}
+                                            onChange={(e) => {
+                                                const isChecked = e.target.checked;
+                                                setFieldValue(`validations[${0}].require`, isChecked);
+                                                setFieldValue(
+                                                    'validations[0].message',
+                                                    isChecked ? values?.validations[0]?.message : ''
+                                                );
+                                            }}
                                         />
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
                                             Require
@@ -167,7 +175,18 @@ const Add = (props) => {
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                     <Flex>
-                                        <Checkbox colorScheme="brandScheme" name={`validations[${1}].min`} me="10px" onChange={(e) => setFieldValue(`validations[${1}].min`, e.target.checked)} />
+                                        <Checkbox colorScheme="brandScheme" name={`validations[${1}].min`} me="10px" isChecked={values?.validations[1]?.min} onChange={(e) => {
+                                            const isChecked = e.target.checked;
+                                            setFieldValue(`validations[${1}].min`, isChecked);
+                                            setFieldValue(
+                                                'validations[1].message',
+                                                isChecked ? values?.validations[1]?.message : ''
+                                            );
+                                            setFieldValue(
+                                                'validations[1].value',
+                                                isChecked ? values?.validations[1]?.value : ''
+                                            );
+                                        }} />
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
                                             Min
                                         </FormLabel>
@@ -206,7 +225,18 @@ const Add = (props) => {
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                     <Flex>
-                                        <Checkbox colorScheme="brandScheme" me="10px" name={`validations[${2}].max`} onChange={(e) => setFieldValue(`validations[${2}].max`, e.target.checked)} />
+                                        <Checkbox colorScheme="brandScheme" isChecked={values?.validations[1]?.max} onChange={(e) => {
+                                            const isChecked = e.target.checked;
+                                            setFieldValue(`validations[${2}].max`, isChecked);
+                                            setFieldValue(
+                                                'validations[2].message',
+                                                isChecked ? values?.validations[2]?.message : ''
+                                            );
+                                            setFieldValue(
+                                                'validations[2].value',
+                                                isChecked ? values?.validations[2]?.value : ''
+                                            )
+                                        }} />
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
                                             Max
                                         </FormLabel>
@@ -246,7 +276,18 @@ const Add = (props) => {
 
                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                     <Flex>
-                                        <Checkbox colorScheme="brandScheme" me="10px" name={`validations[${3}].match`} onChange={(e) => setFieldValue(`validations[${3}].match`, e.target.checked)} />
+                                        <Checkbox colorScheme="brandScheme" isChecked={values?.validations[3]?.match} me="10px" name={`validations[${3}].match`} onChange={(e) => {
+                                            const isChecked = e.target.checked;
+                                            setFieldValue(`validations[${3}].match`, isChecked);
+                                            setFieldValue(
+                                                'validations[3].message',
+                                                isChecked ? values?.validations[3]?.message : ''
+                                            );
+                                            setFieldValue(
+                                                'validations[3].value',
+                                                isChecked ? values?.validations[3]?.value : ''
+                                            );
+                                        }} />
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
                                             Match
                                         </FormLabel>
@@ -287,7 +328,18 @@ const Add = (props) => {
 
                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                     <Flex>
-                                        <Checkbox colorScheme="brandScheme" name={`validations[${4}].types`} me="10px" onChange={(e) => setFieldValue(`validations[${4}].types`, e.target.checked)} />
+                                        <Checkbox colorScheme="brandScheme" isChecked={values.validations[4].types} name={`validations[${4}].types`} me="10px" onChange={(e) => {
+                                            const isChecked = e.target.checked;
+                                            setFieldValue(`validations[${4}].types`, isChecked);
+                                            setFieldValue(
+                                                'validations[4].formikType',
+                                                isChecked ? values?.validations[4]?.formikType : ''
+                                            );
+                                            setFieldValue(
+                                                'validations[4].message',
+                                                isChecked ? values?.validations[4]?.message : ''
+                                            );
+                                        }} />
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
                                             Formik Type
                                         </FormLabel>
@@ -308,12 +360,16 @@ const Add = (props) => {
                                         borderColor={errors?.validations && touched?.validations && errors?.validations[4]?.formikType && touched?.validations[4]?.formikType ? "red.300" : null}
                                     >
                                         <option value='string'>String </option>
-                                        <option value='number'>Number </option>
-                                        <option value='boolean'>Boolean </option>
+                                        <option value='email'>Email </option>
                                         <option value='date'>Date </option>
+                                        <option value='number'>Number </option>
                                         <option value='object'>Object </option>
                                         <option value='array'>Array </option>
-                                        <option value='mixed'>Mixed  </option>
+                                        <option value='url'>Url </option>
+                                        <option value='boolean'>Boolean </option>
+                                        <option value='positive'>Positive </option>
+                                        <option value='negative'>Negative  </option>
+                                        <option value='integer'>Integer  </option>
                                     </Select>
                                     <Text mb='10px' color={'red'}> {errors?.validations && touched?.validations && touched?.validations[4]?.formikType && errors?.validations[4]?.formikType}</Text>
                                 </GridItem>
