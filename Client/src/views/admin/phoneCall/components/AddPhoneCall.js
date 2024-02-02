@@ -122,6 +122,7 @@ const AddPhoneCall = (props) => {
                             <Input
                                 type='datetime-local'
                                 fontSize='sm'
+                                min={values.startDate}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 value={values.endDate}

@@ -263,6 +263,7 @@ const EditTask = (props) => {
                                 <Input
                                     type={isChecked ? 'date' : 'datetime-local'}
                                     fontSize='sm'
+                                    min={values.start}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.end}
