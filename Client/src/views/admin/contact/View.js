@@ -495,7 +495,7 @@ const View = () => {
                                                             <Heading size="md">
                                                                 Property of Interest
                                                             </Heading>
-                                                            <Button onClick={() => setPropertyModel(true)} leftIcon={<LuBuilding2 />} colorScheme="gray" >Select Interested Property  </Button>
+                                                            <Button onClick={() => setPropertyModel(true)} leftIcon={<LuBuilding2 />} size="sm" colorScheme="gray" >Select Interested Property  </Button>
                                                             <PropertyModel fetchData={fetchData} isOpen={propertyModel} onClose={setPropertyModel} id={param.id} interestProperty={data?.interestProperty} />
                                                         </Flex>
                                                         <HSeparator />
