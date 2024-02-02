@@ -30,7 +30,7 @@ import AddMeeting from "./Addmeeting";
 
 export default function ColumnsTable(props) {
     const { columnsData, tableData, title, fetchData, action, setAction, access } = props;
-
+    const buttonbg = useColorModeValue("gray.200", "white");
     const columns = useMemo(() => columnsData, [columnsData]);
     const data = useMemo(() => tableData, [tableData]);
     const [meetingModel, setMeetingModel] = useState(false);
@@ -94,7 +94,7 @@ export default function ColumnsTable(props) {
                     lineHeight='100%'>
                     {title}  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
                 </Text>
-                <Button size="sm" onClick={() => setMeetingModel(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>
+                <Button size="sm" onClick={() => setMeetingModel(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" bg={buttonbg}>Add Meeting </Button>
                 <AddMeeting fetchData={fetchData} isOpen={meetingModel} onClose={setMeetingModel} from="lead" id={param.id} setAction={setAction} />
             </Flex>
             <Box overflowY={'auto'} className="table-container p0" >

@@ -30,7 +30,7 @@ import AddTask from "./addTask";
 
 export default function ColumnsTable(props) {
     const { columnsData, tableData, title, fetchData, action, setAction, access } = props;
-
+    const buttonbg = useColorModeValue("gray.200", "white");
     const columns = useMemo(() => columnsData, [columnsData]);
     const data = useMemo(() => tableData, [tableData]);
     const [id, setId] = useState();
@@ -101,7 +101,7 @@ export default function ColumnsTable(props) {
                     lineHeight='100%'>
                     {title}  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
                 </Text>
-                <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" size="sm">Create Task</Button>
+                <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" size="sm" bg={buttonbg}>Create Task</Button>
                 <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="lead" id={param.id} />
             </Flex>
             <Box overflowY={'auto'} className="table-container p0" >

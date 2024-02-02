@@ -70,7 +70,7 @@ export default function ColumnsTable(props) {
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   const param = useParams()
-
+  const buttonbg = useColorModeValue("gray.200", "white");
   useEffect(() => {
     // Update gopageValue only after the initial render 
     if (gopageValue === undefined && pageOptions.length < gopageValue) {
@@ -94,7 +94,7 @@ export default function ColumnsTable(props) {
           lineHeight='100%'>
           {title}  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
         </Text>
-        {emailAccess?.create && <Button size="sm" onClick={() => setAddEmailHistory(true)} rightIcon={<BsFillSendFill />} colorScheme="gray" >Send Email</Button>}
+        {emailAccess?.create && <Button size="sm" onClick={() => setAddEmailHistory(true)} rightIcon={<BsFillSendFill />} colorScheme="gray" bg={buttonbg}>Send Email</Button>}
         <AddEmailHistory lead={props.lead} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} />
       </Flex>
       <Box overflowY={'auto'} className="table-container p0" >
