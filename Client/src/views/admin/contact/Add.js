@@ -840,7 +840,7 @@ const Add = (props) => {
                             type="submit" size="sm"
                             onClick={handleSubmit}
                         >
-                            {isLoding ? <Spinner /> : 'Add Data'}
+                            {isLoding ? <Spinner /> : 'Save'}
                         </Button>
                         <Button
                             variant="outline"
@@ -851,7 +851,7 @@ const Add = (props) => {
                             }}
                             onClick={handleCancel}
                         >
-                            Cancel
+                            Close
                         </Button>
                     </DrawerFooter>
 

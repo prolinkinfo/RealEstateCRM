@@ -45,7 +45,7 @@ import {
 import * as XLSX from 'xlsx'
 
 // Custom components
-import { DeleteIcon, EditIcon, EmailIcon, PhoneIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
+import { AddIcon, DeleteIcon, EditIcon, EmailIcon, PhoneIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
 import Card from "components/card/Card";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
 import Pagination from "components/pagination/Pagination";
@@ -318,7 +318,7 @@ export default function CheckTable(props) {
                 </MenuList>
               </Menu>
             }
-            {!isHide && access?.create && <Button onClick={() => handleClick()} size={"sm"} variant="brand">Add Contact</Button>}
+            {!isHide && access?.create && <Button onClick={() => handleClick()} size={"sm"} variant="brand" leftIcon={<AddIcon />}>Add New</Button>}
           </GridItem>
           <HStack spacing={4}>
             {getTagValues && getTagValues.map((item) => (

@@ -688,7 +688,7 @@ const Edit = (props) => {
                             type="submit"
                             onClick={handleSubmit}
                         >
-                            {isLoding ? <Spinner /> : 'Update Data'}
+                            {isLoding ? <Spinner /> : 'Update'}
                         </Button>
                         <Button size="sm"
                             variant="outline"
@@ -699,7 +699,7 @@ const Edit = (props) => {
                             }}
                             onClick={() => { props.onClose(false) }}
                         >
-                            Cancel
+                            Close
                         </Button>
                     </DrawerFooter>
 

@@ -317,7 +317,7 @@ const AddTask = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button size="sm" variant='brand' disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Add'}</Button>
+                    <Button size="sm" variant='brand' disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Save'}</Button>
                     <Button sx={{
                         marginLeft: 2,
                         textTransform: "capitalize",
@@ -325,7 +325,7 @@ const AddTask = (props) => {
                         colorScheme="red" size="sm" onClick={() => {
                             formik.resetForm()
                             onClose()
-                        }}>Clear</Button>
+                        }}>Close</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

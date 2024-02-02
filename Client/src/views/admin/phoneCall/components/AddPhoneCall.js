@@ -166,7 +166,7 @@ const AddPhoneCall = (props) => {
                     </Grid>
                 </ModalBody>
                 <ModalFooter>
-                    <Button size="sm" variant='brand' leftIcon={<BsFillTelephoneFill />} disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Call'}</Button>
+                    <Button size="sm" variant='brand' disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Save'}</Button>
                     <Button size="sm" sx={{
                         marginLeft: 2,
                         textTransform: "capitalize",

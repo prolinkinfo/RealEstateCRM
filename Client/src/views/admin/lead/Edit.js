@@ -567,7 +567,7 @@ const Edit = (props) => {
                             disabled={isLoding ? true : false}
                             onClick={handleSubmit}
                         >
-                            {isLoding ? <Spinner /> : 'Update Data'}
+                            {isLoding ? <Spinner /> : 'Update'}
                         </Button>
                         <Button
                             variant="outline"
@@ -578,7 +578,7 @@ const Edit = (props) => {
                             }}
                             onClick={handleClose}
                         >
-                            Cancel
+                            Close
                         </Button>
                     </DrawerFooter>
 

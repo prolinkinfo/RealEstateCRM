@@ -614,7 +614,7 @@ const Add = (props) => {
 
                     <DrawerFooter>
                         <Button size="sm" sx={{ textTransform: "capitalize" }} disabled={isLoding ? true : false} variant="brand" type="submit" onClick={handleSubmit}                        >
-                            {isLoding ? <Spinner /> : 'Add Data'}
+                            {isLoding ? <Spinner /> : 'Save'}
                         </Button>
                         <Button size="sm"
                             variant="outline"
@@ -625,7 +625,7 @@ const Add = (props) => {
                             }}
                             onClick={props.onClose}
                         >
-                            Cancel
+                            Close
                         </Button>
                     </DrawerFooter>
 

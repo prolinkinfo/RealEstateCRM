@@ -56,7 +56,7 @@ import Add from '../add';
 import * as yup from "yup"
 import { useFormik } from "formik";
 import { BsColumnsGap } from "react-icons/bs";
-import { SearchIcon, ViewIcon } from "@chakra-ui/icons";
+import { AddIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
 import { MdLeaderboard } from "react-icons/md";
 import { IoIosContact } from "react-icons/io";
 import { HasAccess } from "../../../../redux/accessUtils";
@@ -299,7 +299,7 @@ export default function CheckTable(props) {
               </MenuList>
             </Menu>
             <GridItem colStart={6} textAlign={"right"}>
-              {access?.create && <Button onClick={() => handleClick()} variant="brand" size="sm">Add Email</Button>}
+              {access?.create && <Button onClick={() => handleClick()} variant="brand" size="sm" leftIcon={<AddIcon />}>Add New</Button>}
             </GridItem>
           </GridItem>
           <HStack spacing={4}>

@@ -329,7 +329,7 @@ export default function CheckTable(props) {
               </MenuList>
             </Menu>
             {access?.create && <Button onClick={() => handleClick()} size="sm"
-              variant="brand">Add Lead</Button>}
+              variant="brand" leftIcon={<AddIcon />}>Add New</Button>}
           </GridItem>
           <HStack spacing={4}>
             {getTagValues && getTagValues.map((item) => (

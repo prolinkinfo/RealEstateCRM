@@ -51,7 +51,7 @@ import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 import { SiGooglemeet } from "react-icons/si";
 import { Link, useNavigate } from "react-router-dom";
 import AddMeeting from "./Addmeeting";
-import { DeleteIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
+import { AddIcon, DeleteIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
 import { BsColumnsGap } from "react-icons/bs";
 import * as yup from "yup"
 import { useFormik } from "formik";
@@ -281,7 +281,7 @@ export default function CheckTable(props) {
             </Menu>
             {from !== "index" ? (access?.create && <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} size="sm" colorScheme="gray" >Add Meeting </Button>) :
               <GridItem colStart={6} textAlign={"right"}>
-                {access?.create && <Button onClick={() => setMeeting(true)} variant="brand" size="sm">Add Meeting</Button>}
+                {access?.create && <Button onClick={() => setMeeting(true)} variant="brand" size="sm" leftIcon={<AddIcon />}>Add New</Button>}
               </GridItem>}
           </GridItem>
           <HStack spacing={4}>
