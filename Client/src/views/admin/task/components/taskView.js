@@ -61,7 +61,7 @@ const TaskView = (props) => {
                                     Actions
                                 </MenuButton>}
                                 <MenuDivider />
-                                <MenuList>
+                                <MenuList minWidth={2}>
                                     {(user.role === 'superAdmin' || permission?.create) && <MenuItem onClick={() => handleClick()} icon={<AddIcon />}>Add</MenuItem>}
                                     {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => setEdit(true)} color={'green'} icon={<EditIcon />}>Edit</MenuItem>}
                                     {(user.role === 'superAdmin' || permission?.deleteModel) && <>

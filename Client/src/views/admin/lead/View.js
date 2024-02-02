@@ -173,11 +173,11 @@ const View = () => {
                             <GridItem  >
                                 <Flex justifyContent={"right"}>
                                     <Menu>
-                                        {(user.role === 'superAdmin' || (permission?.create || permission?.update || permission?.delete)) && <MenuButton size="sm" variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
+                                        {(user.role === 'superAdmin' || (permission?.create || permission?.update || permission?.delete)) && <MenuButton size="sm" variant="outline" colorScheme='blackAlpha' mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
                                             Actions
                                         </MenuButton>}
                                         <MenuDivider />
-                                        <MenuList>
+                                        <MenuList minWidth={2}>
                                             {(user.role === 'superAdmin' || permission?.create) && <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
                                             {(user.role === 'superAdmin' || permission?.update) && <MenuItem color={'green'} onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
                                             {(user.role === 'superAdmin' || permission?.delete) && <>
