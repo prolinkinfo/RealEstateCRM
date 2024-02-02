@@ -58,7 +58,7 @@ export const buttonStyles = {
           },
         }),
         light: (props) => ({
-          bg: mode("secondaryGray.300", "whiteAlpha.100")(props),
+          bg: mode("secondaryGray.400", "whiteAlpha.100")(props),
           color: mode("secondaryGray.900", "white")(props),
           _focus: {
             bg: mode("secondaryGray.300", "whiteAlpha.100")(props),

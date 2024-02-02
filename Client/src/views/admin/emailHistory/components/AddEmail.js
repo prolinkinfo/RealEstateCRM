@@ -92,6 +92,7 @@ const AddEmailHistory = (props) => {
                                 onChange={handleChange} onBlur={handleBlur}
                                 value={values.recipient}
                                 name="recipient"
+                                disabled
                                 placeholder='Recipient'
                                 fontWeight='500'
                                 borderColor={errors.recipient && touched.recipient ? "red.300" : null}
@@ -136,6 +137,7 @@ const AddEmailHistory = (props) => {
                             <Input
                                 type='datetime-local'
                                 fontSize='sm'
+                                min={values.startDate}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 value={values.endDate}

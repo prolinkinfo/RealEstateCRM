@@ -69,6 +69,7 @@ export default function PhoneCall(props) {
   }
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
+  const buttonbg = useColorModeValue("gray.200", "white");
   const param = useParams()
   const navigate = useNavigate()
   return (
@@ -88,7 +89,7 @@ export default function PhoneCall(props) {
           {title} (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
         </Text>
         {/* <Menu /> */}
-        {!props.text ? callAccess?.create && <Button onClick={() => setAddModel(true)} leftIcon={<BsFillTelephoneFill />} size="sm" colorScheme="gray" >Call</Button> : <Button onClick={() => navigate('/communication-integration')} size="sm" leftIcon={<MdOutlineMessage />} colorScheme="gray" >send text Msg</Button>}
+        {!props.text ? callAccess?.create && <Button onClick={() => setAddModel(true)} leftIcon={<BsFillTelephoneFill />} size="sm" colorScheme="gray" bg={buttonbg}>Call</Button> : <Button onClick={() => navigate('/communication-integration')} size="sm" leftIcon={<MdOutlineMessage />} colorScheme="gray" >send text Msg</Button>}
         <AddPhoneCall lead={props.lead} fetchData={fetchData} isOpen={addModel} onClose={setAddModel} id={param.id} />
       </Flex>
       <Box overflowY={'auto'} className="table-container" >
