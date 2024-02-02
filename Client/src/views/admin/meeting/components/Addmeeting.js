@@ -136,6 +136,7 @@ const AddMeeting = (props) => {
                                             placeholder="Type a Name"
                                             name="attendes"
                                             items={countriesWithEmailAsLabel}
+                                            className='custom-autoComplete'
                                             selectedItems={countriesWithEmailAsLabel?.filter((item) => values.related === "Contact" ? values?.attendes.includes(item._id) : values.related === "Lead" && values?.attendesLead.includes(item._id))}
                                             onSelectedItemsChange={(changes) => {
                                                 const selectedLabels = extractLabels(changes.selectedItems);

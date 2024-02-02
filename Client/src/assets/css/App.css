@@ -56,6 +56,11 @@ option {
   overflow-y: auto;
 }
 
+.css-efk3t2 {
+  max-height: 15rem !important;
+  overflow-y: scroll !important;
+}
+
 .table-container-property thead {
   position: sticky;
   top: 0;
