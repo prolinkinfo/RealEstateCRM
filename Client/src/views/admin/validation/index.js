@@ -74,7 +74,7 @@ const Index = () => {
     return (
         <div>
             <Flex justifyContent={"end"} mb={3}>
-                {selectedValues.length > 0 && <Button variant='outline' colorScheme='brand' color={"red"} mr={2} leftIcon={<DeleteIcon />} onClick={() => setDeleteMany(true)} size='sm' >Delete</Button>}
+                {selectedValues.length > 0 && <Button variant='outline'  colorScheme='brand' color={"red"} mr={2} leftIcon={<DeleteIcon />} onClick={() => setDeleteMany(true)} size='sm' >Delete</Button>}
                 <Button size='sm' variant='brand' me={1} onClick={() => handleAddOpen()}>Add </Button>
                 <Button size='sm' variant='brand' onClick={() => navigate(-1)} leftIcon={<IoIosArrowBack />}> Back</Button>
             </Flex>
@@ -134,7 +134,7 @@ const Index = () => {
             <Edit isOpen={editModal} onClose={handleEditClose} selectedId={selectedId} editdata={editdata} setAction={setAction} fetchData={fetchData} />
             <Delete method='one' isOpen={deleteModal} onClose={handleDeleteClose} selectedId={selectedId} fetchData={fetchData} />
             <Delete method='many' isOpen={deleteMany} onClose={setDeleteMany} selectedId={selectedId} fetchData={fetchData} setSelectedValues={setSelectedValues} data={selectedValues} />
-            <View isOpen={viewModal} onClose={handleViewClose} selectedId={selectedId} />
+            <View isOpen={viewModal} onClose={handleViewClose} selectedId={selectedId} setAction={setAction} fetchData={fetchData} />
         </div>
     )
 }

@@ -167,11 +167,15 @@ const AddEmailHistory = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' onClick={handleSubmit} rightIcon={<BsFillSendFill />} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Send'}</Button>
-                    <Button onClick={() => {
-                        formik.resetForm()
-                        onClose()
-                    }}>Close</Button>
+                    <Button size="sm" variant='brand' onClick={handleSubmit} rightIcon={<BsFillSendFill />} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Send'}</Button>
+                    <Button sx={{
+                        marginLeft: 2,
+                        textTransform: "capitalize",
+                    }} variant="outline"
+                        colorScheme="red" size="sm" onClick={() => {
+                            formik.resetForm()
+                            onClose()
+                        }}>Close</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

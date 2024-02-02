@@ -12,13 +12,18 @@ import {
     Tr,
     useColorModeValue,
     Select,
-    Button
+    Button,
+    Text,
+    TableContainer,
+    Grid,
+    GridItem
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import { postApi } from 'services/api';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import ExcelJS from 'exceljs';
+import Card from 'components/card/Card';
 
 function LeadImport() {
 
@@ -54,7 +59,6 @@ function LeadImport() {
         { Header: "Lead Engagement Level", accessor: "leadEngagementLevel" },
         { Header: "Lead Conversion Rate", accessor: "leadConversionRate" },
         { Header: "Lead Nurturing Stage", accessor: "leadNurturingStage" },
-        { Header: "Lead Deleted", accessor: "deleted" },
         { Header: "Lead Next Action", accessor: "leadNextAction" },
         { Header: "Lead Nurturing Workflow", accessor: "leadNurturingWorkflow" },
         { Header: "Lead Campaign", accessor: "leadCampaign" },
@@ -223,61 +227,111 @@ function LeadImport() {
         }
     }, [fileData]);
 
+    // const filterLead = fieldsInCrm.filter(field => importedFileFields.find(data => field.accessor === data || field.Header === data))
+
+    const filterLead = importedFileFields.filter(field => fieldsInCrm.find(data => field === data.accessor || field === data.Header))
+
+
     return (
         <>
-            <Box overflowY={"auto"} className="table-fix-container">
-                <Table variant="simple" color="gray.500" mb="24px">
-                    <Thead pe="10px" borderColor={borderColor}>
-                        <Tr>
+            <Card overflowY={"auto"} className="table-fix-container">
+                <Text color={"secondaryGray.900"}
+                    fontSize="22px"
+                    fontWeight="700"
+                    mb='20px'
+                >Import Leads</Text>
+                {/* <TableContainer overflowY={'auto'}>
+                    <Table variant="simple" color="gray.500" mb="24px" >
+                        <Thead pe="10px" borderColor={borderColor} >
+                            <Tr>
+                                {
+                                    columns.map((column, index) => (
+                                        <Th pe="10px" key={index} borderColor={borderColor}>
+                                            <Flex
+                                                justify="space-between"
+                                                align="center"
+                                                fontSize={{ sm: "14px", lg: "14px" }}
+                                                color=" secondaryGray.900"
+                                                styles={{ zIndex: 1 }}
+                                            >
+                                                <span style={{ textTransform: "uppercase" }}>
+                                                    {column.Header}
+                                                </span>
+                                            </Flex>
+                                        </Th>
+                                    ))
+                                }
+                            </Tr>
+                        </Thead>
+                        <Tbody overflowY={"auto"}>
                             {
-                                columns.map((column, index) => (
-                                    <Th pe="10px" key={index} borderColor={borderColor}>
-                                        <Flex
-                                            justify="space-between"
-                                            align="center"
-                                            fontSize={{ sm: "14px", lg: "16px" }}
-                                            color=" secondaryGray.900"
-                                        >
-                                            <span style={{ textTransform: "uppercase" }}>
-                                                {column.Header}
-                                            </span>
-                                        </Flex>
-                                    </Th>
+                                fieldsInCrm?.map((item, index) => (
+                                    <Tr key={item.id}>
+                                        <Td>{item.Header}</Td>
+                                        <Td >
+                                            <Select
+                                                variant="flushed"
+                                                fontWeight='500'
+                                                isSearchable
+                                                value={values[item.accessor]}
+                                                name={item.accessor}
+                                                onChange={handleChange}
+                                            >
+                                                <option value=''> {importedFileFields ? filterLead.map((data) => data.accessor)[index] ? filterLead.map((data) => data.accessor)[index] : 'Select Field In File' : 'Select Field In File'}</option>
+                                                {
+                                                    importedFileFields?.map(field => (
+                                                        <option value={field} key={field}>{field}</option>
+                                                    ))
+                                                }
+                                            </Select>
+                                        </Td>
+                                    </Tr>
                                 ))
                             }
-                        </Tr>
-                    </Thead>
-                    <Tbody overflowY={"auto"}>
-                        {
-                            fieldsInCrm?.map((item) => (
-                                <Tr key={item.id}>
-                                    <Td>{item.Header}</Td>
-                                    <Td>
-                                        <Select
-                                            variant="flushed"
-                                            fontWeight='500'
-                                            isSearchable
-                                            placeholder={'Select Field In File'}
-                                            value={values[item.accessor]}
-                                            name={item.accessor}
-                                            onChange={handleChange}
-                                        >
-                                            {
-                                                importedFileFields?.map(field => (
-                                                    <option value={field} key={field}>{field}</option>
-                                                ))
-                                            }
-                                        </Select>
-                                    </Td>
-                                </Tr>
-                            ))
-                        }
-                    </Tbody>
-                </Table>
-            </Box>
-            <Box mt={5}>
-                <Button onClick={() => handleSubmit()} variant="brand">Next</Button>
-            </Box>
+                        </Tbody>
+                    </Table>
+                </TableContainer> */}
+                <Grid templateColumns="repeat(12, 1fr)" mb={3} pb={2} gap={1} borderBottom={'1px solid #e2e8f0'}>
+                    {
+                        columns.map((column, index) => (
+                            <GridItem key={index} colSpan={{ base: 6 }} fontWeight={'600'} fontSize={{ sm: "14px", lg: "14px" }} color="secondaryGray.900" style={{ textTransform: "uppercase" }}>
+                                {column.Header}
+                            </GridItem>
+                        ))
+                    }
+                </Grid>
+                <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={1} overflowY={'auto'}>
+                    {
+                        fieldsInCrm?.map((item, index) => (
+                            <>
+                                <GridItem colSpan={{ base: 6 }} key={item.id} mt='10px'>
+                                    {item.Header}
+                                </GridItem>
+                                <GridItem colSpan={{ base: 4 }}>
+                                    <Select
+                                        variant="flushed"
+                                        fontWeight='500'
+                                        isSearchable
+                                        value={values[item.accessor]}
+                                        name={item.accessor}
+                                        onChange={handleChange}
+                                    >
+                                        <option value=''> {filterLead ? filterLead.find((data) => (item.Header === data || item.accessor === data) && data) ? filterLead.find((data) => (item.Header === data || item.accessor === data) && data) : 'Select Field In File' : 'Select Field In File'}</option>
+                                        {
+                                            importedFileFields?.map(field => (
+                                                <option value={field} key={field}>{field}</option>
+                                            ))
+                                        }
+                                    </Select>
+                                </GridItem>
+                            </>
+                        ))
+                    }
+                </Grid>
+                <Flex Flex justifyContent={'end'} mt='5' >
+                    <Button size="sm" onClick={() => handleSubmit()} variant="brand">Next</Button>
+                </Flex>
+            </Card>
         </>
     )
 }

@@ -34,8 +34,8 @@ const Delete = (props) => {
                         Are You Sure To Delete selected Document{props.method === 'one' ? '' : 's'} ?
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme="red" mr={2} onClick={handleDeleteClick}>Yes</Button>
-                        <Button variant="outline" onClick={handleClose}>No</Button>
+                        <Button size="sm" colorScheme="red" mr={2} onClick={handleDeleteClick}>Yes</Button>
+                        <Button size="sm" variant="outline" onClick={handleClose}>No</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

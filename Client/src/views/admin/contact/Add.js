@@ -8,60 +8,68 @@ import { BiMobile } from 'react-icons/bi';
 import { contactSchema } from 'schema';
 import { postApi } from 'services/api';
 import { generateValidationSchema } from 'utils';
+import CustomForm from 'utils/customForm';
 import * as yup from 'yup'
 
 const Add = (props) => {
     const [isLoding, setIsLoding] = useState(false)
 
-    const initialValues = {
-        firstName: "",
-        lastName: "",
-        title: "",
-        email: "",
-        phoneNumber: "",
-        mobileNumber: "",
-        physicalAddress: "",
-        mailingAddress: "",
-        preferredContactMethod: "",
-        // 2.Lead Source Information
-        leadSource: "",
-        referralSource: "",
-        campaignSource: "",
-        // 3. Status and Classifications
-        leadStatus: "",
-        leadRating: "",
-        leadConversionProbability: "",
-        // 5. History:
-        notesandComments: "",
-        // 6. Tags or Categories
-        tagsOrLabelsForcategorizingcontacts: "",
-        // 7. Important Dates::
-        birthday: "",
-        anniversary: "",
-        keyMilestones: "",
-        // 8. Additional Personal Information
-        dob: "",
-        gender: "",
-        occupation: "",
-        interestsOrHobbies: "",
-        // 9. Preferred  Communication Preferences:
-        communicationFrequency: "",
-        preferences: "",
-        // 10. Social Media Profiles:
-        linkedInProfile: "",
-        facebookProfile: "",
-        twitterHandle: "",
-        otherProfiles: "",
-        // 11. Lead Assignment and Team Collaboration:
-        agentOrTeamMember: "",
-        internalNotesOrComments: "",
-        createBy: JSON.parse(localStorage.getItem('user'))._id,
-    };
+    // const initialValues = {
+    //     firstName: "",
+    //     lastName: "",
+    //     title: "",
+    //     email: "",
+    //     phoneNumber: "",
+    //     mobileNumber: "",
+    //     physicalAddress: "",
+    //     mailingAddress: "",
+    //     preferredContactMethod: "",
+    //     // 2.Lead Source Information
+    //     leadSource: "",
+    //     referralSource: "",
+    //     campaignSource: "",
+    //     // 3. Status and Classifications
+    //     leadStatus: "",
+    //     leadRating: "",
+    //     leadConversionProbability: "",
+    //     // 5. History:
+    //     notesandComments: "",
+    //     // 6. Tags or Categories
+    //     tagsOrLabelsForcategorizingcontacts: "",
+    //     // 7. Important Dates::
+    //     birthday: "",
+    //     anniversary: "",
+    //     keyMilestones: "",
+    //     // 8. Additional Personal Information
+    //     dob: "",
+    //     gender: "",
+    //     occupation: "",
+    //     interestsOrHobbies: "",
+    //     // 9. Preferred  Communication Preferences:
+    //     communicationFrequency: "",
+    //     preferences: "",
+    //     // 10. Social Media Profiles:
+    //     linkedInProfile: "",
+    //     facebookProfile: "",
+    //     twitterHandle: "",
+    //     otherProfiles: "",
+    //     // 11. Lead Assignment and Team Collaboration:
+    //     agentOrTeamMember: "",
+    //     internalNotesOrComments: "",
+    //     createBy: JSON.parse(localStorage.getItem('user'))._id,
+    // };
 
+    const initialFieldValues = Object.fromEntries(props?.contactData?.fields?.map(field => [field.name, '']))
+
+    const initialValues = {
+        ...initialFieldValues,
+        createBy: JSON.parse(localStorage.getItem('user'))._id
+    };
+    
     const formik = useFormik({
         // initialValues: initialValues,
         // validationSchema: contactSchema,
-        initialValues: Object.fromEntries(props?.contactData?.fields?.map(field => [field.name, ''])),
+        initialValues: initialValues,
         validationSchema: yup.object().shape(generateValidationSchema(props?.contactData?.fields)),
         onSubmit: (values, { resetForm }) => {
             // AddData();
@@ -104,8 +112,9 @@ const Add = (props) => {
                         <IconButton onClick={props.onClose} icon={<CloseIcon />} />
                     </DrawerHeader>
                     <DrawerBody>
+                        <CustomForm leadData={props.contactData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
 
-                        <Grid templateColumns="repeat(12, 1fr)" gap={3}>
+                        {/* <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                             {props.contactData.fields?.map(field => (
                                 <GridItem colSpan={{ base: 12, sm: 6 }} key={field?.name}>
                                     {field.type === 'check' ? '' : <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px' htmlFor={field.name}>{field.label} {field.validation && field.validation.find((validation) => validation.require) && (
@@ -186,7 +195,7 @@ const Add = (props) => {
                                 </GridItem>
                             ))}
 
-                        </Grid>
+                        </Grid> */}
 
                         {/* <Grid templateColumns="repeat(12, 1fr)" gap={3}>
 
@@ -828,14 +837,14 @@ const Add = (props) => {
                             sx={{ textTransform: "capitalize" }}
                             variant="brand"
                             disabled={isLoding ? true : false}
-                            type="submit"
+                            type="submit" size="sm"
                             onClick={handleSubmit}
                         >
                             {isLoding ? <Spinner /> : 'Add Data'}
                         </Button>
                         <Button
                             variant="outline"
-                            colorScheme='red'
+                            colorScheme='red' size="sm"
                             sx={{
                                 marginLeft: 2,
                                 textTransform: "capitalize",

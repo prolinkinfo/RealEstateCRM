@@ -21,6 +21,7 @@ const CustomField = () => {
     const [moduleName, setModuleName] = useState('')
     const [moduleId, setModuleId] = useState('')
     const [data, setData] = useState([])
+    const [dataFilter, setDataFilter] = useState([])
     const [fields, setFields] = useState([])
     const [editModal, setEditModal] = useState(false)
     const [updateField, setUpdateField] = useState({})
@@ -35,6 +36,9 @@ const CustomField = () => {
     const [updateHeading, setUpdateHeading] = useState({});
     const [selectedHeadings, setSelectedHeadings] = useState([]);
     const [selectedHeadingId, setSelectedHeadingId] = useState('');
+    const [headingId, setHeadingId] = useState('');
+    const [heading, setHeading] = useState('');
+    const [draggedData, setDraggedData] = useState([]);
 
     const handleHeadigsCheckboxChange = (event, value) => {
         if (event.target.checked) {
@@ -57,8 +61,9 @@ const CustomField = () => {
         setData((prev) => [{ ...prev[0], headings: newData }]);
 
         const response = await putApi(`api/custom-field/change-headings/${moduleId}`, newData)
-        console.log(response.data)
+        fetchData();
     };
+
     const [selectedId, setSelectedId] = useState('')
     const [validations, setValidations] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -86,19 +91,25 @@ const CustomField = () => {
     };
 
     const handleDragEnd = async (result) => {
-        // Handle the drag end event
         if (!result.destination) {
-            return; // Item was dropped outside the list
+            return;
         }
 
-        // Implement logic to reorder the data based on the drag-and-drop result
         const newData = [...data[0]?.fields];
+        const newFilterData = [...dataFilter];
         const [removed] = newData.splice(result.source.index, 1);
-        newData.splice(result.destination.index, 0, removed); 
+        newData.splice(result.destination.index, 0, removed);
+        const [removed1] = newFilterData.splice(result.source.index, 1);
+        newFilterData.splice(result.destination.index, 0, removed1);
         setData((prev) => [{ ...prev[0], fields: newData }]);
+        setDataFilter(newFilterData);
 
-        await putApi(`api/custom-field/change-fields/${moduleId}`, newData)
-        fetchData()
+        const mergedArray = [...newFilterData, ...newData];
+
+        const unique = [...new Set(mergedArray.map(item => item))]
+
+        await putApi(`api/custom-field/change-fields/${moduleId}`, unique);
+        fetchData();
     };
 
     const fetchData = async () => {
@@ -107,16 +118,20 @@ const CustomField = () => {
         setFields(responseAllData?.data);
         if (moduleName) {
             let response = await getApi(`api/custom-field/?moduleName=${moduleName}`);
+            const filterData = response?.data[0]?.fields?.filter(field => (headingId ? headingId : field?.belongsTo) === field?.belongsTo);
+
+            setDataFilter(filterData);
             setData(response?.data);
         } else if (!moduleName) {
-            setData([])
+            setData([]);
+            setDataFilter([])
         }
         setIsLoading(false)
     }
 
     useEffect(() => {
         if (fetchData) fetchData()
-    }, [moduleName])
+    }, [moduleName, headingId])
 
     return (
         <>
@@ -126,7 +141,7 @@ const CustomField = () => {
                         <Text color={"secondaryGray.900"}
                             fontSize="22px"
                             fontWeight="700"
-                        >Custom Heading</Text>
+                        >{moduleName ? 'Custom Heading' : 'Select Module'}</Text>
                     </Box>
                     <Box>
                         <Flex>
@@ -136,9 +151,9 @@ const CustomField = () => {
                                         {moduleName ? moduleName : 'Select Module'}
                                     </MenuButton>
                                     <MenuList>
-                                        <MenuItem onClick={() => setModuleName('')}>Select Module</MenuItem>
+                                        <MenuItem onClick={() => { setModuleName(''); setData([]); setDataFilter([]); }}>Select Module</MenuItem>
                                         {fields?.map((item, id) => (
-                                            <MenuItem key={id} onClick={() => { setModuleName(item.moduleName); setModuleId(item._id) }}>{item.moduleName}</MenuItem>
+                                            <MenuItem key={id} onClick={() => { setModuleName(item.moduleName); setModuleId(item._id); setHeadingId('') }}>{item.moduleName}</MenuItem>
                                         ))}
                                     </MenuList>
                                 </Menu>
@@ -188,12 +203,23 @@ const CustomField = () => {
                             </div>
                         )}
                     </Droppable>
-                </DragDropContext >
-                <Flex Flex justifyContent={'end'} mt='5' >
-                    {selectedHeadings.length > 0 && <Button colorScheme="red" mr={2} onClick={() => setDeleteManyHeadings(true)} size='sm' >Delete</Button>}
+                </DragDropContext>
+                <Flex Flex justifyContent={'end'} mt='5'>
 
+                    {(!isLoading && data[0]?.headings.length > 0) && <Menu>
+                        <MenuButton as={Button} size='sm' me={2} rightIcon={<ChevronDownIcon />} variant="outline">
+                            {heading ? heading : 'Select Headings'}
+                        </MenuButton>
+                        <MenuList>
+                            <MenuItem onClick={() => { setHeading(''); setHeadingId('') }}>Select Headings</MenuItem>
+                            {data[0]?.headings?.map((item, id) => (
+                                <MenuItem key={id} onClick={() => { setHeading(item.heading); setHeadingId(item._id) }}>{item.heading}</MenuItem>
+                            ))}
+                        </MenuList>
+                    </Menu>}
+                    {selectedHeadings.length > 0 && <Button colorScheme="red" mr={2} onClick={() => setDeleteManyHeadings(true)} size='sm' >Delete</Button>}
                     {data?.length > 0 && <Button onClick={() => setAddHeadingModel(true)} variant="brand" size='sm'>Add Heading</Button>}
-                </Flex >
+                </Flex>
 
 
                 <Flex justifyContent={'space-between'} alignItems={'center'}>
@@ -201,7 +227,7 @@ const CustomField = () => {
                         <Text color={"secondaryGray.900"}
                             fontSize="22px"
                             fontWeight="700"
-                        >Custom Field</Text>
+                        >{moduleName && 'Custom Field'}</Text>
                     </Box>
                     {/* <Box>
                         <Menu>
@@ -226,7 +252,7 @@ const CustomField = () => {
                                 {(provided) => (
                                     <div ref={provided.innerRef} {...provided.droppableProps}>
                                         <Grid templateColumns="repeat(12, 1fr)" gap={3} mt={5}>
-                                            {data[0]?.fields?.map((item, i) => (
+                                            {dataFilter && dataFilter?.map((item, i) => (
                                                 <GridItem colSpan={{ base: 12, md: 6 }} key={item._id}>
                                                     <Draggable draggableId={item._id} index={i}>
                                                         {(provided, snapshot) => (
@@ -241,10 +267,10 @@ const CustomField = () => {
                                                                 >
 
                                                                     <Text display='flex' alignItems='center' size='sm' colorScheme='gray' ms='4px' mt={4} fontSize='md' fontWeight='500' mb='8px' >
-                                                                        {!item.fixed && <div {...provided.dragHandleProps} style={{ marginRight: '10px', cursor: 'grab' }} size={18} >
+                                                                        <div {...provided.dragHandleProps} style={{ marginRight: '10px', cursor: 'grab' }} size={18} >
                                                                             {/* Wrap the BiGridVertical icon with the drag handle */}
                                                                             <BiGridVertical size={18} />
-                                                                        </div>}
+                                                                        </div>
                                                                         {!item.fixed && <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(item?._id)} onChange={(event) => handleCheckboxChange(event, item?._id)} me="10px" />}
                                                                         {item?.label}
                                                                     </Text>
@@ -271,27 +297,10 @@ const CustomField = () => {
                     </>
                 }
 
-                {/* {data[0]?.fields?.map((item, i) => (
-                        <GridItem colSpan={{ base: 12, md: 6 }}>
-                            <Flex alignItems={"center"} justifyContent={"space-between"} className="CustomFieldName" >
-                                <Text display='flex' size='sm' colorScheme='gray' ms='4px' mt={4} fontSize='md' fontWeight='500' mb='8px' >
-                                    <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(item?._id)} onChange={(event) => handleCheckboxChange(event, item?._id)} me="10px" />
-                                    {item?.label}
-                                </Text>
-                                <span className="EditDelete">
-                                    <Button size='sm' variant='outline' me={2} color={'green'} onClick={() => { setEditModal(true); setUpdateField(item) }}><EditIcon /></Button>
-                                    <Button size='sm' variant='outline' me={2} color={'red'} onClick={() => { setDeleteModal(true); setSelectedId(item?._id) }}><DeleteIcon /></Button>
-                                </span>
-                            </Flex>
-                        </GridItem>
-                    ))} */}
-
-            </Card >
+            </Card>
 
             <Addfield isOpen={addFieldModel} onClose={setAddFieldModel} moduleName={moduleName} field={data[0]?.fields} moduleId={data[0]?._id} fetchData={fetchData} headingsData={data?.[0]?.headings} />
             <EditField isOpen={editModal} onClose={setEditModal} field={data[0]?.fields} moduleId={data[0]?._id} fetchData={fetchData} updateFiled={updateField} headingsData={data?.[0]?.headings} />
-            {/* <Addfield validations={validations} setValidations={setValidations} isOpen={addFieldModel} onClose={setAddFieldModel} moduleName={moduleName} field={data[0]?.fields} moduleId={data[0]?._id} fetchData={fetchData} />
-            <EditField validations={validations} isOpen={editModal} onClose={setEditModal} field={data[0]?.fields} moduleId={data[0]?._id} fetchData={fetchData} updateFiled={updateField} /> */}
             <DeleteFiled method='one' isOpen={deleteModal} onClose={setDeleteModal} moduleName={moduleName} moduleId={data[0]?._id} selectedId={selectedId} fetchData={fetchData} updateFiled={updateField} />
             <DeleteFiled method='many' isOpen={deleteMany} onClose={setDeleteMany} url={'api/custom-field/deleteMany'} moduleName={moduleName} moduleId={data[0]?._id} selectedId={selectedId} fetchData={fetchData} updateFiled={updateField} setSelectedValues={setSelectedValues} data={selectedValues} />
 

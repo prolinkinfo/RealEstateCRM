@@ -94,7 +94,7 @@ export default function ColumnsTable(props) {
           lineHeight='100%'>
           {title}  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
         </Text>
-        {emailAccess?.create && <Button onClick={() => setAddEmailHistory(true)} rightIcon={<BsFillSendFill />} colorScheme="gray" >Send Email</Button>}
+        {emailAccess?.create && <Button size="sm" onClick={() => setAddEmailHistory(true)} rightIcon={<BsFillSendFill />} colorScheme="gray" >Send Email</Button>}
         <AddEmailHistory lead={props.lead} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} />
       </Flex>
       <Box overflowY={'auto'} className="table-container p0" >

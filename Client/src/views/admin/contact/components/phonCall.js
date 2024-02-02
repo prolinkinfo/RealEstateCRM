@@ -88,7 +88,7 @@ export default function PhoneCall(props) {
           {title} (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
         </Text>
         {/* <Menu /> */}
-        {!props.text ? callAccess?.create && <Button onClick={() => setAddModel(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" >Call</Button> : <Button onClick={() => navigate('/communication-integration')} leftIcon={<MdOutlineMessage />} colorScheme="gray" >send text Msg</Button>}
+        {!props.text ? callAccess?.create && <Button onClick={() => setAddModel(true)} leftIcon={<BsFillTelephoneFill />} size="sm" colorScheme="gray" >Call</Button> : <Button onClick={() => navigate('/communication-integration')} size="sm" leftIcon={<MdOutlineMessage />} colorScheme="gray" >send text Msg</Button>}
         <AddPhoneCall lead={props.lead} fetchData={fetchData} isOpen={addModel} onClose={setAddModel} id={param.id} />
       </Flex>
       <Box overflowY={'auto'} className="table-container" >
