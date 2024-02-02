@@ -284,7 +284,7 @@ export default function CheckTable(props) {
               </Text>
               <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={dataColumn} onSearch={handleSearch} />
               <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} size="sm">Advance Search</Button>
-              {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>clear</Button> : ""}
+              {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>Clear</Button> : ""}
             </Flex>
           </GridItem>
           <GridItem colSpan={4} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
@@ -302,7 +302,7 @@ export default function CheckTable(props) {
                 <MenuItem width={"165px"} onClick={() => handleExportTasks('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem>
               </MenuList>
             </Menu>
-            {access?.create && <Button size="sm" onClick={() => handleClick()} size="sm" variant="brand">Create Task</Button>}
+            {access?.create && <Button size="sm" onClick={() => handleClick()} variant="brand">Create Task</Button>}
             {/* {setTaskModel && <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>} */}
           </GridItem>
           <HStack spacing={4}>

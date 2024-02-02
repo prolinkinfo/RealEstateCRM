@@ -166,6 +166,10 @@ export default function CheckTable(props) {
     setDisplaySearchData(false)
   }
 
+  const resetForm1 = () => {
+    setTempSelectedColumns(dynamicColumns)
+  }
+
   useEffect(() => {
     setSearchedData && setSearchedData(data);
   }, []);
@@ -305,7 +309,7 @@ export default function CheckTable(props) {
               </Text>
               <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={dataColumn} onSearch={handleSearch} />
               <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} size="sm">Advance Search</Button>
-              {displaySearchData ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>clear</Button> : ""}
+              {displaySearchData ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>Clear</Button> : ""}
               {(selectedValues.length > 0 && access?.delete) && <DeleteIcon onClick={() => setDelete(true)} color={'red'} ms={2} />}
             </Flex>
           </GridItem>
@@ -710,11 +714,11 @@ export default function CheckTable(props) {
         </ModalContent>
       </Modal>
       {/* Manage Columns */}
-      <Modal onClose={() => { setManageColumns(false); resetForm() }} isOpen={manageColumns} isCentered>
+      <Modal onClose={() => { setManageColumns(false) }} isOpen={manageColumns} isCentered>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Manage Columns</ModalHeader>
-          <ModalCloseButton onClick={() => { setManageColumns(false); resetForm() }} />
+          <ModalCloseButton onClick={() => { setManageColumns(false) }} />
           <ModalBody>
             <div>
               {dynamicColumns.map((column) => (
@@ -735,7 +739,7 @@ export default function CheckTable(props) {
               setManageColumns(false);
               resetForm();
             }} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
-            <Button size="sm" colorScheme="red" onClick={() => resetForm()}>Clear</Button>
+            <Button size="sm" colorScheme="red" onClick={() => resetForm1()}>Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
