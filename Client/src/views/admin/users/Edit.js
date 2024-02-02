@@ -10,7 +10,7 @@ import { getApi, putApi } from 'services/api';
 
 
 const Edit = (props) => {
-    const { onClose, isOpen, fetchData } = props
+    const { onClose, isOpen, fetchData, setEdit } = props
 
     const initialValues = {
         firstName: '',
@@ -34,9 +34,9 @@ const Edit = (props) => {
     const EditData = async () => {
         try {
             setIsLoding(true)
-            let response = await putApi(`api/user/edit/${param.id}`, values)
+            let response = await putApi(`api/user/edit/${props.selectedId}`, values)
             if (response && response.status === 200) {
-                props.onClose();
+                setEdit(false)
                 props.setAction((pre) => !pre)
             } else {
                 toast.error(response.response.data?.message)
@@ -51,7 +51,7 @@ const Edit = (props) => {
 
     const param = useParams()
     const fetcEdithData = async () => {
-        let response = await getApi('api/user/view/', param.id)
+        let response = await getApi('api/user/view/', props.selectedId)
         setFieldValue('firstName', response.data?.firstName)
         setFieldValue('lastName', response.data?.lastName)
         setFieldValue('username', response.data?.username)
@@ -69,7 +69,7 @@ const Edit = (props) => {
             <ModalContent>
                 <ModalHeader justifyContent='space-between' display='flex' >
                     Edit User
-                    <IconButton onClick={() => onClose(false)} icon={<CloseIcon />} />
+                    <IconButton onClick={() => setEdit(false)} icon={<CloseIcon />} />
                 </ModalHeader>
                 <ModalBody>
 
@@ -147,7 +147,11 @@ const Edit = (props) => {
                 </ModalBody>
                 <ModalFooter>
                     <Button size="sm" variant='brand' disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Update Data'}</Button>
-                    <Button size="sm" onClick={() => onClose(false)}>close</Button>
+                    <Button sx={{
+                        marginLeft: 2,
+                        textTransform: "capitalize",
+                    }} variant="outline"
+                        colorScheme="red" size="sm" onClick={() => setEdit(false)}>close</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

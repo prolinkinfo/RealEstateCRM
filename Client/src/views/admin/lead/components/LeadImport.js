@@ -227,7 +227,10 @@ function LeadImport() {
         }
     }, [fileData]);
 
-    const filterLead = fieldsInCrm.filter(field => importedFileFields.find(data => field.accessor === data || field.Header === data))
+    // const filterLead = fieldsInCrm.filter(field => importedFileFields.find(data => field.accessor === data || field.Header === data))
+
+    const filterLead = importedFileFields.filter(field => fieldsInCrm.find(data => field === data.accessor || field === data.Header))
+
 
     return (
         <>
@@ -313,7 +316,7 @@ function LeadImport() {
                                         name={item.accessor}
                                         onChange={handleChange}
                                     >
-                                        <option value=''> {importedFileFields ? filterLead.map((data) => data.accessor)[index] ? filterLead.map((data) => data.accessor)[index] : 'Select Field In File' : 'Select Field In File'}</option>
+                                        <option value=''> {filterLead ? filterLead.find((data) => (item.Header === data || item.accessor === data) && data) ? filterLead.find((data) => (item.Header === data || item.accessor === data) && data) : 'Select Field In File' : 'Select Field In File'}</option>
                                         {
                                             importedFileFields?.map(field => (
                                                 <option value={field} key={field}>{field}</option>

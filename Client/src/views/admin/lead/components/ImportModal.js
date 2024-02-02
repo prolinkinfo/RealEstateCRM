@@ -60,6 +60,7 @@ const ImportModal = (props) => {
                     <Button variant='brand' size="sm" onClick={handleSubmit} disabled={isLoding ? true : false} rightIcon={<AddIcon />}>{isLoding ? <Spinner /> : 'Add'}</Button>
                     <Button variant="outline"
                         colorScheme="red" sx={{
+                            marginLeft: 2,
                             textTransform: "capitalize",
                         }} size="sm" onClick={() => {
                             onClose()

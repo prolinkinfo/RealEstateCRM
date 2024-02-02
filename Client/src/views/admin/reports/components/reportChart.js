@@ -85,18 +85,18 @@ const ReportChart = (props) => {
 
     const selectedSeries = select === 'all' ? series : series.filter(series => series.name === select);
     return (
-        <>
+        <Card>
             {!dashboard &&
                 <Box display='flex' alignItems='center' flexWrap={'wrap'} justifyContent='space-between' mb={4}>
-                    <Select value={select} onChange={(e) => setSelect(e.target.value)} width={{ base: '100%', md: '15%' }} mb={{ base: 3, md: 'auto' }}>
+                    <Select value={select} onChange={(e) => setSelect(e.target.value)} size='sm' width={{ base: '100%', md: '15%' }} mb={{ base: 3, md: 'auto' }}>
                         <option value='all'>All</option>
                         <option value='EmailDetails'>Email</option>
                         <option value='outboundcall'>Call</option>
                         {/* <option value='TextSent'>TextSent</option> */}
                     </Select>
                     <Box width={{ base: '100%', md: 'auto' }} flexWrap={'wrap'} justifyContent={'left'} mb={{ base: 3, md: 'auto' }} display='flex'>
-                        <ReactDatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
-                        <ReactDatePicker selected={endDate} onChange={(date) => setEndDate(date)} />
+                        <ReactDatePicker selected={startDate} onChange={(date) => setStartDate(date)} className='datePickerBorder' />
+                        <ReactDatePicker selected={endDate} onChange={(date) => setEndDate(date)} className='datePickerBorder' />
                     </Box>
                     <Box width={{ base: '100%', md: 'auto' }} display={'flex'} justifyContent={'right'} mb={{ base: 3, md: 'auto' }}>
                         <RadioGroup onChange={(e) => setSelection(e)} value={selection}>
@@ -126,7 +126,7 @@ const ReportChart = (props) => {
 
 
 
-        </>
+        </Card>
     )
 }
 

@@ -58,6 +58,7 @@ import * as yup from "yup"
 import { BsColumnsGap } from "react-icons/bs";
 import { CiMenuKebab } from "react-icons/ci";
 import { IoIosArrowBack } from "react-icons/io";
+import Edit from "../Edit";
 
 
 export default function CheckTable(props) {
@@ -236,7 +237,7 @@ export default function CheckTable(props) {
                   fontWeight='500'
                   placeholder="Search..." borderRadius="16px" />
               </InputGroup>
-              <Button  variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} size="sm">Advance Search</Button>
+              <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} size="sm">Advance Search</Button>
               {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>clear</Button> : ""}
               {selectedValues.length > 0 && <DeleteIcon onClick={() => setDelete(true)} color={'red'} ms={2} />}
             </Flex>
@@ -421,6 +422,7 @@ export default function CheckTable(props) {
 
       </Card>
       <AddUser isOpen={isOpen} size={"sm"} setAction={setAction} onClose={onClose} />
+      <Edit isOpen={edit} size={"sm"} setAction={setAction} onClose={onClose} setEdit={setEdit} selectedId={selectedId} />
       {/* Advance filter */}
       <Modal onClose={() => { setAdvaceSearch(false); resetForm() }} isOpen={advaceSearch} isCentered>
         <ModalOverlay />

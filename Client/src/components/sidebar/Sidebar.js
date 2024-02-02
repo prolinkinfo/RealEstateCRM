@@ -44,7 +44,7 @@ function Sidebar(props) {
         bg={sidebarBg}
         transition={variantChange}
         // w='280px'
-        w={openSidebar ? '260px' : "80px"}
+        w={openSidebar ? '280px' : "80px"}
         h='100vh'
         m={sidebarMargins}
         minH='100%'
@@ -98,7 +98,7 @@ export function SidebarResponsive(props) {
         placement={document.documentElement.dir === "rtl" ? "right" : "left"}
         finalFocusRef={btnRef}>
         <DrawerOverlay />
-        <DrawerContent w='285px' maxW='285px' bg={sidebarBackgroundColor}>
+        <DrawerContent boxShadow={'xl'} w='285px' maxW='285px' bg={sidebarBackgroundColor}>
           <DrawerCloseButton
             zIndex='3'
             onClose={handlesidebarClose}
