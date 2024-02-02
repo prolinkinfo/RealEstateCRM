@@ -245,7 +245,7 @@ const View = () => {
                                                         <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">
                                                             First Name
                                                         </Text>
-                                                        <Text>{data?.firstName ? data?.contact?.firstName : 'N/A'}</Text>
+                                                        <Text>{data?.firstName ? data?.firstName : 'N/A'}</Text>
                                                     </GridItem>
                                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                                         <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">

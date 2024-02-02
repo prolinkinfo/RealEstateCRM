@@ -384,7 +384,7 @@ export default function CheckTable(props) {
                         if (cell?.column.Header === "#") {
                           data = (
                             <Flex align="center">
-                              <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />
+                              {/* <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" /> */}
                               <Text color={textColor} fontSize="sm" fontWeight="700">
                                 {cell?.row?.index + 1}
                               </Text>

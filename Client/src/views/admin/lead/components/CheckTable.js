@@ -310,7 +310,7 @@ export default function CheckTable(props) {
               <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={dataColumn} onSearch={handleSearch} />
               <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} size="sm">Advance Search</Button>
               {displaySearchData ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>Clear</Button> : ""}
-              {(selectedValues.length > 0 && access?.delete) && <DeleteIcon onClick={() => setDelete(true)} color={'red'} ms={2} />}
+              {(selectedValues.length > 0 && access?.delete) && <DeleteIcon cursor={"pointer"} onClick={() => setDelete(true)} color={'red'} ms={2} />}
             </Flex>
           </GridItem>
           <GridItem colSpan={4} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
@@ -500,9 +500,12 @@ export default function CheckTable(props) {
                           );
                         } else if (cell?.column.Header === "Status") {
                           data = (
-                            <Text color={"secondaryGray.900"} bgColor={cell?.value === "active" ? "green.500" : cell?.value === "sold" ? "red.300" : cell?.value === "pending" ? "yellow.400" : "#000"
-                            } p={1} borderRadius={"20px"} textAlign={"center"} fontSize="sm"
-                              // fontWeight="500"
+                            <Text
+                              bgColor={cell?.value === "active" ? "#eaf9e6" : cell?.value === "sold" ? "#ffeeeb" : cell?.value === "pending" ? "#fbf4dd" : "#000"
+                              }
+                              color={cell?.value === "active" ? "#43882f" : cell?.value === "sold" ? "#d6401d" : cell?.value === "pending" ? "#a37f08" : "#000"
+                              }
+                              p={1} borderRadius={"20px"} textAlign={"center"} fontSize="sm"
                               fontWeight="700"
                               textTransform={"capitalize"}>
                               {cell?.value}
