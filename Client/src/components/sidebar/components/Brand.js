@@ -25,13 +25,14 @@ export function SidebarBrand(props) {
 
 
   return (
-    <Flex align='center' direction='column' style={{
+    <Flex align='center' mt='12px' direction='column' style={{
       position: "sticky",
       top: "0",
       left: "0",
-      background: "#fff"
+      background: "#fff",
+
     }}>
-      <Flex>
+      <Flex display={{ sm: "flex", xl: "none" }}>
         {largeLogo[0]?.logoLgImg || largeLogo[0]?.logoSmImg ? <Image
           style={{ width: "100%", height: '52px' }}
           src={openSidebar === true ? largeLogo[0]?.logoLgImg : largeLogo[0]?.logoSmImg} // Set the source path of your image

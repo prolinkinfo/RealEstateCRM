@@ -88,13 +88,13 @@ export default function AdminNavbar(props) {
 			}}
 			pt='8px'
 			top={{ base: '0px' }}
-			// top={{ base: '12px', md: '16px', lg: '20px', xl: '20px' }}
 			w={{
-				base: 'calc(100vw - 0%)',
-				md: 'calc(100vw - 0%)',
-				lg: 'calc(100vw - 0%)',
-				xl: openSidebar === true ? 'calc(100vw - 286px)' : 'calc(100vw - 80px)',
-				'2xl': openSidebar === true ? 'calc(100vw - 286px)' : 'calc(100vw - 80px)'
+				base: '100vw'
+				// base: 'calc(100vw - 0%)',
+				// md: 'calc(100vw - 0%)',
+				// lg: 'calc(100vw - 0%)',
+				// xl: openSidebar === true ? 'calc(100vw - 286px)' : 'calc(100vw - 80px)',
+				// '2xl': openSidebar === true ? 'calc(100vw - 286px)' : 'calc(100vw - 80px)'
 			}}
 			sx={{ boxShadow: '14px 17px 40px 4px rgba(112, 144, 176, 0.08)' }}
 		>
@@ -133,7 +133,19 @@ export default function AdminNavbar(props) {
 
 					</Breadcrumb>
 					*/}
-					<Box display={{ sm: "none", xl: "flex" }} onClick={() => setOpenSidebar(!openSidebar)} style={{ fontSize: "25px" }}>{openSidebar ? <AiOutlineMenuFold /> : <AiOutlineMenuUnfold />}</Box>
+					<Flex me={openSidebar ? "" : "5"} mx={openSidebar ? "14" : "1"} display={{ sm: "none", xl: "flex" }}>
+						{largeLogo[0]?.logoLgImg || largeLogo[0]?.logoSmImg ? <Image
+							style={{ width: "100%", height: '52px' }}
+							src={openSidebar === true ? largeLogo[0]?.logoLgImg : largeLogo[0]?.logoSmImg} // Set the source path of your image
+							alt="Logo" // Set the alt text for accessibility
+							cursor="pointer"
+							onClick={() => !props.from && setOpenSidebar(!openSidebar)}
+							userSelect="none"
+							my={2}
+						/> : <Heading my={4}
+							cursor={"pointer"} onClick={() => !props.from && setOpenSidebar(!openSidebar)} userSelect={"none"}>{openSidebar === true ? "Prolink" : "Pr"}</Heading>}
+					</Flex>
+					<Box display={{ sm: "none", xl: "flex" }} ms={openSidebar ? "" : "3"} onClick={() => setOpenSidebar(!openSidebar)} style={{ fontSize: "25px" }}>{openSidebar ? <AiOutlineMenuFold /> : <AiOutlineMenuUnfold />}</Box>
 					<Link
 						color={mainText}
 						display={{ sm: "flex", xl: "none" }}

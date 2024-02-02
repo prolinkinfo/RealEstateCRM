@@ -22,7 +22,7 @@ function SidebarContent(props) {
       <Brand from={from}
         openSidebar={openSidebar} setOpenSidebar={setOpenSidebar}
       />
-      <Stack direction='column' mb='auto'
+      <Stack direction='column' mb='auto' pt={{ sm: '0', xl: '60px' }}
       >
 
         <Box
@@ -40,7 +40,7 @@ function SidebarContent(props) {
         borderRadius='30px'>
         <SidebarCard />
       </Box> */}
-    </Flex>
+    </Flex >
   );
 }
 
