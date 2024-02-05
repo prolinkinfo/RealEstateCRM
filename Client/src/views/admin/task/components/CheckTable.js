@@ -323,7 +323,7 @@ export default function CheckTable(props) {
         </Grid>
         <Box overflowY={"auto"} className={className}>
           <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
-            <Thead>
+            <Thead zIndex={9}>
               {headerGroups?.map((headerGroup, index) => (
                 <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
                   {headerGroup.headers?.map((column, index) => (
