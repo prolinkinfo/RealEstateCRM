@@ -434,7 +434,7 @@ export default function CheckTable(props) {
                                   fontSize="sm"
                                   fontWeight="700"
                                 >
-                                  {cell?.row?.original.createBy && "contact" || "-"}
+                                  {cell?.row?.original.createBy && "contact"}
                                 </Text>
                               </Link> :
                                 <Text
@@ -442,7 +442,7 @@ export default function CheckTable(props) {
                                   fontSize="sm"
                                   fontWeight="700"
                                 >
-                                  {cell?.row?.original.createBy && "contact" || "-"}
+                                  {cell?.row?.original.createBy && "contact"}
                                 </Text>}
 
                               {leadAccess?.view && cell?.row?.original.createByLead ? <Link to={`/leadView/${cell?.row?.original.createByLead}`}>
@@ -453,14 +453,14 @@ export default function CheckTable(props) {
                                   fontSize="sm"
                                   fontWeight="700"
                                 >
-                                  {cell?.row?.original.createByLead && "lead" || "-"}
+                                  {cell?.row?.original.createByLead && "lead"}
                                 </Text>
                               </Link> : <Text
                                 me="10px"
                                 fontSize="sm"
                                 fontWeight="700"
                               >
-                                {cell?.row?.original.createByLead && "lead" || "-"}
+                                {cell?.row?.original.createByLead && "lead"}
                               </Text>}
                             </>
                           );
