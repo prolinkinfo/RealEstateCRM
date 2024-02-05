@@ -1,5 +1,5 @@
 import { AddIcon, ChevronDownIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { AspectRatio, Box, Button, Flex, Grid, GridItem, Heading, Image, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useDisclosure } from "@chakra-ui/react";
+import { AspectRatio, Box, Button, Flex, Grid, GridItem, Heading, Image, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useColorModeValue, useDisclosure } from "@chakra-ui/react";
 import Card from "components/card/Card";
 import { HSeparator } from "components/separator/Separator";
 import Spinner from "components/spinner/Spinner";
@@ -21,7 +21,7 @@ const View = () => {
 
     const user = JSON.parse(localStorage.getItem("user"))
     const param = useParams()
-
+    const buttonbg = useColorModeValue("gray.200", "white");
     const [data, setData] = useState()
     const [filteredContacts, setFilteredContacts] = useState()
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -133,8 +133,8 @@ const View = () => {
                                         </MenuButton>}
                                         <MenuDivider />
                                         <MenuList minWidth={2}>
-                                            {user.role === 'superAdmin' || permission?.create && <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
-                                            {user.role === 'superAdmin' || permission?.update && <MenuItem color={'green'} onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
+                                            {user.role === 'superAdmin' || permission?.create && <MenuItem color={'blue'} onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
+                                            {user.role === 'superAdmin' || permission?.update && <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
                                             {user.role === 'superAdmin' || permission?.delete && <>
                                                 <MenuDivider />
                                                 <MenuItem color={'red'} onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
@@ -205,7 +205,7 @@ const View = () => {
                                     </GridItem>
 
 
-                                    <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
+                                    <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <Card >
                                             <Grid templateColumns="repeat(12, 1fr)" gap={4}>
                                                 <GridItem colSpan={12}>
@@ -277,7 +277,7 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
-                                    <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
+                                    <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <Card >
                                             <Grid templateColumns="repeat(12, 1fr)" gap={4}>
                                                 <GridItem colSpan={12}>
@@ -393,7 +393,7 @@ const View = () => {
                                                             <Heading size="md" >
                                                                 Property Photos
                                                             </Heading>
-                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setPropertyPhoto(true)} variant="brand">Add Property Photos</Button>
+                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setPropertyPhoto(true)} bg={buttonbg}>Add New</Button>
                                                             <PropertyPhoto text='Property Photos' fetchData={fetchData} isOpen={propertyPhoto} onClose={setPropertyPhoto} id={param.id} />
                                                         </Flex>
                                                         <HSeparator />
@@ -418,7 +418,7 @@ const View = () => {
                                                             <Heading size="md" >
                                                                 Virtual Tours or Videos
                                                             </Heading>
-                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setVirtualToursorVideos(true)} variant="brand">Add Virtual Tours or Videos</Button>
+                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setVirtualToursorVideos(true)} bg={buttonbg}>Add New</Button>
                                                             <PropertyPhoto text='Virtual Tours or Videos' fetchData={fetchData} isOpen={virtualToursorVideos} onClose={setVirtualToursorVideos} id={param.id} />
                                                         </Flex>
                                                         <HSeparator />
@@ -427,7 +427,7 @@ const View = () => {
                                                 <GridItem colSpan={{ base: 12 }} >
                                                     <Flex flexWrap={'wrap'} justifyContent={'center'} alingItem={'center'} >
                                                         {data?.virtualToursOrVideos?.map((item) => (
-                                                            <AspectRatio width={'30%'} m={1} ratio={2}>
+                                                            <AspectRatio width={'30%'} m={1} ratio={1}>
                                                                 <iframe
                                                                     title="YouTube video player"
                                                                     src={item.img}
@@ -450,7 +450,7 @@ const View = () => {
                                                             <Heading size="md" >
                                                                 Floor Plans
                                                             </Heading>
-                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setFloorPlans(true)} variant="brand">Add Floor Plans</Button>
+                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setFloorPlans(true)} bg={buttonbg}>Add New</Button>
                                                             <PropertyPhoto text='Floor Plans' fetchData={fetchData} isOpen={floorPlans} onClose={setFloorPlans} id={param.id} />
                                                         </Flex>
                                                         <HSeparator />
@@ -475,7 +475,7 @@ const View = () => {
                                                             <Heading size="md" >
                                                                 Property Documents
                                                             </Heading>
-                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setPropertyDocuments(true)} variant="brand">Add Property Documents</Button>
+                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setPropertyDocuments(true)} bg={buttonbg}>Add New</Button>
                                                             <PropertyPhoto text='Property Documents' fetchData={fetchData} isOpen={propertyDocuments} onClose={setPropertyDocuments} id={param.id} />
                                                         </Flex>
                                                         <HSeparator />

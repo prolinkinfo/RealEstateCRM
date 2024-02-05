@@ -149,37 +149,7 @@ const View = () => {
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                     <Spinner />
                 </Flex> : <>
-                    {/* <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
-                        <GridItem colStart={6} >
-                            <Flex justifyContent={"right"}>
-                                <Menu>
-                                    {(permission?.create || permission?.update || permission?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
-                                        Actions
-                                    </MenuButton>}
-                                    <MenuDivider />
-                                    <MenuList>
-                                        {permission?.create && <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
-                                        {permission?.update && <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
-                                        {permission?.delete && <MenuDivider />}
-                                        {permission?.delete && <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>}
-                                    </MenuList>
-                                </Menu>
-                                <Link to="/contacts">
-                                    <Button leftIcon={<IoIosArrowBack />} variant="brand">
-                                        Back
-                                    </Button>
-                                </Link>
-                            </Flex>
-                        </GridItem>
-                    </Grid> */}
-
-                    <Tabs >
-                        {/* <TabList sx={{ '& button:focus': { boxShadow: 'none', }, }}>
-                            <Tab>Information</Tab>
-                            <Tab>Activity</Tab>
-                            <Tab>Document</Tab>
-                            <Tab>Social Media</Tab>
-                        </TabList> */}
+                    <Tabs >                       
                         <Grid templateColumns="repeat(3, 1fr)" mb={3} gap={1}>
                             <GridItem colSpan={2}>
                                 <TabList sx={{
@@ -207,8 +177,8 @@ const View = () => {
                                         </MenuButton>}
                                         <MenuDivider />
                                         <MenuList minWidth={2}>
-                                            {(user.role === 'superAdmin' || permission?.create) && <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
-                                            {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => setEdit(true)} color={'green'} icon={<EditIcon />}>Edit</MenuItem>}
+                                            {(user.role === 'superAdmin' || permission?.create) && <MenuItem onClick={() => onOpen()} color={'blue'} icon={<AddIcon />}>Add</MenuItem>}
+                                            {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
                                             {(user.role === 'superAdmin' || permission?.delete) &&
                                                 <>
                                                     <MenuDivider />

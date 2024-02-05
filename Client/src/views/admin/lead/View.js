@@ -181,8 +181,8 @@ const View = () => {
                                         </MenuButton>}
                                         <MenuDivider />
                                         <MenuList minWidth={2}>
-                                            {(user.role === 'superAdmin' || permission?.create) && <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
-                                            {(user.role === 'superAdmin' || permission?.update) && <MenuItem color={'green'} onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
+                                            {(user.role === 'superAdmin' || permission?.create) && <MenuItem color={'blue'} onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
+                                            {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
                                             {(user.role === 'superAdmin' || permission?.delete) && <>
                                                 <MenuDivider />
                                                 <MenuItem color={'red'} onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
