@@ -85,7 +85,7 @@ export default function PropertyTable(props) {
       style={{ border: '1px solid gray.200' }
       }
       overflowX={{ sm: "scroll", lg: "hidden" }}>
-      <Flex px='25px' justify='space-between' mb='20px' align='center'>
+      {/* <Flex px='25px' justify='space-between' mb='20px' align='center'>
         <Text
           color={textColor}
           fontSize='22px'
@@ -93,7 +93,7 @@ export default function PropertyTable(props) {
           lineHeight='100%'>
           {title}  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
         </Text>
-      </Flex>
+      </Flex> */}
       <Box overflowY={'auto'} className="table-container-property" >
         <Table  {...getTableProps()} variant='simple' color='gray.500' mb='24px'>
           <Thead >
