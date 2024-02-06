@@ -64,7 +64,7 @@ export default function AdminNavbar(props) {
 			// borderRadius='16px'
 			borderWidth='1.5px'
 			borderStyle='solid'
-			// zIndex='99999'
+			zIndex='1'
 			transitionDelay='0s, 0s, 0s, 0s'
 			transitionDuration=' 0.25s, 0.25s, 0.25s, 0s'
 			transition-property='box-shadow, background-color, filter, border'
