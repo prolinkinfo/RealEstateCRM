@@ -121,9 +121,8 @@ const changeStatus = async (req, res) => {
             { $set: { status: status } }
         );
 
-        // const result = new Task(taskData);
-        // await result.save();
-        res.status(200).json(result);
+        let response = await Task.findOne({ _id: req.params.id })
+        res.status(200).json(response);
     } catch (err) {
         console.error('Failed to create task:', err);
         res.status(400).json({ error: 'Failed to create task : ', err });
