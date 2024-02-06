@@ -89,12 +89,12 @@ const add = async (req, res) => {
 
 const edit = async (req, res) => {
     try {
-        const { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy, assignmentTo } = req.body;
+        const { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy, assignmentTo, status } = req.body;
 
         if (assignmentTo && !mongoose.Types.ObjectId.isValid(assignmentTo)) {
             res.status(400).json({ error: 'Invalid assignmentTo value' });
         }
-        const taskData = { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy };
+        const taskData = { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy, status };
 
         if (assignmentTo) {
             taskData.assignmentTo = assignmentTo;
