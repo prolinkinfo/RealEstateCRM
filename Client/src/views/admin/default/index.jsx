@@ -155,6 +155,43 @@ export default function UserReports() {
     labels: ['Percent'],
   }
 
+  const options4 = {
+    chart: {
+      type: 'radialBar',
+      height: 350,
+      width: 380,
+    },
+    plotOptions: {
+      radialBar: {
+        size: undefined,
+        inverseOrder: true,
+        hollow: {
+          margin: 40,
+          size: '48%',
+          background: 'transparent',
+
+        },
+        track: {
+          show: false,
+        },
+        startAngle: -180,
+        endAngle: 180
+
+      },
+    },
+    stroke: {
+      lineCap: 'round'
+    },
+    labels: ['June', 'May', 'April'],
+    legend: {
+      show: true,
+      floating: true,
+      position: 'right',
+      offsetX: 152,
+      offsetY: 215
+    },
+  }
+
 
 
 
@@ -309,7 +346,7 @@ export default function UserReports() {
       </SimpleGrid>
 
       <Grid Grid templateColumns="repeat(12, 1fr)" gap={3} >
-        {/* <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
+        <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
           <Card>
             <ReactApexChart options={options} series={[44, 55, 67, 83]} type="radialBar" height={350} />
           </Card>
@@ -323,7 +360,12 @@ export default function UserReports() {
           <Card>
             <ReactApexChart options={options3} series={[76]} type="radialBar" height={350} />
           </Card>
-        </GridItem> */}
+        </GridItem>
+        <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
+          <Card>
+            <ReactApexChart options={options4} series={[71, 63, 77]} type="radialBar" height={350} />
+          </Card>
+        </GridItem>
         <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
           <Card>
             <Flex mb={3} alignItems={"center"} justifyContent={"space-between"}>
