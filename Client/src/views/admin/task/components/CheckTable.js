@@ -602,10 +602,7 @@ export default function CheckTable(props) {
                   fontWeight='500'
                 />
                 <Text mb='10px' color={'red'}> {errors.assignmentToName && touched.assignmentToName && errors.assignmentToName}</Text>
-
               </GridItem>
-
-
             </Grid>
           </ModalBody>
           <ModalFooter>
@@ -622,8 +619,8 @@ export default function CheckTable(props) {
           <ModalCloseButton onClick={() => { setManageColumns(false); resetForm() }} />
           <ModalBody>
             <div>
-              {dynamicColumns.map((column) => (
-                <Text display={"flex"} key={column.accessor} py={2}>
+              {dynamicColumns.map((column, i) => (
+                <Text display={"flex"} key={column.accessor} py={2} >
                   <Checkbox
                     defaultChecked={selectedColumns.some((selectedColumn) => selectedColumn.accessor === column.accessor)}
                     onChange={() => toggleColumnVisibility(column.accessor)}

@@ -33,6 +33,7 @@ const EditTask = (props) => {
         textColor: '',
         display: '',
         url: '',
+        status: '',
         createBy: userId,
     };
 
@@ -70,7 +71,6 @@ const EditTask = (props) => {
             try {
                 setIsLoding(true)
                 let result = await getApi('api/task/view/', props.id)
-                console.log('EditData response:', result);
 
                 setFieldValue('title', result?.data?.title)
                 setFieldValue('category', result?.data?.category)
@@ -85,6 +85,7 @@ const EditTask = (props) => {
                 setFieldValue('textColor', result?.data?.textColor)
                 setFieldValue('display', result?.data?.display)
                 setFieldValue('url', result?.data?.url)
+                setFieldValue("status", result?.data?.status)
                 setFieldValue('assignmentToLead', result?.data?.assignmentToLead)
             }
             catch (e) {
@@ -321,21 +322,9 @@ const EditTask = (props) => {
                                 />
                                 <Text mb='10px' color={'red'}> {errors.textColor && touched.textColor && errors.textColor}</Text>
                             </GridItem>
-                            <GridItem colSpan={{ base: 12 }} >
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Reminder
-                                </FormLabel>
-                                <RadioGroup onChange={(e) => setFieldValue('reminder', e)} value={values.reminder}>
-                                    <Stack direction='row'>
-                                        <Radio value='None' >None</Radio>
-                                        <Radio value='email'>Email</Radio>
-                                        <Radio value='sms'>Sms</Radio>
-                                    </Stack>
-                                </RadioGroup>
-                                <Text mb='10px' color={'red'}> {errors.reminder && touched.reminder && errors.reminder}</Text>
-                            </GridItem>
 
-                            <GridItem colSpan={{ base: 12 }} >
+
+                            <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                     Url
                                 </FormLabel>
@@ -350,6 +339,21 @@ const EditTask = (props) => {
                                     borderColor={errors?.url && touched?.url ? "red.300" : null}
                                 />
                                 <Text mb='10px' color={'red'}> {errors.url && touched.url && errors.url}</Text>
+                            </GridItem>
+                            <GridItem colSpan={{ base: 12, md: 6 }} >
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                    Status
+                                </FormLabel>
+                                <Select placeholder='Select option'
+                                    onChange={(e) => setFieldValue("status", e.target.value)}
+                                    value={values?.status}
+                                    style={{ fontSize: "14px" }}>
+                                    <option value='completed'>Completed</option>
+                                    <option value='todo'>Todo</option>
+                                    <option value='onHold'>On Hold</option>
+                                    <option value='inProgress'>In Progress</option>
+                                    <option value='pending'>Pending</option>
+                                </Select>
                             </GridItem>
                             <GridItem colSpan={{ base: 12 }} >
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
