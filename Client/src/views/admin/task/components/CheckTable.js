@@ -59,9 +59,10 @@ import DeleteTask from "./deleteTask";
 import * as XLSX from 'xlsx'
 import { HasAccess } from "../../../../redux/accessUtils";
 import CustomSearchInput from "components/search/search";
+import { putApi } from "services/api";
 
 export default function CheckTable(props) {
-  const { tableData, fetchData, isLoding, allData, dataColumn, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action, className } = props;
+  const { tableData, fetchData, isLoding, setIsLoding, allData, dataColumn, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action, className } = props;
 
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -265,6 +266,37 @@ export default function CheckTable(props) {
     setSearchedData(results);
   };
 
+  const setStatusData = async (cell, e) => {
+    try {
+      setIsLoding(true)
+      let response = await putApi(`api/task/changeStatus/${cell?.row?.original?._id}`, { status: e.target.value });
+      if (response.status === 200) {
+        setAction((pre) => !pre)
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    finally {
+      setIsLoding(false)
+    }
+  }
+  const changeStatus = (cell) => {
+    switch (cell.value) {
+      case 'pending':
+        return 'pending';
+      case 'completed':
+        return 'completed';
+      case 'todo':
+        return 'toDo';
+      case 'onHold':
+        return 'onHold';
+      case 'inProgress':
+        return 'inProgress';
+      default:
+        return '';
+    }
+
+  }
   return (
     <>
       <Card
@@ -409,6 +441,18 @@ export default function CheckTable(props) {
                             >
                               {cell?.value ? cell?.value : ' - '}
                             </Text>
+                          );
+                        } else if (cell?.column.Header === "Status") {
+                          data = (
+                            <Select placeholder='Select option' className={changeStatus(cell)} onChange={(e) => setStatusData(cell, e)} height={7} width={130} value={cell?.value} style={{ fontSize: "14px" }}>
+                              <option value='completed'>Completed</option>
+                              <option value='todo'>Todo</option>
+                              <option value='onHold'>On Hold</option>
+                              <option value='inProgress'>In Progress</option>
+                              <option value='pending'>Pending</option>
+                            </Select>
+
+
                           );
                         } else if (cell?.column.Header === "Assignment To") {
                           data = (

@@ -75,7 +75,6 @@ export default function UserReports() {
     setLeadData(lead?.data);
     setContactData(contact?.data);
   };
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -91,7 +90,33 @@ export default function UserReports() {
     fetchProgressChart()
   }, [])
 
-
+  const taskStatus = [
+    {
+      name: "Completed",
+      length: task && task?.length > 0 && task?.filter(item => item?.status === "completed")?.length || 0,
+      color: "#4d8f3a"
+    },
+    {
+      name: "Pending",
+      length: task && task?.length > 0 && task?.filter(item => item?.status === "pending")?.length || 0,
+      color: "#a37f08"
+    },
+    {
+      name: "In Progress",
+      length: task && task?.length > 0 && task?.filter(item => item?.status === "inProgress")?.length || 0,
+      color: "#7038db"
+    },
+    {
+      name: "Todo",
+      length: task && task?.length > 0 && task?.filter(item => item?.status === "todo")?.length || 0,
+      color: "#1f7eeb"
+    },
+    {
+      name: "On Hold",
+      length: task && task?.length > 0 && task?.filter(item => item?.status === "onHold")?.length || 0,
+      color: "#DB5436"
+    },
+  ]
 
   return (
     <>
@@ -195,6 +220,21 @@ export default function UserReports() {
       </Grid>
       <SimpleGrid gap="20px" columns={{ base: 1, md: 2, lg: 3 }} my="20px">
 
+        <Card >
+          <Heading size="md" pb={3}>Statistics</Heading>
+          {data && data.length > 0 && data?.map((item, i) => (
+            <Box border={"1px solid #e5e5e5"} p={2} m={1} key={i}>
+              <Flex justifyContent={"space-between"}>
+                <Text fontSize="sm" fontWeight={600} pb={2}>{item?.name}</Text>
+                <Text fontSize="sm" fontWeight={600} pb={2}>{item?.length}</Text>
+              </Flex>
+              <Progress
+                colorScheme={item?.color}
+                size='xs' value={item?.length} width={"100%"} />
+            </Box>
+          ))}
+        </Card>
+
         <Card>
           <Heading size="md" pb={2}>Lead Statistics</Heading>
           {(leadView?.create || leadView?.update || leadView?.delete || leadView?.view) &&
@@ -243,68 +283,27 @@ export default function UserReports() {
         </Card>
 
         <Card >
-          <Heading size="md" pb={3}>Statistics</Heading>
-          {data && data.length > 0 && data?.map((item, i) => (
-            <Box border={"1px solid #e5e5e5"} p={2} m={1} key={i}>
-              <Flex justifyContent={"space-between"}>
-                <Text fontSize="sm" fontWeight={600} pb={2}>{item?.name}</Text>
-                <Text fontSize="sm" fontWeight={600} pb={2}>{item?.length}</Text>
-              </Flex>
-              <Progress
-                colorScheme={item?.color}
-                size='xs' value={item?.length} width={"100%"} />
-            </Box>
-          ))}
-        </Card>
-
-        <Card >
           <Heading size="md" pb={3}>Task Statistics</Heading>
-          <Grid templateColumns="repeat(12, 1fr)" gap={2}>
-            <GridItem colSpan={{ base: 12, md: 6 }}>
+          <Grid templateColumns="repeat(12, 1fr)" gap={2} mb={2}>
+            <GridItem colSpan={{ base: 12 }}>
               <Box backgroundColor={"#ebf5ff"}
                 borderRadius={"10px"}
                 p={2} m={1} textAlign={"center"}>
                 <Heading size="sm" pb={3} color={"#1f7eeb"}>Total Tasks </Heading>
-                <Text fontWeight={600} color={"#1f7eeb"}>45</Text>
+                <Text fontWeight={600} color={"#1f7eeb"}>{task?.length || 0}</Text>
               </Box>
             </GridItem>
-            <GridItem colSpan={{ base: 12, md: 6 }}>
-              <Box backgroundColor={"#eaf9e6"}
-                borderRadius={"10px"}
-                p={2} m={1} textAlign={"center"}>
-                <Heading size="sm" pb={3} color={"#43882f"} >Active Tasks </Heading>
-                <Text fontWeight={600} color={"#43882f"}>68</Text>
-              </Box>
-            </GridItem>
-            <GridItem colSpan={{ base: 12, md: 6 }}>
-              <Box backgroundColor={"#fbf4dd"}
-                borderRadius={"10px"}
-                p={2} m={1} textAlign={"center"}>
-                <Heading size="sm" pb={3} color={"#a37f08"}>Pending Tasks</Heading>
-                <Text fontWeight={600} color={"#a37f08"}>52</Text>
-              </Box>
-            </GridItem>
-
-            <GridItem colSpan={{ base: 12, md: 6 }}>
-              <Box backgroundColor={"#ffeeeb"}
-                borderRadius={"10px"}
-                p={2} m={1} textAlign={"center"}>
-                <Heading size="sm" pb={3} color={"#d6401d"}>Sold Tasks </Heading>
-                <Text fontWeight={600} color={"#d6401d"}>23</Text>
-              </Box>
-            </GridItem>
-
           </Grid>
-          {data && data.length > 0 && data?.map((item, i) => (
-            <Box my={3}>
-              <Flex justifyContent={"space-between"} alignItems={"center"}>
+          {taskStatus && taskStatus.length > 0 && taskStatus?.map((item, i) => (
+            <Box my={1.5}>
+              <Flex justifyContent={"space-between"} alignItems={"center"} padding={4} backgroundColor={"#0b0b0b17"} borderRadius={"10px"}>
                 <Flex alignItems={"center"}>
                   <Box height={"18px"} width={"18px"} lineHeight={"18px"} textAlign={"center"} border={`1px solid ${item.color}`} display={"flex"} justifyContent={"center"} alignItems={"center"} borderRadius={"50%"} margin={"0 auto"} >
-                    <Box backgroundColor={item.color} height={"10px"} width={"10px"} borderRadius={"50%"}></Box>
+                    <Box backgroundColor={`${item.color}`} height={"10px"} width={"10px"} borderRadius={"50%"}></Box>
                   </Box>
-                  <Text ps={2} fontWeight={"bold"}>{item.name}</Text>
+                  <Text ps={2} fontWeight={"bold"} color={`${item.color}`}>{item.name}</Text>
                 </Flex>
-                <Box fontWeight={"bold"}>{item.length}</Box>
+                <Box fontWeight={"bold"} color={`${item.color}`}>{item.length}</Box>
               </Flex>
             </Box>
           ))}
