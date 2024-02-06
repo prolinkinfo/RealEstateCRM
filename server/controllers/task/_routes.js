@@ -8,6 +8,7 @@ router.get('/', auth, task.index)
 router.post('/add', auth, task.add)
 router.get('/view/:id', auth, task.view)
 router.put('/edit/:id', auth, task.edit)
+router.put('/changeStatus/:id', auth, task.changeStatus)
 router.delete('/delete/:id', auth, task.deleteData)
 
 
