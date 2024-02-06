@@ -112,6 +112,23 @@ const edit = async (req, res) => {
         res.status(400).json({ error: 'Failed to create task : ', err });
     }
 }
+const changeStatus = async (req, res) => {
+    try {
+        const { status } = req.body;
+
+        let result = await Task.updateOne(
+            { _id: req.params.id },
+            { $set: { status: status } }
+        );
+
+        // const result = new Task(taskData);
+        // await result.save();
+        res.status(200).json(result);
+    } catch (err) {
+        console.error('Failed to create task:', err);
+        res.status(400).json({ error: 'Failed to create task : ', err });
+    }
+}
 
 const view = async (req, res) => {
     try {
@@ -177,4 +194,4 @@ const deleteData = async (req, res) => {
     }
 }
 
-module.exports = { index, add, edit, view, deleteData }
+module.exports = { index, add, edit, view, deleteData, changeStatus }

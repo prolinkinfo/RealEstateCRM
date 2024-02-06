@@ -30,6 +30,10 @@ const Task = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    status: {
+        type: String,
+        default: "todo"
+    },
     createdDate: {
         type: Date,
     },
