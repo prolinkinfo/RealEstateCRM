@@ -307,7 +307,7 @@ export default function CheckTable(props) {
                 <MenuButton p={4}>
                   <BsColumnsGap />
                 </MenuButton>
-                <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} >
+                <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} zIndex={2}  >
                   <MenuItem onClick={() => setManageColumns(true)} width={"165px"}> Manage Columns
                   </MenuItem>
                   <MenuItem width={"165px"} onClick={() => setIsImportContact(true)}> Import Contacts
@@ -342,7 +342,7 @@ export default function CheckTable(props) {
 
         <Box overflowY={"auto"} className="table-fix-container">
           <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
-            <Thead zIndex={9}>
+            <Thead zIndex={1}>
               {headerGroups?.map((headerGroup, index) => (
                 <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
                   {headerGroup.headers?.map((column, index) => (

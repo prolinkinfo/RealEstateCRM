@@ -288,7 +288,7 @@ export default function CheckTable(props) {
               <MenuButton p={4}>
                 <BsColumnsGap />
               </MenuButton>
-              <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} >
+              <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} zIndex={2}  >
                 <MenuItem onClick={() => setManageColumns(true)} width={"165px"}> Manage Columns
                 </MenuItem>
                 {/* <MenuItem width={"165px"} onClick={() => setIsImportLead(true)}> Import Leads
