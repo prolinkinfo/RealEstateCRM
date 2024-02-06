@@ -66,7 +66,6 @@ const EditTask = (props) => {
     };
 
     const fetchTaskData = async () => {
-        console.log('11111111111111111111:');
         if (props.id) {
             try {
                 setIsLoding(true)
@@ -120,7 +119,6 @@ const EditTask = (props) => {
         fetchTaskData()
         getContactDetails()
     }, [props.id, isOpen])
-    console.log(props.id, "props.id")
     return (
         <Modal isOpen={isOpen} size={'xl'} >
             {!props.from && <ModalOverlay />}
