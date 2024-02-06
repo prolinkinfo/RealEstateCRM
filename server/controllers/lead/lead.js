@@ -32,6 +32,23 @@ const addMany = async (req, res) => {
     }
 };
 
+const changeStatus = async (req, res) => {
+    try {
+        const { leadStatus } = req.body;
+
+        let result = await Lead.updateOne(
+            { _id: req.params.id },
+            { $set: { leadStatus: leadStatus } }
+        );
+
+        let response = await Lead.findOne({ _id: req.params.id })
+        res.status(200).json({ message: "Status Change Successfully", response });
+    } catch (err) {
+        console.error('Failed to change status:', err);
+        res.status(400).json({ error: 'Failed to change status : ', err });
+    }
+}
+
 const add = async (req, res) => {
     try {
         req.body.createdDate = new Date();
@@ -263,4 +280,4 @@ const deleteMany = async (req, res) => {
 }
 
 
-module.exports = { index, add, addMany, view, edit, deleteData, deleteMany }
+module.exports = { index, add, addMany, view, edit, deleteData, deleteMany, changeStatus }
