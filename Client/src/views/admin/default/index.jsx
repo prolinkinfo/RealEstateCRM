@@ -29,6 +29,7 @@ import Chart from "components/charts/LineChart.js";
 // import Chart from "../reports/components/chart";
 import { HasAccess } from "../../../redux/accessUtils";
 import PieChart from "components/charts/PieChart";
+import ReactApexChart from 'react-apexcharts';
 
 export default function UserReports() {
   // Chakra Color Mode
@@ -47,6 +48,131 @@ export default function UserReports() {
   const taskView = HasAccess("Task");
   const leadView = HasAccess("Lead");
   const proprtyView = HasAccess("Property");
+
+  const options = {
+    chart: {
+      height: 350,
+      type: 'radialBar',
+    },
+    plotOptions: {
+      radialBar: {
+        dataLabels: {
+          name: {
+            fontSize: '22px',
+          },
+          value: {
+            fontSize: '16px',
+          },
+          total: {
+            show: true,
+            label: 'Total',
+            formatter: function (w) {
+              return 249;
+            }
+          }
+        }
+      }
+    },
+    labels: ['Apples', 'Oranges', 'Bananas', 'Berries'],
+  };
+
+  const options3 = {
+    chart: {
+      height: 350,
+      type: 'radialBar',
+      toolbar: {
+        show: true
+      }
+    },
+    plotOptions: {
+      radialBar: {
+        startAngle: -135,
+        endAngle: 225,
+        hollow: {
+          margin: 0,
+          size: '70%',
+          background: '#fff',
+          image: undefined,
+          imageOffsetX: 0,
+          imageOffsetY: 0,
+          position: 'front',
+          dropShadow: {
+            enabled: true,
+            top: 3,
+            left: 0,
+            blur: 4,
+            opacity: 0.24
+          }
+        },
+        track: {
+          background: '#fff',
+          strokeWidth: '67%',
+          margin: 0, // margin is in pixels
+          dropShadow: {
+            enabled: true,
+            top: -3,
+            left: 0,
+            blur: 4,
+            opacity: 0.35
+          }
+        },
+
+        dataLabels: {
+          show: true,
+          name: {
+            offsetY: -10,
+            show: true,
+            color: '#888',
+            fontSize: '17px'
+          },
+          value: {
+            formatter: function (val) {
+              return parseInt(val);
+            },
+            color: '#111',
+            fontSize: '36px',
+            show: true,
+          }
+        }
+      }
+    },
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shade: 'dark',
+        type: 'horizontal',
+        shadeIntensity: 0.5,
+        gradientToColors: ['#ABE5A1'],
+        inverseColors: true,
+        opacityFrom: 1,
+        opacityTo: 1,
+        stops: [0, 100]
+      }
+    },
+    stroke: {
+      lineCap: 'round'
+    },
+    labels: ['Percent'],
+  }
+
+
+
+
+  const options2 = {
+    chart: {
+      height: 350,
+      type: 'radialBar',
+    },
+    plotOptions: {
+      radialBar: {
+        hollow: {
+          size: '70%',
+        }
+      },
+    },
+    labels: ['Cricket'],
+  };
+
 
   const fetchData = async () => {
     let taskData = await getApi(
@@ -183,6 +309,21 @@ export default function UserReports() {
       </SimpleGrid>
 
       <Grid Grid templateColumns="repeat(12, 1fr)" gap={3} >
+        {/* <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
+          <Card>
+            <ReactApexChart options={options} series={[44, 55, 67, 83]} type="radialBar" height={350} />
+          </Card>
+        </GridItem>
+        <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
+          <Card>
+            <ReactApexChart options={options2} series={[44]} type="radialBar" height={350} />
+          </Card>
+        </GridItem>
+        <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
+          <Card>
+            <ReactApexChart options={options3} series={[76]} type="radialBar" height={350} />
+          </Card>
+        </GridItem> */}
         <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
           <Card>
             <Flex mb={3} alignItems={"center"} justifyContent={"space-between"}>
