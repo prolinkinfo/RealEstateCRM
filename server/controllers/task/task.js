@@ -104,8 +104,6 @@ const edit = async (req, res) => {
             { $set: taskData }
         );
 
-        // const result = new Task(taskData);
-        // await result.save();
         res.status(200).json(result);
     } catch (err) {
         console.error('Failed to create task:', err);
