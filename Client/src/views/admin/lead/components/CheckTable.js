@@ -93,6 +93,7 @@ export default function CheckTable(props) {
   const [edit, setEdit] = useState(false);
   const [isImportLead, setIsImportLead] = useState(false);
   const [searchbox, setSearchbox] = useState('');
+  const [column, setColumn] = useState('');
   const [manageColumns, setManageColumns] = useState(false);
   const [tempSelectedColumns, setTempSelectedColumns] = useState(dataColumn); // State to track changes
 
@@ -105,17 +106,28 @@ export default function CheckTable(props) {
     { Header: "Score", accessor: "leadScore" },
   ];
 
+  let isColumnSelected;
   const toggleColumnVisibility = (columnKey) => {
-    const isColumnSelected = tempSelectedColumns.some((column) => column.accessor === columnKey);
+    setColumn(columnKey)
+    isColumnSelected = tempSelectedColumns.some((column) => column.accessor === columnKey);
 
     if (isColumnSelected) {
       const updatedColumns = tempSelectedColumns.filter((column) => column.accessor !== columnKey);
       setTempSelectedColumns(updatedColumns);
+      console.log(columnKey, "1111111111")
     } else {
       const columnToAdd = dynamicColumns.find((column) => column.accessor === columnKey);
       setTempSelectedColumns([...tempSelectedColumns, columnToAdd]);
+      console.log(columnToAdd.accessor, "2222222")
     }
   };
+  console.log("selectedColumns", selectedColumns)
+  const handleColumnClear = () => {
+    isColumnSelected = selectedColumns.some((selectedColumn) => selectedColumn.accessor === column.accessor)
+    setTempSelectedColumns(dynamicColumns);
+    // setManageColumns(!manageColumns ? !manageColumns : false)
+    console.log(tempSelectedColumns)
+  }
 
   const initialValues = {
     leadName: '',
@@ -350,7 +362,7 @@ export default function CheckTable(props) {
 
         <Box overflowY={"auto"} className="table-fix-container">
           <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
-            <Thead >
+            <Thead zIndex={9}>
               {headerGroups?.map((headerGroup, index) => (
                 <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
                   {headerGroup.headers?.map((column, index) => (
@@ -727,6 +739,7 @@ export default function CheckTable(props) {
               {dynamicColumns.map((column) => (
                 <Text display={"flex"} key={column.accessor} py={2}>
                   <Checkbox
+                    value={selectedColumns.some((selectedColumn) => selectedColumn.accessor === column.accessor)}
                     defaultChecked={selectedColumns.some((selectedColumn) => selectedColumn.accessor === column.accessor)}
                     onChange={() => toggleColumnVisibility(column.accessor)}
                     pe={2}
@@ -742,7 +755,7 @@ export default function CheckTable(props) {
               setManageColumns(false);
               resetForm();
             }} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
-            <Button size="sm" colorScheme="red" onClick={() => resetForm1()}>Clear</Button>
+            <Button size="sm" colorScheme="red" onClick={() => handleColumnClear()}>Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

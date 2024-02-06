@@ -224,19 +224,19 @@ const View = () => {
                                                     <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Parking Availability </Text>
                                                     <Text textTransform={'capitalize'}>{data?.parkingAvailability ? data?.parkingAvailability : 'N/A'}</Text>
                                                 </GridItem>
-                                                <GridItem colSpan={{ base: 12, md: 6 }} >
+                                                <GridItem colSpan={{ base: 12 }} >
                                                     <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Heating And Cooling Systems </Text>
                                                     <Text>{data?.heatingAndCoolingSystems ? data?.heatingAndCoolingSystems : 'N/A'}</Text>
                                                 </GridItem>
-                                                <GridItem colSpan={{ base: 12, md: 6 }} >
+                                                <GridItem colSpan={{ base: 12 }} >
                                                     <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Flooring Type </Text>
                                                     <Text>{data?.flooringType ? data?.flooringType : 'N/A'}</Text>
                                                 </GridItem>
-                                                <GridItem colSpan={{ base: 12, md: 6 }} >
+                                                <GridItem colSpan={{ base: 12 }} >
                                                     <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Exterior Features </Text>
                                                     <Text>{data?.exteriorFeatures ? data?.exteriorFeatures : 'N/A'}</Text>
                                                 </GridItem>
-                                                <GridItem colSpan={{ base: 12, md: 6 }} >
+                                                <GridItem colSpan={{ base: 12 }} >
                                                     <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> Community Amenities </Text>
                                                     <Text>{data?.communityAmenities ? data?.communityAmenities : 'N/A'}</Text>
                                                 </GridItem>
@@ -427,14 +427,21 @@ const View = () => {
                                                 <GridItem colSpan={{ base: 12 }} >
                                                     <Flex flexWrap={'wrap'} justifyContent={'center'} alingItem={'center'} >
                                                         {data?.virtualToursOrVideos?.map((item) => (
-                                                            <AspectRatio width={'30%'} m={1} ratio={1}>
-                                                                <iframe
-                                                                    title="YouTube video player"
-                                                                    src={item.img}
-                                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                                    allowFullScreen
-                                                                ></iframe>
-                                                            </AspectRatio>
+                                                            <Flex me={2}>
+                                                                {/* <AspectRatio width={'50%'} height={'20%'} m={1} ratio={1}>
+                                                                    <iframe
+                                                                        title="YouTube video player"
+                                                                        src={item.img}
+                                                                        className="VideoSize"
+                                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                        allowFullScreen
+                                                                    ></iframe>
+                                                                </AspectRatio> */}
+                                                                <video width="200" height="200" controls autoplay loop >
+                                                                    <source src={item.img} type="video/mp4" />
+                                                                    <source src={item.img} type="video/ogg" />
+                                                                </video>
+                                                            </Flex>
                                                         ))}
                                                     </Flex>
                                                 </GridItem>

@@ -124,12 +124,12 @@ const EditTask = (props) => {
     return (
         <Modal isOpen={isOpen} size={'xl'} >
             {!props.from && <ModalOverlay />}
-            <ModalContent>
+            <ModalContent overflowY={"auto"} height={"700px"}>
                 <ModalHeader justifyContent='space-between' display='flex' >
                     Edit Task
                     <IconButton onClick={() => onClose(false)} icon={<CloseIcon />} />
                 </ModalHeader>
-                <ModalBody>
+                <ModalBody >
                     {/* Contact Model  */}
                     <ContactModel isOpen={contactModelOpen} onClose={setContactModel} fieldName='assignmentTo' setFieldValue={setFieldValue} />
                     {/* Lead Model  */}
@@ -139,7 +139,7 @@ const EditTask = (props) => {
                             <Spinner />
                         </Flex>
                         :
-                        <Grid templateColumns="repeat(12, 1fr)" gap={3}>
+                        <Grid templateColumns="repeat(12, 1fr)" gap={3} >
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                     Title<Text color={"red"}>*</Text>

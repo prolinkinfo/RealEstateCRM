@@ -149,7 +149,7 @@ const View = () => {
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                     <Spinner />
                 </Flex> : <>
-                    <Tabs >                       
+                    <Tabs >
                         <Grid templateColumns="repeat(3, 1fr)" mb={3} gap={1}>
                             <GridItem colSpan={2}>
                                 <TabList sx={{
@@ -484,7 +484,7 @@ const View = () => {
                                                     <Box>
                                                         <Flex alignItems={'center'} mb={2} justifyContent={'space-between'}>
                                                             <Heading size="md">
-                                                                Property of Interest
+                                                                Property of Interest({allData?.interestProperty?.interestProperty?.length})
                                                             </Heading>
                                                             <Button onClick={() => setPropertyModel(true)} leftIcon={<LuBuilding2 />} size="sm" colorScheme="gray" >Select Interested Property  </Button>
                                                             <PropertyModel fetchData={fetchData} isOpen={propertyModel} onClose={setPropertyModel} id={param.id} interestProperty={data?.interestProperty} />
@@ -494,7 +494,8 @@ const View = () => {
 
                                                     <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                                         <GridItem colSpan={{ base: 2 }}>
-                                                            {allData?.interestProperty?.interestProperty?.length > 0 && <PropertyTable fetchData={fetchData} columnsData={PropertyColumn} tableData={allData?.interestProperty?.interestProperty} title={'Interested Property'} />}
+                                                            {/* {allData?.interestProperty?.interestProperty?.length > 0 && <PropertyTable fetchData={fetchData} columnsData={PropertyColumn} tableData={allData?.interestProperty?.interestProperty} title={'Interested Property'} />} */}
+                                                            <PropertyTable fetchData={fetchData} columnsData={PropertyColumn} tableData={allData?.interestProperty?.interestProperty?.length > 0 ? allData?.interestProperty?.interestProperty : []} title={'Interested Property'} />
                                                         </GridItem>
                                                     </Grid>
                                                 </GridItem>
@@ -544,7 +545,7 @@ const View = () => {
                                                         <Button colorScheme="brand" variant="outline" size='sm' display="flex" justifyContant="end" onClick={() => showTasks ? setShowTasks(false) : setShowTasks(true)}>{showTasks ? "Show less" : "Show more"}</Button>
                                                     </div>}
                                                 </Card>
-                                            </GridItem >}
+                                            </GridItem>}
                                             {meetingAccess?.view && <GridItem colSpan={{ base: 12, sm: 6 }}>
                                                 <Card overflow={'scroll'}>
                                                     {allData?.meetingHistory?.length > 0 ? <MeetingColumnsTable fetchData={fetchData} columnsData={MeetingColumns} tableData={showMeetings ? allData?.meetingHistory : [allData?.meetingHistory[0]]} title={'Meeting '} action={action} setAction={setAction} access={meetingAccess} /> : meetingAccess?.create && <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} size='sm' colorScheme="gray" >Add Meeting </Button>}
