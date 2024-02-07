@@ -14,7 +14,7 @@ option {
 }
 
 ::-webkit-scrollbar {
-  height: 0px !important;
+  height: 4px !important;
   width: 7px;
 }
 
