@@ -122,7 +122,7 @@ export default function CheckTable(props) {
       console.log(columnToAdd.accessor, "2222222")
     }
   };
-  console.log("selectedColumns", selectedColumns)
+  
   const handleColumnClear = () => {
     isColumnSelected = selectedColumns.some((selectedColumn) => selectedColumn.accessor === column.accessor)
     setTempSelectedColumns(dynamicColumns);
