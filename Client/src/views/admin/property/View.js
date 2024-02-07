@@ -15,8 +15,6 @@ import Edit from "./Edit";
 import PropertyPhoto from "./components/propertyPhoto";
 import { HasAccess } from "../../../redux/accessUtils";
 
-
-
 const View = () => {
 
     const user = JSON.parse(localStorage.getItem("user"))
