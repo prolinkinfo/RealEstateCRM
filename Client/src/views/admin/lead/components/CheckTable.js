@@ -110,24 +110,21 @@ export default function CheckTable(props) {
   let isColumnSelected;
   const toggleColumnVisibility = (columnKey) => {
     setColumn(columnKey)
-    isColumnSelected = tempSelectedColumns.some((column) => column.accessor === columnKey);
+    isColumnSelected = tempSelectedColumns?.some((column) => column?.accessor === columnKey);
 
     if (isColumnSelected) {
-      const updatedColumns = tempSelectedColumns.filter((column) => column.accessor !== columnKey);
+      const updatedColumns = tempSelectedColumns?.filter((column) => column?.accessor !== columnKey);
       setTempSelectedColumns(updatedColumns);
-      console.log(columnKey, "1111111111")
     } else {
-      const columnToAdd = dynamicColumns.find((column) => column.accessor === columnKey);
+      const columnToAdd = dynamicColumns?.find((column) => column?.accessor === columnKey);
       setTempSelectedColumns([...tempSelectedColumns, columnToAdd]);
-      console.log(columnToAdd.accessor, "2222222")
     }
   };
-  
+
   const handleColumnClear = () => {
-    isColumnSelected = selectedColumns.some((selectedColumn) => selectedColumn.accessor === column.accessor)
+    isColumnSelected = selectedColumns?.some((selectedColumn) => selectedColumn?.accessor === column?.accessor)
     setTempSelectedColumns(dynamicColumns);
-    // setManageColumns(!manageColumns ? !manageColumns : false)
-    console.log(tempSelectedColumns)
+    setManageColumns(!manageColumns ? !manageColumns : false)
   }
 
   const initialValues = {

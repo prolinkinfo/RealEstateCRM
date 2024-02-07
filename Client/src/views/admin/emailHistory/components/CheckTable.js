@@ -63,11 +63,9 @@ import { HasAccess } from "../../../../redux/accessUtils";
 import CustomSearchInput from "components/search/search";
 
 export default function CheckTable(props) {
-  // const { columnsData, action } = props;
   const { columnsData, tableData, fetchData, isLoding, allData, access, dataColumn, setSearchedData, setDisplaySearchData, displaySearchData, columnsToExclude, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action } = props;
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
-  // const columns = useMemo(() => columnsData, [columnsData]);
   const columns = useMemo(() => dataColumn, [dataColumn]);
   const data = useMemo(() => tableData, [tableData]);
   const user = JSON.parse(localStorage.getItem("user"))
@@ -80,6 +78,7 @@ export default function CheckTable(props) {
   const [searchClear, setSearchClear] = useState(false);
   const [getTagValues, setGetTagValues] = useState([]);
   const [selectedValues, setSelectedValues] = useState([]);
+  const [column, setColumn] = useState('');
   const navigate = useNavigate()
 
   const csvColumns = [
@@ -90,17 +89,25 @@ export default function CheckTable(props) {
     { Header: "Created", access: "timestamp" },
   ];
 
+  let isColumnSelected;
   const toggleColumnVisibility = (columnKey) => {
-    const isColumnSelected = tempSelectedColumns.some((column) => column.Header === columnKey);
+    setColumn(columnKey)
+    isColumnSelected = tempSelectedColumns?.some((column) => column?.Header === columnKey);
 
     if (isColumnSelected) {
-      const updatedColumns = tempSelectedColumns.filter((column) => column.Header !== columnKey);
+      const updatedColumns = tempSelectedColumns?.filter((column) => column?.Header !== columnKey);
       setTempSelectedColumns(updatedColumns);
     } else {
-      const columnToAdd = dynamicColumns.find((column) => column.Header === columnKey);
+      const columnToAdd = dynamicColumns?.find((column) => column?.Header === columnKey);
       setTempSelectedColumns([...tempSelectedColumns, columnToAdd]);
     }
   };
+
+  const handleColumnClear = () => {
+    isColumnSelected = selectedColumns?.some((selectedColumn) => selectedColumn?.accessor === column?.accessor)
+    setTempSelectedColumns(dynamicColumns);
+    setManageColumns(!manageColumns ? !manageColumns : false)
+  }
   const initialValues = {
     senderName: '',
     realetedTo: '',
@@ -594,13 +601,13 @@ export default function CheckTable(props) {
           <ModalBody>
             <div>
               {dynamicColumns.map((column) => (
-                <Text display={"flex"} key={column.Header} py={2}>
+                <Text display={"flex"} key={column?.Header} py={2}>
                   <Checkbox
-                    defaultChecked={selectedColumns.some((selectedColumn) => selectedColumn.Header === column.Header)}
-                    onChange={() => toggleColumnVisibility(column.Header)}
+                    defaultChecked={selectedColumns?.some((selectedColumn) => selectedColumn?.Header === column?.Header)}
+                    onChange={() => toggleColumnVisibility(column?.Header)}
                     pe={2}
                   />
-                  {column.Header}
+                  {column?.Header}
                 </Text>
               ))}
             </div>
@@ -611,7 +618,7 @@ export default function CheckTable(props) {
               setManageColumns(false);
               resetForm();
             }} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
-            <Button colorScheme="red" onClick={() => resetForm()} size="sm">Clear</Button>
+            <Button colorScheme="red" onClick={() => handleColumnClear()} size="sm">Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

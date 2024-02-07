@@ -82,6 +82,7 @@ export default function CheckTable(props) {
   const [edit, setEdit] = useState(false);
   const [selectedId, setSelectedId] = useState();
   const [deleteModel, setDelete] = useState(false);
+  const [column, setColumn] = useState('');
   // const data = useMemo(() => tableData, [tableData]);
   // const [data, setData] = useState([])
   const user = JSON.parse(localStorage.getItem("user"))
@@ -135,18 +136,24 @@ export default function CheckTable(props) {
   if (pageOptions.length < gopageValue) {
     setGopageValue(pageOptions.length)
   }
-
+  let isColumnSelected;
   const toggleColumnVisibility = (columnKey) => {
-    const isColumnSelected = tempSelectedColumns.some((column) => column.accessor === columnKey);
+    setColumn(columnKey)
+    isColumnSelected = tempSelectedColumns?.some((column) => column?.accessor === columnKey);
 
     if (isColumnSelected) {
-      const updatedColumns = tempSelectedColumns.filter((column) => column.accessor !== columnKey);
+      const updatedColumns = tempSelectedColumns?.filter((column) => column?.accessor !== columnKey);
       setTempSelectedColumns(updatedColumns);
     } else {
-      const columnToAdd = dynamicColumns.find((column) => column.accessor === columnKey);
+      const columnToAdd = dynamicColumns?.find((column) => column?.accessor === columnKey);
       setTempSelectedColumns([...tempSelectedColumns, columnToAdd]);
     }
   };
+  const handleColumnClear = () => {
+    isColumnSelected = selectedColumns?.some((selectedColumn) => selectedColumn?.accessor === column?.accessor)
+    setTempSelectedColumns(dynamicColumns);
+    setManageColumns(!manageColumns ? !manageColumns : false)
+  }
   const initialValues = {
     propertyType: '',
     listingPrice: '',
@@ -614,13 +621,13 @@ export default function CheckTable(props) {
           <ModalBody>
             <div>
               {dynamicColumns?.map((column) => (
-                <Text display={"flex"} key={column.accessor} py={2}>
+                <Text display={"flex"} key={column?.accessor} py={2}>
                   <Checkbox
-                    defaultChecked={selectedColumns.some((selectedColumn) => selectedColumn.accessor === column.accessor)}
-                    onChange={() => toggleColumnVisibility(column.accessor)}
+                    defaultChecked={selectedColumns?.some((selectedColumn) => selectedColumn?.accessor === column?.accessor)}
+                    onChange={() => toggleColumnVisibility(column?.accessor)}
                     pe={2}
                   />
-                  {column.Header}
+                  {column?.Header}
                 </Text>
               ))}
             </div>
@@ -631,7 +638,7 @@ export default function CheckTable(props) {
               setManageColumns(false);
               resetForm();
             }} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
-            <Button size="sm" colorScheme="red" onClick={() => resetForm()}>Clear</Button>
+            <Button size="sm" colorScheme="red" onClick={() => handleColumnClear()}>Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

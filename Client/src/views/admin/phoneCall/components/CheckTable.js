@@ -85,6 +85,7 @@ export default function CheckTable(props) {
   const [getTagValues, setGetTagValues] = useState([]);
   const [searchbox, setSearchbox] = useState('');
   const [selectedValues, setSelectedValues] = useState([]);
+  const [column, setColumn] = useState('');
   const navigate = useNavigate()
 
   const csvColumns = [
@@ -98,17 +99,25 @@ export default function CheckTable(props) {
   const contactAccess = HasAccess('Contacts')
   const leadAccess = HasAccess('Lead')
 
+  let isColumnSelected;
   const toggleColumnVisibility = (columnKey) => {
-    const isColumnSelected = tempSelectedColumns.some((column) => column.Header === columnKey);
+    setColumn(columnKey)
+    isColumnSelected = tempSelectedColumns?.some((column) => column?.Header === columnKey);
 
     if (isColumnSelected) {
-      const updatedColumns = tempSelectedColumns.filter((column) => column.Header !== columnKey);
+      const updatedColumns = tempSelectedColumns?.filter((column) => column?.Header !== columnKey);
       setTempSelectedColumns(updatedColumns);
     } else {
-      const columnToAdd = dynamicColumns.find((column) => column.Header === columnKey);
+      const columnToAdd = dynamicColumns?.find((column) => column?.Header === columnKey);
       setTempSelectedColumns([...tempSelectedColumns, columnToAdd]);
     }
   };
+
+  const handleColumnClear = () => {
+    isColumnSelected = selectedColumns?.some((selectedColumn) => selectedColumn?.accessor === column?.accessor)
+    setTempSelectedColumns(dynamicColumns);
+    setManageColumns(!manageColumns ? !manageColumns : false)
+  }
   const initialValues = {
     senderName: '',
     realetedTo: '',
@@ -588,14 +597,14 @@ export default function CheckTable(props) {
           <ModalCloseButton onClick={() => { setManageColumns(false); resetForm() }} />
           <ModalBody>
             <div>
-              {dynamicColumns.map((column) => (
-                <Text display={"flex"} key={column.Header} py={2}>
+              {dynamicColumns?.map((column) => (
+                <Text display={"flex"} key={column?.Header} py={2}>
                   <Checkbox
-                    defaultChecked={selectedColumns.some((selectedColumn) => selectedColumn.Header === column.Header)}
-                    onChange={() => toggleColumnVisibility(column.Header)}
+                    defaultChecked={selectedColumns?.some((selectedColumn) => selectedColumn?.Header === column?.Header)}
+                    onChange={() => toggleColumnVisibility(column?.Header)}
                     pe={2}
                   />
-                  {column.Header}
+                  {column?.Header}
                 </Text>
               ))}
             </div>
@@ -606,7 +615,7 @@ export default function CheckTable(props) {
               setManageColumns(false);
               resetForm();
             }} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
-            <Button size="sm" colorScheme="red" onClick={() => resetForm()}>Clear</Button>
+            <Button size="sm" colorScheme="red" onClick={() => handleColumnClear()}>Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
