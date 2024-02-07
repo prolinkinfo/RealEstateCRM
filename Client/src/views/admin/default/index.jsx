@@ -263,7 +263,7 @@ export default function UserReports() {
       </SimpleGrid>
 
       <Grid Grid templateColumns="repeat(12, 1fr)" gap={3} >
-        <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
+        {/* <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
           <Card>
             <ReactApexChart options={options} series={[44, 55, 67, 83]} type="radialBar" height={350} />
           </Card>
@@ -272,7 +272,7 @@ export default function UserReports() {
           <Card>
             <ReactApexChart options={options4} series={[71, 63, 77]} type="radialBar" height={350} />
           </Card>
-        </GridItem>
+        </GridItem> */}
         <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
           <Card>
             <Flex mb={3} alignItems={"center"} justifyContent={"space-between"}>
