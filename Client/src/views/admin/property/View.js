@@ -1,5 +1,5 @@
 import { AddIcon, ChevronDownIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { AspectRatio, Box, Button, Flex, Grid, GridItem, Heading, Image, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useColorModeValue, useDisclosure } from "@chakra-ui/react";
+import { AspectRatio, Box, Button, Flex, Grid, GridItem, Heading, Image, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useColorModeValue, useDisclosure } from "@chakra-ui/react";
 import Card from "components/card/Card";
 import { HSeparator } from "components/separator/Separator";
 import Spinner from "components/spinner/Spinner";
@@ -14,8 +14,6 @@ import Delete from "./Delete";
 import Edit from "./Edit";
 import PropertyPhoto from "./components/propertyPhoto";
 import { HasAccess } from "../../../redux/accessUtils";
-
-
 
 const View = () => {
 
@@ -34,6 +32,8 @@ const View = () => {
     const [floorPlans, setFloorPlans] = useState(false);
     const [propertyDocuments, setPropertyDocuments] = useState(false);
     const [isLoding, setIsLoding] = useState(false)
+    const [displayPropertyPhoto, setDisplayPropertyPhoto] = useState(false)
+    const [type, setType] = useState(false)
 
     const size = "lg";
 
@@ -400,11 +400,15 @@ const View = () => {
                                                     </Box>
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12 }} >
-                                                    <Flex flexWrap={'wrap'} justifyContent={'center'} alingItem={'center'} >
+                                                    <Flex overflowY={"scroll"} height={"150px"} alingItem={'center'} >
                                                         {data?.propertyPhotos?.map((item) => (
                                                             <Image width={'150px'} m={1} src={item.img} alt="Your Image" />
                                                         ))}
                                                     </Flex>
+                                                    {data?.propertyPhotos.length > 0 ?
+                                                        <Flex justifyContent={"end"} mt={1}>
+                                                            <Button size="sm" colorScheme="brand" variant="outline" onClick={() => { setDisplayPropertyPhoto(true); setType("photo"); }}>Show more</Button>
+                                                        </Flex> : ""}
                                                 </GridItem>
                                             </Grid>
                                         </Card>
@@ -425,25 +429,18 @@ const View = () => {
                                                     </Box>
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12 }} >
-                                                    <Flex flexWrap={'wrap'} justifyContent={'center'} alingItem={'center'} >
+                                                    <Flex overflowY={"scroll"} height={"150px"} alingItem={'center'} >
                                                         {data?.virtualToursOrVideos?.map((item) => (
-                                                            <Flex me={2}>
-                                                                {/* <AspectRatio width={'50%'} height={'20%'} m={1} ratio={1}>
-                                                                    <iframe
-                                                                        title="YouTube video player"
-                                                                        src={item.img}
-                                                                        className="VideoSize"
-                                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                                        allowFullScreen
-                                                                    ></iframe>
-                                                                </AspectRatio> */}
-                                                                <video width="200" height="200" controls autoplay loop >
-                                                                    <source src={item.img} type="video/mp4" />
-                                                                    <source src={item.img} type="video/ogg" />
-                                                                </video>
-                                                            </Flex>
+                                                            <video width="200" controls autoplay loop style={{ margin: "0 5px" }}>
+                                                                <source src={item.img} type="video/mp4" />
+                                                                <source src={item.img} type="video/ogg" />
+                                                            </video>
                                                         ))}
                                                     </Flex>
+                                                    {data?.virtualToursOrVideos.length > 0 ?
+                                                        <Flex justifyContent={"end"} mt={1}>
+                                                            <Button size="sm" colorScheme="brand" variant="outline" onClick={() => { setDisplayPropertyPhoto(true); setType("video") }}>Show more</Button>
+                                                        </Flex> : ""}
                                                 </GridItem>
                                             </Grid>
                                         </Card>
@@ -464,11 +461,15 @@ const View = () => {
                                                     </Box>
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12 }} >
-                                                    <Flex flexWrap={'wrap'} justifyContent={'center'} alingItem={'center'} >
+                                                    <Flex overflowY={"scroll"} height={"150px"} alingItem={'center'} >
                                                         {data?.floorPlans?.map((item) => (
                                                             <Image key={item.createOn} width={'30%'} m={1} src={item.img} alt="Your Image" />
                                                         ))}
                                                     </Flex>
+                                                    {data?.floorPlans.length > 0 ?
+                                                        <Flex justifyContent={"end"} mt={1}>
+                                                            <Button size="sm" colorScheme="brand" variant="outline" onClick={() => { setDisplayPropertyPhoto(true); setType("floor"); }}>Show more</Button>
+                                                        </Flex> : ""}
                                                 </GridItem>
                                             </Grid>
                                         </Card>
@@ -518,6 +519,42 @@ const View = () => {
                         </Grid>
                     </Card>}
                 </>}
+
+            {/* property photo modal */}
+            <Modal onClose={() => setDisplayPropertyPhoto(false)} isOpen={displayPropertyPhoto} >
+                <ModalOverlay />
+                <ModalContent maxWidth={"6xl"} height={"750px"}>
+                    <ModalHeader>{type == "photo" ? "Property All Photos" : type == "video" ? "Virtual Tours or Videos" : type == "floor" ? "Floors plans" : ""}</ModalHeader>
+                    <ModalCloseButton onClick={() => setDisplayPropertyPhoto(false)} />
+                    <ModalBody overflowY={"auto"} height={"700px"}>
+                        <div style={{ columns: 3 }}  >
+                            {
+                                type == "photo" ?
+                                    data?.propertyPhotos?.map((item) => (
+                                        <a href={item.img} target="_blank"> <Image width={"100%"} m={1} mb={4} src={item.img} alt="Your Image" /></a>
+                                    )) :
+                                    type == "video" ? data?.virtualToursOrVideos?.map((item) => (
+                                        <a href={item.img} target="_blank">
+                                            <video width="380" controls autoplay loop style={{ margin: " 5px" }}>
+                                                <source src={item.img} type="video/mp4" />
+                                                <source src={item.img} type="video/ogg" />
+                                            </video>
+                                        </a>
+                                    )) : type == "floor" ?
+                                        data?.floorPlans?.map((item) => (
+                                            <a href={item.img} target="_blank">
+                                                <Image width={"100%"} m={1} mb={4} src={item.img} alt="Your Image" />
+                                            </a>
+                                        )) : ""
+                            }
+                        </div>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button size="sm" variant="outline" colorScheme='red' mr={2} onClick={() =>
+                            setDisplayPropertyPhoto(false)} >Close</Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </>
     );
 };

@@ -69,9 +69,10 @@ import * as yup from "yup"
 import ImportModal from "./ImportModal";
 import { HasAccess } from "../../../../redux/accessUtils";
 import CustomSearchInput from "components/search/search";
+import { putApi } from "services/api";
 
 export default function CheckTable(props) {
-  const { columnsData, tableData, dataColumn, fetchData, isLoding, allData, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, callAccess, emailAccess, setAction, action } = props;
+  const { columnsData, tableData, dataColumn, fetchData, isLoding, setIsLoding, allData, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, callAccess, emailAccess, setAction, action } = props;
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   const [leadData, setLeadData] = useState([])
@@ -121,7 +122,7 @@ export default function CheckTable(props) {
       console.log(columnToAdd.accessor, "2222222")
     }
   };
-  console.log("selectedColumns", selectedColumns)
+  
   const handleColumnClear = () => {
     isColumnSelected = selectedColumns.some((selectedColumn) => selectedColumn.accessor === column.accessor)
     setTempSelectedColumns(dynamicColumns);
@@ -301,6 +302,32 @@ export default function CheckTable(props) {
   const handleSearch = (results) => {
     setSearchedData(results);
   };
+  const setStatusData = async (cell, e) => {
+    try {
+      setIsLoding(true)
+      let response = await putApi(`api/lead/changeStatus/${cell?.row?.original?._id}`, { leadStatus: e.target.value });
+      if (response.status === 200) {
+        setAction((pre) => !pre)
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    finally {
+      setIsLoding(false)
+    }
+  }
+  const changeStatus = (cell) => {
+    switch (cell.value) {
+      case 'pending':
+        return 'pending';
+      case 'active':
+        return 'completed';
+      case 'sold':
+        return 'onHold';
+      default:
+        return '';
+    }
+  }
 
   return (
     <>
@@ -512,16 +539,11 @@ export default function CheckTable(props) {
                           );
                         } else if (cell?.column.Header === "Status") {
                           data = (
-                            <Text
-                              bgColor={cell?.value === "active" ? "#eaf9e6" : cell?.value === "sold" ? "#ffeeeb" : cell?.value === "pending" ? "#fbf4dd" : "#000"
-                              }
-                              color={cell?.value === "active" ? "#43882f" : cell?.value === "sold" ? "#d6401d" : cell?.value === "pending" ? "#a37f08" : "#000"
-                              }
-                              p={1} borderRadius={"20px"} textAlign={"center"} fontSize="sm"
-                              fontWeight="700"
-                              textTransform={"capitalize"}>
-                              {cell?.value}
-                            </Text>
+                            <Select placeholder='Select option' className={changeStatus(cell)} onChange={(e) => setStatusData(cell, e)} height={7} width={130} value={cell?.value} style={{ fontSize: "14px" }}>
+                              <option value='active'>Active</option>
+                              <option value='sold'>Sold</option>
+                              <option value='pending'>Pending</option>
+                            </Select>
                           );
                         } else if (cell?.column.Header === "Owner") {
                           data = (
