@@ -66,7 +66,7 @@ export default function UserReports() {
           total: {
             show: true,
             label: 'Total',
-            formatter: function (w) {
+            formatter: function () {
               return 249;
             }
           }
@@ -75,85 +75,6 @@ export default function UserReports() {
     },
     labels: ['Apples', 'Oranges', 'Bananas', 'Berries'],
   };
-
-  const options3 = {
-    chart: {
-      height: 350,
-      type: 'radialBar',
-      toolbar: {
-        show: true
-      }
-    },
-    plotOptions: {
-      radialBar: {
-        startAngle: -135,
-        endAngle: 225,
-        hollow: {
-          margin: 0,
-          size: '70%',
-          background: '#fff',
-          image: undefined,
-          imageOffsetX: 0,
-          imageOffsetY: 0,
-          position: 'front',
-          dropShadow: {
-            enabled: true,
-            top: 3,
-            left: 0,
-            blur: 4,
-            opacity: 0.24
-          }
-        },
-        track: {
-          background: '#fff',
-          strokeWidth: '67%',
-          margin: 0, // margin is in pixels
-          dropShadow: {
-            enabled: true,
-            top: -3,
-            left: 0,
-            blur: 4,
-            opacity: 0.35
-          }
-        },
-
-        dataLabels: {
-          show: true,
-          name: {
-            offsetY: -10,
-            show: true,
-            color: '#888',
-            fontSize: '17px'
-          },
-          value: {
-            formatter: function (val) {
-              return parseInt(val);
-            },
-            color: '#111',
-            fontSize: '36px',
-            show: true,
-          }
-        }
-      }
-    },
-    fill: {
-      type: 'gradient',
-      gradient: {
-        shade: 'dark',
-        type: 'horizontal',
-        shadeIntensity: 0.5,
-        gradientToColors: ['#ABE5A1'],
-        inverseColors: true,
-        opacityFrom: 1,
-        opacityTo: 1,
-        stops: [0, 100]
-      }
-    },
-    stroke: {
-      lineCap: 'round'
-    },
-    labels: ['Percent'],
-  }
 
   const options4 = {
     chart: {
@@ -170,6 +91,21 @@ export default function UserReports() {
           size: '48%',
           background: 'transparent',
 
+        },
+        dataLabels: {
+          name: {
+            fontSize: '22px',
+          },
+          value: {
+            fontSize: '16px',
+          },
+          total: {
+            show: true,
+            label: 'Total',
+            formatter: function () {
+              return 249;
+            }
+          }
         },
         track: {
           show: false,
@@ -191,25 +127,6 @@ export default function UserReports() {
       offsetY: 215
     },
   }
-
-
-
-
-  const options2 = {
-    chart: {
-      height: 350,
-      type: 'radialBar',
-    },
-    plotOptions: {
-      radialBar: {
-        hollow: {
-          size: '70%',
-        }
-      },
-    },
-    labels: ['Cricket'],
-  };
-
 
   const fetchData = async () => {
     let taskData = await getApi(
@@ -353,16 +270,6 @@ export default function UserReports() {
         </GridItem>
         <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
           <Card>
-            <ReactApexChart options={options2} series={[44]} type="radialBar" height={350} />
-          </Card>
-        </GridItem>
-        <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
-          <Card>
-            <ReactApexChart options={options3} series={[76]} type="radialBar" height={350} />
-          </Card>
-        </GridItem>
-        <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
-          <Card>
             <ReactApexChart options={options4} series={[71, 63, 77]} type="radialBar" height={350} />
           </Card>
         </GridItem>
@@ -455,9 +362,7 @@ export default function UserReports() {
                   <Text fontWeight={600} color={"#d6401d"}>{leadData && leadData.length > 0 && leadData?.filter(lead => lead?.leadStatus === "sold")?.length || 0}</Text>
                 </Box>
               </GridItem>
-
             </Grid>
-
           }
           <Flex justifyContent={"center"} m={3} >
             <PieChart leadData={leadData} />
@@ -477,7 +382,7 @@ export default function UserReports() {
               </Box>
             </GridItem>
           </Grid>
-          {taskStatus && taskStatus.length > 0 && taskStatus?.map((item, i) => (
+          {taskStatus && taskStatus.length > 0 && taskStatus?.map((item) => (
             <Box my={1.5}>
               <Flex justifyContent={"space-between"} alignItems={"center"} padding={4} backgroundColor={"#0b0b0b17"} borderRadius={"10px"}>
                 <Flex alignItems={"center"}>
