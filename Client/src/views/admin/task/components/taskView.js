@@ -20,9 +20,7 @@ const TaskView = (props) => {
     const { id } = params
     const user = JSON.parse(localStorage.getItem("user"))
 
-    const permission = HasAccess('Task')
-    const contactAccess = HasAccess('Contacts')
-    const leadAccess = HasAccess('Lead')
+    const [permission, contactAccess, leadAccess] = HasAccess(['Task', 'Contacts', 'Lead'])
 
     const [data, setData] = useState()
     const [isLoding, setIsLoding] = useState(false)
