@@ -80,7 +80,7 @@ const ApexChart = (props) => {
           value: {
             show: true,
             formatter: function (val) {
-              return (+val)?.toFixed(2);
+              return (+val)?.toFixed(1);
             }
           }
         },
