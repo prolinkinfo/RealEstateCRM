@@ -84,18 +84,27 @@ export default function CheckTable(props) {
   const [edit, setEdit] = useState(false);
   const [selectedId, setSelectedId] = useState();
   const navigate = useNavigate()
+  const [column, setColumn] = useState('');
 
+  let isColumnSelected;
   const toggleColumnVisibility = (columnKey) => {
-    const isColumnSelected = tempSelectedColumns.some((column) => column.accessor === columnKey);
+    setColumn(columnKey)
+
+    isColumnSelected = tempSelectedColumns?.some((column) => column?.accessor === columnKey);
 
     if (isColumnSelected) {
-      const updatedColumns = tempSelectedColumns.filter((column) => column.accessor !== columnKey);
+      const updatedColumns = tempSelectedColumns?.filter((column) => column?.accessor !== columnKey);
       setTempSelectedColumns(updatedColumns);
     } else {
-      const columnToAdd = dynamicColumns.find((column) => column.accessor === columnKey);
+      const columnToAdd = dynamicColumns?.find((column) => column?.accessor === columnKey);
       setTempSelectedColumns([...tempSelectedColumns, columnToAdd]);
     }
   };
+  const handleColumnClear = () => {
+    isColumnSelected = selectedColumns?.some((selectedColumn) => selectedColumn?.accessor === column?.accessor)
+    setTempSelectedColumns(dynamicColumns);
+    setManageColumns(!manageColumns ? !manageColumns : false)
+  }
   const initialValues = {
     firstName: '',
     username: '',
@@ -115,7 +124,6 @@ export default function CheckTable(props) {
           (!values?.firstName || (item?.firstName && item?.firstName.toLowerCase().includes(values?.firstName?.toLowerCase()))) &&
           (!values?.username || (item?.username && item?.username.toLowerCase().includes(values?.username?.toLowerCase()))) &&
           (!values?.lastName || (item?.lastName && item?.lastName.toLowerCase().includes(values?.lastName?.toLowerCase())))
-
       )
       let getValue = [values.firstName, values?.username, values?.lastName,].filter(value => value);
       setGetTagValues(getValue)
@@ -508,7 +516,7 @@ export default function CheckTable(props) {
               setManageColumns(false);
               resetForm();
             }} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
-            <Button size="sm" colorScheme="red" onClick={() => resetForm()}>Clear</Button>
+            <Button size="sm" colorScheme="red" onClick={() => handleColumnClear()}>Close</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
