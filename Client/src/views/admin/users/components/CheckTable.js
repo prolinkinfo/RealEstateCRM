@@ -398,11 +398,12 @@ export default function CheckTable(props) {
                           data = (
                             <Text fontSize="md" fontWeight="900" textAlign={"center"} >
                               <Menu isLazy  >
+                                {console.log(cell?.row?.original?.role === 'superAdmin')}
                                 <MenuButton><CiMenuKebab /></MenuButton>
                                 <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
                                   <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>
                                   <MenuItem py={2.5} color={'green'} onClick={() => navigate(user?.role !== 'superAdmin' ? `/leadView/${cell?.row?.original._id}` : `/admin/leadView/${cell?.row?.original._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>
-                                  <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>
+                                  {cell?.row?.original?.role === 'superAdmin' ? '' : <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>}
                                 </MenuList>
                               </Menu>
                             </Text>
