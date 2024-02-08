@@ -42,15 +42,7 @@ export default function AdminNavbar(props) {
 			setScrolled(false);
 		}
 	};
-	// const dispatch = useDispatch();
-
-	// useEffect(() => {
-	// 	// Dispatch the fetchRoles action on component mount
-	// 	dispatch(fetchImage(window.location.pathname === '/change-image' ? '' : "?isActive=true"));
-	// }, [dispatch]);
-
-	// const largeLogo = useSelector((state) => state?.images?.image[state?.images?.image.length - 1]);
-	// const smallLogo = useSelector((state) => state?.images?.image[state?.images?.image.length - 1]);
+	
 	return (
 		<Box
 			position={navbarPosition}

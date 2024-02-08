@@ -77,35 +77,6 @@ export default function UserReports() {
         setPropertyData(property?.data);
       }
     }, 4000);
-    // let taskData = await getApi(
-    //   user.role === "superAdmin"
-    //     ? "api/task/"
-    //     : (taskView?.create || taskView?.update || taskView?.delete || taskView?.view) &&
-    //     `api/task/?createBy=${user._id}`
-    // );
-    // let contact = await getApi(
-    //   user.role === "superAdmin"
-    //     ? "api/contact/"
-    //     : (contactsView?.create || contactsView?.update || contactsView?.delete || contactsView?.view) &&
-    //     `api/contact/?createBy=${user._id}`
-    // );
-    // let lead = await getApi(
-    //   user.role === "superAdmin"
-    //     ? "api/lead/"
-    //     : (leadView?.create || leadView?.update || leadView?.delete || leadView?.view) &&
-    //     `api/lead/?createBy=${user._id}`
-    // );
-    // let property = await getApi(
-    //   user.role === "superAdmin"
-    //     ? "api/property/"
-    //     : (proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view) &&
-    //     `api/property/?createBy=${user._id}`
-    // );
-
-
-    // setPropertyData(property?.data);
-    // setLeadData(lead?.data);
-
   };
 
   useEffect(() => {

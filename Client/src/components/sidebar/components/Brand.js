@@ -14,15 +14,6 @@ export function SidebarBrand(props) {
   //   Chakra color mode
   let logoColor = useColorModeValue("navy.700", "white");
 
-  // const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   // Dispatch the fetchRoles action on component mount
-  //   dispatch(fetchImage());
-  // }, [dispatch]);
-
-  // const largeLogo = useSelector((state) => state?.images?.image.filter(item => item.isActive === true));
-
   return (
     <Flex align='center' direction='column' style={{
       position: "sticky",

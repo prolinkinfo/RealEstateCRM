@@ -61,19 +61,6 @@ const Edit = (props) => {
             if (response && response.status === 200) {
                 handleCloseModal();
                 fetchData()
-
-                // let updatedUserData = userData; // Create a copy of userData
-
-                // if (updatedUserData && typeof updatedUserData === 'object') {
-                //     // Create a new object with the updated firstName
-                //     updatedUserData = {
-                //         ...updatedUserData,
-                //         firstName: values?.firstName
-                //     };
-                // }
-
-                // const updatedDataString = JSON.stringify(updatedUserData);
-                // localStorage.setItem('user', updatedDataString);
                 props.setAction((pre) => !pre)
             } else {
                 toast.error(response.response.data?.message)
@@ -87,17 +74,6 @@ const Edit = (props) => {
     };
 
     const param = useParams()
-    // const fetcEdithData = async () => {
-    //     let response = await getApi('api/user/view/', param.id)
-    //     setFieldValue('firstName', response.data?.firstName)
-    //     setFieldValue('lastName', response.data?.lastName)
-    //     setFieldValue('username', response.data?.username)
-    //     setFieldValue('phoneNumber', response.data?.phoneNumber)
-    // }
-
-    // useEffect(() => {
-    //     fetcEdithData()
-    // }, [props])
 
     return (
         <Modal isOpen={isOpen} isCentered>
