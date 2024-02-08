@@ -6,11 +6,13 @@ import Navbar from 'components/navbar/NavbarAdmin.js';
 import Sidebar from 'components/sidebar/Sidebar.js';
 import Spinner from 'components/spinner/Spinner';
 import { SidebarContext } from 'contexts/SidebarContext';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { ROLE_PATH } from '../../roles';
 import routes from 'routes.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchImage } from '../../redux/imageSlice';
 
 // Custom Chakra theme
 export default function Dashboard(props) {
@@ -46,6 +48,16 @@ export default function Dashboard(props) {
 		}
 		return activeRoute;
 	};
+
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		// Dispatch the fetchRoles action on component mount
+		dispatch(fetchImage());
+	}, [dispatch]);
+
+	const largeLogo = useSelector((state) => state?.images?.image.filter(item => item.isActive === true));
+
 	const under = (routes) => {
 		let activeRoute = false
 		for (let i = 0; i < routes.length; i++) {
@@ -140,7 +152,7 @@ export default function Dashboard(props) {
 						toggleSidebar,
 						setToggleSidebar
 					}}>
-					<Sidebar routes={routes} display='none' {...rest} openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
+					<Sidebar routes={routes} largeLogo={largeLogo} display='none' {...rest} openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
 					<Box
 						float='right'
 						minHeight='100vh'
@@ -166,6 +178,7 @@ export default function Dashboard(props) {
 									message={getActiveNavbarText(routes)}
 									fixed={fixed}
 									under={under(routes)}
+									largeLogo={largeLogo}
 									openSidebar={openSidebar} setOpenSidebar={setOpenSidebar}
 									{...rest}
 								/>

@@ -253,9 +253,9 @@ export default function CheckTable(props) {
     setSelectedValues([])
   };
 
-  useEffect(() => {
-    if (fetchData) fetchData()
-  }, [action])
+  // useEffect(() => {
+  //   if (fetchData) fetchData()
+  // }, [action])
 
   const handleSearch = (results) => {
     setSearchedData(results);

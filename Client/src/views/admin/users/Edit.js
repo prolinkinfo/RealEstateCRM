@@ -5,28 +5,51 @@ import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { fetchRoles } from '../../../redux/roleSlice';
 import { userSchema } from 'schema';
 import { getApi, putApi } from 'services/api';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from '../../../redux/localSlice';
 
 
 const Edit = (props) => {
-    const { onClose, isOpen, fetchData } = props
+    const { onClose, isOpen, fetchData, data, userData } = props
 
     const initialValues = {
-        firstName: '',
-        lastName: '',
-        username: '',
-        phoneNumber: ''
+        firstName: data ? data?.firstName : '',
+        lastName: data ? data?.lastName : '',
+        username: data ? data?.username : '',
+        phoneNumber: data ? data?.phoneNumber : ''
     }
+    const user = JSON.parse(window.localStorage.getItem('user'))
 
     const formik = useFormik({
         initialValues: initialValues,
         validationSchema: userSchema,
+        enableReinitialize: true,
         onSubmit: (values, { resetForm }) => {
             EditData();
             resetForm();
         },
     });
+    const dispatch = useDispatch()
+
+    const handleCloseModal = () => {
+        props.onClose();
+        let updatedUserData = userData; // Create a copy of userData
+
+        if (updatedUserData && typeof updatedUserData === 'object') {
+            // Create a new object with the updated firstName
+            updatedUserData = {
+                ...updatedUserData,
+                firstName: values?.firstName
+            };
+        }
+
+        const updatedDataString = JSON.stringify(updatedUserData);
+        localStorage.setItem('user', updatedDataString);
+        dispatch(setUser(updatedDataString)); // Dispatch setUser action to set user data
+    };
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue } = formik
 
     const [isLoding, setIsLoding] = useState(false)
@@ -36,7 +59,21 @@ const Edit = (props) => {
             setIsLoding(true)
             let response = await putApi(`api/user/edit/${param.id}`, values)
             if (response && response.status === 200) {
-                props.onClose();
+                handleCloseModal();
+                fetchData()
+
+                // let updatedUserData = userData; // Create a copy of userData
+
+                // if (updatedUserData && typeof updatedUserData === 'object') {
+                //     // Create a new object with the updated firstName
+                //     updatedUserData = {
+                //         ...updatedUserData,
+                //         firstName: values?.firstName
+                //     };
+                // }
+
+                // const updatedDataString = JSON.stringify(updatedUserData);
+                // localStorage.setItem('user', updatedDataString);
                 props.setAction((pre) => !pre)
             } else {
                 toast.error(response.response.data?.message)
@@ -50,18 +87,17 @@ const Edit = (props) => {
     };
 
     const param = useParams()
-    const fetcEdithData = async () => {
-        let response = await getApi('api/user/view/', param.id)
-        setFieldValue('firstName', response.data?.firstName)
-        setFieldValue('lastName', response.data?.lastName)
-        setFieldValue('username', response.data?.username)
-        setFieldValue('phoneNumber', response.data?.phoneNumber)
-    }
+    // const fetcEdithData = async () => {
+    //     let response = await getApi('api/user/view/', param.id)
+    //     setFieldValue('firstName', response.data?.firstName)
+    //     setFieldValue('lastName', response.data?.lastName)
+    //     setFieldValue('username', response.data?.username)
+    //     setFieldValue('phoneNumber', response.data?.phoneNumber)
+    // }
 
-    useEffect(() => {
-        fetcEdithData()
-    }, [props])
-
+    // useEffect(() => {
+    //     fetcEdithData()
+    // }, [props])
 
     return (
         <Modal isOpen={isOpen} isCentered>
@@ -147,7 +183,7 @@ const Edit = (props) => {
                 </ModalBody>
                 <ModalFooter>
                     <Button variant='brand' disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Update Data'}</Button>
-                    <Button onClick={() => onClose(false)}>close</Button>
+                    <Button onClick={() => handleCloseModal()}>close</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

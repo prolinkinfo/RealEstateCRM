@@ -9,20 +9,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchImage } from "../../../redux/imageSlice";
 
 export function SidebarBrand(props) {
-  const { setOpenSidebar, openSidebar, from } = props;
+  const { setOpenSidebar, openSidebar, from, largeLogo } = props;
 
   //   Chakra color mode
   let logoColor = useColorModeValue("navy.700", "white");
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  useEffect(() => {
-    // Dispatch the fetchRoles action on component mount
-    dispatch(fetchImage());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   // Dispatch the fetchRoles action on component mount
+  //   dispatch(fetchImage());
+  // }, [dispatch]);
 
-  const largeLogo = useSelector((state) => state?.images?.image.filter(item => item.isActive === true));
-
+  // const largeLogo = useSelector((state) => state?.images?.image.filter(item => item.isActive === true));
 
   return (
     <Flex align='center' direction='column' style={{
@@ -32,7 +31,7 @@ export function SidebarBrand(props) {
       background: "#fff"
     }}>
       <Flex>
-        {largeLogo[0]?.logoLgImg || largeLogo[0]?.logoSmImg ? <Image
+        {largeLogo && (largeLogo[0]?.logoLgImg || largeLogo[0]?.logoSmImg) ? <Image
           style={{ width: "100%", height: '52px' }}
           src={openSidebar === true ? largeLogo[0]?.logoLgImg : largeLogo[0]?.logoSmImg} // Set the source path of your image
           alt="Logo" // Set the alt text for accessibility

@@ -3,7 +3,8 @@ import { getApi } from 'services/api';
 
 // Assume you have an initialState for roles
 const initialState = {
-    roles: [], // Initial empty array for roles
+    roles: [],
+    user: [], // Initial empty array for roles
     status: 'idle', // Possible statuses: 'idle', 'loading', 'succeeded', 'failed'
     error: null,
 };
@@ -31,6 +32,7 @@ const rolesSlice = createSlice({
             .addCase(fetchRoles.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.roles = action.payload.roles; // Set roles in the state
+                state.user = action.payload; // Set roles in the state
             })
             .addCase(fetchRoles.rejected, (state, action) => {
                 state.status = 'failed';

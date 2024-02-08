@@ -20,7 +20,7 @@ export default function AdminNavbar(props) {
 		};
 	});
 
-	const { secondary, message, brandText, under, setOpenSidebar, openSidebar } = props;
+	const { secondary, message, brandText, under, setOpenSidebar, openSidebar, largeLogo } = props;
 
 	// Here are all the props that may change depending on navbar's type or state.(secondary, variant, scrolled)
 	let mainText = useColorModeValue('navy.700', 'white');
@@ -42,15 +42,15 @@ export default function AdminNavbar(props) {
 			setScrolled(false);
 		}
 	};
-	const dispatch = useDispatch();
+	// const dispatch = useDispatch();
 
-	useEffect(() => {
-		// Dispatch the fetchRoles action on component mount
-		dispatch(fetchImage(window.location.pathname === '/change-image' ? '' : "?isActive=true"));
-	}, [dispatch]);
+	// useEffect(() => {
+	// 	// Dispatch the fetchRoles action on component mount
+	// 	dispatch(fetchImage(window.location.pathname === '/change-image' ? '' : "?isActive=true"));
+	// }, [dispatch]);
 
-	const largeLogo = useSelector((state) => state?.images?.image[state?.images?.image.length - 1]);
-	const smallLogo = useSelector((state) => state?.images?.image[state?.images?.image.length - 1]);
+	// const largeLogo = useSelector((state) => state?.images?.image[state?.images?.image.length - 1]);
+	// const smallLogo = useSelector((state) => state?.images?.image[state?.images?.image.length - 1]);
 	return (
 		<Box
 			position={navbarPosition}
