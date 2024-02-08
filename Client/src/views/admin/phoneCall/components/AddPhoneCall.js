@@ -101,7 +101,7 @@ const AddPhoneCall = (props) => {
                         </GridItem>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Start Date
+                                Start Date<Text color={"red"}>*</Text>
                             </FormLabel>
                             <Input
                                 type="datetime-local"

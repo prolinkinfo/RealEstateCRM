@@ -8,7 +8,8 @@ export const phoneCallSchema = yup.object({
     callNotes: yup.string(),
     createBy: yup.string(),
     createByLead: yup.string(),
-    category: yup.string()
+    category: yup.string(),
+    startDate: yup.date().required("Start Date Is required"),
 }).test('createBy-or-createByLead-required', 'Recipient Is required', function (value) {
     if (!value.createBy && !value.createByLead) {
         return this.createError({

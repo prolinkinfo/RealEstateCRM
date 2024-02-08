@@ -88,9 +88,9 @@ const EventView = (props) => {
                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> assignment To  </Text>
                                     {data?.assignmentTo ?
                                         <Link to={contactAccess?.view && `/contactView/${data?.assignmentTo}`}>
-                                            <Text color={contactAccess?.view ? 'green.400' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }}>{data?.assignmentToName ? data?.assignmentToName : ' - '}</Text>
+                                            <Text color={contactAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }}>{data?.assignmentToName ? data?.assignmentToName : ' - '}</Text>
                                         </Link> : <Link to={leadAccess?.view && `/leadView/${data?.assignmentToLead}`}>
-                                            <Text color={leadAccess?.view ? 'green.400' : 'blackAlpha.900'} sx={{ '&:hover': { color: leadAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: leadAccess?.view ? 'underline' : 'none' } }}>{data?.assignmentToName ? data?.assignmentToName : ' - '}</Text>
+                                            <Text color={leadAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: leadAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: leadAccess?.view ? 'underline' : 'none' } }}>{data?.assignmentToName ? data?.assignmentToName : ' - '}</Text>
                                         </Link>
                                     }
                                 </GridItem>
