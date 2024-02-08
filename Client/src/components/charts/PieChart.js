@@ -8,7 +8,7 @@ const ApexChart = (props) => {
   let soldLength = leadData && leadData.length > 0 ? leadData?.filter(lead => lead?.leadStatus === "sold")?.length : 0;
 
   const series = [activeLength, pendingLength, soldLength];
-  const scaledSeries = series.map(value => (value * 100) / 51);
+  const scaledSeries = series.map(value => (value * 100) / leadData.length);
 
   const chartState = {
     series: [activeLength, pendingLength, soldLength],
@@ -80,7 +80,7 @@ const ApexChart = (props) => {
           value: {
             show: true,
             formatter: function (val) {
-              return val?.toFixed(2);
+              return (+val)?.toFixed(2);
             }
           }
         },
@@ -107,7 +107,7 @@ const ApexChart = (props) => {
   console.log(scaledSeries)
   return (
     <div>
-      {/* <ReactApexChart options={chartState.options} series={chartState.series} type="donut" width={350} /> */}
+      <ReactApexChart options={chartState.options} series={chartState.series} type="donut" width={350} />
       <ReactApexChart options={options4} series={scaledSeries} type="radialBar" height={350} />
     </div>
   );
