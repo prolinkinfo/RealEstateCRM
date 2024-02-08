@@ -365,7 +365,7 @@ export default function UserReports() {
               </GridItem>
             </Grid>
           }
-          <Flex justifyContent={"center"} m={3} >
+          <Flex justifyContent={"center"}  >
             <PieChart leadData={leadData} />
           </Flex>
 
