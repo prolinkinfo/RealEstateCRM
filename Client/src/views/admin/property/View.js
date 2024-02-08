@@ -62,11 +62,8 @@ const View = () => {
         fetchData()
     }, [action])
 
-    const permission = HasAccess('Property');
-    const contactAccess = HasAccess('Contacts');
-    const emailAccess = HasAccess('Email');
-    const callAccess = HasAccess('Call');
-
+    const [permission, contactAccess,emailAccess,callAccess] = HasAccess(['Property', 'Contacts','Email','Call']);
+   
     return (
         <>
             <Add isOpen={isOpen} size={size} onClose={onClose} />

@@ -47,7 +47,7 @@ const Index = () => {
         setColumns(tableColumns)
     }, [action])
 
-    const permission = HasAccess('Call')
+    const [permission] = HasAccess(['Call'])
 
     return (
         <div>

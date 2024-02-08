@@ -38,37 +38,45 @@ export default function UserReports() {
   const [propertyData, setPropertyData] = useState([]);
   const navigate = useNavigate();
 
-  const contactView = HasAccess("Contacts");
-  const taskView = HasAccess("Task");
-  const leadView = HasAccess("Lead");
-  const proprtyView = HasAccess("Property");
+  const [contactsView, taskView, leadView, proprtyView] = HasAccess(["Contacts", "Task", "Lead", "Property"]);
 
   const fetchData = async () => {
-    let taskData = await getApi(
-      user.role === "superAdmin"
-        ? "api/task/"
-        : (taskView?.create || taskView?.update || taskView?.delete || taskView?.view) && `api/task/?createBy=${user._id}`
-    );
-    let contact = await getApi(
-      user.role === "superAdmin"
-        ? "api/contact/"
-        : (contactView?.create || contactView?.update || contactView?.delete || contactView?.view) && `api/contact/?createBy=${user._id}`
-    );
-    let lead = await getApi(
-      user.role === "superAdmin"
-        ? "api/lead/"
-        : (leadView?.create || leadView?.update || leadView?.delete || leadView?.view) && `api/lead/?createBy=${user._id}`
-    );
-    let property = await getApi(
-      user.role === "superAdmin"
-        ? "api/property/"
-        : (proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view) && `api/property/?createBy=${user._id}`
-    );
-
-    setTask(taskData?.data);
-    setPropertyData(property?.data);
-    setLeadData(lead?.data);
-    setContactData(contact?.data);
+    let taskData;
+    setTimeout(async () => {
+      if (user.role === "superAdmin") {
+        taskData = await getApi("api/task/")
+      } else if (taskView?.create || taskView?.update || taskView?.delete || taskView?.view) {
+        taskData = await getApi(`api/task/?createBy=${user._id}`)
+        setTask(taskData?.data);
+      }
+    }, 4000);
+    let contact;
+    setTimeout(async () => {
+      if (user.role === "superAdmin") {
+        contact = await getApi("api/contact/")
+      } else if (contactsView?.create || contactsView?.update || contactsView?.delete || contactsView?.view) {
+        contact = await getApi(`api/contact/?createBy=${user._id}`)
+        setContactData(contact?.data);
+      }
+    }, 4000);
+    let lead;
+    setTimeout(async () => {
+      if (user.role === "superAdmin") {
+        lead = await getApi("api/lead/")
+      } else if (leadView?.create || leadView?.update || leadView?.delete || leadView?.view) {
+        lead = await getApi(`api/lead/?createBy=${user._id}`)
+        setLeadData(lead?.data);
+      }
+    }, 4000);
+    let property;
+    setTimeout(async () => {
+      if (user.role === "superAdmin") {
+        property = await getApi("api/property/")
+      } else if (proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view) {
+        property = await getApi(`api/property/?createBy=${user._id}`)
+        setPropertyData(property?.data);
+      }
+    }, 4000);
   };
 
   useEffect(() => {
@@ -79,64 +87,68 @@ export default function UserReports() {
     <>
       <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} gap="20px" mb="20px">
         {/* , "2xl": 6 */}
-        {(taskView?.create || taskView?.update || taskView?.delete || taskView?.view) && <MiniStatistics
-          onClick={() => navigate("/task")}
-          startContent={
-            <IconBox
-              w="56px"
-              h="56px"
-              bg="linear-gradient(90deg, #4481EB 0%, #04BEFE 100%)"
-              icon={<Icon w="28px" h="28px" as={MdAddTask} color="white" />}
-            />
-          }
-          name="Tasks"
-          value={task?.length || 0}
-        />}
-        {(contactView?.create || contactView?.update || contactView?.delete || contactView?.view) && <MiniStatistics
-          onClick={() => navigate("/contacts")}
-          startContent={
-            <IconBox
-              w="56px"
-              h="56px"
-              bg={boxBg}
-              icon={
-                <Icon w="32px" h="32px" as={MdContacts} color={brandColor} />
-              }
-            />
-          }
-          name="Contacts"
-          value={contactData?.length || 0}
-        />}
-        {(leadView?.create || leadView?.update || leadView?.delete || leadView?.view) && <MiniStatistics
-          onClick={() => navigate("/lead")}
-          startContent={
-            <IconBox
-              w="56px"
-              h="56px"
-              bg={boxBg}
-              icon={
-                <Icon w="32px" h="32px" as={MdLeaderboard} color={brandColor} />
-              }
-            />
-          }
-          name="Leads"
-          value={leadData?.length || 0}
-        />}
-        {(proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view) && <MiniStatistics
-          onClick={() => navigate("/properties")}
-          startContent={
-            <IconBox
-              w="56px"
-              h="56px"
-              bg={boxBg}
-              icon={
-                <Icon w="32px" h="32px" as={LuBuilding2} color={brandColor} />
-              }
-            />
-          }
-          name="Property"
-          value={propertyData?.length || 0}
-        />}
+        {(taskView?.create || taskView?.update || taskView?.delete || taskView?.view) &&
+          <MiniStatistics
+            onClick={() => navigate("/task")}
+            startContent={
+              <IconBox
+                w="56px"
+                h="56px"
+                bg="linear-gradient(90deg, #4481EB 0%, #04BEFE 100%)"
+                icon={<Icon w="28px" h="28px" as={MdAddTask} color="white" />}
+              />
+            }
+            name="Tasks"
+            value={task?.length || 0}
+          />}
+        {(contactsView?.create || contactsView?.update || contactsView?.delete || contactsView?.view) &&
+          <MiniStatistics
+            onClick={() => navigate("/contacts")}
+            startContent={
+              <IconBox
+                w="56px"
+                h="56px"
+                bg={boxBg}
+                icon={
+                  <Icon w="32px" h="32px" as={MdContacts} color={brandColor} />
+                }
+              />
+            }
+            name="Contacts"
+            value={contactData?.length || 0}
+          />}
+        {(leadView?.create || leadView?.update || leadView?.delete || leadView?.view) &&
+          <MiniStatistics
+            onClick={() => navigate("/lead")}
+            startContent={
+              <IconBox
+                w="56px"
+                h="56px"
+                bg={boxBg}
+                icon={
+                  <Icon w="32px" h="32px" as={MdLeaderboard} color={brandColor} />
+                }
+              />
+            }
+            name="Leads"
+            value={leadData?.length || 0}
+          />}
+        {(proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view) &&
+          <MiniStatistics
+            onClick={() => navigate("/properties")}
+            startContent={
+              <IconBox
+                w="56px"
+                h="56px"
+                bg={boxBg}
+                icon={
+                  <Icon w="32px" h="32px" as={LuBuilding2} color={brandColor} />
+                }
+              />
+            }
+            name="Property"
+            value={propertyData?.length || 0}
+          />}
       </SimpleGrid>
 
       <Grid templateColumns="repeat(12, 1fr)" gap={3}>

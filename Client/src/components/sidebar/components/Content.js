@@ -10,7 +10,7 @@ import { HiOutlineChevronDoubleRight, HiOutlineChevronLeft, HiOutlineChevronRigh
 // FUNCTIONS
 
 function SidebarContent(props) {
-  const { routes, setOpenSidebar, openSidebar, from } = props;
+  const { routes, setOpenSidebar, openSidebar, from, largeLogo } = props;
 
   // SIDEBAR
   return (
@@ -19,7 +19,7 @@ function SidebarContent(props) {
       // onMouseOut={() => setOpenSidebar(false)}
       pt='2px'
       borderRadius='30px'>
-      <Brand from={from}
+      <Brand from={from} largeLogo={largeLogo}
         openSidebar={openSidebar} setOpenSidebar={setOpenSidebar}
       />
       <Stack direction='column' mb='auto'
