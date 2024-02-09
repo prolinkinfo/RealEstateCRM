@@ -70,6 +70,7 @@ import ImportModal from "./ImportModal";
 import { HasAccess } from "../../../../redux/accessUtils";
 import CustomSearchInput from "components/search/search";
 import { putApi } from "services/api";
+import AdvanceSearch from "components/search/advanceSearch";
 
 export default function CheckTable(props) {
   const { columnsData, tableData, dataColumn, fetchData, isLoding, setIsLoding, allData, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, callAccess, emailAccess, setAction, action } = props;
@@ -97,6 +98,8 @@ export default function CheckTable(props) {
   const [column, setColumn] = useState('');
   const [manageColumns, setManageColumns] = useState(false);
   const [tempSelectedColumns, setTempSelectedColumns] = useState(dataColumn); // State to track changes
+
+  console.log(dataColumn)
 
   const csvColumns = [
     { Header: 'Name', accessor: 'leadName' },
@@ -183,7 +186,7 @@ export default function CheckTable(props) {
   useEffect(() => {
     setSearchedData && setSearchedData(data);
   }, []);
-  const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
+  const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm, dirty } = formik
   const tableInstance = useTable(
     {
       columns, data,
@@ -741,11 +744,19 @@ export default function CheckTable(props) {
             </Grid>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" colorScheme='green' size="sm" mr={2} onClick={handleSubmit} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
+            <Button variant="outline" colorScheme='green' size="sm" mr={2} onClick={handleSubmit} disabled={isLoding || !dirty ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
             <Button colorScheme="red" size="sm" onClick={() => resetForm()}>Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
+      {/* <AdvanceSearch
+        setAdvaceSearch={setAdvaceSearch}
+        setSearchClear={setSearchClear}
+        setGetTagValues={setGetTagValues}
+        isLoding={isLoding} allData={allData}
+        setDisplaySearchData={setDisplaySearchData}
+
+        setSearchedData={setSearchedData} advaceSearch={advaceSearch} /> */}
       {/* Manage Columns */}
       <Modal onClose={() => { setManageColumns(false) }} isOpen={manageColumns} isCentered>
         <ModalOverlay />
