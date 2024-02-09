@@ -20,7 +20,7 @@ export default function AdminNavbar(props) {
 		};
 	});
 
-	const { secondary, message, brandText, under, setOpenSidebar, openSidebar } = props;
+	const { secondary, message, brandText, under, setOpenSidebar, openSidebar, largeLogo } = props;
 
 	// Here are all the props that may change depending on navbar's type or state.(secondary, variant, scrolled)
 	let mainText = useColorModeValue('navy.700', 'white');
@@ -49,7 +49,7 @@ export default function AdminNavbar(props) {
 		dispatch(fetchImage());
 	}, [dispatch]);
 
-	const largeLogo = useSelector((state) => state?.images?.image.filter(item => item.isActive === true));
+	// const largeLogo = useSelector((state) => state?.images?.image.filter(item => item.isActive === true));
 
 	return (
 		<Box

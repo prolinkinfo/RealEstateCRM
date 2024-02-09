@@ -5,28 +5,52 @@ import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { fetchRoles } from '../../../redux/roleSlice';
 import { userSchema } from 'schema';
 import { getApi, putApi } from 'services/api';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from '../../../redux/localSlice';
 
 
 const Edit = (props) => {
-    const { onClose, isOpen, fetchData, setEdit } = props
+    const { onClose, isOpen, fetchData, setEdit, data, userData } = props
 
     const initialValues = {
-        firstName: '',
-        lastName: '',
-        username: '',
-        phoneNumber: ''
+        firstName: data ? data?.firstName : '',
+        lastName: data ? data?.lastName : '',
+        username: data ? data?.username : '',
+        phoneNumber: data ? data?.phoneNumber : ''
     }
+    const user = JSON.parse(window.localStorage.getItem('user'))
 
     const formik = useFormik({
         initialValues: initialValues,
         validationSchema: userSchema,
+        enableReinitialize: true,
         onSubmit: (values, { resetForm }) => {
             EditData();
             resetForm();
         },
     });
+    const dispatch = useDispatch()
+
+    const handleCloseModal = () => {
+        props.onClose();
+        let updatedUserData = userData; // Create a copy of userData
+
+        if (updatedUserData && typeof updatedUserData === 'object') {
+            // Create a new object with the updated firstName
+            updatedUserData = {
+                ...updatedUserData,
+                firstName: values?.firstName,
+                lastName: values?.lastName
+            };
+        }
+
+        const updatedDataString = JSON.stringify(updatedUserData);
+        localStorage.setItem('user', updatedDataString);
+        dispatch(setUser(updatedDataString)); // Dispatch setUser action to set user data
+    };
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue } = formik
 
     const [isLoding, setIsLoding] = useState(false)
@@ -37,6 +61,8 @@ const Edit = (props) => {
             let response = await putApi(`api/user/edit/${props.selectedId}`, values)
             if (response && response.status === 200) {
                 setEdit(false)
+                handleCloseModal();
+                fetchData()
                 props.setAction((pre) => !pre)
             } else {
                 toast.error(response.response.data?.message)
@@ -152,6 +178,8 @@ const Edit = (props) => {
                         textTransform: "capitalize",
                     }} variant="outline"
                         colorScheme="red" size="sm" onClick={() => setEdit(false)}>close</Button>
+                    {/* <Button variant='brand' disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Update Data'}</Button>
+                    <Button onClick={() => handleCloseModal()}>close</Button> */}
                 </ModalFooter>
             </ModalContent>
         </Modal>

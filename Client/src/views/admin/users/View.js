@@ -13,6 +13,8 @@ import Edit from "./Edit";
 import RoleTable from "./components/roleTable";
 import { LiaCriticalRole } from "react-icons/lia";
 import RoleModal from "./components/roleModal";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../../../redux/localSlice";
 
 const View = () => {
 
@@ -21,8 +23,20 @@ const View = () => {
         { Header: 'Role Name', accessor: 'roleName' },
         { Header: "Description", accessor: "description", }
     ];
+    const dispatch = useDispatch()
+    const userData = useSelector(state => state.user.user)
+
+    const userName = typeof userData === 'string' ? JSON.parse(userData) : userData
+    console.log(userName)
 
     const param = useParams()
+
+    const handleOpenModal = (userData) => {
+        setEdit(true)
+        // dispatch(setIsOpen(true)); // Dispatch setIsOpen action with true value
+        dispatch(setUser(userData)); // Dispatch setUser action to set user data
+    };
+
 
     const [data, setData] = useState()
     const [roleData, setRoleData] = useState([])
@@ -60,7 +74,8 @@ const View = () => {
                     <Spinner />
                 </Flex> : <>
                     <Add isOpen={isOpen} size={size} onClose={onClose} />
-                    <Edit isOpen={edit} size={size} onClose={setEdit} selectedId={param.id} setEdit={setEdit} setAction={setAction}  />
+                    {/* <Edit isOpen={edit} size={size} onClose={setEdit} selectedId={param.id} setEdit={setEdit} setAction={setAction}  /> */}
+                    <Edit isOpen={edit} size={size} onClose={setEdit} userData={userName} setAction={setAction} fetchData={fetchData} data={data} />
                     <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/user/delete/' id={param.id} />
 
 
@@ -86,7 +101,7 @@ const View = () => {
                                                             <MenuDivider />
                                                             <MenuList>
                                                                 <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>
-                                                                <MenuItem onClick={() => {setEdit(true);}} icon={<EditIcon />} color='green'>Edit</MenuItem>
+                                                                <MenuItem onClick={() => { setEdit(true); }} icon={<EditIcon />} color='green'>Edit</MenuItem>
                                                                 {data?.role !== 'superAdmin' && JSON.parse(localStorage.getItem('user'))?.role === 'superAdmin' && <>
                                                                     <MenuDivider />
                                                                     <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
@@ -141,8 +156,10 @@ const View = () => {
                         <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                             <GridItem colStart={6} >
                                 <Flex justifyContent={"right"}>
-                                    <Button onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" size="sm" colorScheme="green">Edit</Button>
-                                    {data?.role !== 'superAdmin' && JSON.parse(localStorage.getItem('user'))?.role === 'superAdmin' && <Button style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" size="sm">Delete</Button>}
+                                    {/*  <Button onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" size="sm" colorScheme="green">Edit</Button>
+                                     {data?.role !== 'superAdmin' && JSON.parse(localStorage.getItem('user'))?.role === 'superAdmin' && <Button style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" size="sm">Delete</Button>} */}
+                                    <Button onClick={() => handleOpenModal(userData)} leftIcon={<EditIcon />} mr={2.5} variant="outline" size="sm" colorScheme="green">Edit</Button>
+                                    {data?.role !== 'superAdmin' && JSON.parse(localStorage.getItem('user'))?.role === 'superAdmin' && <Button style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>}
                                 </Flex>
                             </GridItem>
                         </Grid>
