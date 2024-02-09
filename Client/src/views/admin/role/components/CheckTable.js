@@ -47,7 +47,7 @@ export default function CheckTable(props) {
   const { columnsData, name, tableData, handleClick, fetchData, isLoding, setAction, _id, action } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const textColor = useColorModeValue("secondaryGray.900", "white");
+  const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   const columns = useMemo(() => columnsData, [columnsData]);
   const [selectedValues, setSelectedValues] = useState([]);
@@ -116,16 +116,6 @@ export default function CheckTable(props) {
     setGopageValue(pageOptions.length)
   }
 
-  const handleCheckboxChange = (event, value) => {
-    if (event.target.checked) {
-      setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
-    } else {
-      setSelectedValues((prevSelectedValues) =>
-        prevSelectedValues.filter((selectedValue) => selectedValue !== value)
-      );
-    }
-  };
-
   useEffect(() => {
     fetchData()
   }, [])
@@ -163,31 +153,25 @@ export default function CheckTable(props) {
                 <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
                   {headerGroup.headers?.map((column, index) => (
                     <Th
-                      // sx={{ width: "20%" }}
+                      {...column.getHeaderProps(column.isSortable !== false && column.getSortByToggleProps())}
                       pe="10px"
                       key={index}
                       borderColor={borderColor}
                     >
                       <Flex
-                        justify="space-between"
                         align="center"
-                        fontSize={{ sm: "10px", lg: "12px" }}
-                        color="gray.400"
+                        justifyContent={column.center ? "center" : "start"}
+                        fontSize={{ sm: "14px", lg: "16px" }}
+                        color="secondaryGray.900"
                       >
-                        {column.render("Header")}
+                        <span style={{ textTransform: "capitalize", marginRight: "8px" }}>
+                          {column.render("Header")}
+                        </span>
                         {/* {column.isSortable !== false && (
-                    <span>
-                      {column.isSorted ? (
-                        column.isSortedDesc ? (
-                          <FaSortDown />
-                        ) : (
-                          <FaSortUp />
-                        )
-                      ) : (
-                        <FaSort />
-                      )}
-                    </span>
-                  )} */}
+                          <span>
+                            {column.isSorted ? (column.isSortedDesc ? <FaSortDown /> : <FaSortUp />) : <FaSort />}
+                          </span>
+                        )} */}
                       </Flex>
                     </Th>
                   ))}

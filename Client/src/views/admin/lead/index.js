@@ -12,7 +12,7 @@ const Index = () => {
     const [searchedData, setSearchedData] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"));
 
-    const permission = HasAccess('Lead');
+    const [permission, emailAccess, callAccess] = HasAccess(['Lead', 'Email', 'Call']);
     const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
         { Header: 'Name', accessor: 'leadName', width: 20 },
@@ -23,9 +23,6 @@ const Index = () => {
         { Header: "Score", accessor: "leadScore", },
         { Header: "Action", isSortable: false, center: true },
     ];
-
-    const emailAccess = HasAccess('Email')
-    const callAccess = HasAccess('Call')
 
     const [dynamicColumns, setDynamicColumns] = useState([...tableColumns]);
     const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);

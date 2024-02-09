@@ -26,6 +26,7 @@ import { toast } from "react-toastify";
 import jwtDecode from "jwt-decode";
 import { ThemeEditor } from "./ThemeEditor";
 import FixedPlugin from "components/fixedPlugin/FixedPlugin";
+import { useSelector } from "react-redux";
 
 export default function HeaderLinks(props) {
 	const { secondary, setOpenSidebar, openSidebar } = props;
@@ -46,8 +47,10 @@ export default function HeaderLinks(props) {
 
 	const [loginUser, setLoginUser] = useState();
 	const navigate = useNavigate();
+	const userData = useSelector(state => state.user.user)
 
-	const user = loginUser?.firstName + " " + loginUser?.lastName;
+	const data = typeof userData === 'string' ? JSON.parse(userData) : userData
+	const user = data?.firstName + " " + data?.lastName;
 
 	const userId = JSON.parse(localStorage.getItem("user"))?._id;
 
