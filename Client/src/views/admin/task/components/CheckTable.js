@@ -70,6 +70,7 @@ export default function CheckTable(props) {
   const [selectedValues, setSelectedValues] = useState([]);
   const [getTagValues, setGetTagValues] = useState([]);
   const [deleteModel, setDelete] = useState(false);
+  const [deleteMany, setDeleteMany] = useState(false);
   const [advaceSearch, setAdvaceSearch] = useState(false);
   const [searchClear, setSearchClear] = useState(false);
   const [selectedId, setSelectedId] = useState();
@@ -324,6 +325,7 @@ export default function CheckTable(props) {
               <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={dataColumn} onSearch={handleSearch} />
               <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} size="sm">Advance Search</Button>
               {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>Clear</Button> : ""}
+              {(selectedValues.length > 0 && access?.delete) && <DeleteIcon cursor={"pointer"} onClick={() => setDeleteMany(true)} color={'red'} ms={2} />}
             </Flex>
           </GridItem>
           <GridItem colSpan={4} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
@@ -524,7 +526,8 @@ export default function CheckTable(props) {
       <EditTask isOpen={edit} onClose={setEdit} viewClose={onClose} id={selectedId} setAction={setAction} />
       <EventView fetchData={fetchData} isOpen={eventView} access={access} contactAccess={contactAccess} leadAccess={leadAccess} onClose={setEventView} info={id} setAction={setAction} action={action} />
       <DeleteTask isOpen={deleteModel} onClose={setDelete} viewClose={onClose} url='api/task/delete/' method='one' id={selectedValues} redirectPage={"/task"} setAction={setAction} />
-      <ImportModal text='Lead file' fetchData={fetchData} isOpen={isImportLead} onClose={setIsImportLead} />
+      <DeleteTask isOpen={deleteMany} onClose={setDeleteMany} viewClose={onClose} url='api/task/deleteMany' method='many' data={selectedValues} setSelectedValues={setSelectedValues} redirectPage={"/task"} fetchData={fetchData} setAction={setAction} />
+      <ImportModal text='Lead file' fetchData={fetchData} isOpen={isImportLead} onClose={setIsImportLead} /> 
       {/* Advance filter modal*/}
       <Modal onClose={() => { setAdvaceSearch(false); resetForm() }} isOpen={advaceSearch} isCentered>
         <ModalOverlay />

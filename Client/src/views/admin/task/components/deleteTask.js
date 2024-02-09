@@ -32,9 +32,10 @@ const DeleteTask = (props) => {
                 let response = await deleteManyApi(props.url, props.data)
                 if (response.status === 200) {
                     props.viewClose();
-                    props.onClose(false)
                     props.fetchData()
+                    props.setSelectedValues([])
                     props.setAction((pre) => !pre)
+                    props.onClose(false)
                 }
             } catch (error) {
                 console.log(error)
