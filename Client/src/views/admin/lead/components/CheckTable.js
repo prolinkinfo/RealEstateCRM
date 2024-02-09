@@ -335,8 +335,8 @@ export default function CheckTable(props) {
         w="100%"
         overflowX={{ sm: "scroll", lg: "hidden" }}
       >
-        <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={4}>
-          <GridItem colSpan={8} >
+        <Grid templateColumns="repeat(12, 1fr)" gap={2}>
+          <GridItem colSpan={{ base: 12, md: 8 }} display={"flex"} alignItems={"center"}>
             <Flex alignItems={"center"} flexWrap={"wrap"}>
               <Text
                 color={"secondaryGray.900"}
@@ -351,7 +351,7 @@ export default function CheckTable(props) {
               {(selectedValues.length > 0 && access?.delete) && <DeleteIcon cursor={"pointer"} onClick={() => setDelete(true)} color={'red'} ms={2} />}
             </Flex>
           </GridItem>
-          <GridItem colSpan={4} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
+          <GridItem colSpan={{ base: 12, md: 4 }} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
             <Menu isLazy  >
               <MenuButton p={4}>
                 <BsColumnsGap />
@@ -369,7 +369,7 @@ export default function CheckTable(props) {
             {access?.create && <Button onClick={() => handleClick()} size="sm"
               variant="brand" leftIcon={<AddIcon />}>Add New</Button>}
           </GridItem>
-          <HStack spacing={4}>
+          <HStack spacing={4} mb={2}>
             {getTagValues && getTagValues.map((item) => (
               <Tag
                 size={"md"}
@@ -744,8 +744,8 @@ export default function CheckTable(props) {
             </Grid>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" colorScheme='green' size="sm" mr={2} onClick={handleSubmit} disabled={isLoding || !dirty ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
-            <Button colorScheme="red" size="sm" onClick={() => resetForm()}>Clear</Button>
+            <Button colorScheme='brand' size="sm" mr={2} onClick={handleSubmit} disabled={isLoding || !dirty ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
+            <Button colorScheme="red" variant="outline" size="sm" onClick={() => resetForm()}>Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -779,12 +779,12 @@ export default function CheckTable(props) {
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" colorScheme='green' size="sm" mr={2} onClick={() => {
+            <Button colorScheme='brand' size="sm" mr={2} onClick={() => {
               setSelectedColumns(tempSelectedColumns);
               setManageColumns(false);
               resetForm();
             }} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
-            <Button size="sm" colorScheme="red" onClick={() => handleColumnClear()}>Close</Button>
+            <Button size="sm" variant="outline" colorScheme="red" onClick={() => handleColumnClear()}>Close</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
