@@ -72,8 +72,8 @@ const PropertyPhoto = (props) => {
                     </Grid>
                 </ModalBody>
                 <ModalFooter>
-                    <Button size="sm" variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} leftIcon={<AddIcon />}>{isLoding ? <Spinner /> : 'Add'}</Button>
-                    <Button size="sm" onClick={() => {
+                    <Button size="sm" variant='brand' onClick={handleSubmit} mr={1} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Add'}</Button>
+                    <Button size="sm" colorScheme="red" variant="outline" onClick={() => {
                         onClose()
                         formik.resetForm()
                     }}>Close</Button>

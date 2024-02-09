@@ -20,6 +20,8 @@ const View = () => {
     const user = JSON.parse(localStorage.getItem("user"))
     const param = useParams()
     const buttonbg = useColorModeValue("gray.200", "white");
+    const textColor = useColorModeValue("gray.500", "white");
+
     const [data, setData] = useState()
     const [filteredContacts, setFilteredContacts] = useState()
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -63,8 +65,8 @@ const View = () => {
         fetchData()
     }, [action])
 
-    const [permission, contactAccess,emailAccess,callAccess] = HasAccess(['Property', 'Contacts','Email','Call']);
-   
+    const [permission, contactAccess, emailAccess, callAccess] = HasAccess(['Property', 'Contacts', 'Email', 'Call']);
+
     return (
         <>
             <Add isOpen={isOpen} size={size} onClose={onClose} />
@@ -398,11 +400,14 @@ const View = () => {
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12 }} >
                                                     <Flex overflowY={"scroll"} height={"150px"} alingItem={'center'} >
-                                                        {data?.propertyPhotos?.map((item) => (
-                                                            <Image width={'150px'} m={1} src={item.img} alt="Your Image" />
-                                                        ))}
+                                                        {data?.propertyPhotos?.length > 0 ?
+                                                            data && data?.propertyPhotos?.length > 0 && data?.propertyPhotos?.map((item) => (
+                                                                <Image width={'150px'} m={1} src={item.img} alt="Your Image" />
+                                                            )) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                                                                -- No Data Found --
+                                                            </Text>}
                                                     </Flex>
-                                                    {data?.propertyPhotos.length > 0 ?
+                                                    {data?.propertyPhotos?.length > 0 ?
                                                         <Flex justifyContent={"end"} mt={1}>
                                                             <Button size="sm" colorScheme="brand" variant="outline" onClick={() => { setDisplayPropertyPhoto(true); setType("photo"); }}>Show more</Button>
                                                         </Flex> : ""}
@@ -427,14 +432,18 @@ const View = () => {
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12 }} >
                                                     <Flex overflowY={"scroll"} height={"150px"} alingItem={'center'} >
-                                                        {data?.virtualToursOrVideos?.map((item) => (
-                                                            <video width="200" controls autoplay loop style={{ margin: "0 5px" }}>
-                                                                <source src={item.img} type="video/mp4" />
-                                                                <source src={item.img} type="video/ogg" />
-                                                            </video>
-                                                        ))}
+                                                        {data?.virtualToursOrVideos?.length > 0 ?
+                                                            data && data?.virtualToursOrVideos?.length > 0 && data?.virtualToursOrVideos?.map((item) => (
+                                                                <video width="200" controls autoplay loop style={{ margin: "0 5px" }}>
+                                                                    <source src={item.img} type="video/mp4" />
+                                                                    <source src={item.img} type="video/ogg" />
+                                                                </video>
+                                                            )) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                                                                -- No Data Found --
+                                                            </Text>}
+
                                                     </Flex>
-                                                    {data?.virtualToursOrVideos.length > 0 ?
+                                                    {data?.virtualToursOrVideos?.length > 0 ?
                                                         <Flex justifyContent={"end"} mt={1}>
                                                             <Button size="sm" colorScheme="brand" variant="outline" onClick={() => { setDisplayPropertyPhoto(true); setType("video") }}>Show more</Button>
                                                         </Flex> : ""}
@@ -459,11 +468,14 @@ const View = () => {
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12 }} >
                                                     <Flex overflowY={"scroll"} height={"150px"} alingItem={'center'} >
-                                                        {data?.floorPlans?.map((item) => (
-                                                            <Image key={item.createOn} width={'30%'} m={1} src={item.img} alt="Your Image" />
-                                                        ))}
+                                                        {data?.floorPlans?.length > 0 ?
+                                                            data && data?.floorPlans?.length > 0 && data?.floorPlans?.map((item) => (
+                                                                <Image key={item.createOn} width={'30%'} m={1} src={item.img} alt="Your Image" />
+                                                            )) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                                                                -- No Data Found --
+                                                            </Text>}
                                                     </Flex>
-                                                    {data?.floorPlans.length > 0 ?
+                                                    {data?.floorPlans?.length > 0 ?
                                                         <Flex justifyContent={"end"} mt={1}>
                                                             <Button size="sm" colorScheme="brand" variant="outline" onClick={() => { setDisplayPropertyPhoto(true); setType("floor"); }}>Show more</Button>
                                                         </Flex> : ""}
@@ -488,11 +500,14 @@ const View = () => {
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12 }} >
                                                     <Flex flexWrap={'wrap'} justifyContent={'center'} alingItem={'center'} >
-                                                        {data?.propertyDocuments?.map((item) => (
-                                                            <Text color='green.400' onClick={() => window.open(item?.img)} cursor={'pointer'} sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>
-                                                                {item.filename}
-                                                            </Text>
-                                                        ))}
+                                                        {data?.propertyDocuments?.length > 0 ?
+                                                            data && data?.propertyDocuments?.length > 0 && data?.propertyDocuments?.map((item) => (
+                                                                <Text color='green.400' onClick={() => window.open(item?.img)} cursor={'pointer'} sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>
+                                                                    {item.filename}
+                                                                </Text>
+                                                            )) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                                                                -- No Data Found --
+                                                            </Text>}
                                                     </Flex>
                                                 </GridItem>
                                             </Grid>
@@ -527,10 +542,10 @@ const View = () => {
                         <div style={{ columns: 3 }}  >
                             {
                                 type == "photo" ?
-                                    data?.propertyPhotos?.map((item) => (
+                                    data && data?.propertyPhotos?.length > 0 && data?.propertyPhotos?.map((item) => (
                                         <a href={item.img} target="_blank"> <Image width={"100%"} m={1} mb={4} src={item.img} alt="Your Image" /></a>
                                     )) :
-                                    type == "video" ? data?.virtualToursOrVideos?.map((item) => (
+                                    type == "video" ? data && data?.virtualToursOrVideos?.length > 0 && data?.virtualToursOrVideos?.map((item) => (
                                         <a href={item.img} target="_blank">
                                             <video width="380" controls autoplay loop style={{ margin: " 5px" }}>
                                                 <source src={item.img} type="video/mp4" />
@@ -538,7 +553,7 @@ const View = () => {
                                             </video>
                                         </a>
                                     )) : type == "floor" ?
-                                        data?.floorPlans?.map((item) => (
+                                        data && data?.floorPlans?.length > 0 && data?.floorPlans?.map((item) => (
                                             <a href={item.img} target="_blank">
                                                 <Image width={"100%"} m={1} mb={4} src={item.img} alt="Your Image" />
                                             </a>
