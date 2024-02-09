@@ -69,7 +69,7 @@ export function SidebarLinks(props) {
                 <Box backgroundColor={activeRoute(route.path.toLowerCase())
                   ? sidebarBgColor
                   : ""}
-                  ps={"25px"} py={"9px"}>
+                  ps={"25px"} pb={"9px"} pt={"20px"}>
 
                   <HStack
                     spacing={activeRoute(route.path.toLowerCase()) ? "22px" : "26px"}
