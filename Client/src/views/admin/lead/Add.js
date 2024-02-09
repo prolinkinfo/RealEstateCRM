@@ -48,7 +48,11 @@ const Add = (props) => {
     //     createBy: JSON.parse(localStorage.getItem('user'))._id,
     // };
 
-    const initialFieldValues = Object.fromEntries(props?.leadData?.fields?.map(field => [field.name, '']))
+    // const initialFieldValues = Object.fromEntries(props?.leadData && props?.leadData?.fields?.length > 0 && props?.leadData?.fields?.map(field => [field?.name, '']))
+
+    const initialFieldValues = Object.fromEntries(
+        (props?.leadData?.fields || []).map(field => [field?.name, ''])
+      );
 
     const initialValues = {
         ...initialFieldValues,

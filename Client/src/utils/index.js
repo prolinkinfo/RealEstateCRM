@@ -40,7 +40,7 @@ import * as yup from 'yup'
 // };
 
 export const generateValidationSchema = (fields) => {
-    return fields.reduce((acc, field) => {
+    return fields?.reduce((acc, field) => {
         // let formikValObj = field?.validation?.find(obj => obj?.hasOwnProperty('formikType'));
 
         acc[field.name] = field.validation.reduce((fieldAcc, rule) => {
