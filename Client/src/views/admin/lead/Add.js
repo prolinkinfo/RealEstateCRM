@@ -65,7 +65,6 @@ const Add = (props) => {
         validationSchema: yup.object().shape(generateValidationSchema(props?.leadData?.fields)),
         onSubmit: (values, { resetForm }) => {
             AddData();
-            console.log(values)
         },
     });
 
@@ -74,7 +73,8 @@ const Add = (props) => {
     const AddData = async () => {
         try {
             setIsLoding(true)
-            let response = await postApi('api/lead/add', values)
+            // let response = await postApi('api/lead/add', values)
+            let response = await postApi('api/form/add', { ...values, moduleId: props?.leadData?._id })
             if (response.status === 200) {
                 props.onClose();
                 formik.resetForm();

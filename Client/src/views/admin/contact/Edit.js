@@ -73,7 +73,8 @@ const Edit = (props) => {
     const EditData = async () => {
         try {
             setIsLoding(true)
-            let response = await putApi(`api/contact/edit/${props?.selectedId || param.id}`, values)
+            // let response = await putApi(`api/contact/edit/${props?.selectedId || param.id}`, values)
+            let response = await putApi(`api/form/edit/${props?.selectedId || param.id}`, { ...values, moduleId: props?.moduleId })
             if (response.status === 200) {
                 props.onClose();
                 props.setAction((pre) => !pre)
