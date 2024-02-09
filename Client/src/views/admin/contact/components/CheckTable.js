@@ -278,7 +278,7 @@ export default function CheckTable(props) {
         <Grid templateColumns="repeat(12, 1fr)" gap={2}>
           <GridItem colSpan={{ base: 12, md: 8 }} display={"flex"} alignItems={"center"}>
             <Flex alignItems={"center"} flexWrap={"wrap"}>
-              {window.location.pathname === "contacts" ?
+              {window.location.pathname === "/contacts" ?
                 <Text
                   color={"secondaryGray.900"}
                   fontSize="22px"

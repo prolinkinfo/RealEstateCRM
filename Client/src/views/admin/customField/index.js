@@ -150,7 +150,7 @@ const CustomField = () => {
                                     <MenuButton as={Button} size='sm' rightIcon={<ChevronDownIcon />} variant="outline">
                                         {moduleName ? moduleName : 'Select Module'}
                                     </MenuButton>
-                                    <MenuList>
+                                    <MenuList minWidth={"10rem"}>
                                         <MenuItem onClick={() => { setModuleName(''); setData([]); setDataFilter([]); }}>Select Module</MenuItem>
                                         {fields?.map((item, id) => (
                                             <MenuItem key={id} onClick={() => { setModuleName(item.moduleName); setModuleId(item._id); setHeadingId('') }}>{item.moduleName}</MenuItem>
