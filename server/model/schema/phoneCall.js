@@ -18,7 +18,7 @@ const phoneCall = new mongoose.Schema({
     },
     createBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'contacts',
+        ref: 'Contact',
     },
     timestamp: {
         type: Date,
@@ -30,4 +30,4 @@ const phoneCall = new mongoose.Schema({
     },
 })
 
-module.exports = mongoose.model('PhoneCall', phoneCall);
+module.exports = mongoose.model('PhoneCall', phoneCall, 'PhoneCall');

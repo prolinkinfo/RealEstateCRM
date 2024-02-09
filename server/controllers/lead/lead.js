@@ -1,4 +1,4 @@
-const Lead = require('../../model/schema/lead')
+const { Lead } = require('../../model/schema/lead')
 const EmailHistory = require('../../model/schema/email');
 const PhoneCall = require('../../model/schema/phoneCall');
 const Task = require('../../model/schema/task')
@@ -71,7 +71,7 @@ const view = async (req, res) => {
         { $match: { createByLead: lead._id } },
         {
             $lookup: {
-                from: 'leads', // Assuming this is the collection name for 'leads'
+                from: 'Lead', // Assuming this is the collection name for 'leads'
                 localField: 'createByLead',
                 foreignField: '_id',
                 as: 'createByrefLead'
@@ -79,7 +79,7 @@ const view = async (req, res) => {
         },
         {
             $lookup: {
-                from: 'users',
+                from: 'User',
                 localField: 'sender',
                 foreignField: '_id',
                 as: 'users'
@@ -121,7 +121,7 @@ const view = async (req, res) => {
         { $match: { createByLead: lead._id } },
         {
             $lookup: {
-                from: 'leads', // Assuming this is the collection name for 'leads'
+                from: 'Lead', // Assuming this is the collection name for 'leads'
                 localField: 'createByLead',
                 foreignField: '_id',
                 as: 'createByrefLead'
@@ -130,7 +130,7 @@ const view = async (req, res) => {
 
         {
             $lookup: {
-                from: 'users',
+                from: 'User',
                 localField: 'sender',
                 foreignField: '_id',
                 as: 'users'
@@ -153,7 +153,7 @@ const view = async (req, res) => {
         { $match: { assignmentToLead: lead._id } },
         {
             $lookup: {
-                from: 'lead',
+                from: 'Lead',
                 localField: 'assignmentToLead',
                 foreignField: '_id',
                 as: 'lead'
@@ -161,7 +161,7 @@ const view = async (req, res) => {
         },
         {
             $lookup: {
-                from: 'users',
+                from: 'User',
                 localField: 'createBy',
                 foreignField: '_id',
                 as: 'users'
@@ -190,7 +190,7 @@ const view = async (req, res) => {
         },
         {
             $lookup: {
-                from: 'lead',
+                from: 'Lead',
                 localField: 'assignmentToLead',
                 foreignField: '_id',
                 as: 'lead'
@@ -198,7 +198,7 @@ const view = async (req, res) => {
         },
         {
             $lookup: {
-                from: 'users',
+                from: 'User',
                 localField: 'createdBy',
                 foreignField: '_id',
                 as: 'users'
@@ -222,7 +222,7 @@ const view = async (req, res) => {
         { $match: { 'file.deleted': false, 'file.linkLead': lead._id } },
         {
             $lookup: {
-                from: 'users', // Replace 'users' with the actual name of your users collection
+                from: 'User', // Replace 'users' with the actual name of your users collection
                 localField: 'createBy',
                 foreignField: '_id', // Assuming the 'createBy' field in DocumentSchema corresponds to '_id' in the 'users' collection
                 as: 'creatorInfo'

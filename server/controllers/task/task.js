@@ -13,7 +13,7 @@ const index = async (req, res) => {
             { $match: query },
             {
                 $lookup: {
-                    from: 'contacts',
+                    from: 'Contact',
                     localField: 'assignmentTo',
                     foreignField: '_id',
                     as: 'contact'
@@ -21,7 +21,7 @@ const index = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'leads', // Assuming this is the collection name for 'leads'
+                    from: 'Lead', // Assuming this is the collection name for 'leads'
                     localField: 'assignmentToLead',
                     foreignField: '_id',
                     as: 'Lead'
@@ -29,7 +29,7 @@ const index = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'users',
+                    from: 'User',
                     localField: 'createBy',
                     foreignField: '_id',
                     as: 'users'
@@ -121,7 +121,7 @@ const view = async (req, res) => {
             { $match: { _id: response._id } },
             {
                 $lookup: {
-                    from: 'contacts',
+                    from: 'Contact',
                     localField: 'assignmentTo',
                     foreignField: '_id',
                     as: 'contact'
@@ -129,7 +129,7 @@ const view = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'leads', // Assuming this is the collection name for 'leads'
+                    from: 'Lead', // Assuming this is the collection name for 'leads'
                     localField: 'assignmentToLead',
                     foreignField: '_id',
                     as: 'Lead'
@@ -137,7 +137,7 @@ const view = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'users',
+                    from: 'User',
                     localField: 'createBy',
                     foreignField: '_id',
                     as: 'users'

@@ -23,7 +23,7 @@ const index = async (req, res) => {
             { $match: query },
             {
                 $lookup: {
-                    from: 'contacts',
+                    from: 'Contact',
                     localField: 'attendes',
                     foreignField: '_id',
                     as: 'contact'
@@ -31,7 +31,7 @@ const index = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'users',
+                    from: 'User',
                     localField: 'createdBy',
                     foreignField: '_id',
                     as: 'users'
@@ -70,7 +70,7 @@ const view = async (req, res) => {
             { $match: { _id: result._id } },
             {
                 $lookup: {
-                    from: 'contacts',
+                    from: 'Contact',
                     localField: 'attendes',
                     foreignField: '_id',
                     as: 'attendes'
@@ -78,7 +78,7 @@ const view = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'leads',
+                    from: 'Lead',
                     localField: 'attendesLead',
                     foreignField: '_id',
                     as: 'attendesLead'
@@ -86,7 +86,7 @@ const view = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'users',
+                    from: 'User',
                     localField: 'createdBy',
                     foreignField: '_id',
                     as: 'users'

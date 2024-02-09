@@ -22,7 +22,7 @@ const EditField = (props) => {
         type: updateFiled ? updateFiled?.type : '',
         delete: updateFiled ? updateFiled?.delete : '',
         fixed: updateFiled ? updateFiled?.fixed ? true : false : '',
-        belongsTo: updateFiled ? updateFiled?.belongsTo : '',
+        belongsTo: updateFiled ? updateFiled?.belongsTo : null,
         validate: updateFiled?.validation && (updateFiled?.validation[0]?.require || updateFiled?.validation[1]?.min || updateFiled?.validation[2]?.max || updateFiled?.validation[3]?.match || updateFiled?.validation[4]?.formikType) ? true : false,
         options: updateFiled?.options ? updateFiled?.options : '',
         validation: [
@@ -73,8 +73,8 @@ const EditField = (props) => {
 
     const formik = useFormik({
         initialValues: initialValues,
-        // validationSchema: addFiledSchema,
-        validationSchema: headingsData?.length > 0 ? addFiledSchema.concat(underHeadingSchema) : addFiledSchema,
+        validationSchema: addFiledSchema,
+        // validationSchema: headingsData?.length > 0 ? addFiledSchema.concat(underHeadingSchema) : addFiledSchema,
         enableReinitialize: true,
         validate: (values) => {
             const errors = {};
@@ -185,7 +185,21 @@ const EditField = (props) => {
                                     </FormLabel>
                                     <Input
                                         fontSize='sm'
-                                        onChange={handleChange} onBlur={handleBlur}
+                                        onKeyDown={(e) => {
+                                            if (e.code === 'Space') {
+                                                e.preventDefault();
+                                            }
+                                        }}
+                                        onChange={(e) => {
+                                            const newValue = e.target.value.replace(/\s/g, '');
+                                            handleChange({
+                                                target: {
+                                                    name: 'name',
+                                                    value: newValue,
+                                                },
+                                            });
+                                        }}
+                                        onBlur={handleBlur}
                                         value={values.name}
                                         name="name"
                                         placeholder='Enter Name'
@@ -222,12 +236,22 @@ const EditField = (props) => {
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                        Belongs To{headingsData?.length > 0 ? <Text color={"red"}>*</Text> : ''}
+                                        {/* Belongs To{headingsData?.length > 0 ? <Text color={"red"}>*</Text> : ''} */}
+                                        Belongs To
                                     </FormLabel>
                                     <Select
                                         value={values.belongsTo}
                                         name="belongsTo"
-                                        onChange={handleChange}
+                                        onChange={(e) => {
+                                            const selectedValue = e.target.value;
+                                            const newValue = selectedValue === "" ? null : selectedValue;
+                                            handleChange({
+                                                target: {
+                                                    name: "belongsTo",
+                                                    value: newValue,
+                                                },
+                                            })
+                                        }}
                                         onBlur={handleBlur}
                                         fontWeight='500'
                                         placeholder={'Select Heading'}

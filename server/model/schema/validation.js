@@ -45,4 +45,4 @@ const validationSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('validation', validationSchema);
+module.exports = mongoose.model('Validation', validationSchema, 'Validation');

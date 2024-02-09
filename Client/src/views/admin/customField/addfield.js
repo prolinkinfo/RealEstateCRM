@@ -22,7 +22,7 @@ const Addfield = (props) => {
         type: "",
         delete: false,
         fixed: false,
-        belongsTo: '',
+        belongsTo: null,
         options: [{
             name: '',
             value: ''
@@ -189,7 +189,21 @@ const Addfield = (props) => {
                                     </FormLabel>
                                     <Input
                                         fontSize='sm'
-                                        onChange={handleChange} onBlur={handleBlur}
+                                        onKeyDown={(e) => {
+                                            if (e.code === 'Space') {
+                                                e.preventDefault();
+                                            }
+                                        }}
+                                        onChange={(e) => {
+                                            const newValue = e.target.value.replace(/\s/g, '');
+                                            handleChange({
+                                                target: {
+                                                    name: 'name',
+                                                    value: newValue,
+                                                },
+                                            });
+                                        }}
+                                        onBlur={handleBlur}
                                         value={values.name}
                                         name="name"
                                         placeholder='Enter Name'
@@ -232,7 +246,16 @@ const Addfield = (props) => {
                                     <Select
                                         value={values.belongsTo}
                                         name="belongsTo"
-                                        onChange={handleChange}
+                                        onChange={(e) => {
+                                            const selectedValue = e.target.value;
+                                            const newValue = selectedValue === "" ? null : selectedValue;
+                                            handleChange({
+                                                target: {
+                                                    name: "belongsTo",
+                                                    value: newValue,
+                                                },
+                                            })
+                                        }}
                                         onBlur={handleBlur}
                                         fontWeight='500'
                                         placeholder={'Select Heading'}
@@ -660,7 +683,7 @@ const Addfield = (props) => {
                                                         fontSize='sm'
                                                         onChange={handleChange} onBlur={handleBlur}
                                                         value={(values?.validation[4]?.types === true || values?.validation[4].formikType) ? values.validation[3].massage : ''}
-                                                        name={`validation[${3}].message`}
+                                                        name={`validation[${4}].message`}
                                                         placeholder='Enter Formik Type Message'
                                                         fontWeight='500'
                                                     />

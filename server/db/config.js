@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const User = require('../model/schema/user');
 const bcrypt = require('bcrypt');
+const { initializeLeadSchema } = require("../model/schema/lead");
+const { initializeContactSchema } = require("../model/schema/contact");
+const { initializePropertySchema } = require("../model/schema/property");
 
 const connectDB = async (DATABASE_URL, DATABASE) => {
     try {
@@ -10,6 +13,10 @@ const connectDB = async (DATABASE_URL, DATABASE) => {
 
         mongoose.set("strictQuery", false);
         await mongoose.connect(DATABASE_URL, DB_OPTIONS);
+
+        await initializeLeadSchema();
+        await initializeContactSchema();
+        await initializePropertySchema();
 
         let adminExisting = await User.find({ role: 'superAdmin' });
         if (adminExisting.length <= 0) {

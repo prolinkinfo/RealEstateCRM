@@ -259,7 +259,7 @@ export default function CheckTable(props) {
   }, [action])
 
   const fetchCustomData = async () => {
-    const response = await getApi('api/custom-field?moduleName=contact')
+    const response = await getApi('api/custom-field?moduleName=Contact')
     setContactData(response.data)
   }
 
