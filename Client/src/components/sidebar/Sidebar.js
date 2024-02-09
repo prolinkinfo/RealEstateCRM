@@ -26,7 +26,7 @@ import PropTypes from "prop-types";
 import { IoMenuOutline } from "react-icons/io5";
 
 function Sidebar(props) {
-  const { routes, setOpenSidebar, openSidebar } = props;
+  const { routes, setOpenSidebar, openSidebar, largeLogo } = props;
 
   let variantChange = "0.2s linear";
   let shadow = useColorModeValue(
@@ -55,7 +55,7 @@ function Sidebar(props) {
           renderTrackVertical={renderTrack}
           renderThumbVertical={renderThumb}
           renderView={renderView}>
-          <Content routes={routes} openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
+          <Content routes={routes} largeLogo={largeLogo} openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
         </Scrollbars>
       </Box>
     </Box>

@@ -87,8 +87,7 @@ export default function CheckTable(props) {
   const data = useMemo(() => tableData, [tableData]);
   const navigate = useNavigate();
 
-  const contactAccess = HasAccess('Contacts')
-  const leadAccess = HasAccess('Lead')
+  const [contactAccess, leadAccess] = HasAccess(['Contacts', 'Lead'])
 
   const csvColumns = [
     { Header: 'Title', accessor: 'title' },

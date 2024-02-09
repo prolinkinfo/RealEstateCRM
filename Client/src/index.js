@@ -12,7 +12,6 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Provider } from 'react-redux';
 import store from './redux/store';
-import { RoleProvider } from 'contexts/RoleContext';
 
 function App() {
 	const token = localStorage.getItem("token") || sessionStorage.getItem("token");
@@ -40,17 +39,15 @@ function App() {
 
 ReactDOM.render(
 	<Provider store={store}>
-		<RoleProvider>
-			<ChakraProvider theme={theme}>
-				<React.StrictMode>
-					<ThemeEditorProvider>
-						<Router>
-							<App />
-						</Router>
-					</ThemeEditorProvider>
-				</React.StrictMode>
-			</ChakraProvider>
-		</RoleProvider>
+		<ChakraProvider theme={theme}>
+			<React.StrictMode>
+				<ThemeEditorProvider>
+					<Router>
+						<App />
+					</Router>
+				</ThemeEditorProvider>
+			</React.StrictMode>
+		</ChakraProvider>
 	</Provider>
 	, document.getElementById('root')
 );

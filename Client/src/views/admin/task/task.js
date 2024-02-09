@@ -34,7 +34,7 @@ const Task = (props) => {
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
 
-    const permission = HasAccess('Task')
+    const [permission] = HasAccess(['Task'])
 
     const dataColumn = dynamicColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 

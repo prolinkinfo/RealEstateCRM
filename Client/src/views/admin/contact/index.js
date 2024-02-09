@@ -33,9 +33,7 @@ const Index = () => {
 
     const user = JSON.parse(localStorage.getItem("user"))
 
-    const permission = HasAccess('Contacts');
-    const emailAccess = HasAccess('Email')
-    const callAccess = HasAccess('Call')
+    const [permission, emailAccess, callAccess] = HasAccess(['Contacts', 'Email', 'Call']);
 
     const dataColumn = dynamicColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 

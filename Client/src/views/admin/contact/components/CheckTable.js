@@ -265,18 +265,6 @@ export default function CheckTable(props) {
     setSelectedValues([])
   };
 
-  useEffect(() => {
-    if (fetchData) fetchData()
-  }, [action])
-
-  const fetchCustomData = async () => {
-    const response = await getApi('api/custom-field?moduleName=contact')
-    setContactData(response.data)
-  }
-
-  useEffect(() => {
-    if (fetchCustomData) fetchCustomData()
-  }, [action])
   const handleSearch = (results) => {
     setSearchedData(results);
   };
