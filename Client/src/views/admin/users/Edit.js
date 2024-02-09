@@ -43,7 +43,7 @@ const Edit = (props) => {
             updatedUserData = {
                 ...updatedUserData,
                 firstName: values?.firstName,
-                lastName    : values?.lastName  ,
+                lastName: values?.lastName
             };
         }
 
