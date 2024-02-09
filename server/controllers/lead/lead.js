@@ -35,17 +35,20 @@ const addMany = async (req, res) => {
 const changeStatus = async (req, res) => {
     try {
         const { leadStatus } = req.body;
-
-        let result = await Lead.updateOne(
+        let result = await Lead.findOneAndUpdate(
             { _id: req.params.id },
-            { $set: { leadStatus: leadStatus } }
+            { $set: { leadStatus: leadStatus } },
+            { new: true }
         );
 
-        let response = await Lead.findOne({ _id: req.params.id })
-        res.status(200).json({ message: "Status Change Successfully", response });
+        if (!result) {
+            return res.status(404).json({ success: false, message: 'Lead not found' });
+        }
+
+        return res.status(200).json({ message: "Status Change Successfully", result });
     } catch (err) {
         console.error('Failed to change status:', err);
-        res.status(400).json({ error: 'Failed to change status : ', err });
+        return res.status(400).json({ error: 'Failed to change status : ', err });
     }
 }
 
