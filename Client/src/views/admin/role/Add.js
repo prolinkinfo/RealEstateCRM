@@ -94,7 +94,7 @@ const AddRole = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button size="sm" variant='brand' disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Add'}</Button>
+                    <Button size="sm" variant='brand' mr={1} disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Add'}</Button>
                     <Button size="sm" onClick={() => {
                         formik.resetForm()
                         onClose(false)

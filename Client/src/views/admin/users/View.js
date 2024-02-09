@@ -43,7 +43,9 @@ const View = () => {
     }
 
     useEffect(() => {
-        fetchData()
+        if (param.id) {
+            fetchData()
+        }
     }, [action])
 
     useEffect(async () => {
