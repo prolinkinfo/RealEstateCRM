@@ -42,7 +42,6 @@ export default function AdminNavbar(props) {
 			setScrolled(false);
 		}
 	};
-
 	return (
 		<Box
 			position={navbarPosition}

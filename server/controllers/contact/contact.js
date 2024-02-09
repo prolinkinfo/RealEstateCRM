@@ -1,4 +1,4 @@
-const Contact = require('../../model/schema/contact')
+const { Contact } = require('../../model/schema/contact')
 const emailHistory = require('../../model/schema/email')
 const MeetingHistory = require('../../model/schema/meeting')
 const phoneCall = require('../../model/schema/phoneCall')
@@ -81,7 +81,7 @@ const view = async (req, res) => {
             { $match: { createBy: contact._id } },
             {
                 $lookup: {
-                    from: 'contacts', // Assuming this is the collection name for 'contacts'
+                    from: 'Contact', // Assuming this is the collection name for 'contacts'
                     localField: 'createBy',
                     foreignField: '_id',
                     as: 'createByRef'
@@ -89,7 +89,7 @@ const view = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'users',
+                    from: 'User',
                     localField: 'sender',
                     foreignField: '_id',
                     as: 'users'
@@ -219,7 +219,7 @@ const view = async (req, res) => {
             { $match: { createBy: contact._id } },
             {
                 $lookup: {
-                    from: 'contacts',
+                    from: 'Contact',
                     localField: 'createBy',
                     foreignField: '_id',
                     as: 'contact'
@@ -227,7 +227,7 @@ const view = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'users',
+                    from: 'User',
                     localField: 'sender',
                     foreignField: '_id',
                     as: 'users'
@@ -259,7 +259,7 @@ const view = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'contacts',
+                    from: 'Contact',
                     localField: 'attendes',
                     foreignField: '_id',
                     as: 'contact'
@@ -267,7 +267,7 @@ const view = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'users',
+                    from: 'User',
                     localField: 'createdBy',
                     foreignField: '_id',
                     as: 'users'
@@ -291,7 +291,7 @@ const view = async (req, res) => {
             { $match: { createFor: contact._id } },
             {
                 $lookup: {
-                    from: 'contacts',
+                    from: 'Contact',
                     localField: 'createFor',
                     foreignField: '_id',
                     as: 'contact'
@@ -299,7 +299,7 @@ const view = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'users',
+                    from: 'User',
                     localField: 'sender',
                     foreignField: '_id',
                     as: 'users'
@@ -324,7 +324,7 @@ const view = async (req, res) => {
             { $match: { assignmentTo: contact._id } },
             {
                 $lookup: {
-                    from: 'contacts',
+                    from: 'Contact',
                     localField: 'assignmentTo',
                     foreignField: '_id',
                     as: 'contact'
@@ -332,7 +332,7 @@ const view = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'users',
+                    from: 'User',
                     localField: 'createBy',
                     foreignField: '_id',
                     as: 'users'
@@ -354,7 +354,7 @@ const view = async (req, res) => {
             { $match: { 'file.deleted': false, 'file.linkContact': contact._id } },
             {
                 $lookup: {
-                    from: 'users', // Replace 'users' with the actual name of your users collection
+                    from: 'User', // Replace 'users' with the actual name of your users collection
                     localField: 'createBy',
                     foreignField: '_id', // Assuming the 'createBy' field in DocumentSchema corresponds to '_id' in the 'users' collection
                     as: 'creatorInfo'

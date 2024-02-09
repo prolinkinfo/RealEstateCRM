@@ -43,7 +43,9 @@ const radioSelctboxSchema = new mongoose.Schema({
 const fieldsSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        // unique: true, 
+        trim: true
     },
     label: {
         type: String,
@@ -62,6 +64,11 @@ const fieldsSchema = new mongoose.Schema({
     },
     belongsTo: {
         type: mongoose.Schema.Types.ObjectId,
+    },
+    backendType: {
+        type: String,
+        default: 'Mixed',
+        required: true
     },
     // options: [radioSelctboxSchema],
     options: {
@@ -88,4 +95,4 @@ const customFieldSchema = new mongoose.Schema({
     fields: [fieldsSchema]
 });
 
-module.exports = mongoose.model("customField", customFieldSchema);
+module.exports = mongoose.model("CustomField", customFieldSchema, 'CustomField');

@@ -3,14 +3,14 @@ const mongoose = require('mongoose');
 const TextMsg = new mongoose.Schema({
     sender: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
+        ref: 'User',
         required: true
     },
     to: { type: String },
     message: { type: String },
     createFor: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'contacts',
+        ref: 'Contact',
         required: true
     },
     timestamp: {
@@ -19,4 +19,4 @@ const TextMsg = new mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('textMsg', TextMsg);
+module.exports = mongoose.model('TextMsg', TextMsg, 'TextMsg');
