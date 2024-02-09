@@ -99,8 +99,6 @@ export default function CheckTable(props) {
   const [manageColumns, setManageColumns] = useState(false);
   const [tempSelectedColumns, setTempSelectedColumns] = useState(dataColumn); // State to track changes
 
-  console.log(dataColumn)
-
   const csvColumns = [
     { Header: 'Name', accessor: 'leadName' },
     { Header: "Status", accessor: "leadStatus" },

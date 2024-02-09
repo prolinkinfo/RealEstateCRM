@@ -276,8 +276,8 @@ export default function CheckTable(props) {
         w="100%"
         overflowX={{ sm: "scroll", lg: "hidden" }}
       >
-        <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={4} mx={4}>
-          <GridItem colSpan={8} >
+        <Grid templateColumns="repeat(12, 1fr)" gap={2}>
+          <GridItem colSpan={{ base: 12, md: 8 }} display={"flex"} alignItems={"center"}>
             <Flex alignItems={"center"} flexWrap={"wrap"}>
               <Text
                 color={"secondaryGray.900"}
@@ -296,7 +296,7 @@ export default function CheckTable(props) {
               {(selectedValues.length > 0 && access?.delete) && <DeleteIcon cursor={"pointer"} onClick={() => setDelete(true)} color={'red'} ms={2} />}
             </Flex>
           </GridItem>
-          <GridItem colSpan={4} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
+          <GridItem colSpan={{ base: 12, md: 4 }} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
             {isHide ? null :
               <Menu isLazy  >
                 <MenuButton p={4}>
@@ -315,7 +315,7 @@ export default function CheckTable(props) {
             }
             {!isHide && access?.create && <Button onClick={() => handleClick()} size={"sm"} variant="brand" leftIcon={<AddIcon />}>Add New</Button>}
           </GridItem>
-          <HStack spacing={4}>
+          <HStack spacing={4} mb={2}>
             {getTagValues && getTagValues.map((item) => (
               <Tag
                 size={"md"}
@@ -485,17 +485,17 @@ export default function CheckTable(props) {
                               <Menu isLazy  >
                                 <MenuButton><CiMenuKebab /></MenuButton>
                                 <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
-                                  {access?.update && <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>}
+                                  {access?.update && <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon mb={1} fontSize={15} />}>Edit</MenuItem>}
                                   {callAccess?.create && <MenuItem py={2.5} width={"165px"} onClick={() => {
                                     setAddPhoneCall(true)
                                     setSelectedId(cell?.row?.values._id)
-                                  }} icon={<PhoneIcon fontSize={15} />}>Create Call</MenuItem>}
+                                  }} icon={<PhoneIcon mb={1} fontSize={15} />}>Create Call</MenuItem>}
                                   {emailAccess?.create && <MenuItem py={2.5} width={"165px"} onClick={() => {
                                     setAddEmailHistory(true)
                                     setSelectedId(cell?.row?.values._id)
-                                  }} icon={<EmailIcon fontSize={15} />}>Send Email</MenuItem>}
-                                  {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/contactView/${cell?.row?.original._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>}
-                                  {access?.delete && <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>}
+                                  }} icon={<EmailIcon mb={1} fontSize={15} />}>Send Email</MenuItem>}
+                                  {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/contactView/${cell?.row?.original._id}`)} icon={<ViewIcon mb={1} fontSize={15} />}>View</MenuItem>}
+                                  {access?.delete && <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} icon={<DeleteIcon mb={1} fontSize={15} />}>Delete</MenuItem>}
                                 </MenuList>
                               </Menu>
                             </Text>
@@ -622,8 +622,8 @@ export default function CheckTable(props) {
             </Grid>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" colorScheme='green' mr={2} size="sm" onClick={handleSubmit} disabled={isLoding || !dirty ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
-            <Button colorScheme="red" onClick={() => resetForm()} size="sm">Clear</Button>
+            <Button colorScheme='brand' mr={2} size="sm" onClick={handleSubmit} disabled={isLoding || !dirty ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
+            <Button colorScheme="red" onClick={() => resetForm()} variant="outline" size='sm'>Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -648,12 +648,12 @@ export default function CheckTable(props) {
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" size='sm' colorScheme='green' mr={2} onClick={() => {
+            <Button colorScheme='brand' mr={2} onClick={() => {
               setSelectedColumns(tempSelectedColumns);
               setManageColumns(false);
               resetForm();
-            }} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
-            <Button colorScheme="red" size='sm' onClick={() => handleColumnClear()}>Close</Button>
+            }} disabled={isLoding ? true : false} size='sm'>{isLoding ? <Spinner /> : 'Save'}</Button>
+            <Button variant='outline' colorScheme="red" size='sm' onClick={() => handleColumnClear()}>Close</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

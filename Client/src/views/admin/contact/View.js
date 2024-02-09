@@ -1,5 +1,5 @@
 import { AddIcon, ChevronDownIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { Box, Button, Flex, Grid, GridItem, Heading, IconButton, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Flex, Grid, GridItem, Heading, IconButton, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, useColorModeValue, useDisclosure } from "@chakra-ui/react";
 import FolderTreeView from 'components/FolderTreeView/folderTreeView';
 import Card from "components/card/Card";
 import { HSeparator } from "components/separator/Separator";
@@ -37,9 +37,10 @@ import TaskColumnsTable from "../task/components/ColumnsTable";
 const View = () => {
 
     const param = useParams()
+    const textColor = useColorModeValue("gray.500", "white");
 
     const user = JSON.parse(localStorage.getItem("user"));
-
+    const buttonbg = useColorModeValue("gray.200", "white");
     const [data, setData] = useState([])
     const [allData, setAllData] = useState([]);
     const [contactData, setContactData] = useState([]);
@@ -146,26 +147,28 @@ const View = () => {
                     <Spinner />
                 </Flex> : <>
                     <Tabs >
-                        <Grid templateColumns="repeat(3, 1fr)" mb={3} gap={1}>
-                            <GridItem colSpan={2}>
+                        <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={1}>
+                            <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <TabList sx={{
+                                    width: '100%',
+                                    overflowX: 'auto',
                                     border: "none",
                                     '& button:focus': { boxShadow: 'none', },
                                     '& button': {
-                                        margin: "0 5px", border: '2px solid #8080803d', borderTopLeftRadius: "10px", borderTopRightRadius: "10px", borderBottom: 0
+                                        margin: { sm: "0 3px", md: "0 5px" }, padding: { sm: "5px", md: "8px" }, fontSize: { sm: "12px", md: "16px" }, border: '2px solid #8080803d', borderTopLeftRadius: "10px", borderTopRightRadius: "10px", borderBottom: 0
                                     },
                                     '& button[aria-selected="true"]': {
                                         border: "2px solid brand.200", borderBottom: 0, zIndex: '0'
                                     },
                                 }} >
                                     <Tab >Information</Tab>
-                                    <Tab>Activity</Tab>
+                                    <Tab>Communication</Tab>
                                     <Tab>Document</Tab>
                                     <Tab>Social Media</Tab>
                                 </TabList>
 
                             </GridItem>
-                            <GridItem  >
+                            <GridItem colSpan={{ base: 12, md: 6 }} mt={{ sm: "3px", md: "5px" }} >
                                 <Flex justifyContent={"right"}>
                                     <Menu>
                                         {(user.role === 'superAdmin' || permission?.create || permission?.update || permission?.delete) && <MenuButton size="sm" variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
@@ -173,12 +176,12 @@ const View = () => {
                                         </MenuButton>}
                                         <MenuDivider />
                                         <MenuList minWidth={2}>
-                                            {(user.role === 'superAdmin' || permission?.create) && <MenuItem onClick={() => onOpen()} color={'blue'} icon={<AddIcon />}>Add</MenuItem>}
-                                            {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
+                                            {(user.role === 'superAdmin' || permission?.create) && <MenuItem alignItems={'start'} onClick={() => onOpen()} color={'blue'} icon={<AddIcon />}>Add</MenuItem>}
+                                            {(user.role === 'superAdmin' || permission?.update) && <MenuItem alignItems={'start'} onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
                                             {(user.role === 'superAdmin' || permission?.delete) &&
                                                 <>
                                                     <MenuDivider />
-                                                    <MenuItem onClick={() => setDelete(true)} color={'red'} icon={<DeleteIcon />}>Delete</MenuItem>
+                                                    <MenuItem alignItems={'start'} onClick={() => setDelete(true)} color={'red'} icon={<DeleteIcon />}>Delete</MenuItem>
                                                 </>
                                             }
                                         </MenuList>
@@ -482,7 +485,7 @@ const View = () => {
                                                             <Heading size="md">
                                                                 Property of Interest({allData?.interestProperty?.interestProperty?.length})
                                                             </Heading>
-                                                            <Button onClick={() => setPropertyModel(true)} leftIcon={<LuBuilding2 />} size="sm" colorScheme="gray" >Select Interested Property  </Button>
+                                                            <Button onClick={() => setPropertyModel(true)} leftIcon={<LuBuilding2 />} size="sm" colorScheme="gray" bg={buttonbg}>Select Interested Property  </Button>
                                                             <PropertyModel fetchData={fetchData} isOpen={propertyModel} onClose={setPropertyModel} id={param.id} interestProperty={data?.interestProperty} />
                                                         </Flex>
                                                         <HSeparator />
@@ -505,16 +508,16 @@ const View = () => {
                             <TabPanel pt={4} p={0}>
                                 <GridItem colSpan={{ base: 12 }} >
                                     <Grid templateColumns={{ base: "1fr" }} gap={4}>
-                                        <GridItem colSpan={2}>
+                                        {/* <GridItem colSpan={2}>
                                             <Box>
                                                 <Heading size="md" mb={3}>
                                                     Communication
                                                 </Heading>
                                                 <HSeparator />
                                             </Box>
-                                        </GridItem>
+                                        </GridItem> */}
                                         <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
-                                            {emailAccess?.view && <GridItem colSpan={{ base: 12, sm: 6 }}>
+                                            {emailAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
                                                 <Card overflow={'scroll'}>
                                                     <ColumnsTable fetchData={fetchData} emailAccess={emailAccess} columnsData={columnsDataColumns} tableData={showEmail ? allData.EmailHistory : allData?.EmailHistory?.length > 0 ? [allData.EmailHistory[0]] : []} title={'Email '} />
                                                     {/* {(allData?.EmailHistory && allData?.EmailHistory?.length) ? <ColumnsTable fetchData={fetchData} emailAccess={emailAccess} columnsData={columnsDataColumns} tableData={showEmail ? allData.EmailHistory : [allData.EmailHistory[0]]} title={'Email '} /> : emailAccess?.create && <Button onClick={() => setAddEmailHistory(true)} leftIcon={<BsFillSendFill />} colorScheme="gray" size='sm'>Send Email </Button>}
@@ -525,7 +528,7 @@ const View = () => {
                                                         </div>}
                                                 </Card>
                                             </GridItem>}
-                                            {callAccess?.view && <GridItem colSpan={{ base: 12, sm: 6 }}>
+                                            {callAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
                                                 <Card overflow={'scroll'}>
                                                     <PhoneCall callAccess={callAccess} fetchData={fetchData} columnsData={columnsDataColumns} tableData={showCall ? allData?.phoneCallHistory : allData?.phoneCallHistory?.length > 0 ? [allData?.phoneCallHistory[0]] : []} title={'Call '} />
                                                     {/* {allData?.phoneCallHistory?.length > 0 ? <PhoneCall callAccess={callAccess} fetchData={fetchData} columnsData={columnsDataColumns} tableData={showCall ? allData?.phoneCallHistory : [allData?.phoneCallHistory[0]]} title={'Call '} /> : callAccess?.create && <Button onClick={() => setAddPhoneCall(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" size='sm'> Call </Button>} */}
@@ -535,7 +538,7 @@ const View = () => {
                                                     </div>}
                                                 </Card>
                                             </GridItem>}
-                                            {taskAccess?.view && <GridItem colSpan={{ base: 12, sm: 6 }}>
+                                            {taskAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
                                                 <Card overflow={'scroll'}><TaskColumnsTable fetchData={fetchData} columnsData={taskColumns} tableData={showTasks ? allData?.task : allData?.task?.length > 0 ? [allData?.task[0]] : []} title={'Task '} action={action} setAction={setAction} access={taskAccess} />
                                                     {/* {allData?.task?.length > 0 ? <TaskColumnsTable fetchData={fetchData} columnsData={taskColumns} tableData={showTasks ? allData?.task : [allData?.task[0]]} title={'Task '} action={action} setAction={setAction} access={taskAccess} /> : taskAccess?.create && <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" size='sm'>Create Task</Button>} */}
                                                     <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="contact" id={param.id} />
@@ -544,7 +547,7 @@ const View = () => {
                                                     </div>}
                                                 </Card>
                                             </GridItem>}
-                                            {meetingAccess?.view && <GridItem colSpan={{ base: 12, sm: 6 }}>
+                                            {meetingAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
                                                 <Card overflow={'scroll'}>
                                                     <MeetingColumnsTable fetchData={fetchData} columnsData={MeetingColumns} tableData={showMeetings ? allData?.meetingHistory : allData?.meetingHistory?.length > 0 ? [allData?.meetingHistory[0]] : []} title={'Meeting '} action={action} setAction={setAction} access={meetingAccess} />
                                                     {/* {allData?.meetingHistory?.length > 0 ? <MeetingColumnsTable fetchData={fetchData} columnsData={MeetingColumns} tableData={showMeetings ? allData?.meetingHistory : [allData?.meetingHistory[0]]} title={'Meeting '} action={action} setAction={setAction} access={meetingAccess} /> : meetingAccess?.create && <Button onClick={() => setMeeting(true)} leftIcon={<SiGooglemeet />} size='sm' colorScheme="gray" >Add Meeting </Button>} */}
@@ -571,7 +574,7 @@ const View = () => {
                             <TabPanel pt={4} p={0}>
                                 <GridItem colSpan={{ base: 12 }} >
                                     <Card minH={'40vh'} >
-                                        <Heading size="lg" mb={4} >
+                                        <Heading size="md" mb={3}>
                                             Documents
                                         </Heading>
                                         <HSeparator />
@@ -582,7 +585,9 @@ const View = () => {
                                                         <FolderTreeView download={download} data={file} name={file.fileName} isFile from="contact" />
                                                     ))}
                                                 </FolderTreeView>
-                                            )) : <Text> No Documents Found</Text>}
+                                            )) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                                                -- No Data Found --
+                                            </Text>}
                                         </VStack>
                                     </Card>
                                 </GridItem>
@@ -592,7 +597,7 @@ const View = () => {
                                 <GridItem colSpan={{ base: 12 }} >
                                     <Card >
                                         <Grid templateColumns={{ base: "1fr" }} gap={4}>
-                                            <GridItem colSpan={2} textAlign={'center'}>
+                                            <GridItem colSpan={2}>
                                                 <Box>
                                                     <Heading size="md" mb={3}>
                                                         Social Media Profiles
@@ -601,7 +606,7 @@ const View = () => {
                                                 </Box>
                                             </GridItem>
                                             {data?.linkedInProfile || data?.facebookProfile || data?.twitterHandle || data?.otherProfiles ?
-                                                <Grid templateColumns={'repeat(4, 1fr)'} gap={4} my={3} flexWrap={'wrap'} display={'flex'} justifyContent={'center'}>
+                                                <Grid templateColumns={'repeat(12, 1fr)'} gap={4} my={3} flexWrap={'wrap'} display={'flex'} justifyContent={'center'}>
                                                     {data?.linkedInProfile && <GridItem textAlign={'center'} colSpan={{ base: 2, md: 1 }}>
                                                         <a target='_blank' href={data?.linkedInProfile}>
                                                             <IconButton colorScheme="brand" aria-label="Call Fred" borderRadius="10px" size="md" icon={<BiLogoLinkedin />} />
@@ -615,11 +620,12 @@ const View = () => {
                                                         <Text fontSize="sm" mt={2} fontWeight="bold" color={'blackAlpha.900'}> Facebook Profile  </Text>
                                                     </GridItem>}
                                                     {data?.linkedInProfile && <GridItem textAlign={'center'} colSpan={{ base: 2, md: 1 }}>
-                                                        <a target='_blank' href={'https://twitter.com/' + data?.twitterHandle}>
+                                                        <a target='_blank' href={`https://www.facebook.com/${data.facebookProfile}`}>
                                                             <IconButton colorScheme="brand" aria-label="Call Fred" borderRadius="10px" size="md" icon={<BsTwitter />} />
                                                         </a>
-                                                        <Text fontSize="sm" mt={2} fontWeight="bold" color={'blackAlpha.900'}> Twitter Handle  </Text>
+                                                        <Text fontSize="sm" mt={2} px={2} fontWeight="bold" color={'blackAlpha.900'}>Twitter Handle </Text>
                                                     </GridItem>}
+
                                                     {data?.linkedInProfile && <GridItem textAlign={'center'} colSpan={{ base: 2, md: 1 }}>
                                                         <a target='_blank' href={data?.otherProfiles}>
                                                             <IconButton colorScheme="brand" aria-label="Call Fred" borderRadius="10px" size="md" icon={<BiLink />} />
@@ -630,7 +636,7 @@ const View = () => {
                                                 :
                                                 <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                                     <GridItem colSpan={{ base: 2 }} textAlign={'center'}>
-                                                        <Heading size="md" >No Profile Found</Heading>
+                                                        <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">-- No Data Found --</Text>
                                                     </GridItem>
                                                 </Grid>
                                             }

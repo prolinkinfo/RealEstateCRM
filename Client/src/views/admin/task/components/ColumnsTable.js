@@ -2,6 +2,7 @@ import {
     Box,
     Button,
     Flex,
+    Heading,
     Table,
     Tbody,
     Td,
@@ -86,22 +87,18 @@ export default function ColumnsTable(props) {
     }, [pageOptions, gopageValue]);
 
     return (
-        <Card
+        <Box
             direction='column'
             w='100%'
             px='0px'
             style={{ border: '1px solid gray.200' }}
             overflowX={{ sm: "scroll", lg: "hidden" }}
         >
-            <Flex px='25px' justify='space-between' mb='10px' align='center'>
-                <Text
-                    color={textColor}
-                    fontSize='22px'
-                    fontWeight='700'
-                    lineHeight='100%'>
+            <Flex justify='space-between' mb='10px' align='center'>
+                <Heading size="md" mb={3}>
                     {title}  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
-                </Text>
-                <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" size="sm" bg={buttonbg}>Create Task</Button>
+                </Heading>
+                <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" size="sm" bg={buttonbg}>Add New</Button>
                 <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="lead" id={param.id} />
             </Flex>
             <Box overflowY={'auto'} className="table-container p0" >
@@ -199,6 +196,6 @@ export default function ColumnsTable(props) {
 
             {data?.length > 5 && <Pagination gotoPage={gotoPage} gopageValue={gopageValue} setGopageValue={setGopageValue} pageCount={pageCount} canPreviousPage={canPreviousPage} previousPage={previousPage} canNextPage={canNextPage} pageOptions={pageOptions} setPageSize={setPageSize} nextPage={nextPage} pageSize={pageSize} pageIndex={pageIndex} />}
 
-        </Card>
+        </Box>
     );
 }
