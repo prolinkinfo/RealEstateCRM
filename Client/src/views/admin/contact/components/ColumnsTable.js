@@ -89,7 +89,6 @@ export default function ColumnsTable(props) {
       overflowX={{ sm: "scroll", lg: "hidden" }}
     >
       <Flex justify='space-between' mb='10px' align='center'>
-
         <Heading size="md" mb={3}>
           {title}  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
         </Heading>
