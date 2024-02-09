@@ -42,7 +42,8 @@ const Edit = (props) => {
             // Create a new object with the updated firstName
             updatedUserData = {
                 ...updatedUserData,
-                firstName: values?.firstName
+                firstName: values?.firstName,
+                lastName: values?.lastName
             };
         }
 
