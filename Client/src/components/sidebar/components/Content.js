@@ -15,14 +15,11 @@ function SidebarContent(props) {
   // SIDEBAR
   return (
     <Flex direction='column' height='100%'
-      // onMouseOver={() => setOpenSidebar(true)}
-      // onMouseOut={() => setOpenSidebar(false)}
-      pt='2px'
       borderRadius='30px'>
       <Brand from={from} largeLogo={largeLogo}
         openSidebar={openSidebar} setOpenSidebar={setOpenSidebar}
       />
-      <Stack direction='column' mb='auto' pt={{ sm: '0', xl: '60px' }}
+      <Stack direction='column' mb='auto'
       >
 
         <Box
