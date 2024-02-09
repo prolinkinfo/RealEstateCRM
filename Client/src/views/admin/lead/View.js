@@ -137,7 +137,7 @@ const View = () => {
     return (
         <>
             {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} setLeadData={setLeadData} leadData={leadData[0]} setAction={setAction} />}
-            <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} />
+            <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} moduleId={leadData?.[0]?._id} />
             <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/lead/delete/' id={param.id} setAction={setAction} />
 
             {isLoding ?
