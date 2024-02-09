@@ -2,6 +2,7 @@ import {
     Box,
     Button,
     Flex,
+    Heading,
     Table,
     Tbody,
     Td,
@@ -27,6 +28,7 @@ import Pagination from "components/pagination/Pagination";
 import { SiGooglemeet } from "react-icons/si";
 import { Link, useParams } from "react-router-dom";
 import AddMeeting from "./Addmeeting";
+import { AddIcon } from "@chakra-ui/icons";
 
 export default function ColumnsTable(props) {
     const { columnsData, tableData, title, fetchData, action, setAction, access } = props;
@@ -79,22 +81,18 @@ export default function ColumnsTable(props) {
     }, [pageOptions, gopageValue]);
 
     return (
-        <Card
+        <Box
             direction='column'
             w='100%'
             px='0px'
             style={{ border: '1px solid gray.200' }}
             overflowX={{ sm: "scroll", lg: "hidden" }}
         >
-            <Flex px='25px' justify='space-between' mb='10px' align='center'>
-                <Text
-                    color={textColor}
-                    fontSize='22px'
-                    fontWeight='700'
-                    lineHeight='100%'>
+            <Flex justify='space-between' mb='10px' align='center'>
+                <Heading size="md" mb={3}>
                     {title}  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
-                </Text>
-                <Button size="sm" onClick={() => setMeetingModel(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" bg={buttonbg}>Add Meeting </Button>
+                </Heading>
+                <Button size="sm" onClick={() => setMeetingModel(true)} leftIcon={<AddIcon />} colorScheme="gray" bg={buttonbg}>Add New </Button>
                 <AddMeeting fetchData={fetchData} isOpen={meetingModel} onClose={setMeetingModel} from="lead" id={param.id} setAction={setAction} />
             </Flex>
             <Box overflowY={'auto'} className="table-container p0" >
@@ -188,6 +186,6 @@ export default function ColumnsTable(props) {
 
             {data?.length > 5 && <Pagination gotoPage={gotoPage} gopageValue={gopageValue} setGopageValue={setGopageValue} pageCount={pageCount} canPreviousPage={canPreviousPage} previousPage={previousPage} canNextPage={canNextPage} pageOptions={pageOptions} setPageSize={setPageSize} nextPage={nextPage} pageSize={pageSize} pageIndex={pageIndex} />}
 
-        </Card >
+        </Box>
     );
 }

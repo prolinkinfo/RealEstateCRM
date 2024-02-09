@@ -63,7 +63,7 @@ export default function PropertyTable(props) {
     setGopageValue(pageOptions.length)
   }
 
-  const textColor = useColorModeValue("secondaryGray.900", "white");
+  const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
 
   const handleCheckboxChange = (event, value) => {
@@ -108,8 +108,8 @@ export default function PropertyTable(props) {
                     <Flex
                       justify='space-between'
                       align='center'
-                      fontSize={{ sm: "10px", lg: "12px" }}
-                      color='gray.400'>
+                      fontSize={{ sm: "14px", lg: "14px" }}
+                      color="secondaryGray.900">
                       {column.render("Header")}
                     </Flex>
                   </Th>
@@ -228,6 +228,6 @@ export default function PropertyTable(props) {
 
       {data?.length > 5 && <Pagination gotoPage={gotoPage} gopageValue={gopageValue} setGopageValue={setGopageValue} pageCount={pageCount} canPreviousPage={canPreviousPage} previousPage={previousPage} canNextPage={canNextPage} pageOptions={pageOptions} setPageSize={setPageSize} nextPage={nextPage} pageSize={pageSize} pageIndex={pageIndex} />}
 
-    </Card>
+    </Card >
   );
 }

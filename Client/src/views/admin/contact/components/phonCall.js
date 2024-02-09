@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Flex,
+  Heading,
   Table,
   Tbody,
   Td,
@@ -28,6 +29,7 @@ import { BsFillTelephoneFill } from "react-icons/bs";
 import { MdOutlineMessage } from "react-icons/md";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import AddPhoneCall from "../../phoneCall/components/AddPhoneCall";
+import { AddIcon } from "@chakra-ui/icons";
 
 export default function PhoneCall(props) {
   const { columnsData, tableData, title, fetchData, callAccess } = props;
@@ -73,23 +75,19 @@ export default function PhoneCall(props) {
   const param = useParams()
   const navigate = useNavigate()
   return (
-    <Card
+    <Box
       direction='column'
       w='100%'
       px='0px'
       style={{ border: '1px solid gray.200' }}
       overflowX={{ sm: "scroll", lg: "hidden" }}
     >
-      <Flex px='25px' justify='space-between' mb='20px' align='center'>
-        <Text
-          color={textColor}
-          fontSize='22px'
-          fontWeight='700'
-          lineHeight='100%'>
+      <Flex justify='space-between' mb='10px' align='center'>
+        <Heading size="md" mb={3}>
           {title} (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
-        </Text>
+        </Heading>
         {/* <Menu /> */}
-        {!props.text ? callAccess?.create && <Button onClick={() => setAddModel(true)} leftIcon={<BsFillTelephoneFill />} size="sm" colorScheme="gray" bg={buttonbg}>Call</Button> : <Button onClick={() => navigate('/communication-integration')} size="sm" leftIcon={<MdOutlineMessage />} colorScheme="gray" >send text Msg</Button>}
+        {!props.text ? callAccess?.create && <Button onClick={() => setAddModel(true)} leftIcon={<AddIcon />} size="sm" colorScheme="gray" bg={buttonbg}>Add New</Button> : <Button onClick={() => navigate('/communication-integration')} size="sm" leftIcon={<MdOutlineMessage />} colorScheme="gray" >send text Msg</Button>}
         <AddPhoneCall lead={props.lead} fetchData={fetchData} isOpen={addModel} onClose={setAddModel} id={param.id} />
       </Flex>
       <Box overflowY={'auto'} className="table-container" >
@@ -189,6 +187,6 @@ export default function PhoneCall(props) {
 
       {data?.length > 5 && <Pagination gotoPage={gotoPage} gopageValue={gopageValue} setGopageValue={setGopageValue} pageCount={pageCount} canPreviousPage={canPreviousPage} previousPage={previousPage} canNextPage={canNextPage} pageOptions={pageOptions} setPageSize={setPageSize} nextPage={nextPage} pageSize={pageSize} pageIndex={pageIndex} />}
 
-    </Card >
+    </Box >
   );
 }
