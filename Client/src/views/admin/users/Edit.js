@@ -13,7 +13,7 @@ import { setUser } from '../../../redux/localSlice';
 
 
 const Edit = (props) => {
-    const { onClose, isOpen, fetchData, data, userData } = props
+    const { onClose, isOpen, fetchData, data, userData, setEdit } = props
 
     const initialValues = {
         firstName: data ? data?.firstName : '',
@@ -60,6 +60,7 @@ const Edit = (props) => {
             setIsLoding(true)
             let response = await putApi(`api/user/edit/${props.selectedId}`, values)
             if (response && response.status === 200) {
+                setEdit(false)
                 handleCloseModal();
                 fetchData()
                 props.setAction((pre) => !pre)

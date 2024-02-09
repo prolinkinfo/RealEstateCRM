@@ -76,14 +76,11 @@ const View = () => {
                     <Spinner />
                 </Flex> : <>
                     <Add isOpen={isOpen} size={size} onClose={onClose} />
-                    <Edit isOpen={edit} size={size} onClose={setEdit} selectedId={param.id} userData={userName} setAction={setAction} fetchData={fetchData} data={data} />
+                    {/* <Edit isOpen={edit} size={size} onClose={setEdit} selectedId={param.id} setEdit={setEdit} setAction={setAction}  /> */}
+                    <Edit isOpen={edit} size={size} onClose={setEdit} userData={userName} setAction={setAction} fetchData={fetchData} data={data} />
                     <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/user/delete/' id={param.id} />
 
-
-
                     <Grid templateColumns="repeat(4, 1fr)" gap={3}>
-
-
                         <GridItem colSpan={{ base: 4 }}>
                             <Card >
                                 <Grid templateColumns={{ base: "1fr" }} gap={4}>
@@ -157,6 +154,8 @@ const View = () => {
                         <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                             <GridItem colStart={6} >
                                 <Flex justifyContent={"right"}>
+                                    {/*  <Button onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" size="sm" colorScheme="green">Edit</Button>
+                                     {data?.role !== 'superAdmin' && JSON.parse(localStorage.getItem('user'))?.role === 'superAdmin' && <Button style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" size="sm">Delete</Button>} */}
                                     <Button onClick={() => handleOpenModal(userData)} leftIcon={<EditIcon />} mr={2.5} variant="outline" size="sm" colorScheme="green">Edit</Button>
                                     {data?.role !== 'superAdmin' && JSON.parse(localStorage.getItem('user'))?.role === 'superAdmin' && <Button style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>}
                                 </Flex>

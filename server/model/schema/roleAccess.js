@@ -43,4 +43,4 @@ const roleAccess = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('roleAccess', roleAccess)
+module.exports = mongoose.model('RoleAccess', roleAccess, 'RoleAccess')

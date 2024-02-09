@@ -1,40 +1,44 @@
 const mongoose = require('mongoose');
 
+const fetchSchemaFields = async () => {
+    const CustomFieldModel = mongoose.model('CustomField');
+    return await CustomFieldModel.find({ moduleName: "Lead" });
+};
 
 const leadSchema = new mongoose.Schema({
-    // Lead Information:
-    leadName: String,
-    leadEmail: String,
-    leadPhoneNumber: String,
-    leadAddress: String,
-    // Lead Source and Details:
-    leadSource: String,
-    leadStatus: String,
-    leadSourceDetails: String,
-    leadCampaign: String,
-    leadSourceChannel: String,
-    leadSourceMedium: String,
-    leadSourceCampaign: String,
-    leadSourceReferral: String,
-    // Lead Assignment and Ownership:
-    leadAssignedAgent: String,
-    leadOwner: String,
-    // Lead Dates and Follow - up:
-    leadCreationDate: Date,
-    leadConversionDate: Date,
-    leadFollowUpDate: Date,
-    leadFollowUpStatus: String,
-    // Lead Interaction and Communication:
-    // leadInteractionHistory: [{ leadHistory }],
-    leadNotes: String,
-    leadCommunicationPreferences: String,
-    // Lead Scoring and Nurturing:
-    leadScore: Number,
-    leadNurturingWorkflow: String,
-    leadEngagementLevel: String,
-    leadConversionRate: Number,
-    leadNurturingStage: String,
-    leadNextAction: String,
+    // // Lead Information:
+    // leadName: String,
+    // leadEmail: String,
+    // leadPhoneNumber: String,
+    // leadAddress: String,
+    // // Lead Source and Details:
+    // leadSource: String,
+    // leadStatus: String,
+    // leadSourceDetails: String,
+    // leadCampaign: String,
+    // leadSourceChannel: String,
+    // leadSourceMedium: String,
+    // leadSourceCampaign: String,
+    // leadSourceReferral: String,
+    // // Lead Assignment and Ownership:
+    // leadAssignedAgent: String,
+    // leadOwner: String,
+    // // Lead Dates and Follow - up:
+    // leadCreationDate: Date,
+    // leadConversionDate: Date,
+    // leadFollowUpDate: Date,
+    // leadFollowUpStatus: String,
+    // // Lead Interaction and Communication:
+    // // leadInteractionHistory: [{ leadHistory }],
+    // leadNotes: String,
+    // leadCommunicationPreferences: String,
+    // // Lead Scoring and Nurturing:
+    // leadScore: Number,
+    // leadNurturingWorkflow: String,
+    // leadEngagementLevel: String,
+    // leadConversionRate: Number,
+    // leadNurturingStage: String,
+    // leadNextAction: String,
     deleted: {
         type: Boolean,
         default: false,
@@ -53,6 +57,12 @@ const leadSchema = new mongoose.Schema({
     },
 });
 
-const Lead = mongoose.model('Lead', leadSchema);
+const initializeLeadSchema = async () => {
+    const schemaFieldsData = await fetchSchemaFields();
+    schemaFieldsData[0]?.fields?.forEach((item) => {
+        leadSchema.add({ [item.name]: item?.backendType });
+    });
+};
 
-module.exports = Lead;
+const Lead = mongoose.model('Lead', leadSchema, 'Lead');
+module.exports = { Lead, initializeLeadSchema };

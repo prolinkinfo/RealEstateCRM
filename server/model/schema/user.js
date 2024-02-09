@@ -20,7 +20,7 @@ const user = new mongoose.Schema({
     lastName: String,
     roles: [{
         type: mongoose.Schema.ObjectId,
-        ref: 'roleAccess',
+        ref: 'RoleAccess',
         required: true
     }],
     updatedDate: {
@@ -36,4 +36,4 @@ const user = new mongoose.Schema({
     },
 })
 
-module.exports = mongoose.model('User', user)
+module.exports = mongoose.model('User', user, 'User')

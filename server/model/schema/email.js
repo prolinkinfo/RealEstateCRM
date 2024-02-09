@@ -31,4 +31,4 @@ const emailHistory = new mongoose.Schema({
     },
 })
 
-module.exports = mongoose.model('EmailHistory', emailHistory);
+module.exports = mongoose.model('EmailHistory', emailHistory, 'EmailHistory');

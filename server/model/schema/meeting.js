@@ -4,7 +4,7 @@ const meetingHistory = new mongoose.Schema({
     agenda: { type: String, required: true },
     attendes: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'contacts',
+        ref: 'Contact',
     }],
     attendesLead: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -30,4 +30,4 @@ const meetingHistory = new mongoose.Schema({
     },
 })
 
-module.exports = mongoose.model('meetingHistory', meetingHistory);
+module.exports = mongoose.model('MeetingHistory', meetingHistory, 'MeetingHistory');
