@@ -191,7 +191,7 @@ export default function CheckTable(props) {
       resetForm();
     }
   })
-  const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
+  const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm, dirty } = formik
   const handleClear = () => {
     setDisplaySearchData(false)
   }
@@ -622,7 +622,7 @@ export default function CheckTable(props) {
             </Grid>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" colorScheme='green' mr={2} size="sm" onClick={handleSubmit} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
+            <Button variant="outline" colorScheme='green' mr={2} size="sm" onClick={handleSubmit} disabled={isLoding || !dirty ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
             <Button colorScheme="red" onClick={() => resetForm()} size="sm">Clear</Button>
           </ModalFooter>
         </ModalContent>
