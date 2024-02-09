@@ -51,7 +51,6 @@ export default function HeaderLinks(props) {
 
 	const data = typeof userData === 'string' ? JSON.parse(userData) : userData
 	const user = data?.firstName + " " + data?.lastName;
-
 	const userId = JSON.parse(localStorage.getItem("user"))?._id;
 
 	const fetchData = async () => {

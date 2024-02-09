@@ -32,6 +32,7 @@ import { toast } from "react-toastify";
 import Spinner from "components/spinner/Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchImage } from "../../../redux/imageSlice";
+import { setUser } from "../../../redux/localSlice";
 
 function SignIn() {
   // Chakra color mode
@@ -82,6 +83,7 @@ function SignIn() {
         navigate("/superAdmin");
         toast.success("Login Successfully!");
         resetForm();
+        dispatch(setUser(response?.data?.user))
       } else {
         toast.error(response.response.data?.error);
       }

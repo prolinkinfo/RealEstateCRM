@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    user: JSON.parse(localStorage.getItem('user')),
+    user: JSON.parse(window.localStorage.getItem('user')),
 };
 
 const localSlice = createSlice({

@@ -9,7 +9,6 @@ export const postApi = async (path, data, login) => {
                 Authorization: localStorage.getItem("token") || sessionStorage.getItem("token")
             }
         })
-
         if (result.data?.token && result.data?.token !== null) {
             if (login) {
                 localStorage.setItem('token', result.data?.token)
