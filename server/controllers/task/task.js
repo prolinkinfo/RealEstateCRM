@@ -191,4 +191,20 @@ const deleteData = async (req, res) => {
     }
 }
 
-module.exports = { index, add, edit, view, deleteData, changeStatus }
+const deleteMany = async (req, res) => {
+    try {
+        const result = await Task.updateMany({ _id: { $in: req.body } }, { $set: { deleted: true } });
+
+        if (result?.matchedCount > 0 && result?.modifiedCount > 0) {
+            return res.status(200).json({ message: "Tasks Removed successfully", result });
+        }
+        else {
+            return res.status(404).json({ success: false, message: "Failed to remove tasks" })
+        }
+
+    } catch (err) {
+        return res.status(404).json({ success: false, message: "error", err });
+    }
+}
+
+module.exports = { index, add, edit, view, deleteData, changeStatus, deleteMany }

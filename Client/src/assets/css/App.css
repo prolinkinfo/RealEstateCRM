@@ -83,6 +83,12 @@ option {
   background: #ffffff;
 }
 
+.importTable {
+  min-height: auto;
+  max-height: 82vh;
+  overflow-y: auto;
+}
+
 .tableData {
   padding: 10px !important;
 }

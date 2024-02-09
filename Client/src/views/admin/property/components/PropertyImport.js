@@ -267,7 +267,7 @@ function PropertyImport() {
 
     return (
         <>
-            <Card overflowY={"auto"} className="table-fix-container">
+            <Card overflowY={"auto"} className="importTable">
                 <Text color={"secondaryGray.900"}
                     fontSize="22px"
                     fontWeight="700"

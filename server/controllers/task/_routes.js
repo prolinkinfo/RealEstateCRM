@@ -10,6 +10,6 @@ router.get('/view/:id', auth, task.view)
 router.put('/edit/:id', auth, task.edit)
 router.put('/changeStatus/:id', auth, task.changeStatus)
 router.delete('/delete/:id', auth, task.deleteData)
-
+router.post('/deleteMany/', auth, task.deleteMany)
 
 module.exports = router
