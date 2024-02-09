@@ -65,6 +65,7 @@ import { CiMenuKebab } from "react-icons/ci";
 import { IoIosContact } from 'react-icons/io';
 import { MdLeaderboard } from 'react-icons/md';
 import { HasAccess } from "../../../../redux/accessUtils";
+import CustomSearchInput from "components/search/search";
 
 export default function CheckTable(props) {
   const { columnsData, tableData, fetchData, isLoding, dataColumn, allData, setSearchedData, access, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action } = props;
@@ -261,6 +262,9 @@ export default function CheckTable(props) {
     fetchData()
   }, [action])
 
+  const handleSearch = (results) => {
+    setSearchedData(results);
+  };
 
   return (
     <>
@@ -269,8 +273,6 @@ export default function CheckTable(props) {
         w="100%"
         overflowX={{ sm: "scroll", lg: "hidden" }}
       >
-
-
         <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={4} mx={4}>
           <GridItem colSpan={8} >
             <Flex alignItems={"center"} flexWrap={"wrap"}>
@@ -282,42 +284,9 @@ export default function CheckTable(props) {
               >
                 Calls (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
               </Text>
-              <InputGroup width={"30%"} mx={3}>
-                <InputLeftElement
-                  size="sm"
-                  top={"-3px"}
-                  pointerEvents="none"
-                  children={<SearchIcon color="gray.300" borderRadius="16px" />}
-                />
-                <Input type="text"
-                  size="sm"
-                  fontSize='sm'
-                  value={searchbox}
-                  onChange={(e) => {
-                    const results = allData.filter((item) => {
-                      // Iterate through each property of the object
-                      for (const key in item) {
-                        // Check if the value of the property contains the search term
-                        if (
-                          item[key] &&
-                          typeof item[key] === "string" &&
-                          item[key].toLowerCase().includes(e.target.value.toLowerCase())
-                        ) {
-                          return true; // If found, include in the results
-                        }
-                      }
-                      return false; // If not found in any field, exclude from the results
-                    });
-                    setSearchedData(results)
-                    setSearchbox(e.target.value)
-                    setDisplaySearchData(e.target.value === "" ? false : true)
-
-                  }}
-                  fontWeight='500'
-                  placeholder="Search..." borderRadius="16px" />
-              </InputGroup>
+              <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={dataColumn} onSearch={handleSearch} />
               <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} size="sm">Advance Search</Button>
-              {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>clear</Button> : ""}
+              {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>Clear</Button> : ""}
 
             </Flex>
           </GridItem>
@@ -606,8 +575,8 @@ export default function CheckTable(props) {
             </Grid>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" colorScheme='green' mr={2} onClick={handleSubmit} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
-            <Button colorScheme="red" onClick={() => resetForm()}>Clear</Button>
+            <Button size="sm" variant="outline" colorScheme='green' mr={2} onClick={handleSubmit} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
+            <Button size="sm" colorScheme="red" onClick={() => resetForm()}>Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -632,12 +601,12 @@ export default function CheckTable(props) {
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" colorScheme='green' mr={2} onClick={() => {
+            <Button variant="outline" colorScheme='green' size="sm" mr={2} onClick={() => {
               setSelectedColumns(tempSelectedColumns);
               setManageColumns(false);
               resetForm();
             }} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
-            <Button colorScheme="red" onClick={() => resetForm()}>Clear</Button>
+            <Button size="sm" colorScheme="red" onClick={() => resetForm()}>Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

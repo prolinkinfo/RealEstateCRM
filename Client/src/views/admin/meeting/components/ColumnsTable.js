@@ -94,7 +94,7 @@ export default function ColumnsTable(props) {
                     lineHeight='100%'>
                     {title}  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
                 </Text>
-                <Button onClick={() => setMeetingModel(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>
+                <Button size="sm" onClick={() => setMeetingModel(true)} leftIcon={<SiGooglemeet />} colorScheme="gray" >Add Meeting </Button>
                 <AddMeeting fetchData={fetchData} isOpen={meetingModel} onClose={setMeetingModel} from="lead" id={param.id} setAction={setAction} />
             </Flex>
             <Box overflowY={'auto'} className="table-container p0" >

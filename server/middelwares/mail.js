@@ -12,8 +12,8 @@ const sendEmail = async (to, subject, text) => {
                 host: 'smtp.office365.com',
                 port: 587,
                 auth: {
-                    user: 'prolink@gmail.com',
-                    pass: 'emailpass@17'
+                    user: process.env.user,
+                    pass: process.env.pass
                 }
             });
 

@@ -809,7 +809,7 @@ const Edit = (props) => {
                             sx={{ textTransform: "capitalize" }}
                             variant="solid"
                             colorScheme="green"
-                            type="submit"
+                            type="submit" size="sm"
                             disabled={isLoding ? true : false}
                             onClick={handleSubmit}
                         >
@@ -817,7 +817,7 @@ const Edit = (props) => {
                         </Button>
                         <Button
                             variant="outline"
-                            colorScheme='red'
+                            colorScheme='red' size="sm"
                             sx={{
                                 marginLeft: 2,
                                 textTransform: "capitalize",

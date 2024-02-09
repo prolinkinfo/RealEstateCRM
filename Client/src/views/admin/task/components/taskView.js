@@ -57,21 +57,21 @@ const TaskView = (props) => {
                     <GridItem colSpan={{ base: 12, md: 6 }}>
                         <Flex justifyContent={"right"}>
                             <Menu>
-                                {(permission?.create || permission?.update || permission?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
+                                {(user.role === 'superAdmin' || permission?.create || permission?.update || permission?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' size="sm" va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
                                     Actions
                                 </MenuButton>}
                                 <MenuDivider />
                                 <MenuList>
-                                    {permission?.create && <MenuItem onClick={() => handleClick()} icon={<AddIcon />}>Add</MenuItem>}
-                                    {permission?.update && <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
-                                    {permission?.deleteModel && <>
+                                    {(user.role === 'superAdmin' || permission?.create) && <MenuItem onClick={() => handleClick()} icon={<AddIcon />}>Add</MenuItem>}
+                                    {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => setEdit(true)} color={'green'} icon={<EditIcon />}>Edit</MenuItem>}
+                                    {(user.role === 'superAdmin' || permission?.deleteModel) && <>
                                         <MenuDivider />
-                                        <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
+                                        <MenuItem onClick={() => setDelete(true)} color={'red'} icon={<DeleteIcon />}>Delete</MenuItem>
                                     </>}
                                 </MenuList>
                             </Menu>
                             <Link to="/task">
-                                <Button leftIcon={<IoIosArrowBack />} variant="brand">
+                                <Button size="sm" leftIcon={<IoIosArrowBack />} variant="brand">
                                     Back
                                 </Button>
                             </Link>
@@ -110,9 +110,9 @@ const TaskView = (props) => {
                         <Text>{data?.reminder ? data?.reminder : ' - '}</Text>
                     </GridItem>
                     <GridItem colSpan={{ base: 12, md: 6 }} >
-                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> assignment To  </Text>
+                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Assignment To  </Text>
                         <Link to={data?.assignmentTo ? contactAccess?.view && `/contactView/${data?.assignmentTo}` : leadAccess?.view && `/leadView/${data?.assignmentToLead}`}>
-                            <Text color={(data?.category === 'contact' && contactAccess?.view) ? 'brand.600' : (leadAccess?.view && data?.category === 'lead') ? 'brand.600' : 'blackAlpha.900'} sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.assignmentToName ? data?.assignmentToName : ' - '}</Text>
+                            <Text color={(data?.category === 'contact' && (contactAccess?.view || user?.role === 'superAdmin')) ? 'brand.600' : (leadAccess?.view || user?.role === 'superAdmin' && data?.category === 'lead') ? 'brand.600' : 'blackAlpha.900'} sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.assignmentToName ? data?.assignmentToName : ' - '}</Text>
                         </Link>
                     </GridItem>
                     <GridItem colSpan={{ base: 12, md: 6 }} >
@@ -129,12 +129,12 @@ const TaskView = (props) => {
                     </GridItem>
                 </Grid>
             </Card>
-            {(permission?.update || permission?.delete) && <Card mt={3}>
+            {(permission?.update || permission?.delete || user?.role === 'superAdmin') && <Card mt={3}>
                 <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                     <GridItem colStart={6} >
                         <Flex justifyContent={"right"}>
-                            {permission?.update && <Button onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button>}
-                            {permission?.delete && <Button style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>}
+                            {permission?.update && <Button size="sm" onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button>}
+                            {permission?.delete && <Button size="sm" style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>}
                         </Flex>
                     </GridItem>
                 </Grid>

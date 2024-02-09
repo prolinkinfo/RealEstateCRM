@@ -698,7 +698,11 @@ const Addfield = (props) => {
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme="brand" size="sm" mr={2} type='submit' disabled={isLoding ? true : false} onClick={handleSubmit} >{isLoding ? <Spinner /> : 'Add'}</Button>
-                        <Button variant="outline" size="sm" onClick={() => { handleClose(); resetForm(); setValidationType('') }}>Cancel</Button>
+                        <Button variant="outline"
+                            colorScheme='red' size="sm"
+                            sx={{
+                                textTransform: "capitalize",
+                            }} onClick={() => { handleClose(); resetForm(); setValidationType('') }}>Cancel</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

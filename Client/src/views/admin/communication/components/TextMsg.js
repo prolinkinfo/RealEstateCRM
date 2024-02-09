@@ -137,8 +137,8 @@ const TextMsg = () => {
             </GridItem>
 
             <GridItem colSpan={{ base: 12 }} >
-                <Button variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} leftIcon={<MdOutlineMessage />}>  {isLoding ? <Spinner /> : 'Send Msg'}</Button>
-                <Button onClick={() => formik.resetForm()}>Clear</Button>
+                <Button variant='brand' size="sm" onClick={handleSubmit} disabled={isLoding ? true : false} leftIcon={<MdOutlineMessage />}>  {isLoding ? <Spinner /> : 'Send Msg'}</Button>
+                <Button onClick={() => formik.resetForm()} size="sm">Clear</Button>
             </GridItem>
 
         </Grid>

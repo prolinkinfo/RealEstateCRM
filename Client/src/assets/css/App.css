@@ -56,6 +56,11 @@ option {
   overflow-y: auto;
 }
 
+.css-efk3t2 {
+  max-height: 15rem !important;
+  overflow-y: scroll !important;
+}
+
 .table-container-property thead {
   position: sticky;
   top: 0;
@@ -65,11 +70,12 @@ option {
 
 .table-fix-container {
   min-height: auto;
-  max-height: 65vh;
+  max-height: 80vh;
   overflow-y: auto;
 }
 
 .table-fix-container thead {
+  border-bottom: 1px solid black;
   position: sticky;
   top: 0;
   height: 25px;
@@ -83,10 +89,22 @@ option {
 /* .leadRow td {
   border-bottom: 1px solid #e2e8f0;
 } */
+
+.datePickerBorder {
+  border: 1px solid #e2e8f0;
+  padding: 0 5px;
+  border-radius: 5px;
+  margin: 0 10px !important;
+}
+
 .imageCard {
   position: relative;
   overflow: hidden;
+  margin-right: 12px;
+  /* height: 200px;
+  width: 400px; */
 }
+
 
 .imageContent {
   content: "";

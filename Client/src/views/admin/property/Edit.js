@@ -64,7 +64,8 @@ const Edit = (props) => {
         },
     });
 
-    const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
+    const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik;
+
     const [isLoding, setIsLoding] = useState(false)
 
     const EditData = async () => {
@@ -144,7 +145,6 @@ const Edit = (props) => {
             }
         }
     }
-
 
     useEffect(() => {
         fetchData()
@@ -680,7 +680,7 @@ const Edit = (props) => {
 
 
                     <DrawerFooter>
-                        <Button
+                        <Button size="sm"
                             sx={{ textTransform: "capitalize" }}
                             variant="solid"
                             colorScheme="green"
@@ -690,7 +690,7 @@ const Edit = (props) => {
                         >
                             {isLoding ? <Spinner /> : 'Update Data'}
                         </Button>
-                        <Button
+                        <Button size="sm"
                             variant="outline"
                             colorScheme='red'
                             sx={{

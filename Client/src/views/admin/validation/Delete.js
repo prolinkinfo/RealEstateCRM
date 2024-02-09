@@ -7,16 +7,19 @@ import { deleteManyApi } from 'services/api';
 import { deleteApi } from 'services/api';
 
 const Delete = (props) => {
+    const { selectedId, fetchData, onClose, isOpen, data, setSelectedValues } = props;
     const [isLoding, setIsLoding] = useState(false)
 
-    const navigate = useNavigate()
     const handleDeleteClick = async () => {
         if (props.method === 'one') {
             try {
-                setIsLoding(true)
-                const response = await deleteApi(props.url, props.id)
-                if (response.status === 200) {
-                    navigate('/contacts')
+                if (selectedId) {
+                    setIsLoding(true)
+                    const response = await deleteApi('api/validation/delete/', selectedId)
+                    if (response.status === 200) {
+                        onClose()
+                        fetchData()
+                    }
                 }
             } catch (error) {
                 console.log(error)
@@ -27,11 +30,11 @@ const Delete = (props) => {
         } else if (props.method === 'many') {
             try {
                 setIsLoding(true)
-                let response = await deleteManyApi(props.url, props.data)
+                let response = await deleteManyApi('api/validation/deleteMany', data)
                 if (response.status === 200) {
-                    props.setSelectedValues([])
-                    props.onClose(false)
-                    props.setAction((pre) => !pre)
+                    setSelectedValues([])
+                    onClose(false)
+                    fetchData()
                 }
             } catch (error) {
                 console.log(error)
@@ -40,6 +43,7 @@ const Delete = (props) => {
                 setIsLoding(false)
             }
         }
+
     };
 
     const handleClose = () => {
@@ -48,17 +52,17 @@ const Delete = (props) => {
 
     return (
         <div>
-            <Modal onClose={props.onClose} isOpen={props.isOpen} isCentered>
+            <Modal onClose={onClose} isOpen={isOpen} isCentered>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Delete Contact{props.method === 'one' ? '' : 's'}</ModalHeader>
+                    <ModalHeader>Delete Validation</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        Are You Sure To Delete selected Contact{props.method === 'one' ? '' : 's'} ?
+                        Are You Sure To Delete selected Validation?
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme="red" mr={2} onClick={handleDeleteClick} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Yes'}</Button>
-                        <Button variant="outline" onClick={handleClose}>No</Button>
+                        <Button colorScheme="red" size="sm" mr={2} onClick={handleDeleteClick} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Yes'}</Button>
+                        <Button variant="outline" size="sm" onClick={handleClose}>No</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

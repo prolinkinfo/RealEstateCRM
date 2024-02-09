@@ -31,7 +31,7 @@ export default function AdminNavbar(props) {
 	let navbarShadow = 'none';
 	let navbarBg = useColorModeValue('#fff', 'rgba(11,20,55,0.5)');
 	let navbarBorder = 'transparent';
-	let secondaryMargin = '-2px';
+	let secondaryMargin = '-9px';
 	let paddingX = '15px';
 	let gap = '0px';
 	let size = "sm";
@@ -76,7 +76,7 @@ export default function AdminNavbar(props) {
 			lineHeight='25.6px'
 			mx='auto'
 			mt={secondaryMargin}
-			pb='8px'
+			pb='6px'
 			right={{ base: '0px' }}
 			// right={{ base: '12px', md: '30px', lg: '30px', xl: '30px' }}
 			px={{
@@ -93,9 +93,10 @@ export default function AdminNavbar(props) {
 				base: 'calc(100vw - 0%)',
 				md: 'calc(100vw - 0%)',
 				lg: 'calc(100vw - 0%)',
-				xl: openSidebar === true ? 'calc(100vw - 267px)' : 'calc(100vw - 80px)',
-				'2xl': openSidebar === true ? 'calc(100vw - 267px)' : 'calc(100vw - 80px)'
+				xl: openSidebar === true ? 'calc(100vw - 286px)' : 'calc(100vw - 80px)',
+				'2xl': openSidebar === true ? 'calc(100vw - 286px)' : 'calc(100vw - 80px)'
 			}}
+			sx={{ boxShadow: '14px 17px 40px 4px rgba(112, 144, 176, 0.08)' }}
 		>
 			<Flex
 				w='100%'
@@ -105,7 +106,10 @@ export default function AdminNavbar(props) {
 				}}
 				alignItems={{ xl: 'center' }}
 				mb={gap}>
-				<Box mb={{ sm: '8px', md: '10px' }} pt="15px" display={"flex"} alignItems={"center"}>
+				<Box
+					//  mb={{ sm: '8px', md: '10px' }} 
+					//  pt="15px"
+					display={"flex"} alignItems={"center"}>
 					{/*
 					<Breadcrumb>
 						<BreadcrumbItem color={secondaryText} fontSize='sm' mb='5px'>

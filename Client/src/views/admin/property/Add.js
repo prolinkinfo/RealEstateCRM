@@ -29,10 +29,10 @@ const Add = (props) => {
         exteriorFeatures: "",
         communityAmenities: "",
         //3. Media and Visuals:
-        propertyPhotos: "",
-        virtualToursOrVideos: "",
-        floorPlans: "",
-        propertyDocuments: "",
+        propertyPhotos: [],
+        virtualToursOrVideos: [],
+        floorPlans: [],
+        propertyDocuments: [],
         //4. Listing and Marketing Details:
         listingStatus: "",
         listingAgentOrTeam: "",
@@ -613,10 +613,10 @@ const Add = (props) => {
 
 
                     <DrawerFooter>
-                        <Button sx={{ textTransform: "capitalize" }} disabled={isLoding ? true : false} variant="brand" type="submit" onClick={handleSubmit}                        >
+                        <Button size="sm" sx={{ textTransform: "capitalize" }} disabled={isLoding ? true : false} variant="brand" type="submit" onClick={handleSubmit}                        >
                             {isLoding ? <Spinner /> : 'Add Data'}
                         </Button>
-                        <Button
+                        <Button size="sm"
                             variant="outline"
                             colorScheme='red'
                             sx={{

@@ -215,10 +215,10 @@ const RoleUser = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant="brand" onClick={() => { addUser(); setOpenUser(true) }}>
+                    <Button variant="brand" size="sm" onClick={() => { addUser(); setOpenUser(true) }}>
                         Save
                     </Button>
-                    <Button
+                    <Button size="sm"
                         onClick={() => { setUserModal(false); setSelectedValues([]); setOpenUser(true) }}
                         variant="outline"
                         colorScheme="red"

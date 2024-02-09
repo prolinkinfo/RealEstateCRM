@@ -166,8 +166,8 @@ const Link = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button colorScheme='brand' rightIcon={<LinkIcon />} mr={2} onClick={handleClick}>Link</Button>
-                    <Button variant="outline" colorScheme='red' onClick={handleClose}>Cancel</Button>
+                    <Button size="sm" colorScheme='brand' rightIcon={<LinkIcon />} mr={2} onClick={handleClick}>Link</Button>
+                    <Button size="sm" variant="outline" colorScheme='red' onClick={handleClose}>Cancel</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>
