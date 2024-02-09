@@ -124,18 +124,35 @@ const editSingleField = async (req, res) => {
                 const updatedFieldBcType = req.body?.updatedField?.backendType || "Mixed";
                 const isFieldNameChanged = updatedFieldName && updatedFieldName !== existingField.name;
 
+                // if (isFieldNameChanged) {
+                //     // Check if the updatedFieldName exists in the dynamic fields
+                //     customFieldBeforeUpdate?.fields?.forEach((field) => {
+                //         if (field._id !== fieldId) {
+                //             nameAlreadyExists = field?.name?.toLowerCase() === updatedFieldName?.toLowerCase();
+                //         }
+                //     });
+                //     console.log("nameAlreadyExists ", nameAlreadyExists);
+
+                //     // Check if the updatedFieldName exists in the schema
+                //     const existingFieldInSchema = Object.keys(existingSchema.paths).find(pathName => pathName.toLowerCase() === updatedFieldName?.toLowerCase());
+
+                //     if (nameAlreadyExists || (existingFieldInSchema && updatedFieldName.toLowerCase() !== existingField.name.toLowerCase())) {
+                //         return res.status(409).json({ success: false, message: 'Duplicate name found in schema' });
+                //     }
+                // }
+
+                function isDuplicateName(name, existingNames) {
+                    const lowerCaseName = name.toLowerCase();
+                    return existingNames.some(existingName => existingName.toLowerCase() === lowerCaseName);
+                }
+
                 if (isFieldNameChanged) {
                     // Check if the updatedFieldName exists in the dynamic fields
-                    customFieldBeforeUpdate?.fields?.forEach((field) => {
-                        if (field._id !== fieldId) {
-                            nameAlreadyExists = field?.name?.toLowerCase() === updatedFieldName?.toLowerCase();
-                        }
-                    });
+                    nameAlreadyExists = isDuplicateName(updatedFieldName, customFieldBeforeUpdate?.fields?.map(field => field.name));
 
                     // Check if the updatedFieldName exists in the schema
-                    const existingFieldInSchema = Object.keys(existingSchema.paths).find(pathName => pathName.toLowerCase() === updatedFieldName?.toLowerCase());
-
-                    if (nameAlreadyExists || (existingFieldInSchema && updatedFieldName.toLowerCase() !== existingField.name.toLowerCase())) {
+                    const existingFieldInSchema = Object.keys(existingSchema.paths);
+                    if (isDuplicateName(updatedFieldName, existingFieldInSchema) && updatedFieldName.toLowerCase() !== existingField.name.toLowerCase()) {
                         return res.status(409).json({ success: false, message: 'Duplicate name found in schema' });
                     }
                 }

@@ -531,7 +531,7 @@ export default function CheckTable(props) {
         setAction={setAction} />}
       <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={selectedId} />
       <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} id={selectedId} />
-      <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} selectedId={selectedId} setSelectedId={setSelectedId} />
+      <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} selectedId={selectedId} setSelectedId={setSelectedId} moduleId={contactData?.[0]?._id} />
       <ImportModal text='Contact file' fetchData={fetchData} isOpen={isImportContact} onClose={setIsImportContact} />
       {/* Advance filter */}
       <Modal onClose={() => { setAdvaceSearch(false); resetForm(); }} isOpen={advaceSearch} isCentered>
