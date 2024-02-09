@@ -44,6 +44,8 @@ function ChangeAccess(props) {
     setAction,
     setAccess,
     _id,
+    accessRole,
+    setAccessRole,
     onClose,
     setRoleModal,
     editModal, setEditModal,
@@ -141,6 +143,7 @@ function ChangeAccess(props) {
       if (response.status === 200) {
         setEditModal(false)
         fetchData()
+        setAccessRole(tableData)
         setRoleModal(true)
       }
     } catch (e) {
@@ -162,7 +165,7 @@ function ChangeAccess(props) {
     <Modal onClose={() => setEditModal(false)} isOpen={editModal} isCentered size={"xl"}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{name} Access</ModalHeader>
+        <ModalHeader textTransform={"capitalize"}>{name} Access</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Table>
@@ -322,7 +325,7 @@ function ChangeAccess(props) {
             Save
           </Button>
           <Button size="sm"
-            onClick={() => { setEditModal(false); setRoleModal(true) }}
+            onClick={() => { setEditModal(false); setRoleModal(true); }}
             variant="outline"
             colorScheme="red"
             sx={{

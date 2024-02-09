@@ -54,6 +54,7 @@ export default function CheckTable(props) {
 
   const [roleModal, setRoleModal] = useState(false);
   const [access, setAccess] = useState([])
+  const [accessRole, setAccessRole] = useState([])
   const [roleName, setRoleName] = useState('')
   const [roleId, setRoleId] = useState('')
   const [gopageValue, setGopageValue] = useState()
@@ -231,7 +232,7 @@ export default function CheckTable(props) {
                           data = (
                             <Text
                               me="10px"
-                              onClick={() => { setRoleModal(true); setRoleName(cell?.value); setRoleId(cell?.row?.original?._id); setAccess(cell?.row?.original?.access) }}
+                              onClick={() => { setRoleModal(true); setRoleName(cell?.value); setRoleId(cell?.row?.original?._id); setAccess(cell?.row?.original?.access); setAccessRole(cell?.row?.original?.access) }}
                               color='brand.600'
                               sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline', cursor: 'pointer' } }}
                               fontSize="sm"
@@ -272,7 +273,7 @@ export default function CheckTable(props) {
         {access && <RoleModal isOpen={roleModal}
           setRoleModal={setRoleModal}
           onOpen={onOpen}
-          isLoding={isLoding} columnsData={rowColumns} name={roleName} _id={roleId} tableData={access} setAccess={setAccess} fetchData={fetchData} setAction={setAction} />}
+          isLoding={isLoding} columnsData={rowColumns} name={roleName} _id={roleId} tableData={access} accessRole={accessRole} setAccessRole={setAccessRole} setAccess={setAccess} fetchData={fetchData} setAction={setAction} />}
       </Card>
 
       <AddRole isOpen={addRoleModal} size={"sm"} setAction={setAction} onClose={setAddRoleModal} />
