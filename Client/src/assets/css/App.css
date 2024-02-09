@@ -70,18 +70,18 @@ option {
 
 .table-fix-container {
   min-height: auto;
-  max-height: 82vh;
+  max-height: 63vh;
   overflow-y: auto;
 }
 
-/* .table-fix-container thead {
+.table-fix-container thead {
   border-bottom: 1px solid black;
   box-shadow: -2px 0px 4px -2px #5c5d5efa;
   position: sticky;
   top: 0;
   height: 25px;
   background: #ffffff;
-} */
+}
 
 .tableData {
   padding: 10px !important;
