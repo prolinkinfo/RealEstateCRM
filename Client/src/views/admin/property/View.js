@@ -14,6 +14,7 @@ import Delete from "./Delete";
 import Edit from "./Edit";
 import PropertyPhoto from "./components/propertyPhoto";
 import { HasAccess } from "../../../redux/accessUtils";
+import CountUpComponent from "components/countUpComponent/countUpComponent";
 
 const View = () => {
 
@@ -107,13 +108,13 @@ const View = () => {
                     </Grid> */}
 
                     <Tabs >
-                        <Grid templateColumns="repeat(3, 1fr)" mb={3} gap={1}>
-                            <GridItem colSpan={2}>
+                        <Grid templateColumns={'repeat(12, 1fr)'} mb={3} gap={1}>
+                            <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <TabList sx={{
                                     border: "none",
                                     '& button:focus': { boxShadow: 'none', },
                                     '& button': {
-                                        margin: "0 5px", border: '2px solid #8080803d', borderTopLeftRadius: "10px", borderTopRightRadius: "10px", borderBottom: 0
+                                        margin: { sm: "0 3px", md: "0 5px" }, padding: { sm: "5px", md: "8px" }, border: '2px solid #8080803d', borderTopLeftRadius: "10px", borderTopRightRadius: "10px", borderBottom: 0, fontSize: { sm: "12px", md: "16px" }
                                     },
                                     '& button[aria-selected="true"]': {
                                         border: "2px solid brand.200", borderBottom: 0, zIndex: '0'
@@ -124,7 +125,7 @@ const View = () => {
                                 </TabList>
 
                             </GridItem>
-                            <GridItem  >
+                            <GridItem colSpan={{ base: 12, md: 6 }} mt={{ sm: "3px", md: "5px" }} >
                                 <Flex justifyContent={"right"}>
                                     <Menu>
                                         {(user.role === 'superAdmin' || permission?.create || permission?.update || permission?.delete) && <MenuButton variant="outline" size="sm" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
@@ -359,15 +360,15 @@ const View = () => {
                                     {filteredContacts?.length > 0 &&
                                         <GridItem colSpan={{ base: 12 }}>
                                             <Card >
-                                                <Grid templateColumns={{ base: "1fr" }} gap={4}>
+                                                <Grid templateColumns={{ base: "1fr" }} >
                                                     <GridItem colSpan={2}>
                                                         <Box>
                                                             <Heading size="md" mb={3}>
-                                                                Interested Contact
+                                                                Interested Contact (<CountUpComponent key={filteredContacts?.length} targetNumber={filteredContacts?.length} />)
                                                             </Heading>
-                                                            <HSeparator />
+                                                            {/* <HSeparator /> */}
                                                         </Box>
-                                                        <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
+                                                        <Grid templateColumns={'repeat(2, 1fr)'} >
                                                             <GridItem colSpan={{ base: 2 }}>
                                                                 <CheckTable dataColumn={contactColumns} tableData={filteredContacts} dynamicColumns={dynamicColumns} setDynamicColumns={setDynamicColumns} selectedColumns={selectedColumns} setSelectedColumns={setSelectedColumns} access={contactAccess} emailAccess={emailAccess} callAccess={callAccess} isHide={true} />
                                                             </GridItem>
