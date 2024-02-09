@@ -57,7 +57,7 @@ const ImportModal = (props) => {
                     </Grid>
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' size="sm" onClick={handleSubmit} disabled={isLoding ? true : false} rightIcon={<AddIcon />}>{isLoding ? <Spinner /> : 'Add'}</Button>
+                    <Button variant='brand' size="sm" onClick={handleSubmit} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
                     <Button variant="outline"
                         colorScheme="red" sx={{
                             marginLeft: 2,
