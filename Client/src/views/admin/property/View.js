@@ -14,6 +14,7 @@ import Delete from "./Delete";
 import Edit from "./Edit";
 import PropertyPhoto from "./components/propertyPhoto";
 import { HasAccess } from "../../../redux/accessUtils";
+import CountUpComponent from "components/countUpComponent/countUpComponent";
 
 const View = () => {
 
@@ -359,15 +360,15 @@ const View = () => {
                                     {filteredContacts?.length > 0 &&
                                         <GridItem colSpan={{ base: 12 }}>
                                             <Card >
-                                                <Grid templateColumns={{ base: "1fr" }} gap={4}>
+                                                <Grid templateColumns={{ base: "1fr" }} >
                                                     <GridItem colSpan={2}>
                                                         <Box>
                                                             <Heading size="md" mb={3}>
-                                                                Interested Contact
+                                                                Interested Contact (<CountUpComponent key={filteredContacts?.length} targetNumber={filteredContacts?.length} />)
                                                             </Heading>
-                                                            <HSeparator />
+                                                            {/* <HSeparator /> */}
                                                         </Box>
-                                                        <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
+                                                        <Grid templateColumns={'repeat(2, 1fr)'} >
                                                             <GridItem colSpan={{ base: 2 }}>
                                                                 <CheckTable dataColumn={contactColumns} tableData={filteredContacts} dynamicColumns={dynamicColumns} setDynamicColumns={setDynamicColumns} selectedColumns={selectedColumns} setSelectedColumns={setSelectedColumns} access={contactAccess} emailAccess={emailAccess} callAccess={callAccess} isHide={true} />
                                                             </GridItem>
