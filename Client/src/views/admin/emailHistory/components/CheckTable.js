@@ -272,8 +272,8 @@ export default function CheckTable(props) {
         w="100%"
         overflowX={{ sm: "scroll", lg: "hidden" }}
       >
-        <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={4} mx={4} >
-          <GridItem colSpan={8} display={"flex"} alignItems={"center"}>
+        <Grid templateColumns="repeat(12, 1fr)" gap={2}>
+          <GridItem colSpan={{ base: 12, md: 8 }} display={"flex"} alignItems={"center"}>
             <Flex alignItems={"center"} flexWrap={"wrap"}>
               <Text
                 color={"secondaryGray.900"}
@@ -289,7 +289,7 @@ export default function CheckTable(props) {
               {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>Clear</Button> : ""}
             </Flex>
           </GridItem>
-          <GridItem colSpan={4} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
+          <GridItem colSpan={{ base: 12, md: 4 }} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
             <Menu isLazy  >
               <MenuButton p={4}>
                 <BsColumnsGap />
