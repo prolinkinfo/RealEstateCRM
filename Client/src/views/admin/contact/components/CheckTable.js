@@ -269,6 +269,15 @@ export default function CheckTable(props) {
     setSearchedData(results);
   };
 
+  const fetchCustomData = async () => {
+    const response = await getApi('api/custom-field?moduleName=Contact')
+    setContactData(response.data)
+  }
+
+  useEffect(() => {
+    if (fetchCustomData) fetchCustomData()
+  }, [action])
+
   return (
     <>
       <Card
@@ -526,7 +535,7 @@ export default function CheckTable(props) {
       {isOpen && <Add
         isOpen={isOpen}
         size={size}
-        setContactData={setContactData} contactData={contactData[0]}
+        contactData={contactData[0]}
         onClose={onClose}
         setAction={setAction} />}
       <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={selectedId} />
