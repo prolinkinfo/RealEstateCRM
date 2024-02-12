@@ -76,6 +76,8 @@ export default function CheckTable(props) {
   const [selectedValues, setSelectedValues] = useState([]);
   const [deleteModel, setDelete] = useState(false);
   const [column, setColumn] = useState('');
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const navigate = useNavigate()
 
   const csvColumns = [
@@ -138,6 +140,10 @@ export default function CheckTable(props) {
   const initialValues = {
     agenda: '',
     createBy: '',
+    startDate: '',
+    endDate: '',
+    timeStartDate: '',
+    timeEndDate: ''
   }
   const validationSchema = yup.object({
     agenda: yup.string(),
@@ -148,11 +154,24 @@ export default function CheckTable(props) {
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
       const searchResult = allData?.filter(
-        (item) =>
-          (!values?.agenda || (item?.agenda && item?.agenda.toLowerCase().includes(values?.agenda?.toLowerCase()))) &&
-          (!values?.createBy || (item?.createBy && item?.createBy.toLowerCase().includes(values?.createBy?.toLowerCase())))
+        (item) => {
+          const itemDate = new Date(item.dateTime);
+          const momentDate = moment(itemDate).format('YYYY-MM-DD');
+          const timeItemDate = new Date(item.timestamp);
+          const timeMomentDate = moment(timeItemDate).format('YYYY-MM-DD');
+          return (
+            (!values?.agenda || (item?.agenda && item?.agenda.toLowerCase().includes(values?.agenda?.toLowerCase()))) &&
+            (!values?.createBy || (item?.createBy && item?.createBy.toLowerCase().includes(values?.createBy?.toLowerCase()))) &&
+            (!values?.startDate || (momentDate >= values.startDate)) &&
+            (!values?.endDate || (momentDate <= values.endDate)) &&
+            (!values.timeStartDate || (timeMomentDate >= values.timeStartDate)) &&
+            (!values.timeEndDate || (timeMomentDate <= values.timeEndDate)))
+        }
       )
-      let getValue = [values.agenda, values?.createBy].filter(value => value);
+
+      const dateFrom = `${values?.startDate && `From: ${values?.startDate}`} ${values?.endDate && `To: ${values?.endDate}`}`;
+      const timeDateFrom = `${values?.timeStartDate && `From: ${values?.timeStartDate}`} ${values?.timeEndDate && `To: ${values?.timeEndDate}`}`
+      let getValue = [values.agenda, values?.createBy, (values?.startDate || values?.endDate) && dateFrom, (values?.timeStartDate || values?.timeEndDate) && timeDateFrom].filter(value => value);
       setGetTagValues(getValue)
       setSearchedData(searchResult);
       setDisplaySearchData(true)
@@ -499,29 +518,75 @@ export default function CheckTable(props) {
                 <Text mb='10px' color={'red'}> {errors.createBy && touched.createBy && errors.createBy}</Text>
 
               </GridItem>
-              {/* <GridItem colSpan={{ base: 12, md: 6 }}>
+              <GridItem colSpan={{ base: 12 }}>
                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
                   Date & time
+                </FormLabel>
+              </GridItem>
+              <GridItem colSpan={{ base: 12, md: 6 }}>
+                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
+                  From
                 </FormLabel>
                 <Input
                   fontSize='sm'
                   onChange={handleChange} onBlur={handleBlur}
-                  value={values?.leadPhoneNumber}
-                  name="leadPhoneNumber"
-                  placeholder='Enter Lead PhoneNumber'
+                  value={values.startDate}
+                  type="date"
+                  name='startDate'
                   fontWeight='500'
                 />
-                <Text mb='10px' color={'red'}> {errors.leadPhoneNumber && touched.leadPhoneNumber && errors.leadPhoneNumber}</Text>
+              </GridItem>
+              <GridItem colSpan={{ base: 12, md: 6 }}>
+                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
+                  To
+                </FormLabel>
+                <Input
+                  fontSize='sm'
+                  onChange={handleChange} onBlur={handleBlur}
+                  value={values.endDate}
+                  type="date"
+                  name='endDate'
+                  fontWeight='500'
+                />
+              </GridItem>
 
-              </GridItem> */}
-
-
+              <GridItem colSpan={{ base: 12 }}>
+                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
+                  Time Stamp
+                </FormLabel>
+              </GridItem>
+              <GridItem colSpan={{ base: 12, md: 6 }}>
+                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
+                  From
+                </FormLabel>
+                <Input
+                  fontSize='sm'
+                  onChange={handleChange} onBlur={handleBlur}
+                  value={values.timeStartDate}
+                  type="date"
+                  name='timeStartDate'
+                  fontWeight='500'
+                />
+              </GridItem>
+              <GridItem colSpan={{ base: 12, md: 6 }}>
+                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
+                  To
+                </FormLabel>
+                <Input
+                  fontSize='sm'
+                  onChange={handleChange} onBlur={handleBlur}
+                  value={values.timeEndDate}
+                  type="date"
+                  name='timeEndDate'
+                  fontWeight='500'
+                />
+              </GridItem>
 
             </Grid>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" colorScheme='green' size="sm" mr={2} onClick={handleSubmit} disabled={isLoding || !dirty ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
-            <Button colorScheme="red" size="sm" onClick={() => resetForm()}>Clear</Button>
+            <Button variant="brand" size="sm" mr={2} onClick={handleSubmit} disabled={isLoding || !dirty ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
+            <Button variant="outline" colorScheme="red" size="sm" onClick={() => resetForm()}>Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -546,7 +611,7 @@ export default function CheckTable(props) {
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme='brand' size="sm" mr={2} onClick={() => {
+            <Button variant='brand' size="sm" mr={2} onClick={() => {
               setSelectedColumns(tempSelectedColumns);
               setManageColumns(false);
               resetForm();
