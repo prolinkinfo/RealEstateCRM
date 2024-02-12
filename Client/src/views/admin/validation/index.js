@@ -1,4 +1,4 @@
-import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons'
+import { AddIcon, DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons'
 import { Button, Checkbox, Flex, Grid, GridItem, Heading, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react'
 import Card from 'components/card/Card'
 import { HSeparator } from 'components/separator/Separator'
@@ -74,8 +74,8 @@ const Index = () => {
     return (
         <div>
             <Flex justifyContent={"end"} mb={3}>
-                {selectedValues.length > 0 && <Button variant='outline'  colorScheme='brand' color={"red"} mr={2} leftIcon={<DeleteIcon />} onClick={() => setDeleteMany(true)} size='sm' >Delete</Button>}
-                <Button size='sm' variant='brand' me={1} onClick={() => handleAddOpen()}>Add </Button>
+                {selectedValues.length > 0 && <Button variant='outline' colorScheme='brand' color={"red"} mr={2} leftIcon={<DeleteIcon />} onClick={() => setDeleteMany(true)} size='sm' >Delete</Button>}
+                <Button size='sm' variant='brand' me={1} onClick={() => handleAddOpen()} leftIcon={<AddIcon />}>Add New</Button>
                 <Button size='sm' variant='brand' onClick={() => navigate(-1)} leftIcon={<IoIosArrowBack />}> Back</Button>
             </Flex>
             <Grid templateColumns="repeat(12, 1fr)" gap={3}>
