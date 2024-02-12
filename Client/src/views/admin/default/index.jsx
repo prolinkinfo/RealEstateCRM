@@ -131,41 +131,37 @@ export default function UserReports() {
     setTimeout(async () => {
       if (user.role === "superAdmin") {
         taskData = await getApi("api/task/")
-        setTask(taskData?.data);
       } else if (taskView?.create || taskView?.update || taskView?.delete || taskView?.view) {
         taskData = await getApi(`api/task/?createBy=${user._id}`)
-        setTask(taskData?.data);
       }
+      setTask(taskData?.data);
     }, 4000);
     let contact;
     setTimeout(async () => {
       if (user.role === "superAdmin") {
         contact = await getApi("api/contact/")
-        setContactData(contact?.data);
       } else if (contactsView?.create || contactsView?.update || contactsView?.delete || contactsView?.view) {
         contact = await getApi(`api/contact/?createBy=${user._id}`)
-        setContactData(contact?.data);
       }
+      setContactData(contact?.data);
     }, 4000);
     let lead;
     setTimeout(async () => {
       if (user.role === "superAdmin") {
         lead = await getApi("api/lead/")
-        setLeadData(lead?.data);
       } else if (leadView?.create || leadView?.update || leadView?.delete || leadView?.view) {
         lead = await getApi(`api/lead/?createBy=${user._id}`)
-        setLeadData(lead?.data);
       }
+      setLeadData(lead?.data);
     }, 4000);
     let property;
     setTimeout(async () => {
       if (user.role === "superAdmin") {
         property = await getApi("api/property/")
-        setPropertyData(property?.data);
       } else if (proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view) {
         property = await getApi(`api/property/?createBy=${user._id}`)
-        setPropertyData(property?.data);
       }
+      setPropertyData(property?.data);
     }, 4000);
   };
   useEffect(() => {
