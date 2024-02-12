@@ -117,7 +117,7 @@ const AddMeeting = (props) => {
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                related To
+                                Related To<Text color={"red"}>*</Text>
                             </FormLabel>
                             <RadioGroup onChange={(e) => setFieldValue('related', e)} value={values.related}>
                                 <Stack direction='row'>
@@ -166,7 +166,7 @@ const AddMeeting = (props) => {
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Date Time
+                                Date Time<Text color={"red"}>*</Text>
                             </FormLabel>
                             <Input
                                 fontSize='sm'

@@ -26,7 +26,7 @@ const CustomSearchInput = ({ allData, setSearchbox, setDisplaySearchData, search
     };
 
     return (
-        <InputGroup width="30%" mx={3}>
+        <InputGroup width={{ sm: "100%", md: "30%" }} mx={{ sm: 0, md: 3 }} mt={{ sm: "5px", md: "0" }} >
             <InputLeftElement
                 size="sm"
                 top="-3px"

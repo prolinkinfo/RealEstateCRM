@@ -312,8 +312,8 @@ export default function CheckTable(props) {
         w="100%"
         overflowX={{ sm: "scroll", lg: "hidden" }}
       >
-        <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={4} mx={4}>
-          <GridItem colSpan={8} display={"flex"} alignItems={"center"}>
+        <Grid templateColumns="repeat(12, 1fr)" gap={2}>
+          <GridItem colSpan={{ base: 12, md: 8 }} display={"flex"} alignItems={"center"}>
             <Flex alignItems={"center"} flexWrap={"wrap"}>
               <Text
                 color={"secondaryGray.900"}
@@ -323,12 +323,12 @@ export default function CheckTable(props) {
                 Task  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
               </Text>
               <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={dataColumn} onSearch={handleSearch} />
-              <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} size="sm">Advance Search</Button>
+              <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} mt={{ sm: "5px", md: "0" }} size="sm">Advance Search</Button>
               {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>Clear</Button> : ""}
               {(selectedValues.length > 0 && access?.delete) && <DeleteIcon cursor={"pointer"} onClick={() => setDeleteMany(true)} color={'red'} ms={2} />}
             </Flex>
           </GridItem>
-          <GridItem colSpan={4} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
+          <GridItem colSpan={{ base: 12, md: 4 }} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
             <Menu isLazy  >
               <MenuButton p={4}>
                 <BsColumnsGap />
@@ -453,15 +453,15 @@ export default function CheckTable(props) {
                           );
                         } else if (cell?.column.Header === "Status") {
                           data = (
-                            <Select placeholder='Select option' className={changeStatus(cell)} onChange={(e) => setStatusData(cell, e)} height={7} width={130} value={cell?.value} style={{ fontSize: "14px" }}>
-                              <option value='completed'>Completed</option>
-                              <option value='todo'>Todo</option>
-                              <option value='onHold'>On Hold</option>
-                              <option value='inProgress'>In Progress</option>
-                              <option value='pending'>Pending</option>
-                            </Select>
-
-
+                            <div className={changeStatus(cell)}>
+                              <Select placeholder='Select option' border={"transparent"} onChange={(e) => setStatusData(cell, e)} height={7} width={130} value={cell?.value} style={{ fontSize: "14px" }}>
+                                <option value='completed'>Completed</option>
+                                <option value='todo'>Todo</option>
+                                <option value='onHold'>On Hold</option>
+                                <option value='inProgress'>In Progress</option>
+                                <option value='pending'>Pending</option>
+                              </Select>
+                            </div>
                           );
                         } else if (cell?.column.Header === "Assignment To") {
                           data = (

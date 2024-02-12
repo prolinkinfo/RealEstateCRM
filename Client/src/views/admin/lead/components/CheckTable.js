@@ -344,7 +344,7 @@ export default function CheckTable(props) {
                 Leads  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
               </Text>
               <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={dataColumn} onSearch={handleSearch} />
-              <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} size="sm">Advance Search</Button>
+              <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} mt={{ sm: "5px", md: "0" }} size="sm">Advance Search</Button>
               {displaySearchData ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>Clear</Button> : ""}
               {(selectedValues.length > 0 && access?.delete) && <DeleteIcon cursor={"pointer"} onClick={() => setDelete(true)} color={'red'} ms={2} />}
             </Flex>
@@ -536,11 +536,13 @@ export default function CheckTable(props) {
                           );
                         } else if (cell?.column.Header === "Status") {
                           data = (
-                            <Select placeholder='Select option' className={changeStatus(cell)} onChange={(e) => setStatusData(cell, e)} height={7} width={130} value={cell?.value} style={{ fontSize: "14px" }}>
-                              <option value='active'>Active</option>
-                              <option value='sold'>Sold</option>
-                              <option value='pending'>Pending</option>
-                            </Select>
+                            <div className={changeStatus(cell)}>
+                              <Select placeholder='Select option' border={"transparent"} onChange={(e) => setStatusData(cell, e)} height={7} width={130} value={cell?.value} style={{ fontSize: "14px" }}>
+                                <option value='active'>Active</option>
+                                <option value='sold'>Sold</option>
+                                <option value='pending'>Pending</option>
+                              </Select>
+                            </div>
                           );
                         } else if (cell?.column.Header === "Owner") {
                           data = (

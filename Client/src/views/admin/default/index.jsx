@@ -133,8 +133,8 @@ export default function UserReports() {
         taskData = await getApi("api/task/")
       } else if (taskView?.create || taskView?.update || taskView?.delete || taskView?.view) {
         taskData = await getApi(`api/task/?createBy=${user._id}`)
-        setTask(taskData?.data);
       }
+      setTask(taskData?.data);
     }, 4000);
     let contact;
     setTimeout(async () => {
@@ -142,8 +142,8 @@ export default function UserReports() {
         contact = await getApi("api/contact/")
       } else if (contactsView?.create || contactsView?.update || contactsView?.delete || contactsView?.view) {
         contact = await getApi(`api/contact/?createBy=${user._id}`)
-        setContactData(contact?.data);
       }
+      setContactData(contact?.data);
     }, 4000);
     let lead;
     setTimeout(async () => {
@@ -151,8 +151,8 @@ export default function UserReports() {
         lead = await getApi("api/lead/")
       } else if (leadView?.create || leadView?.update || leadView?.delete || leadView?.view) {
         lead = await getApi(`api/lead/?createBy=${user._id}`)
-        setLeadData(lead?.data);
       }
+      setLeadData(lead?.data);
     }, 4000);
     let property;
     setTimeout(async () => {
@@ -160,8 +160,8 @@ export default function UserReports() {
         property = await getApi("api/property/")
       } else if (proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view) {
         property = await getApi(`api/property/?createBy=${user._id}`)
-        setPropertyData(property?.data);
       }
+      setPropertyData(property?.data);
     }, 4000);
   };
   useEffect(() => {
