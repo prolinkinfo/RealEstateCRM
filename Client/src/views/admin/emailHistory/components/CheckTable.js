@@ -272,8 +272,8 @@ export default function CheckTable(props) {
         w="100%"
         overflowX={{ sm: "scroll", lg: "hidden" }}
       >
-        <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={4} mx={4}>
-          <GridItem colSpan={8} >
+        <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={4} mx={4} >
+          <GridItem colSpan={8} display={"flex"} alignItems={"center"}>
             <Flex alignItems={"center"} flexWrap={"wrap"}>
               <Text
                 color={"secondaryGray.900"}
@@ -493,12 +493,12 @@ export default function CheckTable(props) {
                               <Menu isLazy  >
                                 <MenuButton><CiMenuKebab /></MenuButton>
                                 <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
-                                  {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/Email/${cell?.row?.values._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>}
+                                  {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/Email/${cell?.row?.values._id}`)} icon={<ViewIcon mb={1} fontSize={15} />}>View</MenuItem>}
                                   {cell?.row?.original?.createBy && contactAccess?.view ?
-                                    <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(cell?.row?.original?.createBy && `/contactView/${cell?.row?.original.createBy}`)} icon={cell?.row?.original.createBy && <IoIosContact fontSize={15} />}>  {(cell?.row?.original.createBy && contactAccess?.view) && "contact"}
+                                    <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(cell?.row?.original?.createBy && `/contactView/${cell?.row?.original.createBy}`)} icon={cell?.row?.original.createBy && <IoIosContact mb={1} fontSize={15} />}>  {(cell?.row?.original.createBy && contactAccess?.view) && "contact"}
                                     </MenuItem>
                                     : ''}
-                                  {cell?.row?.original.createByLead && leadAccess?.view ? <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(`/leadView/${cell?.row?.original.createByLead}`)} icon={cell?.row?.original.createByLead && leadAccess?.view && <MdLeaderboard fontSize={15} />}>{cell?.row?.original.createByLead && leadAccess?.view && 'lead'}</MenuItem> : ''}
+                                  {cell?.row?.original.createByLead && leadAccess?.view ? <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(`/leadView/${cell?.row?.original.createByLead}`)} icon={cell?.row?.original.createByLead && leadAccess?.view && <MdLeaderboard mb={1} fontSize={15} />}>{cell?.row?.original.createByLead && leadAccess?.view && 'lead'}</MenuItem> : ''}
                                 </MenuList>
                               </Menu>
                             </Text>
@@ -586,8 +586,8 @@ export default function CheckTable(props) {
             </Grid>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" size="sm" colorScheme='green' mr={2} onClick={handleSubmit} disabled={isLoding || !dirty ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
-            <Button colorScheme="red" size="sm" onClick={() => resetForm()}>Clear</Button>
+            <Button variant="brand" size="sm" mr={2} onClick={handleSubmit} disabled={isLoding || !dirty ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
+            <Button variant="outline" colorScheme="red" size="sm" onClick={() => resetForm()}>Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -612,12 +612,12 @@ export default function CheckTable(props) {
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" colorScheme='green' size="sm" mr={2} onClick={() => {
+            <Button variant="brand" size="sm" mr={2} onClick={() => {
               setSelectedColumns(tempSelectedColumns);
               setManageColumns(false);
               resetForm();
             }} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
-            <Button colorScheme="red" onClick={() => handleColumnClear()} size="sm">Clear</Button>
+            <Button variant="outline" colorScheme="red" onClick={() => handleColumnClear()} size="sm">Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
