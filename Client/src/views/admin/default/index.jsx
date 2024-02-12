@@ -128,48 +128,47 @@ export default function UserReports() {
 
   const fetchData = async () => {
     let taskData;
-    setTimeout(async () => {
-      if (user.role === "superAdmin") {
-        taskData = await getApi("api/task/")
-      } else if (taskView?.create || taskView?.update || taskView?.delete || taskView?.view) {
-        taskData = await getApi(`api/task/?createBy=${user._id}`)
-      }
-      setTask(taskData?.data);
-    }, 4000);
+    // setTimeout(async () => {
+    if (user.role === "superAdmin") {
+      taskData = await getApi("api/task/")
+    } else if (taskView?.create || taskView?.update || taskView?.delete || taskView?.view) {
+      taskData = await getApi(`api/task/?createBy=${user._id}`)
+    }
+    setTask(taskData?.data);
+    // }, 4000);
     let contact;
-    setTimeout(async () => {
-      if (user.role === "superAdmin") {
-        contact = await getApi("api/contact/")
-      } else if (contactsView?.create || contactsView?.update || contactsView?.delete || contactsView?.view) {
-        contact = await getApi(`api/contact/?createBy=${user._id}`)
-      }
-      setContactData(contact?.data);
-    }, 4000);
+    // setTimeout(async () => {
+    if (user.role === "superAdmin") {
+      contact = await getApi("api/contact/")
+    } else if (contactsView?.create || contactsView?.update || contactsView?.delete || contactsView?.view) {
+      contact = await getApi(`api/contact/?createBy=${user._id}`)
+    }
+    setContactData(contact?.data);
+    // }, 4000);
     let lead;
-    setTimeout(async () => {
-      if (user.role === "superAdmin") {
-        lead = await getApi("api/lead/")
-      } else if (leadView?.create || leadView?.update || leadView?.delete || leadView?.view) {
-        lead = await getApi(`api/lead/?createBy=${user._id}`)
-      }
-      setLeadData(lead?.data);
-    }, 4000);
+    // setTimeout(async () => {
+    if (user.role === "superAdmin") {
+      lead = await getApi("api/lead/")
+    } else if (leadView?.create || leadView?.update || leadView?.delete || leadView?.view) {
+      lead = await getApi(`api/lead/?createBy=${user._id}`)
+    }
+    setLeadData(lead?.data);
+    // }, 4000);
     let property;
-    setTimeout(async () => {
-      if (user.role === "superAdmin") {
-        property = await getApi("api/property/")
-      } else if (proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view) {
-        property = await getApi(`api/property/?createBy=${user._id}`)
-      }
-      setPropertyData(property?.data);
-    }, 4000);
+    // setTimeout(async () => {
+    if (user.role === "superAdmin") {
+      property = await getApi("api/property/")
+    } else if (proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view) {
+      property = await getApi(`api/property/?createBy=${user._id}`)
+    }
+    setPropertyData(property?.data);
+    // }, 4000);
   };
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchProgressChart = async () => {
-    // let result = await getApi('api/reporting/line-chart');
     let result = await getApi(user.role === 'superAdmin' ? 'api/reporting/line-chart' : `api/reporting/line-chart?createBy=${user._id}`);
     if (result && result.status === 200) {
       setData(result?.data)
@@ -317,7 +316,7 @@ export default function UserReports() {
               />
             </Flex>
             <HSeparator />
-            <Chart dashboard={"dashboard"} />
+            <Chart dashboard={"dashboard"} data={data} />
           </Card>
         </GridItem>
       </Grid>
