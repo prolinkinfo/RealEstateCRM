@@ -126,7 +126,7 @@ export default function AdminNavbar(props) {
 					*/}
 					<Flex me={openSidebar ? "" : "5"} mx={openSidebar ? "14" : "1"} display={{ sm: "none", xl: "flex" }}>
 						{largeLogo[0]?.logoLgImg || largeLogo[0]?.logoSmImg ? <Image
-							style={{ width: "100%", height: '52px' }}
+							style={{ width: openSidebar ? "165px" : "60px", height: '52px' }}
 							src={openSidebar === true ? largeLogo[0]?.logoLgImg : largeLogo[0]?.logoSmImg} // Set the source path of your image
 							alt="Logo" // Set the alt text for accessibility
 							cursor="pointer"

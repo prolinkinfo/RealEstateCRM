@@ -69,7 +69,7 @@ option {
 }
 
 .table-fix-container {
-  min-height: auto;
+  min-height: 63vh;
   max-height: 63vh;
   overflow-y: auto;
 }

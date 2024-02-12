@@ -288,17 +288,18 @@ export default function CheckTable(props) {
         <Grid templateColumns="repeat(12, 1fr)" gap={2}>
           <GridItem colSpan={{ base: 12, md: 8 }} display={"flex"} alignItems={"center"}>
             <Flex alignItems={"center"} flexWrap={"wrap"}>
-              <Text
-                color={"secondaryGray.900"}
-                fontSize="22px"
-                fontWeight="700"
-              >
-                Contacts (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
-              </Text>
+              {window.location.pathname === "/contacts" ?
+                <Text
+                  color={"secondaryGray.900"}
+                  fontSize="22px"
+                  fontWeight="700"
+                >
+                  Contacts (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
+                </Text> : ""}
               {isHide ? null :
                 <>
                   <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={dataColumn} onSearch={handleSearch} />
-                  <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} size="sm">Advance Search</Button>
+                  <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} mt={{ sm: "5px", md: "0" }} size="sm">Advance Search</Button>
                 </>
               }
               {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setGetTagValues([]); setSearchbox(''); }}>Clear</Button> : ""}

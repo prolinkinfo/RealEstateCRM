@@ -488,7 +488,7 @@ const View = () => {
                                                             <Button onClick={() => setPropertyModel(true)} leftIcon={<LuBuilding2 />} size="sm" colorScheme="gray" bg={buttonbg}>Select Interested Property  </Button>
                                                             <PropertyModel fetchData={fetchData} isOpen={propertyModel} onClose={setPropertyModel} id={param.id} interestProperty={data?.interestProperty} />
                                                         </Flex>
-                                                        <HSeparator />
+                                                        {/* <HSeparator /> */}
                                                     </Box>
 
                                                     <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
