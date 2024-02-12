@@ -145,35 +145,30 @@ option {
 
 .pending {
   background-color: #fbf4dd !important;
-  border-radius: 5px !important;
   color: #a37f08 !important;
   border: 1px solid #a37f08 !important;
 }
 
 .onHold {
   background-color: #ffeeeb !important;
-  border-radius: 5px !important;
   color: #DB5436 !important;
   border: 1px solid #DB5436 !important;
 }
 
 .completed {
   background-color: #eaf9e6 !important;
-  border-radius: 5px !important;
   color: #4d8f3a !important;
   border: 1px solid #4d8f3a !important;
 }
 
 .toDo {
   background-color: #ebf5ff !important;
-  border-radius: 5px !important;
   color: #1f7eeb !important;
   border: 1px solid #1f7eeb !important;
 }
 
 .inProgress {
   background-color: #eee7fc !important;
-  border-radius: 5px !important;
   color: #7038db !important;
   border: 1px solid #7038db !important;
 }

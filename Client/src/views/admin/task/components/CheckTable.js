@@ -453,8 +453,8 @@ export default function CheckTable(props) {
                           );
                         } else if (cell?.column.Header === "Status") {
                           data = (
-                            <div className={changeStatus(cell)}>
-                              <Select placeholder='Select option' border={"transparent"} onChange={(e) => setStatusData(cell, e)} height={7} width={130} value={cell?.value} style={{ fontSize: "14px" }}>
+                            <div className="selectOpt">
+                              <Select placeholder='Select option' className={changeStatus(cell)} onChange={(e) => setStatusData(cell, e)} height={7} width={130} value={cell?.value} style={{ fontSize: "14px" }}>
                                 <option value='completed'>Completed</option>
                                 <option value='todo'>Todo</option>
                                 <option value='onHold'>On Hold</option>
