@@ -123,7 +123,7 @@ const EditTask = (props) => {
     return (
         <Modal isOpen={isOpen} size={'xl'} >
             {!props.from && <ModalOverlay />}
-            <ModalContent overflowY={"auto"} height={"700px"}>
+            <ModalContent overflowY={"auto"} >
                 <ModalHeader justifyContent='space-between' display='flex' >
                     Edit Task
                     <IconButton onClick={() => onClose(false)} icon={<CloseIcon />} />

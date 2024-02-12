@@ -469,9 +469,9 @@ export default function CheckTable(props) {
                               <Menu isLazy  >
                                 <MenuButton><CiMenuKebab /></MenuButton>
                                 <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
-                                  {access?.update && <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>}
-                                  {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/propertyView/${cell?.row?.values?._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>}
-                                  {access?.delete && <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>}
+                                  {access?.update && <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon mb={1} fontSize={15} />}>Edit</MenuItem>}
+                                  {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/propertyView/${cell?.row?.values?._id}`)} icon={<ViewIcon mb={1} fontSize={15} />}>View</MenuItem>}
+                                  {access?.delete && <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} icon={<DeleteIcon mb={1} fontSize={15} />}>Delete</MenuItem>}
                                 </MenuList>
                               </Menu>
                             </Text>
