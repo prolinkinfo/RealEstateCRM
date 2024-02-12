@@ -605,7 +605,7 @@ export default function CheckTable(props) {
         <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={callSelectedId} lead='true' />
 
         {isOpen && <Add isOpen={isOpen} size={size} setLeadData={setLeadData} leadData={leadData[0]} onClose={onClose} setAction={setAction} action={action} />}
-        <Edit isOpen={edit} size={size} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={leadData?.[0]?._id} />
+        <Edit isOpen={edit} size={size} setLeadData={setLeadData} leadData={leadData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={leadData?.[0]?._id} />
         <ImportModal text='Lead file' fetchData={fetchData} isOpen={isImportLead} onClose={setIsImportLead} />
 
       </Card>

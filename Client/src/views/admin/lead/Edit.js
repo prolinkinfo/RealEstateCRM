@@ -9,48 +9,59 @@ import { useParams } from 'react-router-dom';
 import { leadSchema } from 'schema';
 import { putApi } from 'services/api';
 import { getApi } from 'services/api';
+import { generateValidationSchema } from '../../../utils';
+import CustomForm from '../../../utils/customForm';
+import * as yup from 'yup'
 
 const Edit = (props) => {
     const [isLoding, setIsLoding] = useState(false);
+    const initialFieldValues = Object.fromEntries(
+        (props?.leadData?.fields || []).map(field => [field?.name, ''])
+    );
+    // const [initialValues, setInitialValues] = useState({
+    //     // Lead Information:
+    //     leadName: '',
+    //     leadEmail: '',
+    //     leadPhoneNumber: '',
+    //     leadAddress: '',
+    //     // Lead Source and Details:
+    //     leadSource: '',
+    //     leadStatus: '',
+    //     leadSourceDetails: '',
+    //     leadCampaign: '',
+    //     leadSourceChannel: '',
+    //     leadSourceMedium: '',
+    //     leadSourceCampaign: '',
+    //     leadSourceReferral: '',
+    //     // Lead Assignment and Ownership:
+    //     leadAssignedAgent: '',
+    //     leadOwner: '',
+    //     leadCommunicationPreferences: '',
+    //     // Lead Dates and Follow-up:
+    //     leadCreationDate: '',
+    //     leadConversionDate: '',
+    //     leadFollowUpDate: '',
+    //     leadFollowUpStatus: '',
+    //     // Lead Scoring and Nurturing:
+    //     leadScore: '',
+    //     leadNurturingWorkflow: '',
+    //     leadEngagementLevel: '',
+    //     leadConversionRate: '',
+    //     leadNurturingStage: '',
+    //     leadNextAction: '',
+    //     createBy: JSON.parse(localStorage.getItem('user'))._id,
+    // });
     const [initialValues, setInitialValues] = useState({
-        // Lead Information:
-        leadName: '',
-        leadEmail: '',
-        leadPhoneNumber: '',
-        leadAddress: '',
-        // Lead Source and Details:
-        leadSource: '',
-        leadStatus: '',
-        leadSourceDetails: '',
-        leadCampaign: '',
-        leadSourceChannel: '',
-        leadSourceMedium: '',
-        leadSourceCampaign: '',
-        leadSourceReferral: '',
-        // Lead Assignment and Ownership:
-        leadAssignedAgent: '',
-        leadOwner: '',
-        leadCommunicationPreferences: '',
-        // Lead Dates and Follow-up:
-        leadCreationDate: '',
-        leadConversionDate: '',
-        leadFollowUpDate: '',
-        leadFollowUpStatus: '',
-        // Lead Scoring and Nurturing:
-        leadScore: '',
-        leadNurturingWorkflow: '',
-        leadEngagementLevel: '',
-        leadConversionRate: '',
-        leadNurturingStage: '',
-        leadNextAction: '',
-        createBy: JSON.parse(localStorage.getItem('user'))._id,
-    });
+        ...initialFieldValues,
+        createBy: JSON.parse(localStorage.getItem('user'))._id
+    })
     const param = useParams()
 
     const formik = useFormik({
         initialValues: initialValues,
         enableReinitialize: true,
-        validationSchema: leadSchema,
+        // validationSchema: leadSchema,
+        validationSchema: yup.object().shape(generateValidationSchema(props?.leadData?.fields)),
         onSubmit: (values, { resetForm }) => {
             EditData();
         },
@@ -120,7 +131,12 @@ const Edit = (props) => {
                                 <Spinner />
                             </Flex>
                             :
-                            <Grid templateColumns="repeat(12, 1fr)" gap={3}>
+                            <CustomForm leadData={props.leadData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
+
+                        }
+                    </DrawerBody>
+
+                    {/* <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                                 <GridItem colSpan={{ base: 12 }}>
                                     <Heading as="h1" size="md" >
                                         1. Basic Lead Information
@@ -554,11 +570,7 @@ const Edit = (props) => {
                                 </GridItem>
 
 
-                            </Grid>
-                        }
-                    </DrawerBody>
-
-
+                            </Grid> */}
                     <DrawerFooter>
                         <Button
                             sx={{ textTransform: "capitalize" }}
