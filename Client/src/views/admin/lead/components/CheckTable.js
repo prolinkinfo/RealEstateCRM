@@ -536,11 +536,13 @@ export default function CheckTable(props) {
                           );
                         } else if (cell?.column.Header === "Status") {
                           data = (
-                            <Select placeholder='Select option' className={changeStatus(cell)} onChange={(e) => setStatusData(cell, e)} height={7} width={130} value={cell?.value} style={{ fontSize: "14px" }}>
-                              <option value='active'>Active</option>
-                              <option value='sold'>Sold</option>
-                              <option value='pending'>Pending</option>
-                            </Select>
+                            <div className={changeStatus(cell)}>
+                              <Select placeholder='Select option' border={"transparent"} onChange={(e) => setStatusData(cell, e)} height={7} width={130} value={cell?.value} style={{ fontSize: "14px" }}>
+                                <option value='active'>Active</option>
+                                <option value='sold'>Sold</option>
+                                <option value='pending'>Pending</option>
+                              </Select>
+                            </div>
                           );
                         } else if (cell?.column.Header === "Owner") {
                           data = (
