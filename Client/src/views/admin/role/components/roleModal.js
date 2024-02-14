@@ -35,6 +35,7 @@ import { putApi } from "services/api";
 import ChangeAccess from "../changeAccess";
 import UserModal from "./userModal";
 import { getApi } from "services/api";
+import DataNotFound from "components/notFoundData";
 
 function RoleModal(props) {
   const {
@@ -195,7 +196,7 @@ function RoleModal(props) {
                         fontSize="sm"
                         fontWeight="700"
                       >
-                        -- No Data Found --
+                          <DataNotFound />
                       </Text>
                     </Td>
                   </Tr>

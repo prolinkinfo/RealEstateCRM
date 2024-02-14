@@ -344,7 +344,7 @@ const EditTask = (props) => {
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                     Status
                                 </FormLabel>
-                                <Select placeholder='Select option'
+                                <Select
                                     onChange={(e) => setFieldValue("status", e.target.value)}
                                     value={values?.status}
                                     style={{ fontSize: "14px" }}>

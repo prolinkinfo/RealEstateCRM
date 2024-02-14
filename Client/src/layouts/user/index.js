@@ -1,5 +1,5 @@
 // Chakra imports
-import { Portal, Box, useDisclosure, Text, Button, Link, Flex, Spinner, Icon } from '@chakra-ui/react';
+import { Portal, Box, useDisclosure, Text, Button, Link, Flex, Icon } from '@chakra-ui/react';
 import Footer from 'components/footer/FooterAdmin.js';
 // Layout components
 import Navbar from 'components/navbar/NavbarAdmin.js';
@@ -10,6 +10,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { ROLE_PATH } from '../../roles';
 import newRoute from 'routes.js';
 import { MdHome, MdLock } from 'react-icons/md';
+import Spinner from 'components/spinner/Spinner';
 
 const MainDashboard = React.lazy(() => import("views/admin/default"));
 const SignInCentered = React.lazy(() => import("views/auth/signIn"));

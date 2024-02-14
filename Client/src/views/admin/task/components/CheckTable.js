@@ -60,6 +60,7 @@ import * as XLSX from 'xlsx'
 import { HasAccess } from "../../../../redux/accessUtils";
 import CustomSearchInput from "components/search/search";
 import { putApi } from "services/api";
+import DataNotFound from "components/notFoundData";
 
 export default function CheckTable(props) {
   const { tableData, fetchData, isLoding, setIsLoding, allData, dataColumn, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action, className } = props;
@@ -408,7 +409,7 @@ export default function CheckTable(props) {
                   <Tr>
                     <Td colSpan={columns.length}>
                       <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                        -- No Data Found --
+                        <DataNotFound />
                       </Text>
                     </Td>
                   </Tr>
@@ -454,7 +455,7 @@ export default function CheckTable(props) {
                         } else if (cell?.column.Header === "Status") {
                           data = (
                             <div className="selectOpt">
-                              <Select placeholder='Select option' className={changeStatus(cell)} onChange={(e) => setStatusData(cell, e)} height={7} width={130} value={cell?.value} style={{ fontSize: "14px" }}>
+                              <Select className={changeStatus(cell)} onChange={(e) => setStatusData(cell, e)} height={7} width={130} value={cell?.value} style={{ fontSize: "14px" }}>
                                 <option value='completed'>Completed</option>
                                 <option value='todo'>Todo</option>
                                 <option value='onHold'>On Hold</option>

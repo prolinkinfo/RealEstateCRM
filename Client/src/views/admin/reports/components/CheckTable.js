@@ -23,6 +23,7 @@ import Card from "components/card/Card";
 import Pagination from "components/pagination/Pagination";
 import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 import Delete from "views/admin/contact/Delete";
+import DataNotFound from "components/notFoundData";
 
 
 export default function CheckTable(props) {
@@ -129,7 +130,7 @@ export default function CheckTable(props) {
                             <Tr>
                                 <Td colSpan={columns.length}>
                                     <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                                        -- No Data Found --
+                                        <DataNotFound />
                                     </Text>
                                 </Td>
                             </Tr>

@@ -11,6 +11,7 @@ import { CiMenuKebab } from 'react-icons/ci'
 import Add from './add'
 import Delete from './Delete'
 import { IoIosArrowBack } from 'react-icons/io'
+import DataNotFound from 'components/notFoundData'
 
 const Index = () => {
     const navigate = useNavigate()
@@ -128,7 +129,9 @@ const Index = () => {
                     </GridItem>
                 ))}
             </Grid>
-
+            {!validationData.length > 0 &&
+                <DataNotFound />
+            }
 
             <Add isOpen={addModal} onClose={handleAddClose} fetchData={fetchData} setAction={setAction} />
             <Edit isOpen={editModal} onClose={handleEditClose} selectedId={selectedId} editdata={editdata} setAction={setAction} fetchData={fetchData} />

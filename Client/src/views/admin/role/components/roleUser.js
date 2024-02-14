@@ -1,4 +1,5 @@
 import { Button, Flex, Modal, ModalBody, Text, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useColorModeValue, Tr, Td, Spinner, Thead, Table, Tbody, Th, Checkbox } from '@chakra-ui/react';
+import DataNotFound from 'components/notFoundData';
 import Pagination from 'components/pagination/Pagination';
 import React, { useEffect, useMemo, useState } from 'react'
 import { FaSort, FaSortDown, FaSortUp } from 'react-icons/fa';
@@ -135,7 +136,7 @@ const RoleUser = (props) => {
                                     <Tr>
                                         <Td colSpan={columns.length}>
                                             <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                                                -- No Data Found --
+                                                <DataNotFound />
                                             </Text>
                                         </Td>
                                     </Tr>

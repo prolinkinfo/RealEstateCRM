@@ -63,6 +63,7 @@ import Edit from "../Edit";
 import ImportModal from "./ImportModel";
 import { getApi } from "services/api";
 import CustomSearchInput from "components/search/search";
+import DataNotFound from "components/notFoundData";
 
 export default function CheckTable(props) {
   const { columnsData, tableData, fetchData, isLoding, setAction, allData, access, dataColumn, onClose, emailAccess, callAccess, setSearchedData, onOpen, isOpen, displaySearchData, dynamicColumns, action, setDisplaySearchData, selectedColumns, setSelectedColumns, isHide } = props;
@@ -390,7 +391,7 @@ export default function CheckTable(props) {
                   <Tr>
                     <Td colSpan={columns.length}>
                       <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                        -- No Data Found --
+                        <DataNotFound />
                       </Text>
                     </Td>
                   </Tr>

@@ -62,6 +62,7 @@ import { CiMenuKebab } from "react-icons/ci";
 import Edit from "../Edit";
 import ImportModal from "./ImportModal";
 import CustomSearchInput from "components/search/search";
+import DataNotFound from "components/notFoundData";
 
 export default function CheckTable(props) {
   const { columnsData, setAction, tableData, fetchData, dataColumn, access, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, action } = props;
@@ -383,7 +384,7 @@ export default function CheckTable(props) {
                   <Tr>
                     <Td colSpan={columns.length} className="tableData">
                       <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                        -- No Data Found --
+                        <DataNotFound />
                       </Text>
                     </Td>
                   </Tr>

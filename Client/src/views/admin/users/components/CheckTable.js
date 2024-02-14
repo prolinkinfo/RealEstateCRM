@@ -59,6 +59,7 @@ import { BsColumnsGap } from "react-icons/bs";
 import { CiMenuKebab } from "react-icons/ci";
 import { IoIosArrowBack } from "react-icons/io";
 import Edit from "../Edit";
+import DataNotFound from "components/notFoundData";
 
 
 export default function CheckTable(props) {
@@ -83,6 +84,7 @@ export default function CheckTable(props) {
   const [getTagValues, setGetTagValues] = useState([]);
   const [edit, setEdit] = useState(false);
   const [selectedId, setSelectedId] = useState();
+  const [editData, setEditData] = useState({});
   const navigate = useNavigate()
   const [column, setColumn] = useState('');
 
@@ -267,7 +269,7 @@ export default function CheckTable(props) {
                 <MenuItem width={"165px"} onClick={() => handleExportLeads('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem> */}
               </MenuList>
             </Menu>
-            <Button onClick={() => handleClick()} variant="brand" size="sm">Add User</Button>
+            <Button onClick={() => handleClick()} variant="brand" size="sm" leftIcon={<AddIcon />}>Add New</Button>
             <Button onClick={() => navigate('/admin-setting')} variant="brand" size="sm" leftIcon={<IoIosArrowBack />} ml={2}>Back</Button>
           </GridItem>
           <HStack spacing={4}>
@@ -335,7 +337,7 @@ export default function CheckTable(props) {
                   <Tr>
                     <Td colSpan={columns.length}>
                       <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                        -- No Data Found --
+                        <DataNotFound />
                       </Text>
                     </Td>
                   </Tr>
@@ -400,11 +402,10 @@ export default function CheckTable(props) {
                           data = (
                             <Text fontSize="md" fontWeight="900" textAlign={"center"} >
                               <Menu isLazy  >
-                                {console.log(cell?.row?.original?.role === 'superAdmin')}
                                 <MenuButton><CiMenuKebab /></MenuButton>
                                 <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
-                                  <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>
-                                  <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/userView/${cell?.row?.values._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>
+                                  <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id); setEditData(cell?.row?.original) }} icon={<EditIcon mb={1} fontSize={15} />}>Edit</MenuItem>
+                                  <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/userView/${cell?.row?.values._id}`)} icon={<ViewIcon mb={1} fontSize={15} />}>View</MenuItem>
                                   {cell?.row?.original?.role === 'superAdmin' ? '' : <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>}
                                 </MenuList>
                               </Menu>
@@ -433,7 +434,7 @@ export default function CheckTable(props) {
 
       </Card>
       <AddUser isOpen={isOpen} size={"sm"} setAction={setAction} onClose={onClose} />
-      <Edit isOpen={edit} size={"sm"} setAction={setAction} onClose={onClose} setEdit={setEdit} selectedId={selectedId} />
+      <Edit isOpen={edit} size={"sm"} setAction={setAction} onClose={onClose} data={editData} setEdit={setEdit} selectedId={selectedId} />
       {/* Advance filter */}
       <Modal onClose={() => { setAdvaceSearch(false); resetForm() }} isOpen={advaceSearch} isCentered>
         <ModalOverlay />

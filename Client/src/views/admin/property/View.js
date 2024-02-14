@@ -15,6 +15,7 @@ import Edit from "./Edit";
 import PropertyPhoto from "./components/propertyPhoto";
 import { HasAccess } from "../../../redux/accessUtils";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
+import DataNotFound from "components/notFoundData";
 
 const View = () => {
 
@@ -414,7 +415,7 @@ const View = () => {
                                                             data && data?.propertyPhotos?.length > 0 && data?.propertyPhotos?.map((item) => (
                                                                 <Image width={'150px'} m={1} src={item.img} alt="Your Image" />
                                                             )) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                                                                -- No Data Found --
+                                                                <DataNotFound />
                                                             </Text>}
                                                     </Flex>
                                                     {data?.propertyPhotos?.length > 0 ?
@@ -449,7 +450,7 @@ const View = () => {
                                                                     <source src={item.img} type="video/ogg" />
                                                                 </video>
                                                             )) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                                                                -- No Data Found --
+                                                                <DataNotFound />
                                                             </Text>}
 
                                                     </Flex>
@@ -482,7 +483,7 @@ const View = () => {
                                                             data && data?.floorPlans?.length > 0 && data?.floorPlans?.map((item) => (
                                                                 <Image key={item.createOn} width={'30%'} m={1} src={item.img} alt="Your Image" />
                                                             )) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                                                                -- No Data Found --
+                                                                <DataNotFound />
                                                             </Text>}
                                                     </Flex>
                                                     {data?.floorPlans?.length > 0 ?
@@ -516,7 +517,7 @@ const View = () => {
                                                                     {item.filename}
                                                                 </Text>
                                                             )) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                                                                -- No Data Found --
+                                                                <DataNotFound />
                                                             </Text>}
                                                     </Flex>
                                                 </GridItem>

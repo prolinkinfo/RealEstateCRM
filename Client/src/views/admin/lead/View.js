@@ -40,6 +40,7 @@ import Edit from "./Edit";
 import { fetchRoles } from "../../../redux/roleSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { HasAccess } from "../../../redux/accessUtils";
+import DataNotFound from "components/notFoundData";
 
 
 const View = () => {
@@ -438,7 +439,7 @@ const View = () => {
                                                     ))}
                                                 </FolderTreeView>
                                             )) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                                                -- No Data Found --
+                                                <DataNotFound />
                                             </Text>}
                                         </VStack>
                                     </Card>

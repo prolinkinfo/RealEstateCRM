@@ -33,6 +33,7 @@ import PropertyTable from "./components/propertyTable";
 import { HasAccess } from "../../../redux/accessUtils";
 import MeetingColumnsTable from "../meeting/components/ColumnsTable";
 import TaskColumnsTable from "../task/components/ColumnsTable";
+import DataNotFound from "components/notFoundData";
 
 const View = () => {
 
@@ -585,9 +586,12 @@ const View = () => {
                                                         <FolderTreeView download={download} data={file} name={file.fileName} isFile from="contact" />
                                                     ))}
                                                 </FolderTreeView>
-                                            )) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                                                -- No Data Found --
-                                            </Text>}
+                                            )) :
+                                                <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                                                    <DataNotFound />
+                                                </Text>
+                                            }
+
                                         </VStack>
                                     </Card>
                                 </GridItem>
@@ -636,7 +640,8 @@ const View = () => {
                                                 :
                                                 <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                                     <GridItem colSpan={{ base: 2 }} textAlign={'center'}>
-                                                        <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">-- No Data Found --</Text>
+                                                        <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700"> <DataNotFound /></Text>
+
                                                     </GridItem>
                                                 </Grid>
                                             }
