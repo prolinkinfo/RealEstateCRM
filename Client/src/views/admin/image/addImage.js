@@ -37,7 +37,7 @@ const AddImage = (props) => {
             setIsLoding(true);
             const formData = new FormData();
 
-            if (    ) {
+            if (values?.authImg) {
                 formData?.append('authImg', values?.authImg?.[0]);
             }
 
