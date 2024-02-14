@@ -19,7 +19,7 @@ const Addfield = (props) => {
     const initialValues = {
         label: "",
         name: "",
-        type: "",
+        type: "text",
         delete: false,
         fixed: false,
         belongsTo: null,
@@ -221,7 +221,7 @@ const Addfield = (props) => {
                                         name="type"
                                         onChange={handleChange}
                                         fontWeight='500'
-                                        placeholder={'Select Type'}
+                                        // placeholder={'Select Type'}
                                         borderColor={errors.type && touched.type ? "red.300" : null}
                                     >
                                         <option value='text'>Text</option>
