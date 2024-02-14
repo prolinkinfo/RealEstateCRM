@@ -30,6 +30,7 @@ const View = () => {
     const [deleteModel, setDelete] = useState(false);
     const [action, setAction] = useState(false)
     const [propertyPhoto, setPropertyPhoto] = useState(false);
+    const [propertyData, setPropertyData] = useState([]);
 
     const [virtualToursorVideos, setVirtualToursorVideos] = useState(false);
     const [floorPlans, setFloorPlans] = useState(false);
@@ -62,16 +63,24 @@ const View = () => {
         setFilteredContacts(response?.data?.filteredContacts);
         setIsLoding(false)
     }
+
+    const fetchCustomData = async () => {
+        const response = await getApi('api/custom-field?moduleName=Property')
+        setPropertyData(response.data)
+    }
+
     useEffect(() => {
         fetchData()
+        if (fetchCustomData) fetchCustomData()
     }, [action])
+
 
     const [permission, contactAccess, emailAccess, callAccess] = HasAccess(['Property', 'Contacts', 'Email', 'Call']);
 
     return (
         <>
-            <Add isOpen={isOpen} size={size} onClose={onClose} />
-            <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} />
+            <Add isOpen={isOpen} size={size} onClose={onClose} setPropertyData={setPropertyData} propertyData={propertyData[0]} />
+            <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} setPropertyData={setPropertyData} propertyData={propertyData[0]} />
             <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/property/delete/' id={param.id} />
 
             {isLoding ?
@@ -133,9 +142,9 @@ const View = () => {
                                         </MenuButton>}
                                         <MenuDivider />
                                         <MenuList minWidth={2}>
-                                            {user.role === 'superAdmin' || permission?.create && <MenuItem color={'blue'} onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
-                                            {user.role === 'superAdmin' || permission?.update && <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
-                                            {user.role === 'superAdmin' || permission?.delete && <>
+                                            {(user.role === 'superAdmin' || permission?.create) && <MenuItem color={'blue'} onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
+                                            {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
+                                            {(user.role === 'superAdmin' || permission?.delete) && <>
                                                 <MenuDivider />
                                                 <MenuItem color={'red'} onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
                                             </>}

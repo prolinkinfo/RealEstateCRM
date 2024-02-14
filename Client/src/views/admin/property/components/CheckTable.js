@@ -83,6 +83,7 @@ export default function CheckTable(props) {
   const [selectedId, setSelectedId] = useState();
   const [deleteModel, setDelete] = useState(false);
   const [column, setColumn] = useState('');
+  const [propertyData, setPropertyData] = useState([]);
   // const data = useMemo(() => tableData, [tableData]);
   // const [data, setData] = useState([])
   const user = JSON.parse(localStorage.getItem("user"))
@@ -105,6 +106,15 @@ export default function CheckTable(props) {
   //   setData(result.data);
   //   setIsLoding(false)
   // }
+
+  const fetchCustomData = async () => {
+    const response = await getApi('api/custom-field?moduleName=Property')
+    setPropertyData(response.data)
+  }
+
+  useEffect(() => {
+    if (fetchCustomData) fetchCustomData()
+  }, [action])
 
   const tableInstance = useTable(
     {
@@ -500,8 +510,8 @@ export default function CheckTable(props) {
 
 
       </Card>
-      <Add isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} />
-      <Edit isOpen={edit} size={size} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} />
+      <Add propertyData={propertyData[0]} isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} />
+      <Edit isOpen={edit} size={size} propertyData={propertyData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} />
       <ImportModal text='Property file' fetchData={fetchData} isOpen={isImportProperty} onClose={setIsImportProperty} />
 
       {/* Advance filter */}
