@@ -26,7 +26,7 @@ const Index = () => {
                             icon={<Icon w="28px" h="28px" as={HiUsers} color="white" />}
                         />
                     }
-                    name="User"
+                    name="Users"
                 // value={task?.length || 0}
                 />
                 <MiniStatistics
@@ -41,7 +41,7 @@ const Index = () => {
                         />
 
                     }
-                    name="Role"
+                    name="Roles"
                 // value={contactData?.length || 0}
                 />
                 <MiniStatistics
@@ -70,7 +70,7 @@ const Index = () => {
                         />
 
                     }
-                    name="Add Custom Field"
+                    name="Add Custom Fields"
                 />
                 <MiniStatistics
                     fontsize="md"
@@ -84,7 +84,7 @@ const Index = () => {
                         />
 
                     }
-                    name="Validation"
+                    name="Validations"
 
                 />
                 <MiniStatistics

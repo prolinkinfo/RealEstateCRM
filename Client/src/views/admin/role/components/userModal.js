@@ -31,6 +31,7 @@ import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 import Pagination from "components/pagination/Pagination";
 import RoleUser from "./roleUser";
 import { getApi } from "services/api";
+import DataNotFound from "components/notFoundData";
 
 function UserModal(props) {
   const {
@@ -167,7 +168,7 @@ function UserModal(props) {
                     <Tr>
                       <Td colSpan={columns.length}>
                         <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                          -- No Data Found --
+                          <DataNotFound />
                         </Text>
                       </Td>
                     </Tr>

@@ -217,7 +217,7 @@ const EditField = (props) => {
                                         name="type"
                                         onChange={handleChange}
                                         fontWeight='500'
-                                        placeholder={'Select Type'}
+                                        // placeholder={'Select Type'}
                                         borderColor={errors.type && touched.type ? "red.300" : null}
                                     >
                                         <option value='text'>Text</option>
@@ -689,12 +689,12 @@ const EditField = (props) => {
                         </>
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme="brand" size="sm" mr={2} type='submit' disabled={isLoding ? true : false} onClick={handleSubmit} >{isLoding ? <Spinner /> : 'Edit'}</Button>
+                        <Button colorScheme="brand" size="sm" mr={2} type='submit' disabled={isLoding ? true : false} onClick={handleSubmit} >{isLoding ? <Spinner /> : 'Update'}</Button>
                         <Button variant="outline"
                             colorScheme='red' size="sm"
                             sx={{
                                 textTransform: "capitalize",
-                            }} onClick={() => { handleClose(); resetForm() }}>Cancel</Button>
+                            }} onClick={() => { handleClose(); resetForm() }}>Close</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

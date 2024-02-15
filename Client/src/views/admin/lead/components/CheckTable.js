@@ -71,6 +71,7 @@ import { HasAccess } from "../../../../redux/accessUtils";
 import CustomSearchInput from "components/search/search";
 import { putApi } from "services/api";
 import AdvanceSearch from "components/search/advanceSearch";
+import DataNotFound from "components/notFoundData";
 
 export default function CheckTable(props) {
   const { columnsData, tableData, dataColumn, fetchData, isLoding, setIsLoding, allData, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, callAccess, emailAccess, setAction, action } = props;
@@ -430,7 +431,7 @@ export default function CheckTable(props) {
                   <Tr>
                     <Td colSpan={columns.length}>
                       <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                        -- No Data Found --
+                        <DataNotFound />
                       </Text>
                     </Td>
                   </Tr>
@@ -537,7 +538,7 @@ export default function CheckTable(props) {
                         } else if (cell?.column.Header === "Status") {
                           data = (
                             <div className="selectOpt">
-                              <Select placeholder='Select option' className={changeStatus(cell)} onChange={(e) => setStatusData(cell, e)} height={7} width={130} value={cell?.value} style={{ fontSize: "14px" }}>
+                              <Select className={changeStatus(cell)} onChange={(e) => setStatusData(cell, e)} height={7} width={130} value={cell?.value} style={{ fontSize: "14px" }}>
                                 <option value='active'>Active</option>
                                 <option value='sold'>Sold</option>
                                 <option value='pending'>Pending</option>
@@ -605,7 +606,7 @@ export default function CheckTable(props) {
         <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={callSelectedId} lead='true' />
 
         {isOpen && <Add isOpen={isOpen} size={size} setLeadData={setLeadData} leadData={leadData[0]} onClose={onClose} setAction={setAction} action={action} />}
-        <Edit isOpen={edit} size={size} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={leadData?.[0]?._id} />
+        <Edit isOpen={edit} size={size} setLeadData={setLeadData} leadData={leadData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={leadData?.[0]?._id} />
         <ImportModal text='Lead file' fetchData={fetchData} isOpen={isImportLead} onClose={setIsImportLead} />
 
       </Card>

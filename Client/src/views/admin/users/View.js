@@ -27,7 +27,6 @@ const View = () => {
     const userData = useSelector(state => state.user.user)
 
     const userName = typeof userData === 'string' ? JSON.parse(userData) : userData
-    console.log(userName)
 
     const param = useParams()
 
@@ -98,11 +97,11 @@ const View = () => {
                                                             </MenuButton>
                                                             <MenuDivider />
                                                             <MenuList>
-                                                                <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>
-                                                                <MenuItem onClick={() => { setEdit(true); }} icon={<EditIcon />} color='green'>Edit</MenuItem>
+                                                                <MenuItem alignItems={"start"} onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>
+                                                                <MenuItem alignItems={"start"} onClick={() => { setEdit(true); }} icon={<EditIcon />} color='green'>Edit</MenuItem>
                                                                 {data?.role !== 'superAdmin' && JSON.parse(localStorage.getItem('user'))?.role === 'superAdmin' && <>
                                                                     <MenuDivider />
-                                                                    <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
+                                                                    <MenuItem alignItems={"start"} onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
                                                                 </>}
                                                             </MenuList>
                                                         </Menu>

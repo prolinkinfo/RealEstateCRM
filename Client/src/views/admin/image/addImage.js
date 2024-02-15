@@ -90,7 +90,7 @@ const AddImage = (props) => {
                     </Grid>
                 </ModalBody>
                 <ModalFooter>
-                    <Button me={2} variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} size='sm' >{isLoding ? <Spinner /> : 'Add'}</Button>
+                    <Button me={2} variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} size='sm' >{isLoding ? <Spinner /> : 'Save'}</Button>
                     <Button variant="outline"
                         size='sm'
                         colorScheme="red" onClick={() => {

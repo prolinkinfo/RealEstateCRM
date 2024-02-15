@@ -62,20 +62,19 @@ const Add = (props) => {
     // const initialFieldValues = Object.fromEntries(props?.contactData?.fields?.map(field => [field.name, '']))
     const initialFieldValues = Object.fromEntries(
         (props?.contactData?.fields || []).map(field => [field?.name, ''])
-      );
+    );
     const initialValues = {
         ...initialFieldValues,
         createBy: JSON.parse(localStorage.getItem('user'))._id
     };
-    
+
     const formik = useFormik({
         // initialValues: initialValues,
         // validationSchema: contactSchema,
         initialValues: initialValues,
         validationSchema: yup.object().shape(generateValidationSchema(props?.contactData?.fields)),
         onSubmit: (values, { resetForm }) => {
-            // AddData();
-            console.log(values)
+            AddData();
             resetForm();
         },
     });

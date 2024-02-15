@@ -123,7 +123,7 @@ const EditTask = (props) => {
     return (
         <Modal isOpen={isOpen} size={'xl'} >
             {!props.from && <ModalOverlay />}
-            <ModalContent overflowY={"auto"} height={"700px"}>
+            <ModalContent overflowY={"auto"} >
                 <ModalHeader justifyContent='space-between' display='flex' >
                     Edit Task
                     <IconButton onClick={() => onClose(false)} icon={<CloseIcon />} />
@@ -344,7 +344,7 @@ const EditTask = (props) => {
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                     Status
                                 </FormLabel>
-                                <Select placeholder='Select option'
+                                <Select
                                     onChange={(e) => setFieldValue("status", e.target.value)}
                                     value={values?.status}
                                     style={{ fontSize: "14px" }}>

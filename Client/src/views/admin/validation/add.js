@@ -398,7 +398,7 @@ const Add = (props) => {
                         <Button sx={{
                             textTransform: "capitalize",
                         }} variant="outline"
-                            colorScheme="red" size="sm" onClick={onClose}>Cancel</Button>
+                            colorScheme="red" size="sm" onClick={onClose}>Close</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

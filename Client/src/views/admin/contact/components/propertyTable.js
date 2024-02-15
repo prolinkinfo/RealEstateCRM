@@ -23,6 +23,7 @@ import CountUpComponent from "components/countUpComponent/countUpComponent";
 import Pagination from "components/pagination/Pagination";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import DataNotFound from "components/notFoundData";
 
 export default function PropertyTable(props) {
   const { columnsData, tableData, title, selectedValues, setSelectedValues } = props;
@@ -122,7 +123,7 @@ export default function PropertyTable(props) {
               <Tr>
                 <Td colSpan={columns.length}>
                   <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                    -- No Data Found --
+                    <DataNotFound />
                   </Text>
                 </Td>
               </Tr>

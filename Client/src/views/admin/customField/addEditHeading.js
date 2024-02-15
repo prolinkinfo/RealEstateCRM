@@ -110,12 +110,12 @@ const AddEditHeading = (props) => {
                         </>
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme="brand" size="sm" mr={2} type='submit' disabled={isLoding ? true : false} onClick={handleSubmit} >{isLoding ? <Spinner /> : updateData && updateData?.heading ? 'Edit' : 'Add'}</Button>
+                        <Button colorScheme="brand" size="sm" mr={2} type='submit' disabled={isLoding ? true : false} onClick={handleSubmit} >{isLoding ? <Spinner /> : updateData && updateData?.heading ? 'Update' : 'Save'}</Button>
                         <Button variant="outline"
                             colorScheme='red' size="sm"
                             sx={{
                                 textTransform: "capitalize",
-                            }} onClick={() => { handleClose(); resetForm() }}>Cancel</Button>
+                            }} onClick={() => { handleClose(); resetForm() }}>Close</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

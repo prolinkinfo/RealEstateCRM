@@ -32,6 +32,7 @@ import {
 import { useFormik } from "formik";
 import { useParams } from "react-router-dom";
 import { putApi } from "services/api";
+import DataNotFound from "components/notFoundData";
 
 function ChangeAccess(props) {
   const {
@@ -219,7 +220,7 @@ function ChangeAccess(props) {
                       fontSize="sm"
                       fontWeight="700"
                     >
-                      -- No Data Found --
+                        <DataNotFound />
                     </Text>
                   </Td>
                 </Tr>

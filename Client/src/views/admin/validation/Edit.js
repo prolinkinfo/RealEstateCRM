@@ -174,16 +174,17 @@ const Edit = (props) => {
                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                     <Flex>
                                         <Checkbox colorScheme="brandScheme" isChecked={values?.validations[1]?.min} onChange={(e) => {
-                                                        const isChecked = e.target.checked;
-                                                        setFieldValue(`validations[${1}].min`, isChecked);
-                                                        setFieldValue(
-                                                            'validations[1].message',
-                                                            (isChecked) ? values?.validations[1]?.message : ''
-                                                        );
-                                                        setFieldValue(
-                                                            'validations[1].value',
-                                                            (isChecked) ? values?.validations[1]?.value : ''
-                                                        )}} />
+                                            const isChecked = e.target.checked;
+                                            setFieldValue(`validations[${1}].min`, isChecked);
+                                            setFieldValue(
+                                                'validations[1].message',
+                                                (isChecked) ? values?.validations[1]?.message : ''
+                                            );
+                                            setFieldValue(
+                                                'validations[1].value',
+                                                (isChecked) ? values?.validations[1]?.value : ''
+                                            )
+                                        }} />
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb="0">
                                             Min
                                         </FormLabel>
@@ -394,7 +395,7 @@ const Edit = (props) => {
                         <Button sx={{
                             textTransform: "capitalize",
                         }} variant="outline"
-                            colorScheme="red" size="sm" onClick={onClose}>Cancel</Button>
+                            colorScheme="red" size="sm" onClick={onClose}>Close</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

@@ -125,7 +125,7 @@ export default function AdminNavbar(props) {
 					</Breadcrumb>
 					*/}
 					<Flex me={openSidebar ? "" : "5"} mx={openSidebar ? "14" : "1"} display={{ sm: "none", xl: "flex" }}>
-						{largeLogo[0]?.logoLgImg || largeLogo[0]?.logoSmImg ? <Image
+						{largeLogo && largeLogo[0]?.logoLgImg || largeLogo && largeLogo[0]?.logoSmImg ? <Image
 							style={{ width: openSidebar ? "165px" : "60px", height: '52px' }}
 							src={openSidebar === true ? largeLogo[0]?.logoLgImg : largeLogo[0]?.logoSmImg} // Set the source path of your image
 							alt="Logo" // Set the alt text for accessibility
@@ -141,7 +141,7 @@ export default function AdminNavbar(props) {
 						color={mainText}
 						display={{ sm: "flex", xl: "none" }}
 					>
-						{largeLogo[0]?.logoLgImg ? <Image
+						{largeLogo && largeLogo[0]?.logoLgImg ? <Image
 							style={{ width: "100%", height: '52px' }}
 							src={largeLogo[0]?.logoLgImg}
 							alt="Logo"

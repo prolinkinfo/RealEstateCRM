@@ -42,6 +42,7 @@ import ChangeAccess from "../changeAccess";
 import RoleModal from "./roleModal";
 import AddRole from "../Add";
 import { IoIosArrowBack } from "react-icons/io";
+import DataNotFound from "components/notFoundData";
 
 export default function CheckTable(props) {
   const { columnsData, name, tableData, handleClick, fetchData, isLoding, setAction, _id, action } = props;
@@ -141,7 +142,7 @@ export default function CheckTable(props) {
             </Flex>
           </GridItem>
           <GridItem colSpan={4} justifyContent="end" alignItems="center" textAlign="right">
-            <Button onClick={() => setAddRoleModal(true)} variant="brand" size="sm">Add Role</Button>
+            <Button onClick={() => setAddRoleModal(true)} variant="brand" size="sm" leftIcon={<AddIcon />}>Add New</Button>
             <Button onClick={() => navigate('/admin-setting')} variant="brand" size="sm" ml={2} leftIcon={<IoIosArrowBack />}>Back</Button>
           </GridItem>
         </Grid>
@@ -204,7 +205,7 @@ export default function CheckTable(props) {
                       fontSize="sm"
                       fontWeight="700"
                     >
-                      -- No Data Found --
+                        <DataNotFound />
                     </Text>
                   </Td>
                 </Tr>

@@ -59,7 +59,6 @@ const CustomForm = ({ leadData, values, handleChange, handleBlur, errors, touche
                                                         fontWeight='500'
                                                         borderColor={errors.leadName && touched.leadName ? "red.300" : null}
                                                     >
-                                                        <option value="">Select {field.label}</option>
                                                         {field.options.map(option => (
                                                             <option key={option._id} value={option.value}>
                                                                 {option.name}
@@ -92,7 +91,7 @@ const CustomForm = ({ leadData, values, handleChange, handleBlur, errors, touche
                                                             </InputGroup>
                                                         </>}
                                             {touched[field?.name] && errors?.[field?.name] ? (
-                                                <Text mb='10px' color={'red'}> {errors?.[field?.name]}</Text>
+                                                <Text mb='10px' color={'red'} textTransform={'capitalize'}> {errors?.[field?.name]}</Text>
                                             ) : null}
                                         </GridItem>
                                     ))

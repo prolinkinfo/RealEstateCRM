@@ -19,7 +19,7 @@ const Addfield = (props) => {
     const initialValues = {
         label: "",
         name: "",
-        type: "",
+        type: "text",
         delete: false,
         fixed: false,
         belongsTo: null,
@@ -221,7 +221,7 @@ const Addfield = (props) => {
                                         name="type"
                                         onChange={handleChange}
                                         fontWeight='500'
-                                        placeholder={'Select Type'}
+                                        // placeholder={'Select Type'}
                                         borderColor={errors.type && touched.type ? "red.300" : null}
                                     >
                                         <option value='text'>Text</option>
@@ -697,12 +697,12 @@ const Addfield = (props) => {
                         </>
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme="brand" size="sm" mr={2} type='submit' disabled={isLoding ? true : false} onClick={handleSubmit} >{isLoding ? <Spinner /> : 'Add'}</Button>
+                        <Button colorScheme="brand" size="sm" mr={2} type='submit' disabled={isLoding ? true : false} onClick={handleSubmit} >{isLoding ? <Spinner /> : 'Save'}</Button>
                         <Button variant="outline"
                             colorScheme='red' size="sm"
                             sx={{
                                 textTransform: "capitalize",
-                            }} onClick={() => { handleClose(); resetForm(); setValidationType('') }}>Cancel</Button>
+                            }} onClick={() => { handleClose(); resetForm(); setValidationType('') }}>Close</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

@@ -62,6 +62,7 @@ import { CiMenuKebab } from "react-icons/ci";
 import Edit from "../Edit";
 import ImportModal from "./ImportModal";
 import CustomSearchInput from "components/search/search";
+import DataNotFound from "components/notFoundData";
 
 export default function CheckTable(props) {
   const { columnsData, setAction, tableData, fetchData, dataColumn, access, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, action } = props;
@@ -83,6 +84,7 @@ export default function CheckTable(props) {
   const [selectedId, setSelectedId] = useState();
   const [deleteModel, setDelete] = useState(false);
   const [column, setColumn] = useState('');
+  const [propertyData, setPropertyData] = useState([]);
   // const data = useMemo(() => tableData, [tableData]);
   // const [data, setData] = useState([])
   const user = JSON.parse(localStorage.getItem("user"))
@@ -105,6 +107,15 @@ export default function CheckTable(props) {
   //   setData(result.data);
   //   setIsLoding(false)
   // }
+
+  const fetchCustomData = async () => {
+    const response = await getApi('api/custom-field?moduleName=Property')
+    setPropertyData(response.data)
+  }
+
+  useEffect(() => {
+    if (fetchCustomData) fetchCustomData()
+  }, [action])
 
   const tableInstance = useTable(
     {
@@ -373,7 +384,7 @@ export default function CheckTable(props) {
                   <Tr>
                     <Td colSpan={columns.length} className="tableData">
                       <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                        -- No Data Found --
+                        <DataNotFound />
                       </Text>
                     </Td>
                   </Tr>
@@ -469,9 +480,9 @@ export default function CheckTable(props) {
                               <Menu isLazy  >
                                 <MenuButton><CiMenuKebab /></MenuButton>
                                 <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
-                                  {access?.update && <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>}
-                                  {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/propertyView/${cell?.row?.values?._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>}
-                                  {access?.delete && <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>}
+                                  {access?.update && <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon mb={1} fontSize={15} />}>Edit</MenuItem>}
+                                  {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/propertyView/${cell?.row?.values?._id}`)} icon={<ViewIcon mb={1} fontSize={15} />}>View</MenuItem>}
+                                  {access?.delete && <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} icon={<DeleteIcon mb={1} fontSize={15} />}>Delete</MenuItem>}
                                 </MenuList>
                               </Menu>
                             </Text>
@@ -500,8 +511,8 @@ export default function CheckTable(props) {
 
 
       </Card>
-      <Add isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} />
-      <Edit isOpen={edit} size={size} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} />
+      <Add propertyData={propertyData[0]} isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} />
+      <Edit isOpen={edit} size={size} propertyData={propertyData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} />
       <ImportModal text='Property file' fetchData={fetchData} isOpen={isImportProperty} onClose={setIsImportProperty} />
 
       {/* Advance filter */}

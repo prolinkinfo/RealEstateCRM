@@ -9,6 +9,8 @@ import { getApi } from 'services/api';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 import { putApi } from 'services/api';
+import { AddIcon } from '@chakra-ui/icons';
+import DataNotFound from 'components/notFoundData';
 
 const ChangeImage = () => {
     const [imageModal, setImageModal] = useState(false)
@@ -57,7 +59,7 @@ const ChangeImage = () => {
         <>
             <Card>
                 <Flex justifyContent={'end'}>
-                    <Button variant='brand' size='sm' onClick={() => setImageModal(true)}>New Image</Button>
+                    <Button variant='brand' size='sm' onClick={() => setImageModal(true)} leftIcon={<AddIcon />}>Add New</Button>
                     <Button onClick={() => navigate('/admin-setting')} variant="brand" size="sm" leftIcon={<IoIosArrowBack />} ml={2}>Back</Button>
                 </Flex>
                 <Card>
@@ -77,6 +79,7 @@ const ChangeImage = () => {
                             </GridItem>
                         ))}
                     </Grid>
+                    {!image?.length > 0 && <DataNotFound />}
                 </Card>
             </Card>
 

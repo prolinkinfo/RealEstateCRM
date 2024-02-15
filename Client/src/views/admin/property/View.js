@@ -15,6 +15,7 @@ import Edit from "./Edit";
 import PropertyPhoto from "./components/propertyPhoto";
 import { HasAccess } from "../../../redux/accessUtils";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
+import DataNotFound from "components/notFoundData";
 
 const View = () => {
 
@@ -30,6 +31,7 @@ const View = () => {
     const [deleteModel, setDelete] = useState(false);
     const [action, setAction] = useState(false)
     const [propertyPhoto, setPropertyPhoto] = useState(false);
+    const [propertyData, setPropertyData] = useState([]);
 
     const [virtualToursorVideos, setVirtualToursorVideos] = useState(false);
     const [floorPlans, setFloorPlans] = useState(false);
@@ -62,16 +64,24 @@ const View = () => {
         setFilteredContacts(response?.data?.filteredContacts);
         setIsLoding(false)
     }
+
+    const fetchCustomData = async () => {
+        const response = await getApi('api/custom-field?moduleName=Property')
+        setPropertyData(response.data)
+    }
+
     useEffect(() => {
         fetchData()
+        if (fetchCustomData) fetchCustomData()
     }, [action])
+
 
     const [permission, contactAccess, emailAccess, callAccess] = HasAccess(['Property', 'Contacts', 'Email', 'Call']);
 
     return (
         <>
-            <Add isOpen={isOpen} size={size} onClose={onClose} />
-            <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} />
+            <Add isOpen={isOpen} size={size} onClose={onClose} setPropertyData={setPropertyData} propertyData={propertyData[0]} />
+            <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} setPropertyData={setPropertyData} propertyData={propertyData[0]} />
             <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/property/delete/' id={param.id} />
 
             {isLoding ?
@@ -133,9 +143,9 @@ const View = () => {
                                         </MenuButton>}
                                         <MenuDivider />
                                         <MenuList minWidth={2}>
-                                            {user.role === 'superAdmin' || permission?.create && <MenuItem color={'blue'} onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
-                                            {user.role === 'superAdmin' || permission?.update && <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
-                                            {user.role === 'superAdmin' || permission?.delete && <>
+                                            {(user.role === 'superAdmin' || permission?.create) && <MenuItem color={'blue'} onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
+                                            {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
+                                            {(user.role === 'superAdmin' || permission?.delete) && <>
                                                 <MenuDivider />
                                                 <MenuItem color={'red'} onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
                                             </>}
@@ -405,7 +415,7 @@ const View = () => {
                                                             data && data?.propertyPhotos?.length > 0 && data?.propertyPhotos?.map((item) => (
                                                                 <Image width={'150px'} m={1} src={item.img} alt="Your Image" />
                                                             )) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                                                                -- No Data Found --
+                                                                <DataNotFound />
                                                             </Text>}
                                                     </Flex>
                                                     {data?.propertyPhotos?.length > 0 ?
@@ -440,7 +450,7 @@ const View = () => {
                                                                     <source src={item.img} type="video/ogg" />
                                                                 </video>
                                                             )) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                                                                -- No Data Found --
+                                                                <DataNotFound />
                                                             </Text>}
 
                                                     </Flex>
@@ -473,7 +483,7 @@ const View = () => {
                                                             data && data?.floorPlans?.length > 0 && data?.floorPlans?.map((item) => (
                                                                 <Image key={item.createOn} width={'30%'} m={1} src={item.img} alt="Your Image" />
                                                             )) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                                                                -- No Data Found --
+                                                                <DataNotFound />
                                                             </Text>}
                                                     </Flex>
                                                     {data?.floorPlans?.length > 0 ?
@@ -507,7 +517,7 @@ const View = () => {
                                                                     {item.filename}
                                                                 </Text>
                                                             )) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                                                                -- No Data Found --
+                                                                <DataNotFound />
                                                             </Text>}
                                                     </Flex>
                                                 </GridItem>

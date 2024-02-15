@@ -135,19 +135,20 @@ const CustomField = () => {
 
     return (
         <>
-            <Card>
+            <Card minHeight='200px'>
                 <Flex justifyContent={'space-between'} alignItems={'center'}>
-                    <Box >
+                    <Flex alignItems='center'>
                         <Text color={"secondaryGray.900"}
                             fontSize="22px"
                             fontWeight="700"
                         >{moduleName ? 'Custom Heading' : 'Select Module'}</Text>
-                    </Box>
+                        {selectedHeadings.length > 0 && <Button color="red" ml='2' onClick={() => setDeleteManyHeadings(true)} size='sm' ><DeleteIcon /></Button>}
+                    </Flex>
                     <Box>
                         <Flex>
                             {!isLoading && (
                                 <Menu>
-                                    <MenuButton as={Button} size='sm' rightIcon={<ChevronDownIcon />} variant="outline">
+                                    <MenuButton as={Button} mr={2} size='sm' rightIcon={<ChevronDownIcon />} variant="outline">
                                         {moduleName ? moduleName : 'Select Module'}
                                     </MenuButton>
                                     <MenuList minWidth={"10rem"}>
@@ -158,6 +159,8 @@ const CustomField = () => {
                                     </MenuList>
                                 </Menu>
                             )}
+
+                            {data?.length > 0 && <Button ml={2} onClick={() => setAddHeadingModel(true)} variant="brand" size='sm'>Add Heading</Button>}
                             <Button onClick={() => navigate('/admin-setting')} variant="brand" size="sm" leftIcon={<IoIosArrowBack />} ml={2}>Back</Button>
                         </Flex>
                     </Box>
@@ -204,44 +207,48 @@ const CustomField = () => {
                         )}
                     </Droppable>
                 </DragDropContext>
-                <Flex Flex justifyContent={'end'} mt='5'>
+                {/* <Flex Flex justifyContent={'end'} mt='5'>
 
                     {(!isLoading && data[0]?.headings.length > 0) && <Menu>
                         <MenuButton as={Button} size='sm' me={2} rightIcon={<ChevronDownIcon />} variant="outline">
-                            {heading ? heading : 'Select Headings'}
+                            {heading ? heading : 'Select All Headings'}
                         </MenuButton>
                         <MenuList>
-                            <MenuItem onClick={() => { setHeading(''); setHeadingId('') }}>Select Headings</MenuItem>
+                            <MenuItem onClick={() => { setHeading(''); setHeadingId('') }}>Select All Headings</MenuItem>
                             {data[0]?.headings?.map((item, id) => (
                                 <MenuItem key={id} onClick={() => { setHeading(item.heading); setHeadingId(item._id) }}>{item.heading}</MenuItem>
                             ))}
                         </MenuList>
                     </Menu>}
                     {selectedHeadings.length > 0 && <Button colorScheme="red" mr={2} onClick={() => setDeleteManyHeadings(true)} size='sm' >Delete</Button>}
-                    {data?.length > 0 && <Button onClick={() => setAddHeadingModel(true)} variant="brand" size='sm'>Add Heading</Button>}
-                </Flex>
+                </Flex> */}
 
-
-                <Flex justifyContent={'space-between'} alignItems={'center'}>
-                    <Box >
+            </Card>
+            {data?.length > 0 && <Card mt='5'>
+                <Flex justifyContent={'space-between'} alignItems={'center'} mt='5'>
+                    <Flex alignItems='center'>
                         <Text color={"secondaryGray.900"}
                             fontSize="22px"
                             fontWeight="700"
                         >{moduleName && 'Custom Field'}</Text>
-                    </Box>
-                    {/* <Box>
-                        <Menu>
-                            <MenuButton as={Button} rightIcon={<ChevronDownIcon />} variant="outline">
-                                {moduleName ? moduleName : 'Select Module'}
+                        {selectedValues.length > 0 && <Button color="red" ml='2' onClick={() => setDeleteMany(true)} size='sm' ><DeleteIcon /></Button>}
+                    </Flex>
+
+                    <Box>
+                        {(!isLoading && data[0]?.headings.length > 0) && <Menu>
+                            <MenuButton as={Button} size='sm' rightIcon={<ChevronDownIcon />} variant="outline">
+                                {heading ? heading : 'Select All Headings'}
                             </MenuButton>
                             <MenuList>
-                                <MenuItem onClick={() => setModuleName('')}>Select Module</MenuItem>
-                                {fields?.map((item, id) => (
-                                    <MenuItem key={id} onClick={() => { setModuleName(item.moduleName); setModuleId(item._id) }}>{item.moduleName}</MenuItem>
+                                <MenuItem onClick={() => { setHeading(''); setHeadingId('') }}>Select All Headings</MenuItem>
+                                {data[0]?.headings?.map((item, id) => (
+                                    <MenuItem key={id} onClick={() => { setHeading(item.heading); setHeadingId(item._id) }}>{item.heading}</MenuItem>
                                 ))}
                             </MenuList>
-                        </Menu>
-                    </Box> */}
+                        </Menu>}
+                        {data?.length > 0 && <Button me={2} ml='2' onClick={() => setAddFieldModel(true)} variant="brand" size='sm'>Add Field</Button>}
+                    </Box>
+
                 </Flex>
                 {isLoading && moduleName ? <Flex justifyContent={'center'} alignItems={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
                     <Spinner />
@@ -289,15 +296,10 @@ const CustomField = () => {
                                 )}
                             </Droppable>
                         </DragDropContext>
-                        <Flex Flex justifyContent={'end'} mt='5' >
-                            {selectedValues.length > 0 && <Button colorScheme="red" mr={2} onClick={() => setDeleteMany(true)} size='sm' >Delete</Button>}
 
-                            {data?.length > 0 && <Button onClick={() => setAddFieldModel(true)} variant="brand" size='sm'>Add Field</Button>}
-                        </Flex>
                     </>
                 }
-
-            </Card>
+            </Card>}
 
             <Addfield isOpen={addFieldModel} onClose={setAddFieldModel} moduleName={moduleName} field={data[0]?.fields} moduleId={data[0]?._id} fetchData={fetchData} headingsData={data?.[0]?.headings} />
             <EditField isOpen={editModal} onClose={setEditModal} field={data[0]?.fields} moduleId={data[0]?._id} fetchData={fetchData} updateFiled={updateField} headingsData={data?.[0]?.headings} />

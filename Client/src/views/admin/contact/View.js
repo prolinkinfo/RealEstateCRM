@@ -33,6 +33,7 @@ import PropertyTable from "./components/propertyTable";
 import { HasAccess } from "../../../redux/accessUtils";
 import MeetingColumnsTable from "../meeting/components/ColumnsTable";
 import TaskColumnsTable from "../task/components/ColumnsTable";
+import DataNotFound from "components/notFoundData";
 
 const View = () => {
 
@@ -139,7 +140,7 @@ const View = () => {
     return (
         <>
             {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} contactData={contactData[0]} />}
-            <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} moduleId={contactData?.[0]?._id} />
+            <Edit isOpen={edit} contactData={contactData[0]} size={size} onClose={setEdit} setAction={setAction} moduleId={contactData?.[0]?._id} />
             <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/contact/delete/' id={param.id} />
 
             {isLoding ?
@@ -585,9 +586,12 @@ const View = () => {
                                                         <FolderTreeView download={download} data={file} name={file.fileName} isFile from="contact" />
                                                     ))}
                                                 </FolderTreeView>
-                                            )) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                                                -- No Data Found --
-                                            </Text>}
+                                            )) :
+                                                <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                                                    <DataNotFound />
+                                                </Text>
+                                            }
+
                                         </VStack>
                                     </Card>
                                 </GridItem>
@@ -636,7 +640,8 @@ const View = () => {
                                                 :
                                                 <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                                     <GridItem colSpan={{ base: 2 }} textAlign={'center'}>
-                                                        <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">-- No Data Found --</Text>
+                                                        <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700"> <DataNotFound /></Text>
+
                                                     </GridItem>
                                                 </Grid>
                                             }

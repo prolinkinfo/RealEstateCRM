@@ -24,6 +24,7 @@ import { Link } from "react-router-dom";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
 import moment from "moment";
 import { getApi } from "services/api";
+import DataNotFound from "components/notFoundData";
 
 export default function CheckTable(props) {
   const { columnsData } = props;
@@ -122,7 +123,7 @@ export default function CheckTable(props) {
             <Tr>
               <Td colSpan={columns.length}>
                 <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                  -- No Data Found --
+                  <DataNotFound />
                 </Text>
               </Td>
             </Tr>
