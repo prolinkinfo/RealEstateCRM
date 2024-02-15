@@ -57,7 +57,7 @@ const CustomForm = ({ leadData, values, handleChange, handleBlur, errors, touche
                                                         onBlur={handleBlur}
                                                         value={values[field.name]}
                                                         fontWeight='500'
-                                                        borderColor={errors.leadName && touched.leadName ? "red.300" : null}
+                                                        borderColor={errors?.[field?.name] && touched?.[field?.name] ? "red.300" : null}
                                                     >
                                                         {field.options.map(option => (
                                                             <option key={option._id} value={option.value}>
@@ -86,7 +86,7 @@ const CustomForm = ({ leadData, values, handleChange, handleBlur, errors, touche
                                                                     value={values[field.name]}
                                                                     fontWeight='500'
                                                                     placeholder={`Enter ${field.label}`}
-                                                                    borderColor={errors.leadName && touched.leadName ? "red.300" : null}
+                                                                    borderColor={errors?.[field?.name] && touched?.[field?.name] ? "red.300" : null}
                                                                 />
                                                             </InputGroup>
                                                         </>}
@@ -139,7 +139,7 @@ const CustomForm = ({ leadData, values, handleChange, handleBlur, errors, touche
                                             onBlur={handleBlur}
                                             value={values[field.name]}
                                             fontWeight='500'
-                                            borderColor={errors.leadName && touched.leadName ? "red.300" : null}
+                                            borderColor={errors?.[field?.name] && touched?.[field?.name] ? "red.300" : null}
                                         >
                                             <option value="">Select {field.label}</option>
                                             {field.options.map(option => (
@@ -169,7 +169,7 @@ const CustomForm = ({ leadData, values, handleChange, handleBlur, errors, touche
                                                         value={values[field.name]}
                                                         fontWeight='500'
                                                         placeholder={`Enter ${field.label}`}
-                                                        borderColor={errors.leadName && touched.leadName ? "red.300" : null}
+                                                        borderColor={errors?.[field?.name] && touched?.[field?.name] ? "red.300" : null}
                                                     />
                                                 </InputGroup>
                                             </>}
@@ -221,7 +221,7 @@ const CustomForm = ({ leadData, values, handleChange, handleBlur, errors, touche
                                         onBlur={handleBlur}
                                         value={values[field.name]}
                                         fontWeight='500'
-                                        borderColor={errors.leadName && touched.leadName ? "red.300" : null}
+                                        borderColor={errors?.[field?.name] && touched?.[field?.name] ? "red.300" : null}
                                     >
                                         <option value="">Select {field.label}</option>
                                         {field.options.map(option => (
@@ -251,7 +251,7 @@ const CustomForm = ({ leadData, values, handleChange, handleBlur, errors, touche
                                                     value={values[field.name]}
                                                     fontWeight='500'
                                                     placeholder={`Enter ${field.label}`}
-                                                    borderColor={errors.leadName && touched.leadName ? "red.300" : null}
+                                                    borderColor={errors?.[field?.name] && touched?.[field?.name] ? "red.300" : null}
                                                 />
                                             </InputGroup>
                                         </>}

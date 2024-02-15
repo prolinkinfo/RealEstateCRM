@@ -70,6 +70,7 @@ const Add = (props) => {
 
     const formik = useFormik({
         initialValues: initialValues,
+        enableReinitialize: true,
         // validationSchema: propertySchema,
         validationSchema: yup.object().shape(generateValidationSchema(props?.propertyData?.fields)),
 
