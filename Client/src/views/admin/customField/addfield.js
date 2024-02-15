@@ -388,7 +388,7 @@ const Addfield = (props) => {
                                             Validation
                                         </Heading>
                                         <Flex>
-                                            <Select
+                                            {validations?.length > 0 && <Select
                                                 value={validationType}
                                                 name="validations"
                                                 // onChange={handleChange}
@@ -437,7 +437,7 @@ const Addfield = (props) => {
                                                 {validations?.map((item, index) => (
                                                     <option key={index} value={item._id} >{item.name}</option>
                                                 ))}
-                                            </Select>
+                                            </Select>}
                                             <Checkbox colorScheme="brandScheme" me="10px" isChecked={(values?.type === 'range' || values.validate) ? true : false} onChange={(e) => setFieldValue(`validate`, e.target.checked)} />
                                         </Flex>
                                     </Flex>
