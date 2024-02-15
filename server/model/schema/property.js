@@ -24,10 +24,10 @@ const propertySchema = new mongoose.Schema({
     // exteriorFeatures: String,
     // communityAmenities: String,
     // //3. Media and Visuals:
-    // propertyPhotos: [],
-    // virtualToursOrVideos: [],
-    // floorPlans: [],
-    // propertyDocuments: [],
+    propertyPhotos: [],
+    virtualToursOrVideos: [],
+    floorPlans: [],
+    propertyDocuments: [],
     // //4. Listing and Marketing Details:
     // listingStatus: String,
     // listingAgentOrTeam: String,
