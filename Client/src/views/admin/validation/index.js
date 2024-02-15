@@ -130,7 +130,11 @@ const Index = () => {
                 ))}
             </Grid>
             {!validationData.length > 0 &&
-                <DataNotFound />
+                <Card mt='5'>
+                    <Text textAlign={'center'} width="100%" color={'gray.500'} fontSize="sm" fontWeight="700">
+                        <DataNotFound />
+                    </Text>
+                </Card>
             }
 
             <Add isOpen={addModal} onClose={handleAddClose} fetchData={fetchData} setAction={setAction} />

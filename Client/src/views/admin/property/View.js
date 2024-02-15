@@ -16,6 +16,7 @@ import PropertyPhoto from "./components/propertyPhoto";
 import { HasAccess } from "../../../redux/accessUtils";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
 import DataNotFound from "components/notFoundData";
+import xlsx from '../../../assets/img/fileImage/xlsx.png'
 
 const View = () => {
 
@@ -143,11 +144,11 @@ const View = () => {
                                         </MenuButton>}
                                         <MenuDivider />
                                         <MenuList minWidth={2}>
-                                            {(user.role === 'superAdmin' || permission?.create) && <MenuItem color={'blue'} onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
-                                            {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
+                                            {(user.role === 'superAdmin' || permission?.create) && <MenuItem alignItems={'start'} color={'blue'} onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
+                                            {(user.role === 'superAdmin' || permission?.update) && <MenuItem alignItems={'start'} onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
                                             {(user.role === 'superAdmin' || permission?.delete) && <>
                                                 <MenuDivider />
-                                                <MenuItem color={'red'} onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
+                                                <MenuItem alignItems={'start'} color={'red'} onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
                                             </>}
                                         </MenuList>
                                     </Menu>
@@ -512,11 +513,20 @@ const View = () => {
                                                 <GridItem colSpan={{ base: 12 }} >
                                                     <Flex flexWrap={'wrap'} justifyContent={'center'} alingItem={'center'} >
                                                         {data?.propertyDocuments?.length > 0 ?
-                                                            data && data?.propertyDocuments?.length > 0 && data?.propertyDocuments?.map((item) => (
-                                                                <Text color='green.400' onClick={() => window.open(item?.img)} cursor={'pointer'} sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>
-                                                                    {item.filename}
-                                                                </Text>
-                                                            )) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                                                            data && data?.propertyDocuments?.length > 0 && data?.propertyDocuments?.map((item) => {
+                                                                const parts = item.filename.split('.');
+                                                                const lastIndex = parts[parts.length - 1]
+                                                                console.log(lastIndex)
+                                                                return (
+                                                                    <Flex alignItems='center'>
+                                                                        {lastIndex === 'xlsx' && <Image src={xlsx} boxSize='50px' />}
+                                                                        <Text color='green.400' onClick={() => window.open(item?.img)} cursor={'pointer'} sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>
+                                                                            {item.filename}
+                                                                        </Text>
+                                                                    </Flex>
+                                                                )
+                                                            }
+                                                            ) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
                                                                 <DataNotFound />
                                                             </Text>}
                                                     </Flex>

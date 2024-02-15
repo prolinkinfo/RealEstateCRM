@@ -135,7 +135,7 @@ const CustomField = () => {
 
     return (
         <>
-            <Card minHeight='200px'>
+            <Card minHeight='250px'>
                 <Flex justifyContent={'space-between'} alignItems={'center'}>
                     <Flex alignItems='center'>
                         <Text color={"secondaryGray.900"}
@@ -165,6 +165,14 @@ const CustomField = () => {
                         </Flex>
                     </Box>
                 </Flex>
+                {!data?.length > 0 && <Text
+                    textAlign={"center"}
+                    width="100%"
+                    color={'gray.500'}
+                    fontSize="sm"
+                    my='7'
+                    fontWeight="700"
+                >-- Please Select Module --</Text>}
                 <DragDropContext DragDropContext onDragEnd={handleHeadingsDragEnd} >
                     <Droppable droppableId="droppable">
                         {(provided) => (
@@ -207,21 +215,6 @@ const CustomField = () => {
                         )}
                     </Droppable>
                 </DragDropContext>
-                {/* <Flex Flex justifyContent={'end'} mt='5'>
-
-                    {(!isLoading && data[0]?.headings.length > 0) && <Menu>
-                        <MenuButton as={Button} size='sm' me={2} rightIcon={<ChevronDownIcon />} variant="outline">
-                            {heading ? heading : 'Select All Headings'}
-                        </MenuButton>
-                        <MenuList>
-                            <MenuItem onClick={() => { setHeading(''); setHeadingId('') }}>Select All Headings</MenuItem>
-                            {data[0]?.headings?.map((item, id) => (
-                                <MenuItem key={id} onClick={() => { setHeading(item.heading); setHeadingId(item._id) }}>{item.heading}</MenuItem>
-                            ))}
-                        </MenuList>
-                    </Menu>}
-                    {selectedHeadings.length > 0 && <Button colorScheme="red" mr={2} onClick={() => setDeleteManyHeadings(true)} size='sm' >Delete</Button>}
-                </Flex> */}
 
             </Card>
             {data?.length > 0 && <Card mt='5'>

@@ -494,12 +494,12 @@ export default function CheckTable(props) {
                               <Menu isLazy  >
                                 <MenuButton><CiMenuKebab /></MenuButton>
                                 <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
-                                  {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/Email/${cell?.row?.values._id}`)} icon={<ViewIcon mb={1} fontSize={15} />}>View</MenuItem>}
+                                  {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/Email/${cell?.row?.values._id}`)} icon={<ViewIcon mb={'2px'} fontSize={15} />}>View</MenuItem>}
                                   {cell?.row?.original?.createBy && contactAccess?.view ?
-                                    <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(cell?.row?.original?.createBy && `/contactView/${cell?.row?.original.createBy}`)} icon={cell?.row?.original.createBy && <IoIosContact mb={1} fontSize={15} />}>  {(cell?.row?.original.createBy && contactAccess?.view) && "contact"}
+                                    <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(cell?.row?.original?.createBy && `/contactView/${cell?.row?.original.createBy}`)} icon={cell?.row?.original.createBy && <IoIosContact fontSize={15} />}>  {(cell?.row?.original.createBy && contactAccess?.view) && "contact"}
                                     </MenuItem>
                                     : ''}
-                                  {cell?.row?.original.createByLead && leadAccess?.view ? <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(`/leadView/${cell?.row?.original.createByLead}`)} icon={cell?.row?.original.createByLead && leadAccess?.view && <MdLeaderboard mb={1} fontSize={15} />}>{cell?.row?.original.createByLead && leadAccess?.view && 'lead'}</MenuItem> : ''}
+                                  {cell?.row?.original.createByLead && leadAccess?.view ? <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(`/leadView/${cell?.row?.original.createByLead}`)} icon={cell?.row?.original.createByLead && leadAccess?.view && <MdLeaderboard style={{ marginBottom: '4px' }} fontSize={15} />}>{cell?.row?.original.createByLead && leadAccess?.view && 'lead'}</MenuItem> : ''}
                                 </MenuList>
                               </Menu>
                             </Text>

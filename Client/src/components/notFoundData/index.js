@@ -5,7 +5,8 @@ import React from 'react'
 const DataNotFound = () => {
     return (
         <Box display={'flex'} justifyContent={'center'} alignItems={'center'}>
-            <Image src={dataImage} />
+            {/* <Image src={dataImage} /> */}
+            -- No Data Found --
         </Box>
     )
 }

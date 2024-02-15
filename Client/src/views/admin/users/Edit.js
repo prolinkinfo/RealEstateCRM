@@ -50,19 +50,22 @@ const Edit = (props) => {
             if (response && response.status === 200) {
                 setEdit(false)
                 let updatedUserData = userData; // Create a copy of userData
+                if (user?._id === props.selectedId) {
+                    if (updatedUserData && typeof updatedUserData === 'object') {
+                        // Create a new object with the updated firstName
+                        updatedUserData = {
+                            ...updatedUserData,
+                            firstName: values?.firstName,
+                            lastName: values?.lastName
+                        };
+                    }
 
-                if (updatedUserData && typeof updatedUserData === 'object') {
-                    // Create a new object with the updated firstName
-                    updatedUserData = {
-                        ...updatedUserData,
-                        firstName: values?.firstName,
-                        lastName: values?.lastName
-                    };
+                    const updatedDataString = JSON.stringify(updatedUserData);
+                    localStorage.setItem('user', updatedDataString);
+                    dispatch(setUser(updatedDataString));
                 }
 
-                const updatedDataString = JSON.stringify(updatedUserData);
-                localStorage.setItem('user', updatedDataString);
-                dispatch(setUser(updatedDataString));
+
                 handleCloseModal();
                 fetchData()
                 props.setAction((pre) => !pre)

@@ -434,7 +434,7 @@ export default function CheckTable(props) {
 
       </Card>
       <AddUser isOpen={isOpen} size={"sm"} setAction={setAction} onClose={onClose} />
-      <Edit isOpen={edit} size={"sm"} setAction={setAction} onClose={onClose} data={editData} setEdit={setEdit} selectedId={selectedId} />
+      <Edit isOpen={edit} size={"sm"} setAction={setAction} onClose={onClose} fetchData={fetchData} data={editData} setEdit={setEdit} selectedId={selectedId} />
       {/* Advance filter */}
       <Modal onClose={() => { setAdvaceSearch(false); resetForm() }} isOpen={advaceSearch} isCentered>
         <ModalOverlay />
