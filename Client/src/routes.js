@@ -20,6 +20,7 @@ import { ROLE_PATH } from "./roles";
 import ChangeImage from "views/admin/image";
 import Validation from "views/admin/validation";
 import CustomField from "views/admin/customField";
+import TableField from "views/admin/tableField";
 
 // Admin Imports
 const MainDashboard = React.lazy(() => import("views/admin/default"));
@@ -288,6 +289,14 @@ const routes = [
     under: "Validation",
     icon: <Icon as={FaCreativeCommonsBy} width='20px' height='20px' color='inherit' />,
     component: Validation,
+  },
+  {
+    name: "Table Fields",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/table-Field",
+    under: "tableField",
+    icon: <Icon as={FaWpforms} width='20px' height='20px' color='inherit' />,
+    component: TableField,
   },
   // // ------------- Text message Routes ------------------------
   // {
