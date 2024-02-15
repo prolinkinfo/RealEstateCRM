@@ -114,7 +114,7 @@ export default function CheckTable(props) {
   }
   const validationSchema = yup.object({
     firstName: yup.string(),
-    username: yup.string().email("Lead Email is invalid"),
+    username: yup.string().email("User Email is invalid"),
     lastName: yup.string(),
   });
   const formik = useFormik({
@@ -489,8 +489,8 @@ export default function CheckTable(props) {
             </Grid>
           </ModalBody>
           <ModalFooter>
-            <Button size="sm" variant="outline" colorScheme='green' mr={2} onClick={handleSubmit} disabled={isLoding || !dirty ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
-            <Button size="sm" colorScheme="red" onClick={() => resetForm()}>Clear</Button>
+            <Button size="sm" variant="brand" mr={2} onClick={handleSubmit} disabled={isLoding || !dirty ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
+            <Button size="sm" variant="outline" colorScheme="red" onClick={() => resetForm()}>Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -515,12 +515,12 @@ export default function CheckTable(props) {
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button size="sm" variant="outline" colorScheme='green' mr={2} onClick={() => {
+            <Button size="sm" variant="brand" colorScheme='green' mr={2} onClick={() => {
               setSelectedColumns(tempSelectedColumns);
               setManageColumns(false);
               resetForm();
             }} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
-            <Button size="sm" colorScheme="red" onClick={() => handleColumnClear()}>Close</Button>
+            <Button size="sm" variant='outline' color="red" onClick={() => handleColumnClear()}>Close</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

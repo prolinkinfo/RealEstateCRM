@@ -30,7 +30,7 @@ const AddImage = (props) => {
             resetForm();
         },
     });
-    const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
+    const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm, dirty } = formik
 
     const AddData = async () => {
         try {
@@ -90,7 +90,7 @@ const AddImage = (props) => {
                     </Grid>
                 </ModalBody>
                 <ModalFooter>
-                    <Button me={2} variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} size='sm' >{isLoding ? <Spinner /> : 'Save'}</Button>
+                    <Button me={2} variant='brand' onClick={handleSubmit} disabled={isLoding || !dirty ? true : false} size='sm' >{isLoding ? <Spinner /> : 'Save'}</Button>
                     <Button variant="outline"
                         size='sm'
                         colorScheme="red" onClick={() => {

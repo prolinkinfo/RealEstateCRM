@@ -48,11 +48,11 @@ const Add = (props) => {
         validate: (values) => {
             const errors = {};
 
-            if (values?.validations && values.validations[0]?.require && !values.validations[0]?.message) {
-                errors.validations = errors.validations || [];
-                errors.validations[0] = errors.validations[0] || {};
-                errors.validations[0].message = 'Message is required';
-            }
+            // if (values?.validations && values.validations[0]?.require && !values.validations[0]?.message) {
+            //     errors.validations = errors.validations || [];
+            //     errors.validations[0] = errors.validations[0] || {};
+            //     errors.validations[0].message = 'Message is required';
+            // }
             if (values?.validations && values.validations[1]?.min && !values.validations[1]?.value) {
                 errors.validations = errors.validations || [];
                 errors.validations[1] = errors.validations[1] || {};
@@ -109,9 +109,9 @@ const Add = (props) => {
             <Modal onClose={onClose} isOpen={isOpen} isCentered size='2xl'>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Add </ModalHeader>
+                    <ModalHeader>Add Validation</ModalHeader>
                     <ModalCloseButton />
-                    <HSeparator />
+                    {/* <HSeparator /> */}
                     <ModalBody>
                         <>
                             <Grid templateColumns="repeat(12, 1fr)" gap={3}>
@@ -398,7 +398,7 @@ const Add = (props) => {
                         <Button sx={{
                             textTransform: "capitalize",
                         }} variant="outline"
-                            colorScheme="red" size="sm" onClick={onClose}>Close</Button>
+                            colorScheme="red" size="sm" onClick={() => { onClose(); resetForm() }}>Close</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
