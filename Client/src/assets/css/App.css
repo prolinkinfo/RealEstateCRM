@@ -83,7 +83,7 @@ option {
   background: #ffffff;
 }
 
-.dataNotFound-img {
+/* .dataNotFound-img {
   background-image: url('../img/nodatafound1.png');
   background-size: contain;
   background-position: center;
@@ -91,7 +91,7 @@ option {
   width: 100%;
   height: 112px;
   padding: 0;
-}
+} */
 
 .importTable {
   min-height: auto;

@@ -1,5 +1,5 @@
 import { Image, Box } from '@chakra-ui/react'
-import dataImage from '../../assets/img/nodatafound1.png'
+// import dataImage from '../../assets/img/nodatafound1.png'
 import React from 'react'
 
 const DataNotFound = () => {
