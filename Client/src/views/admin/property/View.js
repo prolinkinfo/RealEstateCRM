@@ -17,6 +17,12 @@ import { HasAccess } from "../../../redux/accessUtils";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
 import DataNotFound from "components/notFoundData";
 import xlsx from '../../../assets/img/fileImage/xlsx.png'
+import jpg from '../../../assets/img/fileImage/jpg.png'
+import png from '../../../assets/img/fileImage/png.png'
+import pdf from '../../../assets/img/fileImage/pdf.png'
+import xls from '../../../assets/img/fileImage/xls.png'
+import csv from '../../../assets/img/fileImage/csv.png'
+import file from '../../../assets/img/fileImage/file.png'
 
 const View = () => {
 
@@ -510,26 +516,32 @@ const View = () => {
                                                         <HSeparator />
                                                     </Box>
                                                 </GridItem>
-                                                <GridItem colSpan={{ base: 12 }} >
-                                                    <Flex flexWrap={'wrap'} justifyContent={'center'} alingItem={'center'} >
-                                                        {data?.propertyDocuments?.length > 0 ?
-                                                            data && data?.propertyDocuments?.length > 0 && data?.propertyDocuments?.map((item) => {
-                                                                const parts = item.filename.split('.');
-                                                                const lastIndex = parts[parts.length - 1]
-                                                                return (
-                                                                    <Flex alignItems='center'>
-                                                                        {lastIndex === 'xlsx' && <Image src={xlsx} boxSize='50px' />}
-                                                                        <Text color='green.400' onClick={() => window.open(item?.img)} cursor={'pointer'} sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>
-                                                                            {item.filename}
-                                                                        </Text>
-                                                                    </Flex>
-                                                                )
-                                                            }
-                                                            ) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                                                                <DataNotFound />
-                                                            </Text>}
-                                                    </Flex>
-                                                </GridItem>
+                                                {/* <Flex flexWrap={'wrap'} alingItem={'center'} > */}
+                                                {data?.propertyDocuments?.length > 0 ?
+                                                    data && data?.propertyDocuments?.length > 0 && data?.propertyDocuments?.map((item) => {
+                                                        const parts = item.filename.split('.');
+                                                        const lastIndex = parts[parts.length - 1]
+                                                        return (
+                                                            <GridItem colSpan={12} >
+                                                                <Flex alignItems={'center'}>
+                                                                    {lastIndex === 'xlsx' && <Image src={xlsx} boxSize='50px' />}
+                                                                    {lastIndex === 'jpg' && <Image src={jpg} boxSize='50px' />}
+                                                                    {lastIndex === 'png' && <Image src={png} boxSize='50px' />}
+                                                                    {lastIndex === 'pdf' && <Image src={pdf} boxSize='50px' />}
+                                                                    {lastIndex === 'xls' && <Image src={xls} boxSize='50px' />}
+                                                                    {lastIndex === 'csv' && <Image src={csv} boxSize='50px' />}
+                                                                    {!(lastIndex === 'xls' || lastIndex === 'csv' || lastIndex === 'png' || lastIndex === 'pdf' || lastIndex === 'xlsx' || lastIndex === 'jpg') && <Image src={file} boxSize='50px' />}
+                                                                    <Text ml={2} color='green.400' onClick={() => window.open(item?.img)} cursor={'pointer'} sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>
+                                                                        {item.filename}
+                                                                    </Text>
+                                                                </Flex>
+                                                            </GridItem>
+                                                        )
+                                                    }
+                                                    ) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                                                        <DataNotFound />
+                                                    </Text>}
+                                                {/* </Flex> */}
                                             </Grid>
                                         </Card>
                                     </GridItem>
