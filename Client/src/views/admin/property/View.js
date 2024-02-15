@@ -516,7 +516,6 @@ const View = () => {
                                                             data && data?.propertyDocuments?.length > 0 && data?.propertyDocuments?.map((item) => {
                                                                 const parts = item.filename.split('.');
                                                                 const lastIndex = parts[parts.length - 1]
-                                                                console.log(lastIndex)
                                                                 return (
                                                                     <Flex alignItems='center'>
                                                                         {lastIndex === 'xlsx' && <Image src={xlsx} boxSize='50px' />}
