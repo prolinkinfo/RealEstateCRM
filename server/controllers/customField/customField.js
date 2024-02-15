@@ -465,4 +465,73 @@ const deleteManyHeadings = async (req, res) => {
     }
 };
 
-module.exports = { index, add, editWholeFieldsArray, editSingleField, view, deleteField, deleteManyFields, createNewModule, addHeading, editSingleHeading, editWholeHeadingsArray, deleteHeading, deleteManyHeadings };
+const changeIsTableField = async (req, res) => {
+    try {
+        const moduleId = new mongoose.Types.ObjectId(req.body?.moduleId);
+        const fieldId = new mongoose.Types.ObjectId(req.params?.id);
+
+        const { isTableField } = req.body;
+
+        let result = await CustomField.findOneAndUpdate(
+            { _id: moduleId, 'fields._id': fieldId },
+            { $set: { 'fields.$.isTableField': isTableField } },
+            { new: true }
+        );
+
+        if (!result) {
+            return res.status(404).json({ success: false, message: 'Field not found' });
+        }
+
+        const successMessage = isTableField
+            ? 'Field will now be included in the table.'
+            : 'Field will no longer be included in the table.';
+
+        return res.status(200).json({ success: true, message: successMessage, result });
+
+    } catch (err) {
+        console.error('Failed to change table field status:', err);
+        return res.status(400).json({ message: 'Failed to change table field status : ', error: err.toString() });
+    }
+};
+
+const changeIsTableFields = async (req, res) => {
+    try {
+        const moduleId = new mongoose.Types.ObjectId(req.body?.moduleId);
+        const updates = req.body?.updates;
+
+        if (!updates || !Array.isArray(updates)) {
+            return res.status(400).json({ success: false, message: `Invalid 'updates' format` });
+        }
+
+        // Create an array of update operations for each field
+        const updateOperations = updates.map(({ fieldId, isTableField }) => ({
+            updateOne: {
+                filter: { _id: moduleId, 'fields._id': new mongoose.Types.ObjectId(fieldId.slice(1)) },
+                update: { $set: { 'fields.$[field].isTableField': isTableField } },
+                arrayFilters: [{ 'field._id': new mongoose.Types.ObjectId(fieldId.slice(1)) }],
+            },
+        }));
+
+        // Update all fields in a single bulk operation
+        let updateResult = await CustomField.bulkWrite(updateOperations);
+
+        if (!updateResult) {
+            return res.status(404).json({ success: false, message: 'Fields not found' });
+        }
+
+        if (updateResult.matchedCount > 0 && updateResult.modifiedCount > 0) {
+            return res.status(200).json({ success: true, message: 'Updated successfully', updateResult });
+        }
+        else if (updateResult?.matchedCount > 0 && updateResult?.modifiedCount === 0) {
+            return res.status(200).json({ success: true, message: "No changes made, already up-to-date" });
+        } else {
+            return res.status(400).json({ success: true, message: 'Failed to update', updateResult });
+        }
+
+    } catch (err) {
+        console.error('Failed to change table fields :', err);
+        return res.status(400).json({ message: 'Failed to change ', error: err.toString() });
+    }
+};
+
+module.exports = { index, add, editWholeFieldsArray, editSingleField, view, deleteField, deleteManyFields, createNewModule, addHeading, editSingleHeading, editWholeHeadingsArray, deleteHeading, deleteManyHeadings, changeIsTableField, changeIsTableFields };

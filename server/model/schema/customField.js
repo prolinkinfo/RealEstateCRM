@@ -70,6 +70,10 @@ const fieldsSchema = new mongoose.Schema({
         default: 'Mixed',
         required: true
     },
+    isTableField: {
+        type: Boolean,
+        default: false
+    },
     // options: [radioSelctboxSchema],
     options: {
         type: [radioSelctboxSchema],

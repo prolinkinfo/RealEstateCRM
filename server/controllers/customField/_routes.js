@@ -17,5 +17,7 @@ router.put('/change-headings/:id', auth, customField.editWholeHeadingsArray);
 router.put('/change-single-heading/:id', auth, customField.editSingleHeading);
 router.delete('/delete-heading/:id', auth, customField.deleteHeading);
 router.post('/deleteMany-headings', auth, customField.deleteManyHeadings);
+router.put('/change-table-field/:id', auth, customField.changeIsTableField);
+router.put('/change-table-fields', auth, customField.changeIsTableFields);
 
 module.exports = router;
