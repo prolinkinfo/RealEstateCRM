@@ -293,7 +293,7 @@ const routes = [
   {
     name: "Table Fields",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-    path: "/table-Field",
+    path: "/table-field",
     under: "tableField",
     icon: <Icon as={FaWpforms} width='20px' height='20px' color='inherit' />,
     component: TableField,
