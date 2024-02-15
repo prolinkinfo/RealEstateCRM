@@ -40,6 +40,10 @@ const CustomField = () => {
     const [heading, setHeading] = useState('');
     const [draggedData, setDraggedData] = useState([]);
 
+    const [selectedId, setSelectedId] = useState('')
+    const [validations, setValidations] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
+
     const handleHeadigsCheckboxChange = (event, value) => {
         if (event.target.checked) {
             setSelectedHeadings((prevSelectedHeadings) => [...prevSelectedHeadings, value]);
@@ -64,9 +68,6 @@ const CustomField = () => {
         fetchData();
     };
 
-    const [selectedId, setSelectedId] = useState('')
-    const [validations, setValidations] = useState([])
-    const [isLoading, setIsLoading] = useState(false)
     const textColor = useColorModeValue("gray.500", "white");
 
     const getValidationData = async () => {
@@ -76,7 +77,7 @@ const CustomField = () => {
 
     useEffect(() => {
         getValidationData()
-    }, [])
+    }, [moduleName])
 
     const navigate = useNavigate()
 
@@ -294,7 +295,7 @@ const CustomField = () => {
                 }
             </Card>}
 
-            <Addfield isOpen={addFieldModel} onClose={setAddFieldModel} moduleName={moduleName} field={data[0]?.fields} moduleId={data[0]?._id} fetchData={fetchData} headingsData={data?.[0]?.headings} />
+            <Addfield isOpen={addFieldModel} onClose={setAddFieldModel} moduleName={moduleName} field={data[0]?.fields} validations={validations} moduleId={data[0]?._id} fetchData={fetchData} headingsData={data?.[0]?.headings} />
             <EditField isOpen={editModal} onClose={setEditModal} field={data[0]?.fields} moduleId={data[0]?._id} fetchData={fetchData} updateFiled={updateField} headingsData={data?.[0]?.headings} />
             <DeleteFiled method='one' isOpen={deleteModal} onClose={setDeleteModal} moduleName={moduleName} moduleId={data[0]?._id} selectedId={selectedId} fetchData={fetchData} updateFiled={updateField} />
             <DeleteFiled method='many' isOpen={deleteMany} onClose={setDeleteMany} url={'api/custom-field/deleteMany'} moduleName={moduleName} moduleId={data[0]?._id} selectedId={selectedId} fetchData={fetchData} updateFiled={updateField} setSelectedValues={setSelectedValues} data={selectedValues} />
