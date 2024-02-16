@@ -118,31 +118,44 @@ const Index = () => {
                     </Box>
                 </Flex>
 
-                {isLoading && moduleName ? <Flex justifyContent={'center'} alignItems={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                    <Spinner />
-                </Flex> :
+                {isLoading ?
+                    <Flex justifyContent={'center'} alignItems={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                        <Spinner />
+                    </Flex> :
                     <>
-                        <Grid templateColumns="repeat(12, 1fr)" gap={3} mt={5}>
-                            {fields && fields?.map((item, i) => (
-                                <GridItem colSpan={{ base: 12, md: 6 }} key={item._id}>
-                                    <Flex
-                                        alignItems="center"
-                                        justifyContent="space-between"
-                                        className="CustomFieldName"
-                                    >
-                                        <Text display='flex' alignItems='center' size='sm' colorScheme='gray' ms='4px' mt={4} fontSize='md' fontWeight='500' mb='8px' >
-                                            <Checkbox colorScheme="brandScheme" value={item?.isTableField} isChecked={item?.isTableField} onChange={(event) => handleCheckboxChange(event, item?._id)} me="10px" />
-                                            {item?.label}
-                                        </Text>
-                                    </Flex>
-                                </GridItem>
-                            ))}
-                        </Grid>
-                        <Flex Flex justifyContent={'end'} mt='5' >
-                            {Object.keys(selectedFields)?.length > 0 && <Button colorScheme="brand" mr={2} onClick={() => handleUpdateTableFields()} size='sm'>Update</Button>}
-                        </Flex>
+                        {
+                            moduleName ?
+                                <> <Grid templateColumns="repeat(12, 1fr)" gap={3} mt={5}>
+                                    {fields && fields?.map((item, i) => (
+                                        <GridItem colSpan={{ base: 12, md: 6 }} key={item._id}>
+                                            <Flex
+                                                alignItems="center"
+                                                justifyContent="space-between"
+                                                className="CustomFieldName"
+                                            >
+                                                <Text display='flex' alignItems='center' size='sm' colorScheme='gray' ms='4px' mt={4} fontSize='md' fontWeight='500' mb='8px' >
+                                                    <Checkbox colorScheme="brandScheme" value={item?.isTableField} isChecked={item?.isTableField} onChange={(event) => handleCheckboxChange(event, item?._id)} me="10px" />
+                                                    {item?.label}
+                                                </Text>
+                                            </Flex>
+                                        </GridItem>
+                                    ))}
+                                </Grid>
+                                    <Flex Flex justifyContent={'end'} mt='5' >
+                                        {Object.keys(selectedFields)?.length > 0 && <Button colorScheme="brand" mr={2} onClick={() => handleUpdateTableFields()} size='sm'>Update</Button>}
+                                    </Flex></>
+                                : <Text
+                                    textAlign={"center"}
+                                    width="100%"
+                                    color={'gray.500'}
+                                    fontSize="sm"
+                                    my='7'
+                                    fontWeight="700"
+                                >-- Please Select Module --</Text>
+                        }
                     </>
                 }
+
             </Card>
         </>
     )
