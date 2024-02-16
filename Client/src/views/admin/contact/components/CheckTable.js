@@ -165,7 +165,7 @@ export default function CheckTable(props) {
     title: yup.string(),
     firstName: yup.string(),
     email: yup.string().email("Lead Email is invalid"),
-    phoneNumber: yup.number().typeError('Enter Number').min(0, 'Lead Phone Number is invalid').max(999999999999, 'Lead Phone Number is invalid').notRequired(),
+    phoneNumber: yup.number().typeError('Enter Number').min(0, 'Contact Phone Number is invalid').max(999999999999, 'Contact Phone Number is invalid').notRequired(),
     lastName: yup.string(),
     preferredContactMethod: yup.string(),
 
