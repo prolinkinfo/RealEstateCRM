@@ -235,6 +235,7 @@ export default function User(props) {
                                     secondary={getActiveNavbar(routes)}
                                     message={getActiveNavbarText(routes)}
                                     fixed={fixed}
+                                    routes={routes}
                                     under={under(routes)}
                                     largeLogo={largeLogo}
                                     openSidebar={openSidebar} setOpenSidebar={setOpenSidebar}

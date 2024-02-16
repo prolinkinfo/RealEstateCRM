@@ -91,7 +91,7 @@ const routes = [
     component: Lead,
   },
   {
-    name: "Lead View",
+    name: "Lead",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     under: "lead",
     parentName: "Lead",
@@ -115,7 +115,7 @@ const routes = [
     component: Contact,
   },
   {
-    name: "Contact View",
+    name: "Contacts",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     under: "contacts",
     parentName: "Contacts",
@@ -140,7 +140,7 @@ const routes = [
     component: Property,
   },
   {
-    name: "Property View",
+    name: "Property ",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     parentName: "Property",
     under: "properties",
@@ -184,7 +184,7 @@ const routes = [
     component: Task,
   },
   {
-    name: "Task View",
+    name: "Task ",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     under: "task",
     parentName: "Task",
@@ -200,7 +200,7 @@ const routes = [
     component: Meeting,
   },
   {
-    name: "Meeting View",
+    name: "Meeting ",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     under: "metting",
     parentName: "Meeting",
@@ -216,7 +216,7 @@ const routes = [
     component: PhoneCall,
   },
   {
-    name: "Call View",
+    name: "Call ",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     under: "phone-call",
     parentName: "Call",
@@ -233,7 +233,7 @@ const routes = [
     component: EmailHistory,
   },
   {
-    name: "Email View",
+    name: "Email ",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     under: "email",
     parentName: "Email",

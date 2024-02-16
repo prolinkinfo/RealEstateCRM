@@ -11,7 +11,7 @@ import { getApi, postApi } from 'services/api';
 
 const AddTask = (props) => {
     const { onClose, isOpen, fetchData } = props
-    const [isChecked, setIsChecked] = useState(true);
+    const [isChecked, setIsChecked] = useState(false);
     const userId = JSON.parse(localStorage.getItem('user'))._id
     const [assignmentToData, setAssignmentToData] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"))
@@ -32,6 +32,7 @@ const AddTask = (props) => {
         backgroundColor: '',
         borderColor: '#ffffff',
         textColor: '',
+        allDay: isChecked === true ? 'Yes' : 'No',
         display: '',
         url: '',
         createBy: userId,
@@ -46,7 +47,7 @@ const AddTask = (props) => {
     });
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
-    console.log(props.leadContect)
+
     const AddData = async () => {
         try {
             setIsLoding(true)
@@ -156,7 +157,6 @@ const AddTask = (props) => {
                                             placeholder={'Assignment To'}
                                             borderColor={errors.assignmentTo && touched.assignmentTo ? "red.300" : null}
                                         >
-                                            {console.log(assignmentToData)}
                                             {assignmentToData?.map((item) => {
                                                 return <option value={item._id} key={item._id}>{values.category === 'Contact' && `${item.firstName} ${item.lastName}`}</option>
                                             })}
@@ -181,7 +181,7 @@ const AddTask = (props) => {
                                                 fontWeight='500'
                                                 placeholder={'Assignment To'}
                                                 borderColor={errors.assignmentToLead && touched.assignmentToLead ? "red.300" : null}
-                                            > {console.log(assignmentToData)}
+                                            >
                                                 {assignmentToData?.map((item) => {
                                                     return <option value={item._id} key={item._id}>{values.category === 'Lead' && item.leadName}</option>
                                                 })}

@@ -21,7 +21,6 @@ import { useEffect, useState } from "react";
 // Assets
 import { MdInfoOutline, MdNotificationsNone } from "react-icons/md";
 import { FaEthereum } from "react-icons/fa";
-import routes from "routes.js";
 import { Link, useNavigate } from "react-router-dom";
 import { getApi } from "services/api";
 import { toast } from "react-toastify";
@@ -31,7 +30,7 @@ import FixedPlugin from "components/fixedPlugin/FixedPlugin";
 import { useSelector } from "react-redux";
 
 export default function HeaderLinks(props) {
-	const { secondary, setOpenSidebar, openSidebar } = props;
+	const { secondary, setOpenSidebar, openSidebar, routes } = props;
 	// Chakra Color Mode
 	const navbarIcon = useColorModeValue("gray.400", "white");
 	let menuBg = useColorModeValue("white", "navy.800");

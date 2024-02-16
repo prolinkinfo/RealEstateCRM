@@ -444,6 +444,7 @@ const Addfield = (props) => {
                                 </GridItem>
                                 {(values.validate === true || values?.type === 'range') ?
                                     <>
+
                                         <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                             <Flex>
                                                 <Checkbox colorScheme="brandScheme" me="10px" isChecked={values?.validation[0]?.require}
@@ -475,7 +476,8 @@ const Addfield = (props) => {
                                                 fontWeight='500'
                                             />
                                         </GridItem>
-                                        {!(values?.type === 'radio' || values?.type === 'select') &&
+
+                                        {!(values?.type === 'radio' || values?.type === 'select' || values?.type === 'check') &&
                                             <>
                                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                                     <Flex>
@@ -498,14 +500,14 @@ const Addfield = (props) => {
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                                        Value{values.validation[1].min === true || values?.type === 'range' ? <Text color={"red"}>*</Text> : ''}
+                                                        Value{(values.validation[1].min === true || values?.type === 'range') ? <Text color={"red"}>*</Text> : ''}
                                                     </FormLabel>
                                                     <Input
                                                         disabled={(values.validation[1].min === true || values?.type === 'range') ? false : true}
                                                         fontSize='sm'
-                                                        type='number'
+                                                        type={values?.type === 'date' ? 'date' : 'number'}
                                                         onChange={handleChange} onBlur={handleBlur}
-                                                        value={values.validation[1].min === true || values?.type === 'range' ? values.validation[1].value : ''}
+                                                        value={(values.validation[1].min === true || values?.type === 'range') ? values.validation[1].value : ''}
                                                         name={`validation[${1}].value`}
                                                         placeholder='Enter Min Value'
                                                         fontWeight='500'
@@ -529,7 +531,7 @@ const Addfield = (props) => {
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                                     <Flex>
-                                                        <Checkbox colorScheme="brandScheme" me="10px" isChecked={values?.validation[2].max || values?.type === 'range' ? true : false} name={`validation[${2}].max`} onChange={(e) => {
+                                                        <Checkbox colorScheme="brandScheme" me="10px" isChecked={(values?.validation[2].max || values?.type === 'range') ? true : false} name={`validation[${2}].max`} onChange={(e) => {
                                                             const isChecked = e.target.checked;
                                                             setFieldValue(`validation[${2}].max`, isChecked);
                                                             setFieldValue(
@@ -548,30 +550,30 @@ const Addfield = (props) => {
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                                        Value{values.validation[2].max === true || values?.type === 'range' ? <Text color={"red"}>*</Text> : ''}
+                                                        Value{(values.validation[2].max === true || values?.type === 'range') ? <Text color={"red"}>*</Text> : ''}
                                                     </FormLabel>
                                                     <Input
-                                                        disabled={values.validation[2].max === true || values?.type === 'range' ? false : true}
+                                                        disabled={(values.validation[2].max === true || values?.type === 'range') ? false : true}
                                                         fontSize='sm'
-                                                        type='number'
+                                                        type={values?.type === 'date' ? 'date' : 'number'}
                                                         onChange={handleChange} onBlur={handleBlur}
-                                                        value={values.validation[2].max === true || values?.type === 'range' ? values.validation[2].value : ''}
+                                                        value={(values.validation[2].max === true || values?.type === 'range') ? values.validation[2].value : ''}
                                                         name={`validation[${2}].value`}
                                                         placeholder='Enter Max Value'
                                                         fontWeight='500'
-                                                        borderColor={values.validation[2].max === true || values?.type === 'range' && errors?.validation && touched?.validation && errors?.validation[2]?.value && touched?.validation[2]?.value ? "red.300" : null}
+                                                        borderColor={(values.validation[2].max === true || values?.type === 'range') && errors?.validation && touched?.validation && errors?.validation[2]?.value && touched?.validation[2]?.value ? "red.300" : null}
                                                     />
-                                                    {values.validation[2].max === true || values?.type === 'range' && <Text mb='10px' color={'red'}> {errors?.validation && touched?.validation && touched?.validation[2]?.value && errors?.validation[2]?.value}</Text>}
+                                                    {(values.validation[2].max === true || values?.type === 'range') && <Text mb='10px' color={'red'}> {errors?.validation && touched?.validation && touched?.validation[2]?.value && errors?.validation[2]?.value}</Text>}
                                                 </GridItem>
                                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                                         Message
                                                     </FormLabel>
                                                     <Input
-                                                        disabled={values.validation[2].max === true || values?.type === 'range' ? false : true}
+                                                        disabled={(values.validation[2].max === true || values?.type === 'range') ? false : true}
                                                         fontSize='sm'
                                                         onChange={handleChange} onBlur={handleBlur}
-                                                        value={values.validation[2].max === true || values?.type === 'range' ? values.validation[2].massage : ''}
+                                                        value={(values.validation[2].max === true || values?.type === 'range') ? values.validation[2].massage : ''}
                                                         name={`validation[${2}].message`}
                                                         placeholder='Enter Max Message'
                                                         fontWeight='500'

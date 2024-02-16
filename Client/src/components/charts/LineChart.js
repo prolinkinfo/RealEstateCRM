@@ -51,7 +51,7 @@ const ApexChart = (props) => {
   };
   return (
     <div id="chart">
-      <ReactApexChart options={state.options} series={state.series} type="bar" height={300} />
+      <ReactApexChart options={state.options} series={state.series} type="bar" height={350}  />
     </div>
   );
 };
