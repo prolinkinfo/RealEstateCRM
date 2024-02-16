@@ -1,9 +1,17 @@
 const mongoose = require("mongoose");
 const CustomField = require("../../model/schema/customField");
 
+async function getNextAutoIncrementValue() {
+    const no = await CustomField.countDocuments({});
+    return no + 1;
+}
+
 const index = async (req, res) => {
     try {
         const result = await CustomField.find(req.query);
+        result.sort((a, b) => {
+            return a.no - b.no;
+        });
         return res.send(result);
     } catch (err) {
         console.error('Failed', err);
@@ -329,8 +337,9 @@ const createNewModule = async (req, res) => {
         if (existingModule) {
             return res.status(400).json({ success: false, message: `Module name already exist` });
         }
+        const nextAutoIncrementValue = await getNextAutoIncrementValue();
 
-        const newModule = new CustomField({ moduleName, fields: req.body.fields || [], headings: req.body.headings || [] });
+        const newModule = new CustomField({ moduleName, fields: req.body.fields || [], headings: req.body.headings || [], no: nextAutoIncrementValue });
         await newModule.save();
 
         return res.status(200).json({ message: "Module added successfully", data: newModule });
