@@ -22,8 +22,8 @@ const AddMeeting = (props) => {
 
     const initialValues = {
         agenda: '',
-        attendes: [props.leadContect === 'contactView' && props.id ? props.id : ''],
-        attendesLead: [props.leadContect === 'leadView' && props.id ? props.id : ''],
+        attendes: props.leadContect === 'contactView' && props.id ? [props.id] : [],
+        attendesLead: props.leadContect === 'leadView' && props.id ? [props.id] : [],
         location: '',
         related: props.leadContect === 'contactView' ? 'Contact' : props.leadContect === 'leadView' ? 'Lead' : 'None',
         dateTime: '',
@@ -88,12 +88,12 @@ const AddMeeting = (props) => {
     }));
 
     return (
-        <Modal onClose={onClose} isOpen={isOpen} >
+        <Modal onClose={onClose} isOpen={isOpen} isCentered>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent height={"580px"}>
                 <ModalHeader>Add Meeting </ModalHeader>
                 <ModalCloseButton />
-                <ModalBody>
+                <ModalBody overflowY={"auto"} height={"400px"}>
                     {/* Contact Model  */}
                     <MultiContactModel isOpen={contactModelOpen} onClose={setContactModel} fieldName='attendes' setFieldValue={setFieldValue} />
                     {/* Lead Model  */}

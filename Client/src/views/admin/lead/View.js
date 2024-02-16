@@ -96,7 +96,7 @@ const View = () => {
     const taskColumns = [
         { Header: 'Title', accessor: 'title' },
         { Header: "Category", accessor: "category", },
-        { Header: "Assignment To", accessor: "assignmentToName", },
+        { Header: "Assign To", accessor: "assignmentToName", },
         { Header: "Start Date", accessor: "start", },
         { Header: "End Date", accessor: "end", },
     ];
