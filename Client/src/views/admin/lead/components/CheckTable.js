@@ -323,7 +323,7 @@ export default function CheckTable(props) {
       case 'sold':
         return 'onHold';
       default:
-        return '';
+        return 'completed';
     }
   }
 
@@ -538,7 +538,7 @@ export default function CheckTable(props) {
                         } else if (cell?.column.Header === "Status") {
                           data = (
                             <div className="selectOpt">
-                              <Select className={changeStatus(cell)} onChange={(e) => setStatusData(cell, e)} height={7} width={130} value={cell?.value} style={{ fontSize: "14px" }}>
+                              <Select defaultValue={'active'} className={changeStatus(cell)} onChange={(e) => setStatusData(cell, e)} height={7} width={130} value={cell?.value} style={{ fontSize: "14px" }}>
                                 <option value='active'>Active</option>
                                 <option value='sold'>Sold</option>
                                 <option value='pending'>Pending</option>

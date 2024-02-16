@@ -5,6 +5,12 @@ const { initializeLeadSchema } = require("../model/schema/lead");
 const { initializeContactSchema } = require("../model/schema/contact");
 const { initializePropertySchema } = require("../model/schema/property");
 
+const initializedSchemas = async () => {
+    await initializeLeadSchema();
+    await initializeContactSchema();
+    await initializePropertySchema();
+}
+
 const connectDB = async (DATABASE_URL, DATABASE) => {
     try {
         const DB_OPTIONS = {
@@ -14,9 +20,7 @@ const connectDB = async (DATABASE_URL, DATABASE) => {
         mongoose.set("strictQuery", false);
         await mongoose.connect(DATABASE_URL, DB_OPTIONS);
 
-        await initializeLeadSchema();
-        await initializeContactSchema();
-        await initializePropertySchema();
+        await initializedSchemas();
 
         let adminExisting = await User.find({ role: 'superAdmin' });
         if (adminExisting.length <= 0) {
