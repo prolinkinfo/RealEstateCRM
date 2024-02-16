@@ -62,7 +62,7 @@ const index = async (req, res) => {
 
 const add = async (req, res) => {
     try {
-        const { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy, assignmentTo, assignmentToLead } = req.body;
+        const { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, allDay, createBy, assignmentTo, assignmentToLead } = req.body;
         // Check if assignmentTo is a valid ObjectId if provided and not empty
         if (assignmentTo && !mongoose.Types.ObjectId.isValid(assignmentTo)) {
             res.status(400).json({ error: 'Invalid assignmentTo value' });
@@ -70,7 +70,7 @@ const add = async (req, res) => {
         if (assignmentToLead && !mongoose.Types.ObjectId.isValid(assignmentToLead)) {
             res.status(400).json({ error: 'Invalid assignmentToLead value' });
         }
-        const taskData = { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy, createdDate: new Date() };
+        const taskData = { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy,allDay, createdDate: new Date() };
 
         if (assignmentTo) {
             taskData.assignmentTo = assignmentTo;
