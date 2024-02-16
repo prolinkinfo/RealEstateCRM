@@ -47,7 +47,7 @@ const Index = () => {
                 />
                 <MiniStatistics
                     fontsize="md"
-                    onClick={() => navigate("/change-image")}
+                    onClick={() => navigate("/change-images")}
                     startContent={
                         <IconBox
                             w="56px"
@@ -61,7 +61,7 @@ const Index = () => {
                 />
                 <MiniStatistics
                     fontsize="md"
-                    onClick={() => navigate("/custom-Field")}
+                    onClick={() => navigate("/custom-Fields")}
                     startContent={
                         <IconBox
                             w="56px"
@@ -71,11 +71,11 @@ const Index = () => {
                         />
 
                     }
-                    name="Add Custom Fields"
+                    name="Custom Fields"
                 />
                 <MiniStatistics
                     fontsize="md"
-                    onClick={() => navigate("/validation")}
+                    onClick={() => navigate("/validations")}
                     startContent={
                         <IconBox
                             w="56px"
