@@ -70,8 +70,6 @@ const AddImage = (props) => {
         }
     };
 
-    console.log(values)
-
     return (
         <Modal onClose={() => setImageModal(false)} size={"xl"} isOpen={imageModal} isCentered={useBreakpointValue({ base: false, md: true })}>
             <ModalOverlay />

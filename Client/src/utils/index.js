@@ -16,7 +16,6 @@ import * as yup from 'yup'
 //                 const data = new RegExp(rule.value)
 //                 const fieldAcc1 = data.test(rule.value);
 
-//                 console.log(fieldAcc1)
 //                 // fieldAcc = fieldAcc.matches(data, rule.message);
 //                 if (!fieldAcc1) {
 //                     // If the string doesn't match the regular expression, handle the error or validation failure
