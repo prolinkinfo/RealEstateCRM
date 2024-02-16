@@ -42,6 +42,9 @@ const Index = () => {
     useEffect(() => {
         setColumns(tableColumns)
     }, [action])
+
+    const dataColumn = dynamicColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
+
     return (
         <div>
 
@@ -57,6 +60,7 @@ const Index = () => {
                 displaySearchData={displaySearchData}
                 tableData={displaySearchData ? searchedData : data}
                 fetchData={fetchData}
+                dataColumn={dataColumn}
                 setDisplaySearchData={setDisplaySearchData}
                 setDynamicColumns={setDynamicColumns}
                 dynamicColumns={dynamicColumns}

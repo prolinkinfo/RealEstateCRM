@@ -70,6 +70,8 @@ const AddImage = (props) => {
         }
     };
 
+    console.log(values)
+
     return (
         <Modal onClose={() => setImageModal(false)} size={"xl"} isOpen={imageModal} isCentered={useBreakpointValue({ base: false, md: true })}>
             <ModalOverlay />
@@ -89,8 +91,9 @@ const AddImage = (props) => {
                         </GridItem>
                     </Grid>
                 </ModalBody>
+                {console.log(values?.authImg && values?.logoSmImg && values?.logoLgImg)}
                 <ModalFooter>
-                    <Button me={2} variant='brand' onClick={handleSubmit} disabled={isLoding || !dirty ? true : false} size='sm' >{isLoding ? <Spinner /> : 'Save'}</Button>
+                    <Button me={2} variant='brand' onClick={handleSubmit} disabled={isLoding || !(values?.authImg && values?.logoSmImg && values?.logoLgImg) ? true : false} size='sm' >{isLoding ? <Spinner /> : 'Save'}</Button>
                     <Button variant="outline"
                         size='sm'
                         colorScheme="red" onClick={() => {
