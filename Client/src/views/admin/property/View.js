@@ -39,7 +39,7 @@ const View = () => {
     const [action, setAction] = useState(false)
     const [propertyPhoto, setPropertyPhoto] = useState(false);
     const [propertyData, setPropertyData] = useState([]);
-
+    const [showProperty, setShowProperty] = useState(false);
     const [virtualToursorVideos, setVirtualToursorVideos] = useState(false);
     const [floorPlans, setFloorPlans] = useState(false);
     const [propertyDocuments, setPropertyDocuments] = useState(false);
@@ -461,10 +461,7 @@ const View = () => {
                                                             </Text>}
 
                                                     </Flex>
-                                                    {data?.virtualToursOrVideos?.length > 0 ?
-                                                        <Flex justifyContent={"end"} mt={1}>
-                                                            <Button size="sm" colorScheme="brand" variant="outline" onClick={() => { setDisplayPropertyPhoto(true); setType("video") }}>Show more</Button>
-                                                        </Flex> : ""}
+
                                                 </GridItem>
                                             </Grid>
                                         </Card>
@@ -502,7 +499,7 @@ const View = () => {
                                         </Card>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12, md: 6 }}>
-                                        <Card >
+                                        <Card  >
                                             <Grid templateColumns="repeat(12, 1fr)" gap={4}>
                                                 <GridItem colSpan={12}>
                                                     <Box>
@@ -517,7 +514,7 @@ const View = () => {
                                                     </Box>
                                                 </GridItem>
                                                 {/* <Flex flexWrap={'wrap'} alingItem={'center'} > */}
-                                                <GridItem colSpan={12} >
+                                                <GridItem colSpan={12} sx={{ maxHeight: '200px', overflowX: 'auto' }}>
                                                     {data?.propertyDocuments?.length > 0 ?
                                                         (data && data?.propertyDocuments?.length > 0 && data?.propertyDocuments?.map((item) => {
                                                             const parts = item.filename.split('.');
@@ -545,9 +542,12 @@ const View = () => {
 
                                                 {/* </Flex> */}
                                             </Grid>
+                                            {data?.propertyDocuments?.length > 0 ?
+                                                <Flex justifyContent={"end"} mt={1}>
+                                                    <Button size="sm" colorScheme="brand" variant="outline" onClick={() => { setShowProperty(true); setType("Doucument"); }}>Show more</Button>
+                                                </Flex> : ""}
                                         </Card>
                                     </GridItem>
-
                                 </Grid>
                             </TabPanel>
                         </TabPanels>
@@ -601,6 +601,45 @@ const View = () => {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
+
+            {/* property document modal */}
+            <Modal onClose={() => setShowProperty(false)} isOpen={showProperty} >
+                <ModalOverlay />
+                <ModalContent maxWidth={"6xl"} height={"750px"}>
+                    <ModalHeader>Property All Document</ModalHeader>
+                    <ModalCloseButton onClick={() => setShowProperty(false)} />
+                    <ModalBody overflowY={"auto"} height={"700px"}>
+                        {data?.propertyDocuments?.length > 0 ?
+                            (data && data?.propertyDocuments?.length > 0 && data?.propertyDocuments?.map((item) => {
+                                const parts = item.filename.split('.');
+                                const lastIndex = parts[parts.length - 1]
+                                return (
+                                    <Flex alignItems={'center'} mt='3'>
+                                        {lastIndex === 'xlsx' && <Image src={xlsx} boxSize='50px' />}
+                                        {lastIndex === 'jpg' && <Image src={jpg} boxSize='50px' />}
+                                        {lastIndex === 'png' && <Image src={png} boxSize='50px' />}
+                                        {lastIndex === 'pdf' && <Image src={pdf} boxSize='50px' />}
+                                        {lastIndex === 'xls' && <Image src={xls} boxSize='50px' />}
+                                        {lastIndex === 'csv' && <Image src={csv} boxSize='50px' />}
+                                        {!(lastIndex === 'xls' || lastIndex === 'csv' || lastIndex === 'png' || lastIndex === 'pdf' || lastIndex === 'xlsx' || lastIndex === 'jpg') && <Image src={file} boxSize='50px' />}
+                                        <Text ml={2} color='green.400' onClick={() => window.open(item?.img)} cursor={'pointer'} sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>
+                                            {item.filename}
+                                        </Text>
+                                    </Flex>
+                                )
+                            }))
+                            :
+                            <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                                <DataNotFound />
+                            </Text>}
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button size="sm" variant="outline" colorScheme='red' mr={2} onClick={() =>
+                            setShowProperty(false)} >Close</Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+
         </>
     );
 };
