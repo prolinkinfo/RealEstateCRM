@@ -92,6 +92,7 @@ const AddEmailHistory = (props) => {
                                 onChange={handleChange} onBlur={handleBlur}
                                 value={values.recipient}
                                 name="recipient"
+                                disabled
                                 placeholder='Recipient'
                                 fontWeight='500'
                                 borderColor={errors.recipient && touched.recipient ? "red.300" : null}
@@ -115,7 +116,7 @@ const AddEmailHistory = (props) => {
                         </GridItem>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Start Date
+                                Start Date<Text color={"red"}>*</Text>
                             </FormLabel>
                             <Input
                                 type="datetime-local"
@@ -136,6 +137,7 @@ const AddEmailHistory = (props) => {
                             <Input
                                 type='datetime-local'
                                 fontSize='sm'
+                                min={values.startDate}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 value={values.endDate}
@@ -167,11 +169,15 @@ const AddEmailHistory = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' onClick={handleSubmit} rightIcon={<BsFillSendFill />} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Send'}</Button>
-                    <Button onClick={() => {
-                        formik.resetForm()
-                        onClose()
-                    }}>Close</Button>
+                    <Button size="sm" variant='brand' onClick={handleSubmit}  disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
+                    <Button sx={{
+                        marginLeft: 2,
+                        textTransform: "capitalize",
+                    }} variant="outline"
+                        colorScheme="red" size="sm" onClick={() => {
+                            formik.resetForm()
+                            onClose()
+                        }}>Close</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

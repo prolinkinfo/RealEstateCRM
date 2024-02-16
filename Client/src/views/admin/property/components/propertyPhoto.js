@@ -61,7 +61,7 @@ const PropertyPhoto = (props) => {
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Select {text} Images</ModalHeader>
+                <ModalHeader>Select {text} </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
@@ -72,8 +72,8 @@ const PropertyPhoto = (props) => {
                     </Grid>
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} rightIcon={<AddIcon />}>{isLoding ? <Spinner /> : 'Add'}</Button>
-                    <Button onClick={() => {
+                    <Button size="sm" variant='brand' onClick={handleSubmit} mr={1} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
+                    <Button size="sm" colorScheme="red" variant="outline" onClick={() => {
                         onClose()
                         formik.resetForm()
                     }}>Close</Button>

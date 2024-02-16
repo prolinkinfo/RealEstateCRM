@@ -14,7 +14,7 @@ option {
 }
 
 ::-webkit-scrollbar {
-  height: 0px !important;
+  height: 4px !important;
   width: 7px;
 }
 
@@ -52,8 +52,13 @@ option {
 
 .table-container-property {
   min-height: auto;
-  max-height: 80vh;
+  max-height: 68vh;
   overflow-y: auto;
+}
+
+.css-efk3t2 {
+  max-height: 15rem !important;
+  overflow-y: scroll !important;
 }
 
 .table-container-property thead {
@@ -64,16 +69,24 @@ option {
 }
 
 .table-fix-container {
-  min-height: auto;
-  max-height: 65vh;
+  min-height: 63vh;
+  max-height: 63vh;
   overflow-y: auto;
 }
 
 .table-fix-container thead {
+  border-bottom: 1px solid black;
+  box-shadow: -2px 0px 4px -2px #5c5d5efa;
   position: sticky;
   top: 0;
   height: 25px;
   background: #ffffff;
+}
+
+.importTable {
+  min-height: auto;
+  max-height: 82vh;
+  overflow-y: auto;
 }
 
 .tableData {
@@ -83,10 +96,22 @@ option {
 /* .leadRow td {
   border-bottom: 1px solid #e2e8f0;
 } */
+
+.datePickerBorder {
+  border: 1px solid #e2e8f0;
+  padding: 0 5px;
+  border-radius: 5px;
+  margin: 0 10px !important;
+}
+
 .imageCard {
   position: relative;
   overflow: hidden;
+  margin-right: 12px;
+  /* height: 200px;
+  width: 400px; */
 }
+
 
 .imageContent {
   content: "";
@@ -104,4 +129,46 @@ option {
 
 .imageCard:hover .imageContent {
   opacity: 1;
+}
+
+.EditDelete {
+  display: none;
+}
+
+.CustomFieldName {
+  border-bottom: 1px solid rgba(128, 128, 128, 0.705);
+}
+
+.CustomFieldName:hover .EditDelete {
+  display: block;
+}
+
+.pending {
+  background-color: #fbf4dd !important;
+  color: #a37f08 !important;
+  border: 1px solid #a37f08 !important;
+}
+
+.onHold {
+  background-color: #ffeeeb !important;
+  color: #DB5436 !important;
+  border: 1px solid #DB5436 !important;
+}
+
+.completed {
+  background-color: #eaf9e6 !important;
+  color: #4d8f3a !important;
+  border: 1px solid #4d8f3a !important;
+}
+
+.toDo {
+  background-color: #ebf5ff !important;
+  color: #1f7eeb !important;
+  border: 1px solid #1f7eeb !important;
+}
+
+.inProgress {
+  background-color: #eee7fc !important;
+  color: #7038db !important;
+  border: 1px solid #7038db !important;
 }

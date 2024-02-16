@@ -38,7 +38,7 @@ const documentSchema = new mongoose.Schema({
     file: [fileSchema],
     createBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
+        ref: 'User',
         required: true
     },
 });
@@ -46,4 +46,4 @@ const documentSchema = new mongoose.Schema({
 // Create the model for the main document
 
 
-module.exports = mongoose.model('document', documentSchema);
+module.exports = mongoose.model('Document', documentSchema, 'Document');

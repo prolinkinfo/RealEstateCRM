@@ -157,8 +157,8 @@ const Call = () => {
             </GridItem>
 
             <GridItem colSpan={{ base: 12 }} >
-                <Button variant='brand' disabled={isLoding ? true : false} onClick={handleSubmit} leftIcon={<BsFillTelephoneFill />}>{isLoding ? <Spinner /> : 'Call'}</Button>
-                <Button onClick={() => formik.resetForm()}>Clear</Button>
+                <Button variant='brand' disabled={isLoding ? true : false} size="sm" onClick={handleSubmit} leftIcon={<BsFillTelephoneFill />}>{isLoding ? <Spinner /> : 'Call'}</Button>
+                <Button onClick={() => formik.resetForm()} size="sm">Clear</Button>
             </GridItem>
 
         </Grid>

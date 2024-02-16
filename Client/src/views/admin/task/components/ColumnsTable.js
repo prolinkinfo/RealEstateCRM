@@ -2,6 +2,7 @@ import {
     Box,
     Button,
     Flex,
+    Heading,
     Table,
     Tbody,
     Td,
@@ -27,10 +28,11 @@ import Pagination from "components/pagination/Pagination";
 import { Link, useParams } from "react-router-dom";
 import EventView from "../eventView";
 import AddTask from "./addTask";
+import DataNotFound from "components/notFoundData";
 
 export default function ColumnsTable(props) {
     const { columnsData, tableData, title, fetchData, action, setAction, access } = props;
-
+    const buttonbg = useColorModeValue("gray.200", "white");
     const columns = useMemo(() => columnsData, [columnsData]);
     const data = useMemo(() => tableData, [tableData]);
     const [id, setId] = useState();
@@ -69,7 +71,7 @@ export default function ColumnsTable(props) {
         setGopageValue(pageOptions.length)
     }
 
-    const textColor = useColorModeValue("secondaryGray.900", "white");
+    const textColor = useColorModeValue("gray.500", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
     const param = useParams()
 
@@ -86,22 +88,18 @@ export default function ColumnsTable(props) {
     }, [pageOptions, gopageValue]);
 
     return (
-        <Card
+        <Box
             direction='column'
             w='100%'
             px='0px'
             style={{ border: '1px solid gray.200' }}
             overflowX={{ sm: "scroll", lg: "hidden" }}
         >
-            <Flex px='25px' justify='space-between' mb='10px' align='center'>
-                <Text
-                    color={textColor}
-                    fontSize='22px'
-                    fontWeight='700'
-                    lineHeight='100%'>
+            <Flex justify='space-between' mb='10px' align='center'>
+                <Heading size="md" mb={3}>
                     {title}  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
-                </Text>
-                <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>
+                </Heading>
+                <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" size="sm" bg={buttonbg}>Add New</Button>
                 <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="lead" id={param.id} />
             </Flex>
             <Box overflowY={'auto'} className="table-container p0" >
@@ -111,16 +109,20 @@ export default function ColumnsTable(props) {
                             <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
                                 {headerGroup.headers.map((column, index) => (
                                     <Th
-                                        {...column.getHeaderProps(column.getSortByToggleProps())}
-                                        pe='10px'
+                                        {...column.getHeaderProps(column.isSortable !== false && column.getSortByToggleProps())}
+                                        pe="10px"
                                         key={index}
-                                        borderColor={borderColor}>
+                                        borderColor={borderColor}
+                                    >
                                         <Flex
-                                            justify='space-between'
-                                            align='center'
-                                            fontSize={{ sm: "10px", lg: "12px" }}
-                                            color='gray.400'>
-                                            {column.render("Header")}
+                                            justifyContent={column.center ? "center" : "start"}
+                                            align="center"
+                                            fontSize={{ sm: "14px", lg: "16px" }}
+                                            color="secondaryGray.900"
+                                        >
+                                            <span style={{ textTransform: "capitalize", marginRight: "8px" }}>
+                                                {column.render("Header")}
+                                            </span>
                                         </Flex>
                                     </Th>
                                 ))}
@@ -133,7 +135,7 @@ export default function ColumnsTable(props) {
                             <Tr>
                                 <Td colSpan={columns?.length}>
                                     <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                                        -- No Data Found --
+                                        <DataNotFound />
                                     </Text>
                                 </Td>
                             </Tr>
@@ -199,6 +201,6 @@ export default function ColumnsTable(props) {
 
             {data?.length > 5 && <Pagination gotoPage={gotoPage} gopageValue={gopageValue} setGopageValue={setGopageValue} pageCount={pageCount} canPreviousPage={canPreviousPage} previousPage={previousPage} canNextPage={canNextPage} pageOptions={pageOptions} setPageSize={setPageSize} nextPage={nextPage} pageSize={pageSize} pageIndex={pageIndex} />}
 
-        </Card>
+        </Box>
     );
 }

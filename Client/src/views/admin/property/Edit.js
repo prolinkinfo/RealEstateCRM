@@ -7,58 +7,71 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { propertySchema } from 'schema';
 import { getApi, putApi } from 'services/api';
-const Edit = (props) => {
+import { generateValidationSchema } from 'utils';
+import CustomForm from 'utils/customForm';
+import * as yup from 'yup'
 
-    const initialValues = {
-        //1. basicPropertyInformation
-        propertyType: "",
-        propertyAddress: "",
-        listingPrice: "",
-        squareFootage: "",
-        numberofBedrooms: "",
-        numberofBathrooms: "",
-        yearBuilt: "",
-        propertyDescription: "",
-        //2. Property Features and Amenities
-        lotSize: "",
-        parkingAvailability: "",
-        appliancesIncluded: "",
-        heatingAndCoolingSystems: "",
-        flooringType: "",
-        exteriorFeatures: "",
-        communityAmenities: "",
-        //3. Media and Visuals
-        propertyPhotos: "",
-        virtualToursOrVideos: "",
-        floorPlans: "",
-        propertyDocuments: "",
-        //4. Listing and Marketing Details
-        listingStatus: "",
-        listingAgentOrTeam: "",
-        listingDate: "",
-        marketingDescription: "",
-        multipleListingService: "",
-        //5. Property History
-        previousOwners: "",
-        purchaseHistory: "",
-        //6. Financial Information
-        propertyTaxes: "",
-        homeownersAssociation: "",
-        mortgageInformation: "",
-        //7. Contacts Associated with Property
-        sellers: "",
-        buyers: "",
-        propertyManagers: "",
-        contractorsOrServiceProviders: "",
-        //8. Property Notes and Comments
-        internalNotesOrComments: "",
-        createBy: JSON.parse(localStorage.getItem('user'))._id,
-    };
+const Edit = (props) => {
+    const initialFieldValues = Object.fromEntries(
+        (props?.leadData?.fields || []).map(field => [field?.name, ''])
+    );
+    const [initialValues, setInitialValues] = useState({
+        ...initialFieldValues,
+        createBy: JSON.parse(localStorage.getItem('user'))._id
+    })
+
+    // const initialValues = {
+    //     //1. basicPropertyInformation
+    //     propertyType: "",
+    //     propertyAddress: "",
+    //     listingPrice: "",
+    //     squareFootage: "",
+    //     numberofBedrooms: "",
+    //     numberofBathrooms: "",
+    //     yearBuilt: "",
+    //     propertyDescription: "",
+    //     //2. Property Features and Amenities
+    //     lotSize: "",
+    //     parkingAvailability: "",
+    //     appliancesIncluded: "",
+    //     heatingAndCoolingSystems: "",
+    //     flooringType: "",
+    //     exteriorFeatures: "",
+    //     communityAmenities: "",
+    //     //3. Media and Visuals
+    //     propertyPhotos: "",
+    //     virtualToursOrVideos: "",
+    //     floorPlans: "",
+    //     propertyDocuments: "",
+    //     //4. Listing and Marketing Details
+    //     listingStatus: "",
+    //     listingAgentOrTeam: "",
+    //     listingDate: "",
+    //     marketingDescription: "",
+    //     multipleListingService: "",
+    //     //5. Property History
+    //     previousOwners: "",
+    //     purchaseHistory: "",
+    //     //6. Financial Information
+    //     propertyTaxes: "",
+    //     homeownersAssociation: "",
+    //     mortgageInformation: "",
+    //     //7. Contacts Associated with Property
+    //     sellers: "",
+    //     buyers: "",
+    //     propertyManagers: "",
+    //     contractorsOrServiceProviders: "",
+    //     //8. Property Notes and Comments
+    //     internalNotesOrComments: "",
+    //     createBy: JSON.parse(localStorage.getItem('user'))._id,
+    // };
     const param = useParams()
 
     const formik = useFormik({
         initialValues: initialValues,
-        validationSchema: propertySchema,
+        validationSchema: yup.object().shape(generateValidationSchema(props?.propertyData?.fields)),
+        enableReinitialize: true,
+        // validationSchema: propertySchema,
         onSubmit: (values, { resetForm }) => {
             EditData();
         },
@@ -95,49 +108,49 @@ const Edit = (props) => {
             try {
                 setIsLoding(true)
                 response = await getApi('api/property/view/', props?.selectedId ? props?.selectedId : param.id)
-
+                setInitialValues(response?.data?.property)
                 //1. basicPropertyInformation
-                values.propertyType = response?.data?.property?.propertyType;
-                values.propertyAddress = response?.data?.property?.propertyAddress;
-                values.listingPrice = response?.data?.property?.listingPrice;
-                values.squareFootage = response?.data?.property?.squareFootage;
-                values.numberofBedrooms = response?.data?.property?.numberofBedrooms;
-                values.numberofBathrooms = response?.data?.property?.numberofBathrooms;
-                values.yearBuilt = response?.data?.property?.yearBuilt;
-                values.propertyDescription = response?.data?.property?.propertyDescription;
-                //2. Property Features and Amenities
-                values.lotSize = response?.data?.property?.lotSize;
-                values.parkingAvailability = response?.data?.property?.parkingAvailability;
-                values.appliancesIncluded = response?.data?.property?.appliancesIncluded;
-                values.heatingAndCoolingSystems = response?.data?.property?.heatingAndCoolingSystems;
-                values.flooringType = response?.data?.property?.flooringType;
-                values.exteriorFeatures = response?.data?.property?.exteriorFeatures;
-                values.communityAmenities = response?.data?.property?.communityAmenities;
-                //3. Media and Visuals
-                values.propertyPhotos = response?.data?.property?.propertyPhotos;
-                values.virtualToursOrVideos = response?.data?.property?.virtualToursOrVideos;
-                values.floorPlans = response?.data?.property?.floorPlans;
-                values.propertyDocuments = response?.data?.property?.propertyDocuments;
-                //4. Listing and Marketing Details
-                values.listingStatus = response?.data?.property?.listingStatus;
-                values.listingAgentOrTeam = response?.data?.property?.listingAgentOrTeam;
-                values.listingDate = response?.data?.property?.listingDate;
-                values.marketingDescription = response?.data?.property?.marketingDescription;
-                values.multipleListingService = response?.data?.property?.multipleListingService;
-                //5. Property History
-                values.previousOwners = response?.data?.property?.previousOwners;
-                values.purchaseHistory = response?.data?.property?.purchaseHistory;
-                //6. Financial Information
-                values.propertyTaxes = response?.data?.property?.propertyTaxes;
-                values.homeownersAssociation = response?.data?.property?.homeownersAssociation;
-                values.mortgageInformation = response?.data?.property?.mortgageInformation;
-                //7. Contacts Associated with Property
-                values.sellers = response?.data?.property?.sellers;
-                values.buyers = response?.data?.property?.buyers;
-                values.propertyManagers = response?.data?.property?.propertyManagers;
-                values.contractorsOrServiceProviders = response?.data?.property?.contractorsOrServiceProviders;
-                //8. Property Notes and Comments
-                values.internalNotesOrComments = response?.data?.property?.internalNotesOrComments;
+                // values.propertyType = response?.data?.property?.propertyType;
+                // values.propertyAddress = response?.data?.property?.propertyAddress;
+                // values.listingPrice = response?.data?.property?.listingPrice;
+                // values.squareFootage = response?.data?.property?.squareFootage;
+                // values.numberofBedrooms = response?.data?.property?.numberofBedrooms;
+                // values.numberofBathrooms = response?.data?.property?.numberofBathrooms;
+                // values.yearBuilt = response?.data?.property?.yearBuilt;
+                // values.propertyDescription = response?.data?.property?.propertyDescription;
+                // //2. Property Features and Amenities
+                // values.lotSize = response?.data?.property?.lotSize;
+                // values.parkingAvailability = response?.data?.property?.parkingAvailability;
+                // values.appliancesIncluded = response?.data?.property?.appliancesIncluded;
+                // values.heatingAndCoolingSystems = response?.data?.property?.heatingAndCoolingSystems;
+                // values.flooringType = response?.data?.property?.flooringType;
+                // values.exteriorFeatures = response?.data?.property?.exteriorFeatures;
+                // values.communityAmenities = response?.data?.property?.communityAmenities;
+                // //3. Media and Visuals
+                // values.propertyPhotos = response?.data?.property?.propertyPhotos;
+                // values.virtualToursOrVideos = response?.data?.property?.virtualToursOrVideos;
+                // values.floorPlans = response?.data?.property?.floorPlans;
+                // values.propertyDocuments = response?.data?.property?.propertyDocuments;
+                // //4. Listing and Marketing Details
+                // values.listingStatus = response?.data?.property?.listingStatus;
+                // values.listingAgentOrTeam = response?.data?.property?.listingAgentOrTeam;
+                // values.listingDate = response?.data?.property?.listingDate;
+                // values.marketingDescription = response?.data?.property?.marketingDescription;
+                // values.multipleListingService = response?.data?.property?.multipleListingService;
+                // //5. Property History
+                // values.previousOwners = response?.data?.property?.previousOwners;
+                // values.purchaseHistory = response?.data?.property?.purchaseHistory;
+                // //6. Financial Information
+                // values.propertyTaxes = response?.data?.property?.propertyTaxes;
+                // values.homeownersAssociation = response?.data?.property?.homeownersAssociation;
+                // values.mortgageInformation = response?.data?.property?.mortgageInformation;
+                // //7. Contacts Associated with Property
+                // values.sellers = response?.data?.property?.sellers;
+                // values.buyers = response?.data?.property?.buyers;
+                // values.propertyManagers = response?.data?.property?.propertyManagers;
+                // values.contractorsOrServiceProviders = response?.data?.property?.contractorsOrServiceProviders;
+                // //8. Property Notes and Comments
+                // values.internalNotesOrComments = response?.data?.property?.internalNotesOrComments;
             } catch (e) {
                 console.error(e)
             } finally {
@@ -165,7 +178,13 @@ const Edit = (props) => {
                                 <Spinner />
                             </Flex>
                             :
-                            <Grid templateColumns="repeat(12, 1fr)" gap={3}>
+                            <CustomForm leadData={props.propertyData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
+
+
+                        }
+                    </DrawerBody>
+
+                    {/* <Grid templateColumns="repeat(12, 1fr)" gap={3}>
 
                                 <GridItem colSpan={{ base: 12 }}>
                                     <Heading as="h1" size="md" >
@@ -674,13 +693,9 @@ const Edit = (props) => {
                                 </GridItem>
 
 
-                            </Grid>
-                        }
-                    </DrawerBody>
-
-
+                            </Grid> */}
                     <DrawerFooter>
-                        <Button
+                        <Button size="sm"
                             sx={{ textTransform: "capitalize" }}
                             variant="solid"
                             colorScheme="green"
@@ -688,9 +703,9 @@ const Edit = (props) => {
                             type="submit"
                             onClick={handleSubmit}
                         >
-                            {isLoding ? <Spinner /> : 'Update Data'}
+                            {isLoding ? <Spinner /> : 'Update'}
                         </Button>
-                        <Button
+                        <Button size="sm"
                             variant="outline"
                             colorScheme='red'
                             sx={{
@@ -699,7 +714,7 @@ const Edit = (props) => {
                             }}
                             onClick={() => { props.onClose(false) }}
                         >
-                            Cancel
+                            Close
                         </Button>
                     </DrawerFooter>
 

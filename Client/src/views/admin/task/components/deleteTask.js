@@ -32,9 +32,10 @@ const DeleteTask = (props) => {
                 let response = await deleteManyApi(props.url, props.data)
                 if (response.status === 200) {
                     props.viewClose();
-                    props.onClose(false)
                     props.fetchData()
+                    props.setSelectedValues([])
                     props.setAction((pre) => !pre)
+                    props.onClose(false)
                 }
             } catch (error) {
                 console.log(error)
@@ -56,11 +57,11 @@ const DeleteTask = (props) => {
                 <ModalHeader>Delete Task{props.method === 'one' ? '' : 's'}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    Are You Sure To Delete selated Task{props.method === 'one' ? '' : 's'} ?
+                    Are You Sure To Delete selected Task{props.method === 'one' ? '' : 's'} ?
                 </ModalBody>
                 <ModalFooter>
-                    <Button colorScheme="red" mr={2} onClick={handleDeleteClick} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Yes'}</Button>
-                    <Button variant="outline" onClick={handleClose}>No</Button>
+                    <Button size="sm" colorScheme="red" mr={2} onClick={handleDeleteClick} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Yes'}</Button>
+                    <Button size="sm" variant="outline" onClick={handleClose}>No</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

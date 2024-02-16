@@ -32,6 +32,7 @@ import {
 import { useFormik } from "formik";
 import { useParams } from "react-router-dom";
 import { putApi } from "services/api";
+import DataNotFound from "components/notFoundData";
 
 function ChangeAccess(props) {
   const {
@@ -44,6 +45,8 @@ function ChangeAccess(props) {
     setAction,
     setAccess,
     _id,
+    accessRole,
+    setAccessRole,
     onClose,
     setRoleModal,
     editModal, setEditModal,
@@ -141,6 +144,7 @@ function ChangeAccess(props) {
       if (response.status === 200) {
         setEditModal(false)
         fetchData()
+        setAccessRole(tableData)
         setRoleModal(true)
       }
     } catch (e) {
@@ -162,7 +166,7 @@ function ChangeAccess(props) {
     <Modal onClose={() => setEditModal(false)} isOpen={editModal} isCentered size={"xl"}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{name} Access</ModalHeader>
+        <ModalHeader textTransform={"capitalize"}>{name} Access</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Table>
@@ -216,7 +220,7 @@ function ChangeAccess(props) {
                       fontSize="sm"
                       fontWeight="700"
                     >
-                      -- No Data Found --
+                        <DataNotFound />
                     </Text>
                   </Td>
                 </Tr>
@@ -318,11 +322,11 @@ function ChangeAccess(props) {
           </Table>
         </ModalBody>
         <ModalFooter>
-          <Button variant="brand" onClick={handleSubmit}>
+          <Button size="sm" variant="brand" onClick={handleSubmit}>
             Save
           </Button>
-          <Button
-            onClick={() => { setEditModal(false); setRoleModal(true) }}
+          <Button size="sm"
+            onClick={() => { setEditModal(false); setRoleModal(true); }}
             variant="outline"
             colorScheme="red"
             sx={{

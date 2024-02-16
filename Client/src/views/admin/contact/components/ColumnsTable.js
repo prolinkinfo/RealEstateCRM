@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Flex,
+  Heading,
   Table,
   Tbody,
   Td,
@@ -27,6 +28,8 @@ import Pagination from "components/pagination/Pagination";
 import { BsFillSendFill } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
 import AddEmailHistory from "../../emailHistory/components/AddEmail";
+import { AddIcon } from "@chakra-ui/icons";
+import DataNotFound from "components/notFoundData";
 
 export default function ColumnsTable(props) {
   const { columnsData, tableData, title, fetchData, emailAccess } = props;
@@ -67,10 +70,10 @@ export default function ColumnsTable(props) {
     setGopageValue(pageOptions.length)
   }
 
-  const textColor = useColorModeValue("secondaryGray.900", "white");
+  const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   const param = useParams()
-
+  const buttonbg = useColorModeValue("gray.200", "white");
   useEffect(() => {
     // Update gopageValue only after the initial render 
     if (gopageValue === undefined && pageOptions.length < gopageValue) {
@@ -79,22 +82,18 @@ export default function ColumnsTable(props) {
   }, [pageOptions, gopageValue]);
 
   return (
-    <Card
+    <Box
       direction='column'
       w='100%'
       px='0px'
       style={{ border: '1px solid gray.200' }}
       overflowX={{ sm: "scroll", lg: "hidden" }}
     >
-      <Flex px='25px' justify='space-between' mb='10px' align='center'>
-        <Text
-          color={textColor}
-          fontSize='22px'
-          fontWeight='700'
-          lineHeight='100%'>
+      <Flex justify='space-between' mb='10px' align='center'>
+        <Heading size="md" mb={3}>
           {title}  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
-        </Text>
-        {emailAccess?.create && <Button onClick={() => setAddEmailHistory(true)} rightIcon={<BsFillSendFill />} colorScheme="gray" >Send Email</Button>}
+        </Heading>
+        {emailAccess?.create && <Button size="sm" onClick={() => setAddEmailHistory(true)} leftIcon={<AddIcon />} colorScheme="gray" bg={buttonbg}>Add New</Button>}
         <AddEmailHistory lead={props.lead} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} />
       </Flex>
       <Box overflowY={'auto'} className="table-container p0" >
@@ -103,17 +102,23 @@ export default function ColumnsTable(props) {
             {headerGroups?.map((headerGroup, index) => (
               <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
                 {headerGroup.headers.map((column, index) => (
+
                   <Th
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                    pe='10px'
+                    {...column.getHeaderProps(column.isSortable !== false && column.getSortByToggleProps())}
+                    pe="10px"
                     key={index}
-                    borderColor={borderColor}>
+                    borderColor={borderColor}
+                  >
                     <Flex
-                      justify='space-between'
-                      align='center'
-                      fontSize={{ sm: "10px", lg: "12px" }}
-                      color='gray.400'>
-                      {column.render("Header")}
+                      justifyContent={column.center ? "center" : "start"}
+                      align="center"
+                      fontSize={{ sm: "14px", lg: "16px" }}
+                      color="secondaryGray.900"
+                    >
+                      <span style={{ textTransform: "capitalize", marginRight: "8px" }}>
+                        {column.render("Header")}
+                      </span>
+
                     </Flex>
                   </Th>
                 ))}
@@ -126,7 +131,7 @@ export default function ColumnsTable(props) {
               <Tr>
                 <Td colSpan={columns?.length}>
                   <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                    -- No Data Found --
+                    <DataNotFound />
                   </Text>
                 </Td>
               </Tr>
@@ -140,10 +145,11 @@ export default function ColumnsTable(props) {
                       data = (
                         <Flex align='center'>
                           <Text
-                            me='10px'
+                            me="10px"
                             color={textColor}
-                            fontSize='sm'
-                            fontWeight='700'>
+                            fontSize="sm"
+                            fontWeight="700"
+                          >
                             {cell?.value}
                           </Text>
                         </Flex>
@@ -194,6 +200,6 @@ export default function ColumnsTable(props) {
 
       {data?.length > 5 && <Pagination gotoPage={gotoPage} gopageValue={gopageValue} setGopageValue={setGopageValue} pageCount={pageCount} canPreviousPage={canPreviousPage} previousPage={previousPage} canNextPage={canNextPage} pageOptions={pageOptions} setPageSize={setPageSize} nextPage={nextPage} pageSize={pageSize} pageIndex={pageIndex} />}
 
-    </Card>
+    </Box>
   );
 }

@@ -117,7 +117,7 @@ const AddMeeting = (props) => {
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                related To
+                                Related To<Text color={"red"}>*</Text>
                             </FormLabel>
                             <RadioGroup onChange={(e) => setFieldValue('related', e)} value={values.related}>
                                 <Stack direction='row'>
@@ -136,6 +136,7 @@ const AddMeeting = (props) => {
                                             placeholder="Type a Name"
                                             name="attendes"
                                             items={countriesWithEmailAsLabel}
+                                            className='custom-autoComplete'
                                             selectedItems={countriesWithEmailAsLabel?.filter((item) => values.related === "Contact" ? values?.attendes.includes(item._id) : values.related === "Lead" && values?.attendesLead.includes(item._id))}
                                             onSelectedItemsChange={(changes) => {
                                                 const selectedLabels = extractLabels(changes.selectedItems);
@@ -165,7 +166,7 @@ const AddMeeting = (props) => {
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Date Time
+                                Date Time<Text color={"red"}>*</Text>
                             </FormLabel>
                             <Input
                                 fontSize='sm'
@@ -201,11 +202,14 @@ const AddMeeting = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' me={2} leftIcon={<AddIcon />} disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Add'}</Button>
-                    <Button onClick={() => {
-                        formik.resetForm()
-                        onClose()
-                    }}>Close</Button>
+                    <Button size="sm" variant='brand' me={2} disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Save'}</Button>
+                    <Button sx={{
+                        textTransform: "capitalize",
+                    }} variant="outline"
+                        colorScheme="red" size="sm" onClick={() => {
+                            formik.resetForm()
+                            onClose()
+                        }}>Close</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

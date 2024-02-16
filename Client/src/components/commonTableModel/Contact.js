@@ -23,6 +23,7 @@ import Card from "components/card/Card";
 import { Link } from "react-router-dom";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
 import Pagination from "components/pagination/Pagination";
+import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 
 export default function ContactTable(props) {
   const { columnsData, tableData, title, type, selectedValues, setSelectedValues } = props;
@@ -63,7 +64,7 @@ export default function ContactTable(props) {
     setGopageValue(pageOptions.length)
   }
 
-  const textColor = useColorModeValue("secondaryGray.900", "white");
+  const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
 
   const handleCheckboxChange = (event, value) => {
@@ -107,17 +108,28 @@ export default function ContactTable(props) {
             {headerGroups?.map((headerGroup, index) => (
               <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
                 {headerGroup.headers.map((column, index) => (
+
                   <Th
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                    pe='10px'
+                    {...column.getHeaderProps(column.isSortable !== false && column.getSortByToggleProps())}
+                    pe="10px"
                     key={index}
-                    borderColor={borderColor}>
+                    borderColor={borderColor}
+                  >
                     <Flex
-                      justify='space-between'
-                      align='center'
-                      fontSize={{ sm: "10px", lg: "12px" }}
-                      color='gray.400'>
-                      {column.render("Header")}
+                      align="center"
+                      justifyContent={column.center ? "center" : "start"}
+                      fontSize={{ sm: "14px", lg: "16px" }}
+                      color=" secondaryGray.900"
+                    >
+                      <span style={{ textTransform: "capitalize", marginRight: "8px" }}>
+                        {column.render("Header")}
+                      </span>
+
+                      {column.isSortable !== false && (
+                        <span>
+                          {column.isSorted ? (column.isSortedDesc ? <FaSortDown /> : <FaSortUp />) : <FaSort />}
+                        </span>
+                      )}
                     </Flex>
                   </Th>
                 ))}

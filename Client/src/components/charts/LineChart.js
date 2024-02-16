@@ -1,32 +1,17 @@
 import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
-import { getApi } from "services/api";
 
-const ApexChart = () => {
-  const user = JSON.parse(localStorage.getItem("user"))
-
-  const [chartData, setChartData] = useState([])
-
-  const featchChart = async () => {
-    // let result = await getApi('api/reporting/line-chart');
-    let result = await getApi(user.role === 'superAdmin' ? 'api/reporting/line-chart' : `api/reporting/line-chart?createBy=${user._id}`);
-    if (result && result.status === 200) {
-      setChartData(result?.data)
-    }
-  }
-  useEffect(() => {
-    featchChart()
-  }, [])
+const ApexChart = (props) => {
+  const { data } = props;
 
   const state = {
     series: [
       {
         name: 'Data',
-        data: chartData?.map((item) => item.length)
+        data: data?.map((item) => item.length)
       }
     ],
     options: {
-
       chart: {
         height: 350,
         type: 'bar',
@@ -46,7 +31,7 @@ const ApexChart = () => {
         }
       },
       xaxis: {
-        categories: chartData?.map((item) => item.name),
+        categories: data?.map((item) => item.name),
         tickPlacement: 'on'
       },
 

@@ -12,13 +12,17 @@ import {
     Tr,
     useColorModeValue,
     Select,
-    Button
+    Button,
+    Grid,
+    GridItem,
+    Text
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import { postApi } from 'services/api';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import ExcelJS from 'exceljs';
+import Card from 'components/card/Card';
 
 function PropertyImport() {
 
@@ -70,8 +74,7 @@ function PropertyImport() {
         { Header: "Buyers", accessor: "buyers" },
         { Header: "Property Managers", accessor: "propertyManagers" },
         { Header: "Contractors Or Service Providers", accessor: "contractorsOrServiceProviders" },
-        { Header: "internalNotesOrComments", accessor: "internalNotesOrComments" },
-        { Header: "Property Deleted", accessor: "deleted" },
+        { Header: "internalNotesOrComments", accessor: "internalNotesOrComments" }
     ];
 
     const initialValues = {
@@ -258,10 +261,19 @@ function PropertyImport() {
         }
     }, [fileData]);
 
+    // const filterLead = fieldsInCrm.filter(field => importedFileFields.find(data => field.accessor === data || field.Header === data))
+    const filterLead = importedFileFields.filter(field => fieldsInCrm.find(data => field === data.accessor || field === data.Header))
+
+
     return (
         <>
-            <Box overflowY={"auto"} className="table-fix-container">
-                <Table variant="simple" color="gray.500" mb="24px">
+            <Card overflowY={"auto"} className="importTable">
+                <Text color={"secondaryGray.900"}
+                    fontSize="22px"
+                    fontWeight="700"
+                    mb='20px'
+                >Import Properties </Text>
+                {/* <Table variant="simple" color="gray.500" mb="24px">
                     <Thead pe="10px" borderColor={borderColor}>
                         <Tr>
                             {
@@ -308,11 +320,48 @@ function PropertyImport() {
                             ))
                         }
                     </Tbody>
-                </Table>
-            </Box>
-            <Box mt={5}>
-                <Button onClick={() => handleSubmit()} variant="brand">Next</Button>
-            </Box>
+                </Table> */}
+                <Grid templateColumns="repeat(12, 1fr)" mb={3} pb={2} gap={1} borderBottom={'1px solid #e2e8f0'}>
+                    {
+                        columns.map((column, index) => (
+                            <GridItem key={index} colSpan={{ base: 6 }} fontWeight={'600'} fontSize={{ sm: "14px", lg: "14px" }} color="secondaryGray.900" style={{ textTransform: "uppercase" }}>
+                                {column.Header}
+                            </GridItem>
+                        ))
+                    }
+                </Grid>
+                <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={1} overflowY={'auto'}>
+                    {
+                        fieldsInCrm?.map((item, index) => (
+                            <>
+                                <GridItem colSpan={{ base: 6 }} key={item.id} mt='10px'>
+                                    {item.Header}
+                                </GridItem>
+                                <GridItem colSpan={{ base: 4 }}>
+                                    <Select
+                                        variant="flushed"
+                                        fontWeight='500'
+                                        isSearchable
+                                        value={values[item.accessor]}
+                                        name={item.accessor}
+                                        onChange={handleChange}
+                                    >
+                                        <option value=''> {filterLead ? filterLead.find((data) => (item.Header === data || item.accessor === data) && data) ? filterLead.find((data) => (item.Header === data || item.accessor === data) && data) : 'Select Field In File' : 'Select Field In File'}</option>                                        {
+                                            importedFileFields?.map(field => (
+                                                <option value={field} key={field}>{field}</option>
+                                            ))
+                                        }
+                                    </Select>
+                                </GridItem>
+                            </>
+                        ))
+                    }
+                </Grid>
+
+                <Flex Flex justifyContent={'end'} mt='5' >
+                    <Button size="sm" onClick={() => handleSubmit()} variant="brand">Next</Button>
+                </Flex>
+            </Card>
         </>
     )
 }

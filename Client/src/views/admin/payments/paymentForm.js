@@ -114,7 +114,7 @@ export default function PaymentForm() {
                 />
                 <Text mb='10px' color={'red'}> {errors.amount && touched.amount && errors.amount}</Text>
             </GridItem>
-            <Button onClick={handleSubmit} variant="brand">Pay</Button>
+            <Button onClick={handleSubmit} variant="brand" size="sm">Pay</Button>
         </>
     )
 }

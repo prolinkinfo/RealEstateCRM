@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Flex,
+  Heading,
   Table,
   Tbody,
   Td,
@@ -28,6 +29,8 @@ import { BsFillTelephoneFill } from "react-icons/bs";
 import { MdOutlineMessage } from "react-icons/md";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import AddPhoneCall from "../../phoneCall/components/AddPhoneCall";
+import { AddIcon } from "@chakra-ui/icons";
+import DataNotFound from "components/notFoundData";
 
 export default function PhoneCall(props) {
   const { columnsData, tableData, title, fetchData, callAccess } = props;
@@ -67,28 +70,25 @@ export default function PhoneCall(props) {
   if (pageOptions.length < gopageValue) {
     setGopageValue(pageOptions.length)
   }
-  const textColor = useColorModeValue("secondaryGray.900", "white");
+  const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
+  const buttonbg = useColorModeValue("gray.200", "white");
   const param = useParams()
   const navigate = useNavigate()
   return (
-    <Card
+    <Box
       direction='column'
       w='100%'
       px='0px'
       style={{ border: '1px solid gray.200' }}
       overflowX={{ sm: "scroll", lg: "hidden" }}
     >
-      <Flex px='25px' justify='space-between' mb='20px' align='center'>
-        <Text
-          color={textColor}
-          fontSize='22px'
-          fontWeight='700'
-          lineHeight='100%'>
+      <Flex justify='space-between' mb='10px' align='center'>
+        <Heading size="md" mb={3}>
           {title} (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
-        </Text>
+        </Heading>
         {/* <Menu /> */}
-        {!props.text ? callAccess?.create && <Button onClick={() => setAddModel(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" >Call</Button> : <Button onClick={() => navigate('/communication-integration')} leftIcon={<MdOutlineMessage />} colorScheme="gray" >send text Msg</Button>}
+        {!props.text ? callAccess?.create && <Button onClick={() => setAddModel(true)} leftIcon={<AddIcon />} size="sm" colorScheme="gray" bg={buttonbg}>Add New</Button> : <Button onClick={() => navigate('/communication-integration')} size="sm" leftIcon={<MdOutlineMessage />} colorScheme="gray" >send text Msg</Button>}
         <AddPhoneCall lead={props.lead} fetchData={fetchData} isOpen={addModel} onClose={setAddModel} id={param.id} />
       </Flex>
       <Box overflowY={'auto'} className="table-container" >
@@ -98,16 +98,20 @@ export default function PhoneCall(props) {
               <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
                 {headerGroup.headers.map((column, index) => (
                   <Th
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                    pe='10px'
+                    {...column.getHeaderProps(column.isSortable !== false && column.getSortByToggleProps())}
+                    pe="10px"
                     key={index}
-                    borderColor={borderColor}>
+                    borderColor={borderColor}
+                  >
                     <Flex
-                      justify='space-between'
-                      align='center'
-                      fontSize={{ sm: "10px", lg: "12px" }}
-                      color='gray.400'>
-                      {column.render("Header")}
+                      justifyContent={column.center ? "center" : "start"}
+                      align="center"
+                      fontSize={{ sm: "14px", lg: "16px" }}
+                      color="secondaryGray.900"
+                    >
+                      <span style={{ textTransform: "capitalize", marginRight: "8px" }}>
+                        {column.render("Header")}
+                      </span>
                     </Flex>
                   </Th>
                 ))}
@@ -119,7 +123,7 @@ export default function PhoneCall(props) {
               <Tr>
                 <Td colSpan={columns.length}>
                   <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                    -- No Data Found --
+                    <DataNotFound />
                   </Text>
                 </Td>
               </Tr>
@@ -188,6 +192,6 @@ export default function PhoneCall(props) {
 
       {data?.length > 5 && <Pagination gotoPage={gotoPage} gopageValue={gopageValue} setGopageValue={setGopageValue} pageCount={pageCount} canPreviousPage={canPreviousPage} previousPage={previousPage} canNextPage={canNextPage} pageOptions={pageOptions} setPageSize={setPageSize} nextPage={nextPage} pageSize={pageSize} pageIndex={pageIndex} />}
 
-    </Card >
+    </Box >
   );
 }

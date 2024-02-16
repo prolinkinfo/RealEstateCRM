@@ -1,8 +1,8 @@
-const Property = require('../../model/schema/property')
+const { Property } = require('../../model/schema/property')
 const multer = require('multer')
 const fs = require('fs');
 const path = require('path');
-const Contact = require('../../model/schema/contact');
+const { Contact } = require('../../model/schema/contact');
 
 
 const index = async (req, res) => {

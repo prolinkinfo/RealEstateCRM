@@ -101,7 +101,7 @@ const AddPhoneCall = (props) => {
                         </GridItem>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Start Date
+                                Start Date<Text color={"red"}>*</Text>
                             </FormLabel>
                             <Input
                                 type="datetime-local"
@@ -122,6 +122,7 @@ const AddPhoneCall = (props) => {
                             <Input
                                 type='datetime-local'
                                 fontSize='sm'
+                                min={values.startDate}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 value={values.endDate}
@@ -162,17 +163,18 @@ const AddPhoneCall = (props) => {
                             />
                             <Text mb='10px' color={'red'}> {errors.callNotes && touched.callNotes && errors.callNotes}</Text>
                         </GridItem>
-
                     </Grid>
-
-
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' leftIcon={<BsFillTelephoneFill />} disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Call'}</Button>
-                    <Button onClick={() => {
-                        formik.resetForm()
-                        onClose()
-                    }}>Close</Button>
+                    <Button size="sm" variant='brand' disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Save'}</Button>
+                    <Button size="sm" sx={{
+                        marginLeft: 2,
+                        textTransform: "capitalize",
+                    }} variant="outline"
+                        colorScheme="red" onClick={() => {
+                            formik.resetForm()
+                            onClose()
+                        }}>Close</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

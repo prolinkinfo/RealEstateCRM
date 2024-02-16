@@ -15,9 +15,6 @@ function SidebarContent(props) {
   // SIDEBAR
   return (
     <Flex direction='column' height='100%'
-      // onMouseOver={() => setOpenSidebar(true)}
-      // onMouseOut={() => setOpenSidebar(false)}
-      pt='2px'
       borderRadius='30px'>
       <Brand from={from} largeLogo={largeLogo}
         openSidebar={openSidebar} setOpenSidebar={setOpenSidebar}
@@ -40,7 +37,7 @@ function SidebarContent(props) {
         borderRadius='30px'>
         <SidebarCard />
       </Box> */}
-    </Flex>
+    </Flex >
   );
 }
 

@@ -57,11 +57,15 @@ const ImportModal = (props) => {
                     </Grid>
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} rightIcon={<AddIcon />}>{isLoding ? <Spinner /> : 'Add'}</Button>
-                    <Button onClick={() => {
-                        onClose()
-                        formik.resetForm()
-                    }}>Close</Button>
+                    <Button size="sm" variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
+                    <Button sx={{
+                        marginLeft: 2,
+                        textTransform: "capitalize",
+                    }} variant="outline"
+                        colorScheme="red" size="sm" onClick={() => {
+                            onClose()
+                            formik.resetForm()
+                        }}>Close</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

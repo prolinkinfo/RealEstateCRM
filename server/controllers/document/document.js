@@ -18,7 +18,7 @@ const index = async (req, res) => {
             { $match: query },
             {
                 $lookup: {
-                    from: 'users', // Replace 'users' with the actual name of your users collection
+                    from: 'User', // Replace 'users' with the actual name of your users collection
                     localField: 'createBy',
                     foreignField: '_id', // Assuming the 'createBy' field in DocumentSchema corresponds to '_id' in the 'users' collection
                     as: 'creatorInfo'

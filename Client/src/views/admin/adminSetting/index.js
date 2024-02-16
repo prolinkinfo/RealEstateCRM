@@ -1,10 +1,12 @@
 import { Icon, SimpleGrid, useColorModeValue } from '@chakra-ui/react';
 import MiniStatistics from "components/card/MiniStatistics";
 import IconBox from 'components/icons/IconBox';
-import { FaCreativeCommonsBy } from "react-icons/fa";
+import { FaCreativeCommonsBy, FaWpforms } from "react-icons/fa";
 import { HiUsers } from "react-icons/hi";
 import { TbExchange } from "react-icons/tb";
 import { useNavigate } from 'react-router-dom';
+import { GrValidate } from "react-icons/gr";
+import { TbTableColumn } from "react-icons/tb";
 
 const Index = () => {
     const navigate = useNavigate();
@@ -25,7 +27,7 @@ const Index = () => {
                             icon={<Icon w="28px" h="28px" as={HiUsers} color="white" />}
                         />
                     }
-                    name="User"
+                    name="Users"
                 // value={task?.length || 0}
                 />
                 <MiniStatistics
@@ -40,7 +42,7 @@ const Index = () => {
                         />
 
                     }
-                    name="Role"
+                    name="Roles"
                 // value={contactData?.length || 0}
                 />
                 <MiniStatistics
@@ -56,6 +58,48 @@ const Index = () => {
 
                     }
                     name="Change Images"
+                />
+                <MiniStatistics
+                    fontsize="md"
+                    onClick={() => navigate("/custom-Field")}
+                    startContent={
+                        <IconBox
+                            w="56px"
+                            h="56px"
+                            bg="linear-gradient(90deg, #4481EB 0%, #04BEFE 100%)"
+                            icon={<Icon w="28px" h="28px" as={FaWpforms} color="white" />}
+                        />
+
+                    }
+                    name="Add Custom Fields"
+                />
+                <MiniStatistics
+                    fontsize="md"
+                    onClick={() => navigate("/validation")}
+                    startContent={
+                        <IconBox
+                            w="56px"
+                            h="56px"
+                            bg="linear-gradient(90deg, #4481EB 0%, #04BEFE 100%)"
+                            icon={<Icon w="28px" h="28px" as={GrValidate} color="white" />}
+                        />
+
+                    }
+                    name="Validations"
+
+                />
+                <MiniStatistics
+                    fontsize="md"
+                    onClick={() => navigate("/table-field")}
+                    startContent={
+                        <IconBox
+                            w="56px"
+                            h="56px"
+                            bg="linear-gradient(90deg, #4481EB 0%, #04BEFE 100%)"
+                            icon={<Icon w="28px" h="28px" as={TbTableColumn} color="white" />}
+                        />
+                    }
+                    name="Table Fields"
                 />
             </SimpleGrid>
         </div>

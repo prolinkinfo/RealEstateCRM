@@ -210,6 +210,7 @@ const AddPhoneCall = (props) => {
                             <Input
                                 type='datetime-local'
                                 fontSize='sm'
+                                min={values.startDate}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 value={values.endDate}
@@ -256,11 +257,15 @@ const AddPhoneCall = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' leftIcon={<AddIcon />} disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Add'}</Button>
-                    <Button onClick={() => {
-                        formik.resetForm()
-                        onClose()
-                    }}>Close</Button>
+                    <Button variant='brand' size="sm"  disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Save'}</Button>
+                    <Button size="sm" sx={{
+                        marginLeft: 2,
+                        textTransform: "capitalize",
+                    }} variant="outline"
+                        colorScheme="red" onClick={() => {
+                            formik.resetForm()
+                            onClose()
+                        }}>Close</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

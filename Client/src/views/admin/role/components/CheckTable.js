@@ -42,18 +42,20 @@ import ChangeAccess from "../changeAccess";
 import RoleModal from "./roleModal";
 import AddRole from "../Add";
 import { IoIosArrowBack } from "react-icons/io";
+import DataNotFound from "components/notFoundData";
 
 export default function CheckTable(props) {
   const { columnsData, name, tableData, handleClick, fetchData, isLoding, setAction, _id, action } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const textColor = useColorModeValue("secondaryGray.900", "white");
+  const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   const columns = useMemo(() => columnsData, [columnsData]);
   const [selectedValues, setSelectedValues] = useState([]);
 
   const [roleModal, setRoleModal] = useState(false);
   const [access, setAccess] = useState([])
+  const [accessRole, setAccessRole] = useState([])
   const [roleName, setRoleName] = useState('')
   const [roleId, setRoleId] = useState('')
   const [gopageValue, setGopageValue] = useState()
@@ -115,16 +117,6 @@ export default function CheckTable(props) {
     setGopageValue(pageOptions.length)
   }
 
-  const handleCheckboxChange = (event, value) => {
-    if (event.target.checked) {
-      setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
-    } else {
-      setSelectedValues((prevSelectedValues) =>
-        prevSelectedValues.filter((selectedValue) => selectedValue !== value)
-      );
-    }
-  };
-
   useEffect(() => {
     fetchData()
   }, [])
@@ -150,7 +142,7 @@ export default function CheckTable(props) {
             </Flex>
           </GridItem>
           <GridItem colSpan={4} justifyContent="end" alignItems="center" textAlign="right">
-            <Button onClick={() => setAddRoleModal(true)} variant="brand" size="sm">Add Role</Button>
+            <Button onClick={() => setAddRoleModal(true)} variant="brand" size="sm" leftIcon={<AddIcon />}>Add New</Button>
             <Button onClick={() => navigate('/admin-setting')} variant="brand" size="sm" ml={2} leftIcon={<IoIosArrowBack />}>Back</Button>
           </GridItem>
         </Grid>
@@ -162,31 +154,25 @@ export default function CheckTable(props) {
                 <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
                   {headerGroup.headers?.map((column, index) => (
                     <Th
-                      // sx={{ width: "20%" }}
+                      {...column.getHeaderProps(column.isSortable !== false && column.getSortByToggleProps())}
                       pe="10px"
                       key={index}
                       borderColor={borderColor}
                     >
                       <Flex
-                        justify="space-between"
                         align="center"
-                        fontSize={{ sm: "10px", lg: "12px" }}
-                        color="gray.400"
+                        justifyContent={column.center ? "center" : "start"}
+                        fontSize={{ sm: "14px", lg: "16px" }}
+                        color="secondaryGray.900"
                       >
-                        {column.render("Header")}
+                        <span style={{ textTransform: "capitalize", marginRight: "8px" }}>
+                          {column.render("Header")}
+                        </span>
                         {/* {column.isSortable !== false && (
-                    <span>
-                      {column.isSorted ? (
-                        column.isSortedDesc ? (
-                          <FaSortDown />
-                        ) : (
-                          <FaSortUp />
-                        )
-                      ) : (
-                        <FaSort />
-                      )}
-                    </span>
-                  )} */}
+                          <span>
+                            {column.isSorted ? (column.isSortedDesc ? <FaSortDown /> : <FaSortUp />) : <FaSort />}
+                          </span>
+                        )} */}
                       </Flex>
                     </Th>
                   ))}
@@ -219,7 +205,7 @@ export default function CheckTable(props) {
                       fontSize="sm"
                       fontWeight="700"
                     >
-                      -- No Data Found --
+                        <DataNotFound />
                     </Text>
                   </Td>
                 </Tr>
@@ -247,7 +233,7 @@ export default function CheckTable(props) {
                           data = (
                             <Text
                               me="10px"
-                              onClick={() => { setRoleModal(true); setRoleName(cell?.value); setRoleId(cell?.row?.original?._id); setAccess(cell?.row?.original?.access) }}
+                              onClick={() => { setRoleModal(true); setRoleName(cell?.value); setRoleId(cell?.row?.original?._id); setAccess(cell?.row?.original?.access); setAccessRole(cell?.row?.original?.access) }}
                               color='brand.600'
                               sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline', cursor: 'pointer' } }}
                               fontSize="sm"
@@ -288,7 +274,7 @@ export default function CheckTable(props) {
         {access && <RoleModal isOpen={roleModal}
           setRoleModal={setRoleModal}
           onOpen={onOpen}
-          isLoding={isLoding} columnsData={rowColumns} name={roleName} _id={roleId} tableData={access} setAccess={setAccess} fetchData={fetchData} setAction={setAction} />}
+          isLoding={isLoding} columnsData={rowColumns} name={roleName} _id={roleId} tableData={access} accessRole={accessRole} setAccessRole={setAccessRole} setAccess={setAccess} fetchData={fetchData} setAction={setAction} />}
       </Card>
 
       <AddRole isOpen={addRoleModal} size={"sm"} setAction={setAction} onClose={setAddRoleModal} />

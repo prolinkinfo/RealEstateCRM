@@ -1,5 +1,5 @@
 // Chakra imports
-import { Portal, Box, useDisclosure, Text, Button, Link, Flex, Spinner, Icon } from '@chakra-ui/react';
+import { Portal, Box, useDisclosure, Text, Button, Link, Flex, Icon } from '@chakra-ui/react';
 import Footer from 'components/footer/FooterAdmin.js';
 // Layout components
 import Navbar from 'components/navbar/NavbarAdmin.js';
@@ -10,6 +10,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { ROLE_PATH } from '../../roles';
 import newRoute from 'routes.js';
 import { MdHome, MdLock } from 'react-icons/md';
+import Spinner from 'components/spinner/Spinner';
 
 const MainDashboard = React.lazy(() => import("views/admin/default"));
 const SignInCentered = React.lazy(() => import("views/auth/signIn"));
@@ -206,14 +207,14 @@ export default function User(props) {
                         position='relative'
                         maxHeight='100%'
                         // w={{ base: '100%', xl: 'calc( 100% - 290px )' }}
-                        w={{ base: '100%', xl: openSidebar === true ? 'calc( 100% - 290px )' : 'calc( 100% - 80px )' }}
-                        maxWidth={{ base: '100%', xl: openSidebar === true ? 'calc( 100% - 290px )' : 'calc( 100% - 80px )' }}
+                        w={{ base: '100%', xl: openSidebar === true ? 'calc( 100% - 300px )' : 'calc( 100% - 88px )' }}
+                        maxWidth={{ base: '100%', xl: openSidebar === true ? 'calc( 100% - 300px )' : 'calc( 100% - 88px )' }}
                         transition='all 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1)'
                         transitionDuration='.2s, .2s, .35s'
                         transitionProperty='top, bottom, width'
                         transitionTimingFunction='linear, linear, ease'>
                         <Portal>
-                            <Box>
+                            <Box className='header'>
                                 <Navbar
                                     onOpen={onOpen}
                                     logoText={'Horizon UI Dashboard PRO'}
@@ -229,7 +230,7 @@ export default function User(props) {
                         </Portal>
                         <Box pt={{ base: "150px", md: "95px", xl: "95px" }}>
                             {getRoute() ? (
-                                <Box mx='auto' p={{ base: '20px', md: '30px' }} pe='20px' minH='84vh' pt='50px'>
+                                <Box mx='auto' pe='20px' minH='84vh' pt='50px' style={{ padding: openSidebar ? '8px 20px 8px 20px' : '8px 20px' }}>
                                     <Suspense fallback={
                                         <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                                             <Spinner />

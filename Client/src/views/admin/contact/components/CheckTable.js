@@ -45,7 +45,7 @@ import {
 import * as XLSX from 'xlsx'
 
 // Custom components
-import { DeleteIcon, EditIcon, EmailIcon, PhoneIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
+import { AddIcon, DeleteIcon, EditIcon, EmailIcon, PhoneIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
 import Card from "components/card/Card";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
 import Pagination from "components/pagination/Pagination";
@@ -61,7 +61,9 @@ import { useFormik } from "formik";
 import { CiMenuKebab } from "react-icons/ci";
 import Edit from "../Edit";
 import ImportModal from "./ImportModel";
+import { getApi } from "services/api";
 import CustomSearchInput from "components/search/search";
+import DataNotFound from "components/notFoundData";
 
 export default function CheckTable(props) {
   const { columnsData, tableData, fetchData, isLoding, setAction, allData, access, dataColumn, onClose, emailAccess, callAccess, setSearchedData, onOpen, isOpen, displaySearchData, dynamicColumns, action, setDisplaySearchData, selectedColumns, setSelectedColumns, isHide } = props;
@@ -70,6 +72,7 @@ export default function CheckTable(props) {
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   // const columns = useMemo(() => columnsData, [columnsData]);
   const [selectedValues, setSelectedValues] = useState([]);
+  const [contactData, setContactData] = useState([])
   const [getTagValues, setGetTagValues] = useState([]);
   const [deleteModel, setDelete] = useState(false);
   const [selectedId, setSelectedId] = useState()
@@ -85,6 +88,8 @@ export default function CheckTable(props) {
   const [edit, setEdit] = useState(false);
   const data = useMemo(() => tableData, [tableData]);
   const [isImportContact, setIsImportContact] = useState(false);
+  const [column, setColumn] = useState('');
+
 
   const csvColumns = [
     { Header: 'Title', accessor: 'title', width: 20 },
@@ -96,6 +101,7 @@ export default function CheckTable(props) {
   ];
 
   const columns = useMemo(() => dataColumn, [dataColumn]);
+
   // const fetchData = async () => {
   //   let result = await getApi('api/contact/');
   //   setData(result.data);
@@ -186,22 +192,29 @@ export default function CheckTable(props) {
       resetForm();
     }
   })
-  const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
+  const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm, dirty } = formik
   const handleClear = () => {
     setDisplaySearchData(false)
   }
-
+  let isColumnSelected;
   const toggleColumnVisibility = (columnKey) => {
-    const isColumnSelected = tempSelectedColumns.some((column) => column.accessor === columnKey);
+    setColumn(columnKey)
+    isColumnSelected = tempSelectedColumns?.some((column) => column?.accessor === columnKey);
 
     if (isColumnSelected) {
-      const updatedColumns = tempSelectedColumns.filter((column) => column.accessor !== columnKey);
+      const updatedColumns = tempSelectedColumns?.filter((column) => column?.accessor !== columnKey);
       setTempSelectedColumns(updatedColumns);
     } else {
-      const columnToAdd = dynamicColumns.find((column) => column.accessor === columnKey);
+      const columnToAdd = dynamicColumns?.find((column) => column?.accessor === columnKey);
       setTempSelectedColumns([...tempSelectedColumns, columnToAdd]);
     }
   };
+
+  const handleColumnClear = () => {
+    isColumnSelected = selectedColumns?.some((selectedColumn) => selectedColumn?.accessor === column?.accessor)
+    setTempSelectedColumns(dynamicColumns);
+    setManageColumns(!manageColumns ? !manageColumns : false)
+  }
 
   const handleExportContacts = (extension) => {
     if (selectedValues && selectedValues?.length > 0) {
@@ -257,6 +270,15 @@ export default function CheckTable(props) {
     setSearchedData(results);
   };
 
+  const fetchCustomData = async () => {
+    const response = await getApi('api/custom-field?moduleName=Contact')
+    setContactData(response.data)
+  }
+
+  useEffect(() => {
+    if (fetchCustomData) fetchCustomData()
+  }, [action])
+
   return (
     <>
       <Card
@@ -264,33 +286,34 @@ export default function CheckTable(props) {
         w="100%"
         overflowX={{ sm: "scroll", lg: "hidden" }}
       >
-        <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={4} mx={4}>
-          <GridItem colSpan={8} >
+        <Grid templateColumns="repeat(12, 1fr)" gap={2}>
+          <GridItem colSpan={{ base: 12, md: 8 }} display={"flex"} alignItems={"center"}>
             <Flex alignItems={"center"} flexWrap={"wrap"}>
-              <Text
-                color={"secondaryGray.900"}
-                fontSize="22px"
-                fontWeight="700"
-              >
-                Contacts (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
-              </Text>
+              {window.location.pathname === "/contacts" ?
+                <Text
+                  color={"secondaryGray.900"}
+                  fontSize="22px"
+                  fontWeight="700"
+                >
+                  Contacts (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
+                </Text> : ""}
               {isHide ? null :
                 <>
                   <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={dataColumn} onSearch={handleSearch} />
-                  <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} size="sm">Advance Search</Button>
+                  <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} mt={{ sm: "5px", md: "0" }} size="sm">Advance Search</Button>
                 </>
               }
-              {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setGetTagValues([]); setSearchbox(''); }}>clear</Button> : ""}
-              {(selectedValues.length > 0 && access?.delete) && <DeleteIcon onClick={() => setDelete(true)} color={'red'} ms={2} />}
+              {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setGetTagValues([]); setSearchbox(''); }}>Clear</Button> : ""}
+              {(selectedValues.length > 0 && access?.delete) && <DeleteIcon cursor={"pointer"} onClick={() => setDelete(true)} color={'red'} ms={2} />}
             </Flex>
           </GridItem>
-          <GridItem colSpan={4} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
+          <GridItem colSpan={{ base: 12, md: 4 }} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
             {isHide ? null :
               <Menu isLazy  >
                 <MenuButton p={4}>
                   <BsColumnsGap />
                 </MenuButton>
-                <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} >
+                <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} zIndex={2}  >
                   <MenuItem onClick={() => setManageColumns(true)} width={"165px"}> Manage Columns
                   </MenuItem>
                   <MenuItem width={"165px"} onClick={() => setIsImportContact(true)}> Import Contacts
@@ -301,9 +324,9 @@ export default function CheckTable(props) {
                 </MenuList>
               </Menu>
             }
-            {!isHide && access?.create && <Button onClick={() => handleClick()} size={"sm"} variant="brand">Add Contact</Button>}
+            {!isHide && access?.create && <Button onClick={() => handleClick()} size={"sm"} variant="brand" leftIcon={<AddIcon />}>Add New</Button>}
           </GridItem>
-          <HStack spacing={4}>
+          <HStack spacing={4} mb={2}>
             {getTagValues && getTagValues.map((item) => (
               <Tag
                 size={"md"}
@@ -325,7 +348,7 @@ export default function CheckTable(props) {
 
         <Box overflowY={"auto"} className="table-fix-container">
           <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
-            <Thead>
+            <Thead zIndex={1}>
               {headerGroups?.map((headerGroup, index) => (
                 <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
                   {headerGroup.headers?.map((column, index) => (
@@ -368,7 +391,7 @@ export default function CheckTable(props) {
                   <Tr>
                     <Td colSpan={columns.length}>
                       <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                        -- No Data Found --
+                        <DataNotFound />
                       </Text>
                     </Td>
                   </Tr>
@@ -473,17 +496,17 @@ export default function CheckTable(props) {
                               <Menu isLazy  >
                                 <MenuButton><CiMenuKebab /></MenuButton>
                                 <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
-                                  {access?.update && <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>}
+                                  {access?.update && <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon mb={1} fontSize={15} />}>Edit</MenuItem>}
                                   {callAccess?.create && <MenuItem py={2.5} width={"165px"} onClick={() => {
                                     setAddPhoneCall(true)
                                     setSelectedId(cell?.row?.values._id)
-                                  }} icon={<PhoneIcon fontSize={15} />}>Create Call</MenuItem>}
+                                  }} icon={<PhoneIcon mb={1} fontSize={15} />}>Create Call</MenuItem>}
                                   {emailAccess?.create && <MenuItem py={2.5} width={"165px"} onClick={() => {
                                     setAddEmailHistory(true)
                                     setSelectedId(cell?.row?.values._id)
-                                  }} icon={<EmailIcon fontSize={15} />}>Send Email</MenuItem>}
-                                  {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/contactView/${cell?.row?.original._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>}
-                                  {access?.delete && <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>}
+                                  }} icon={<EmailIcon mb={1} fontSize={15} />}>Send Email</MenuItem>}
+                                  {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/contactView/${cell?.row?.original._id}`)} icon={<ViewIcon mb={1} fontSize={15} />}>View</MenuItem>}
+                                  {access?.delete && <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} icon={<DeleteIcon mb={1} fontSize={15} />}>Delete</MenuItem>}
                                 </MenuList>
                               </Menu>
                             </Text>
@@ -511,14 +534,15 @@ export default function CheckTable(props) {
 
       </Card>
       {/* modal */}
-      <Add
+      {isOpen && <Add
         isOpen={isOpen}
         size={size}
+        contactData={contactData[0]}
         onClose={onClose}
-        setAction={setAction} />
+        setAction={setAction} />}
       <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={selectedId} />
       <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} id={selectedId} />
-      <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} selectedId={selectedId} setSelectedId={setSelectedId} />
+      {edit && <Edit contactData={contactData[0]} isOpen={edit} size={size} onClose={setEdit} setAction={setAction} selectedId={selectedId} setSelectedId={setSelectedId} moduleId={contactData?.[0]?._id} />}
       <ImportModal text='Contact file' fetchData={fetchData} isOpen={isImportContact} onClose={setIsImportContact} />
       {/* Advance filter */}
       <Modal onClose={() => { setAdvaceSearch(false); resetForm(); }} isOpen={advaceSearch} isCentered>
@@ -609,8 +633,8 @@ export default function CheckTable(props) {
             </Grid>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" colorScheme='green' mr={2} onClick={handleSubmit} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
-            <Button colorScheme="red" onClick={() => resetForm()}>Clear</Button>
+            <Button colorScheme='brand' mr={2} size="sm" onClick={handleSubmit} disabled={isLoding || !dirty ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
+            <Button colorScheme="red" onClick={() => resetForm()} variant="outline" size='sm'>Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -623,24 +647,24 @@ export default function CheckTable(props) {
           <ModalBody>
             <div>
               {dynamicColumns.map((column) => (
-                <Text display={"flex"} key={column.accessor} py={2}>
+                <Text display={"flex"} key={column?.accessor} py={2}>
                   <Checkbox
-                    defaultChecked={selectedColumns.some((selectedColumn) => selectedColumn.accessor === column.accessor)}
-                    onChange={() => toggleColumnVisibility(column.accessor)}
+                    defaultChecked={selectedColumns.some((selectedColumn) => selectedColumn?.accessor === column?.accessor)}
+                    onChange={() => toggleColumnVisibility(column?.accessor)}
                     pe={2}
                   />
-                  {column.Header}
+                  {column?.Header}
                 </Text>
               ))}
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" colorScheme='green' mr={2} onClick={() => {
+            <Button colorScheme='brand' mr={2} onClick={() => {
               setSelectedColumns(tempSelectedColumns);
               setManageColumns(false);
               resetForm();
-            }} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
-            <Button colorScheme="red" onClick={() => resetForm()}>Clear</Button>
+            }} disabled={isLoding ? true : false} size='sm'>{isLoding ? <Spinner /> : 'Save'}</Button>
+            <Button variant='outline' colorScheme="red" size='sm' onClick={() => handleColumnClear()}>Close</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

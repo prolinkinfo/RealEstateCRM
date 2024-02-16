@@ -5,7 +5,7 @@ import Spinner from "components/spinner/Spinner";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { HasAccess } from "../../../redux/accessUtils";
 import { getApi } from "services/api";
 
@@ -20,7 +20,7 @@ const View = () => {
     const user = JSON.parse(localStorage.getItem("user"))
     const size = "lg";
     const [isLoding, setIsLoding] = useState(false)
-
+    const navigate = useNavigate()
 
     const fetchData = async () => {
         setIsLoding(true)
@@ -49,11 +49,17 @@ const View = () => {
                                 <Grid templateColumns={{ base: "1fr" }} gap={4}>
                                     <GridItem colSpan={2}>
                                         <Box>
-                                            <Heading size="md" mb={3}>
-                                                Meeting View page
-                                            </Heading>
+                                            <Flex justifyContent={"space-between"}>
+                                                <Heading size="md" mb={3}>
+                                                    Meeting View page
+                                                </Heading>
+                                                <Button leftIcon={<IoIosArrowBack />} size='sm' variant="brand" onClick={() => navigate(-1)}>
+                                                    Back
+                                                </Button>
+                                            </Flex>
                                             <HSeparator />
                                         </Box>
+
                                     </GridItem>
                                     <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                         <GridItem colSpan={{ base: 2, md: 1 }}>

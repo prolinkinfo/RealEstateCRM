@@ -162,8 +162,8 @@ export default function Dashboard(props) {
 						position='relative'
 						maxHeight='100%'
 						// w={{ base: '100%', xl: 'calc( 100% - 290px )' }}
-						w={{ base: '100%', xl: openSidebar === true ? 'calc( 100% - 290px )' : 'calc( 100% - 80px )' }}
-						maxWidth={{ base: '100%', xl: openSidebar === true ? 'calc( 100% - 290px )' : 'calc( 100% - 80px )' }}
+						w={{ base: '100%', xl: openSidebar === true ? 'calc( 100% - 300px )' : 'calc( 100% - 88px )' }}
+						maxWidth={{ base: '100%', xl: openSidebar === true ? 'calc( 100% - 300px )' : 'calc( 100% - 88px )' }}
 						transition='all 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1)'
 						transitionDuration='.2s, .2s, .35s'
 						transitionProperty='top, bottom, width'
@@ -186,7 +186,7 @@ export default function Dashboard(props) {
 						</Portal>
 						<Box pt={{ base: "150px", md: "95px", xl: "95px" }}>
 							{getRoute() ? (
-								<Box mx='auto' pe='20px' minH='84vh' pt='50px' style={{ padding: openSidebar ? '8px 0px' : '8px 20px' }}>
+								<Box mx='auto' pe='20px' minH='84vh' pt='50px' style={{ padding: openSidebar ? '8px 20px 8px 0px' : '8px 20px' }}>
 									<Suspense fallback={
 										<Flex justifyContent={'center'} alignItems={'center'} width="100%" >
 											<Spinner />

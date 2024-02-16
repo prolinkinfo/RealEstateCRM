@@ -9,6 +9,8 @@ import { getApi } from 'services/api';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 import { putApi } from 'services/api';
+import { AddIcon } from '@chakra-ui/icons';
+import DataNotFound from 'components/notFoundData';
 
 const ChangeImage = () => {
     const [imageModal, setImageModal] = useState(false)
@@ -57,7 +59,7 @@ const ChangeImage = () => {
         <>
             <Card>
                 <Flex justifyContent={'end'}>
-                    <Button variant='brand' size='sm' onClick={() => setImageModal(true)}>New Image</Button>
+                    <Button variant='brand' size='sm' onClick={() => setImageModal(true)} leftIcon={<AddIcon />}>Add New</Button>
                     <Button onClick={() => navigate('/admin-setting')} variant="brand" size="sm" leftIcon={<IoIosArrowBack />} ml={2}>Back</Button>
                 </Flex>
                 <Card>
@@ -65,7 +67,7 @@ const ChangeImage = () => {
                         {image?.length > 0 && image?.map((item, i) => (
                             <GridItem colSpan={{ base: 12, md: 4, lg: 3 }}>
                                 <div className="imageCard">
-                                    <Image src={item?.authImg} height={"200px"} width={"400px"} />
+                                    <Image src={item?.authImg} height={"200px"} width={"100%"} />
                                     {item?.isActive === true ? <Box backgroundColor={"#422afb"} color={"#fff"} height={"20px"} width={"140px"} position={"absolute"} top={"18px"} right={"-40px"} transform={"rotate(45deg)"} fontSize={"16px"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                                         Active
                                     </Box> : ""}
@@ -77,6 +79,7 @@ const ChangeImage = () => {
                             </GridItem>
                         ))}
                     </Grid>
+                    {!image?.length > 0 && <DataNotFound />}
                 </Card>
             </Card>
 

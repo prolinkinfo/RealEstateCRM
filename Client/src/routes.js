@@ -11,13 +11,16 @@ import {
 // icon
 import React from "react";
 import { AiFillFolderOpen, AiOutlineMail } from "react-icons/ai";
-import { FaCalendarAlt, FaRupeeSign, FaTasks } from "react-icons/fa";
+import { FaCalendarAlt, FaRupeeSign, FaTasks, FaWpforms } from "react-icons/fa";
 import { LuBuilding2 } from "react-icons/lu";
 import { PiPhoneCallBold } from "react-icons/pi";
 import { FaCreativeCommonsBy } from "react-icons/fa";
 import { SiGooglemeet } from "react-icons/si";
 import { ROLE_PATH } from "./roles";
 import ChangeImage from "views/admin/image";
+import Validation from "views/admin/validation";
+import CustomField from "views/admin/customField";
+import TableField from "views/admin/tableField";
 
 // Admin Imports
 const MainDashboard = React.lazy(() => import("views/admin/default"));
@@ -66,6 +69,7 @@ const TextMsgView = React.lazy(() => import("views/admin/textMsg/View"));
 const SignInCentered = React.lazy(() => import("views/auth/signIn"));
 // admin setting 
 const AdminSetting = React.lazy(() => import("views/admin/adminSetting"));
+const validation = React.lazy(() => import("views/admin/validation"));
 
 
 const routes = [
@@ -262,7 +266,14 @@ const routes = [
     icon: <Icon as={FaCreativeCommonsBy} width='20px' height='20px' color='inherit' />,
     component: Role,
   },
-
+  {
+    name: "Custom Field",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/custom-Field",
+    under: "customField",
+    icon: <Icon as={FaWpforms} width='20px' height='20px' color='inherit' />,
+    component: CustomField,
+  },
   {
     name: "Images",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
@@ -270,6 +281,22 @@ const routes = [
     under: "image",
     icon: <Icon as={FaCreativeCommonsBy} width='20px' height='20px' color='inherit' />,
     component: ChangeImage,
+  },
+  {
+    name: "Validation",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/validation",
+    under: "Validation",
+    icon: <Icon as={FaCreativeCommonsBy} width='20px' height='20px' color='inherit' />,
+    component: Validation,
+  },
+  {
+    name: "Table Fields",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/table-field",
+    under: "tableField",
+    icon: <Icon as={FaWpforms} width='20px' height='20px' color='inherit' />,
+    component: TableField,
   },
   // // ------------- Text message Routes ------------------------
   // {

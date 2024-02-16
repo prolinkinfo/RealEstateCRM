@@ -50,6 +50,7 @@ const Index = () => {
                 <GridItem colSpan={6}>
                     <CheckTable
                         isLoding={isLoding}
+                        setIsLoding={setIsLoding}
                         columnsData={tableColumns}
                         isOpen={isOpen}
                         setAction={setAction}

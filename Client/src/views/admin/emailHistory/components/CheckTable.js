@@ -56,18 +56,17 @@ import Add from '../add';
 import * as yup from "yup"
 import { useFormik } from "formik";
 import { BsColumnsGap } from "react-icons/bs";
-import { SearchIcon, ViewIcon } from "@chakra-ui/icons";
+import { AddIcon, SearchIcon, ViewIcon } from "@chakra-ui/icons";
 import { MdLeaderboard } from "react-icons/md";
 import { IoIosContact } from "react-icons/io";
 import { HasAccess } from "../../../../redux/accessUtils";
 import CustomSearchInput from "components/search/search";
+import DataNotFound from "components/notFoundData";
 
 export default function CheckTable(props) {
-  // const { columnsData, action } = props;
   const { columnsData, tableData, fetchData, isLoding, allData, access, dataColumn, setSearchedData, setDisplaySearchData, displaySearchData, columnsToExclude, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action } = props;
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
-  // const columns = useMemo(() => columnsData, [columnsData]);
   const columns = useMemo(() => dataColumn, [dataColumn]);
   const data = useMemo(() => tableData, [tableData]);
   const user = JSON.parse(localStorage.getItem("user"))
@@ -80,6 +79,7 @@ export default function CheckTable(props) {
   const [searchClear, setSearchClear] = useState(false);
   const [getTagValues, setGetTagValues] = useState([]);
   const [selectedValues, setSelectedValues] = useState([]);
+  const [column, setColumn] = useState('');
   const navigate = useNavigate()
 
   const csvColumns = [
@@ -90,17 +90,25 @@ export default function CheckTable(props) {
     { Header: "Created", access: "timestamp" },
   ];
 
+  let isColumnSelected;
   const toggleColumnVisibility = (columnKey) => {
-    const isColumnSelected = tempSelectedColumns.some((column) => column.Header === columnKey);
+    setColumn(columnKey)
+    isColumnSelected = tempSelectedColumns?.some((column) => column?.Header === columnKey);
 
     if (isColumnSelected) {
-      const updatedColumns = tempSelectedColumns.filter((column) => column.Header !== columnKey);
+      const updatedColumns = tempSelectedColumns?.filter((column) => column?.Header !== columnKey);
       setTempSelectedColumns(updatedColumns);
     } else {
-      const columnToAdd = dynamicColumns.find((column) => column.Header === columnKey);
+      const columnToAdd = dynamicColumns?.find((column) => column?.Header === columnKey);
       setTempSelectedColumns([...tempSelectedColumns, columnToAdd]);
     }
   };
+
+  const handleColumnClear = () => {
+    isColumnSelected = selectedColumns?.some((selectedColumn) => selectedColumn?.accessor === column?.accessor)
+    setTempSelectedColumns(dynamicColumns);
+    setManageColumns(!manageColumns ? !manageColumns : false)
+  }
   const initialValues = {
     senderName: '',
     realetedTo: '',
@@ -137,7 +145,7 @@ export default function CheckTable(props) {
   useEffect(() => {
     setSearchedData && setSearchedData(data);
   }, []);
-  const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
+  const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm, dirty } = formik
   const handleClick = () => {
     onOpen()
   }
@@ -265,8 +273,8 @@ export default function CheckTable(props) {
         w="100%"
         overflowX={{ sm: "scroll", lg: "hidden" }}
       >
-        <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={4} mx={4}>
-          <GridItem colSpan={8} >
+        <Grid templateColumns="repeat(12, 1fr)" gap={2}>
+          <GridItem colSpan={{ base: 12, md: 8 }} display={"flex"} alignItems={"center"}>
             <Flex alignItems={"center"} flexWrap={"wrap"}>
               <Text
                 color={"secondaryGray.900"}
@@ -278,16 +286,16 @@ export default function CheckTable(props) {
 
               </Text>
               <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={dataColumn} onSearch={handleSearch} />
-              <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} size="sm">Advance Search</Button>
-              {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>clear</Button> : ""}
+              <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} mt={{ sm: "5px", md: "0" }} size="sm">Advance Search</Button>
+              {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>Clear</Button> : ""}
             </Flex>
           </GridItem>
-          <GridItem colSpan={4} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
+          <GridItem colSpan={{ base: 12, md: 4 }} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
             <Menu isLazy  >
               <MenuButton p={4}>
                 <BsColumnsGap />
               </MenuButton>
-              <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} >
+              <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} zIndex={2}  >
                 <MenuItem onClick={() => setManageColumns(true)} width={"165px"}> Manage Columns
                 </MenuItem>
                 {/* <MenuItem width={"165px"} onClick={() => setIsImportLead(true)}> Import Leads
@@ -298,7 +306,7 @@ export default function CheckTable(props) {
               </MenuList>
             </Menu>
             <GridItem colStart={6} textAlign={"right"}>
-              {access?.create && <Button onClick={() => handleClick()} variant="brand" size="sm">Add Email</Button>}
+              {access?.create && <Button onClick={() => handleClick()} variant="brand" size="sm" leftIcon={<AddIcon />}>Add New</Button>}
             </GridItem>
           </GridItem>
           <HStack spacing={4}>
@@ -375,7 +383,7 @@ export default function CheckTable(props) {
                   <Tr>
                     <Td colSpan={columns.length}>
                       <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                        -- No Data Found --
+                        <DataNotFound />
                       </Text>
                     </Td>
                   </Tr>
@@ -388,7 +396,7 @@ export default function CheckTable(props) {
                         if (cell?.column.Header === "#") {
                           data = (
                             <Flex align="center">
-                              <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />
+                              {/* <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" /> */}
                               <Text color={textColor} fontSize="sm" fontWeight="700">
                                 {cell?.row?.index + 1}
                               </Text>
@@ -486,12 +494,12 @@ export default function CheckTable(props) {
                               <Menu isLazy  >
                                 <MenuButton><CiMenuKebab /></MenuButton>
                                 <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
-                                  {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/Email/${cell?.row?.values._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>}
+                                  {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/Email/${cell?.row?.values._id}`)} icon={<ViewIcon mb={'2px'} fontSize={15} />}>View</MenuItem>}
                                   {cell?.row?.original?.createBy && contactAccess?.view ?
                                     <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(cell?.row?.original?.createBy && `/contactView/${cell?.row?.original.createBy}`)} icon={cell?.row?.original.createBy && <IoIosContact fontSize={15} />}>  {(cell?.row?.original.createBy && contactAccess?.view) && "contact"}
                                     </MenuItem>
                                     : ''}
-                                  {cell?.row?.original.createByLead && leadAccess?.view ? <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(`/leadView/${cell?.row?.original.createByLead}`)} icon={cell?.row?.original.createByLead && leadAccess?.view && <MdLeaderboard fontSize={15} />}>{cell?.row?.original.createByLead && leadAccess?.view && 'lead'}</MenuItem> : ''}
+                                  {cell?.row?.original.createByLead && leadAccess?.view ? <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(`/leadView/${cell?.row?.original.createByLead}`)} icon={cell?.row?.original.createByLead && leadAccess?.view && <MdLeaderboard style={{ marginBottom: '4px' }} fontSize={15} />}>{cell?.row?.original.createByLead && leadAccess?.view && 'lead'}</MenuItem> : ''}
                                 </MenuList>
                               </Menu>
                             </Text>
@@ -579,8 +587,8 @@ export default function CheckTable(props) {
             </Grid>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" colorScheme='green' mr={2} onClick={handleSubmit} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
-            <Button colorScheme="red" onClick={() => resetForm()}>Clear</Button>
+            <Button variant="brand" size="sm" mr={2} onClick={handleSubmit} disabled={isLoding || !dirty ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
+            <Button variant="outline" colorScheme="red" size="sm" onClick={() => resetForm()}>Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -593,24 +601,24 @@ export default function CheckTable(props) {
           <ModalBody>
             <div>
               {dynamicColumns.map((column) => (
-                <Text display={"flex"} key={column.Header} py={2}>
+                <Text display={"flex"} key={column?.Header} py={2}>
                   <Checkbox
-                    defaultChecked={selectedColumns.some((selectedColumn) => selectedColumn.Header === column.Header)}
-                    onChange={() => toggleColumnVisibility(column.Header)}
+                    defaultChecked={selectedColumns?.some((selectedColumn) => selectedColumn?.Header === column?.Header)}
+                    onChange={() => toggleColumnVisibility(column?.Header)}
                     pe={2}
                   />
-                  {column.Header}
+                  {column?.Header}
                 </Text>
               ))}
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" colorScheme='green' mr={2} onClick={() => {
+            <Button variant="brand" size="sm" mr={2} onClick={() => {
               setSelectedColumns(tempSelectedColumns);
               setManageColumns(false);
               resetForm();
             }} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
-            <Button colorScheme="red" onClick={() => resetForm()}>Clear</Button>
+            <Button variant="outline" colorScheme="red" onClick={() => handleColumnClear()} size="sm">Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

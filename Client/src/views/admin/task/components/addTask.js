@@ -219,6 +219,7 @@ const AddTask = (props) => {
                             <Input
                                 type={isChecked ? 'date' : 'datetime-local'}
                                 fontSize='sm'
+                                min={values.start}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 value={values.end}
@@ -316,11 +317,15 @@ const AddTask = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Add'}</Button>
-                    <Button onClick={() => {
-                        formik.resetForm()
-                        onClose()
-                    }}>Clear</Button>
+                    <Button size="sm" variant='brand' disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Save'}</Button>
+                    <Button sx={{
+                        marginLeft: 2,
+                        textTransform: "capitalize",
+                    }} variant="outline"
+                        colorScheme="red" size="sm" onClick={() => {
+                            formik.resetForm()
+                            onClose()
+                        }}>Close</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

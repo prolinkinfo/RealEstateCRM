@@ -18,6 +18,7 @@ const Task = (props) => {
         },
         { Header: 'Title', accessor: 'title' },
         { Header: "Related", accessor: "category", },
+        { Header: "Status", accessor: "status", },
         { Header: "Assignment To", accessor: "assignmentToName", },
         { Header: "Start Date", accessor: "start", },
         { Header: "End Date", accessor: "end", },
@@ -65,6 +66,7 @@ const Task = (props) => {
                 displaySearchData={displaySearchData}
                 tableData={displaySearchData ? searchedData : data}
                 fetchData={fetchData}
+                setIsLoding={setIsLoding}
                 setDisplaySearchData={setDisplaySearchData}
                 setDynamicColumns={setDynamicColumns}
                 dynamicColumns={dynamicColumns}

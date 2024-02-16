@@ -59,9 +59,11 @@ import DeleteTask from "./deleteTask";
 import * as XLSX from 'xlsx'
 import { HasAccess } from "../../../../redux/accessUtils";
 import CustomSearchInput from "components/search/search";
+import { putApi } from "services/api";
+import DataNotFound from "components/notFoundData";
 
 export default function CheckTable(props) {
-  const { tableData, fetchData, isLoding, allData, dataColumn, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action, className } = props;
+  const { tableData, fetchData, isLoding, setIsLoding, allData, dataColumn, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action, className } = props;
 
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -69,6 +71,7 @@ export default function CheckTable(props) {
   const [selectedValues, setSelectedValues] = useState([]);
   const [getTagValues, setGetTagValues] = useState([]);
   const [deleteModel, setDelete] = useState(false);
+  const [deleteMany, setDeleteMany] = useState(false);
   const [advaceSearch, setAdvaceSearch] = useState(false);
   const [searchClear, setSearchClear] = useState(false);
   const [selectedId, setSelectedId] = useState();
@@ -79,6 +82,7 @@ export default function CheckTable(props) {
   const [tempSelectedColumns, setTempSelectedColumns] = useState(dataColumn);
   const [eventView, setEventView] = useState(false)
   const [id, setId] = useState()
+  const [column, setColumn] = useState('');
   const [gopageValue, setGopageValue] = useState()
   const user = JSON.parse(localStorage.getItem("user"))
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -94,18 +98,25 @@ export default function CheckTable(props) {
     { Header: "Start Date", accessor: "start" },
     { Header: "End Date", accessor: "end" },
   ];
-
+  let isColumnSelected;
   const toggleColumnVisibility = (columnKey) => {
-    const isColumnSelected = tempSelectedColumns.some((column) => column.accessor === columnKey);
+    setColumn(columnKey)
+    isColumnSelected = tempSelectedColumns?.some((column) => column?.accessor === columnKey);
 
     if (isColumnSelected) {
-      const updatedColumns = tempSelectedColumns.filter((column) => column.accessor !== columnKey);
+      const updatedColumns = tempSelectedColumns?.filter((column) => column?.accessor !== columnKey);
       setTempSelectedColumns(updatedColumns);
     } else {
-      const columnToAdd = dynamicColumns.find((column) => column.accessor === columnKey);
+      const columnToAdd = dynamicColumns?.find((column) => column?.accessor === columnKey);
       setTempSelectedColumns([...tempSelectedColumns, columnToAdd]);
     }
   };
+
+  const handleColumnClear = () => {
+    isColumnSelected = selectedColumns?.some((selectedColumn) => selectedColumn?.accessor === column?.accessor)
+    setTempSelectedColumns(dynamicColumns);
+    setManageColumns(!manageColumns ? !manageColumns : false)
+  }
   const initialValues = {
     title: '',
     category: '',
@@ -154,7 +165,7 @@ export default function CheckTable(props) {
   const handleClear = () => {
     setDisplaySearchData(false)
   }
-  const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
+  const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm, dirty } = formik
 
   const tableInstance = useTable(
     {
@@ -264,6 +275,37 @@ export default function CheckTable(props) {
     setSearchedData(results);
   };
 
+  const setStatusData = async (cell, e) => {
+    try {
+      setIsLoding(true)
+      let response = await putApi(`api/task/changeStatus/${cell?.row?.original?._id}`, { status: e.target.value });
+      if (response.status === 200) {
+        setAction((pre) => !pre)
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    finally {
+      setIsLoding(false)
+    }
+  }
+  const changeStatus = (cell) => {
+    switch (cell.value) {
+      case 'pending':
+        return 'pending';
+      case 'completed':
+        return 'completed';
+      case 'todo':
+        return 'toDo';
+      case 'onHold':
+        return 'onHold';
+      case 'inProgress':
+        return 'inProgress';
+      default:
+        return '';
+    }
+
+  }
   return (
     <>
       <Card
@@ -271,8 +313,8 @@ export default function CheckTable(props) {
         w="100%"
         overflowX={{ sm: "scroll", lg: "hidden" }}
       >
-        <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={4} mx={4}>
-          <GridItem colSpan={8} >
+        <Grid templateColumns="repeat(12, 1fr)" gap={2}>
+          <GridItem colSpan={{ base: 12, md: 8 }} display={"flex"} alignItems={"center"}>
             <Flex alignItems={"center"} flexWrap={"wrap"}>
               <Text
                 color={"secondaryGray.900"}
@@ -282,16 +324,17 @@ export default function CheckTable(props) {
                 Task  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
               </Text>
               <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={dataColumn} onSearch={handleSearch} />
-              <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} size="sm">Advance Search</Button>
-              {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>clear</Button> : ""}
+              <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} mt={{ sm: "5px", md: "0" }} size="sm">Advance Search</Button>
+              {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>Clear</Button> : ""}
+              {(selectedValues.length > 0 && access?.delete) && <DeleteIcon cursor={"pointer"} onClick={() => setDeleteMany(true)} color={'red'} ms={2} />}
             </Flex>
           </GridItem>
-          <GridItem colSpan={4} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
+          <GridItem colSpan={{ base: 12, md: 4 }} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
             <Menu isLazy  >
               <MenuButton p={4}>
                 <BsColumnsGap />
               </MenuButton>
-              <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} >
+              <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} zIndex={2}  >
                 <MenuItem onClick={() => setManageColumns(true)} width={"165px"}> Manage Columns
                 </MenuItem>
                 {/* <MenuItem width={"165px"} onClick={() => setIsImportLead(true)}> Import Leads
@@ -301,7 +344,7 @@ export default function CheckTable(props) {
                 <MenuItem width={"165px"} onClick={() => handleExportTasks('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem>
               </MenuList>
             </Menu>
-            {access?.create && <Button onClick={() => handleClick()} size="sm" variant="brand">Create Task</Button>}
+            {access?.create && <Button size="sm" onClick={() => handleClick()} variant="brand" leftIcon={<AddIcon />}>Add New</Button>}
             {/* {setTaskModel && <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" >Create Task</Button>} */}
           </GridItem>
           <HStack spacing={4}>
@@ -322,7 +365,7 @@ export default function CheckTable(props) {
         </Grid>
         <Box overflowY={"auto"} className={className}>
           <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
-            <Thead>
+            <Thead zIndex={1}>
               {headerGroups?.map((headerGroup, index) => (
                 <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
                   {headerGroup.headers?.map((column, index) => (
@@ -366,7 +409,7 @@ export default function CheckTable(props) {
                   <Tr>
                     <Td colSpan={columns.length}>
                       <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                        -- No Data Found --
+                        <DataNotFound />
                       </Text>
                     </Td>
                   </Tr>
@@ -409,6 +452,18 @@ export default function CheckTable(props) {
                               {cell?.value ? cell?.value : ' - '}
                             </Text>
                           );
+                        } else if (cell?.column.Header === "Status") {
+                          data = (
+                            <div className="selectOpt">
+                              <Select className={changeStatus(cell)} onChange={(e) => setStatusData(cell, e)} height={7} width={130} value={cell?.value} style={{ fontSize: "14px" }}>
+                                <option value='completed'>Completed</option>
+                                <option value='todo'>Todo</option>
+                                <option value='onHold'>On Hold</option>
+                                <option value='inProgress'>In Progress</option>
+                                <option value='pending'>Pending</option>
+                              </Select>
+                            </div>
+                          );
                         } else if (cell?.column.Header === "Assignment To") {
                           data = (
                             <Text
@@ -438,9 +493,9 @@ export default function CheckTable(props) {
                               <Menu isLazy  >
                                 <MenuButton><CiMenuKebab /></MenuButton>
                                 <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
-                                  {access?.update && <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>}
-                                  {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/view/${cell?.row?.original._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>}
-                                  {access?.delete && <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>}
+                                  {access?.update && <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(cell?.row?.original._id) }} icon={<EditIcon mb={1} fontSize={15} />}>Edit</MenuItem>}
+                                  {access?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/view/${cell?.row?.original._id}`)} icon={<ViewIcon mb={1} fontSize={15} />}>View</MenuItem>}
+                                  {access?.delete && <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([cell?.row?.original._id]); setDelete(true) }} icon={<DeleteIcon mb={1} fontSize={15} />}>Delete</MenuItem>}
                                 </MenuList>
                               </Menu>
                             </Text>
@@ -472,6 +527,7 @@ export default function CheckTable(props) {
       <EditTask isOpen={edit} onClose={setEdit} viewClose={onClose} id={selectedId} setAction={setAction} />
       <EventView fetchData={fetchData} isOpen={eventView} access={access} contactAccess={contactAccess} leadAccess={leadAccess} onClose={setEventView} info={id} setAction={setAction} action={action} />
       <DeleteTask isOpen={deleteModel} onClose={setDelete} viewClose={onClose} url='api/task/delete/' method='one' id={selectedValues} redirectPage={"/task"} setAction={setAction} />
+      <DeleteTask isOpen={deleteMany} onClose={setDeleteMany} viewClose={onClose} url='api/task/deleteMany' method='many' data={selectedValues} setSelectedValues={setSelectedValues} redirectPage={"/task"} fetchData={fetchData} setAction={setAction} />
       <ImportModal text='Lead file' fetchData={fetchData} isOpen={isImportLead} onClose={setIsImportLead} />
       {/* Advance filter modal*/}
       <Modal onClose={() => { setAdvaceSearch(false); resetForm() }} isOpen={advaceSearch} isCentered>
@@ -557,15 +613,12 @@ export default function CheckTable(props) {
                   fontWeight='500'
                 />
                 <Text mb='10px' color={'red'}> {errors.assignmentToName && touched.assignmentToName && errors.assignmentToName}</Text>
-
               </GridItem>
-
-
             </Grid>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" colorScheme='green' mr={2} onClick={handleSubmit} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
-            <Button colorScheme="red" onClick={() => resetForm()}>Clear</Button>
+            <Button size="sm" variant="brand" mr={2} onClick={handleSubmit} disabled={isLoding || !dirty ? true : false} >{isLoding ? <Spinner /> : 'Search'}</Button>
+            <Button size="sm" variant="outline" colorScheme="red" onClick={() => resetForm()}>Clear</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -577,25 +630,25 @@ export default function CheckTable(props) {
           <ModalCloseButton onClick={() => { setManageColumns(false); resetForm() }} />
           <ModalBody>
             <div>
-              {dynamicColumns.map((column) => (
-                <Text display={"flex"} key={column.accessor} py={2}>
+              {dynamicColumns.map((column, i) => (
+                <Text display={"flex"} key={column.accessor} py={2} >
                   <Checkbox
-                    defaultChecked={selectedColumns.some((selectedColumn) => selectedColumn.accessor === column.accessor)}
-                    onChange={() => toggleColumnVisibility(column.accessor)}
+                    defaultChecked={selectedColumns.some((selectedColumn) => selectedColumn?.accessor === column?.accessor)}
+                    onChange={() => toggleColumnVisibility(column?.accessor)}
                     pe={2}
                   />
-                  {column.Header}
+                  {column?.Header}
                 </Text>
               ))}
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" colorScheme='green' mr={2} onClick={() => {
+            <Button size="sm" variant='brand' mr={2} onClick={() => {
               setSelectedColumns(tempSelectedColumns);
               setManageColumns(false);
               resetForm();
             }} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
-            <Button colorScheme="red" onClick={() => resetForm()}>Clear</Button>
+            <Button size="sm" variant="outline" colorScheme="red" onClick={() => handleColumnClear()}>Close</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

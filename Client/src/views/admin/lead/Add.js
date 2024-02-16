@@ -3,50 +3,66 @@ import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, 
 import { HSeparator } from 'components/separator/Separator';
 import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { leadSchema } from 'schema';
+import { getApi } from 'services/api';
 import { postApi } from 'services/api';
+import { generateValidationSchema } from 'utils';
+import CustomForm from 'utils/customForm';
+import * as yup from 'yup'
 
 const Add = (props) => {
     const [isLoding, setIsLoding] = useState(false)
 
+    // const initialValues = {
+    //     // Lead Information:
+    //     leadName: '',
+    //     leadEmail: '',
+    //     leadPhoneNumber: '',
+    //     leadAddress: '',
+    //     // Lead Source and Details:
+    //     leadSource: '',
+    //     leadStatus: '',
+    //     leadSourceDetails: '',
+    //     leadCampaign: '',
+    //     leadSourceChannel: '',
+    //     leadSourceMedium: '',
+    //     leadSourceCampaign: '',
+    //     leadSourceReferral: '',
+    //     // Lead Assignment and Ownership:
+    //     leadAssignedAgent: '',
+    //     leadOwner: '',
+    //     leadCommunicationPreferences: '',
+    //     // Lead Dates and Follow-up:
+    //     leadCreationDate: '',
+    //     leadConversionDate: '',
+    //     leadFollowUpDate: '',
+    //     leadFollowUpStatus: '',
+    //     // Lead Scoring and Nurturing:
+    //     leadScore: '',
+    //     leadNurturingWorkflow: '',
+    //     leadEngagementLevel: '',
+    //     leadConversionRate: '',
+    //     leadNurturingStage: '',
+    //     leadNextAction: '',
+    //     createBy: JSON.parse(localStorage.getItem('user'))._id,
+    // };
+
+    // const initialFieldValues = Object.fromEntries(props?.leadData && props?.leadData?.fields?.length > 0 && props?.leadData?.fields?.map(field => [field?.name, '']))
+
+    const initialFieldValues = Object.fromEntries(
+        (props?.leadData?.fields || []).map(field => [field?.name, ''])
+      );
+
     const initialValues = {
-        // Lead Information:
-        leadName: '',
-        leadEmail: '',
-        leadPhoneNumber: '',
-        leadAddress: '',
-        // Lead Source and Details:
-        leadSource: '',
-        leadStatus: '',
-        leadSourceDetails: '',
-        leadCampaign: '',
-        leadSourceChannel: '',
-        leadSourceMedium: '',
-        leadSourceCampaign: '',
-        leadSourceReferral: '',
-        // Lead Assignment and Ownership:
-        leadAssignedAgent: '',
-        leadOwner: '',
-        leadCommunicationPreferences: '',
-        // Lead Dates and Follow-up:
-        leadCreationDate: '',
-        leadConversionDate: '',
-        leadFollowUpDate: '',
-        leadFollowUpStatus: '',
-        // Lead Scoring and Nurturing:
-        leadScore: '',
-        leadNurturingWorkflow: '',
-        leadEngagementLevel: '',
-        leadConversionRate: '',
-        leadNurturingStage: '',
-        leadNextAction: '',
-        createBy: JSON.parse(localStorage.getItem('user'))._id,
+        ...initialFieldValues,
+        createBy: JSON.parse(localStorage.getItem('user'))._id
     };
 
     const formik = useFormik({
         initialValues: initialValues,
-        validationSchema: leadSchema,
+        // validationSchema: validationSchema,
+        validationSchema: yup.object().shape(generateValidationSchema(props?.leadData?.fields)),
         onSubmit: (values, { resetForm }) => {
             AddData();
         },
@@ -54,11 +70,11 @@ const Add = (props) => {
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
 
-
     const AddData = async () => {
         try {
             setIsLoding(true)
-            let response = await postApi('api/lead/add', values)
+            // let response = await postApi('api/lead/add', values)
+            let response = await postApi('api/form/add', { ...values, moduleId: props?.leadData?._id })
             if (response.status === 200) {
                 props.onClose();
                 formik.resetForm();
@@ -87,454 +103,118 @@ const Add = (props) => {
                         <IconButton onClick={props.onClose} icon={<CloseIcon />} />
                     </DrawerHeader>
                     <DrawerBody>
-
-                        <Grid templateColumns="repeat(12, 1fr)" gap={3}>
-
-                            <GridItem colSpan={{ base: 12 }}>
-                                <Heading as="h1" size="md" >
-                                    1. Basic Lead Information
-                                </Heading>
-                            </GridItem>
-
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead Name<Text color={"red"}>*</Text>
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadName}
-                                    name="leadName"
-                                    placeholder='Enter Lead Name'
-                                    fontWeight='500'
-                                    borderColor={errors.leadName && touched.leadName ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}> {errors.leadName && touched.leadName && errors.leadName}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead Email<Text color={"red"}>*</Text>
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadEmail}
-                                    name="leadEmail"
-                                    type='Email'
-                                    placeholder='mail@simmmple.com'
-                                    fontWeight='500'
-                                    borderColor={errors.leadEmail && touched.leadEmail ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}>{errors.leadEmail && touched.leadEmail && errors.leadEmail}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead Phone Number<Text color={"red"}>*</Text>
-                                </FormLabel>
-                                <InputGroup>
-                                    <InputLeftElement
-                                        pointerEvents="none"
-                                        children={<PhoneIcon color="gray.300" borderRadius="16px" />}
-                                    />
-                                    <Input type="tel"
-                                        fontSize='sm'
-                                        onChange={handleChange} onBlur={handleBlur}
-                                        value={values.leadPhoneNumber}
-                                        name="leadPhoneNumber"
-                                        fontWeight='500'
-                                        borderColor={errors.leadPhoneNumber && touched.leadPhoneNumber ? "red.300" : null}
-                                        placeholder="Phone number" borderRadius="16px" />
-                                </InputGroup>
-                                <Text mb='10px' color={'red'}>{errors.leadPhoneNumber && touched.leadPhoneNumber && errors.leadPhoneNumber}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead Address<Text color={"red"}>*</Text>
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadAddress}
-                                    name="leadAddress"
-                                    placeholder='Enter Lead Address'
-                                    fontWeight='500'
-                                    borderColor={errors.leadAddress && touched.leadAddress ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}>{errors.leadAddress && touched.leadAddress && errors.leadAddress}</Text>
-                            </GridItem>
-
-                            <GridItem colSpan={{ base: 12 }}>
-                                <HSeparator />
-                                <Heading mt={2} as="h1" size="md" >
-                                    2. Lead Source and Details
-                                </Heading>
-                            </GridItem>
-
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead Source
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadSource}
-                                    name="leadSource"
-                                    placeholder='Enter Lead Source'
-                                    fontWeight='500'
-                                    borderColor={errors.leadSource && touched.leadSource ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}>{errors.leadSource && touched.leadSource && errors.leadSource}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead Status
-                                </FormLabel>
-                                <Select
-                                    value={values.leadStatus}
-                                    name="leadStatus"
-                                    onChange={handleChange}
-                                    fontWeight='500'
-                                    placeholder={'Select Lead Source'}
-                                    borderColor={errors.leadStatus && touched.leadStatus ? "red.300" : null}
-                                >
-                                    <option value='active'>Active</option>
-                                    <option value='pending'>Pending</option>
-                                    <option value='sold'>Sold</option>
-                                </Select>
-                                <Text mb='10px' color={'red'}>{errors.leadStatus && touched.leadStatus && errors.leadStatus}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead Source Details
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadSourceDetails}
-                                    name="leadSourceDetails"
-                                    placeholder='Enter Lead Source Details'
-                                    fontWeight='500'
-                                    borderColor={errors.leadSourceDetails && touched.leadSourceDetails ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}>{errors.leadSourceDetails && touched.leadSourceDetails && errors.leadSourceDetails}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead Campaign
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadCampaign}
-                                    name="leadCampaign"
-                                    placeholder='Enter Lead Campaign'
-                                    fontWeight='500'
-                                    borderColor={errors.leadCampaign && touched.leadCampaign ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}>{errors.leadCampaign && touched.leadCampaign && errors.leadCampaign}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead Source Channel
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadSourceChannel}
-                                    name="leadSourceChannel"
-                                    placeholder='Enter Lead Source Channel'
-                                    fontWeight='500'
-                                    borderColor={errors.leadSourceChannel && touched.leadSourceChannel ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}>{errors.leadSourceChannel && touched.leadSourceChannel && errors.leadSourceChannel}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead Source Medium
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadSourceMedium}
-                                    name="leadSourceMedium"
-                                    placeholder='Enter Lead Source Medium'
-                                    fontWeight='500'
-                                    borderColor={errors.leadSourceMedium && touched.leadSourceMedium ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}>{errors.leadSourceMedium && touched.leadSourceMedium && errors.leadSourceMedium}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead Source Campaign
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadSourceCampaign}
-                                    name="leadSourceCampaign"
-                                    placeholder='Enter lead Source Campaign'
-                                    fontWeight='500'
-                                    borderColor={errors.leadSourceCampaign && touched.leadSourceCampaign ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}>{errors.leadSourceCampaign && touched.leadSourceCampaign && errors.leadSourceCampaign}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead Source Referral
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadSourceReferral}
-                                    name="leadSourceReferral"
-                                    placeholder='Enter Lead Source Referral'
-                                    fontWeight='500'
-                                    borderColor={errors.leadSourceReferral && touched.leadSourceReferral ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}>{errors.leadSourceReferral && touched.leadSourceReferral && errors.leadSourceReferral}</Text>
-                            </GridItem>
-
-                            <GridItem colSpan={{ base: 12 }}>
-                                <HSeparator />
-                                <Heading mt={2} as="h1" size="md" >
-                                    3. Lead Assignment and Ownership
-                                </Heading>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead Assigned Agent
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadAssignedAgent}
-                                    name="leadAssignedAgent"
-                                    placeholder='Enter Lead Assigned Agent'
-                                    fontWeight='500'
-                                    borderColor={errors.leadAssignedAgent && touched.leadAssignedAgent ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}>{errors.leadAssignedAgent && touched.leadAssignedAgent && errors.leadAssignedAgent}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead Owner
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadOwner}
-                                    name="leadOwner"
-                                    placeholder='Enter Lead Owner'
-                                    fontWeight='500'
-                                    borderColor={errors.leadOwner && touched.leadOwner ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}>{errors.leadOwner && touched.leadOwner && errors.leadOwner}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead Communication Preferences
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadCommunicationPreferences}
-                                    name="leadCommunicationPreferences"
-                                    placeholder='Enter Lead Communication Preferences'
-                                    fontWeight='500'
-                                    borderColor={errors.leadCommunicationPreferences && touched.leadCommunicationPreferences ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}>{errors.leadCommunicationPreferences && touched.leadCommunicationPreferences && errors.leadCommunicationPreferences}</Text>
-                            </GridItem>
-
-
-                            <GridItem colSpan={{ base: 12 }}>
-                                <HSeparator />
-                                <Heading mt={2} as="h1" size="md" >
-                                    4. Lead Dates and Follow-up
-                                </Heading>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead Creation Date
-                                </FormLabel>
-                                <Input
-                                    type='date'
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadCreationDate}
-                                    name="leadCreationDate"
-                                    fontWeight='500'
-                                    borderColor={errors.leadCreationDate && touched.leadCreationDate ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}> {errors.leadCreationDate && touched.leadCreationDate && errors.leadCreationDate}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead Conversion Date
-                                </FormLabel>
-                                <Input
-                                    type='date'
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadConversionDate}
-                                    name="leadConversionDate"
-                                    fontWeight='500'
-                                    borderColor={errors.leadConversionDate && touched.leadConversionDate ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}> {errors.leadConversionDate && touched.leadConversionDate && errors.leadConversionDate}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead FollowUp Date
-                                </FormLabel>
-                                <Input
-                                    type='date'
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadFollowUpDate}
-                                    name="leadFollowUpDate"
-                                    fontWeight='500'
-                                    borderColor={errors.leadFollowUpDate && touched.leadFollowUpDate ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}> {errors.leadFollowUpDate && touched.leadFollowUpDate && errors.leadFollowUpDate}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead FollowUp Status
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadFollowUpStatus}
-                                    name="leadFollowUpStatus"
-                                    placeholder='Lead FollowUp Status'
-                                    fontWeight='500'
-                                    borderColor={errors.leadFollowUpStatus && touched.leadFollowUpStatus ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}> {errors.leadFollowUpStatus && touched.leadFollowUpStatus && errors.leadFollowUpStatus}</Text>
-                            </GridItem>
-
-                            <GridItem colSpan={{ base: 12 }}>
-                                <HSeparator />
-                                <Heading mt={2} as="h1" size="md" >
-                                    5. Lead Scoring and Nurturing
-                                </Heading>
-                            </GridItem>
-
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead Score
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadScore}
-                                    type='number'
-                                    name="leadScore"
-                                    placeholder='Lead Score'
-                                    fontWeight='500'
-                                    borderColor={errors.leadScore && touched.leadScore ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}> {errors.leadScore && touched.leadScore && errors.leadScore}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead Nurturing Workflow
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadNurturingWorkflow}
-                                    name="leadNurturingWorkflow"
-                                    placeholder=' Lead Nurturing Workflow'
-                                    fontWeight='500'
-                                    borderColor={errors.leadNurturingWorkflow && touched.leadNurturingWorkflow ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}> {errors.leadNurturingWorkflow && touched.leadNurturingWorkflow && errors.leadNurturingWorkflow}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead Engagement Level
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadEngagementLevel}
-                                    name="leadEngagementLevel"
-                                    placeholder='Lead Engagement Level'
-                                    fontWeight='500'
-                                    borderColor={errors.leadEngagementLevel && touched.leadEngagementLevel ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}> {errors.leadEngagementLevel && touched.leadEngagementLevel && errors.leadEngagementLevel}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead Conversion Rate
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    type='number'
-                                    value={values.leadConversionRate}
-                                    name="leadConversionRate"
-                                    placeholder='Lead Conversion Rate'
-                                    fontWeight='500'
-                                    borderColor={errors.leadConversionRate && touched.leadConversionRate ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}> {errors.leadConversionRate && touched.leadConversionRate && errors.leadConversionRate}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead Nurturing Stage
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadNurturingStage}
-                                    name="leadNurturingStage"
-                                    placeholder='Lead Nurturing Stage'
-                                    fontWeight='500'
-                                    borderColor={errors.leadNurturingStage && touched.leadNurturingStage ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}> {errors.leadNurturingStage && touched.leadNurturingStage && errors.leadNurturingStage}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Lead Next Action
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.leadNextAction}
-                                    name="leadNextAction"
-                                    placeholder='Lead Next Action'
-                                    fontWeight='500'
-                                    borderColor={errors.leadNextAction && touched.leadNextAction ? "red.300" : null}
-                                />
-                                <Text mb='10px' color={'red'}> {errors.leadNextAction && touched.leadNextAction && errors.leadNextAction}</Text>
-                            </GridItem>
-
-                        </Grid>
+                        {/* <Grid templateColumns="repeat(12, 1fr)" gap={3}>
+                            {props?.leadData?.headings?.length > 0 ?
+                                <>
+                                    {
+                                        props?.leadData?.headings?.map((item, ind) => (
+                                            <>
+                                                <GridItem colSpan={{ base: 12 }}>
+                                                    {ind !== 0 && <HSeparator />}
+                                                    <Heading as="h1" size="md" >
+                                                        {ind + 1}. {item?.heading}
+                                                    </Heading>
+                                                </GridItem>
+                                                {
+                                                    props?.leadData?.fields?.filter((itm) => itm?.belongsTo === item?._id)?.map((field) => (
+                                                        <GridItem colSpan={{ base: 12, sm: 6 }}>
+                                                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px' htmlFor={field?.name}>
+                                                                {field.label} {field.validation && field.validation.find((validation) => validation.require) && (
+                                                                    <span style={{ color: 'red' }}>*</span>
+                                                                )}
+                                                            </FormLabel>
+                                                            <Input
+                                                                id={field?.name}
+                                                                name={field?.name}
+                                                                type={field?.type}
+                                                                value={values?.[field?.name]}
+                                                                onChange={handleChange} onBlur={handleBlur}
+                                                                fontSize='sm'
+                                                                fontWeight='500'
+                                                                borderColor={errors?.[field?.name] && touched?.[field?.name] ? "red.300" : null}
+                                                                placeholder={`Enter ${field?.label}`}
+                                                            />
+                                                            {touched[field?.name] && errors?.[field?.name] ? (
+                                                                <Text mb='10px' color={'red'}> {errors?.[field?.name]}</Text>
+                                                            ) : null}
+                                                        </GridItem>
+                                                    ))
+                                                }
+                                            </>
+                                        ))
+                                    }
+                                    {props?.leadData?.headings?.length > 0 &&
+                                        props?.leadData?.headings?.map((item, ind) => (
+                                            <>
+                                                {props?.leadData?.fields?.filter((itm) => !itm?.belongsTo)?.map((field) => (
+                                                    <GridItem colSpan={{ base: 12, sm: 6 }} key={field?.name}>
+                                                        <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px' htmlFor={field?.name}>
+                                                            {field.label} {field.validation && field.validation.find((validation) => validation.require) && (
+                                                                <span style={{ color: 'red' }}>*</span>
+                                                            )}
+                                                        </FormLabel>
+                                                        <Input
+                                                            id={field?.name}
+                                                            name={field?.name}
+                                                            type={field?.type}
+                                                            value={values?.[field?.name]}
+                                                            onChange={handleChange} onBlur={handleBlur}
+                                                            fontSize='sm'
+                                                            fontWeight='500'
+                                                            borderColor={errors?.[field?.name] && touched?.[field?.name] ? "red.300" : null}
+                                                            placeholder={`Enter ${field?.label}`}
+                                                        />
+                                                        {touched[field?.name] && errors?.[field?.name] ? (
+                                                            <Text mb='10px' color={'red'}> {errors?.[field?.name]}</Text>
+                                                        ) : null}
+                                                    </GridItem>
+                                                ))}
+                                            </>
+                                        ))
+                                    }
+                                </>
+                                :
+                                props?.leadData?.fields?.map(field => (
+                                    <GridItem colSpan={{ base: 12, sm: 6 }} key={field?.name}>
+                                        <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px' htmlFor={field.name}>{field.label} {field.validation && field.validation.find((validation) => validation.require) && (
+                                            <span style={{ color: 'red' }}>*</span>
+                                        )}</FormLabel>
+                                        <Input
+                                            id={field?.name}
+                                            name={field?.name}
+                                            type={field?.type}
+                                            value={values?.[field?.name]}
+                                            onChange={handleChange} onBlur={handleBlur}
+                                            fontSize='sm'
+                                            fontWeight='500'
+                                            borderColor={errors?.[field?.name] && touched?.[field?.name] ? "red.300" : null}
+                                            placeholder={`Enter ${field?.label}`}
+                                        />
+                                        {touched[field?.name] && errors[field?.name] ? (
+                                            <Text mb='10px' color={'red'}> {errors?.[field?.name]}</Text>
+                                        ) : null}
+                                    </GridItem>
+                                ))
+                            }
+                        </Grid> */}
+                        <CustomForm leadData={props.leadData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
                     </DrawerBody>
-
-
                     <DrawerFooter>
-                        <Button sx={{ textTransform: "capitalize" }} disabled={isLoding ? true : false} variant="brand" type="submit" onClick={handleSubmit}                        >
-                            {isLoding ? <Spinner /> : 'Add Data'}
+                        <Button sx={{ textTransform: "capitalize" }} size="sm" disabled={isLoding ? true : false} variant="brand" type="submit" onClick={handleSubmit}                        >
+                            {isLoding ? <Spinner /> : 'Save'}
                         </Button>
                         <Button
                             variant="outline"
-                            colorScheme='red'
+                            colorScheme='red' size="sm"
                             sx={{
                                 marginLeft: 2,
                                 textTransform: "capitalize",
                             }}
                             onClick={handleCancel}
                         >
-                            Cancel
+                            Close
                         </Button>
                     </DrawerFooter>
-
                 </DrawerContent>
             </Drawer>
         </div>

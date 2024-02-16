@@ -33,10 +33,12 @@ const EditTask = (props) => {
         textColor: '',
         display: '',
         url: '',
+        status: '',
         createBy: userId,
     };
 
     const formik = useFormik({
+        enableReinitialize: true,
         initialValues: initialValues,
         validationSchema: TaskSchema,
         onSubmit: (values, { resetForm }) => {
@@ -45,7 +47,6 @@ const EditTask = (props) => {
     });
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
-
     const EditData = async () => {
         try {
             setIsLoding(true)
@@ -84,6 +85,7 @@ const EditTask = (props) => {
                 setFieldValue('textColor', result?.data?.textColor)
                 setFieldValue('display', result?.data?.display)
                 setFieldValue('url', result?.data?.url)
+                setFieldValue("status", result?.data?.status)
                 setFieldValue('assignmentToLead', result?.data?.assignmentToLead)
             }
             catch (e) {
@@ -115,19 +117,18 @@ const EditTask = (props) => {
     }, [values.category])
 
     useEffect(() => {
-        getContactDetails()
         fetchTaskData()
-    }, [props.id])
-
+        getContactDetails()
+    }, [props.id, isOpen])
     return (
-        <Modal isOpen={isOpen} size={'xl'} isCentered={useBreakpointValue({ base: false, md: true })}>
+        <Modal isOpen={isOpen} size={'xl'} >
             {!props.from && <ModalOverlay />}
-            <ModalContent>
+            <ModalContent overflowY={"auto"} >
                 <ModalHeader justifyContent='space-between' display='flex' >
                     Edit Task
                     <IconButton onClick={() => onClose(false)} icon={<CloseIcon />} />
                 </ModalHeader>
-                <ModalBody>
+                <ModalBody >
                     {/* Contact Model  */}
                     <ContactModel isOpen={contactModelOpen} onClose={setContactModel} fieldName='assignmentTo' setFieldValue={setFieldValue} />
                     {/* Lead Model  */}
@@ -137,7 +138,7 @@ const EditTask = (props) => {
                             <Spinner />
                         </Flex>
                         :
-                        <Grid templateColumns="repeat(12, 1fr)" gap={3}>
+                        <Grid templateColumns="repeat(12, 1fr)" gap={3} >
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                     Title<Text color={"red"}>*</Text>
@@ -261,6 +262,7 @@ const EditTask = (props) => {
                                 <Input
                                     type={isChecked ? 'date' : 'datetime-local'}
                                     fontSize='sm'
+                                    min={values.start}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.end}
@@ -320,21 +322,9 @@ const EditTask = (props) => {
                                 />
                                 <Text mb='10px' color={'red'}> {errors.textColor && touched.textColor && errors.textColor}</Text>
                             </GridItem>
-                            <GridItem colSpan={{ base: 12 }} >
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Reminder
-                                </FormLabel>
-                                <RadioGroup onChange={(e) => setFieldValue('reminder', e)} value={values.reminder}>
-                                    <Stack direction='row'>
-                                        <Radio value='None' >None</Radio>
-                                        <Radio value='email'>Email</Radio>
-                                        <Radio value='sms'>Sms</Radio>
-                                    </Stack>
-                                </RadioGroup>
-                                <Text mb='10px' color={'red'}> {errors.reminder && touched.reminder && errors.reminder}</Text>
-                            </GridItem>
 
-                            <GridItem colSpan={{ base: 12 }} >
+
+                            <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                     Url
                                 </FormLabel>
@@ -349,6 +339,21 @@ const EditTask = (props) => {
                                     borderColor={errors?.url && touched?.url ? "red.300" : null}
                                 />
                                 <Text mb='10px' color={'red'}> {errors.url && touched.url && errors.url}</Text>
+                            </GridItem>
+                            <GridItem colSpan={{ base: 12, md: 6 }} >
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                    Status
+                                </FormLabel>
+                                <Select
+                                    onChange={(e) => setFieldValue("status", e.target.value)}
+                                    value={values?.status}
+                                    style={{ fontSize: "14px" }}>
+                                    <option value='completed'>Completed</option>
+                                    <option value='todo'>Todo</option>
+                                    <option value='onHold'>On Hold</option>
+                                    <option value='inProgress'>In Progress</option>
+                                    <option value='pending'>Pending</option>
+                                </Select>
                             </GridItem>
                             <GridItem colSpan={{ base: 12 }} >
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -371,8 +376,12 @@ const EditTask = (props) => {
                     }
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' onClick={handleSubmit}>Update</Button>
-                    <Button ml={2} onClick={() => onClose(false)}>Close</Button>
+                    <Button size="sm" variant='brand' onClick={handleSubmit}>Update</Button>
+                    <Button sx={{
+                        marginLeft: 2,
+                        textTransform: "capitalize",
+                    }} variant="outline"
+                        colorScheme="red" size="sm" ml={2} onClick={() => onClose(false)}>Close</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

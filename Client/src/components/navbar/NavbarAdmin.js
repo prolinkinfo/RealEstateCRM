@@ -31,7 +31,7 @@ export default function AdminNavbar(props) {
 	let navbarShadow = 'none';
 	let navbarBg = useColorModeValue('#fff', 'rgba(11,20,55,0.5)');
 	let navbarBorder = 'transparent';
-	let secondaryMargin = '-2px';
+	let secondaryMargin = '-9px';
 	let paddingX = '15px';
 	let gap = '0px';
 	let size = "sm";
@@ -42,7 +42,6 @@ export default function AdminNavbar(props) {
 			setScrolled(false);
 		}
 	};
-	
 	return (
 		<Box
 			position={navbarPosition}
@@ -56,7 +55,7 @@ export default function AdminNavbar(props) {
 			// borderRadius='16px'
 			borderWidth='1.5px'
 			borderStyle='solid'
-			// zIndex='99999'
+			zIndex={1}
 			transitionDelay='0s, 0s, 0s, 0s'
 			transitionDuration=' 0.25s, 0.25s, 0.25s, 0s'
 			transition-property='box-shadow, background-color, filter, border'
@@ -68,7 +67,7 @@ export default function AdminNavbar(props) {
 			lineHeight='25.6px'
 			mx='auto'
 			mt={secondaryMargin}
-			pb='8px'
+			pb='6px'
 			right={{ base: '0px' }}
 			// right={{ base: '12px', md: '30px', lg: '30px', xl: '30px' }}
 			px={{
@@ -80,14 +79,15 @@ export default function AdminNavbar(props) {
 			}}
 			pt='8px'
 			top={{ base: '0px' }}
-			// top={{ base: '12px', md: '16px', lg: '20px', xl: '20px' }}
 			w={{
-				base: 'calc(100vw - 0%)',
-				md: 'calc(100vw - 0%)',
-				lg: 'calc(100vw - 0%)',
-				xl: openSidebar === true ? 'calc(100vw - 267px)' : 'calc(100vw - 80px)',
-				'2xl': openSidebar === true ? 'calc(100vw - 267px)' : 'calc(100vw - 80px)'
+				base: '100vw'
+				// base: 'calc(100vw - 0%)',
+				// md: 'calc(100vw - 0%)',
+				// lg: 'calc(100vw - 0%)',
+				// xl: openSidebar === true ? 'calc(100vw - 286px)' : 'calc(100vw - 80px)',
+				// '2xl': openSidebar === true ? 'calc(100vw - 286px)' : 'calc(100vw - 80px)'
 			}}
+			sx={{ boxShadow: '14px 17px 40px 4px rgba(112, 144, 176, 0.08)' }}
 		>
 			<Flex
 				w='100%'
@@ -97,7 +97,10 @@ export default function AdminNavbar(props) {
 				}}
 				alignItems={{ xl: 'center' }}
 				mb={gap}>
-				<Box mb={{ sm: '8px', md: '10px' }} pt="15px" display={"flex"} alignItems={"center"}>
+				<Box
+					//  mb={{ sm: '8px', md: '10px' }} 
+					//  pt="15px"
+					display={"flex"} alignItems={"center"}>
 					{/*
 					<Breadcrumb>
 						<BreadcrumbItem color={secondaryText} fontSize='sm' mb='5px'>
@@ -121,14 +124,26 @@ export default function AdminNavbar(props) {
 
 					</Breadcrumb>
 					*/}
-					<Box display={{ sm: "none", xl: "flex" }} onClick={() => setOpenSidebar(!openSidebar)} style={{ fontSize: "25px" }}>{openSidebar ? <AiOutlineMenuFold /> : <AiOutlineMenuUnfold />}</Box>
+					<Flex me={openSidebar ? "" : "5"} mx={openSidebar ? "14" : "1"} display={{ sm: "none", xl: "flex" }}>
+						{largeLogo && largeLogo[0]?.logoLgImg || largeLogo && largeLogo[0]?.logoSmImg ? <Image
+							style={{ width: openSidebar ? "165px" : "60px", height: '52px' }}
+							src={openSidebar === true ? largeLogo[0]?.logoLgImg : largeLogo[0]?.logoSmImg} // Set the source path of your image
+							alt="Logo" // Set the alt text for accessibility
+							cursor="pointer"
+							onClick={() => !props.from && setOpenSidebar(!openSidebar)}
+							userSelect="none"
+							my={2}
+						/> : <Heading my={4}
+							cursor={"pointer"} onClick={() => !props.from && setOpenSidebar(!openSidebar)} userSelect={"none"}>{openSidebar === true ? "Prolink" : "Pr"}</Heading>}
+					</Flex>
+					<Box display={{ sm: "none", xl: "flex" }} ms={openSidebar ? "" : "3"} onClick={() => setOpenSidebar(!openSidebar)} style={{ fontSize: "25px" }}>{openSidebar ? <AiOutlineMenuFold /> : <AiOutlineMenuUnfold />}</Box>
 					<Link
 						color={mainText}
 						display={{ sm: "flex", xl: "none" }}
 					>
-						{largeLogo?.logoLgImg ? <Image
+						{largeLogo && largeLogo[0]?.logoLgImg ? <Image
 							style={{ width: "100%", height: '52px' }}
-							src={largeLogo?.logoLgImg}
+							src={largeLogo[0]?.logoLgImg}
 							alt="Logo"
 							cursor="pointer"
 							userSelect="none"

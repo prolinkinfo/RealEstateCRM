@@ -1,8 +1,10 @@
 // Chakra Imports
 import {
 	Avatar,
+	Button,
 	Flex,
 	Icon,
+	Image,
 	Menu,
 	MenuButton,
 	MenuItem,
@@ -17,13 +19,15 @@ import { SidebarResponsive } from "components/sidebar/Sidebar";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 // Assets
-import { MdNotificationsNone } from "react-icons/md";
+import { MdInfoOutline, MdNotificationsNone } from "react-icons/md";
 import { FaEthereum } from "react-icons/fa";
 import routes from "routes.js";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getApi } from "services/api";
 import { toast } from "react-toastify";
 import jwtDecode from "jwt-decode";
+import { ThemeEditor } from "./ThemeEditor";
+import FixedPlugin from "components/fixedPlugin/FixedPlugin";
 import { useSelector } from "react-redux";
 
 export default function HeaderLinks(props) {
@@ -49,7 +53,6 @@ export default function HeaderLinks(props) {
 
 	const data = typeof userData === 'string' ? JSON.parse(userData) : userData
 	const user = data?.firstName + " " + data?.lastName;
-
 	const userId = JSON.parse(localStorage.getItem("user"))?._id;
 
 	const fetchData = async () => {
@@ -106,10 +109,12 @@ export default function HeaderLinks(props) {
 		<Flex
 			w={{ sm: "100%", md: "auto" }}
 			alignItems="center"
+			justifyContent={"end"}
 			flexDirection="row"
 			bg={menuBg}
 			flexWrap={secondary ? { base: "wrap", md: "nowrap" } : "unset"}
-			p="10px"
+			p="6px"
+			mt={2.5}
 			borderRadius="30px"
 			boxShadow={shadow}
 		>
@@ -217,66 +222,7 @@ export default function HeaderLinks(props) {
 					</Flex>
 				</MenuList>
 			</Menu>
-
-			{/* <Menu>
-				<MenuButton p='0px'>
-					<Icon
-						mt='6px'
-						as={MdInfoOutline}
-						color={navbarIcon}
-						w='18px'
-						h='18px'
-						me='10px'
-					/>
-				</MenuButton>
-				<MenuList
-					boxShadow={shadow}
-					p='20px'
-					me={{ base: "30px", md: "unset" }}
-					borderRadius='20px'
-					bg={menuBg}
-					border='none'
-					mt='22px'
-					minW={{ base: "unset" }}
-					maxW={{ base: "360px", md: "unset" }}>
-					<Image src={navImage} borderRadius='16px' mb='28px' />
-					<Flex flexDirection='column'>
-						<Link
-							w='100%'
-							href='https://horizon-ui.com/pro?ref=horizon-chakra-free'>
-							<Button w='100%' h='44px' mb='10px' variant='brand'>
-								Buy Horizon UI PRO
-							</Button>
-						</Link>
-						<Link
-							w='100%'
-							href='https://horizon-ui.com/documentation/docs/introduction?ref=horizon-chakra-free'>
-							<Button
-								w='100%'
-								h='44px'
-								mb='10px'
-								border='1px solid'
-								bg='transparent'
-								borderColor={borderButton}>
-								See Documentation
-							</Button>
-						</Link>
-						<Link
-							w='100%'
-							href='https://github.com/horizon-ui/horizon-ui-chakra'>
-							<Button
-								w='100%'
-								h='44px'
-								variant='no-hover'
-								color={textColor}
-								bg='transparent'>
-								Try Horizon Free
-							</Button>
-						</Link>
-					</Flex>
-				</MenuList>
-			</Menu> */}
-
+			{/* <FixedPlugin /> */}
 			{/* <ThemeEditor navbarIcon={navbarIcon} /> */}
 
 			<Menu style={{ zIndex: 1500 }}>

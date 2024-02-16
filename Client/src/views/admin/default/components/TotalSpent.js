@@ -49,6 +49,7 @@ export default function TotalSpent(props) {
         <Flex align='center' w='100%'>
           <Button
             bg={boxBg}
+            size="sm"
             fontSize='sm'
             fontWeight='500'
             color={textColorSecondary}
@@ -63,6 +64,7 @@ export default function TotalSpent(props) {
           <Button
             ms='auto'
             align='center'
+            size="sm"
             justifyContent='center'
             bg={bgButton}
             _hover={bgHover}

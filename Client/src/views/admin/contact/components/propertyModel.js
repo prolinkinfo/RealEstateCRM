@@ -67,8 +67,12 @@ const PropertyModel = (props) => {
                         </Flex> : <CheckTable tableData={data} selectedValues={selectedValues} setSelectedValues={setSelectedValues} columnsData={columns} title="Properties" />}
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} leftIcon={<AddIcon />}> {isLoding ? <Spinner /> : 'Add'}</Button>
-                    <Button onClick={() => onClose()}>Close</Button>
+                    <Button size="sm" variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false}> {isLoding ? <Spinner /> : 'Save'}</Button>
+                    <Button size="sm" sx={{
+                        marginLeft: 2,
+                        textTransform: "capitalize",
+                    }} variant="outline"
+                        colorScheme="red" onClick={() => onClose()}>Close</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

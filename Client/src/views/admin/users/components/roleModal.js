@@ -1,5 +1,6 @@
 import { AddIcon } from '@chakra-ui/icons'
 import { Button, Flex, Modal, Thead, Tbody, ModalBody, Tr, Th, Text, Td, Box, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Table, useColorModeValue, Checkbox } from '@chakra-ui/react'
+import DataNotFound from 'components/notFoundData'
 import Spinner from 'components/spinner/Spinner'
 import { useEffect, useMemo, useState } from 'react'
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
@@ -151,7 +152,7 @@ const RoleModal = (props) => {
                                         <Tr>
                                             <Td colSpan={columns.length}>
                                                 <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                                                    -- No Data Found --
+                                                        <DataNotFound />
                                                 </Text>
                                             </Td>
                                         </Tr>
@@ -214,8 +215,8 @@ const RoleModal = (props) => {
                     }
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} leftIcon={<AddIcon />}> {isLoding ? <Spinner /> : 'Add'}</Button>
-                    <Button variant="outline"
+                    <Button size="sm" variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} leftIcon={<AddIcon />}> {isLoding ? <Spinner /> : 'Add'}</Button>
+                    <Button size="sm" variant="outline"
                         colorScheme="red"
                         sx={{
                             marginLeft: 2,

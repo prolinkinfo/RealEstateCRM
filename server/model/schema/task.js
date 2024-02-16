@@ -7,7 +7,7 @@ const Task = new mongoose.Schema({
     notes: String,
     assignmentTo: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "contact",
+        ref: "Contact",
     },
     assignmentToLead: {
         type: mongoose.Schema.Types.ObjectId,
@@ -30,6 +30,10 @@ const Task = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    status: {
+        type: String,
+        default: "todo"
+    },
     createdDate: {
         type: Date,
     },
@@ -39,4 +43,4 @@ const Task = new mongoose.Schema({
     },
 })
 
-module.exports = mongoose.model('task', Task);
+module.exports = mongoose.model('Task', Task, 'Task');

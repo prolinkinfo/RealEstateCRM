@@ -19,7 +19,8 @@ export function SidebarBrand(props) {
       position: "sticky",
       top: "0",
       left: "0",
-      background: "#fff"
+      background: "#fff",
+
     }}>
       <Flex>
         {largeLogo && (largeLogo[0]?.logoLgImg || largeLogo[0]?.logoSmImg) ? <Image
@@ -33,8 +34,7 @@ export function SidebarBrand(props) {
         /> : <Heading my={4}
           cursor={"pointer"} onClick={() => !from && setOpenSidebar(!openSidebar)} userSelect={"none"}>{openSidebar === true ? "Prolink" : "Pr"}</Heading>}
       </Flex>
-      <HSeparator
-      />
+
     </Flex>
   );
 }

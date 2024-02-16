@@ -44,7 +44,6 @@ const Index = () => {
         setIsLoding(false)
     }
 
-
     useEffect(() => {
         fetchData()
         setColumns(tableColumns)

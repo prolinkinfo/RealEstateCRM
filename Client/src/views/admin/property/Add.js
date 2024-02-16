@@ -6,65 +6,81 @@ import { useFormik } from 'formik';
 import { useState } from 'react';
 import { propertySchema } from 'schema';
 import { postApi } from 'services/api';
+import { generateValidationSchema } from 'utils';
+import CustomForm from 'utils/customForm';
+import * as yup from 'yup'
 
 const Add = (props) => {
     const [isLoding, setIsLoding] = useState(false)
 
+    // const initialValues = {
+    //     //1. basicPropertyInformation:
+    //     propertyType: "",
+    //     propertyAddress: "",
+    //     listingPrice: "",
+    //     squareFootage: "",
+    //     numberofBedrooms: "",
+    //     numberofBathrooms: "",
+    //     yearBuilt: "",
+    //     propertyDescription: "",
+    //     //2. Property Features and Amenities:
+    //     lotSize: "",
+    //     parkingAvailability: "",
+    //     appliancesIncluded: "",
+    //     heatingAndCoolingSystems: "",
+    //     flooringType: "",
+    //     exteriorFeatures: "",
+    //     communityAmenities: "",
+    //     //3. Media and Visuals:
+    //     propertyPhotos: [],
+    //     virtualToursOrVideos: [],
+    //     floorPlans: [],
+    //     propertyDocuments: [],
+    //     //4. Listing and Marketing Details:
+    //     listingStatus: "",
+    //     listingAgentOrTeam: "",
+    //     listingDate: "",
+    //     marketingDescription: "",
+    //     multipleListingService: "",
+    //     //5. Property History:
+    //     previousOwners: "",
+    //     purchaseHistory: "",
+    //     //6. Financial Information:
+    //     propertyTaxes: "",
+    //     homeownersAssociation: "",
+    //     mortgageInformation: "",
+    //     //7. Contacts Associated with Property:
+    //     sellers: "",
+    //     buyers: "",
+    //     propertyManagers: "",
+    //     contractorsOrServiceProviders: "",
+    //     //8. Property Notes and Comments:
+    //     internalNotesOrComments: "",
+    //     createBy: JSON.parse(localStorage.getItem('user'))._id,
+    // };
+
+    const initialFieldValues = Object.fromEntries(
+        (props?.propertyData?.fields || []).map(field => [field?.name, ''])
+    );
+
     const initialValues = {
-        //1. basicPropertyInformation:
-        propertyType: "",
-        propertyAddress: "",
-        listingPrice: "",
-        squareFootage: "",
-        numberofBedrooms: "",
-        numberofBathrooms: "",
-        yearBuilt: "",
-        propertyDescription: "",
-        //2. Property Features and Amenities:
-        lotSize: "",
-        parkingAvailability: "",
-        appliancesIncluded: "",
-        heatingAndCoolingSystems: "",
-        flooringType: "",
-        exteriorFeatures: "",
-        communityAmenities: "",
-        //3. Media and Visuals:
-        propertyPhotos: [],
-        virtualToursOrVideos: [],
-        floorPlans: [],
-        propertyDocuments: [],
-        //4. Listing and Marketing Details:
-        listingStatus: "",
-        listingAgentOrTeam: "",
-        listingDate: "",
-        marketingDescription: "",
-        multipleListingService: "",
-        //5. Property History:
-        previousOwners: "",
-        purchaseHistory: "",
-        //6. Financial Information:
-        propertyTaxes: "",
-        homeownersAssociation: "",
-        mortgageInformation: "",
-        //7. Contacts Associated with Property:
-        sellers: "",
-        buyers: "",
-        propertyManagers: "",
-        contractorsOrServiceProviders: "",
-        //8. Property Notes and Comments:
-        internalNotesOrComments: "",
-        createBy: JSON.parse(localStorage.getItem('user'))._id,
+        ...initialFieldValues,
+        createBy: JSON.parse(localStorage.getItem('user'))._id
     };
 
     const formik = useFormik({
         initialValues: initialValues,
-        validationSchema: propertySchema,
+        enableReinitialize: true,
+        // validationSchema: propertySchema,
+        validationSchema: yup.object().shape(generateValidationSchema(props?.propertyData?.fields)),
+
         onSubmit: (values, { resetForm }) => {
             AddData();
         },
     });
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
+
 
     const AddData = async () => {
         try {
@@ -99,7 +115,7 @@ const Add = (props) => {
                     </DrawerHeader>
                     <DrawerBody>
 
-                        <Grid templateColumns="repeat(12, 1fr)" gap={3}>
+                        {/* <Grid templateColumns="repeat(12, 1fr)" gap={3}>
 
                             <GridItem colSpan={{ base: 12 }}>
                                 <Heading as="h1" size="md" >
@@ -608,15 +624,17 @@ const Add = (props) => {
                             </GridItem>
 
 
-                        </Grid>
+                        </Grid> */}
+                        <CustomForm leadData={props.propertyData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
+
                     </DrawerBody>
 
 
                     <DrawerFooter>
-                        <Button sx={{ textTransform: "capitalize" }} disabled={isLoding ? true : false} variant="brand" type="submit" onClick={handleSubmit}                        >
-                            {isLoding ? <Spinner /> : 'Add Data'}
+                        <Button size="sm" sx={{ textTransform: "capitalize" }} disabled={isLoding ? true : false} variant="brand" type="submit" onClick={handleSubmit}                        >
+                            {isLoding ? <Spinner /> : 'Save'}
                         </Button>
-                        <Button
+                        <Button size="sm"
                             variant="outline"
                             colorScheme='red'
                             sx={{
@@ -625,7 +643,7 @@ const Add = (props) => {
                             }}
                             onClick={props.onClose}
                         >
-                            Cancel
+                            Close
                         </Button>
                     </DrawerFooter>
 

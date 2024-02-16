@@ -13,7 +13,7 @@ import { setUser } from '../../../redux/localSlice';
 
 
 const Edit = (props) => {
-    const { onClose, isOpen, fetchData, data, userData } = props
+    const { onClose, isOpen, fetchData, data, userData, setEdit } = props
 
     const initialValues = {
         firstName: data ? data?.firstName : '',
@@ -21,6 +21,7 @@ const Edit = (props) => {
         username: data ? data?.username : '',
         phoneNumber: data ? data?.phoneNumber : ''
     }
+
     const user = JSON.parse(window.localStorage.getItem('user'))
 
     const formik = useFormik({
@@ -35,21 +36,8 @@ const Edit = (props) => {
     const dispatch = useDispatch()
 
     const handleCloseModal = () => {
-        props.onClose();
-        let updatedUserData = userData; // Create a copy of userData
-
-        if (updatedUserData && typeof updatedUserData === 'object') {
-            // Create a new object with the updated firstName
-            updatedUserData = {
-                ...updatedUserData,
-                firstName: values?.firstName,
-                lastName: values?.lastName
-            };
-        }
-
-        const updatedDataString = JSON.stringify(updatedUserData);
-        localStorage.setItem('user', updatedDataString);
-        dispatch(setUser(updatedDataString)); // Dispatch setUser action to set user data
+        setEdit(false);
+        // Dispatch setUser action to set user data
     };
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue } = formik
 
@@ -58,8 +46,26 @@ const Edit = (props) => {
     const EditData = async () => {
         try {
             setIsLoding(true)
-            let response = await putApi(`api/user/edit/${param.id}`, values)
+            let response = await putApi(`api/user/edit/${props.selectedId}`, values)
             if (response && response.status === 200) {
+                setEdit(false)
+                let updatedUserData = userData; // Create a copy of userData
+                if (user?._id === props.selectedId) {
+                    if (updatedUserData && typeof updatedUserData === 'object') {
+                        // Create a new object with the updated firstName
+                        updatedUserData = {
+                            ...updatedUserData,
+                            firstName: values?.firstName,
+                            lastName: values?.lastName
+                        };
+                    }
+
+                    const updatedDataString = JSON.stringify(updatedUserData);
+                    localStorage.setItem('user', updatedDataString);
+                    dispatch(setUser(updatedDataString));
+                }
+
+
                 handleCloseModal();
                 fetchData()
                 props.setAction((pre) => !pre)
@@ -82,7 +88,7 @@ const Edit = (props) => {
             <ModalContent>
                 <ModalHeader justifyContent='space-between' display='flex' >
                     Edit User
-                    <IconButton onClick={() => onClose(false)} icon={<CloseIcon />} />
+                    <IconButton onClick={() => setEdit(false)} icon={<CloseIcon />} />
                 </ModalHeader>
                 <ModalBody>
 
@@ -159,8 +165,13 @@ const Edit = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Update Data'}</Button>
-                    <Button onClick={() => handleCloseModal()}>close</Button>
+                    <Button size="sm" variant='brand' disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Update'}</Button>
+                    <Button variant="outline"
+                        colorScheme='red' size="sm"
+                        sx={{
+                            marginLeft: 2,
+                            textTransform: "capitalize",
+                        }} onClick={() => handleCloseModal()}>close</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

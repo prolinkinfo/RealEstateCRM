@@ -13,7 +13,7 @@ const index = async (req, res) => {
             { $match: query },
             {
                 $lookup: {
-                    from: 'contacts',
+                    from: 'Contact',
                     localField: 'assignmentTo',
                     foreignField: '_id',
                     as: 'contact'
@@ -21,7 +21,7 @@ const index = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'leads', // Assuming this is the collection name for 'leads'
+                    from: 'Lead', // Assuming this is the collection name for 'leads'
                     localField: 'assignmentToLead',
                     foreignField: '_id',
                     as: 'Lead'
@@ -29,7 +29,7 @@ const index = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'users',
+                    from: 'User',
                     localField: 'createBy',
                     foreignField: '_id',
                     as: 'users'
@@ -89,12 +89,12 @@ const add = async (req, res) => {
 
 const edit = async (req, res) => {
     try {
-        const { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy, assignmentTo } = req.body;
+        const { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy, assignmentTo, status } = req.body;
 
         if (assignmentTo && !mongoose.Types.ObjectId.isValid(assignmentTo)) {
             res.status(400).json({ error: 'Invalid assignmentTo value' });
         }
-        const taskData = { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy };
+        const taskData = { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy, status };
 
         if (assignmentTo) {
             taskData.assignmentTo = assignmentTo;
@@ -104,12 +104,26 @@ const edit = async (req, res) => {
             { $set: taskData }
         );
 
-        // const result = new Task(taskData);
-        // await result.save();
         res.status(200).json(result);
     } catch (err) {
         console.error('Failed to create task:', err);
         res.status(400).json({ error: 'Failed to create task : ', err });
+    }
+}
+const changeStatus = async (req, res) => {
+    try {
+        const { status } = req.body;
+
+        let result = await Task.updateOne(
+            { _id: req.params.id },
+            { $set: { status: status } }
+        );
+
+        let response = await Task.findOne({ _id: req.params.id })
+        res.status(200).json(response);
+    } catch (err) {
+        console.error('Failed to change status:', err);
+        res.status(400).json({ error: 'Failed to change status : ', err });
     }
 }
 
@@ -121,7 +135,7 @@ const view = async (req, res) => {
             { $match: { _id: response._id } },
             {
                 $lookup: {
-                    from: 'contacts',
+                    from: 'Contact',
                     localField: 'assignmentTo',
                     foreignField: '_id',
                     as: 'contact'
@@ -129,7 +143,7 @@ const view = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'leads', // Assuming this is the collection name for 'leads'
+                    from: 'Lead', // Assuming this is the collection name for 'leads'
                     localField: 'assignmentToLead',
                     foreignField: '_id',
                     as: 'Lead'
@@ -137,7 +151,7 @@ const view = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'users',
+                    from: 'User',
                     localField: 'createBy',
                     foreignField: '_id',
                     as: 'users'
@@ -177,4 +191,20 @@ const deleteData = async (req, res) => {
     }
 }
 
-module.exports = { index, add, edit, view, deleteData }
+const deleteMany = async (req, res) => {
+    try {
+        const result = await Task.updateMany({ _id: { $in: req.body } }, { $set: { deleted: true } });
+
+        if (result?.matchedCount > 0 && result?.modifiedCount > 0) {
+            return res.status(200).json({ message: "Tasks Removed successfully", result });
+        }
+        else {
+            return res.status(404).json({ success: false, message: "Failed to remove tasks" })
+        }
+
+    } catch (err) {
+        return res.status(404).json({ success: false, message: "error", err });
+    }
+}
+
+module.exports = { index, add, edit, view, deleteData, changeStatus, deleteMany }
