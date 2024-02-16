@@ -5,12 +5,14 @@ import Footer from 'components/footer/FooterAdmin.js';
 import Navbar from 'components/navbar/NavbarAdmin.js';
 import Sidebar from 'components/sidebar/Sidebar.js';
 import { SidebarContext } from 'contexts/SidebarContext';
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { ROLE_PATH } from '../../roles';
 import newRoute from 'routes.js';
 import { MdHome, MdLock } from 'react-icons/md';
 import Spinner from 'components/spinner/Spinner';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchImage } from '../../redux/imageSlice';
 
 const MainDashboard = React.lazy(() => import("views/admin/default"));
 const SignInCentered = React.lazy(() => import("views/auth/signIn"));
@@ -190,6 +192,17 @@ export default function User(props) {
     document.documentElement.dir = 'ltr';
     const { onOpen } = useDisclosure();
     document.documentElement.dir = 'ltr';
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        // Dispatch the fetchRoles action on component mount
+        dispatch(fetchImage());
+    }, [dispatch]);
+
+    const largeLogo = useSelector((state) => state?.images?.image.filter(item => item.isActive === true));
+
+
     return (
         <Box>
             <Box>
@@ -223,6 +236,7 @@ export default function User(props) {
                                     message={getActiveNavbarText(routes)}
                                     fixed={fixed}
                                     under={under(routes)}
+                                    largeLogo={largeLogo}
                                     openSidebar={openSidebar} setOpenSidebar={setOpenSidebar}
                                     {...rest}
                                 />

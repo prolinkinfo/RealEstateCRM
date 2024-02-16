@@ -38,12 +38,14 @@ option {
 
 /* TABLE  */
 .table-container {
-  min-height: auto;
+  min-height: 23vh;
   max-height: 23vh;
   overflow-y: auto;
 }
 
 .table-container thead {
+  border-bottom: 1px solid black;
+  box-shadow: -2px 0px 4px -2px #5c5d5efa;
   position: sticky;
   top: 0;
   height: 25px;
