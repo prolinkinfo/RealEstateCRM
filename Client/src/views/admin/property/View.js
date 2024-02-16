@@ -517,13 +517,13 @@ const View = () => {
                                                     </Box>
                                                 </GridItem>
                                                 {/* <Flex flexWrap={'wrap'} alingItem={'center'} > */}
-                                                {data?.propertyDocuments?.length > 0 ?
-                                                    data && data?.propertyDocuments?.length > 0 && data?.propertyDocuments?.map((item) => {
-                                                        const parts = item.filename.split('.');
-                                                        const lastIndex = parts[parts.length - 1]
-                                                        return (
-                                                            <GridItem colSpan={12} >
-                                                                <Flex alignItems={'center'}>
+                                                <GridItem colSpan={12} >
+                                                    {data?.propertyDocuments?.length > 0 ?
+                                                        (data && data?.propertyDocuments?.length > 0 && data?.propertyDocuments?.map((item) => {
+                                                            const parts = item.filename.split('.');
+                                                            const lastIndex = parts[parts.length - 1]
+                                                            return (
+                                                                <Flex alignItems={'center'} mt='3'>
                                                                     {lastIndex === 'xlsx' && <Image src={xlsx} boxSize='50px' />}
                                                                     {lastIndex === 'jpg' && <Image src={jpg} boxSize='50px' />}
                                                                     {lastIndex === 'png' && <Image src={png} boxSize='50px' />}
@@ -535,12 +535,14 @@ const View = () => {
                                                                         {item.filename}
                                                                     </Text>
                                                                 </Flex>
-                                                            </GridItem>
-                                                        )
-                                                    }
-                                                    ) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                                                        <DataNotFound />
-                                                    </Text>}
+                                                            )
+                                                        }))
+                                                        :
+                                                        <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                                                            <DataNotFound />
+                                                        </Text>}
+                                                </GridItem>
+
                                                 {/* </Flex> */}
                                             </Grid>
                                         </Card>

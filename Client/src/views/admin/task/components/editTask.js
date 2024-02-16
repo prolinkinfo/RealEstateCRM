@@ -33,7 +33,7 @@ const EditTask = (props) => {
         textColor: '',
         display: '',
         url: '',
-        allDay: isChecked === true ? 'Yes' : 'No',
+        allDay: '',
         status: '',
         createBy: userId,
     };
@@ -88,7 +88,7 @@ const EditTask = (props) => {
                 setFieldValue('url', result?.data?.url)
                 setFieldValue("status", result?.data?.status)
                 setFieldValue('assignmentToLead', result?.data?.assignmentToLead)
-                setFieldValue('allDay', result?.data?.allDay === 'Yes' ? true : false)
+                setFieldValue('allDay', values?.allDay === true ? 'Yes' : 'No')
                 // setIsChecked()
             }
             catch (e) {
@@ -239,10 +239,12 @@ const EditTask = (props) => {
                                     </>
                                     : ''
                             }
+                            {console.log(values?.allDay)}
                             <GridItem colSpan={{ base: 12 }} >
-                                <Checkbox isChecked={values?.allDay} onChange={(e) => {
-                                    const target = e.target.value;
-                                    setFieldValue('allDay', target === true ? 'Yes' : 'No')
+                                <Checkbox isChecked={isChecked} name='allDay' onChange={(e) => {
+                                    const target = e.target.checked;
+                                    setIsChecked(target)
+                                    setFieldValue('allDay', isChecked === true ? 'Yes' : 'No')
                                 }}>All Day Task ? </Checkbox>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
@@ -250,7 +252,7 @@ const EditTask = (props) => {
                                     Start Date
                                 </FormLabel>
                                 <Input
-                                    type={values?.allDay === true ? 'date' : 'datetime-local'}
+                                    type={isChecked === true ? 'date' : 'datetime-local'}
                                     fontSize='sm'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
