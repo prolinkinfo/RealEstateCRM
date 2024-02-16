@@ -52,11 +52,10 @@ export default function Dashboard(props) {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		// Dispatch the fetchRoles action on component mount
 		dispatch(fetchImage());
 	}, [dispatch]);
 
-	const largeLogo = useSelector((state) => state?.images?.image.filter(item => item.isActive === true));
+	const largeLogo = useSelector((state) => state?.images?.image?.filter(item => item.isActive === true));
 
 	const under = (routes) => {
 		let activeRoute = false

@@ -605,7 +605,7 @@ const View = () => {
             {/* property document modal */}
             <Modal onClose={() => setShowProperty(false)} isOpen={showProperty} >
                 <ModalOverlay />
-                <ModalContent maxWidth={"6xl"} height={"750px"}>
+                <ModalContent maxWidth={"xl"} height={"750px"}>
                     <ModalHeader>Property All Document</ModalHeader>
                     <ModalCloseButton onClick={() => setShowProperty(false)} />
                     <ModalBody overflowY={"auto"} height={"700px"}>
