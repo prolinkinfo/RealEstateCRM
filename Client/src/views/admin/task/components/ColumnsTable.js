@@ -89,7 +89,7 @@ export default function ColumnsTable(props) {
 
     const firstValue = Object?.values(param)[0];
     const splitValue = firstValue?.split('/')
-    
+
     return (
         <Box
             direction='column'
@@ -161,10 +161,10 @@ export default function ColumnsTable(props) {
                                                     {cell?.value}
                                                 </Text>
                                             )
-                                        } else if (cell?.column.Header === "Assignment To") {
+                                        } else if (cell?.column.Header === "Assign To") {
                                             data = (
                                                 <Text color={textColor} fontSize='sm' fontWeight='700'>
-                                                    {cell?.value}
+                                                    {cell?.value ? cell?.value : ' - '}
                                                 </Text>
                                             );
                                         } else if (cell?.column.Header === "Start Date") {

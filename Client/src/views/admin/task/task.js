@@ -19,7 +19,7 @@ const Task = (props) => {
         { Header: 'Title', accessor: 'title' },
         { Header: "Related", accessor: "category", },
         { Header: "Status", accessor: "status", },
-        { Header: "Assignment To", accessor: "assignmentToName", },
+        { Header: "Assign To", accessor: "assignmentToName", },
         { Header: "Start Date", accessor: "start", },
         { Header: "End Date", accessor: "end", },
         { Header: "Action", isSortable: false, center: true },
