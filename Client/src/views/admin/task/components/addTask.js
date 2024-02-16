@@ -11,7 +11,7 @@ import { getApi, postApi } from 'services/api';
 
 const AddTask = (props) => {
     const { onClose, isOpen, fetchData } = props
-    const [isChecked, setIsChecked] = useState(true);
+    const [isChecked, setIsChecked] = useState(false);
     const userId = JSON.parse(localStorage.getItem('user'))._id
     const [assignmentToData, setAssignmentToData] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"))
@@ -32,6 +32,7 @@ const AddTask = (props) => {
         backgroundColor: '',
         borderColor: '#ffffff',
         textColor: '',
+        allDay: isChecked === true ? 'Yes' : 'No',
         display: '',
         url: '',
         createBy: userId,
