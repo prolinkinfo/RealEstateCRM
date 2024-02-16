@@ -88,12 +88,12 @@ const AddMeeting = (props) => {
     }));
 
     return (
-        <Modal onClose={onClose} isOpen={isOpen} >
+        <Modal onClose={onClose} isOpen={isOpen} isCentered>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent height={"580px"}>
                 <ModalHeader>Add Meeting </ModalHeader>
                 <ModalCloseButton />
-                <ModalBody>
+                <ModalBody overflowY={"auto"} height={"400px"}>
                     {/* Contact Model  */}
                     <MultiContactModel isOpen={contactModelOpen} onClose={setContactModel} fieldName='attendes' setFieldValue={setFieldValue} />
                     {/* Lead Model  */}
