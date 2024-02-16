@@ -464,7 +464,7 @@ export default function CheckTable(props) {
                               </Select>
                             </div>
                           );
-                        } else if (cell?.column.Header === "Assignment To") {
+                        } else if (cell?.column.Header === "Assign To") {
                           data = (
                             <Text
                               me="10px"
