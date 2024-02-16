@@ -49,7 +49,7 @@ const Index = () => {
             setIsLoading(true);
 
             const updates = Object.entries(selectedFields)?.map(([fieldId, isTableField]) => ({
-                fieldId: `s${fieldId}`,
+                fieldId: fieldId,
                 isTableField,
             }));
 

@@ -191,7 +191,8 @@ const view = async (req, res) => {
         { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
         {
             $addFields: {
-                assignmentToName: lead.leadName,
+                // assignmentToName: lead.leadName, 
+                assignmentToName: '$lead.leadName',
                 createByName: '$users.username',
             }
         },

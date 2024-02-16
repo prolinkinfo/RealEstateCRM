@@ -515,9 +515,9 @@ const changeIsTableFields = async (req, res) => {
         // Create an array of update operations for each field
         const updateOperations = updates.map(({ fieldId, isTableField }) => ({
             updateOne: {
-                filter: { _id: moduleId, 'fields._id': new mongoose.Types.ObjectId(fieldId.slice(1)) },
+                filter: { _id: moduleId, 'fields._id': new mongoose.Types.ObjectId(fieldId) },
                 update: { $set: { 'fields.$[field].isTableField': isTableField } },
-                arrayFilters: [{ 'field._id': new mongoose.Types.ObjectId(fieldId.slice(1)) }],
+                arrayFilters: [{ 'field._id': new mongoose.Types.ObjectId(fieldId) }],
             },
         }));
 
