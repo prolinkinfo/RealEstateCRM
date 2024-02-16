@@ -139,7 +139,7 @@ const Index = () => {
                             ))}
                         </Grid>
                         <Flex Flex justifyContent={'end'} mt='5' >
-                            {Object.keys(selectedFields)?.length > 0 && <Button colorScheme="red" mr={2} onClick={() => handleUpdateTableFields()} size='sm'>Update</Button>}
+                            {Object.keys(selectedFields)?.length > 0 && <Button colorScheme="brand" mr={2} onClick={() => handleUpdateTableFields()} size='sm'>Update</Button>}
                         </Flex>
                     </>
                 }

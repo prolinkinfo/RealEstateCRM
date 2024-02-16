@@ -133,7 +133,7 @@ export default function AdminNavbar(props) {
 							onClick={() => !props.from && setOpenSidebar(!openSidebar)}
 							userSelect="none"
 							my={2}
-						/> : <Heading my={4}
+						/> : <Heading my={4} style={{ width: openSidebar ? "165px" : "60px", height: '52px' }}
 							cursor={"pointer"} onClick={() => !props.from && setOpenSidebar(!openSidebar)} userSelect={"none"}>{openSidebar === true ? "Prolink" : "Pr"}</Heading>}
 					</Flex>
 					<Box display={{ sm: "none", xl: "flex" }} ms={openSidebar ? "" : "3"} onClick={() => setOpenSidebar(!openSidebar)} style={{ fontSize: "25px" }}>{openSidebar ? <AiOutlineMenuFold /> : <AiOutlineMenuUnfold />}</Box>

@@ -19,14 +19,13 @@ const AddTask = (props) => {
     const [contactModelOpen, setContactModel] = useState(false);
     const [leadModelOpen, setLeadModel] = useState(false);
 
-
     const initialValues = {
         title: '',
-        category: props.from === 'Contact' ? 'Contact' : props.from === 'Lead' ? 'Lead' : 'None',
+        category: props.leadContect === 'contactView' ? 'Contact' : props.leadContect === 'leadView' ? 'Lead' : 'None',
         description: '',
         notes: '',
-        assignmentTo: props.from === 'contact' && props.id ? props.id : '',
-        assignmentToLead: props.from === 'lead' && props.id ? props.id : '',
+        assignmentTo: props.leadContect === 'contactView' && props.id ? props.id : '',
+        assignmentToLead: props.leadContect === 'leadView' && props.id ? props.id : '',
         reminder: '',
         start: '',
         end: '',
@@ -47,7 +46,7 @@ const AddTask = (props) => {
     });
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
-
+    console.log(props.leadContect)
     const AddData = async () => {
         try {
             setIsLoding(true)
@@ -157,8 +156,9 @@ const AddTask = (props) => {
                                             placeholder={'Assignment To'}
                                             borderColor={errors.assignmentTo && touched.assignmentTo ? "red.300" : null}
                                         >
+                                            {console.log(assignmentToData)}
                                             {assignmentToData?.map((item) => {
-                                                return <option value={item._id} key={item._id}>{values.category === 'Contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
+                                                return <option value={item._id} key={item._id}>{values.category === 'Contact' && `${item.firstName} ${item.lastName}`}</option>
                                             })}
                                         </Select>
                                         <IconButton onClick={() => setContactModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
@@ -181,9 +181,9 @@ const AddTask = (props) => {
                                                 fontWeight='500'
                                                 placeholder={'Assignment To'}
                                                 borderColor={errors.assignmentToLead && touched.assignmentToLead ? "red.300" : null}
-                                            >
+                                            > {console.log(assignmentToData)}
                                                 {assignmentToData?.map((item) => {
-                                                    return <option value={item._id} key={item._id}>{values.category === 'Contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
+                                                    return <option value={item._id} key={item._id}>{values.category === 'Lead' && item.leadName}</option>
                                                 })}
                                             </Select>
                                             <IconButton onClick={() => setLeadModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />

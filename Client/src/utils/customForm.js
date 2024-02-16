@@ -26,7 +26,7 @@ const CustomForm = ({ leadData, values, handleChange, handleBlur, errors, touche
                                             {field.type === 'range' ?
                                                 <>
                                                     {values.leadRating || 0}
-                                                    <Slider ml={2} aria-label='slider-ex-1' colorScheme='yellow' min={field?.validation[1]?.value} max={field?.validation[2]?.value} step={.1} defaultValue={0} onChange={(value) => setFieldValue(field.name, value)} >
+                                                    <Slider ml={2} aria-label='slider-ex-1' colorScheme='yellow' value={values.leadRating} min={field?.validation[1]?.value} max={field?.validation[2]?.value} step={.1} defaultValue={0} onChange={(value) => setFieldValue(field.name, value)} >
                                                         <SliderTrack>
                                                             <SliderFilledTrack />
                                                         </SliderTrack>

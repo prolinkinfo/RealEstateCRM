@@ -60,16 +60,17 @@ import { CiMenuKebab } from "react-icons/ci";
 import { IoIosArrowBack } from "react-icons/io";
 import Edit from "../Edit";
 import DataNotFound from "components/notFoundData";
+import CustomSearchInput from "components/search/search";
 
 
 export default function CheckTable(props) {
   // const { columnsData, action, setAction } = props;
-  const { columnsData, tableData, fetchData, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action } = props;
+  const { columnsData, tableData, fetchData, dataColumn, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action } = props;
 
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   // const columns = useMemo(() => columnsData, [columnsData]);
-  const columns = useMemo(() => selectedColumns, [selectedColumns]);
+  const columns = useMemo(() => dataColumn, [dataColumn]);
   const data = useMemo(() => tableData, [tableData]);
   const [selectedValues, setSelectedValues] = useState([]);
   const user = JSON.parse(localStorage.getItem("user"))
@@ -80,7 +81,7 @@ export default function CheckTable(props) {
   const [searchClear, setSearchClear] = useState(false);
   const [searchbox, setSearchbox] = useState('');
   const [manageColumns, setManageColumns] = useState(false);
-  const [tempSelectedColumns, setTempSelectedColumns] = useState(selectedColumns);
+  const [tempSelectedColumns, setTempSelectedColumns] = useState(dataColumn);
   const [getTagValues, setGetTagValues] = useState([]);
   const [edit, setEdit] = useState(false);
   const [selectedId, setSelectedId] = useState();
@@ -194,6 +195,10 @@ export default function CheckTable(props) {
     fetchData()
   }, [action])
 
+  const handleSearch = (results) => {
+    setSearchedData(results);
+  };
+
   return (
     <>
       <Card
@@ -215,40 +220,7 @@ export default function CheckTable(props) {
               >
                 Users (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
               </Text>
-              <InputGroup width={"30%"} mx={3}>
-                <InputLeftElement
-                  size="sm"
-                  top={"-3px"}
-                  pointerEvents="none"
-                  children={<SearchIcon color="gray.300" borderRadius="16px" />}
-                />
-                <Input type="text"
-                  size="sm"
-                  fontSize='sm'
-                  value={searchbox}
-                  onChange={(e) => {
-                    const results = allData.filter((item) => {
-                      // Iterate through each property of the object
-                      for (const key in item) {
-                        // Check if the value of the property contains the search term
-                        if (
-                          item[key] &&
-                          typeof item[key] === "string" &&
-                          item[key].toLowerCase().includes(e.target.value.toLowerCase())
-                        ) {
-                          return true; // If found, include in the results
-                        }
-                      }
-                      return false; // If not found in any field, exclude from the results
-                    });
-                    setSearchedData(results)
-                    setSearchbox(e.target.value)
-                    setDisplaySearchData(e.target.value === "" ? false : true)
-
-                  }}
-                  fontWeight='500'
-                  placeholder="Search..." borderRadius="16px" />
-              </InputGroup>
+              <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={dataColumn} onSearch={handleSearch} />
               <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} size="sm">Advance Search</Button>
               {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>clear</Button> : ""}
               {selectedValues.length > 0 && <DeleteIcon onClick={() => setDelete(true)} color={'red'} ms={2} />}
@@ -520,7 +492,7 @@ export default function CheckTable(props) {
               setManageColumns(false);
               resetForm();
             }} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
-            <Button size="sm" variant='outline' color="red" onClick={() => handleColumnClear()}>Close</Button>
+            <Button size="sm" variant='outline' colorScheme="red" onClick={() => handleColumnClear()}>Close</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
