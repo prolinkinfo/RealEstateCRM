@@ -11,7 +11,7 @@ import Spinner from 'components/spinner/Spinner';
 
 const EditTask = (props) => {
     const { onClose, isOpen, fetchData, setAction } = props
-    const [isChecked, setIsChecked] = useState();
+    const [isChecked, setIsChecked] = useState(false);
     const userId = JSON.parse(localStorage.getItem('user'))._id
     const user = JSON.parse(localStorage.getItem("user"))
     const [assignmentToData, setAssignmentToData] = useState([]);
@@ -33,6 +33,7 @@ const EditTask = (props) => {
         textColor: '',
         display: '',
         url: '',
+        allDay: isChecked === true ? 'Yes' : 'No',
         status: '',
         createBy: userId,
     };
@@ -87,6 +88,8 @@ const EditTask = (props) => {
                 setFieldValue('url', result?.data?.url)
                 setFieldValue("status", result?.data?.status)
                 setFieldValue('assignmentToLead', result?.data?.assignmentToLead)
+                setFieldValue('allDay', result?.data?.allDay === 'Yes' ? true : false)
+                // setIsChecked()
             }
             catch (e) {
                 console.log(e);
@@ -237,18 +240,21 @@ const EditTask = (props) => {
                                     : ''
                             }
                             <GridItem colSpan={{ base: 12 }} >
-                                <Checkbox isChecked={isChecked} onChange={(e) => setIsChecked(e.target.checked)}>All Day Task ? </Checkbox>
+                                <Checkbox isChecked={values?.allDay} onChange={(e) => {
+                                    const target = e.target.value;
+                                    setFieldValue('allDay', target === true ? 'Yes' : 'No')
+                                }}>All Day Task ? </Checkbox>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                     Start Date
                                 </FormLabel>
                                 <Input
-                                    type={isChecked ? 'date' : 'datetime-local'}
+                                    type={values?.allDay === true ? 'date' : 'datetime-local'}
                                     fontSize='sm'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.start}
+                                    value={values.start || null}
                                     name="start"
                                     fontWeight='500'
                                     borderColor={errors?.start && touched?.start ? "red.300" : null}
@@ -265,7 +271,7 @@ const EditTask = (props) => {
                                     min={values.start}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.end}
+                                    value={values.end || null}
                                     name="end"
                                     fontWeight='500'
                                     borderColor={errors?.end && touched?.end ? "red.300" : null}
