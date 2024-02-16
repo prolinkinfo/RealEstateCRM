@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react'
-import { ChevronDownIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { AddIcon, ChevronDownIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { Box, Button, Flex, Menu, Heading, MenuButton, Select, Checkbox, GridItem, Text, MenuItem, Grid, MenuList, FormLabel, Input, useColorModeValue } from '@chakra-ui/react';
 import Card from 'components/card/Card'
 import { useFormik } from 'formik';
@@ -161,12 +161,12 @@ const CustomField = () => {
                                 </Menu>
                             )}
 
-                            {data?.length > 0 && <Button ml={2} onClick={() => setAddHeadingModel(true)} variant="brand" size='sm'>Add Heading</Button>}
+                            {data?.length > 0 && <Button ml={2} onClick={() => setAddHeadingModel(true)} leftIcon={<AddIcon />} variant="brand" size='sm'>Add Heading</Button>}
                             <Button onClick={() => navigate('/admin-setting')} variant="brand" size="sm" leftIcon={<IoIosArrowBack />} ml={2}>Back</Button>
                         </Flex>
                     </Box>
                 </Flex>
-                {!data?.length > 0 && <Text
+                {!data?.length > 0 && !isLoading && <Text
                     textAlign={"center"}
                     width="100%"
                     color={'gray.500'}
@@ -174,7 +174,9 @@ const CustomField = () => {
                     my='7'
                     fontWeight="700"
                 >-- Please Select Module --</Text>}
-                <DragDropContext DragDropContext onDragEnd={handleHeadingsDragEnd} >
+                {isLoading ? <Flex justifyContent={'center'} alignItems={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                    <Spinner />
+                </Flex> : <DragDropContext DragDropContext onDragEnd={handleHeadingsDragEnd} >
                     <Droppable droppableId="droppable">
                         {(provided) => (
                             <div ref={provided.innerRef} {...provided.droppableProps}>
@@ -215,7 +217,7 @@ const CustomField = () => {
                             </div>
                         )}
                     </Droppable>
-                </DragDropContext>
+                </DragDropContext>}
 
             </Card>
             {data?.length > 0 && <Card mt='5'>
@@ -240,7 +242,7 @@ const CustomField = () => {
                                 ))}
                             </MenuList>
                         </Menu>}
-                        {data?.length > 0 && <Button me={2} ml='2' onClick={() => setAddFieldModel(true)} variant="brand" size='sm'>Add Field</Button>}
+                        {data?.length > 0 && <Button me={2} ml='2' onClick={() => setAddFieldModel(true)} variant="brand" leftIcon={<AddIcon />} size='sm'>Add Field</Button>}
                     </Box>
 
                 </Flex>
