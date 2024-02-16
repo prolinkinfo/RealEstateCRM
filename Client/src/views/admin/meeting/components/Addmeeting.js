@@ -22,8 +22,8 @@ const AddMeeting = (props) => {
 
     const initialValues = {
         agenda: '',
-        attendes: [props.leadContect === 'contactView' && props.id ? props.id : ''],
-        attendesLead: [props.leadContect === 'leadView' && props.id ? props.id : ''],
+        attendes: props.leadContect === 'contactView' && props.id ? [props.id] : [],
+        attendesLead: props.leadContect === 'leadView' && props.id ? [props.id] : [],
         location: '',
         related: props.leadContect === 'contactView' ? 'Contact' : props.leadContect === 'leadView' ? 'Lead' : 'None',
         dateTime: '',
