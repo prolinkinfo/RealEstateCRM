@@ -128,7 +128,7 @@ const Add = (props) => {
                                         fontWeight='500'
                                         borderColor={errors.name && touched.name ? "red.300" : null}
                                     />
-                                    <Text mb='10px' color={'red'}> {errors.name && touched.name && errors.name}</Text>
+                                    <Text mb='10px' fontSize='sm' color={'red'}> {errors.name && touched.name && errors.name}</Text>
                                 </GridItem>
 
                                 <GridItem colSpan={{ base: 12 }}>
@@ -171,7 +171,7 @@ const Add = (props) => {
                                         fontWeight='500'
                                         borderColor={errors?.validations && touched?.validations && errors?.validations[0]?.message && touched?.validations[0]?.message ? "red.300" : null}
                                     />
-                                    <Text mb='10px' color={'red'}> {errors?.validations && touched?.validations && touched?.validations[0]?.message && errors?.validations[0]?.message}</Text>
+                                    <Text mb='10px' fontSize='sm' color={'red'}> {errors?.validations && touched?.validations && touched?.validations[0]?.message && errors?.validations[0]?.message}</Text>
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                     <Flex>
@@ -206,7 +206,7 @@ const Add = (props) => {
                                         fontWeight='500'
                                         borderColor={errors?.validations && touched?.validations && errors?.validations[1]?.value && touched?.validations[1]?.value ? "red.300" : null}
                                     />
-                                    <Text mb='10px' color={'red'}> {errors?.validations && touched?.validations && touched?.validations[1]?.value && errors?.validations[1]?.value}</Text>
+                                    <Text fontSize='sm' mb='10px' color={'red'}> {errors?.validations && touched?.validations && touched?.validations[1]?.value && errors?.validations[1]?.value}</Text>
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='2px'>
@@ -256,7 +256,7 @@ const Add = (props) => {
                                         fontWeight='500'
                                         borderColor={errors?.validations && touched?.validations && errors?.validations[2]?.value && touched?.validations[2]?.value ? "red.300" : null}
                                     />
-                                    <Text mb='10px' color={'red'}> {errors?.validations && touched?.validations && touched?.validations[2]?.value && errors?.validations[2]?.value}</Text>
+                                    <Text fontSize='sm' mb='10px' color={'red'}> {errors?.validations && touched?.validations && touched?.validations[2]?.value && errors?.validations[2]?.value}</Text>
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='2px'>
@@ -307,7 +307,7 @@ const Add = (props) => {
                                         fontWeight='500'
                                         borderColor={errors?.validations && touched?.validations && errors?.validations[3]?.value && touched?.validations[3]?.value ? "red.300" : null}
                                     />
-                                    <Text mb='10px' color={'red'}> {errors?.validations && touched?.validations && touched?.validations[3]?.value && errors?.validations[3]?.value}</Text>
+                                    <Text fontSize='sm' mb='10px' color={'red'}> {errors?.validations && touched?.validations && touched?.validations[3]?.value && errors?.validations[3]?.value}</Text>
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='2px'>
@@ -323,7 +323,7 @@ const Add = (props) => {
                                         fontWeight='500'
                                         borderColor={errors?.validations && touched?.validations && errors?.validations[3]?.message && touched?.validations[3]?.message ? "red.300" : null}
                                     />
-                                    <Text mb='10px' color={'red'}> {errors?.validations && touched?.validations && touched?.validations[3]?.message && errors?.validations[3]?.message}</Text>
+                                    <Text fontSize='sm' mb='10px' color={'red'}> {errors?.validations && touched?.validations && touched?.validations[3]?.message && errors?.validations[3]?.message}</Text>
                                 </GridItem>
 
                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
@@ -371,7 +371,7 @@ const Add = (props) => {
                                         <option value='negative'>Negative  </option>
                                         <option value='integer'>Integer  </option>
                                     </Select>
-                                    <Text mb='10px' color={'red'}> {errors?.validations && touched?.validations && touched?.validations[4]?.formikType && errors?.validations[4]?.formikType}</Text>
+                                    <Text fontSize='sm' mb='10px' color={'red'}> {errors?.validations && touched?.validations && touched?.validations[4]?.formikType && errors?.validations[4]?.formikType}</Text>
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='2px'>
@@ -387,7 +387,7 @@ const Add = (props) => {
                                         fontWeight='500'
                                         borderColor={errors?.validations && touched?.validations && errors?.validations[3]?.message && touched?.validations[3]?.message ? "red.300" : null}
                                     />
-                                    <Text mb='10px' color={'red'}> {errors?.validations && touched?.validations && touched?.validations[3]?.message && errors?.validations[3]?.message}</Text>
+                                    <Text fontSize='sm' mb='10px' color={'red'}> {errors?.validations && touched?.validations && touched?.validations[3]?.message && errors?.validations[3]?.message}</Text>
                                 </GridItem>
 
                             </Grid>

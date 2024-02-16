@@ -81,6 +81,9 @@ export default function ColumnsTable(props) {
         }
     }, [pageOptions, gopageValue]);
 
+    const firstValue = Object?.values(param)[0];
+    const splitValue = firstValue?.split('/')
+
     return (
         <Box
             direction='column'
@@ -94,7 +97,7 @@ export default function ColumnsTable(props) {
                     {title}  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
                 </Heading>
                 <Button size="sm" onClick={() => setMeetingModel(true)} leftIcon={<AddIcon />} colorScheme="gray" bg={buttonbg}>Add New </Button>
-                <AddMeeting fetchData={fetchData} isOpen={meetingModel} onClose={setMeetingModel} from="lead" id={param.id} setAction={setAction} />
+                <AddMeeting fetchData={fetchData} isOpen={meetingModel} onClose={setMeetingModel} leadContect={splitValue[0]} from="lead" id={param.id} setAction={setAction} />
             </Flex>
             <Box overflowY={'auto'} className="table-container p0" >
                 <Table {...getTableProps()} variant='simple' color='gray.500' mb='24px'>
