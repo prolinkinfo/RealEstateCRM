@@ -304,18 +304,13 @@ export default function UserReports() {
         </GridItem>
         <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
           <Card>
-            <Flex mb={3} alignItems={"center"} justifyContent={"space-between"}>
+            <Flex mb={5} alignItems={"center"} justifyContent={"space-between"}>
               <Heading size="md">Report</Heading>
-              <IconButton
-                color={"green.500"}
-                onClick={() => navigate("/reporting-analytics")}
-                aria-label="Call Fred"
-                borderRadius="10px"
-                size="md"
-                icon={<ViewIcon />}
-              />
+
             </Flex>
-            <HSeparator />
+            <Box mb={3}>
+              <HSeparator />
+            </Box>
             <Chart dashboard={"dashboard"} data={data} />
           </Card>
         </GridItem>
