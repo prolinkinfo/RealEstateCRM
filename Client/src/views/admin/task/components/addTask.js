@@ -110,7 +110,7 @@ const AddTask = (props) => {
                                 fontWeight='500'
                                 borderColor={errors?.title && touched?.title ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.title && touched.title && errors.title}</Text>
+                            <Text mb='10px' fontSize='sm' color={'red'}> {errors.title && touched.title && errors.title}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -210,7 +210,7 @@ const AddTask = (props) => {
                                 fontWeight='500'
                                 borderColor={errors?.start && touched?.start ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.start && touched.start && errors.start}</Text>
+                            <Text mb='10px' fontSize='sm' color={'red'}> {errors.start && touched.start && errors.start}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>

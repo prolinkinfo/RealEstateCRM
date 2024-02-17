@@ -91,7 +91,7 @@ const CustomForm = ({ leadData, values, handleChange, handleBlur, errors, touche
                                                             </InputGroup>
                                                         </>}
                                             {touched[field?.name] && errors?.[field?.name] ? (
-                                                <Text mb='10px' color={'red'} textTransform={'capitalize'}> {errors?.[field?.name]}</Text>
+                                                <Text mb='10px' color={'red'} fontSize='sm' textTransform={'capitalize'}> {errors?.[field?.name]}</Text>
                                             ) : null}
                                         </GridItem>
                                     ))
@@ -174,7 +174,7 @@ const CustomForm = ({ leadData, values, handleChange, handleBlur, errors, touche
                                                 </InputGroup>
                                             </>}
                                 {touched[field?.name] && errors?.[field?.name] ? (
-                                    <Text mb='10px' color={'red'}> {errors?.[field?.name]}</Text>
+                                    <Text mb='10px' fontSize='sm' color={'red'}> {errors?.[field?.name]}</Text>
                                 ) : null}
                             </GridItem>
                         ))}
@@ -256,7 +256,7 @@ const CustomForm = ({ leadData, values, handleChange, handleBlur, errors, touche
                                             </InputGroup>
                                         </>}
                             {touched[field?.name] && errors?.[field?.name] ? (
-                                <Text mb='10px' color={'red'}> {errors?.[field?.name]}</Text>
+                                <Text mb='10px' fontSize='sm' color={'red'}> {errors?.[field?.name]}</Text>
                             ) : null}
                         </GridItem>
                     ))}
