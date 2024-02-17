@@ -239,7 +239,6 @@ const EditTask = (props) => {
                                     </>
                                     : ''
                             }
-                            {console.log(values?.allDay)}
                             <GridItem colSpan={{ base: 12 }} >
                                 <Checkbox isChecked={isChecked} name='allDay' onChange={(e) => {
                                     const target = e.target.checked;

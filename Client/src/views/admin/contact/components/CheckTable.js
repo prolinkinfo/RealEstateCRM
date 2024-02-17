@@ -164,8 +164,8 @@ export default function CheckTable(props) {
   const validationSchema = yup.object({
     title: yup.string(),
     firstName: yup.string(),
-    email: yup.string().email("Lead Email is invalid"),
-    phoneNumber: yup.number().typeError('Enter Number').min(0, 'Contact Phone Number is invalid').max(999999999999, 'Contact Phone Number is invalid').notRequired(),
+    email: yup.string().email("Email is invalid"),
+    phoneNumber: yup.number().typeError('Enter Number').min(0, 'Phone Number is invalid').max(999999999999, 'Phone Number is invalid').notRequired(),
     lastName: yup.string(),
     preferredContactMethod: yup.string(),
 
