@@ -5,9 +5,14 @@ import { getApi } from 'services/api'
 import CheckTable from './components/CheckTable'
 import AddTask from './components/addTask'
 import { HasAccess } from '../../../redux/accessUtils'
+import { useLocation } from 'react-router-dom'
 
 const Task = (props) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
+
+    const location = useLocation();
+    const state = location.state;
+    // Now you can access the state
 
     const tableColumns = [
         {
@@ -40,7 +45,8 @@ const Task = (props) => {
 
     const fetchData = async () => {
         setIsLoding(true)
-        let result = await getApi(user.role === 'superAdmin' ? 'api/task/' : `api/task/?createBy=${user._id}`);
+        let result = await getApi(user.role === 'superAdmin' ? `api/task${state ? `?status=${state}` : ''}` : `api/task/?createBy=${user._id}`);
+        console.log(result)
         setData(result.data);
         setIsLoding(false)
     }
