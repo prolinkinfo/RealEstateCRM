@@ -624,7 +624,7 @@ const EditField = (props) => {
                                             </GridItem>
                                             <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                                 <Flex>
-                                                    <Checkbox colorScheme="brandScheme" isChecked={values?.validation[4]?.types} name={`validation[${4}].types`} me="10px" onChange={(e) => {
+                                                    <Checkbox colorScheme="brandScheme" disabled={values?.type === 'date' ? true : false} isChecked={values?.validation[4]?.types} name={`validation[${4}].types`} me="10px" onChange={(e) => {
                                                         const isChecked = e.target.checked;
                                                         setFieldValue(`validation[${4}].types`, isChecked);
                                                         setFieldValue(
@@ -646,7 +646,7 @@ const EditField = (props) => {
                                                     FormikType{values.validation[4].types === true ? <Text color={"red"}>*</Text> : ''}
                                                 </FormLabel>
                                                 <Select
-                                                    disabled={values?.validation[4]?.types === true ? false : true}
+                                                    disabled={(values?.validation[4]?.types === true || values?.validation[4].formikType) ? values?.type === 'date' ? true : false : true}
                                                     value={values.validation[4].types === true ? values.validation[4].formikType : ''}
                                                     name={`validation[${4}].formikType`}
                                                     onChange={handleChange}
