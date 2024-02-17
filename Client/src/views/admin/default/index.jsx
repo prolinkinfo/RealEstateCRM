@@ -44,7 +44,7 @@ export default function UserReports() {
   const [data, setData] = useState([]);
   const [propertyData, setPropertyData] = useState([]);
   const navigate = useNavigate();
-  const [contactsView, taskView, leadView, proprtyView] = HasAccess(["Contacts", "Task", "Lead", "Property"]);
+  const [contactsView, taskView, leadView, proprtyView, emailView, callView, meetingView] = HasAccess(["Contacts", "Task", "Lead", "Property", "Email", "Call", "Meeting"]);
 
   const options = {
     chart: {
@@ -324,15 +324,28 @@ export default function UserReports() {
         <Card >
           <Heading size="md" pb={3}>Statistics</Heading>
           {data && data.length > 0 && data?.map((item, i) => (
-            <Box border={"1px solid #e5e5e5"} p={2} m={1} key={i}>
-              <Flex justifyContent={"space-between"}>
-                <Text fontSize="sm" fontWeight={600} pb={2}>{item?.name}</Text>
-                <Text fontSize="sm" fontWeight={600} pb={2}><CountUpComponent targetNumber={item?.length} /></Text>
-              </Flex>
-              <Progress
-                colorScheme={item?.color}
-                size='xs' value={item?.length} width={"100%"} />
-            </Box>
+            <>
+              {((item.name === 'Lead' && (leadView?.create || leadView?.update || leadView?.delete || leadView?.view)) ||
+                (item.name === 'Contact' && (contactsView?.create || contactsView?.update || contactsView?.delete || contactsView?.view)) ||
+                (item.name === 'Meeting' && (meetingView?.create || meetingView?.update || meetingView?.delete || meetingView?.view)) ||
+                (item.name === 'Call' && (callView?.create || callView?.update || callView?.delete || callView?.view)) ||
+                (item.name === 'Email' && (emailView?.create || emailView?.update || emailView?.delete || emailView?.view)) ||
+                (item.name === 'Property' && (proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view)) ||
+                (item.name === 'Task' && (taskView?.create || taskView?.update || taskView?.delete || taskView?.view))
+              )
+                &&
+                <Box border={"1px solid #e5e5e5"} p={2} m={1} key={i}>
+                  <Flex justifyContent={"space-between"}>
+                    <Text fontSize="sm" fontWeight={600} pb={2}>{item?.name}</Text>
+                    <Text fontSize="sm" fontWeight={600} pb={2}><CountUpComponent targetNumber={item?.length} /></Text>
+                  </Flex>
+                  <Progress
+                    colorScheme={item?.color}
+                    size='xs' value={item?.length} width={"100%"} />
+                </Box>
+              }
+            </>
+
           ))}
         </Card>
 
