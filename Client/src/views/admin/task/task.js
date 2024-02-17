@@ -46,7 +46,6 @@ const Task = (props) => {
     const fetchData = async () => {
         setIsLoding(true)
         let result = await getApi(user.role === 'superAdmin' ? `api/task${state ? `?status=${state}` : ''}` : `api/task/?createBy=${user._id}`);
-        console.log(result)
         setData(result.data);
         setIsLoding(false)
     }
