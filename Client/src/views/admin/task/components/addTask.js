@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { LiaMousePointerSolid } from 'react-icons/lia';
 import { TaskSchema } from 'schema';
 import { getApi, postApi } from 'services/api';
+import moment from 'moment';
 
 const AddTask = (props) => {
     const { onClose, isOpen, fetchData } = props
@@ -51,6 +52,14 @@ const AddTask = (props) => {
     const AddData = async () => {
         try {
             setIsLoding(true)
+
+            if (values?.start) {
+                values.start = isChecked ? moment(values.start).format('YYYY-MM-DD') || '' : moment(values.start).format('YYYY-MM-DDTHH:mm') || '';
+            }
+            if (values?.end) {
+                values.end = isChecked ? moment(values.end).format('YYY-MM-DD') || '' : moment(values.end).format('YYYY-MM-DDTHH:mm') || '';
+            }
+
             let response = await postApi('api/task/add', values)
             if (response.status === 200) {
                 formik.resetForm()
@@ -194,7 +203,13 @@ const AddTask = (props) => {
                                 : ''
                         }
                         <GridItem colSpan={{ base: 12 }} >
-                            <Checkbox isChecked={isChecked} onChange={(e) => setIsChecked(e.target.checked)}>All Day Task ? </Checkbox>
+                            <Checkbox isChecked={isChecked}
+                                name="allDay"
+                                onChange={(e) => {
+                                    setFieldValue('allDay', e.target.checked === true ? 'Yes' : 'No');
+                                    setIsChecked(e.target.checked);
+                                }}
+                            >All Day Task ? </Checkbox>
                         </GridItem>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>

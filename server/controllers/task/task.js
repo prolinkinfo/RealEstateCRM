@@ -70,7 +70,7 @@ const add = async (req, res) => {
         if (assignmentToLead && !mongoose.Types.ObjectId.isValid(assignmentToLead)) {
             res.status(400).json({ error: 'Invalid assignmentToLead value' });
         }
-        const taskData = { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy,allDay, createdDate: new Date() };
+        const taskData = { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy, allDay, createdDate: new Date() };
 
         if (assignmentTo) {
             taskData.assignmentTo = assignmentTo;
@@ -89,19 +89,21 @@ const add = async (req, res) => {
 
 const edit = async (req, res) => {
     try {
-        const { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy, assignmentTo, status } = req.body;
+        const { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy, assignmentTo, status, allDay } = req.body;
 
         if (assignmentTo && !mongoose.Types.ObjectId.isValid(assignmentTo)) {
             res.status(400).json({ error: 'Invalid assignmentTo value' });
         }
-        const taskData = { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy, status };
+        const taskData = { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy, status, allDay };
 
         if (assignmentTo) {
             taskData.assignmentTo = assignmentTo;
         }
-        let result = await Task.updateOne(
+        // let result = await Task.updateOne(
+        let result = await Task.findOneAndUpdate(
             { _id: req.params.id },
-            { $set: taskData }
+            { $set: taskData },
+            { new: true }
         );
 
         res.status(200).json(result);
