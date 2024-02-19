@@ -175,7 +175,8 @@ export default function CheckTable(props) {
     }
   })
   const handleClear = () => {
-    setDisplaySearchData(false)
+    setDisplaySearchData(false);
+    navigate('/lead')
   }
 
   const findStatus = () => {
@@ -198,7 +199,7 @@ export default function CheckTable(props) {
   useEffect(() => {
     state && findStatus()
   }, [state, allData]);
-  
+
   const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm, dirty } = formik
   const tableInstance = useTable(
     {
@@ -391,8 +392,9 @@ export default function CheckTable(props) {
                 borderRadius='full'
                 variant='solid'
                 colorScheme="gray"
+                textTransform={"capitalize"}
               >
-                <TagLabel>{item}</TagLabel>
+                <TagLabel >{item}</TagLabel>
                 {/* <TagCloseButton /> */}
               </Tag>
             ))}
