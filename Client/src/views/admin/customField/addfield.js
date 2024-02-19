@@ -219,7 +219,11 @@ const Addfield = (props) => {
                                     <Select
                                         value={values.type}
                                         name="type"
-                                        onChange={handleChange}
+                                        onChange={(e) => {
+                                            setFieldValue('type', e.target.value)
+                                            setFieldValue(`validation[${4}].formikType`, e.target.value == 'date' ? 'date' : '')
+                                            setFieldValue(`validation[${4}].types`, e.target.value == 'date' ? true : false)
+                                        }}
                                         fontWeight='500'
                                         // placeholder={'Select Type'}
                                         borderColor={errors.type && touched.type ? "red.300" : null}
@@ -278,57 +282,6 @@ const Addfield = (props) => {
                                         <Checkbox colorScheme="brandScheme" me="10px" onChange={(e) => setFieldValue(`fixed`, e.target.checked)} />
                                     </Flex>
                                 </GridItem>
-                                {/* <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
-                                    <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                        Validations
-                                    </FormLabel>
-                                    <Select
-                                        value={validationType}
-                                        name="validations"
-                                        // onChange={handleChange}
-                                        onChange={(e) => {
-                                            setValidationType(e.target.value)
-                                            if (e.target.value) {
-                                                const validationData = validations?.filter(item => item._id === e.target.value)
-                                                const filterData = validationData?.length > 0 ? validationData[0]?.validations : values?.validation
-                                                setFieldValue('validation', filterData)
-                                            } else {
-                                                setFieldValue('validation', [
-                                                    {
-                                                        require: false,
-                                                        message: "",
-                                                    },
-                                                    {
-                                                        min: false,
-                                                        value: "",
-                                                        message: "",
-                                                    },
-                                                    {
-                                                        max: false,
-                                                        value: "",
-                                                        message: "",
-                                                    },
-                                                    {
-                                                        match: false,
-                                                        value: "",
-                                                        message: "",
-                                                    },
-                                                    {
-                                                        types: false,
-                                                        formikType: '',
-                                                        message: "",
-                                                    },])
-                                            }
-
-                                        }}
-                                        fontWeight='500'
-                                        placeholder={'Select Validation'}
-                                    >
-                                        {validations?.map((item, index) => (
-                                            <option key={index} value={item._id} >{item.name}</option>
-                                        ))}
-                                    </Select>
-                                </GridItem> */}
                                 {(values?.type === 'radio' || values?.type === 'select') ? <>
                                     <GridItem colSpan={{ base: 12, sm: 12, md: 12 }} borderBottom={'1px solid rgba(128, 128, 128, 0.705)'}>
                                         <Flex justifyContent={'space-between'} alignItems={'center'} mb={'8px'} >
@@ -635,7 +588,7 @@ const Addfield = (props) => {
 
                                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                                     <Flex>
-                                                        <Checkbox colorScheme="brandScheme" isChecked={values?.validation[4].formikType ? true : false} name={`validation[${4}].types`} me="10px" onChange={(e) => {
+                                                        <Checkbox colorScheme="brandScheme" disabled={values?.type === 'date' ? true : false} isChecked={(values?.validation[4]?.types === true || values?.validation[4].formikType) ? true : false} name={`validation[${4}].types`} me="10px" onChange={(e) => {
                                                             const isChecked = e.target.checked;
                                                             setFieldValue(`validation[${4}].types`, isChecked);
                                                             setFieldValue(
@@ -654,7 +607,7 @@ const Addfield = (props) => {
                                                         FormikType{(values?.validation[4]?.types === true || values?.validation[4].formikType) ? <Text color={"red"}>*</Text> : ''}
                                                     </FormLabel>
                                                     <Select
-                                                        disabled={(values?.validation[4]?.types === true || values?.validation[4].formikType) ? false : true}
+                                                        disabled={(values?.validation[4]?.types === true || values?.validation[4].formikType) ? values?.type === 'date' ? true : false : true}
                                                         value={values?.validation[4]?.types === true || values?.validation[4].formikType ? values.validation[4].formikType : ''}
                                                         name={`validation[${4}].formikType`}
                                                         onChange={handleChange}

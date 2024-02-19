@@ -22,7 +22,7 @@ import { HSeparator } from "components/separator/Separator";
 import { useEffect, useState } from "react";
 import { LuBuilding2 } from "react-icons/lu";
 import { MdAddTask, MdContacts, MdLeaderboard } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getApi } from "services/api";
 import ReportChart from "../reports/components/reportChart";
 import Chart from "components/charts/LineChart.js";
@@ -44,8 +44,7 @@ export default function UserReports() {
   const [data, setData] = useState([]);
   const [propertyData, setPropertyData] = useState([]);
   const navigate = useNavigate();
-
-  const [contactsView, taskView, leadView, proprtyView] = HasAccess(["Contacts", "Task", "Lead", "Property"]);
+  const [contactsView, taskView, leadView, proprtyView, emailView, callView, meetingView] = HasAccess(["Contacts", "Task", "Lead", "Property", "Email", "Call", "Meeting"]);
 
   const options = {
     chart: {
@@ -181,26 +180,31 @@ export default function UserReports() {
   const taskStatus = [
     {
       name: "Completed",
+      status: 'completed',
       length: task && task?.length > 0 && task?.filter(item => item?.status === "completed")?.length || 0,
       color: "#4d8f3a"
     },
     {
       name: "Pending",
+      status: 'pending',
       length: task && task?.length > 0 && task?.filter(item => item?.status === "pending")?.length || 0,
       color: "#a37f08"
     },
     {
       name: "In Progress",
+      status: 'inProgress',
       length: task && task?.length > 0 && task?.filter(item => item?.status === "inProgress")?.length || 0,
       color: "#7038db"
     },
     {
       name: "Todo",
+      status: 'todo',
       length: task && task?.length > 0 && task?.filter(item => item?.status === "todo")?.length || 0,
       color: "#1f7eeb"
     },
     {
       name: "On Hold",
+      status: 'onHold',
       length: task && task?.length > 0 && task?.filter(item => item?.status === "onHold")?.length || 0,
       color: "#DB5436"
     },
@@ -320,15 +324,28 @@ export default function UserReports() {
         <Card >
           <Heading size="md" pb={3}>Statistics</Heading>
           {data && data.length > 0 && data?.map((item, i) => (
-            <Box border={"1px solid #e5e5e5"} p={2} m={1} key={i}>
-              <Flex justifyContent={"space-between"}>
-                <Text fontSize="sm" fontWeight={600} pb={2}>{item?.name}</Text>
-                <Text fontSize="sm" fontWeight={600} pb={2}><CountUpComponent targetNumber={item?.length} /></Text>
-              </Flex>
-              <Progress
-                colorScheme={item?.color}
-                size='xs' value={item?.length} width={"100%"} />
-            </Box>
+            <>
+              {((item.name === 'Lead' && (leadView?.create || leadView?.update || leadView?.delete || leadView?.view)) ||
+                (item.name === 'Contact' && (contactsView?.create || contactsView?.update || contactsView?.delete || contactsView?.view)) ||
+                (item.name === 'Meeting' && (meetingView?.create || meetingView?.update || meetingView?.delete || meetingView?.view)) ||
+                (item.name === 'Call' && (callView?.create || callView?.update || callView?.delete || callView?.view)) ||
+                (item.name === 'Email' && (emailView?.create || emailView?.update || emailView?.delete || emailView?.view)) ||
+                (item.name === 'Property' && (proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view)) ||
+                (item.name === 'Task' && (taskView?.create || taskView?.update || taskView?.delete || taskView?.view))
+              )
+                &&
+                <Box border={"1px solid #e5e5e5"} p={2} m={1} key={i}>
+                  <Flex justifyContent={"space-between"}>
+                    <Text fontSize="sm" fontWeight={600} pb={2}>{item?.name}</Text>
+                    <Text fontSize="sm" fontWeight={600} pb={2}><CountUpComponent targetNumber={item?.length} /></Text>
+                  </Flex>
+                  <Progress
+                    colorScheme={item?.color}
+                    size='xs' value={item?.length} width={"100%"} />
+                </Box>
+              }
+            </>
+
           ))}
         </Card>
 
@@ -391,12 +408,14 @@ export default function UserReports() {
           </Grid>
           {taskStatus && taskStatus.length > 0 && taskStatus?.map((item) => (
             <Box my={1.5}>
-              <Flex justifyContent={"space-between"} alignItems={"center"} padding={4} backgroundColor={"#0b0b0b17"} borderRadius={"10px"}>
+              <Flex justifyContent={"space-between"} cursor={'pointer'} onClick={() => navigate('/task', { state: item.status })} alignItems={"center"} padding={4} backgroundColor={"#0b0b0b17"} borderRadius={"10px"}>
                 <Flex alignItems={"center"}>
                   <Box height={"18px"} width={"18px"} lineHeight={"18px"} textAlign={"center"} border={`1px solid ${item.color}`} display={"flex"} justifyContent={"center"} alignItems={"center"} borderRadius={"50%"} margin={"0 auto"} >
                     <Box backgroundColor={`${item.color}`} height={"10px"} width={"10px"} borderRadius={"50%"}></Box>
                   </Box>
+
                   <Text ps={2} fontWeight={"bold"} color={`${item.color}`}>{item.name}</Text>
+
                 </Flex>
                 <Box fontWeight={"bold"} color={`${item.color}`}><CountUpComponent targetNumber={item?.length} /></Box>
               </Flex>
