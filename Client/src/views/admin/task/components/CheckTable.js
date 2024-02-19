@@ -88,7 +88,6 @@ export default function CheckTable(props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const data = useMemo(() => tableData, [tableData]);
   const navigate = useNavigate();
-  console.log(getTagValues)
   const [contactAccess, leadAccess] = HasAccess(['Contacts', 'Lead'])
 
   const csvColumns = [
