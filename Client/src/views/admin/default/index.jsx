@@ -356,6 +356,8 @@ export default function UserReports() {
               <GridItem colSpan={{ base: 12, md: 6 }}>
                 <Box backgroundColor={"#ebf5ff"}
                   borderRadius={"10px"}
+                  cursor={"pointer"}
+                  onClick={() => navigate('/lead')}
                   p={2} m={1} textAlign={"center"}>
                   <Heading size="sm" pb={3} color={"#1f7eeb"}>Total Leads </Heading>
                   <Text fontWeight={600} color={"#1f7eeb"}><CountUpComponent targetNumber={leadData?.length || 0} /> </Text>
@@ -364,6 +366,8 @@ export default function UserReports() {
               <GridItem colSpan={{ base: 12, md: 6 }}>
                 <Box backgroundColor={"#eaf9e6"}
                   borderRadius={"10px"}
+                  cursor={"pointer"}
+                  onClick={() => navigate('/lead', { state: 'active' })}
                   p={2} m={1} textAlign={"center"}>
                   <Heading size="sm" pb={3} color={"#43882f"} >Active Leads </Heading>
                   <Text fontWeight={600} color={"#43882f"}><CountUpComponent targetNumber={leadData && leadData.length > 0 && leadData?.filter(lead => lead?.leadStatus === "active")?.length || 0} /></Text>
@@ -371,7 +375,9 @@ export default function UserReports() {
               </GridItem>
               <GridItem colSpan={{ base: 12, md: 6 }}>
                 <Box backgroundColor={"#fbf4dd"}
+                  onClick={() => navigate('/lead', { state: 'pending' })}
                   borderRadius={"10px"}
+                  cursor={"pointer"}
                   p={2} m={1} textAlign={"center"}>
                   <Heading size="sm" pb={3} color={"#a37f08"}>Pending Leads</Heading>
                   <Text fontWeight={600} color={"#a37f08"}><CountUpComponent targetNumber={leadData && leadData.length > 0 && leadData?.filter(lead => lead?.leadStatus === "pending")?.length || 0} /></Text>
@@ -381,6 +387,8 @@ export default function UserReports() {
               <GridItem colSpan={{ base: 12, md: 6 }}>
                 <Box backgroundColor={"#ffeeeb"}
                   borderRadius={"10px"}
+                  cursor={"pointer"}
+                  onClick={() => navigate('/lead', { state: 'sold' })}
                   p={2} m={1} textAlign={"center"}>
                   <Heading size="sm" pb={3} color={"#d6401d"}>Sold Leads </Heading>
                   <Text fontWeight={600} color={"#d6401d"}><CountUpComponent targetNumber={leadData && leadData.length > 0 && leadData?.filter(lead => lead?.leadStatus === "sold")?.length || 0} /></Text>

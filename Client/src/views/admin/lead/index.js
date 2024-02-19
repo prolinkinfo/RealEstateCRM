@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { getApi } from "services/api";
 import { HasAccess } from "../../../redux/accessUtils";
 import CheckTable from './components/CheckTable';
+import { useLocation } from 'react-router-dom';
 
 const Index = () => {
 
@@ -11,7 +12,8 @@ const Index = () => {
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"));
-
+    const location = useLocation();
+    const state = location.state;
     const [permission, emailAccess, callAccess] = HasAccess(['Lead', 'Email', 'Call']);
     const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
@@ -35,7 +37,7 @@ const Index = () => {
 
     const fetchData = async () => {
         setIsLoding(true)
-        let result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
+        let result = await getApi(user.role === 'superAdmin' ? `api/lead/${state ? `?leadStatus=${state}` : ''}` : `api/lead/?createBy=${user._id}`);
         setData(result.data);
         setIsLoding(false)
     }
