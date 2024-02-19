@@ -14,8 +14,6 @@ const CustomView = ({ data, toCamelCase, fieldData }) => {
             {data?.headings?.length > 0 ? <>
                 {data?.headings?.map((item, ind) => (
                     <>
-
-                        {console.log(ind !== lastLength)}
                         <GridItem colSpan={{
                             base: 12, md: 6, lg: ind < lastLength ? ((ind + 1) > lastLength ? 6 : 4) : headingLength === 1 ? 12 : ((ind + 1) > lastLength ? 6 : 4)
                         }}>
