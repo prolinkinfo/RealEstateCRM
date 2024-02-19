@@ -37,7 +37,7 @@ const Index = () => {
 
     const fetchData = async () => {
         setIsLoding(true)
-        let result = await getApi(user.role === 'superAdmin' ? `api/lead/${state ? `?leadStatus=${state}` : ''}` : `api/lead/?createBy=${user._id}`);
+        let result = await getApi(user.role === 'superAdmin' ? `api/lead` : `api/lead/?createBy=${user._id}`);
         setData(result.data);
         setIsLoding(false)
     }
@@ -60,6 +60,7 @@ const Index = () => {
                         action={action}
                         setSearchedData={setSearchedData}
                         allData={data}
+                        state={state}
                         displaySearchData={displaySearchData}
                         tableData={displaySearchData ? searchedData : data}
                         fetchData={fetchData}
