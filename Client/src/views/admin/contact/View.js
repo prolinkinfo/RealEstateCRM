@@ -478,6 +478,12 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
+                                    <GridItem colSpan={{ base: 12 }}>
+                                        <Card overflow={'scroll'}>
+                                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Notes and Comments </Text>
+                                            <Text>{data?.notesandComments ? data?.notesandComments : 'N/A'}</Text>
+                                        </Card>
+                                    </GridItem>
                                     <GridItem colSpan={{ base: 12 }} >
                                         <Card >
                                             <Grid templateColumns={{ base: "1fr" }} gap={4}>
@@ -559,12 +565,6 @@ const View = () => {
                                                     </div>}
                                                 </Card>
                                             </GridItem>}
-                                            <GridItem colSpan={{ base: 12 }}>
-                                                <Card overflow={'scroll'}>
-                                                    <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Notes and Comments </Text>
-                                                    <Text>{data?.notesandComments ? data?.notesandComments : 'N/A'}</Text>
-                                                </Card>
-                                            </GridItem>
                                             {/* <GridItem colSpan={{ base: 2 }}>
                                                     {data?.textMsg?.length > 0 ? <PhoneCall text='true' fetchData={fetchData} columnsData={textColumnsDataColumns} tableData={data?.textMsg} title={'Text Msg '} /> : <Button onClick={() => navigate('/communication-integration')} leftIcon={<MdOutlineMessage />} colorScheme="gray" >send text Msg</Button>}
                                                 </GridItem> */}

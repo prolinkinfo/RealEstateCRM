@@ -19,5 +19,6 @@ router.delete('/delete-heading/:id', auth, customField.deleteHeading);
 router.post('/deleteMany-headings', auth, customField.deleteManyHeadings);
 router.put('/change-table-field/:id', auth, customField.changeIsTableField);
 router.put('/change-table-fields', auth, customField.changeIsTableFields);
+router.put('/change-belongsTo/:id', auth, customField.changeFieldsBelongsTo);
 
 module.exports = router;
