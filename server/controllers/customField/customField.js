@@ -539,8 +539,42 @@ const changeIsTableFields = async (req, res) => {
 
     } catch (err) {
         console.error('Failed to change table fields :', err);
-        return res.status(400).json({ message: 'Failed to change ', error: err.toString() });
+        return res.status(400).json({ success: false, message: 'Failed to change ', error: err.toString() });
     }
 };
 
-module.exports = { index, add, editWholeFieldsArray, editSingleField, view, deleteField, deleteManyFields, createNewModule, addHeading, editSingleHeading, editWholeHeadingsArray, deleteHeading, deleteManyHeadings, changeIsTableField, changeIsTableFields };
+const changeFieldsBelongsTo = async (req, res) => {
+    try {
+        const headingId = req.params.id;
+        const moduleId = req.body?.moduleId;
+        const updates = req.body?.updates;
+
+        const headingExists = await CustomField.findOne({ _id: moduleId, 'headings._id': headingId });
+
+        if (!headingExists) {
+            return res.status(404).json({ success: false, message: "Module or Heading not found" });
+        }
+
+        const updateOperations = updates?.map(update => ({
+            updateOne: {
+                filter: { _id: moduleId, 'fields._id': new mongoose.Types.ObjectId(update.fieldId) },
+                update: { $set: { 'fields.$[field].belongsTo': update.belongsTo } },
+                arrayFilters: [{ 'field._id': new mongoose.Types.ObjectId(update.fieldId) }]
+            }
+        }));
+
+        const result = await CustomField.bulkWrite(updateOperations);
+
+        if (!result) {
+            return res.status(404).json({ success: false, message: 'Fields not found' });
+        }
+
+        return res.status(200).json({ message: 'Updated successfully', result });
+
+    } catch (err) {
+        console.error('Failed to change belongs fields :', err);
+        return res.status(400).json({ success: false, message: 'Failed to change', error: err.toString() });
+    }
+};
+
+module.exports = { index, add, editWholeFieldsArray, editSingleField, view, deleteField, deleteManyFields, createNewModule, addHeading, editSingleHeading, editWholeHeadingsArray, deleteHeading, deleteManyHeadings, changeIsTableField, changeIsTableFields, changeFieldsBelongsTo };

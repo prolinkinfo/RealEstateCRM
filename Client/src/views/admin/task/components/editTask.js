@@ -8,6 +8,7 @@ import { getApi, putApi } from 'services/api';
 import ContactModel from "components/commonTableModel/ContactModel";
 import LeadModel from "components/commonTableModel/LeadModel";
 import Spinner from 'components/spinner/Spinner';
+import moment from 'moment';
 
 const EditTask = (props) => {
     const { onClose, isOpen, fetchData, setAction } = props
@@ -51,6 +52,14 @@ const EditTask = (props) => {
     const EditData = async () => {
         try {
             setIsLoding(true)
+
+            if (values?.start) {
+                values.start = isChecked ? moment(values.start).format('YYYY-MM-DD') || '' : moment(values.start).format('YYYY-MM-DDTHH:mm') || '';
+            }
+            if (values?.end) {
+                values.end = isChecked ? moment(values.end).format('YYYY-MM-DD') || '' : moment(values.end).format('YYYY-MM-DDTHH:mm') || '';
+            }
+
             let response = await putApi(`api/task/edit/${props.id}`, values)
             if (response.status === 200) {
                 formik.resetForm()
@@ -88,8 +97,8 @@ const EditTask = (props) => {
                 setFieldValue('url', result?.data?.url)
                 setFieldValue("status", result?.data?.status)
                 setFieldValue('assignmentToLead', result?.data?.assignmentToLead)
-                setFieldValue('allDay', values?.allDay === true ? 'Yes' : 'No')
-                // setIsChecked()
+                setFieldValue('allDay', result?.data?.allDay === 'Yes' ? 'Yes' : 'No')
+                setIsChecked(result?.data?.allDay === 'Yes' ? true : false)
             }
             catch (e) {
                 console.log(e);
@@ -240,11 +249,14 @@ const EditTask = (props) => {
                                     : ''
                             }
                             <GridItem colSpan={{ base: 12 }} >
-                                <Checkbox isChecked={isChecked} name='allDay' onChange={(e) => {
-                                    const target = e.target.checked;
-                                    setIsChecked(target)
-                                    setFieldValue('allDay', isChecked === true ? 'Yes' : 'No')
-                                }}>All Day Task ? </Checkbox>
+                                <Checkbox isChecked={isChecked} name='allDay'
+                                    onChange={(e) => {
+                                        const target = e.target.checked;
+                                        setFieldValue('allDay', e.target.checked === true ? 'Yes' : 'No');
+                                        setIsChecked(target);
+                                    }}>
+                                    All Day Task ?
+                                </Checkbox>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -255,7 +267,7 @@ const EditTask = (props) => {
                                     fontSize='sm'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.start || null}
+                                    value={isChecked ? moment(values.start).format('YYYY-MM-DD') || '' : moment(values.start).format('YYYY-MM-DDTHH:mm') || ''}
                                     name="start"
                                     fontWeight='500'
                                     borderColor={errors?.start && touched?.start ? "red.300" : null}
@@ -267,12 +279,12 @@ const EditTask = (props) => {
                                     End Date
                                 </FormLabel>
                                 <Input
-                                    type={isChecked ? 'date' : 'datetime-local'}
+                                    type={isChecked === true ? 'date' : 'datetime-local'}
                                     fontSize='sm'
                                     min={values.start}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.end || null}
+                                    value={isChecked ? moment(values.end).format('YYYY-MM-DD') || '' : moment(values.end).format('YYYY-MM-DDTHH:mm') || ''}
                                     name="end"
                                     fontWeight='500'
                                     borderColor={errors?.end && touched?.end ? "red.300" : null}
