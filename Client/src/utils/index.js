@@ -103,10 +103,10 @@ export const generateValidationSchema = (fields) => {
                     fieldValidation = fieldValidation.required(validationRule.message || 'This field is required');
                 }
                 if (validationRule.min) {
-                    fieldValidation = fieldValidation.min(validationRule.value, validationRule.message || 'Value is too small');
+                    fieldValidation = fieldValidation.min(validationRule.value, validationRule.message || (fieldFormikType === 'date' ? "Date is too small" : 'Value is too small'));
                 }
                 if (validationRule.max) {
-                    fieldValidation = fieldValidation.max(validationRule.value, validationRule.message || 'Value is too large');
+                    fieldValidation = fieldValidation.max(validationRule.value, validationRule.message || (fieldFormikType === 'date' ? "Date is too large" : 'Value is too large'));
                 }
                 if (validationRule.match) {
                     fieldValidation = fieldValidation.matches(

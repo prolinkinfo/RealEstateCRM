@@ -113,7 +113,7 @@ const AddMeeting = (props) => {
                                 fontWeight='500'
                                 borderColor={errors.agenda && touched.agenda ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.agenda && touched.agenda && errors.agenda}</Text>
+                            <Text fontSize='sm' mb='10px' color={'red'}> {errors.agenda && touched.agenda && errors.agenda}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -125,7 +125,7 @@ const AddMeeting = (props) => {
                                     <Radio value='Lead'>Lead</Radio>
                                 </Stack>
                             </RadioGroup>
-                            <Text mb='10px' color={'red'}> {errors.related && touched.related && errors.related}</Text>
+                            <Text mb='10px' color={'red'} fontSize='sm'> {errors.related && touched.related && errors.related}</Text>
                         </GridItem>
                         {data?.length > 0 && values.related &&
                             <GridItem colSpan={{ base: 12 }}>
@@ -162,7 +162,7 @@ const AddMeeting = (props) => {
                                 fontWeight='500'
                                 borderColor={errors.location && touched.location ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.location && touched.location && errors.location}</Text>
+                            <Text mb='10px' color={'red'} fontSize='sm'> {errors.location && touched.location && errors.location}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -178,7 +178,7 @@ const AddMeeting = (props) => {
                                 fontWeight='500'
                                 borderColor={errors.dateTime && touched.dateTime ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.dateTime && touched.dateTime && errors.dateTime}</Text>
+                            <Text fontSize='sm' mb='10px' color={'red'}> {errors.dateTime && touched.dateTime && errors.dateTime}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
