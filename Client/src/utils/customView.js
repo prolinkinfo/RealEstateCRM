@@ -10,7 +10,7 @@ const CustomView = ({ data, toCamelCase, fieldData }) => {
     const lastLength = data?.headings.length - headingLength
 
     // Define a function to determine the colSpan value
-    const getColSpan = (ind, lastLength, headingLength) => {
+    const getColSpanLg = (ind, lastLength, headingLength) => {
         if (ind < lastLength) {
             return (ind + 1) > lastLength ? 6 : 4;
         } else {
@@ -23,7 +23,7 @@ const CustomView = ({ data, toCamelCase, fieldData }) => {
                 {data?.headings?.map((item, ind) => (
                     <>
                         <GridItem colSpan={{
-                            base: 12, md: 6, lg: getColSpan(ind, lastLength, headingLength)
+                            base: 12, md: 6, lg: getColSpanLg(ind, lastLength, headingLength)
                         }}>
                             <Card>
                                 <Grid templateColumns="repeat(12, 1fr)" gap={3}>
