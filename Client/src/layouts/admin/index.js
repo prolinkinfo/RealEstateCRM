@@ -175,6 +175,7 @@ export default function Dashboard(props) {
 									brandText={getActiveRoute(routes)}
 									secondary={getActiveNavbar(routes)}
 									message={getActiveNavbarText(routes)}
+									routes={routes}
 									fixed={fixed}
 									under={under(routes)}
 									largeLogo={largeLogo}
