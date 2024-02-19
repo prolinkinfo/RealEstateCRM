@@ -327,7 +327,9 @@ export default function CheckTable(props) {
                 borderRadius='full'
                 variant='solid'
                 colorScheme="gray"
+                textTransform={"capitalize"}
               >
+
                 <TagLabel>{item}</TagLabel>
                 {/* <TagCloseButton /> */}
               </Tag>
@@ -535,7 +537,7 @@ export default function CheckTable(props) {
             <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={2}>
               <GridItem colSpan={{ base: 12 }}>
                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
-                  senderName
+                  Sender Name
                 </FormLabel>
                 <Input
                   fontSize='sm'
