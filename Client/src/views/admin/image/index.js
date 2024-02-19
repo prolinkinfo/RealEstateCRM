@@ -47,7 +47,7 @@ const ChangeImage = () => {
         setDelete(!deleteOpen);
         setSelectedId(item._id)
     }
-    console.log(selectedId)
+
     const handleDelete = async () => {
         try {
             setIsLoding(true)
