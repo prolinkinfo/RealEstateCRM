@@ -121,6 +121,7 @@ export default function CheckTable(props) {
     category: '',
     start: '',
     end: '',
+    status: '',
     leadAddress: '',
     assignmentToName: '',
     fromLeadScore: '',
@@ -143,6 +144,7 @@ export default function CheckTable(props) {
       const searchResult = allData?.filter(
         (item) =>
           (!values?.title || (item?.title && item?.title.toLowerCase().includes(values?.title?.toLowerCase()))) &&
+          (!values.status || (item?.status && item?.status.toLowerCase().includes(values.status?.toLowerCase()))) &&
           (!values?.category || (item?.category && item?.category.toLowerCase().includes(values?.category?.toLowerCase()))) &&
           (!values?.start || (item?.start && item?.start.toLowerCase().includes(values?.start?.toLowerCase()))) &&
           (!values?.end || (item?.end && item?.end.toString().includes(values?.end))) &&
@@ -152,7 +154,7 @@ export default function CheckTable(props) {
               (parseInt(item?.leadScore, 10) >= parseInt(values.fromLeadScore, 10) || 0) &&
               (parseInt(item?.leadScore, 10) <= parseInt(values.toLeadScore, 10) || 0)))
       )
-      let getValue = [values.title, values?.category, state && state, values?.start, values?.end, values?.assignmentToName, (![null, undefined, ''].includes(values?.fromLeadScore) && `${values.fromLeadScore}-${values.toLeadScore}`) || undefined].filter(value => value);
+      let getValue = [values.title, values?.category, values.status, state && state, values?.start, values?.end, values?.assignmentToName, (![null, undefined, ''].includes(values?.fromLeadScore) && `${values.fromLeadScore}-${values.toLeadScore}`) || undefined].filter(value => value);
       setGetTagValues(getValue)
       setSearchedData(searchResult);
       setDisplaySearchData(true)
@@ -162,8 +164,24 @@ export default function CheckTable(props) {
     }
   })
   const handleClear = () => {
+    navigate('/task')
     setDisplaySearchData(false)
   }
+  const findStatus = () => {
+    const searchResult = allData?.filter(
+      (item) =>
+        (!state || (item?.status && item?.status.toLowerCase().includes(state?.toLowerCase())))
+    )
+    let getValue = [state || undefined].filter(value => value);
+    setGetTagValues(getValue)
+    setSearchedData(searchResult);
+    setDisplaySearchData(true)
+    setAdvaceSearch(false)
+    setSearchClear(true)
+  }
+  useEffect(() => {
+    state && findStatus()
+  }, [state, allData]);
   const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm, dirty } = formik
 
   const tableInstance = useTable(
@@ -354,6 +372,7 @@ export default function CheckTable(props) {
                 key={item}
                 borderRadius='full'
                 variant='solid'
+                textTransform={'capitalize'}
                 colorScheme="gray"
               >
                 <TagLabel>{item}</TagLabel>
@@ -549,6 +568,28 @@ export default function CheckTable(props) {
                   fontWeight='500'
                 />
                 <Text mb='10px' color={'red'}> {errors.title && touched.title && errors.title}</Text>
+
+              </GridItem>
+              <GridItem colSpan={{ base: 12, md: 6 }}>
+                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
+                  Status
+                </FormLabel>
+                <Select
+                  value={values?.status}
+                  fontSize='sm'
+                  name="status"
+                  onChange={handleChange}
+                  fontWeight='500'
+                // placeholder={'Select Lead Status'}
+                >
+                  {!state && <option value=''>Select Status</option>}
+                  <option value='completed'>Completed</option>
+                  <option value='todo'>Todo</option>
+                  <option value='pending'>Pending</option>
+                  <option value='inProgress'>In Progress</option>
+                  <option value='onHold'>On Hold</option>
+                </Select>
+                <Text mb='10px' color={'red'}> {errors.status && touched.status && errors.status}</Text>
 
               </GridItem>
               <GridItem colSpan={{ base: 12, md: 6 }}>
