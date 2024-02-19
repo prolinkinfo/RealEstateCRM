@@ -62,10 +62,10 @@ const FolderTreeView = ({ data, deleteFile, item, download, name, isFile, childr
                                         <MenuItem pr={2} w={'180px'} onClick={() => navigate(`/contactView/${data?.linkContact}`)} icon={<IoIosContact fontSize={15} />}>Linked Contact</MenuItem>
                                         : !from && data?.linkLead && <MenuItem pr={2} w={'180px'} onClick={() => navigate(`/leadView/${data?.linkLead}`)} icon={<MdLeaderboard fontSize={15} />}>Linked Lead</MenuItem>
                                     }
-                                    {!from && <MenuItem pr={10} color={'blue'} onClick={() => handleLinkClick(data?._id)} icon={<LinkIcon fontSize={15} />}>Link</MenuItem>}
-                                    {isImageUrl(data?.img) && <MenuItem pr={10} color={'green'} onClick={() => window.open(data?.img)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>}
-                                    <MenuItem pr={10} onClick={() => handleClick(data?._id)} icon={<DownloadIcon fontSize={15} />}>Download</MenuItem>
-                                    {!from && <MenuItem pr={10} color={'red'} onClick={() => deletedata(data?._id)} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>}
+                                    {!from && <MenuItem pr={10} alignItems={'start'} color={'blue'} onClick={() => handleLinkClick(data?._id)} icon={<LinkIcon fontSize={15} />}>Link</MenuItem>}
+                                    {isImageUrl(data?.img) && <MenuItem alignItems={'start'} pr={10} color={'green'} onClick={() => window.open(data?.img)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>}
+                                    <MenuItem pr={10} alignItems={'start'} onClick={() => handleClick(data?._id)} icon={<DownloadIcon fontSize={15} />}>Download</MenuItem>
+                                    {!from && <MenuItem alignItems={'start'} pr={10} color={'red'} onClick={() => deletedata(data?._id)} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>}
                                 </MenuList>
                             </Menu>
                         </Flex>
