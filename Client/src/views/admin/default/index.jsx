@@ -399,6 +399,7 @@ export default function UserReports() {
           <Grid templateColumns="repeat(12, 1fr)" gap={2} mb={2}>
             <GridItem colSpan={{ base: 12 }}>
               <Box backgroundColor={"#ebf5ff"}
+                onClick={() => navigate('/task')}
                 borderRadius={"10px"}
                 p={2} m={1} textAlign={"center"}>
                 <Heading size="sm" pb={3} color={"#1f7eeb"}>Total Tasks </Heading>

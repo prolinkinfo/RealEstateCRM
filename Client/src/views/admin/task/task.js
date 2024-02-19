@@ -66,6 +66,7 @@ const Task = (props) => {
                 dataColumn={dataColumn}
                 setAction={setAction}
                 action={action}
+                state={state}
                 setSearchedData={setSearchedData}
                 allData={data}
                 displaySearchData={displaySearchData}

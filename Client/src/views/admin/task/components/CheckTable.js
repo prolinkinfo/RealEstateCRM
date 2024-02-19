@@ -63,13 +63,13 @@ import { putApi } from "services/api";
 import DataNotFound from "components/notFoundData";
 
 export default function CheckTable(props) {
-  const { tableData, fetchData, isLoding, setIsLoding, allData, dataColumn, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action, className } = props;
+  const { tableData, fetchData, isLoding, setIsLoding, allData, dataColumn, state, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action, className } = props;
 
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   const columns = useMemo(() => dataColumn, [dataColumn]);
   const [selectedValues, setSelectedValues] = useState([]);
-  const [getTagValues, setGetTagValues] = useState([]);
+  const [getTagValues, setGetTagValues] = useState(state ? [state] : []);
   const [deleteModel, setDelete] = useState(false);
   const [deleteMany, setDeleteMany] = useState(false);
   const [advaceSearch, setAdvaceSearch] = useState(false);
@@ -88,7 +88,7 @@ export default function CheckTable(props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const data = useMemo(() => tableData, [tableData]);
   const navigate = useNavigate();
-
+  console.log(getTagValues)
   const [contactAccess, leadAccess] = HasAccess(['Contacts', 'Lead'])
 
   const csvColumns = [
@@ -153,7 +153,7 @@ export default function CheckTable(props) {
               (parseInt(item?.leadScore, 10) >= parseInt(values.fromLeadScore, 10) || 0) &&
               (parseInt(item?.leadScore, 10) <= parseInt(values.toLeadScore, 10) || 0)))
       )
-      let getValue = [values.title, values?.category, values?.start, values?.end, values?.assignmentToName, (![null, undefined, ''].includes(values?.fromLeadScore) && `${values.fromLeadScore}-${values.toLeadScore}`) || undefined].filter(value => value);
+      let getValue = [values.title, values?.category, state && state, values?.start, values?.end, values?.assignmentToName, (![null, undefined, ''].includes(values?.fromLeadScore) && `${values.fromLeadScore}-${values.toLeadScore}`) || undefined].filter(value => value);
       setGetTagValues(getValue)
       setSearchedData(searchResult);
       setDisplaySearchData(true)
@@ -325,7 +325,7 @@ export default function CheckTable(props) {
               </Text>
               <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={dataColumn} onSearch={handleSearch} />
               <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} mt={{ sm: "5px", md: "0" }} size="sm">Advance Search</Button>
-              {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>Clear</Button> : ""}
+              {displaySearchData === true || (state && getTagValues?.length !== 0) ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>Clear</Button> : ""}
               {(selectedValues.length > 0 && access?.delete) && <DeleteIcon cursor={"pointer"} onClick={() => setDeleteMany(true)} color={'red'} ms={2} />}
             </Flex>
           </GridItem>
