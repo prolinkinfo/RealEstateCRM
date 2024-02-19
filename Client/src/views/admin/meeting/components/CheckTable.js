@@ -545,6 +545,7 @@ export default function CheckTable(props) {
                   fontSize='sm'
                   onChange={handleChange} onBlur={handleBlur}
                   value={values.endDate}
+                  min={values.startDate}
                   type="date"
                   name='endDate'
                   fontWeight='500'
@@ -577,6 +578,7 @@ export default function CheckTable(props) {
                   fontSize='sm'
                   onChange={handleChange} onBlur={handleBlur}
                   value={values.timeEndDate}
+                  min={values.timeStartDate}
                   type="date"
                   name='timeEndDate'
                   fontWeight='500'
