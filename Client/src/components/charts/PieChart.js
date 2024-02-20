@@ -9,14 +9,12 @@ const ApexChart = (props) => {
   let soldLength = leadData && leadData.length > 0 ? leadData?.filter(lead => lead?.leadStatus === "sold")?.length : 0;
 
   const series = [activeLength, pendingLength, soldLength];
-  const scaledSeries = series.map(value => (value * 100) / leadData?.length);
-
+  const scaledSeries = series.map(value => value === 0 ? (value + 1 / leadData?.length) : ((value * 100) / leadData?.length))
 
 
   const options = {
     chart: {
       type: 'radialBar',
-      // height: 350,
       width: 330,
     },
     plotOptions: {
@@ -27,7 +25,6 @@ const ApexChart = (props) => {
           margin: 40,
           size: '48%',
           background: 'transparent',
-
         },
         dataLabels: {
           name: {
@@ -45,8 +42,8 @@ const ApexChart = (props) => {
           },
           value: {
             show: true,
-            formatter: function (val) {
-              return (+val)?.toFixed(1);
+            formatter: function (val) { 
+              return (val / 100 * leadData.length).toFixed(0);
             }
           }
         },
@@ -54,7 +51,12 @@ const ApexChart = (props) => {
           show: true,
         },
         startAngle: -180,
-        endAngle: 180
+        endAngle: 180,
+        hover: {
+          size: undefined,
+          sizeOffset: 3,
+          colors: ["#ff5959", "#ECC94B", "#01B574"], // Add hover effect colors
+        }
       },
     },
     stroke: {
@@ -66,7 +68,6 @@ const ApexChart = (props) => {
       show: true,
       floating: true,
       position: 'bottom',
-
     },
   }
 
