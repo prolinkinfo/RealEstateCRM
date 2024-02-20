@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Grid, GridItem, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react'
+import { Box, Button, Flex, Grid, GridItem, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react'
 import Card from 'components/card/Card'
 import React, { useEffect, useState } from 'react'
 import { fetchImage } from "../../../redux/imageSlice";
@@ -101,13 +101,13 @@ const ChangeImage = () => {
                                     <div className='imageContent'>
                                         <Button size='sm' variant="brand" onClick={() => setImageData(item)}>Set Image</Button>
                                         <Button size='sm' variant="brand" mx={1} onClick={() => { handleViewOpen(item); setImageViewData(item) }}>View</Button>
-                                        <Button size="sm" colorScheme="red" onClick={() => { handleDeleteOpen(item) }}>Delete</Button>
+                                        <Button size="sm" colorScheme="red" disabled={item?.isActive === true ? true : false} onClick={() => { handleDeleteOpen(item) }}>Delete</Button>
                                     </div>
                                 </div>
                             </GridItem>
                         ))}
                     </Grid>
-                    {!image?.length > 0 && <DataNotFound />}
+                    {!image?.length > 0 && <Text textAlign={'center'} width="100%" color={'gray.500'} fontSize="sm" fontWeight="700"><DataNotFound /></Text>}
                 </Card>
             </Card>
 
