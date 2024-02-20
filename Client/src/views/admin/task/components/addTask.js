@@ -128,8 +128,8 @@ const AddTask = (props) => {
                             <RadioGroup onChange={(e) => { setFieldValue('category', e); setFieldValue('assignmentTo', null); setFieldValue('assignmentToLead', null); }} value={values.category}>
                                 <Stack direction='row'>
                                     <Radio value='None' >None</Radio>
-                                    <Radio value='Contact'>Contact</Radio>
-                                    <Radio value='Lead'>Lead</Radio>
+                                    {props.leadContect === 'contactView' && <Radio value='Contact'>Contact</Radio>}
+                                    {props.leadContect === 'leadView' && <Radio value='Lead'>Lead</Radio>}
                                 </Stack>
                             </RadioGroup>
                             <Text mb='10px' color={'red'}> {errors.category && touched.category && errors.category}</Text>
