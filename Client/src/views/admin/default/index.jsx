@@ -349,7 +349,7 @@ export default function UserReports() {
           ))}
         </Card>
 
-        <Card>
+        {(leadView?.create || leadView?.update || leadView?.delete || leadView?.view) && <Card>
           <Heading size="md" pb={2}>Lead Statistics</Heading>
           {(leadView?.create || leadView?.update || leadView?.delete || leadView?.view) &&
             <Grid templateColumns="repeat(12, 1fr)" gap={2}>
@@ -400,9 +400,9 @@ export default function UserReports() {
             <PieChart leadData={leadData} />
           </Flex>
 
-        </Card>
+        </Card>}
 
-        <Card >
+        {(taskView?.create || taskView?.update || taskView?.delete || taskView?.view) && <Card >
           <Heading size="md" pb={3}>Task Statistics</Heading>
           <Grid templateColumns="repeat(12, 1fr)" gap={2} mb={2}>
             <GridItem colSpan={{ base: 12 }}>
@@ -430,7 +430,7 @@ export default function UserReports() {
               </Flex>
             </Box>
           ))}
-        </Card>
+        </Card>}
       </SimpleGrid>
 
     </>
