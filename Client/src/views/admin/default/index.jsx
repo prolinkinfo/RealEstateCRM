@@ -319,7 +319,10 @@ export default function UserReports() {
           </Card>
         </GridItem>
       </Grid>
-      <SimpleGrid gap="20px" columns={{ base: 1, md: 2, lg: 3 }} my="20px">
+      <SimpleGrid gap="20px" columns={{
+        base: 1, md: (leadView?.create || leadView?.update || leadView?.delete || leadView?.view) && (taskView?.create || taskView?.update || taskView?.delete || taskView?.view) ? 2 : 2, lg:
+          (leadView?.create || leadView?.update || leadView?.delete || leadView?.view) && (taskView?.create || taskView?.update || taskView?.delete || taskView?.view) ? 3 : 2
+      }} my="20px">
 
         <Card >
           <Heading size="md" pb={3}>Statistics</Heading>

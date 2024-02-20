@@ -36,13 +36,14 @@ const ApexChart = (props) => {
           total: {
             show: true,
             label: 'Total',
+            color: '#1F7EEB',
             formatter: function () {
               return leadData?.length || 0;
             }
           },
           value: {
             show: true,
-            formatter: function (val) { 
+            formatter: function (val) {
               return (val / 100 * leadData.length).toFixed(0);
             }
           }
