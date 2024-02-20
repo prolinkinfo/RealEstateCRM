@@ -18,6 +18,7 @@ const ChangeImage = () => {
     const [imageModal, setImageModal] = useState(false)
     const dispatch = useDispatch();
     const [imageview, setImageView] = useState(false)
+    const [imageviewData, setImageViewData] = useState({})
     const [deleteOpen, setDelete] = useState(false)
     const [data, setData] = useState(false)
     const [selectedId, setSelectedId] = useState(false)
@@ -55,6 +56,7 @@ const ChangeImage = () => {
             if (response.status === 200) {
                 dispatch(fetchImage());
                 setDelete(false);
+                setImageView(false)
             }
         } catch (e) {
             console.log(e);
@@ -98,8 +100,8 @@ const ChangeImage = () => {
                                     </Box> : ""}
                                     <div className='imageContent'>
                                         <Button size='sm' variant="brand" onClick={() => setImageData(item)}>Set Image</Button>
-                                        <Button size='sm' variant="brand" mx={1} onClick={() => handleViewOpen(item)}>View</Button>
-                                        <Button size="sm" colorScheme="red" onClick={() => handleDeleteOpen(item)}>Delete</Button>
+                                        <Button size='sm' variant="brand" mx={1} onClick={() => { handleViewOpen(item); setImageViewData(item) }}>View</Button>
+                                        <Button size="sm" colorScheme="red" onClick={() => { handleDeleteOpen(item) }}>Delete</Button>
                                     </div>
                                 </div>
                             </GridItem>
@@ -112,6 +114,8 @@ const ChangeImage = () => {
             <ImageView isOpen={imageview}
                 onClose={handleViewClose}
                 image={image}
+                handleDeleteOpen={handleDeleteOpen}
+                imageviewData={imageviewData}
                 fetchData={fetchData}
                 data={data}
                 setImageData={setImageData}
