@@ -42,7 +42,7 @@ const ApexChart = (props) => {
           },
           value: {
             show: true,
-            formatter: function (val) { 
+            formatter: function (val) {
               return (val / 100 * leadData.length).toFixed(0);
             }
           }
