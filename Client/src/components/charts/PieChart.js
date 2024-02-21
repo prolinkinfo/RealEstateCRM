@@ -36,6 +36,7 @@ const ApexChart = (props) => {
           total: {
             show: true,
             label: 'Total',
+            color: '#1F7EEB',
             formatter: function () {
               return leadData?.length || 0;
             }
