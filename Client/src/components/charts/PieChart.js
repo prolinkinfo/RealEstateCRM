@@ -63,7 +63,7 @@ const ApexChart = (props) => {
     stroke: {
       lineCap: 'round'
     },
-    colors: ["#01B574", "#ECC94B", "#ff5959"],
+    colors: ["#25BE87", "#ECC94B", "#ff5959"],
     labels: ['Active', 'Pending', 'Sold'],
     legend: {
       show: true,
