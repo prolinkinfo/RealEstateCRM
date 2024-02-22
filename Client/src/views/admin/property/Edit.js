@@ -108,7 +108,7 @@ const Edit = (props) => {
             try {
                 setIsLoding(true)
                 response = await getApi('api/property/view/', props?.selectedId ? props?.selectedId : param.id)
-                setInitialValues(response?.data?.property)
+                setInitialValues((prev) => ({...prev, ...response?.data?.property}))
                 //1. basicPropertyInformation
                 // values.propertyType = response?.data?.property?.propertyType;
                 // values.propertyAddress = response?.data?.property?.propertyAddress;

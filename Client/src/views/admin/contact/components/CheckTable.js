@@ -190,6 +190,7 @@ export default function CheckTable(props) {
       setAdvaceSearch(false)
       setSearchClear(true)
       resetForm();
+      setSearchbox('');
     }
   })
   const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm, dirty } = formik
@@ -299,7 +300,7 @@ export default function CheckTable(props) {
                 </Text> : ""}
               {isHide ? null :
                 <>
-                  <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={dataColumn} onSearch={handleSearch} />
+                  <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={dataColumn} onSearch={handleSearch} setGetTagValues={setGetTagValues} />
                   <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} mt={{ sm: "5px", md: "0" }} size="sm">Advance Search</Button>
                 </>
               }
