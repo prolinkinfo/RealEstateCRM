@@ -41,6 +41,7 @@ import { fetchRoles } from "../../../redux/roleSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { HasAccess } from "../../../redux/accessUtils";
 import DataNotFound from "components/notFoundData";
+import CustomView from "utils/customView";
 
 
 const View = () => {
@@ -196,7 +197,8 @@ const View = () => {
 
                         <TabPanels>
                             <TabPanel pt={4} p={0}>
-                                <Grid templateColumns="repeat(12, 1fr)" gap={3}>
+                                <CustomView data={leadData[0]} fieldData={data} toCamelCase={toCamelCase} />
+                                {/* <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                                     <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <Card >
                                             <Grid templateColumns="repeat(12, 1fr)" gap={4}>
@@ -367,7 +369,7 @@ const View = () => {
                                             </Grid>
                                         </Card>
                                     </GridItem>
-                                </Grid>
+                                </Grid> */}
                             </TabPanel>
                             <TabPanel pt={4} p={0}>
                                 <GridItem colSpan={{ base: 4 }} >

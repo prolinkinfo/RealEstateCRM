@@ -45,7 +45,7 @@ const Task = (props) => {
 
     const fetchData = async () => {
         setIsLoding(true)
-        let result = await getApi(user.role === 'superAdmin' ? `api/task${state ? `?status=${state}` : ''}` : `api/task/?createBy=${user._id}`);
+        let result = await getApi(user.role === 'superAdmin' ? `api/task` : `api/task/?createBy=${user._id}`);
         setData(result.data);
         setIsLoding(false)
     }
@@ -66,6 +66,7 @@ const Task = (props) => {
                 dataColumn={dataColumn}
                 setAction={setAction}
                 action={action}
+                state={state}
                 setSearchedData={setSearchedData}
                 allData={data}
                 displaySearchData={displaySearchData}

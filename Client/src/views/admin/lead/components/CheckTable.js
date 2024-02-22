@@ -74,7 +74,7 @@ import AdvanceSearch from "components/search/advanceSearch";
 import DataNotFound from "components/notFoundData";
 
 export default function CheckTable(props) {
-  const { columnsData, tableData, dataColumn, fetchData, isLoding, setIsLoding, allData, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, callAccess, emailAccess, setAction, action } = props;
+  const { columnsData, tableData, dataColumn, fetchData, isLoding, setIsLoding, allData, state, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, callAccess, emailAccess, setAction, action } = props;
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   const [leadData, setLeadData] = useState([])
@@ -176,16 +176,31 @@ export default function CheckTable(props) {
     }
   })
   const handleClear = () => {
-    setDisplaySearchData(false)
+    setDisplaySearchData(false);
+    navigate('/lead')
   }
 
-  const resetForm1 = () => {
-    setTempSelectedColumns(dynamicColumns)
+  const findStatus = () => {
+    const searchResult = allData?.filter(
+      (item) =>
+        (!state || (item?.leadStatus && item?.leadStatus.toLowerCase().includes(state?.toLowerCase())))
+    )
+    let getValue = [state || undefined].filter(value => value);
+    setGetTagValues(getValue)
+    setSearchedData(searchResult);
+    setDisplaySearchData(true)
+    setAdvaceSearch(false)
+    setSearchClear(true)
   }
 
   useEffect(() => {
     setSearchedData && setSearchedData(data);
   }, []);
+
+  useEffect(() => {
+    state && findStatus()
+  }, [state, allData]);
+
   const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm, dirty } = formik
   const tableInstance = useTable(
     {
@@ -378,8 +393,9 @@ export default function CheckTable(props) {
                 borderRadius='full'
                 variant='solid'
                 colorScheme="gray"
+                textTransform={"capitalize"}
               >
-                <TagLabel>{item}</TagLabel>
+                <TagLabel >{item}</TagLabel>
                 {/* <TagCloseButton /> */}
               </Tag>
             ))}

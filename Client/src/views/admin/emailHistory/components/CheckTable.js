@@ -319,7 +319,9 @@ export default function CheckTable(props) {
                 borderRadius='full'
                 variant='solid'
                 colorScheme="gray"
+                textTransform={"capitalize"}
               >
+
                 <TagLabel>{item}</TagLabel>
                 {/* <TagCloseButton /> */}
               </Tag>
