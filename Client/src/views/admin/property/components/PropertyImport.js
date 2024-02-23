@@ -34,6 +34,7 @@ function PropertyImport() {
     const [isLoding, setIsLoding] = useState(false);
     const navigate = useNavigate();
     const userId = JSON.parse(localStorage.getItem("user"))?._id;
+    const [filterProperty, setFilterProperty] = useState([]);
 
     const columns = [
         { Header: 'Fields In Crm', accessor: 'crmFields' },
@@ -169,7 +170,8 @@ function PropertyImport() {
                 }
             });
 
-            AddData(propertiesData);
+            console.log("values ", values)
+            // AddData(propertiesData);
         }
     })
 
@@ -261,8 +263,20 @@ function PropertyImport() {
         }
     }, [fileData]);
 
-    // const filterLead = fieldsInCrm.filter(field => importedFileFields.find(data => field.accessor === data || field.Header === data))
-    const filterLead = importedFileFields.filter(field => fieldsInCrm.find(data => field === data.accessor || field === data.Header))
+    // const filterProperty = fieldsInCrm.filter(field => importedFileFields.find(data => field.accessor === data || field.Header === data))
+    // const filterProperty = importedFileFields.filter(field => fieldsInCrm.find(data => field === data.accessor || field === data.Header))
+
+    useEffect(() => {
+        const filterPropertyData = importedFileFields.filter(field => {
+            const result = fieldsInCrm.find(data => field === data?.accessor || field === data?.Header);
+            if (result) {
+                setFieldValue(result?.accessor, field);
+                return true;
+            }
+            return false;
+        });
+        setFilterProperty(filterPropertyData);
+    }, [importedFileFields]);
 
 
     return (
@@ -346,7 +360,7 @@ function PropertyImport() {
                                         name={item.accessor}
                                         onChange={handleChange}
                                     >
-                                        <option value=''> {filterLead ? filterLead.find((data) => (item.Header === data || item.accessor === data) && data) ? filterLead.find((data) => (item.Header === data || item.accessor === data) && data) : 'Select Field In File' : 'Select Field In File'}</option>                                        {
+                                        <option value=''> {filterProperty ? filterProperty.find((data) => (item.Header === data || item.accessor === data) && data) ? filterProperty.find((data) => (item.Header === data || item.accessor === data) && data) : 'Select Field In File' : 'Select Field In File'}</option>                                        {
                                             importedFileFields?.map(field => (
                                                 <option value={field} key={field}>{field}</option>
                                             ))
@@ -359,7 +373,7 @@ function PropertyImport() {
                 </Grid>
 
                 <Flex Flex justifyContent={'end'} mt='5' >
-                    <Button size="sm" onClick={() => handleSubmit()} variant="brand">Next</Button>
+                    <Button size="sm" onClick={() => handleSubmit()} variant="brand">Save</Button>
                 </Flex>
             </Card>
         </>
