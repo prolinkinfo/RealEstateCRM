@@ -123,6 +123,7 @@ const AddMeeting = (props) => {
                                 <Stack direction='row'>
                                     {props.leadContect === 'contactView' && <Radio value='Contact'>Contact</Radio>}
                                     {props.leadContect === 'leadView' && <Radio value='Lead'>Lead</Radio>}
+                                    {!props.leadContect && <> <Radio value='Contact'>Contact</Radio><Radio value='Lead'>Lead</Radio></>}
                                 </Stack>
                             </RadioGroup>
                             <Text mb='10px' color={'red'} fontSize='sm'> {errors.related && touched.related && errors.related}</Text>

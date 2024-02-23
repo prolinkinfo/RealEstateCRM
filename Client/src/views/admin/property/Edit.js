@@ -697,8 +697,7 @@ const Edit = (props) => {
                     <DrawerFooter>
                         <Button size="sm"
                             sx={{ textTransform: "capitalize" }}
-                            variant="solid"
-                            colorScheme="green"
+                            variant="brand"
                             disabled={isLoding ? true : false}
                             type="submit"
                             onClick={handleSubmit}
