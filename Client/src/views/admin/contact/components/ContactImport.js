@@ -34,6 +34,7 @@ function ContactImport() {
     const [isLoding, setIsLoding] = useState(false);
     const navigate = useNavigate();
     const userId = JSON.parse(localStorage.getItem('user'))._id;
+    const [filterContact, setFilterContact] = useState([]);
 
     const columns = [
         { Header: 'Fields In Crm', accessor: 'crmFields' },
@@ -256,8 +257,20 @@ function ContactImport() {
         }
     }, [fileData]);
 
-    // const filterLead = fieldsInCrm.filter(field => importedFileFields.find(data => field.accessor === data || field.Header === data))
-    const filterLead = importedFileFields.filter(field => fieldsInCrm.find(data => field === data.accessor || field === data.Header))
+    // const filterContact = fieldsInCrm.filter(field => importedFileFields.find(data => field.accessor === data || field.Header === data))
+    // const filterContact = importedFileFields.filter(field => fieldsInCrm.find(data => field === data.accessor || field === data.Header))
+
+    useEffect(() => {
+        const filterContactData = importedFileFields?.filter(field => {
+            const result = fieldsInCrm?.find(data => field === data?.accessor || field === data?.Header);
+            if (result) {
+                setFieldValue(result?.accessor, field);
+                return true;
+            } 
+            return false;
+        });
+        setFilterContact(filterContactData);
+    }, [importedFileFields]);
 
     return (
         <>
@@ -340,7 +353,7 @@ function ContactImport() {
                                         name={item.accessor}
                                         onChange={handleChange}
                                     >
-                                        <option value=''> {filterLead ? filterLead.find((data) => (item.Header === data || item.accessor === data) && data) ? filterLead.find((data) => (item.Header === data || item.accessor === data) && data) : 'Select Field In File' : 'Select Field In File'}</option>
+                                        <option value=''> {filterContact ? filterContact.find((data) => (item.Header === data || item.accessor === data) && data) ? filterContact.find((data) => (item.Header === data || item.accessor === data) && data) : 'Select Field In File' : 'Select Field In File'}</option>
                                         {
                                             importedFileFields?.map(field => (
                                                 <option value={field} key={field}>{field}</option>
@@ -354,7 +367,7 @@ function ContactImport() {
                 </Grid>
 
                 <Flex Flex justifyContent={'end'} mt='5' >
-                    <Button size="sm" onClick={() => handleSubmit()} variant="brand">Next</Button>
+                    <Button size="sm" onClick={() => handleSubmit()} variant="brand">Save</Button>
                 </Flex>
             </Card>
         </>

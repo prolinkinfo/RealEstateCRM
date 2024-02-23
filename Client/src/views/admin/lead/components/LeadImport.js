@@ -34,6 +34,7 @@ function LeadImport() {
     const [importedFileData, setImportedFileData] = useState([]);
     const [isLoding, setIsLoding] = useState(false);
     const navigate = useNavigate();
+    const [filterLead, setFilterLead] = useState([]);
 
     const columns = [
         { Header: 'Fields In Crm', accessor: 'crmFields' },
@@ -228,9 +229,19 @@ function LeadImport() {
     }, [fileData]);
 
     // const filterLead = fieldsInCrm.filter(field => importedFileFields.find(data => field.accessor === data || field.Header === data))
+    // const filterLead = importedFileFields.filter(field => fieldsInCrm.find(data => field === data.accessor || field === data.Header))
 
-    const filterLead = importedFileFields.filter(field => fieldsInCrm.find(data => field === data.accessor || field === data.Header))
-
+    useEffect(() => {
+        const filterContactData = importedFileFields?.filter(field => {
+            const result = fieldsInCrm?.find(data => field === data?.accessor || field === data?.Header);
+            if (result) {
+                setFieldValue(result?.accessor, field);
+                return true;
+            }
+            return false;
+        });
+        setFilterLead(filterContactData);
+    }, [importedFileFields]);
 
     return (
         <>
@@ -329,7 +340,7 @@ function LeadImport() {
                     }
                 </Grid>
                 <Flex Flex justifyContent={'end'} mt='5' >
-                    <Button size="sm" onClick={() => handleSubmit()} variant="brand">Next</Button>
+                    <Button size="sm" onClick={() => handleSubmit()} variant="brand">Save</Button>
                 </Flex>
             </Card>
         </>

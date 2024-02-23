@@ -107,7 +107,7 @@ const Edit = (props) => {
             try {
                 setIsLoding(true)
                 response = await getApi('api/contact/view/', props?.selectedId ? props?.selectedId : param.id)
-                setInitialValues(response?.data?.contact)
+                setInitialValues((prev) => ({...prev, ...response?.data?.contact}))
                 // values.firstName = response?.data?.contact?.firstName;
                 // values.lastName = response?.data?.contact?.lastName;
                 // values.title = response?.data?.contact?.title;

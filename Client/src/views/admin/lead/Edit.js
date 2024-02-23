@@ -98,11 +98,11 @@ const Edit = (props) => {
             try {
                 setIsLoding(true)
                 response = await getApi('api/lead/view/', props?.selectedId ? props?.selectedId : param.id)
-                let editData = response?.data?.lead
-                editData.leadCreationDate = moment(response?.data?.lead?.leadCreationDate).format('YYYY-MM-DD');
-                editData.leadConversionDate = moment(response?.data?.lead?.leadConversionDate).format('YYYY-MM-DD');
-                editData.leadFollowUpDate = moment(response?.data?.lead?.leadFollowUpDate).format('YYYY-MM-DD');
-                setInitialValues(editData)
+                let editData = response?.data?.lead;
+                setInitialValues((prev) => ({ ...prev, ...editData }));
+                // editData.leadCreationDate = moment(response?.data?.lead?.leadCreationDate).format('YYYY-MM-DD');
+                // editData.leadConversionDate = moment(response?.data?.lead?.leadConversionDate).format('YYYY-MM-DD');
+                // editData.leadFollowUpDate = moment(response?.data?.lead?.leadFollowUpDate).format('YYYY-MM-DD');
             } catch (e) {
                 console.error(e)
             } finally {
