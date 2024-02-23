@@ -177,32 +177,34 @@ const Index = () => {
     return (
         <div>
             <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={4}>
-                <GridItem colSpan={6}>
-                    <CommonCheckTable
-                        title={title}
-                        isLoding={isLoding}
-                        columnData={columns}
-                        dataColumn={dataColumn}
-                        allData={data}
-                        tableData={displaySearchData ? searchedData : data}
-                        displaySearchData={displaySearchData}
-                        setDisplaySearchData={setDisplaySearchData}
-                        searchedData={searchedData}
-                        setSearchedData={setSearchedData}
-                        tableCustomFields={leadData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
-                        access={permission}
-                        action={action}
-                        setAction={setAction}
-                        selectedColumns={selectedColumns}
-                        setSelectedColumns={setSelectedColumns}
-                        isOpen={isOpen}
-                        onClose={onclose}
-                        onOpen={onOpen}
-                        selectedValues={selectedValues}
-                        setSelectedValues={setSelectedValues}
-                        setDelete={setDelete}
-                    />
-                </GridItem>
+                {!isLoding &&
+                    <GridItem colSpan={6}>
+                        <CommonCheckTable
+                            title={title}
+                            isLoding={isLoding}
+                            columnData={columns}
+                            dataColumn={dataColumn}
+                            allData={data}
+                            tableData={displaySearchData ? searchedData : data}
+                            displaySearchData={displaySearchData}
+                            setDisplaySearchData={setDisplaySearchData}
+                            searchedData={searchedData}
+                            setSearchedData={setSearchedData}
+                            tableCustomFields={leadData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
+                            access={permission}
+                            action={action}
+                            setAction={setAction}
+                            selectedColumns={selectedColumns}
+                            setSelectedColumns={setSelectedColumns}
+                            isOpen={isOpen}
+                            onClose={onclose}
+                            onOpen={onOpen}
+                            selectedValues={selectedValues}
+                            setSelectedValues={setSelectedValues}
+                            setDelete={setDelete}
+                        />
+                    </GridItem>
+                }
             </Grid>
 
             {isOpen && <Add isOpen={isOpen} size={size} leadData={leadData[0]} onClose={onClose} setAction={setAction} action={action} />}
