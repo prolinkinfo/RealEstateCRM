@@ -93,6 +93,7 @@ import Edit from "./Edit";
 import Delete from './Delete';
 import AddEmailHistory from "views/admin/emailHistory/components/AddEmail";
 import AddPhoneCall from "views/admin/phoneCall/components/AddPhoneCall";
+import ImportModal from './components/ImportModal';
 
 const Index = () => {
     const title = "Leads";
@@ -118,6 +119,7 @@ const Index = () => {
     const [addEmailHistory, setAddEmailHistory] = useState(false);
     const [selectedId, setSelectedId] = useState();
     const [selectedValues, setSelectedValues] = useState([]);
+    const [isImportLead, setIsImportLead] = useState(false);
 
     const fetchData = async () => {
         setIsLoding(true);
@@ -202,6 +204,7 @@ const Index = () => {
                             selectedValues={selectedValues}
                             setSelectedValues={setSelectedValues}
                             setDelete={setDelete}
+                            setIsImportLead={setIsImportLead}
                         />
                     </GridItem>
                 }
@@ -212,6 +215,7 @@ const Index = () => {
             {deleteModel && <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/lead/deleteMany' data={selectedValues} method='many' setAction={setAction} />}
             {addEmailHistory && <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} lead='true' id={selectedId} />}
             {addPhoneCall && <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={callSelectedId} lead='true' />}
+            {isImportLead && <ImportModal text='Lead file' isOpen={isImportLead} onClose={setIsImportLead} customFields={leadData?.[0]?.fields || []} />}
 
         </div>
     )

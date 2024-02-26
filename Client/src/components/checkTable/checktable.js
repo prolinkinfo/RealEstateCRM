@@ -187,7 +187,7 @@ import AdvanceSearch from "../search/advanceSearch";
 import DataNotFound from "../notFoundData";
 
 const CommonCheckTable = (props) => {
-    const { isLoding, title, columnData, dataColumn, tableData, allData, setSearchedData, setDisplaySearchData, displaySearchData, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues } = props;
+    const { isLoding, title, columnData, dataColumn, tableData, allData, setSearchedData, setDisplaySearchData, displaySearchData, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImportLead } = props;
 
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -203,7 +203,6 @@ const CommonCheckTable = (props) => {
     const [getTagValues, setGetTagValues] = useState([]);
     const [advaceSearch, setAdvaceSearch] = useState(false);
     const [column, setColumn] = useState('');
-    const [isImportLead, setIsImportLead] = useState(false);
     const [gopageValue, setGopageValue] = useState();
 
     const tableInstance = useTable(
@@ -389,8 +388,8 @@ const CommonCheckTable = (props) => {
                             <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} zIndex={2} >
                                 <MenuItem onClick={() => setManageColumns(true)} width={"165px"}> Manage Columns
                                 </MenuItem>
-                                <MenuItem width={"165px"} onClick={() => setIsImportLead(true)}> Import {title}
-                                </MenuItem>
+                                {typeof setIsImportLead === "function" && <MenuItem width={"165px"} onClick={() => setIsImportLead(true)}> Import {title}
+                                </MenuItem>}
                                 <MenuDivider />
                                 <MenuItem width={"165px"} onClick={() => handleExportLeads('csv')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as CSV' : 'Export as CSV'}</MenuItem>
                                 <MenuItem width={"165px"} onClick={() => handleExportLeads('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem>
@@ -510,7 +509,8 @@ const CommonCheckTable = (props) => {
                         </Tbody>
                     </Table>
                 </Box>
-                {data?.length > 5 && <Pagination gotoPage={gotoPage} gopageValue={gopageValue} setGopageValue={setGopageValue} pageCount={pageCount} canPreviousPage={canPreviousPage} previousPage={previousPage} canNextPage={canNextPage} pageOptions={pageOptions} setPageSize={setPageSize} nextPage={nextPage} pageSize={pageSize} pageIndex={pageIndex} />}
+                {data?.length > 5 && <Pagination gotoPage={gotoPage} gopageValue={gopageValue} setGopageValue={setGopageValue} pageCount={pageCount} canPreviousPage={canPreviousPage} previousPage={previousPage} canNextPage={canNextPage} pageOptions={pageOptions} setPageSize={setPageSize} nextPage={nextPage}
+                    pageSize={pageSize} pageIndex={pageIndex} dataLength={15} />}
 
                 {/* Manage Columns */}
                 <Modal onClose={() => { setManageColumns(false); }} isOpen={manageColumns} isCentered>
