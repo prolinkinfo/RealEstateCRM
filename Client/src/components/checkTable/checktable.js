@@ -474,7 +474,7 @@ const CommonCheckTable = (props) => {
                                                             data = (
                                                                 <Flex align="center">
                                                                     <Text color={textColor} fontSize="sm" fontWeight="700">
-                                                                        {item.cell(cell)}
+                                                                        {item.cell(cell) === ' ' ? '-' : item.cell(cell)}
                                                                     </Text>
                                                                 </Flex>
                                                             );
@@ -484,7 +484,7 @@ const CommonCheckTable = (props) => {
                                                                 <Flex align="center">
                                                                     {item.Header === "#" && <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />}
                                                                     <Text color={textColor} fontSize="sm" fontWeight="700">
-                                                                        {item.Header === "#" ? cell?.row?.index + 1 : cell?.value}
+                                                                        {item.Header === "#" ? cell?.row?.index + 1 : cell?.value ? cell?.value : '-'}
                                                                     </Text>
                                                                 </Flex>
                                                             );
