@@ -209,7 +209,15 @@ export default function UserReports() {
       color: "#DB5436"
     },
   ]
-
+  const navigateTo = {
+    Lead: '/lead',
+    Contact: '/contacts',
+    Meeting: '/metting',
+    Call: '/phone-call',
+    Task: '/task',
+    Email: '/email',
+    Property: '/properties',
+  };
   return (
     <>
       <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} gap="20px" mb="20px">
@@ -337,7 +345,7 @@ export default function UserReports() {
                 (item.name === 'Task' && (taskView?.create || taskView?.update || taskView?.delete || taskView?.view))
               )
                 &&
-                <Box border={"1px solid #e5e5e5"} p={2} m={1} key={i}>
+                <Box border={"1px solid #e5e5e5"} p={2} m={1} cursor={'pointer'} key={i} onClick={() => navigate(navigateTo[item.name])}>
                   <Flex justifyContent={"space-between"}>
                     <Text fontSize="sm" fontWeight={600} pb={2}>{item?.name}</Text>
                     <Text fontSize="sm" fontWeight={600} pb={2}><CountUpComponent targetNumber={item?.length} /></Text>
@@ -411,7 +419,7 @@ export default function UserReports() {
             <GridItem colSpan={{ base: 12 }}>
               <Box backgroundColor={"#ebf5ff"}
                 onClick={() => navigate('/task')}
-                borderRadius={"10px"}
+                borderRadius={"10px"} cursor={'pointer'}
                 p={2} m={1} textAlign={"center"}>
                 <Heading size="sm" pb={3} color={"#1f7eeb"}>Total Tasks </Heading>
                 <Text fontWeight={600} color={"#1f7eeb"}><CountUpComponent targetNumber={task?.length || 0} /></Text>

@@ -36,6 +36,7 @@ const ChangeImage = () => {
         setIsLoding(false)
     }
     const image = useSelector((state) => state?.images?.image);
+    const load = useSelector((state) => state?.images);
     const handleViewOpen = (item) => {
         fetchData(item._id)
         setImageView(!imageview)
@@ -89,7 +90,9 @@ const ChangeImage = () => {
                     <Button variant='brand' size='sm' onClick={() => setImageModal(true)} leftIcon={<AddIcon />}>Add New</Button>
                     <Button onClick={() => navigate('/admin-setting')} variant="brand" size="sm" leftIcon={<IoIosArrowBack />} ml={2}>Back</Button>
                 </Flex>
-                <Card>
+                {!(load.status === 'succeeded') ? <Flex justifyContent={'center'} alignItems={'center'} width="100%" color={'black'} fontSize="sm" fontWeight="700">
+                    <Spinner />
+                </Flex> : <Card>
                     <Grid templateColumns={'repeat(12, 1fr)'} gap={5}>
                         {image?.length > 0 && image?.map((item, i) => (
                             <GridItem colSpan={{ base: 12, md: 4, lg: 3 }}>
@@ -108,7 +111,7 @@ const ChangeImage = () => {
                         ))}
                     </Grid>
                     {!image?.length > 0 && <Text textAlign={'center'} width="100%" color={'gray.500'} fontSize="sm" fontWeight="700"><DataNotFound /></Text>}
-                </Card>
+                </Card>}
             </Card>
 
             <ImageView isOpen={imageview}

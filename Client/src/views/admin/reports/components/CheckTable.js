@@ -81,7 +81,7 @@ export default function CheckTable(props) {
         >
             <Flex px="25px" justify="space-between" mb="20px" align="center">
                 <Text
-                    color={textColor}
+                    color={"secondaryGray.900"}
                     fontSize="22px"
                     fontWeight="700"
                     lineHeight="100%"

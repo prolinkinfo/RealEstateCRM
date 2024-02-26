@@ -8,11 +8,14 @@ const initialState = {
 };
 
 // Create an asynchronous thunk
-export const fetchImage = createAsyncThunk('images/fetchImage', async (active) => {
+export const fetchImage = createAsyncThunk('images/fetchImage', async (active, { dispatch, getState }) => {
+    dispatch(fetchImage.pending());
     try {
         const response = await getApi(`api/images/${active ? active : ""}`);
+        dispatch(fetchImage.fulfilled(response.data));
         return response.data;
     } catch (error) {
+        dispatch(fetchImage.rejected(error));
         throw error;
     }
 });
