@@ -148,7 +148,7 @@ function LeadImport() {
     };
 
     const fieldsInCrm = [
-        ...customFields?.map((field) => ({ Header: field?.label, accessor: field?.name, type: field?.type }))
+        ...customFields?.map((field) => ({ Header: field?.label, accessor: field?.name, type: field?.type, formikType: field?.validations?.find(obj => obj.hasOwnProperty('formikType')) }))
     ];
 
     const formik = useFormik({
@@ -168,6 +168,10 @@ function LeadImport() {
 
                     if (field?.type?.toLowerCase() === "date") {
                         lead[field?.accessor] = moment(fieldValue).isValid() ? fieldValue : '';
+                    } else if (field?.type?.toLowerCase() === "number" && ['positive', 'negative'].includes(field?.formikType?.toLowerCase())) {
+                        lead[field?.accessor] = parseFloat(fieldValue) || '';
+                    } else if (field?.type?.toLowerCase() === "number") {
+                        lead[field?.accessor] = parseInt(fieldValue, 10) || '';
                     } else {
                         lead[field?.accessor] = fieldValue;
                     }
@@ -272,7 +276,7 @@ function LeadImport() {
     // const filterLead = importedFileFields.filter(field => fieldsInCrm.find(data => field === data.accessor || field === data.Header))
 
     useEffect(() => {
-        const filterContactData = importedFileFields?.filter(field => {
+        const filterLeadData = importedFileFields?.filter(field => {
             const result = fieldsInCrm?.find(data => field === data?.accessor || field === data?.Header);
             if (result) {
                 setFieldValue(result?.accessor, field);
@@ -280,7 +284,7 @@ function LeadImport() {
             }
             return false;
         });
-        setFilterLead(filterContactData);
+        setFilterLead(filterLeadData);
     }, [importedFileFields]);
 
     return (

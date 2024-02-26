@@ -187,7 +187,7 @@ import AdvanceSearch from "../search/advanceSearch";
 import DataNotFound from "../notFoundData";
 
 const CommonCheckTable = (props) => {
-    const { isLoding, title, columnData, dataColumn, tableData, allData, setSearchedData, setDisplaySearchData, displaySearchData, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImportLead } = props;
+    const { isLoding, title, columnData, dataColumn, tableData, allData, setSearchedData, setDisplaySearchData, displaySearchData, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport } = props;
 
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -388,7 +388,7 @@ const CommonCheckTable = (props) => {
                             <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} zIndex={2} >
                                 <MenuItem onClick={() => setManageColumns(true)} width={"165px"}> Manage Columns
                                 </MenuItem>
-                                {typeof setIsImportLead === "function" && <MenuItem width={"165px"} onClick={() => setIsImportLead(true)}> Import {title}
+                                {typeof setIsImport === "function" && <MenuItem width={"165px"} onClick={() => setIsImport(true)}> Import {title}
                                 </MenuItem>}
                                 <MenuDivider />
                                 <MenuItem width={"165px"} onClick={() => handleExportLeads('csv')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as CSV' : 'Export as CSV'}</MenuItem>
@@ -468,7 +468,7 @@ const CommonCheckTable = (props) => {
                                         <Tr {...row?.getRowProps()}>
                                             {row?.cells?.map((cell, index) => {
                                                 let data = "";
-                                                columnData.forEach((item) => {
+                                                columnData?.forEach((item) => {
                                                     if (cell?.column.Header === item.Header) {
                                                         if (item.cell && typeof item.cell === 'function') {
                                                             data = (
