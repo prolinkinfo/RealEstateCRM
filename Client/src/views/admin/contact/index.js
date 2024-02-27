@@ -157,7 +157,7 @@ const Index = () => {
                                 {permission?.view &&
                                     <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { navigate(`/contactView/${row?.values?._id}`) }}>View</MenuItem>}
                                 {permission?.delete &&
-                                    <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} mb={1} />} onClick={() => { setDelete(true); setSelectedId(row?.values?._id); }}>Delete</MenuItem>}
+                                    <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} mb={1} />} onClick={() => { setDelete(true); setSelectedValues([row?.values?._id]); }}>Delete</MenuItem>}
                             </MenuList>
                         </Menu>
                     </Text>
@@ -214,7 +214,7 @@ const Index = () => {
                     </GridItem>
                 }
             </Grid>
-
+            {console.log('selectedValues', selectedValues)}
             {isOpen && <Add isOpen={isOpen} size={size} contactData={contactData[0]} onClose={onClose} setAction={setAction} action={action} />}
             {edit && <Edit isOpen={edit} size={size} contactData={contactData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={contactData?.[0]?._id} />}
             {deleteModel && <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/contact/deleteMany' data={selectedValues} method='many' setAction={setAction} />}

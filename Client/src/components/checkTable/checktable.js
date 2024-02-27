@@ -183,11 +183,11 @@ import CountUpComponent from 'components/countUpComponent/countUpComponent';
 import Pagination from 'components/pagination/Pagination';
 import Spinner from 'components/spinner/Spinner';
 import CustomSearchInput from "../search/search";
-import AdvanceSearch from "../search/advanceSearch";
+import AdvanceSearchUsingCustomFields from "../search/advanceSearch";
 import DataNotFound from "../notFoundData";
 
 const CommonCheckTable = (props) => {
-    const { isLoding, title, columnData, dataColumn, tableData, allData, setSearchedData, setDisplaySearchData, displaySearchData, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport } = props;
+    const { isLoding, title, columnData, dataColumn, tableData, allData, setSearchedData, setDisplaySearchData, displaySearchData, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, AdvanceSearch, getTagValuesOutside, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
 
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -199,8 +199,9 @@ const CommonCheckTable = (props) => {
     const data = useMemo(() => tableData, [tableData]);
     const [manageColumns, setManageColumns] = useState(false);
     const [csvColumns, setCsvColumns] = useState([]);
+    // const [searchbox, setSearchbox] = useState(searchboxOutside ? searchboxOutside : '');
     const [searchbox, setSearchbox] = useState('');
-    const [getTagValues, setGetTagValues] = useState([]);
+    const [getTagValues, setGetTagValues] = useState(getTagValuesOutside ? getTagValuesOutside : []);
     const [advaceSearch, setAdvaceSearch] = useState(false);
     const [column, setColumn] = useState('');
     const [gopageValue, setGopageValue] = useState();
@@ -362,14 +363,18 @@ const CommonCheckTable = (props) => {
                             >
                                 {title} (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
                             </Text>
-                            <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={setGetTagValues} setGopageValue={setGopageValue} />
-                            <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} mt={{ sm: "5px", md: "0" }} size="sm" onClick={() => setAdvaceSearch(true)}>Advance Search</Button>
+                            {/* <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={setGetTagValues} setGopageValue={setGopageValue} /> */}
+                            <CustomSearchInput setSearchbox={setSearchboxOutside ? setSearchboxOutside : setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchboxOutside ? searchboxOutside : searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={setGetTagValuesOutside ? setGetTagValuesOutside : setGetTagValues} setGopageValue={setGopageValue} />
+                            {
+                                AdvanceSearch ? AdvanceSearch :
+                                    <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} mt={{ sm: "5px", md: "0" }} size="sm" onClick={() => setAdvaceSearch(true)}>Advance Search</Button>
+                            }
                             {displaySearchData ? <Button variant="outline" colorScheme='red' size="sm" ms={2} onClick={() => handleClear()}>Clear</Button> : ""}
                             {(selectedValues?.length > 0 && access?.delete) && <DeleteIcon cursor={"pointer"} onClick={() => setDelete(true)} color={'red'} ms={2} />}
                         </Flex>
                     </GridItem>
                     {/* Advance filter */}
-                    <AdvanceSearch
+                    <AdvanceSearchUsingCustomFields
                         setAdvaceSearch={setAdvaceSearch}
                         setGetTagValues={setGetTagValues}
                         isLoding={isLoding}
@@ -398,7 +403,7 @@ const CommonCheckTable = (props) => {
                         {access?.create && <Button onClick={() => handleClick()} size="sm" variant="brand" leftIcon={<AddIcon />}>Add New</Button>}
                     </GridItem>
                     <HStack spacing={4} mb={2}>
-                        {getTagValues && getTagValues.map((item) => (
+                        {(getTagValuesOutside || []).concat(getTagValues || []).map((item) => (
                             <Tag
                                 size={"md"}
                                 p={2}
