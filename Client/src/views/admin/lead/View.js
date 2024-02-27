@@ -42,6 +42,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { HasAccess } from "../../../redux/accessUtils";
 import DataNotFound from "components/notFoundData";
 import CustomView from "utils/customView";
+import AddDocumentModal from "utils/addDocumentModal";
 
 
 const View = () => {
@@ -65,6 +66,7 @@ const View = () => {
     const [showCall, setShowCall] = useState(false);
     const [showTasks, setShowTasks] = useState(false);
     const [showMeetings, setShowMeetings] = useState(false);
+    const [addDocument, setAddDocument] = useState(false);
     const [action, setAction] = useState(false)
     const [leadData, setLeadData] = useState([])
     const size = "lg";
@@ -429,9 +431,13 @@ const View = () => {
                             <TabPanel pt={4} p={0}>
                                 <GridItem colSpan={{ base: 4 }} >
                                     <Card minH={'50vh'} >
-                                        <Heading size="md" mb={3}>
-                                            Documents
-                                        </Heading>
+                                        <Flex alignItems={'center'} justifyContent={'space-between'} mb='2'>
+                                            <Heading size="md" mb={3}>
+                                                Documents
+                                            </Heading>
+                                            <Button leftIcon={<AddIcon />} size='sm' variant='brand' onClick={() => setAddDocument(true)}>Add Document</Button>
+                                        </Flex>
+                                        <AddDocumentModal addDocument={addDocument} setAddDocument={setAddDocument} linkId={param.id} from="lead" setAction={setAction} />
                                         <HSeparator />
                                         <VStack mt={4} alignItems="flex-start">
                                             {allData?.Document?.length > 0 ? allData?.Document?.map((item) => (

@@ -35,6 +35,7 @@ import MeetingColumnsTable from "../meeting/components/ColumnsTable";
 import TaskColumnsTable from "../task/components/ColumnsTable";
 import DataNotFound from "components/notFoundData";
 import CustomView from "utils/customView";
+import AddDocumentModal from "utils/addDocumentModal";
 
 const View = () => {
 
@@ -61,6 +62,7 @@ const View = () => {
     const [showCall, setShowCall] = useState(false);
     const [showTasks, setShowTasks] = useState(false);
     const [showMeetings, setShowMeetings] = useState(false);
+    const [addDocument, setAddDocument] = useState(false);
 
     const size = "lg";
     const navigate = useNavigate()
@@ -266,9 +268,13 @@ const View = () => {
                             <TabPanel pt={4} p={0}>
                                 <GridItem colSpan={{ base: 12 }} >
                                     <Card minH={'40vh'} >
-                                        <Heading size="md" mb={3}>
-                                            Documents
-                                        </Heading>
+                                        <Flex alignItems={'center'} justifyContent={'space-between'} mb='2'>
+                                            <Heading size="md" mb={3}>
+                                                Documents
+                                            </Heading>
+                                            <Button leftIcon={<AddIcon />} size='sm' variant='brand' onClick={() => setAddDocument(true)}>Add Document</Button>
+                                        </Flex>
+                                        <AddDocumentModal addDocument={addDocument} setAddDocument={setAddDocument} linkId={param.id} from="contact" setAction={setAction} />
                                         <HSeparator />
                                         <VStack mt={4} alignItems="flex-start">
                                             {allData?.Document?.length > 0 ? allData?.Document?.map((item) => (
