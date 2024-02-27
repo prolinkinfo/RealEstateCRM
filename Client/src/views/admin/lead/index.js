@@ -152,7 +152,7 @@ const Index = () => {
                                 {permission?.view &&
                                     <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { navigate(`/leadView/${row?.values?._id}`) }}>View</MenuItem>}
                                 {permission?.delete &&
-                                    <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} mb={1} />} onClick={() => { setDelete(true); setSelectedId(row?.values?._id); }}>Delete</MenuItem>}
+                                    <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} mb={1} />} onClick={() => { setDelete(true); setSelectedValues([row?.values?._id]); }}>Delete</MenuItem>}
                             </MenuList>
                         </Menu>
                     </Text>
