@@ -73,8 +73,6 @@ const Link = (props) => {
         }
     }
 
-    console.log(data)
-
     useEffect(() => {
         fetchData()
     }, [values.linkWith]);
@@ -134,7 +132,7 @@ const Link = (props) => {
                                         ))}
                                     </List>
                                 )} */}
-                                    <Flex alignItems={'center'}>
+                                    <Flex>
 
                                         <Select
                                             value={values.linkContact}
@@ -184,7 +182,7 @@ const Link = (props) => {
                                             ))}
                                         </List>
                                     )} */}
-                                    <Flex Flex alignItems={'center'}>
+                                    <Flex>
 
                                         <Select
                                             value={values.linkLead}
@@ -213,10 +211,10 @@ const Link = (props) => {
                     </ModalBody>
                     <ModalFooter>
                         <Button size="sm" colorScheme='brand' rightIcon={<LinkIcon />} mr={2} onClick={handleClick}>Link</Button>
-                        <Button size="sm" variant="outline" colorScheme='red' onClick={handleClose}>Cancel</Button>
+                        <Button size="sm" variant="outline" colorScheme='red' onClick={() => { handleClose(); resetForm() }}>Cancel</Button>
                     </ModalFooter>
                 </ModalContent>
-            </Modal>
+            </Modal >
             <ContactModel isOpen={contactModelOpen} onClose={setContactModel} fieldName='linkContact' setFieldValue={setFieldValue} />
             {/* Lead Model  */}
             <LeadModel isOpen={leadModelOpen} onClose={setLeadModel} fieldName='linkLead' setFieldValue={setFieldValue} />
