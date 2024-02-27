@@ -53,19 +53,19 @@ const AddEmailHistory = (props) => {
 
     const fetchRecipientData = async () => {
         if (props.id && props.lead !== 'true') {
-            let response = await getApi('api/contact/view/', props.id)
-            if (response?.status === 200) {
-                setFieldValue('recipient', response?.data?.contact?.email);
+            // let response = await getApi('api/contact/view/', props.id)
+            // if (response?.status === 200) {
+                setFieldValue('recipient', props?.viewData?.contact?.email);
                 setFieldValue('createBy', props.id);
-                values.recipient = response?.data?.contact?.email
-            }
+                values.recipient = props?.viewData?.contact?.email
+            // }
         } else if (props.id && props.lead === 'true') {
-            let response = await getApi('api/lead/view/', props.id)
-            if (response?.status === 200) {
-                setFieldValue('recipient', response?.data?.lead?.leadEmail);
+            // let response = await getApi('api/lead/view/', props.id)
+            // if (response?.status === 200) {
+                setFieldValue('recipient', props?.viewData?.lead?.leadEmail);
                 setFieldValue('createByLead', props.id);
-                values.recipient = response?.data?.lead?.leadEmail
-            }
+                values.recipient = props?.viewData?.lead?.leadEmail
+            // }
         }
     }
 
@@ -169,7 +169,7 @@ const AddEmailHistory = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button size="sm" variant='brand' onClick={handleSubmit}  disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
+                    <Button size="sm" variant='brand' onClick={handleSubmit} disabled={isLoding ? true : false} >{isLoding ? <Spinner /> : 'Save'}</Button>
                     <Button sx={{
                         marginLeft: 2,
                         textTransform: "capitalize",

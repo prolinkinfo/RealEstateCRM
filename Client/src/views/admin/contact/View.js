@@ -145,7 +145,7 @@ const View = () => {
             {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} contactData={contactData[0]} />}
             <Edit isOpen={edit} contactData={contactData[0]} size={size} onClose={setEdit} setAction={setAction} moduleId={contactData?.[0]?._id} />
             <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/contact/delete/' id={param.id} />
-            <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} />
+            <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} viewData={allData} />
 
             {isLoding ?
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
@@ -232,7 +232,7 @@ const View = () => {
                                                 <Card overflow={'scroll'}>
                                                     <PhoneCall callAccess={callAccess} fetchData={fetchData} columnsData={columnsDataColumns} tableData={showCall ? allData?.phoneCallHistory : allData?.phoneCallHistory?.length > 0 ? [allData?.phoneCallHistory[0]] : []} title={'Call '} />
                                                     {/* {allData?.phoneCallHistory?.length > 0 ? <PhoneCall callAccess={callAccess} fetchData={fetchData} columnsData={columnsDataColumns} tableData={showCall ? allData?.phoneCallHistory : [allData?.phoneCallHistory[0]]} title={'Call '} /> : callAccess?.create && <Button onClick={() => setAddPhoneCall(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" size='sm'> Call </Button>} */}
-                                                    <AddPhoneCall fetchData={fetchData} setAction={setAction} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param.id} />
+                                                    <AddPhoneCall viewData={allData} fetchData={fetchData} setAction={setAction} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param.id} />
                                                     {allData?.phoneCallHistory?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                         <Button colorScheme="brand" variant="outline" size='sm' display="flex" justifyContant="end" onClick={() => showCall ? setShowCall(false) : setShowCall(true)}>{showCall ? "Show less" : "Show more"}</Button>
                                                     </div>}

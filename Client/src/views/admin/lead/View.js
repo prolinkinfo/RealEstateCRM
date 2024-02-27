@@ -384,7 +384,7 @@ const View = () => {
                                                         : emailAccess?.create && <Button size="sm" onClick={() => setAddEmailHistory(true)} leftIcon={<BsFillSendFill />} colorScheme="gray" bg={buttonbg} >Send Email </Button>} */}
                                                     <ColumnsTable fetchData={fetchData} emailAccess={emailAccess} columnsData={columnsDataColumns} lead='true' tableData={showEmail ? allData.Email : allData?.Email?.length > 0 ? [allData.Email[0]] : []} title={'Email '} />
 
-                                                    <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} setAction={setAction} lead='true' id={param.id} />
+                                                    <AddEmailHistory viewData={allData} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} setAction={setAction} lead='true' id={param.id} />
                                                     {allData.Email?.length > 1 &&
                                                         <div style={{ display: "flex", justifyContent: "end" }}>
                                                             <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showEmail ? setShowEmail(false) : setShowEmail(true)}>{showEmail ? "Show less" : "Show more"}</Button>
@@ -398,7 +398,7 @@ const View = () => {
                                                     {allData?.phoneCall?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                         <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showCall ? setShowCall(false) : setShowCall(true)}>{showCall ? "Show less" : "Show more"}</Button>
                                                     </div>}
-                                                    <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} setAction={setAction} data={data?.contact} id={param.id} lead='true' />
+                                                    <AddPhoneCall viewData={allData} fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} setAction={setAction} data={data?.contact} id={param.id} lead='true' />
                                                 </Card>
                                             </GridItem>}
                                             {taskAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
