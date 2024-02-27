@@ -215,9 +215,9 @@ const Link = (props) => {
                     </ModalFooter>
                 </ModalContent>
             </Modal >
-            <ContactModel isOpen={contactModelOpen} onClose={setContactModel} fieldName='linkContact' setFieldValue={setFieldValue} />
+            <ContactModel data={data} isOpen={contactModelOpen} onClose={setContactModel} fieldName='linkContact' setFieldValue={setFieldValue} />
             {/* Lead Model  */}
-            <LeadModel isOpen={leadModelOpen} onClose={setLeadModel} fieldName='linkLead' setFieldValue={setFieldValue} />
+            <LeadModel data={data} isOpen={leadModelOpen} onClose={setLeadModel} fieldName='linkLead' setFieldValue={setFieldValue} />
         </>
     )
 }

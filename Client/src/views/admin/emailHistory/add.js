@@ -99,9 +99,9 @@ const AddPhoneCall = (props) => {
                 <ModalCloseButton />
                 <ModalBody>
                     {/* Contact Model  */}
-                    <ContactModel isOpen={contactModelOpen} onClose={setContactModel} fieldName='createBy' setFieldValue={setFieldValue} />
+                    <ContactModel isOpen={contactModelOpen} data={assignmentToData} onClose={setContactModel} fieldName='createBy' setFieldValue={setFieldValue} />
                     {/* Lead Model  */}
-                    <LeadModel isOpen={leadModelOpen} onClose={setLeadModel} fieldName='createByLead' setFieldValue={setFieldValue} />
+                    <LeadModel isOpen={leadModelOpen} data={assignmentToData} onClose={setLeadModel} fieldName='createByLead' setFieldValue={setFieldValue} />
 
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
@@ -253,7 +253,7 @@ const AddPhoneCall = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' size="sm"  disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Save'}</Button>
+                    <Button variant='brand' size="sm" disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Save'}</Button>
                     <Button sx={{
                         marginLeft: 2,
                         textTransform: "capitalize",

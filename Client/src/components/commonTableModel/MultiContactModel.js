@@ -8,10 +8,10 @@ import Spinner from 'components/spinner/Spinner'
 import { GiClick } from "react-icons/gi";
 
 const MultiContactModel = (props) => {
-    const { onClose, isOpen, fieldName, setFieldValue } = props
+    const { onClose, isOpen, fieldName, setFieldValue,data } = props
     const [selectedValues, setSelectedValues] = useState([]);
     const [isLoding, setIsLoding] = useState(false)
-    const [data, setData] = useState([])
+    // const [data, setData] = useState([])
 
     const columns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
@@ -26,14 +26,14 @@ const MultiContactModel = (props) => {
     ];
 
     const user = JSON.parse(localStorage.getItem("user"))
-    const fetchContactData = async () => {
-        setIsLoding(true)
-        let result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`);
-        if (result && result.status == 200) {
-            setData(result?.data);
-        }
-        setIsLoding(false)
-    }
+    // const fetchContactData = async () => {
+    //     setIsLoding(true)
+    //     let result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`);
+    //     if (result && result.status == 200) {
+    //         setData(result?.data);
+    //     }
+    //     setIsLoding(false)
+    // }
     const uniqueValues = [...new Set(selectedValues)];
 
     const handleSubmit = async () => {
@@ -51,9 +51,9 @@ const MultiContactModel = (props) => {
         }
     }
 
-    useEffect(() => {
-        fetchContactData()
-    }, [])
+    // useEffect(() => {
+    //     fetchContactData()
+    // }, [])
 
     return (
         <Modal onClose={onClose} size='full' isOpen={isOpen} >

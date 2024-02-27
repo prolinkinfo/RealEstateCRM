@@ -43,7 +43,7 @@ import { HasAccess } from "../../../redux/accessUtils";
 import DataNotFound from "components/notFoundData";
 import CustomView from "utils/customView";
 import AddDocumentModal from "utils/addDocumentModal";
-
+import { useLocation } from 'react-router-dom';
 
 const View = () => {
 
@@ -69,6 +69,7 @@ const View = () => {
     const [addDocument, setAddDocument] = useState(false);
     const [action, setAction] = useState(false)
     const [leadData, setLeadData] = useState([])
+    const location = useLocation()
     const size = "lg";
 
     const [addEmailHistory, setAddEmailHistory] = useState(false);
@@ -409,7 +410,7 @@ const View = () => {
                                                         allData?.task?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                             <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showTasks ? setShowTasks(false) : setShowTasks(true)}>{showTasks ? "Show less" : "Show more"}</Button>
                                                         </div>}
-                                                    <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="lead" id={param.id} setAction={setAction} />
+                                                    {/* <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="lead" id={param.id} setAction={setAction} /> */}
                                                 </Card>
                                             </GridItem>}
                                             {

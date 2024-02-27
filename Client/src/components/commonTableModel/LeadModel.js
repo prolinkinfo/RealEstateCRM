@@ -8,10 +8,10 @@ import Spinner from 'components/spinner/Spinner'
 import { GiClick } from "react-icons/gi";
 
 const ContactModel = (props) => {
-    const { onClose, isOpen, fieldName, setFieldValue } = props
+    const { onClose, isOpen, fieldName, setFieldValue,data } = props
     const [selectedValues, setSelectedValues] = useState();
     const [isLoding, setIsLoding] = useState(false)
-    const [data, setData] = useState([])
+    // const [data, setData] = useState([])
 
     const columns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
@@ -25,14 +25,14 @@ const ContactModel = (props) => {
     ];
 
     const user = JSON.parse(localStorage.getItem("user"))
-    const fetchLeadData = async () => {
-        setIsLoding(true)
-        let result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
-        if (result && result.status == 200) {
-            setData(result?.data);
-        }
-        setIsLoding(false)
-    }
+    // const fetchLeadData = async () => {
+    //     setIsLoding(true)
+    //     let result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
+    //     if (result && result.status == 200) {
+    //         setData(result?.data);
+    //     }
+    //     setIsLoding(false)
+    // }
 
     const handleSubmit = async () => {
         try {
@@ -48,9 +48,9 @@ const ContactModel = (props) => {
         }
     }
 
-    useEffect(() => {
-        fetchLeadData()
-    }, [])
+    // useEffect(() => {
+    //     fetchLeadData()
+    // }, [])
 
     return (
         <Modal onClose={onClose} size='full' isOpen={isOpen} >

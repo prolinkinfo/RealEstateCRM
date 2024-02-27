@@ -142,9 +142,9 @@ const EditTask = (props) => {
                 </ModalHeader>
                 <ModalBody >
                     {/* Contact Model  */}
-                    <ContactModel isOpen={contactModelOpen} onClose={setContactModel} values={values} fieldName='assignmentTo' setFieldValue={setFieldValue} />
+                    <ContactModel isOpen={contactModelOpen} data={assignmentToData} onClose={setContactModel} values={values} fieldName='assignmentTo' setFieldValue={setFieldValue} />
                     {/* Lead Model  */}
-                    <LeadModel isOpen={leadModelOpen} onClose={setLeadModel} values={values} fieldName='assignmentToLead' setFieldValue={setFieldValue} />
+                    <LeadModel isOpen={leadModelOpen} data={assignmentToData} onClose={setLeadModel} values={values} fieldName='assignmentToLead' setFieldValue={setFieldValue} />
                     {isLoding ?
                         <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                             <Spinner />
