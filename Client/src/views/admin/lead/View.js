@@ -422,8 +422,7 @@ const View = () => {
                                                             allData?.meeting?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                                 <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showMeetings ? setShowMeetings(false) : setShowMeetings(true)}>{showMeetings ? "Show less" : "Show more"}</Button>
                                                             </div>}
-                                                        <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="lead" id={param.id} setAction={setAction} />
-                                                    </Card>
+                                                        {addMeeting && <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="lead" id={param.id} setAction={setAction} />}                                                    </Card>
                                                 </GridItem>}
                                         </Grid>
                                     </Grid>
