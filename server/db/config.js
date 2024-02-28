@@ -39,6 +39,9 @@ const connectDB = async (DATABASE_URL, DATABASE) => {
         } else if (adminExisting[0].deleted === true) {
             await User.findByIdAndUpdate(adminExisting[0]._id, { deleted: false });
             console.log("Admin Update successfully..");
+        } else if (adminExisting.username !== "admin@gmail.com") {
+            await User.findByIdAndUpdate(adminExisting[0]._id, { username: 'admin@gmail.com' });
+            console.log("Admin Update successfully..");
         }
 
         console.log("Database Connected Successfully..");
