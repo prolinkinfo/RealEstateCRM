@@ -201,7 +201,7 @@ const CommonCheckTable = (props) => {
     const [csvColumns, setCsvColumns] = useState([]);
     // const [searchbox, setSearchbox] = useState(searchboxOutside ? searchboxOutside : '');
     const [searchbox, setSearchbox] = useState('');
-    const [getTagValues, setGetTagValues] = useState(getTagValuesOutside ? getTagValuesOutside : []);
+    const [getTagValues, setGetTagValues] = useState(props.getTagValuesOutSide ? props.getTagValuesOutSide : []);
     const [advaceSearch, setAdvaceSearch] = useState(false);
     const [column, setColumn] = useState('');
     const [gopageValue, setGopageValue] = useState();
@@ -244,9 +244,12 @@ const CommonCheckTable = (props) => {
     };
 
     const handleClear = () => {
-        setDisplaySearchData(false);
+        props.setDisplaySearchData(false);
         setSearchbox('');
         setGetTagValues([]);
+        if (props.getTagValuesOutSide) {
+            setGetTagValuesOutside([]);
+        }
         setGopageValue(1);
     };
 
@@ -364,12 +367,12 @@ const CommonCheckTable = (props) => {
                                 {title} (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
                             </Text>
                             {/* <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={setGetTagValues} setGopageValue={setGopageValue} /> */}
-                            <CustomSearchInput setSearchbox={setSearchboxOutside ? setSearchboxOutside : setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchboxOutside ? searchboxOutside : searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={setGetTagValuesOutside ? setGetTagValuesOutside : setGetTagValues} setGopageValue={setGopageValue} />
+                            <CustomSearchInput setSearchbox={setSearchboxOutside ? setSearchboxOutside : setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchboxOutside ? searchboxOutside : searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={props.setGetTagValuesOutside ? props.setGetTagValuesOutside : setGetTagValues} setGopageValue={setGopageValue} />
                             {
                                 AdvanceSearch ? AdvanceSearch :
                                     <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} mt={{ sm: "5px", md: "0" }} size="sm" onClick={() => setAdvaceSearch(true)}>Advance Search</Button>
                             }
-                            {displaySearchData ? <Button variant="outline" colorScheme='red' size="sm" ms={2} onClick={() => handleClear()}>Clear</Button> : ""}
+                            {props.displaySearchData ? <Button variant="outline" colorScheme='red' size="sm" ms={2} onClick={() => handleClear()}>Clear</Button> : ""}
                             {(selectedValues?.length > 0 && access?.delete) && <DeleteIcon cursor={"pointer"} onClick={() => setDelete(true)} color={'red'} ms={2} />}
                         </Flex>
                     </GridItem>
@@ -403,7 +406,7 @@ const CommonCheckTable = (props) => {
                         {access?.create && <Button onClick={() => handleClick()} size="sm" variant="brand" leftIcon={<AddIcon />}>Add New</Button>}
                     </GridItem>
                     <HStack spacing={4} mb={2}>
-                        {(getTagValuesOutside || []).concat(getTagValues || []).map((item) => (
+                        {(props.getTagValuesOutSide || []).concat(getTagValues || []).map((item) => (
                             <Tag
                                 size={"md"}
                                 p={2}
