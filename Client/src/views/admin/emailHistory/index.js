@@ -98,20 +98,14 @@ const Index = (props) => {
     const size = "lg";
     const [action, setAction] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [leadData, setLeadData] = useState([]);
-    const [edit, setEdit] = useState(false);
-    const [deleteModel, setDelete] = useState(false);
-    const [eventView, setEventView] = useState(false)
     const [id, setId] = useState('')
-    const [selectedId, setSelectedId] = useState();
+    const [selectedId, setDelete] = useState(false);
     const [selectedValues, setSelectedValues] = useState([]);
     const [advanceSearch, setAdvanceSearch] = useState(false);
     const [getTagValuesOutSide, setGetTagValuesOutside] = useState([]);
     const [searchboxOutside, setSearchboxOutside] = useState('');
     const user = JSON.parse(localStorage.getItem("user"));
     const navigate = useNavigate();
-    const [deleteMany, setDeleteMany] = useState(false);
-    const [isImportLead, setIsImportLead] = useState(false);
     const [isLoding, setIsLoding] = useState(false);
     const [data, setData] = useState([]);
     const [displaySearchData, setDisplaySearchData] = useState(false);
@@ -196,19 +190,16 @@ const Index = (props) => {
         setIsLoding(true)
         let result = await getApi(user.role === 'superAdmin' ? 'api/email/' : `api/email/?sender=${user._id}`);
         setData(result.data);
-        // console.log(result.data)
         setIsLoding(false)
     }
 
     const [columns, setColumns] = useState([...tableColumns]);
     const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
-    // const [dataColumn, setDataColumn] = useState([]);
     const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 
 
     useEffect(() => {
         fetchData();
-        // fetchCustomDataFields();
     }, [action])
 
     return (

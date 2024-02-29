@@ -89,14 +89,12 @@
 // export default Task
 
 import { useEffect, useState } from 'react';
-import { useNavigate } from "react-router-dom";
-import { AddIcon, DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
+import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
 import { Button, Flex, Menu, MenuButton, MenuItem, MenuList, Text, useDisclosure } from '@chakra-ui/react';
 import { getApi } from 'services/api';
 import CheckTable from './components/CheckTable';
 import AddTask from './components/addTask';
 import { HasAccess } from '../../../redux/accessUtils';
-import { useLocation } from 'react-router-dom';
 import CommonCheckTable from '../../../components/checkTable/checktable';
 import TaskAdvanceSearch from './components/TaskAdvanceSearch';
 import { SearchIcon } from "@chakra-ui/icons";
@@ -106,14 +104,12 @@ import EventView from './eventView';
 import DeleteTask from './components/deleteTask';
 import ImportModal from '../lead/components/ImportModal';
 
-const Task = (props) => {
+const Task = () => {
     const title = "Tasks";
     const size = "lg";
     const [action, setAction] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [leadData, setLeadData] = useState([]);
     const [edit, setEdit] = useState(false);
-    const [deleteModel, setDelete] = useState(false);
     const [eventView, setEventView] = useState(false)
     const [id, setId] = useState('')
     const [selectedId, setSelectedId] = useState();
@@ -122,14 +118,13 @@ const Task = (props) => {
     const [getTagValuesOutSide, setGetTagValuesOutside] = useState([]);
     const [searchboxOutside, setSearchboxOutside] = useState('');
     const user = JSON.parse(localStorage.getItem("user"));
-    const navigate = useNavigate();
     const [deleteMany, setDeleteMany] = useState(false);
     const [isImportLead, setIsImportLead] = useState(false);
     const [isLoding, setIsLoding] = useState(false);
     const [data, setData] = useState([]);
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
-    const [permission, leadAccess, contactAccess, callAccess] = HasAccess(["Task", 'Lead', 'Email', 'Contact']);
+    const [permission, leadAccess, contactAccess] = HasAccess(["Task", 'Lead', 'Contact']);
     const tableColumns = [
         {
             Header: "#",
@@ -152,8 +147,6 @@ const Task = (props) => {
                         <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
                             {permission?.update &&
                                 <MenuItem py={2.5} icon={<EditIcon fontSize={15} mb={1} />} onClick={() => { setEdit(true); setSelectedId(row?.values?._id); }}>Edit</MenuItem>}
-
-                            {/* <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { setEventView(true); setId(row?.original._id) }}>Event View</MenuItem> */}
                             {permission?.view &&
                                 <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { setEventView(true); setId(row?.original._id) }}>View</MenuItem>}
                             {permission?.delete &&
@@ -174,13 +167,11 @@ const Task = (props) => {
 
     const [columns, setColumns] = useState([...tableColumns]);
     const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
-    // const [dataColumn, setDataColumn] = useState([]);
     const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 
 
     useEffect(() => {
         fetchData();
-        // fetchCustomDataFields();
     }, [action])
 
     return (
@@ -207,7 +198,7 @@ const Task = (props) => {
                 onOpen={onOpen}
                 selectedValues={selectedValues}
                 setSelectedValues={setSelectedValues}
-                setDelete={setDelete}
+                setDelete={setDeleteMany}
                 AdvanceSearch={
                     <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} mt={{ sm: "5px", md: "0" }} size="sm" onClick={() => setAdvanceSearch(true)}>Advance Search</Button>
                 }
