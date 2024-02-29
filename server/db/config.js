@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const { initializeLeadSchema } = require("../model/schema/lead");
 const { initializeContactSchema } = require("../model/schema/contact");
 const { initializePropertySchema } = require("../model/schema/property");
+const { createNewModule } = require("../controllers/customField/customField.js")
 
 const initializedSchemas = async () => {
     await initializeLeadSchema();
@@ -22,6 +23,22 @@ const connectDB = async (DATABASE_URL, DATABASE) => {
 
         await initializedSchemas();
 
+        /* this was temporary  */
+        const mockRes = {
+            status: (code) => {
+                return {
+                    json: (data) => { }
+                };
+            },
+            json: (data) => { }
+        };
+
+        // Create default modules
+        await createNewModule({ body: { moduleName: 'Lead', fields: [], headings: [] } }, mockRes);
+        await createNewModule({ body: { moduleName: 'Contact', fields: [], headings: [] } }, mockRes);
+        await createNewModule({ body: { moduleName: 'Property', fields: [], headings: [] } }, mockRes);
+        /*  */
+
         let adminExisting = await User.find({ role: 'superAdmin' });
         if (adminExisting.length <= 0) {
             const phoneNumber = 7874263694
@@ -39,7 +56,7 @@ const connectDB = async (DATABASE_URL, DATABASE) => {
         } else if (adminExisting[0].deleted === true) {
             await User.findByIdAndUpdate(adminExisting[0]._id, { deleted: false });
             console.log("Admin Update successfully..");
-        } else if (adminExisting.username !== "admin@gmail.com") {
+        } else if (adminExisting[0].username !== "admin@gmail.com") {
             await User.findByIdAndUpdate(adminExisting[0]._id, { username: 'admin@gmail.com' });
             console.log("Admin Update successfully..");
         }
