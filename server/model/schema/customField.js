@@ -98,6 +98,17 @@ const customFieldSchema = new mongoose.Schema({
     no: {
         type: Number
     },
+    deleted: {
+        type: Boolean,
+        default: false,
+    },
+    updatedDate: {
+        type: Date,
+        default: Date.now
+    },
+    createdDate: {
+        type: Date,
+    },
     headings: [headingsSchema],
     fields: [fieldsSchema]
 });
