@@ -4,8 +4,10 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { getApi } from 'services/api';
 import CheckTable from "./components/CheckTable";
 import ReportChart from './components/reportChart';
+import CommonCheckTable from "components/checkTable/checktable";
 
 const Report = () => {
+    const title = 'Reports'
     const [data, setData] = useState([])
     const [isLoding, setIsLoding] = useState(false)
 
@@ -45,6 +47,15 @@ const Report = () => {
             <ReportChart />
             <Card mt={4}>
                 <CheckTable columnsData={tableColumns} barData={data} isLoding={isLoding} />
+                {/* <CommonCheckTable
+                    title={title}
+                    isLoding={isLoding}
+                    columnData={tableColumns}
+                    allData={data}
+                    tableData={data}
+                    tableCustomFields={[]}
+                    deleteMany={'true'}
+                /> */}
             </Card>
         </div>
     )
