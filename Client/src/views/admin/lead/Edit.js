@@ -120,7 +120,7 @@ const Edit = (props) => {
             <Drawer isOpen={props.isOpen} size={props.size}>
                 <DrawerOverlay />
                 <DrawerContent>
-                    <DrawerHeader justifyContent='space-between' display='flex' >
+                    <DrawerHeader alignItems={"center"} justifyContent='space-between' display='flex' >
                         Edit leads
                         <IconButton onClick={handleClose} icon={<CloseIcon />} />
                     </DrawerHeader>
