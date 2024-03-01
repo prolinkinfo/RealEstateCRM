@@ -339,7 +339,7 @@ const createNewModule = async (req, res) => {
         }
         const nextAutoIncrementValue = await getNextAutoIncrementValue();
 
-        const newModule = new CustomField({ moduleName, fields: req.body.fields || [], headings: req.body.headings || [], no: nextAutoIncrementValue });
+        const newModule = new CustomField({ moduleName, fields: req.body.fields || [], headings: req.body.headings || [], no: nextAutoIncrementValue, createdDate: new Date() });
         await newModule.save();
 
         return res.status(200).json({ message: "Module added successfully", data: newModule });

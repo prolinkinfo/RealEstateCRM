@@ -54,8 +54,10 @@ const Report = () => {
                     dataColumn={tableColumns}
                     allData={data}
                     tableData={data}
+                    AdvanceSearch={() => ""}
                     tableCustomFields={[]}
-                    deleteMany={'true'}
+                    deleteMany={true}
+                    ManageGrid={false}
                 />
             </Card>
         </div>
