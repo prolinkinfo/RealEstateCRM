@@ -142,9 +142,9 @@ const EditTask = (props) => {
                 </ModalHeader>
                 <ModalBody >
                     {/* Contact Model  */}
-                    <ContactModel isOpen={contactModelOpen} onClose={setContactModel} fieldName='assignmentTo' setFieldValue={setFieldValue} />
+                    <ContactModel isOpen={contactModelOpen} data={assignmentToData} onClose={setContactModel} values={values} fieldName='assignmentTo' setFieldValue={setFieldValue} />
                     {/* Lead Model  */}
-                    <LeadModel isOpen={leadModelOpen} onClose={setLeadModel} fieldName='assignmentToLead' setFieldValue={setFieldValue} />
+                    <LeadModel isOpen={leadModelOpen} data={assignmentToData} onClose={setLeadModel} values={values} fieldName='assignmentToLead' setFieldValue={setFieldValue} />
                     {isLoding ?
                         <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                             <Spinner />
@@ -174,8 +174,9 @@ const EditTask = (props) => {
                                 <RadioGroup onChange={(e) => { setFieldValue('category', e); setFieldValue('assignmentTo', null); setFieldValue('assignmentToLead', null); }} value={values.category}>
                                     <Stack direction='row'>
                                         <Radio value='None' >None</Radio>
-                                        <Radio value='Contact'>Contact</Radio>
-                                        <Radio value='Lead'>Lead</Radio>
+                                        {values.category === 'Contact' && <Radio value='Contact'>Contact</Radio>}
+                                        {values.category === 'Lead' && <Radio value='Lead'>Lead</Radio>}
+                                        {!values.category && <> <Radio value='Contact'>Contact</Radio><Radio value='Lead'>Lead</Radio></>}
                                     </Stack>
                                 </RadioGroup>
                                 <Text mb='10px' color={'red'}> {errors.category && touched.category && errors.category}</Text>

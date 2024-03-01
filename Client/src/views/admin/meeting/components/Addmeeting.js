@@ -95,9 +95,9 @@ const AddMeeting = (props) => {
                 <ModalCloseButton />
                 <ModalBody overflowY={"auto"} height={"400px"}>
                     {/* Contact Model  */}
-                    <MultiContactModel isOpen={contactModelOpen} onClose={setContactModel} fieldName='attendes' setFieldValue={setFieldValue} />
+                    <MultiContactModel data={data} isOpen={contactModelOpen} onClose={setContactModel} fieldName='attendes' setFieldValue={setFieldValue} />
                     {/* Lead Model  */}
-                    <MultiLeadModel isOpen={leadModelOpen} onClose={setLeadModel} fieldName='attendesLead' setFieldValue={setFieldValue} />
+                    <MultiLeadModel data={data} isOpen={leadModelOpen} onClose={setLeadModel} fieldName='attendesLead' setFieldValue={setFieldValue} />
 
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12 }}>
@@ -123,6 +123,7 @@ const AddMeeting = (props) => {
                                 <Stack direction='row'>
                                     {props.leadContect === 'contactView' && <Radio value='Contact'>Contact</Radio>}
                                     {props.leadContect === 'leadView' && <Radio value='Lead'>Lead</Radio>}
+                                    {!props.leadContect && <> <Radio value='Contact'>Contact</Radio><Radio value='Lead'>Lead</Radio></>}
                                 </Stack>
                             </RadioGroup>
                             <Text mb='10px' color={'red'} fontSize='sm'> {errors.related && touched.related && errors.related}</Text>

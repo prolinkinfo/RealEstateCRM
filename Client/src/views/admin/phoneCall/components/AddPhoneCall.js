@@ -52,19 +52,19 @@ const AddPhoneCall = (props) => {
 
     const fetchDataR = async () => {
         if (props.id && props.lead !== 'true') {
-            let response = await getApi('api/contact/view/', props.id)
-            if (response?.status === 200) {
-                setFieldValue('recipient', response?.data?.contact?.phoneNumber);
+            // let response = await getApi('api/contact/view/', props.id)
+            // if (response?.status === 200) {
+                setFieldValue('recipient', props?.viewData?.contact?.phoneNumber);
                 setFieldValue('createBy', props?.id);
-                values.recipient = response?.data?.contact?.phoneNumber
-            }
+                values.recipient = props?.viewData?.contact?.phoneNumber
+            // }
         } else if (props.id && props.lead === 'true') {
-            let response = await getApi('api/lead/view/', props.id)
-            if (response?.status === 200) {
-                setFieldValue('recipient', response?.data?.lead?.leadPhoneNumber);
+            // let response = await getApi('api/lead/view/', props.id)
+            // if (response?.status === 200) {
+                setFieldValue('recipient', props?.viewData?.lead?.leadPhoneNumber);
                 setFieldValue('createByLead', props.id);
-                values.recipient = response?.data?.lead?.leadPhoneNumber
-            }
+                values.recipient = props?.viewData?.lead?.leadPhoneNumber
+            // }
         }
     }
 

@@ -93,6 +93,7 @@ import Edit from "./Edit";
 import Delete from './Delete';
 import AddEmailHistory from "views/admin/emailHistory/components/AddEmail";
 import AddPhoneCall from "views/admin/phoneCall/components/AddPhoneCall";
+import ImportModal from './components/ImportModal';
 
 const Index = () => {
     const title = "Leads";
@@ -118,6 +119,7 @@ const Index = () => {
     const [addEmailHistory, setAddEmailHistory] = useState(false);
     const [selectedId, setSelectedId] = useState();
     const [selectedValues, setSelectedValues] = useState([]);
+    const [isImport, setIsImport] = useState(false);
 
     const fetchData = async () => {
         setIsLoding(true);
@@ -150,7 +152,7 @@ const Index = () => {
                                 {permission?.view &&
                                     <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { navigate(`/leadView/${row?.values?._id}`) }}>View</MenuItem>}
                                 {permission?.delete &&
-                                    <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} mb={1} />} onClick={() => { setDelete(true); setSelectedId(row?.values?._id); }}>Delete</MenuItem>}
+                                    <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} mb={1} />} onClick={() => { setDelete(true); setSelectedValues([row?.values?._id]); }}>Delete</MenuItem>}
                             </MenuList>
                         </Menu>
                     </Text>
@@ -202,6 +204,7 @@ const Index = () => {
                             selectedValues={selectedValues}
                             setSelectedValues={setSelectedValues}
                             setDelete={setDelete}
+                            setIsImport={setIsImport}
                         />
                     </GridItem>
                 }
@@ -210,8 +213,9 @@ const Index = () => {
             {isOpen && <Add isOpen={isOpen} size={size} leadData={leadData[0]} onClose={onClose} setAction={setAction} action={action} />}
             {edit && <Edit isOpen={edit} size={size} leadData={leadData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={leadData?.[0]?._id} />}
             {deleteModel && <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/lead/deleteMany' data={selectedValues} method='many' setAction={setAction} />}
-            {addEmailHistory && <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} lead='true' id={selectedId} />}
-            {addPhoneCall && <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={callSelectedId} lead='true' />}
+            {addEmailHistory && <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} lead='true' id={selectedId} />}
+            {addPhoneCall && <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} lead='true' id={callSelectedId} />}
+            {isImport && <ImportModal text='Lead file' isOpen={isImport} onClose={setIsImport} customFields={leadData?.[0]?.fields || []} />}
 
         </div>
     )

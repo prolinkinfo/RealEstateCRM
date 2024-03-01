@@ -28,111 +28,156 @@ import Card from 'components/card/Card';
 function LeadImport() {
 
     const location = useLocation();
-    const { fileData } = location.state || {};
+    const { fileData, customFields } = location.state || {};
     const [importedFileFields, setImportedFileFields] = useState([]);
     const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
     const [importedFileData, setImportedFileData] = useState([]);
     const [isLoding, setIsLoding] = useState(false);
     const navigate = useNavigate();
+    const [filterLead, setFilterLead] = useState([]);
 
     const columns = [
         { Header: 'Fields In Crm', accessor: 'crmFields' },
         { Header: 'Fields In File', accessor: 'fileFields' },
     ];
 
-    const fieldsInCrm = [
-        { Header: 'Lead Name', accessor: 'leadName', width: 20 },
-        { Header: "Lead Email", accessor: "leadEmail" },
-        { Header: "Lead PhoneNumber", accessor: "leadPhoneNumber" },
-        { Header: "Lead Address", accessor: "leadAddress" },
-        { Header: "Lead Owner", accessor: "leadOwner" },
-        { Header: "Lead Score", accessor: "leadScore" },
-        { Header: "Lead Source", accessor: "leadSource" },
-        { Header: "Lead Status", accessor: "leadStatus" },
-        { Header: "Lead Source Channel", accessor: "leadSourceChannel" },
-        { Header: "Lead Assigned Agent", accessor: "leadAssignedAgent" },
-        { Header: "Lead Creation Date", accessor: "leadCreationDate" },
-        { Header: "Lead conversion Date", accessor: "leadConversionDate" },
-        { Header: "Lead FollowUp Date", accessor: "leadFollowUpDate" },
-        { Header: "Lead FollowUp Status", accessor: "leadFollowUpStatus" },
-        { Header: "Lead Communication Preferences", accessor: "leadCommunicationPreferences" },
-        { Header: "Lead Engagement Level", accessor: "leadEngagementLevel" },
-        { Header: "Lead Conversion Rate", accessor: "leadConversionRate" },
-        { Header: "Lead Nurturing Stage", accessor: "leadNurturingStage" },
-        { Header: "Lead Next Action", accessor: "leadNextAction" },
-        { Header: "Lead Nurturing Workflow", accessor: "leadNurturingWorkflow" },
-        { Header: "Lead Campaign", accessor: "leadCampaign" },
-        { Header: "Lead Source Medium", accessor: "leadSourceMedium" },
-    ];
+    // const fieldsInCrm = [
+    //     { Header: 'Lead Name', accessor: 'leadName', width: 20 },
+    //     { Header: "Lead Email", accessor: "leadEmail" },
+    //     { Header: "Lead PhoneNumber", accessor: "leadPhoneNumber" },
+    //     { Header: "Lead Address", accessor: "leadAddress" },
+    //     { Header: "Lead Owner", accessor: "leadOwner" },
+    //     { Header: "Lead Score", accessor: "leadScore" },
+    //     { Header: "Lead Source", accessor: "leadSource" },
+    //     { Header: "Lead Status", accessor: "leadStatus" },
+    //     { Header: "Lead Source Channel", accessor: "leadSourceChannel" },
+    //     { Header: "Lead Assigned Agent", accessor: "leadAssignedAgent" },
+    //     { Header: "Lead Creation Date", accessor: "leadCreationDate" },
+    //     { Header: "Lead conversion Date", accessor: "leadConversionDate" },
+    //     { Header: "Lead FollowUp Date", accessor: "leadFollowUpDate" },
+    //     { Header: "Lead FollowUp Status", accessor: "leadFollowUpStatus" },
+    //     { Header: "Lead Communication Preferences", accessor: "leadCommunicationPreferences" },
+    //     { Header: "Lead Engagement Level", accessor: "leadEngagementLevel" },
+    //     { Header: "Lead Conversion Rate", accessor: "leadConversionRate" },
+    //     { Header: "Lead Nurturing Stage", accessor: "leadNurturingStage" },
+    //     { Header: "Lead Next Action", accessor: "leadNextAction" },
+    //     { Header: "Lead Nurturing Workflow", accessor: "leadNurturingWorkflow" },
+    //     { Header: "Lead Campaign", accessor: "leadCampaign" },
+    //     { Header: "Lead Source Medium", accessor: "leadSourceMedium" },
+    // ];
 
+    // const initialValues = {
+    //     leadName: '',
+    //     leadEmail: '',
+    //     leadPhoneNumber: '',
+    //     leadAddress: '',
+    //     leadOwner: '',
+    //     leadScore: '',
+    //     leadSource: '',
+    //     leadStatus: '',
+    //     leadSourceChannel: '',
+    //     leadAssignedAgent: '',
+    //     leadOwner: '',
+    //     leadCreationDate: '',
+    //     leadConversionDate: '',
+    //     leadFollowUpDate: '',
+    //     leadFollowUpStatus: '',
+    //     leadCommunicationPreferences: '',
+    //     leadEngagementLevel: '',
+    //     leadConversionRate: '',
+    //     leadNurturingStage: '',
+    //     deleted: '',
+    //     createBy: '',
+    //     leadNextAction: '',
+    //     leadNurturingWorkflow: '',
+    //     leadCampaign: '',
+    //     leadSourceMedium: '',
+    //     createdDate: ''
+    // };
+
+    // const formik = useFormik({
+    //     initialValues: initialValues,
+    //     onSubmit: (values, { resetForm }) => {
+
+    //         const leadsData = importedFileData?.map((item, ind) => {
+    //             const leadCreationDate = moment(item[values.leadCreationDate || "leadCreationDate"]);
+    //             const leadConversionDate = moment(item[values.leadConversionDate || "leadConversionDate"]);
+    //             const leadFollowUpDate = moment(item[values.leadFollowUpDate || "leadFollowUpDate"]);
+    //             const leadScore = item[values.leadScore || "leadScore"] || '';
+    //             const leadConversionRate = item[values.leadConversionRate || "leadConversionRate"] || '';
+
+    //             return {
+    //                 leadName: item[values.leadName || "leadName"] || '',
+    //                 leadEmail: item[values.leadEmail || "leadEmail"] || '',
+    //                 leadPhoneNumber: item[values.leadPhoneNumber || "leadPhoneNumber"] || '',
+    //                 leadAddress: item[values.leadAddress || "leadAddress"] || '',
+    //                 leadOwner: item[values.leadOwner || "leadOwner"] || '',
+    //                 leadScore: parseInt(leadScore, 10) || null,
+    //                 leadSource: item[values.leadSource || "leadSource"] || '',
+    //                 leadStatus: item[values.leadStatus || "leadStatus"] || '',
+    //                 leadSourceChannel: item[values.leadSourceChannel || "leadSourceChannel"] || '',
+    //                 leadAssignedAgent: item[values.leadAssignedAgent || "leadAssignedAgent"] || '',
+    //                 leadOwner: item[values.leadOwner || "leadOwner"] || '',
+    //                 leadCreationDate: leadCreationDate.isValid() ? item[values.leadCreationDate || "leadCreationDate"] || '' : '',
+    //                 leadConversionDate: leadConversionDate.isValid() ? item[values.leadConversionDate || "leadConversionDate"] || '' : '',
+    //                 leadFollowUpDate: leadFollowUpDate.isValid() ? item[values.leadFollowUpDate || "leadFollowUpDate"] || '' : '',
+    //                 leadFollowUpStatus: item[values.leadFollowUpStatus || "leadFollowUpStatus"] || '',
+    //                 leadCommunicationPreferences: item[values.leadCommunicationPreferences || "leadCommunicationPreferences"] || '',
+    //                 leadEngagementLevel: item[values.leadEngagementLevel || "leadEngagementLevel"] || '',
+    //                 leadConversionRate: parseFloat(leadConversionRate) || null,
+    //                 leadNurturingStage: item[values.leadNurturingStage || "leadNurturingStage"] || '',
+    //                 deleted: item[values.deleted || "deleted"] || false,
+    //                 createBy: JSON.parse(localStorage.getItem('user'))._id,
+    //                 leadNextAction: item[values.leadNextAction || "leadNextAction"] || '',
+    //                 leadNurturingWorkflow: item[values.leadNurturingWorkflow || "leadNurturingWorkflow"] || '',
+    //                 leadCampaign: item[values.leadCampaign || "leadCampaign"] || '',
+    //                 leadSourceMedium: item[values.leadSourceMedium || "leadSourceMedium"] || '',
+    //                 createdDate: new Date()
+    //             }
+    //         });
+
+    //         AddData(leadsData);
+    //     }
+    // })
+
+    const initialFieldValues = Object.fromEntries(
+        (customFields || []).map(field => [field?.name, ''])
+    );
     const initialValues = {
-        leadName: '',
-        leadEmail: '',
-        leadPhoneNumber: '',
-        leadAddress: '',
-        leadOwner: '',
-        leadScore: '',
-        leadSource: '',
-        leadStatus: '',
-        leadSourceChannel: '',
-        leadAssignedAgent: '',
-        leadOwner: '',
-        leadCreationDate: '',
-        leadConversionDate: '',
-        leadFollowUpDate: '',
-        leadFollowUpStatus: '',
-        leadCommunicationPreferences: '',
-        leadEngagementLevel: '',
-        leadConversionRate: '',
-        leadNurturingStage: '',
-        deleted: '',
-        createBy: '',
-        leadNextAction: '',
-        leadNurturingWorkflow: '',
-        leadCampaign: '',
-        leadSourceMedium: '',
-        createdDate: ''
+        ...initialFieldValues
     };
+
+    const fieldsInCrm = [
+        ...customFields?.map((field) => ({ Header: field?.label, accessor: field?.name, type: field?.type, formikType: field?.validations?.find(obj => obj.hasOwnProperty('formikType')) }))
+    ];
 
     const formik = useFormik({
         initialValues: initialValues,
         onSubmit: (values, { resetForm }) => {
 
             const leadsData = importedFileData?.map((item, ind) => {
-                const leadCreationDate = moment(item[values.leadCreationDate || "leadCreationDate"]);
-                const leadConversionDate = moment(item[values.leadConversionDate || "leadConversionDate"]);
-                const leadFollowUpDate = moment(item[values.leadFollowUpDate || "leadFollowUpDate"]);
-                const leadScore = item[values.leadScore || "leadScore"] || '';
-                const leadConversionRate = item[values.leadConversionRate || "leadConversionRate"] || '';
-
-                return {
-                    leadName: item[values.leadName || "leadName"] || '',
-                    leadEmail: item[values.leadEmail || "leadEmail"] || '',
-                    leadPhoneNumber: item[values.leadPhoneNumber || "leadPhoneNumber"] || '',
-                    leadAddress: item[values.leadAddress || "leadAddress"] || '',
-                    leadOwner: item[values.leadOwner || "leadOwner"] || '',
-                    leadScore: parseInt(leadScore, 10) || null,
-                    leadSource: item[values.leadSource || "leadSource"] || '',
-                    leadStatus: item[values.leadStatus || "leadStatus"] || '',
-                    leadSourceChannel: item[values.leadSourceChannel || "leadSourceChannel"] || '',
-                    leadAssignedAgent: item[values.leadAssignedAgent || "leadAssignedAgent"] || '',
-                    leadOwner: item[values.leadOwner || "leadOwner"] || '',
-                    leadCreationDate: leadCreationDate.isValid() ? item[values.leadCreationDate || "leadCreationDate"] || '' : '',
-                    leadConversionDate: leadConversionDate.isValid() ? item[values.leadConversionDate || "leadConversionDate"] || '' : '',
-                    leadFollowUpDate: leadFollowUpDate.isValid() ? item[values.leadFollowUpDate || "leadFollowUpDate"] || '' : '',
-                    leadFollowUpStatus: item[values.leadFollowUpStatus || "leadFollowUpStatus"] || '',
-                    leadCommunicationPreferences: item[values.leadCommunicationPreferences || "leadCommunicationPreferences"] || '',
-                    leadEngagementLevel: item[values.leadEngagementLevel || "leadEngagementLevel"] || '',
-                    leadConversionRate: parseFloat(leadConversionRate) || null,
-                    leadNurturingStage: item[values.leadNurturingStage || "leadNurturingStage"] || '',
+                const lead = {
+                    createdDate: new Date(),
                     deleted: item[values.deleted || "deleted"] || false,
                     createBy: JSON.parse(localStorage.getItem('user'))._id,
-                    leadNextAction: item[values.leadNextAction || "leadNextAction"] || '',
-                    leadNurturingWorkflow: item[values.leadNurturingWorkflow || "leadNurturingWorkflow"] || '',
-                    leadCampaign: item[values.leadCampaign || "leadCampaign"] || '',
-                    leadSourceMedium: item[values.leadSourceMedium || "leadSourceMedium"] || '',
-                    createdDate: new Date()
-                }
+                };
+
+                fieldsInCrm?.forEach(field => {
+                    const selectedField = values[field?.accessor];
+                    const fieldValue = item[selectedField] || '';
+
+                    if (field?.type?.toLowerCase() === "date") {
+                        lead[field?.accessor] = moment(fieldValue).isValid() ? fieldValue : '';
+                    } else if (field?.type?.toLowerCase() === "number" && ['positive', 'negative'].includes(field?.formikType?.toLowerCase())) {
+                        lead[field?.accessor] = parseFloat(fieldValue) || '';
+                    } else if (field?.type?.toLowerCase() === "number") {
+                        lead[field?.accessor] = parseInt(fieldValue, 10) || '';
+                    } else {
+                        lead[field?.accessor] = fieldValue;
+                    }
+                });
+
+                return lead;
             });
 
             AddData(leadsData);
@@ -228,9 +273,19 @@ function LeadImport() {
     }, [fileData]);
 
     // const filterLead = fieldsInCrm.filter(field => importedFileFields.find(data => field.accessor === data || field.Header === data))
+    // const filterLead = importedFileFields.filter(field => fieldsInCrm.find(data => field === data.accessor || field === data.Header))
 
-    const filterLead = importedFileFields.filter(field => fieldsInCrm.find(data => field === data.accessor || field === data.Header))
-
+    useEffect(() => {
+        const filterLeadData = importedFileFields?.filter(field => {
+            const result = fieldsInCrm?.find(data => field === data?.accessor || field === data?.Header);
+            if (result) {
+                setFieldValue(result?.accessor, field);
+                return true;
+            }
+            return false;
+        });
+        setFilterLead(filterLeadData);
+    }, [importedFileFields]);
 
     return (
         <>
@@ -329,7 +384,7 @@ function LeadImport() {
                     }
                 </Grid>
                 <Flex Flex justifyContent={'end'} mt='5' >
-                    <Button size="sm" onClick={() => handleSubmit()} variant="brand">Next</Button>
+                    <Button size="sm" onClick={() => handleSubmit()} variant="brand">Save</Button>
                 </Flex>
             </Card>
         </>

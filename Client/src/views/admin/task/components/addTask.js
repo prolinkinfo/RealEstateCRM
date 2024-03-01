@@ -100,9 +100,9 @@ const AddTask = (props) => {
                 </ModalHeader>
                 <ModalBody>
                     {/* Contact Model  */}
-                    <ContactModel isOpen={contactModelOpen} onClose={setContactModel} fieldName='assignmentTo' setFieldValue={setFieldValue} />
+                    <ContactModel isOpen={contactModelOpen} data={assignmentToData} onClose={setContactModel} fieldName='assignmentTo' setFieldValue={setFieldValue} />
                     {/* Lead Model  */}
-                    <LeadModel isOpen={leadModelOpen} onClose={setLeadModel} fieldName='assignmentToLead' setFieldValue={setFieldValue} />
+                    <LeadModel isOpen={leadModelOpen} data={assignmentToData} onClose={setLeadModel} fieldName='assignmentToLead' setFieldValue={setFieldValue} />
 
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
@@ -130,6 +130,7 @@ const AddTask = (props) => {
                                     <Radio value='None' >None</Radio>
                                     {props.leadContect === 'contactView' && <Radio value='Contact'>Contact</Radio>}
                                     {props.leadContect === 'leadView' && <Radio value='Lead'>Lead</Radio>}
+                                    {!props.leadContect && <> <Radio value='Contact'>Contact</Radio><Radio value='Lead'>Lead</Radio></>}
                                 </Stack>
                             </RadioGroup>
                             <Text mb='10px' color={'red'}> {errors.category && touched.category && errors.category}</Text>

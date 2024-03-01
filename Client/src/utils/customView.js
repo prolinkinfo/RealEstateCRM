@@ -44,11 +44,9 @@ const CustomView = ({ data, toCamelCase, fieldData }) => {
                                     </GridItem>
                                     {
                                         data?.fields?.filter((itm) => itm?.belongsTo === item?._id)?.map((field) => (
-                                            <GridItem colSpan={{ base: 12, md: 6 }} >
-
-                                                <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> {field.label}</Text>
-                                                <Text color={'blackAlpha.900'} fontSize="sm" > {fieldData[field.name] || "N/A"}</Text>
-
+                                            <GridItem colSpan={{ base: 12, md: 6 }} key={field?.name}>
+                                                <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> {field?.label}</Text>
+                                                <Text color={'blackAlpha.900'} fontSize="sm" > {fieldData && fieldData[field?.name] !== undefined ? fieldData[field?.name] : "N/A"}</Text>
                                             </GridItem>
                                         ))
                                     }

@@ -183,11 +183,11 @@ import CountUpComponent from 'components/countUpComponent/countUpComponent';
 import Pagination from 'components/pagination/Pagination';
 import Spinner from 'components/spinner/Spinner';
 import CustomSearchInput from "../search/search";
-import AdvanceSearch from "../search/advanceSearch";
+import AdvanceSearchUsingCustomFields from "../search/advanceSearch";
 import DataNotFound from "../notFoundData";
 
 const CommonCheckTable = (props) => {
-    const { isLoding, title, columnData, dataColumn, tableData, allData, setSearchedData, setDisplaySearchData, displaySearchData, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues } = props;
+    const { isLoding, title, columnData, dataColumn, tableData, allData, setSearchedData, setDisplaySearchData, displaySearchData, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, AdvanceSearch, getTagValuesOutside, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
 
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -199,11 +199,11 @@ const CommonCheckTable = (props) => {
     const data = useMemo(() => tableData, [tableData]);
     const [manageColumns, setManageColumns] = useState(false);
     const [csvColumns, setCsvColumns] = useState([]);
+    // const [searchbox, setSearchbox] = useState(searchboxOutside ? searchboxOutside : '');
     const [searchbox, setSearchbox] = useState('');
-    const [getTagValues, setGetTagValues] = useState([]);
+    const [getTagValues, setGetTagValues] = useState(props.getTagValuesOutSide ? props.getTagValuesOutSide : []);
     const [advaceSearch, setAdvaceSearch] = useState(false);
     const [column, setColumn] = useState('');
-    const [isImportLead, setIsImportLead] = useState(false);
     const [gopageValue, setGopageValue] = useState();
 
     const tableInstance = useTable(
@@ -244,9 +244,12 @@ const CommonCheckTable = (props) => {
     };
 
     const handleClear = () => {
-        setDisplaySearchData(false);
+        props.setDisplaySearchData(false);
         setSearchbox('');
         setGetTagValues([]);
+        if (props.getTagValuesOutSide) {
+            setGetTagValuesOutside([]);
+        }
         setGopageValue(1);
     };
 
@@ -363,14 +366,18 @@ const CommonCheckTable = (props) => {
                             >
                                 {title} (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
                             </Text>
-                            <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={setGetTagValues} setGopageValue={setGopageValue} />
-                            <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} mt={{ sm: "5px", md: "0" }} size="sm" onClick={() => setAdvaceSearch(true)}>Advance Search</Button>
-                            {displaySearchData ? <Button variant="outline" colorScheme='red' size="sm" ms={2} onClick={() => handleClear()}>Clear</Button> : ""}
+                            {/* <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={setGetTagValues} setGopageValue={setGopageValue} /> */}
+                            <CustomSearchInput setSearchbox={setSearchboxOutside ? setSearchboxOutside : setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchboxOutside ? searchboxOutside : searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={props.setGetTagValuesOutside ? props.setGetTagValuesOutside : setGetTagValues} setGopageValue={setGopageValue} />
+                            {
+                                AdvanceSearch ? AdvanceSearch :
+                                    <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} mt={{ sm: "5px", md: "0" }} size="sm" onClick={() => setAdvaceSearch(true)}>Advance Search</Button>
+                            }
+                            {props.displaySearchData ? <Button variant="outline" colorScheme='red' size="sm" ms={2} onClick={() => handleClear()}>Clear</Button> : ""}
                             {(selectedValues?.length > 0 && access?.delete) && <DeleteIcon cursor={"pointer"} onClick={() => setDelete(true)} color={'red'} ms={2} />}
                         </Flex>
                     </GridItem>
                     {/* Advance filter */}
-                    <AdvanceSearch
+                    <AdvanceSearchUsingCustomFields
                         setAdvaceSearch={setAdvaceSearch}
                         setGetTagValues={setGetTagValues}
                         isLoding={isLoding}
@@ -389,8 +396,8 @@ const CommonCheckTable = (props) => {
                             <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} zIndex={2} >
                                 <MenuItem onClick={() => setManageColumns(true)} width={"165px"}> Manage Columns
                                 </MenuItem>
-                                <MenuItem width={"165px"} onClick={() => setIsImportLead(true)}> Import {title}
-                                </MenuItem>
+                                {typeof setIsImport === "function" && <MenuItem width={"165px"} onClick={() => setIsImport(true)}> Import {title}
+                                </MenuItem>}
                                 <MenuDivider />
                                 <MenuItem width={"165px"} onClick={() => handleExportLeads('csv')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as CSV' : 'Export as CSV'}</MenuItem>
                                 <MenuItem width={"165px"} onClick={() => handleExportLeads('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem>
@@ -399,7 +406,7 @@ const CommonCheckTable = (props) => {
                         {access?.create && <Button onClick={() => handleClick()} size="sm" variant="brand" leftIcon={<AddIcon />}>Add New</Button>}
                     </GridItem>
                     <HStack spacing={4} mb={2}>
-                        {getTagValues && getTagValues.map((item) => (
+                        {(props.getTagValuesOutSide || []).concat(getTagValues || []).map((item) => (
                             <Tag
                                 size={"md"}
                                 p={2}
@@ -469,13 +476,13 @@ const CommonCheckTable = (props) => {
                                         <Tr {...row?.getRowProps()}>
                                             {row?.cells?.map((cell, index) => {
                                                 let data = "";
-                                                columnData.forEach((item) => {
+                                                columnData?.forEach((item) => {
                                                     if (cell?.column.Header === item.Header) {
                                                         if (item.cell && typeof item.cell === 'function') {
                                                             data = (
                                                                 <Flex align="center">
                                                                     <Text color={textColor} fontSize="sm" fontWeight="700">
-                                                                        {item.cell(cell)}
+                                                                        {item.cell(cell) === ' ' ? '-' : item.cell(cell)}
                                                                     </Text>
                                                                 </Flex>
                                                             );
@@ -485,7 +492,7 @@ const CommonCheckTable = (props) => {
                                                                 <Flex align="center">
                                                                     {item.Header === "#" && <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />}
                                                                     <Text color={textColor} fontSize="sm" fontWeight="700">
-                                                                        {item.Header === "#" ? cell?.row?.index + 1 : cell?.value}
+                                                                        {item.Header === "#" ? cell?.row?.index + 1 : cell?.value ? cell?.value : '-'}
                                                                     </Text>
                                                                 </Flex>
                                                             );
@@ -510,7 +517,8 @@ const CommonCheckTable = (props) => {
                         </Tbody>
                     </Table>
                 </Box>
-                {data?.length > 5 && <Pagination gotoPage={gotoPage} gopageValue={gopageValue} setGopageValue={setGopageValue} pageCount={pageCount} canPreviousPage={canPreviousPage} previousPage={previousPage} canNextPage={canNextPage} pageOptions={pageOptions} setPageSize={setPageSize} nextPage={nextPage} pageSize={pageSize} pageIndex={pageIndex} />}
+                {data?.length > 5 && <Pagination gotoPage={gotoPage} gopageValue={gopageValue} setGopageValue={setGopageValue} pageCount={pageCount} canPreviousPage={canPreviousPage} previousPage={previousPage} canNextPage={canNextPage} pageOptions={pageOptions} setPageSize={setPageSize} nextPage={nextPage}
+                    pageSize={pageSize} pageIndex={pageIndex} dataLength={15} />}
 
                 {/* Manage Columns */}
                 <Modal onClose={() => { setManageColumns(false); }} isOpen={manageColumns} isCentered>

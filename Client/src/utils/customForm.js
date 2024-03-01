@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, GridItem, Heading, FormLabel, Input, Text, InputLeftElement, InputGroup, Checkbox, Select, RadioGroup, Radio, HStack, Slider, SliderTrack, SliderFilledTrack, SliderThumb, Box } from '@chakra-ui/react'; // Assuming you are using Chakra UI
 import { HSeparator } from 'components/separator/Separator';
-import { PhoneIcon, StarIcon } from '@chakra-ui/icons';
+import { EmailIcon, PhoneIcon, StarIcon } from '@chakra-ui/icons';
 
 const CustomForm = ({ leadData, values, handleChange, handleBlur, errors, touched, setFieldValue }) => {
     return (
@@ -72,10 +72,14 @@ const CustomForm = ({ leadData, values, handleChange, handleBlur, errors, touche
                                                     </Checkbox> :
                                                         <>
                                                             <InputGroup>
-                                                                {field.type === 'tel' && <InputLeftElement
+                                                                {field.type === 'tel' ? <InputLeftElement
                                                                     pointerEvents="none"
                                                                     children={<PhoneIcon color="gray.300" borderRadius="16px" />}
-                                                                />}
+                                                                /> : field.type === 'email' && <InputLeftElement
+                                                                    pointerEvents="none"
+                                                                    children={<EmailIcon color="gray.300" borderRadius="16px" />}
+                                                                />
+                                                                }
                                                                 <Input
                                                                     fontSize='sm'
                                                                     type={field.type}

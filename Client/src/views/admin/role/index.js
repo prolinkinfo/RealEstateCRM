@@ -45,6 +45,7 @@ const Index = () => {
       <CheckTable
         // isOpen={isOpen}
         // onClose={onClose}
+        isLoding={isLoding}
         tableData={data}
         setAction={setAction}
         fetchData={fetchData}

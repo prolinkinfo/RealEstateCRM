@@ -21,6 +21,8 @@ import ChangeImage from "views/admin/image";
 import Validation from "views/admin/validation";
 import CustomField from "views/admin/customField";
 import TableField from "views/admin/tableField";
+import { TbExchange, TbTableColumn } from "react-icons/tb";
+import { GrValidate } from "react-icons/gr";
 
 // Admin Imports
 const MainDashboard = React.lazy(() => import("views/admin/default"));
@@ -279,7 +281,7 @@ const routes = [
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/change-images",
     under: "image",
-    icon: <Icon as={FaCreativeCommonsBy} width='20px' height='20px' color='inherit' />,
+    icon: <Icon as={TbExchange} width='20px' height='20px' color='inherit' />,
     component: ChangeImage,
   },
   {
@@ -287,7 +289,7 @@ const routes = [
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/validations",
     under: "Validation",
-    icon: <Icon as={FaCreativeCommonsBy} width='20px' height='20px' color='inherit' />,
+    icon: <Icon as={GrValidate} width='20px' height='20px' color='inherit' />,
     component: Validation,
   },
   {
@@ -295,7 +297,7 @@ const routes = [
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/table-field",
     under: "tableField",
-    icon: <Icon as={FaWpforms} width='20px' height='20px' color='inherit' />,
+    icon: <Icon as={TbTableColumn} width='20px' height='20px' color='inherit' />,
     component: TableField,
   },
   // // ------------- Text message Routes ------------------------

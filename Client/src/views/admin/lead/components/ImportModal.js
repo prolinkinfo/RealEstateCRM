@@ -8,7 +8,7 @@ import Upload from './Upload'
 import { useNavigate } from 'react-router-dom'
 
 const ImportModal = (props) => {
-    const { onClose, isOpen, fetchData, text, fieldsInCrm } = props
+    const { onClose, isOpen, text, customFields } = props
     const [isLoding, setIsLoding] = useState(false)
     const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ const ImportModal = (props) => {
 
             if (values.lead) {
                 onClose();
-                navigate('/leadImport', { state: { fileData: values.lead } });
+                navigate('/leadImport', { state: { fileData: values.lead, customFields: customFields } });
             }
         } catch (e) {
             console.log(e);

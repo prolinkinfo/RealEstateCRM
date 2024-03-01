@@ -35,6 +35,7 @@ import MeetingColumnsTable from "../meeting/components/ColumnsTable";
 import TaskColumnsTable from "../task/components/ColumnsTable";
 import DataNotFound from "components/notFoundData";
 import CustomView from "utils/customView";
+import AddDocumentModal from "utils/addDocumentModal";
 
 const View = () => {
 
@@ -61,6 +62,7 @@ const View = () => {
     const [showCall, setShowCall] = useState(false);
     const [showTasks, setShowTasks] = useState(false);
     const [showMeetings, setShowMeetings] = useState(false);
+    const [addDocument, setAddDocument] = useState(false);
 
     const size = "lg";
     const navigate = useNavigate()
@@ -143,7 +145,7 @@ const View = () => {
             {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} contactData={contactData[0]} />}
             <Edit isOpen={edit} contactData={contactData[0]} size={size} onClose={setEdit} setAction={setAction} moduleId={contactData?.[0]?._id} />
             <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/contact/delete/' id={param.id} />
-            <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} />
+            <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} viewData={allData} />
 
             {isLoding ?
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
@@ -230,7 +232,7 @@ const View = () => {
                                                 <Card overflow={'scroll'}>
                                                     <PhoneCall callAccess={callAccess} fetchData={fetchData} columnsData={columnsDataColumns} tableData={showCall ? allData?.phoneCallHistory : allData?.phoneCallHistory?.length > 0 ? [allData?.phoneCallHistory[0]] : []} title={'Call '} />
                                                     {/* {allData?.phoneCallHistory?.length > 0 ? <PhoneCall callAccess={callAccess} fetchData={fetchData} columnsData={columnsDataColumns} tableData={showCall ? allData?.phoneCallHistory : [allData?.phoneCallHistory[0]]} title={'Call '} /> : callAccess?.create && <Button onClick={() => setAddPhoneCall(true)} leftIcon={<BsFillTelephoneFill />} colorScheme="gray" size='sm'> Call </Button>} */}
-                                                    <AddPhoneCall fetchData={fetchData} setAction={setAction} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param.id} />
+                                                    <AddPhoneCall viewData={allData} fetchData={fetchData} setAction={setAction} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param.id} />
                                                     {allData?.phoneCallHistory?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                         <Button colorScheme="brand" variant="outline" size='sm' display="flex" justifyContant="end" onClick={() => showCall ? setShowCall(false) : setShowCall(true)}>{showCall ? "Show less" : "Show more"}</Button>
                                                     </div>}
@@ -266,9 +268,13 @@ const View = () => {
                             <TabPanel pt={4} p={0}>
                                 <GridItem colSpan={{ base: 12 }} >
                                     <Card minH={'40vh'} >
-                                        <Heading size="md" mb={3}>
-                                            Documents
-                                        </Heading>
+                                        <Flex alignItems={'center'} justifyContent={'space-between'} mb='2'>
+                                            <Heading size="md" mb={3}>
+                                                Documents
+                                            </Heading>
+                                            <Button leftIcon={<AddIcon />} size='sm' variant='brand' onClick={() => setAddDocument(true)}>Add Document</Button>
+                                        </Flex>
+                                        <AddDocumentModal addDocument={addDocument} setAddDocument={setAddDocument} linkId={param.id} from="contact" setAction={setAction} />
                                         <HSeparator />
                                         <VStack mt={4} alignItems="flex-start">
                                             {allData?.Document?.length > 0 ? allData?.Document?.map((item) => (

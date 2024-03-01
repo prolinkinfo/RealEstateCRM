@@ -24,10 +24,11 @@ import Pagination from "components/pagination/Pagination";
 import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 import Delete from "views/admin/contact/Delete";
 import DataNotFound from "components/notFoundData";
+import Spinner from "components/spinner/Spinner";
 
 
 export default function CheckTable(props) {
-    const { columnsData, barData } = props;
+    const { columnsData, barData, isLoding } = props;
 
     const textColor = useColorModeValue("gray.500", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -80,7 +81,7 @@ export default function CheckTable(props) {
         >
             <Flex px="25px" justify="space-between" mb="20px" align="center">
                 <Text
-                    color={textColor}
+                    color={"secondaryGray.900"}
                     fontSize="22px"
                     fontWeight="700"
                     lineHeight="100%"
@@ -126,116 +127,137 @@ export default function CheckTable(props) {
                         ))}
                     </Thead>
                     <Tbody {...getTableBodyProps()}>
-                        {data.length === 0 && (
+                        {isLoding ? (
+                            <Tr>
+                                <Td colSpan={columns?.length}>
+                                    <Flex
+                                        justifyContent={"center"}
+                                        alignItems={"center"}
+                                        width="100%"
+                                        color={textColor}
+                                        fontSize="sm"
+                                        fontWeight="700"
+                                    >
+                                        <Spinner />
+                                    </Flex>
+                                </Td>
+                            </Tr>
+                        ) : data?.length === 0 ? (
                             <Tr>
                                 <Td colSpan={columns.length}>
-                                    <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                                    <Text
+                                        textAlign={"center"}
+                                        width="100%"
+                                        color={textColor}
+                                        fontSize="sm"
+                                        fontWeight="700"
+                                    >
                                         <DataNotFound />
                                     </Text>
                                 </Td>
                             </Tr>
-                        )}
-                        {page?.map((row, i) => {
-                            prepareRow(row);
-                            return (
-                                <Tr {...row?.getRowProps()} key={i}>
-                                    {row?.cells?.map((cell, index) => {
-                                        let data = "";
-                                        if (cell?.column.Header === "#") {
-                                            data = (
-                                                <Flex align="center">
-                                                    <Text color={textColor} fontSize="sm" fontWeight="700">
-                                                        {cell?.row?.index + 1}
+                        ) :
+                            page?.map((row, i) => {
+                                prepareRow(row);
+                                return (
+                                    <Tr {...row?.getRowProps()} key={i}>
+                                        {row?.cells?.map((cell, index) => {
+                                            let data = "";
+                                            if (cell?.column.Header === "#") {
+                                                data = (
+                                                    <Flex align="center">
+                                                        <Text color={textColor} fontSize="sm" fontWeight="700">
+                                                            {cell?.row?.index + 1}
+                                                        </Text>
+                                                    </Flex>
+                                                );
+                                            } else if (cell?.column.Header === "Name") {
+                                                data = (
+                                                    <Text
+                                                        me="10px"
+                                                        color={textColor}
+                                                        fontSize="sm"
+                                                        fontWeight="700"
+                                                    >
+                                                        {cell?.value}
                                                     </Text>
-                                                </Flex>
-                                            );
-                                        } else if (cell?.column.Header === "Name") {
-                                            data = (
-                                                <Text
-                                                    me="10px"
-                                                    color={textColor}
-                                                    fontSize="sm"
-                                                    fontWeight="700"
-                                                >
-                                                    {cell?.value}
-                                                </Text>
-                                            );
-                                        } else if (cell?.column.Header === "Email Sent") {
-                                            data = (
+                                                );
+                                            } else if (cell?.column.Header === "Email Sent") {
+                                                data = (
 
-                                                <Text
-                                                    me="10px"
-                                                    color={textColor}
-                                                    fontSize="sm"
-                                                    fontWeight="700"
-                                                >
-                                                    {cell?.value}
-                                                </Text>
-                                            );
-                                        } else if (cell?.column.Header === "Text Sent") {
-                                            data = (
-                                                <Text
-                                                    me="10px"
-                                                    color={textColor}
-                                                    fontSize="sm"
-                                                    fontWeight="700"
-                                                >
-                                                    {cell?.value}
-                                                </Text>
-                                            );
-                                        }
-                                        else if (cell?.column.Header === "Outbound Calls") {
-                                            data = (
-                                                <Text
-                                                    me="10px"
-                                                    color={textColor}
-                                                    fontSize="sm"
-                                                    fontWeight="700"
-                                                >
-                                                    {cell?.value}
-                                                </Text>
-                                            );
-                                        }
-                                        else if (cell?.column.Header === "Email Received") {
-                                            data = (
-                                                <Text
-                                                    me="10px"
-                                                    color={textColor}
-                                                    fontSize="sm"
-                                                    fontWeight="700"
-                                                >
-                                                    {cell?.value}
-                                                </Text>
-                                            );
-                                        }
-                                        else if (cell?.column.Header === "Text Received") {
-                                            data = (
-                                                <Text
-                                                    me="10px"
-                                                    color={textColor}
-                                                    fontSize="sm"
-                                                    fontWeight="700"
-                                                >
-                                                    {cell?.value}
-                                                </Text>
-                                            );
-                                        }
+                                                    <Text
+                                                        me="10px"
+                                                        color={textColor}
+                                                        fontSize="sm"
+                                                        fontWeight="700"
+                                                    >
+                                                        {cell?.value}
+                                                    </Text>
+                                                );
+                                            } else if (cell?.column.Header === "Text Sent") {
+                                                data = (
+                                                    <Text
+                                                        me="10px"
+                                                        color={textColor}
+                                                        fontSize="sm"
+                                                        fontWeight="700"
+                                                    >
+                                                        {cell?.value}
+                                                    </Text>
+                                                );
+                                            }
+                                            else if (cell?.column.Header === "Outbound Calls") {
+                                                data = (
+                                                    <Text
+                                                        me="10px"
+                                                        color={textColor}
+                                                        fontSize="sm"
+                                                        fontWeight="700"
+                                                    >
+                                                        {cell?.value}
+                                                    </Text>
+                                                );
+                                            }
+                                            else if (cell?.column.Header === "Email Received") {
+                                                data = (
+                                                    <Text
+                                                        me="10px"
+                                                        color={textColor}
+                                                        fontSize="sm"
+                                                        fontWeight="700"
+                                                    >
+                                                        {cell?.value}
+                                                    </Text>
+                                                );
+                                            }
+                                            else if (cell?.column.Header === "Text Received") {
+                                                data = (
+                                                    <Text
+                                                        me="10px"
+                                                        color={textColor}
+                                                        fontSize="sm"
+                                                        fontWeight="700"
+                                                    >
+                                                        {cell?.value}
+                                                    </Text>
+                                                );
+                                            }
 
-                                        return (
-                                            <Td
-                                                {...cell?.getCellProps()}
-                                                key={index}
-                                                fontSize={{ sm: "14px" }}
-                                                minW={{ sm: "150px", md: "200px", lg: "auto" }}
-                                                borderColor="transparent"
-                                            >
-                                                {data}
-                                            </Td>
-                                        );
-                                    })}
-                                </Tr>
-                            );
-                        })}
+                                            return (
+                                                <Td
+                                                    {...cell?.getCellProps()}
+                                                    key={index}
+                                                    fontSize={{ sm: "14px" }}
+                                                    minW={{ sm: "150px", md: "200px", lg: "auto" }}
+                                                    borderColor="transparent"
+                                                >
+                                                    {data}
+                                                </Td>
+                                            );
+                                        })}
+                                    </Tr>
+                                );
+                            })}
                     </Tbody>
                 </Table>
             </Box>

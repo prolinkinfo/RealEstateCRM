@@ -42,7 +42,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { HasAccess } from "../../../redux/accessUtils";
 import DataNotFound from "components/notFoundData";
 import CustomView from "utils/customView";
-
+import AddDocumentModal from "utils/addDocumentModal";
+import { useLocation } from 'react-router-dom';
 
 const View = () => {
 
@@ -65,8 +66,10 @@ const View = () => {
     const [showCall, setShowCall] = useState(false);
     const [showTasks, setShowTasks] = useState(false);
     const [showMeetings, setShowMeetings] = useState(false);
+    const [addDocument, setAddDocument] = useState(false);
     const [action, setAction] = useState(false)
     const [leadData, setLeadData] = useState([])
+    const location = useLocation()
     const size = "lg";
 
     const [addEmailHistory, setAddEmailHistory] = useState(false);
@@ -382,7 +385,7 @@ const View = () => {
                                                         : emailAccess?.create && <Button size="sm" onClick={() => setAddEmailHistory(true)} leftIcon={<BsFillSendFill />} colorScheme="gray" bg={buttonbg} >Send Email </Button>} */}
                                                     <ColumnsTable fetchData={fetchData} emailAccess={emailAccess} columnsData={columnsDataColumns} lead='true' tableData={showEmail ? allData.Email : allData?.Email?.length > 0 ? [allData.Email[0]] : []} title={'Email '} />
 
-                                                    <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} setAction={setAction} lead='true' id={param.id} />
+                                                    <AddEmailHistory viewData={allData} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} setAction={setAction} lead='true' id={param.id} />
                                                     {allData.Email?.length > 1 &&
                                                         <div style={{ display: "flex", justifyContent: "end" }}>
                                                             <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showEmail ? setShowEmail(false) : setShowEmail(true)}>{showEmail ? "Show less" : "Show more"}</Button>
@@ -396,7 +399,7 @@ const View = () => {
                                                     {allData?.phoneCall?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                         <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showCall ? setShowCall(false) : setShowCall(true)}>{showCall ? "Show less" : "Show more"}</Button>
                                                     </div>}
-                                                    <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} setAction={setAction} data={data?.contact} id={param.id} lead='true' />
+                                                    <AddPhoneCall viewData={allData} fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} setAction={setAction} data={data?.contact} id={param.id} lead='true' />
                                                 </Card>
                                             </GridItem>}
                                             {taskAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
@@ -407,7 +410,7 @@ const View = () => {
                                                         allData?.task?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                             <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showTasks ? setShowTasks(false) : setShowTasks(true)}>{showTasks ? "Show less" : "Show more"}</Button>
                                                         </div>}
-                                                    <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="lead" id={param.id} setAction={setAction} />
+                                                    {/* <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="lead" id={param.id} setAction={setAction} /> */}
                                                 </Card>
                                             </GridItem>}
                                             {
@@ -419,8 +422,7 @@ const View = () => {
                                                             allData?.meeting?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                                 <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showMeetings ? setShowMeetings(false) : setShowMeetings(true)}>{showMeetings ? "Show less" : "Show more"}</Button>
                                                             </div>}
-                                                        <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="lead" id={param.id} setAction={setAction} />
-                                                    </Card>
+                                                        {addMeeting && <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="lead" id={param.id} setAction={setAction} />}                                                    </Card>
                                                 </GridItem>}
                                         </Grid>
                                     </Grid>
@@ -429,9 +431,13 @@ const View = () => {
                             <TabPanel pt={4} p={0}>
                                 <GridItem colSpan={{ base: 4 }} >
                                     <Card minH={'50vh'} >
-                                        <Heading size="md" mb={3}>
-                                            Documents
-                                        </Heading>
+                                        <Flex alignItems={'center'} justifyContent={'space-between'} mb='2'>
+                                            <Heading size="md" mb={3}>
+                                                Documents
+                                            </Heading>
+                                            <Button leftIcon={<AddIcon />} size='sm' variant='brand' onClick={() => setAddDocument(true)}>Add Document</Button>
+                                        </Flex>
+                                        <AddDocumentModal addDocument={addDocument} setAddDocument={setAddDocument} linkId={param.id} from="lead" setAction={setAction} />
                                         <HSeparator />
                                         <VStack mt={4} alignItems="flex-start">
                                             {allData?.Document?.length > 0 ? allData?.Document?.map((item) => (

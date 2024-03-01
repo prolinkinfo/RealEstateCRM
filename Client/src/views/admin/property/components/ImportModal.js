@@ -7,7 +7,7 @@ import UploadImport from './UploadImport'
 import { useNavigate } from 'react-router-dom'
 
 const ImportModal = (props) => {
-    const { onClose, isOpen, fetchData, text } = props
+    const { onClose, isOpen, fetchData, text, customFields } = props
     const [isLoding, setIsLoding] = useState(false)
     const navigate = useNavigate();
 
@@ -31,7 +31,7 @@ const ImportModal = (props) => {
 
             if (values.property) {
                 onClose();
-                navigate('/propertyImport', { state: { fileData: values.property } });
+                navigate('/propertyImport', { state: { fileData: values.property , customFields: customFields } });
             }
 
         } catch (e) {

@@ -7,6 +7,7 @@ import ReportChart from './components/reportChart';
 
 const Report = () => {
     const [data, setData] = useState([])
+    const [isLoding, setIsLoding] = useState(false)
 
     const user = JSON.parse(localStorage.getItem("user"))
 
@@ -26,10 +27,12 @@ const Report = () => {
 
 
     const fetchData = async () => {
+        setIsLoding(true)
         let result = await getApi(user.role === 'superAdmin' ? 'api/reporting' : `api/reporting?_id=${user._id}`);
         if (result && result.status === 200) {
             setData(result?.data)
         }
+        setIsLoding(false)
     }
 
 
@@ -41,7 +44,7 @@ const Report = () => {
         <div>
             <ReportChart />
             <Card mt={4}>
-                <CheckTable columnsData={tableColumns} barData={data} />
+                <CheckTable columnsData={tableColumns} barData={data} isLoding={isLoding} />
             </Card>
         </div>
     )
