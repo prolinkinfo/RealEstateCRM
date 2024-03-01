@@ -46,16 +46,17 @@ const Report = () => {
         <div>
             <ReportChart />
             <Card mt={4}>
-                <CheckTable columnsData={tableColumns} barData={data} isLoding={isLoding} />
-                {/* <CommonCheckTable
+                {/* <CheckTable columnsData={tableColumns} barData={data} isLoding={isLoding} /> */}
+                <CommonCheckTable
                     title={title}
                     isLoding={isLoding}
                     columnData={tableColumns}
+                    dataColumn={tableColumns}
                     allData={data}
                     tableData={data}
                     tableCustomFields={[]}
                     deleteMany={'true'}
-                /> */}
+                />
             </Card>
         </div>
     )

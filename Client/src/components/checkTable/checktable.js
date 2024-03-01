@@ -344,8 +344,10 @@ const CommonCheckTable = (props) => {
     }, [dataColumn]);
 
     useEffect(() => {
-        let tempCsvColumns = selectedColumns.filter((col) => col?.Header !== '#' && col?.Header !== 'Action')?.map((field) => ({ Header: field?.Header, accessor: field?.accessor }));
-        setCsvColumns([...tempCsvColumns]);
+        if (selectedColumns) {
+            let tempCsvColumns = selectedColumns?.filter((col) => col?.Header !== '#' && col?.Header !== 'Action')?.map((field) => ({ Header: field?.Header, accessor: field?.accessor }));
+            setCsvColumns([...tempCsvColumns])
+        }
     }, [selectedColumns]);
 
     return (
@@ -490,7 +492,7 @@ const CommonCheckTable = (props) => {
                                                         else {
                                                             data = (
                                                                 <Flex align="center">
-                                                                    {item.Header === "#" && <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />}
+                                                                    {item.Header === "#" && <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues?.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />}
                                                                     <Text color={textColor} fontSize="sm" fontWeight="700">
                                                                         {item.Header === "#" ? cell?.row?.index + 1 : cell?.value ? cell?.value : '-'}
                                                                     </Text>
@@ -531,7 +533,7 @@ const CommonCheckTable = (props) => {
                                 {columnData?.map((column) => (
                                     <Text display={"flex"} key={column?.accessor} py={2}>
                                         <Checkbox
-                                            defaultChecked={selectedColumns.some((selectedColumn) => selectedColumn?.accessor === column?.accessor)}
+                                            defaultChecked={selectedColumns?.some((selectedColumn) => selectedColumn?.accessor === column?.accessor)}
                                             onChange={() => toggleColumnVisibility(column?.accessor)}
                                             pe={2}
                                         />
