@@ -103,6 +103,7 @@ const Index = () => {
         dataColumn={columns}
         allData={data}
         tableData={data}
+        AdvanceSearch={() => ""}
         tableCustomFields={[]}
         BackButton={<Button onClick={() => navigate('/admin-setting')} variant="brand" size="sm" leftIcon={<IoIosArrowBack />} ml={2}>Back</Button>}
         deleteMany={true}

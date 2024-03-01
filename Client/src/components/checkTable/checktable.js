@@ -369,10 +369,10 @@ const CommonCheckTable = (props) => {
                                 {title} (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
                             </Text>
                             {/* <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={setGetTagValues} setGopageValue={setGopageValue} /> */}
-                            {title !== 'Reports' || title !== 'Roles' && <CustomSearchInput setSearchbox={setSearchboxOutside ? setSearchboxOutside : setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchboxOutside ? searchboxOutside : searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={props.setGetTagValuesOutside ? props.setGetTagValuesOutside : setGetTagValues} setGopageValue={setGopageValue} />}
+                            <CustomSearchInput setSearchbox={setSearchboxOutside ? setSearchboxOutside : setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchboxOutside ? searchboxOutside : searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={props.setGetTagValuesOutside ? props.setGetTagValuesOutside : setGetTagValues} setGopageValue={setGopageValue} />
                             {
                                 AdvanceSearch ? AdvanceSearch :
-                                    title !== 'Reports' || title !== 'Roles' && <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} mt={{ sm: "5px", md: "0" }} size="sm" onClick={() => setAdvaceSearch(true)}>Advance Search</Button>
+                                    <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} mt={{ sm: "5px", md: "0" }} size="sm" onClick={() => setAdvaceSearch(true)}>Advance Search</Button>
                             }
                             {props.displaySearchData ? <Button variant="outline" colorScheme='red' size="sm" ms={2} onClick={() => handleClear()}>Clear</Button> : ""}
                             {(selectedValues?.length > 0 && access?.delete && !deleteMany) && <DeleteIcon cursor={"pointer"} onClick={() => setDelete(true)} color={'red'} ms={2} />}
