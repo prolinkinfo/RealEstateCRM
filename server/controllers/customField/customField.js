@@ -8,7 +8,9 @@ async function getNextAutoIncrementValue() {
 
 const index = async (req, res) => {
     try {
-        const result = await CustomField.find(req.query);
+        const query = req.query
+        query.deleted = false;
+        const result = await CustomField.find(query);
         result.sort((a, b) => {
             return a.no - b.no;
         });
@@ -572,6 +574,15 @@ const deletmodule = async (req, res) => {
         res.status(404).json({ message: "error", err })
     }
 }
+const deleteManyModule = async (req, res) => {
+    try {
+        const module = await CustomField.updateMany({ _id: { $in: req.body } }, { $set: { deleted: true } });
+        res.status(200).json({ message: "Many module delete successfully", module })
+    } catch (err) {
+        res.status(404).json({ message: "error", err })
+    }
+}
+
 const changeFieldsBelongsTo = async (req, res) => {
     try {
         const headingId = req.params.id;
@@ -606,4 +617,4 @@ const changeFieldsBelongsTo = async (req, res) => {
     }
 };
 
-module.exports = { index, add, editWholeFieldsArray, editSingleField, view, changeModuleName, deleteField, deleteManyFields, deletmodule, createNewModule, addHeading, editSingleHeading, editWholeHeadingsArray, deleteHeading, deleteManyHeadings, changeIsTableField, changeIsTableFields, changeFieldsBelongsTo };
+module.exports = { index, add, editWholeFieldsArray, editSingleField, view, changeModuleName, deleteField, deleteManyFields, deletmodule, deleteManyModule, createNewModule, addHeading, editSingleHeading, editWholeHeadingsArray, deleteHeading, deleteManyHeadings, changeIsTableField, changeIsTableFields, changeFieldsBelongsTo };

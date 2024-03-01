@@ -15,7 +15,7 @@ const Delete = (props) => {
             try {
                 if (selectedId) {
                     setIsLoding(true)
-                    const response = await deleteApi('api/validation/delete/', selectedId)
+                    const response = await deleteApi('api/custom-field/module/', selectedId)
                     if (response.status === 200) {
                         onClose()
                         fetchData()
@@ -30,7 +30,7 @@ const Delete = (props) => {
         } else if (props.method === 'many') {
             try {
                 setIsLoding(true)
-                let response = await deleteManyApi('api/validation/deleteMany', data)
+                let response = await deleteManyApi('api/custom-field/deleteMany-Module', data)
                 if (response.status === 200) {
                     setSelectedValues([])
                     onClose(false)

@@ -98,14 +98,14 @@ const Index = () => {
                             <Card>
                                 <Flex alignItems={"center"} justifyContent={"space-between"}>
                                     <Flex>
-                                        <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(item?._id)} onChange={(event) => handleCheckboxChange(event, item?._id)} me="10px" />
+                                        {/* <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(item?._id)} onChange={(event) => handleCheckboxChange(event, item?._id)} me="10px" /> */}
                                         <Heading size="md" fontWeight={"500"} textTransform={"capitalize"}
                                         >{item?.moduleName}</Heading>
                                     </Flex>
-                                    <Flex>
+                                    {/* <Flex>
                                         <Button size='sm' variant='outline' me={2} color={'green'} onClick={() => handleEditOpen(item)}><EditIcon /></Button>
                                         <Button size='sm' variant='outline' me={2} color={'red'} onClick={() => handleDeleteOpen(item)}><DeleteIcon /></Button>
-                                    </Flex>
+                                    </Flex> */}
                                 </Flex>
                             </Card>
                         </GridItem>
