@@ -350,6 +350,28 @@ const createNewModule = async (req, res) => {
     }
 };
 
+const changeModuleName = async (req, res) => {
+    try {
+        const moduleName = req.body.moduleName;
+
+        let result = await CustomField.findOneAndUpdate(
+            { _id: req.params.id },
+            { $set: { moduleName: moduleName } },
+            { new: true }
+        );
+
+        if (!result) {
+            return res.status(404).json({ success: false, message: 'Module not found' });
+        }
+
+        return res.status(200).json({ message: "Module Name Change Successfully", result });
+
+    } catch (err) {
+        console.error('Failed to create module:', err);
+        return res.status(400).json({ success: false, message: 'Failed to Create module', error: err.toString() });
+    }
+};
+
 const addHeading = async (req, res) => {
     try {
         const result = await CustomField.updateOne({ _id: req.body.moduleId }, { $push: { headings: { $each: req.body.headings } } });
@@ -577,4 +599,4 @@ const changeFieldsBelongsTo = async (req, res) => {
     }
 };
 
-module.exports = { index, add, editWholeFieldsArray, editSingleField, view, deleteField, deleteManyFields, createNewModule, addHeading, editSingleHeading, editWholeHeadingsArray, deleteHeading, deleteManyHeadings, changeIsTableField, changeIsTableFields, changeFieldsBelongsTo };
+module.exports = { index, add, editWholeFieldsArray, editSingleField, view, changeModuleName, deleteField, deleteManyFields, createNewModule, addHeading, editSingleHeading, editWholeHeadingsArray, deleteHeading, deleteManyHeadings, changeIsTableField, changeIsTableFields, changeFieldsBelongsTo };
