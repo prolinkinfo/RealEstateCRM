@@ -7,6 +7,7 @@ import CommonCheckTable from "components/checkTable/checktable";
 import { IoIosArrowBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import RoleModal from "./components/roleModal";
+import AddRole from "./Add";
 
 const Index = () => {
   let title = 'Roles'
@@ -14,6 +15,7 @@ const Index = () => {
   const [roleModal, setRoleModal] = useState(false);
   const [access, setAccess] = useState([])
   const [roleId, setRoleId] = useState('')
+  const [addRoleModal, setAddRoleModal] = useState(false);
   const [accessRole, setAccessRole] = useState([])
   const [roleName, setRoleName] = useState('')
   const columns = [
@@ -109,7 +111,9 @@ const Index = () => {
         deleteMany={true}
         access={true}
         ManageGrid={false}
+        onOpen={onOpen}
       />
+      <AddRole isOpen={isOpen} size={"sm"} setAction={setAction} onClose={onClose} />
       {access && <RoleModal isOpen={roleModal}
         setRoleModal={setRoleModal}
         onOpen={onOpen}

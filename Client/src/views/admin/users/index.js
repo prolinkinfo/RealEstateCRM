@@ -173,7 +173,7 @@ const Index = (props) => {
                 setSelectedColumns={setSelectedColumns}
                 isOpen={isOpen}
                 onClose={onclose}
-                access={'true'}
+                access={true}
                 onOpen={onOpen}
                 selectedValues={selectedValues}
                 setSelectedValues={setSelectedValues}
