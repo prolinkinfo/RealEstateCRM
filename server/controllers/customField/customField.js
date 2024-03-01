@@ -354,7 +354,7 @@ const changeModuleName = async (req, res) => {
     try {
         const moduleName = req.body.moduleName;
 
-        let result = await Lead.findOneAndUpdate(
+        let result = await CustomField.findOneAndUpdate(
             { _id: req.params.id },
             { $set: { moduleName: moduleName } },
             { new: true }
