@@ -187,7 +187,7 @@ import AdvanceSearchUsingCustomFields from "../search/advanceSearch";
 import DataNotFound from "../notFoundData";
 
 const CommonCheckTable = (props) => {
-    const { isLoding, title, columnData, dataColumn, tableData, allData, setSearchedData, deleteMany, setDisplaySearchData, displaySearchData, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, AdvanceSearch, BackButton, getTagValuesOutside, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
+    const { isLoding, title, columnData, dataColumn, tableData, allData, ManageGrid, setSearchedData, deleteMany, setDisplaySearchData, displaySearchData, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, AdvanceSearch, BackButton, getTagValuesOutside, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
 
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -369,10 +369,10 @@ const CommonCheckTable = (props) => {
                                 {title} (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
                             </Text>
                             {/* <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={setGetTagValues} setGopageValue={setGopageValue} /> */}
-                            {title !== 'Reports' && <CustomSearchInput setSearchbox={setSearchboxOutside ? setSearchboxOutside : setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchboxOutside ? searchboxOutside : searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={props.setGetTagValuesOutside ? props.setGetTagValuesOutside : setGetTagValues} setGopageValue={setGopageValue} />}
+                            {title !== 'Reports' || title !== 'Roles' && <CustomSearchInput setSearchbox={setSearchboxOutside ? setSearchboxOutside : setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchboxOutside ? searchboxOutside : searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={props.setGetTagValuesOutside ? props.setGetTagValuesOutside : setGetTagValues} setGopageValue={setGopageValue} />}
                             {
                                 AdvanceSearch ? AdvanceSearch :
-                                    title !== 'Reports' && <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} mt={{ sm: "5px", md: "0" }} size="sm" onClick={() => setAdvaceSearch(true)}>Advance Search</Button>
+                                    title !== 'Reports' || title !== 'Roles' && <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} mt={{ sm: "5px", md: "0" }} size="sm" onClick={() => setAdvaceSearch(true)}>Advance Search</Button>
                             }
                             {props.displaySearchData ? <Button variant="outline" colorScheme='red' size="sm" ms={2} onClick={() => handleClear()}>Clear</Button> : ""}
                             {(selectedValues?.length > 0 && access?.delete && !deleteMany) && <DeleteIcon cursor={"pointer"} onClick={() => setDelete(true)} color={'red'} ms={2} />}
@@ -390,7 +390,7 @@ const CommonCheckTable = (props) => {
                         tableCustomFields={tableCustomFields}
                         setSearchbox={setSearchbox}
                     />
-                    {title !== 'Reports' && <GridItem colSpan={{ base: 12, md: 4 }} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
+                    {ManageGrid !== 'true' && <GridItem colSpan={{ base: 12, md: 4 }} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
                         <Menu isLazy  >
                             <MenuButton p={4}>
                                 <BsColumnsGap />
@@ -405,8 +405,8 @@ const CommonCheckTable = (props) => {
                                 <MenuItem width={"165px"} onClick={() => handleExportLeads('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem>
                             </MenuList>
                         </Menu>
-                            {access?.create || access === 'true' && <Button onClick={() => handleClick()} size="sm" variant="brand" leftIcon={<AddIcon />}>Add New</Button>}
-                            {BackButton && BackButton}
+                        {access?.create || access === 'true' && <Button onClick={() => handleClick()} size="sm" variant="brand" leftIcon={<AddIcon />}>Add New</Button>}
+                        {BackButton && BackButton}
                     </GridItem>}
                     <HStack spacing={4} mb={2}>
                         {(props.getTagValuesOutSide || []).concat(getTagValues || []).map((item) => (
