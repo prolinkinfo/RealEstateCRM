@@ -79,7 +79,7 @@ export default function RoleTable(props) {
           lineHeight='100%'>
           {title}  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
         </Text>
-     {user?.role === 'superAdmin' &&   <Button onClick={() => setRoleModal(true)} leftIcon={<LiaCriticalRole />} size="sm" colorScheme="gray" >Change Role</Button>}
+        {user?.role === 'superAdmin' && <Button variant='brand' onClick={() => setRoleModal(true)} leftIcon={<LiaCriticalRole />} size="sm" colorScheme="gray" >Change Role</Button>}
       </Flex>
       <Box overflowY={'auto'} className="table-container-property" >
         <Table  {...getTableProps()} variant='simple' color='gray.500' mb='24px'>

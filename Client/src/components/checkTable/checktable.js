@@ -390,24 +390,25 @@ const CommonCheckTable = (props) => {
                         tableCustomFields={tableCustomFields}
                         setSearchbox={setSearchbox}
                     />
-                    {ManageGrid !== 'true' && <GridItem colSpan={{ base: 12, md: 4 }} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
-                        <Menu isLazy  >
-                            <MenuButton p={4}>
-                                <BsColumnsGap />
-                            </MenuButton>
-                            <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} zIndex={2} >
-                                <MenuItem onClick={() => setManageColumns(true)} width={"165px"}> Manage Columns
-                                </MenuItem>
-                                {typeof setIsImport === "function" && <MenuItem width={"165px"} onClick={() => setIsImport(true)}> Import {title}
-                                </MenuItem>}
-                                <MenuDivider />
-                                <MenuItem width={"165px"} onClick={() => handleExportLeads('csv')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as CSV' : 'Export as CSV'}</MenuItem>
-                                <MenuItem width={"165px"} onClick={() => handleExportLeads('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem>
-                            </MenuList>
-                        </Menu>
-                        {access?.create || access === 'true' && <Button onClick={() => handleClick()} size="sm" variant="brand" leftIcon={<AddIcon />}>Add New</Button>}
+                    <GridItem colSpan={{ base: 12, md: 4 }} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
+                        {ManageGrid !== false &&
+                            <Menu isLazy  >
+                                <MenuButton p={4}>
+                                    <BsColumnsGap />
+                                </MenuButton>
+                                <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} zIndex={2} >
+                                    <MenuItem onClick={() => setManageColumns(true)} width={"165px"}> Manage Columns
+                                    </MenuItem>
+                                    {typeof setIsImport === "function" && <MenuItem width={"165px"} onClick={() => setIsImport(true)}> Import {title}
+                                    </MenuItem>}
+                                    <MenuDivider />
+                                    <MenuItem width={"165px"} onClick={() => handleExportLeads('csv')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as CSV' : 'Export as CSV'}</MenuItem>
+                                    <MenuItem width={"165px"} onClick={() => handleExportLeads('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem>
+                                </MenuList>
+                            </Menu>}
+                        {(access?.create || access === true) && <Button onClick={() => handleClick()} size="sm" variant="brand" leftIcon={<AddIcon />}>Add New</Button>}
                         {BackButton && BackButton}
-                    </GridItem>}
+                    </GridItem>
                     <HStack spacing={4} mb={2}>
                         {(props.getTagValuesOutSide || []).concat(getTagValues || []).map((item) => (
                             <Tag

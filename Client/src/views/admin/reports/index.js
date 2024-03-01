@@ -55,8 +55,8 @@ const Report = () => {
                     allData={data}
                     tableData={data}
                     tableCustomFields={[]}
-                    deleteMany={'true'}
-                    ManageGrid={'true'}
+                    deleteMany={true}
+                    ManageGrid={false}
                 />
             </Card>
         </div>

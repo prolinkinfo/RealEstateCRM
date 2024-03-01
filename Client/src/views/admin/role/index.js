@@ -105,9 +105,9 @@ const Index = () => {
         tableData={data}
         tableCustomFields={[]}
         BackButton={<Button onClick={() => navigate('/admin-setting')} variant="brand" size="sm" leftIcon={<IoIosArrowBack />} ml={2}>Back</Button>}
-        deleteMany={'true'}
-        access={'true'}
-        ManageGrid={'true'}
+        deleteMany={true}
+        access={true}
+        ManageGrid={false}
       />
       {access && <RoleModal isOpen={roleModal}
         setRoleModal={setRoleModal}
