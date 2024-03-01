@@ -564,7 +564,14 @@ const changeIsTableFields = async (req, res) => {
         return res.status(400).json({ success: false, message: 'Failed to change ', error: err.toString() });
     }
 };
-
+const deletmodule = async (req, res) => {
+    try {
+        const module = await CustomField.findByIdAndUpdate(req.params.id, { deleted: true });
+        res.status(200).json({ message: "Module delete successfully", module })
+    } catch (err) {
+        res.status(404).json({ message: "error", err })
+    }
+}
 const changeFieldsBelongsTo = async (req, res) => {
     try {
         const headingId = req.params.id;
@@ -599,4 +606,4 @@ const changeFieldsBelongsTo = async (req, res) => {
     }
 };
 
-module.exports = { index, add, editWholeFieldsArray, editSingleField, view, changeModuleName, deleteField, deleteManyFields, createNewModule, addHeading, editSingleHeading, editWholeHeadingsArray, deleteHeading, deleteManyHeadings, changeIsTableField, changeIsTableFields, changeFieldsBelongsTo };
+module.exports = { index, add, editWholeFieldsArray, editSingleField, view, changeModuleName, deleteField, deleteManyFields, deletmodule, createNewModule, addHeading, editSingleHeading, editWholeHeadingsArray, deleteHeading, deleteManyHeadings, changeIsTableField, changeIsTableFields, changeFieldsBelongsTo };
