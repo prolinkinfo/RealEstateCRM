@@ -93,12 +93,12 @@ const AddTask = (props) => {
     return (
         <Modal isOpen={isOpen} size={'xl'} >
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent height={"600px"}>
                 <ModalHeader justifyContent='space-between' display='flex' >
                     Create Task
                     <IconButton onClick={() => props.from ? onClose(false) : onClose()} icon={<CloseIcon />} />
                 </ModalHeader>
-                <ModalBody>
+                <ModalBody overflowY={"auto"} height={"700px"}>
                     {/* Contact Model  */}
                     <ContactModel isOpen={contactModelOpen} data={assignmentToData} onClose={setContactModel} fieldName='assignmentTo' setFieldValue={setFieldValue} />
                     {/* Lead Model  */}
