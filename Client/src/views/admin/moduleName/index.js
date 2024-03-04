@@ -98,7 +98,7 @@ const Index = () => {
                                 <Card>
                                     <Flex alignItems={"center"} justifyContent={"space-between"}>
                                         <Flex>
-                                            <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(item?._id)} onChange={(event) => handleCheckboxChange(event, item?._id)} me="10px" />
+                                            <Checkbox disabled={item.moduleName === 'Property' || item.moduleName === 'Contact' || item.moduleName === 'Lead'} colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(item?._id)} onChange={(event) => handleCheckboxChange(event, item?._id)} me="10px" />
                                             <Heading size="md" fontWeight={"500"} textTransform={"capitalize"}
                                             >{item?.moduleName}</Heading>
                                         </Flex>
