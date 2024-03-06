@@ -89,9 +89,9 @@ import { SearchIcon } from "@chakra-ui/icons";
 import { CiMenuKebab } from 'react-icons/ci';
 import EmailAdvanceSearch from './components/EmailAdvanceSearch';
 import moment from 'moment';
-import Add from './add';
 import { MdLeaderboard } from 'react-icons/md';
 import { IoIosContact } from 'react-icons/io';
+import AddEmailHistory from './add';
 
 const Index = (props) => {
     const title = "Email";
@@ -248,7 +248,7 @@ const Index = (props) => {
                 setSearchbox={setSearchboxOutside}
             />
 
-            <Add isOpen={isOpen} size={"sm"} onClose={onClose} setAction={setAction} />
+            <AddEmailHistory isOpen={isOpen} size={"sm"} onClose={onClose} setAction={setAction} />
         </div>
     )
 }
