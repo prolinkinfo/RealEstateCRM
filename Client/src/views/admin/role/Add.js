@@ -73,7 +73,7 @@ const AddRole = (props) => {
                                 fontWeight='500'
                                 borderColor={errors.roleName && touched.roleName ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.roleName && touched.roleName && errors.roleName}</Text>
+                            <Text mb='10px' fontSize={'sm'} color={'red'}> {errors.roleName && touched.roleName && errors.roleName}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -88,7 +88,7 @@ const AddRole = (props) => {
                                 fontWeight='500'
                                 borderColor={errors.description && touched.description ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.description && touched.description && errors.description}</Text>
+                            <Text mb='10px' fontSize={'sm'} color={'red'}> {errors.description && touched.description && errors.description}</Text>
                         </GridItem>
                     </Grid>
 

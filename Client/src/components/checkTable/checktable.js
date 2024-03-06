@@ -491,8 +491,9 @@ const CommonCheckTable = (props) => {
                                                     if (cell?.column.Header === item.Header) {
                                                         if (item.cell && typeof item.cell === 'function') {
                                                             data = (
-                                                                <Flex align="center">
-                                                                    <Text color={textColor} fontSize="sm" fontWeight="700">
+                                                                <Flex Flex align="center" justifyContent={item?.Header === 'Action' && 'center'
+                                                                }>
+                                                                    <Text color={textColor} fontSize="sm" fontWeight="700" >
                                                                         {item.cell(cell) === ' ' ? '-' : item.cell(cell)}
                                                                     </Text>
                                                                 </Flex>
@@ -500,7 +501,7 @@ const CommonCheckTable = (props) => {
                                                         }
                                                         else {
                                                             data = (
-                                                                <Flex align="center">
+                                                                <Flex align="center" >
                                                                     {item.Header === "#" && <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues?.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />}
                                                                     <Text color={textColor} fontSize="sm" fontWeight="700">
                                                                         {item.Header === "#" ? cell?.row?.index + 1 : cell?.value ? cell?.value : '-'}
@@ -561,7 +562,7 @@ const CommonCheckTable = (props) => {
                     </ModalContent>
                 </Modal>
 
-            </Card>
+            </Card >
         </>
     );
 }

@@ -123,7 +123,7 @@ const Index = (props) => {
         { Header: 'sender Name', accessor: 'senderName' },
         { Header: "recipient", accessor: "createByName", },
         {
-            Header: "Realeted To", cell: ({ row }) => (
+            Header: "Realeted To", accessor: "realeted", cell: ({ row }) => (
                 <Text  >
                     {row?.original.createBy && contactAccess?.view ? <Link to={`/contactView/${row?.original.createBy}`}>
                         <Text

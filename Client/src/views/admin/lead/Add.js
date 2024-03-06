@@ -99,7 +99,7 @@ const Add = (props) => {
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerHeader alignItems={"center"} justifyContent='space-between' display='flex'  >
-                        Add leads
+                        Add Lead
                         <IconButton onClick={props.onClose} icon={<CloseIcon />} />
                     </DrawerHeader>
                     <DrawerBody>
