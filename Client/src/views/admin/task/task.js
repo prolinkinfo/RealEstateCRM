@@ -90,7 +90,7 @@
 
 import { useEffect, useState } from 'react';
 import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
-import { Button, Flex, Menu, MenuButton, MenuItem, MenuList, Text, useDisclosure } from '@chakra-ui/react';
+import { Button, Flex, Menu, MenuButton, MenuItem, MenuList, Select, Text, useDisclosure } from '@chakra-ui/react';
 import { getApi } from 'services/api';
 import CheckTable from './components/CheckTable';
 import AddTask from './components/addTask';
@@ -103,6 +103,7 @@ import EditTask from './components/editTask';
 import EventView from './eventView';
 import DeleteTask from './components/deleteTask';
 import ImportModal from '../lead/components/ImportModal';
+import { putApi } from 'services/api';
 
 const Task = () => {
     const title = "Tasks";
@@ -132,9 +133,36 @@ const Task = () => {
             isSortable: false,
             width: 5
         },
-        { Header: 'Title', accessor: 'title', type: 'text', formikType: '' },
+        {
+            Header: 'Title', accessor: 'title', type: 'text', formikType: '', cell: (cell) => (
+                <div className="selectOpt">
+                    <Text
+                        onClick={() => handleDateClick(cell)}
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.value}
+                    </Text>
+                </div>
+            )
+        },
         { Header: "Related", accessor: "category", type: 'text', formikType: '' },
-        { Header: "Status", accessor: "status", type: 'select', formikType: '' },
+        {
+            Header: "Status", accessor: "status", type: 'select', formikType: '', cell: (cell) => (
+                <div className="selectOpt">
+                    <Select className={changeStatus(cell)} onChange={(e) => setStatusData(cell, e)} height={7} width={130} value={cell?.value} style={{ fontSize: "14px" }}>
+                        <option value='completed'>Completed</option>
+                        <option value='todo'>Todo</option>
+                        <option value='onHold'>On Hold</option>
+                        <option value='inProgress'>In Progress</option>
+                        <option value='pending'>Pending</option>
+                    </Select>
+                </div>
+            )
+        },
         { Header: "Assign To", accessor: "assignmentToName", type: 'text', formikType: '' },
         { Header: "Start Date", accessor: "start", type: 'date', formikType: '' },
         { Header: "End Date", accessor: "end", type: 'date', formikType: '' },
@@ -164,7 +192,41 @@ const Task = () => {
         setData(result.data);
         setIsLoding(false)
     }
+    const setStatusData = async (cell, e) => {
+        try {
+            setIsLoding(true)
+            let response = await putApi(`api/task/changeStatus/${cell?.row?.original?._id}`, { status: e.target.value });
+            if (response.status === 200) {
+                setAction((pre) => !pre)
+            }
+        } catch (e) {
+            console.log(e);
+        }
+        finally {
+            setIsLoding(false)
+        }
+    }
+    const changeStatus = (cell) => {
+        switch (cell.value) {
+            case 'pending':
+                return 'pending';
+            case 'completed':
+                return 'completed';
+            case 'todo':
+                return 'toDo';
+            case 'onHold':
+                return 'onHold';
+            case 'inProgress':
+                return 'inProgress';
+            default:
+                return '';
+        }
 
+    }
+    const handleDateClick = (cell) => {
+        setId(cell?.row?.values?._id)
+        setEventView(true)
+    }
     const [columns, setColumns] = useState([...tableColumns]);
     const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
     const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))

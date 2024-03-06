@@ -135,12 +135,12 @@ const EditTask = (props) => {
     return (
         <Modal isOpen={isOpen} size={'xl'} >
             {!props.from && <ModalOverlay />}
-            <ModalContent overflowY={"auto"} >
+            <ModalContent overflowY={"auto"} height={"600px"}>
                 <ModalHeader justifyContent='space-between' display='flex' >
                     Edit Task
                     <IconButton onClick={() => onClose(false)} icon={<CloseIcon />} />
                 </ModalHeader>
-                <ModalBody >
+                <ModalBody overflowY={"auto"} height={"700px"}>
                     {/* Contact Model  */}
                     <ContactModel isOpen={contactModelOpen} data={assignmentToData} onClose={setContactModel} values={values} fieldName='assignmentTo' setFieldValue={setFieldValue} />
                     {/* Lead Model  */}

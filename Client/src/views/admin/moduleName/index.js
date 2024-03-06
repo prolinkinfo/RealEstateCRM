@@ -90,34 +90,41 @@ const Index = () => {
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
                     <Spinner />
                 </Flex>
-                :
-                <Grid templateColumns="repeat(12, 1fr)" gap={3}>
-                    {moduleData?.map((item, i) => (
+                : moduleData.length > 0 ?
+                    <Grid templateColumns="repeat(12, 1fr)" gap={3}>
+                        {moduleData?.map((item, i) => (
 
-                        <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }} key={i}>
-                            <Card>
-                                <Flex alignItems={"center"} justifyContent={"space-between"}>
-                                    <Flex>
-                                        {/* <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(item?._id)} onChange={(event) => handleCheckboxChange(event, item?._id)} me="10px" /> */}
-                                        <Heading size="md" fontWeight={"500"} textTransform={"capitalize"}
-                                        >{item?.moduleName}</Heading>
+                            <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }} key={i}>
+                                <Card>
+                                    <Flex alignItems={"center"} justifyContent={"space-between"}>
+                                        <Flex>
+                                            <Checkbox disabled={item.moduleName === 'Property' || item.moduleName === 'Contact' || item.moduleName === 'Lead'} colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(item?._id)} onChange={(event) => handleCheckboxChange(event, item?._id)} me="10px" />
+                                            <Heading size="md" fontWeight={"500"} textTransform={"capitalize"}
+                                            >{item?.moduleName}</Heading>
+                                        </Flex>
+                                        <Flex>
+                                            <Button size='sm' disabled={item.moduleName === 'Property' || item.moduleName === 'Contact' || item.moduleName === 'Lead'} variant='outline' me={2} color={'green'} onClick={() => handleEditOpen(item)}><EditIcon /></Button>
+                                            <Button size='sm' disabled={item.moduleName === 'Property' || item.moduleName === 'Contact' || item.moduleName === 'Lead'} variant='outline' me={2} color={'red'} onClick={() => handleDeleteOpen(item)}><DeleteIcon /></Button>
+                                        </Flex>
                                     </Flex>
-                                    {/* <Flex>
-                                        <Button size='sm' variant='outline' me={2} color={'green'} onClick={() => handleEditOpen(item)}><EditIcon /></Button>
-                                        <Button size='sm' variant='outline' me={2} color={'red'} onClick={() => handleDeleteOpen(item)}><DeleteIcon /></Button>
-                                    </Flex> */}
-                                </Flex>
-                            </Card>
-                        </GridItem>
-                    ))}
-                </Grid>}
-            {!moduleData.length > 0 &&
+                                </Card>
+                            </GridItem>
+                        ))}
+                    </Grid> :
+                    <Card mt='5'>
+                        <Text textAlign={'center'} width="100%" color={'gray.500'} fontSize="sm" fontWeight="700">
+                            <DataNotFound />
+                        </Text>
+                    </Card>
+            }
+            {/* {
+                isLoding == false && moduleData.length <= 0 &&
                 <Card mt='5'>
                     <Text textAlign={'center'} width="100%" color={'gray.500'} fontSize="sm" fontWeight="700">
                         <DataNotFound />
                     </Text>
                 </Card>
-            }
+            } */}
 
             <Add isOpen={addModal} onClose={handleAddClose} fetchData={fetchData} setAction={setAction} />
             <Edit isOpen={editModal} onClose={handleEditClose} selectedId={selectedId} editdata={editdata} setAction={setAction} fetchData={fetchData} />
