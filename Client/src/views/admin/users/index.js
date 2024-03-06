@@ -162,10 +162,10 @@ const Index = (props) => {
                 dataColumn={dataColumn}
                 allData={data}
                 tableData={displaySearchData ? searchedData : data}
-                displaySearchData={displaySearchData}
-                setDisplaySearchData={setDisplaySearchData}
-                searchedData={searchedData}
-                setSearchedData={setSearchedData}
+                searchDisplay={displaySearchData}
+                setSearchDisplay={setDisplaySearchData}
+                searchedDataOut={searchedData}
+                setSearchedDataOut={setSearchedData}
                 tableCustomFields={[]}
                 action={action}
                 setAction={setAction}

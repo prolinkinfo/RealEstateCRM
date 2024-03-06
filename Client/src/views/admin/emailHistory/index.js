@@ -89,9 +89,9 @@ import { SearchIcon } from "@chakra-ui/icons";
 import { CiMenuKebab } from 'react-icons/ci';
 import EmailAdvanceSearch from './components/EmailAdvanceSearch';
 import moment from 'moment';
-import Add from './add';
 import { MdLeaderboard } from 'react-icons/md';
 import { IoIosContact } from 'react-icons/io';
+import AddEmailHistory from './add';
 
 const Index = (props) => {
     const title = "Email";
@@ -210,11 +210,11 @@ const Index = (props) => {
                 columnData={columns}
                 dataColumn={dataColumn}
                 allData={data}
-                tableData={displaySearchData ? searchedData : data}
-                displaySearchData={displaySearchData}
-                setDisplaySearchData={setDisplaySearchData}
-                searchedData={searchedData}
-                setSearchedData={setSearchedData}
+                tableData={data}
+                searchDisplay={displaySearchData}
+                setSearchDisplay={setDisplaySearchData}
+                searchedDataOut={searchedData}
+                setSearchedDataOut={setSearchedData}
                 tableCustomFields={[]}
                 access={permission}
                 action={action}
@@ -248,7 +248,7 @@ const Index = (props) => {
                 setSearchbox={setSearchboxOutside}
             />
 
-            <Add isOpen={isOpen} size={"sm"} onClose={onClose} setAction={setAction} />
+            <AddEmailHistory isOpen={isOpen} size={"sm"} onClose={onClose} setAction={setAction} />
         </div>
     )
 }

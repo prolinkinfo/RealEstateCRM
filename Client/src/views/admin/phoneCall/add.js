@@ -116,7 +116,7 @@ const AddPhoneCall = (props) => {
                                     <Radio value='Lead'>Lead</Radio>
                                 </Stack>
                             </RadioGroup>
-                            <Text mb='10px' color={'red'}> {errors.category && touched.category && errors.category}</Text>
+                            <Text mb='10px' fontSize='sm' color={'red'}> {errors.category && touched.category && errors.category}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             {values.category === "Contact" ?
@@ -141,7 +141,7 @@ const AddPhoneCall = (props) => {
                                             </Select>
                                             <IconButton onClick={() => setContactModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
                                         </Flex>
-                                        <Text mb='10px' color={'red'}> {errors.createBy && touched.createBy && errors.createBy}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.createBy && touched.createBy && errors.createBy}</Text>
                                     </GridItem>
                                 </>
                                 : values.category === "Lead" ?
@@ -167,7 +167,7 @@ const AddPhoneCall = (props) => {
                                                 </Select>
                                                 <IconButton onClick={() => setLeadModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
                                             </Flex>
-                                            <Text mb='10px' color={'red'}> {errors.createByLead && touched.createByLead && errors.createByLead}</Text>
+                                            <Text mb='10px' fontSize='sm' color={'red'}> {errors.createByLead && touched.createByLead && errors.createByLead}</Text>
                                         </GridItem>
                                     </>
                                     : ''
@@ -201,7 +201,7 @@ const AddPhoneCall = (props) => {
                                 fontWeight='500'
                                 borderColor={errors?.startDate && touched?.startDate ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.startDate && touched.startDate && errors.startDate}</Text>
+                            <Text mb='10px' fontSize='sm' color={'red'}> {errors.startDate && touched.startDate && errors.startDate}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -233,7 +233,7 @@ const AddPhoneCall = (props) => {
                                 fontWeight='500'
                                 borderColor={errors.callDuration && touched.callDuration ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.callDuration && touched.callDuration && errors.callDuration}</Text>
+                            <Text mb='10px' fontSize='sm' color={'red'}> {errors.callDuration && touched.callDuration && errors.callDuration}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -249,7 +249,7 @@ const AddPhoneCall = (props) => {
                                 fontWeight='500'
                                 borderColor={errors.callNotes && touched.callNotes ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.callNotes && touched.callNotes && errors.callNotes}</Text>
+                            <Text mb='10px' fontSize='sm' color={'red'}> {errors.callNotes && touched.callNotes && errors.callNotes}</Text>
                         </GridItem>
 
                     </Grid>
@@ -257,7 +257,7 @@ const AddPhoneCall = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' size="sm"  disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Save'}</Button>
+                    <Button variant='brand' size="sm" disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Save'}</Button>
                     <Button size="sm" sx={{
                         marginLeft: 2,
                         textTransform: "capitalize",
