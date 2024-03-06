@@ -103,8 +103,8 @@ const Index = () => {
     const [permission, emailAccess, callAccess] = HasAccess(['Lead', 'Email', 'Call']);
     const [isLoding, setIsLoding] = useState(false);
     const [data, setData] = useState([]);
-    const [displaySearchData, setDisplaySearchData] = useState(false);
-    const [searchedData, setSearchedData] = useState([]);
+    // const [displaySearchData, setDisplaySearchData] = useState(false);
+    // const [searchedData, setSearchedData] = useState([]);
     const [tableColumns, setTableColumns] = useState([]);
     const [columns, setColumns] = useState([]);
     const [dataColumn, setDataColumn] = useState([]);
@@ -187,11 +187,12 @@ const Index = () => {
                             columnData={columns}
                             dataColumn={dataColumn}
                             allData={data}
-                            tableData={displaySearchData ? searchedData : data}
-                            displaySearchData={displaySearchData}
-                            setDisplaySearchData={setDisplaySearchData}
-                            searchedData={searchedData}
-                            setSearchedData={setSearchedData}
+                            // tableData={displaySearchData ? searchedData : data}
+                            tableData={data}
+                            // displaySearchData={displaySearchData}
+                            // setDisplaySearchData={setDisplaySearchData}
+                            // searchedData={searchedData}
+                            // setSearchedData={setSearchedData}
                             tableCustomFields={leadData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
                             access={permission}
                             action={action}

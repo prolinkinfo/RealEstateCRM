@@ -7,7 +7,7 @@ import Spinner from 'components/spinner/Spinner';
 
 
 const UserAdvanceSearch = (props) => {
-    const { state, allData, advanceSearch, setAdvanceSearch, isLoding, setGetTagValues, setSearchedData, setDisplaySearchData, setSearchClear, setSearchbox } = props;
+    const { state, allData, advanceSearch, setAdvanceSearch, isLoding, setGetTagValues, setSearchedData, setDisplaySearchData, setSearchbox } = props;
 
     const initialValues = {
         firstName: '',
@@ -29,13 +29,12 @@ const UserAdvanceSearch = (props) => {
                     (!values?.username || (item?.username && item?.username.toLowerCase().includes(values?.username?.toLowerCase()))) &&
                     (!values?.lastName || (item?.lastName && item?.lastName.toLowerCase().includes(values?.lastName?.toLowerCase())))
             )
-            let getValue = [values.firstName, values?.username, values?.lastName,].filter(value => value);
+            let getValue = [values.firstName, values?.username, values?.lastName].filter(value => value);
+            resetForm();
             setGetTagValues(getValue)
             setSearchedData(searchResult);
             setDisplaySearchData(true)
             setAdvanceSearch(false)
-            setSearchClear(true)
-            resetForm();
             setSearchbox('');
         }
     })

@@ -187,16 +187,19 @@ import AdvanceSearchUsingCustomFields from "../search/advanceSearch";
 import DataNotFound from "../notFoundData";
 
 const CommonCheckTable = (props) => {
-    const { isLoding, title, columnData, dataColumn, tableData, allData, ManageGrid, setSearchedData, deleteMany, setDisplaySearchData, displaySearchData, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, AdvanceSearch, BackButton, getTagValuesOutside, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
+    // const { isLoding, title, columnData, dataColumn, tableData, allData, ManageGrid, setSearchedData, deleteMany, setDisplaySearchData, displaySearchData, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, AdvanceSearch, BackButton, getTagValuesOutside, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
+    const { isLoding, title, columnData, dataColumn, searchedDataOut, setSearchedDataOut, tableData, allData, ManageGrid, deleteMany, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, AdvanceSearch, searchDisplay, setSearchDisplay, BackButton, getTagValuesOutside, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
 
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
 
     // const columns = useMemo(() => columnData, [columnData]);
+    const [displaySearchData, setDisplaySearchData] = useState(false);
+    const [searchedData, setSearchedData] = useState([]);
     const columns = useMemo(() => dataColumn, [dataColumn]);
     const [tempSelectedColumns, setTempSelectedColumns] = useState(dataColumn); // State to track changes
 
-    const data = useMemo(() => tableData, [tableData]);
+    const data = useMemo(() => (AdvanceSearch ? searchDisplay : displaySearchData) ? (AdvanceSearch ? searchedDataOut : searchedData) : tableData, [(AdvanceSearch ? searchDisplay : displaySearchData) ? (AdvanceSearch ? searchedDataOut : searchedData) : tableData]);
     const [manageColumns, setManageColumns] = useState(false);
     const [csvColumns, setCsvColumns] = useState([]);
     // const [searchbox, setSearchbox] = useState(searchboxOutside ? searchboxOutside : '');
@@ -240,12 +243,16 @@ const CommonCheckTable = (props) => {
     }
 
     const handleSearch = (results) => {
-        setSearchedData(results);
+        AdvanceSearch ? setSearchedDataOut(results) : setSearchedData(results);
     };
 
     const handleClear = () => {
-        props.setDisplaySearchData(false);
-        setSearchbox('');
+        AdvanceSearch ? props.setSearchDisplay(false) : setDisplaySearchData(false)
+        if (searchboxOutside) {
+            setSearchboxOutside('')
+        } else {
+            setSearchbox('');
+        }
         setGetTagValues([]);
         if (props.getTagValuesOutSide) {
             setGetTagValuesOutside([]);
@@ -336,7 +343,7 @@ const CommonCheckTable = (props) => {
     };
 
     useEffect(() => {
-        setSearchedData && setSearchedData(data);
+        AdvanceSearch ? setSearchedDataOut && setSearchedDataOut(data) : setSearchedData && setSearchedData(data);
     }, []);
 
     useEffect(() => {
@@ -369,12 +376,12 @@ const CommonCheckTable = (props) => {
                                 {title} (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
                             </Text>
                             {/* <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={setGetTagValues} setGopageValue={setGopageValue} /> */}
-                            <CustomSearchInput setSearchbox={setSearchboxOutside ? setSearchboxOutside : setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchboxOutside ? searchboxOutside : searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={props.setGetTagValuesOutside ? props.setGetTagValuesOutside : setGetTagValues} setGopageValue={setGopageValue} />
+                            <CustomSearchInput setSearchbox={setSearchboxOutside ? setSearchboxOutside : setSearchbox} setDisplaySearchData={setSearchboxOutside ? props.setSearchDisplay : setDisplaySearchData} searchbox={searchboxOutside ? searchboxOutside : searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={props.setGetTagValuesOutside ? props.setGetTagValuesOutside : setGetTagValues} setGopageValue={setGopageValue} />
                             {
                                 AdvanceSearch ? AdvanceSearch :
                                     <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} mt={{ sm: "5px", md: "0" }} size="sm" onClick={() => setAdvaceSearch(true)}>Advance Search</Button>
                             }
-                            {props.displaySearchData ? <Button variant="outline" colorScheme='red' size="sm" ms={2} onClick={() => handleClear()}>Clear</Button> : ""}
+                            {(AdvanceSearch ? props.searchDisplay : displaySearchData) ? <Button variant="outline" colorScheme='red' size="sm" ms={2} onClick={() => handleClear()}>Clear</Button> : ""}
                             {(selectedValues?.length > 0 && access?.delete && !deleteMany) && <DeleteIcon cursor={"pointer"} onClick={() => setDelete(true)} color={'red'} ms={2} />}
                         </Flex>
                     </GridItem>

@@ -34,7 +34,6 @@ const EmailAdvanceSearch = (props) => {
             setSearchedData(searchResult);
             setDisplaySearchData(true)
             setAdvanceSearch(false)
-            setSearchClear(true)
             resetForm();
             setSearchbox('');
         }
