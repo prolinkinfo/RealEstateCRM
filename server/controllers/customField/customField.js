@@ -376,12 +376,24 @@ const changeModuleName = async (req, res) => {
 
 const addHeading = async (req, res) => {
     try {
-        const result = await CustomField.updateOne({ _id: req.body.moduleId }, { $push: { headings: { $each: req.body.headings } } });
+        const existingField = await CustomField.findOne({ _id: req.body.moduleId });
 
-        if (result?.modifiedCount > 0) {
-            return res.status(200).json({ message: "Headings added successfully", result });
+        if (existingField) {
+            const headingExists = existingField.headings.some(heading => req.body.headings[0].heading.includes(heading.heading));
+
+            if (!headingExists) {
+                // If the heading doesn't exist, perform the update
+                await CustomField.updateOne(
+                    { _id: req.body.moduleId },
+                    { $push: { headings: { $each: req.body.headings } } }
+                );
+                res.status(200).send('Headings added successfully');
+            } else {
+                // Handle the case where the heading already exists
+                res.status(400).send('Heading already exists');
+            }
         } else {
-            return res.status(404).json({ success: false, message: 'Failed to add headings', result });
+            res.status(404).send('Field not found');
         }
 
     } catch (err) {
