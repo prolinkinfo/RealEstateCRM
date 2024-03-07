@@ -245,7 +245,7 @@ const CustomField = () => {
                             <MenuButton as={Button} size='sm' rightIcon={<ChevronDownIcon />} variant="outline">
                                 {heading ? heading : 'Select All Headings'}
                             </MenuButton>
-                            <MenuList>
+                            <MenuList minWidth={"10rem"} maxHeight={'15rem'} overflow={'auto'}>
                                 <MenuItem onClick={() => { setHeading(''); setHeadingId('') }}>Select All Headings</MenuItem>
                                 {data[0]?.headings?.map((item, id) => (
                                     <MenuItem key={id} onClick={() => { setHeading(item.heading); setHeadingId(item._id) }}>{item.heading}</MenuItem>

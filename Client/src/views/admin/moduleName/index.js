@@ -1,5 +1,5 @@
 import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { Button, Checkbox, Flex, Grid, GridItem, Heading, Text, useColorModeValue } from '@chakra-ui/react'
+import { Button, Checkbox, Flex, Grid, GridItem, Heading, Text, Tooltip, useColorModeValue } from '@chakra-ui/react'
 import Card from 'components/card/Card'
 import React, { useEffect, useState } from 'react'
 import { getApi } from 'services/api'
@@ -99,11 +99,14 @@ const Index = () => {
                                     <Flex alignItems={"center"} justifyContent={"space-between"}>
                                         <Flex>
                                             <Checkbox disabled={item.moduleName === 'Property' || item.moduleName === 'Contact' || item.moduleName === 'Lead'} colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(item?._id)} onChange={(event) => handleCheckboxChange(event, item?._id)} me="10px" />
-                                            <Heading size="md" fontWeight={"500"} textTransform={"capitalize"} sx={{
-                                                textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '12rem',
-                                                overflow: 'hidden'
-                                            }}
-                                            >{item?.moduleName}</Heading>
+                                            <Tooltip hasArrow label={item?.moduleName} bg='gray.200' color='gray' textTransform={"capitalize"} fontSize='sm'>
+                                                <Heading size="md" fontWeight={"500"} textTransform={"capitalize"} sx={{
+                                                    textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '6rem',
+                                                    overflow: 'hidden'
+                                                }}
+                                                >{item?.moduleName}</Heading>
+
+                                            </Tooltip>
                                         </Flex>
                                         <Flex>
                                             <Button size='sm' disabled={item.moduleName === 'Property' || item.moduleName === 'Contact' || item.moduleName === 'Lead'} variant='outline' me={2} color={'green'} onClick={() => handleEditOpen(item)}><EditIcon /></Button>
