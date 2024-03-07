@@ -104,6 +104,7 @@ import EventView from './eventView';
 import DeleteTask from './components/deleteTask';
 import ImportModal from '../lead/components/ImportModal';
 import { putApi } from 'services/api';
+import { useLocation } from 'react-router-dom';
 
 const Task = () => {
     const title = "Tasks";
@@ -126,6 +127,8 @@ const Task = () => {
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
     const [permission, leadAccess, contactAccess] = HasAccess(["Task", 'Lead', 'Contact']);
+    const location = useLocation();
+    const state = location.state;
     const tableColumns = [
         {
             Header: "#",
@@ -257,6 +260,7 @@ const Task = () => {
                 setSelectedColumns={setSelectedColumns}
                 isOpen={isOpen}
                 onClose={onclose}
+                state={state}
                 onOpen={onOpen}
                 selectedValues={selectedValues}
                 setSelectedValues={setSelectedValues}
@@ -273,6 +277,7 @@ const Task = () => {
             <TaskAdvanceSearch
                 advanceSearch={advanceSearch}
                 setAdvanceSearch={setAdvanceSearch}
+                state={state}
                 setSearchedData={setSearchedData}
                 setDisplaySearchData={setDisplaySearchData}
                 allData={data}

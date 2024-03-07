@@ -189,7 +189,18 @@ const Index = (props) => {
     const fetchData = async () => {
         setIsLoding(true)
         let result = await getApi(user.role === 'superAdmin' ? 'api/email/' : `api/email/?sender=${user._id}`);
-        setData(result.data);
+        let response = result.data
+        response.forEach(element => {
+
+            if (element.createByLead) {
+                element.realeted = 'Lead'
+            }
+            if (element.createBy) {
+                element.realeted = 'Contact'
+            }
+        });
+        console.log(response)
+        setData(response);
         setIsLoding(false)
     }
 

@@ -188,7 +188,7 @@ import DataNotFound from "../notFoundData";
 
 const CommonCheckTable = (props) => {
     // const { isLoding, title, columnData, dataColumn, tableData, allData, ManageGrid, setSearchedData, deleteMany, setDisplaySearchData, displaySearchData, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, AdvanceSearch, BackButton, getTagValuesOutside, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
-    const { isLoding, title, columnData, dataColumn, searchedDataOut, setSearchedDataOut, tableData, allData, ManageGrid, deleteMany, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, AdvanceSearch, searchDisplay, setSearchDisplay, BackButton, getTagValuesOutside, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
+    const { isLoding, title, columnData, dataColumn, searchedDataOut, setSearchedDataOut, tableData, state, allData, ManageGrid, deleteMany, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, AdvanceSearch, searchDisplay, setSearchDisplay, BackButton, getTagValuesOutside, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
 
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -263,6 +263,23 @@ const CommonCheckTable = (props) => {
     const handleClick = () => {
         onOpen();
     };
+
+    const findStatus = () => {
+        const searchResult = allData?.filter(
+            (item) =>
+                (!state || (item?.status && item?.status.toLowerCase().includes(state?.toLowerCase())))
+        )
+        let getValue = [state || undefined].filter(value => value);
+        setGetTagValues(getValue)
+        AdvanceSearch ? setSearchedDataOut && setSearchedDataOut(searchResult) : setSearchedData && setSearchedData(searchResult);
+        AdvanceSearch ? setSearchDisplay && setSearchDisplay(true) : setDisplaySearchData && setDisplaySearchData(searchResult);
+        // setSearchedData(searchResult);
+        setDisplaySearchData(true)
+        setAdvaceSearch(false)
+    }
+    useEffect(() => {
+        state && findStatus()
+    }, [state, allData]);
 
     let isColumnSelected;
     const toggleColumnVisibility = (columnKey) => {
