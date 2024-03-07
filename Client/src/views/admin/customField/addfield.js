@@ -123,7 +123,7 @@ const Addfield = (props) => {
         },
         onSubmit: (values, { resetForm }) => {
             fetchAddData()
-            resetForm()
+
         },
     });
 
@@ -150,6 +150,7 @@ const Addfield = (props) => {
             if (response.status === 200) {
                 setValidationType('')
                 props.onClose()
+                resetForm()
                 props.fetchData()
             }
             if (!response.response.data?.success) {
