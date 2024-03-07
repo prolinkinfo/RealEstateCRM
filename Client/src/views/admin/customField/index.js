@@ -152,7 +152,7 @@ const CustomField = () => {
                                     <MenuButton as={Button} mr={2} size='sm' rightIcon={<ChevronDownIcon />} variant="outline">
                                         {moduleName ? moduleName : 'Select Module'}
                                     </MenuButton>
-                                    <MenuList minWidth={"10rem"}>
+                                    <MenuList minWidth={"10rem"} maxHeight={'15rem'} overflow={'auto'}>
                                         <MenuItem onClick={() => { setModuleName(''); setData([]); setDataFilter([]); }}>Select Module</MenuItem>
                                         {fields?.map((item, id) => (
                                             <MenuItem key={id} onClick={() => { setModuleName(item.moduleName); setModuleId(item._id); setHeadingId('') }}>{item.moduleName}</MenuItem>
@@ -264,7 +264,7 @@ const CustomField = () => {
                             <Droppable droppableId="droppable">
                                 {(provided) => (
                                     <div ref={provided.innerRef} {...provided.droppableProps}>
-                                    {
+                                        {
                                             dataFilter.length === 0 ?
                                                 <Text
                                                     textAlign={"center"}
@@ -308,8 +308,8 @@ const CustomField = () => {
                                                         </GridItem>
                                                     ))}
                                                 </Grid>
-                                    }
- 
+                                        }
+
                                     </div>
                                 )}
                             </Droppable>
