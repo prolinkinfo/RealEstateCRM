@@ -394,9 +394,7 @@ const changeModuleName = async (req, res) => {
                     let exists = false;
                     while (!exists) {
                         if (mongoose.models[moduleName]) {
-                            console.log(`Module ${moduleName} exists`);
                             exists = true;
-                            return res.status(400).json({ message: `Module ${moduleName} exists` });
                         } else {
                             console.log(`Module ${moduleName} does not exist, waiting...`);
                             await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for 1 second
@@ -406,7 +404,7 @@ const changeModuleName = async (req, res) => {
                 await checkModuleExistence(newModuleName);
 
             } else {
-                return res.status(400).json({ message: `Module ${oldModuleName} does not exist` });
+                console.log(`Module ${oldModuleName} does not exist`)
             }
         };
 
