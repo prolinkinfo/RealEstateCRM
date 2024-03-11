@@ -30,25 +30,11 @@ const initializedSchemas = async () => {
                 // Create Mongoose model
                 mongoose.model(moduleName, moduleSchema, moduleName);
                 console.log(`Schema created for module: ${moduleName}`);
-            } else {
-                // console.log(`Schema for module ${moduleName} already exists`);
             }
         }
     };
 
     createDynamicSchemas(CustomFields);
-
-    // const mongooseModels = mongoose.models;
-    // const schemas = Object.keys(mongooseModels).map(modelName => {
-    //     const model = mongooseModels[modelName];
-    //     return {
-    //         modelName,
-    //         schema: model.schema
-    //     };
-    // });
-
-    // // Log or process the schemas as needed
-    // console.log("All initialized schemas:", schemas);
 
 }
 
