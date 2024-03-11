@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { useFormik } from 'formik'
 import { HSeparator } from 'components/separator/Separator'
 import { postApi } from 'services/api'
-import { validationAddSchema } from 'schema/validationAddSchema'
+import { moduleAddSchema } from 'schema/moduleAddSchema'
 import { toast } from 'react-toastify'
 
 
@@ -19,14 +19,14 @@ const Add = (props) => {
 
     const formik = useFormik({
         initialValues: initialValues,
-        // validationSchema: validationsAddSchema,
+        validationSchema: moduleAddSchema,
         onSubmit: (values, { resetForm }) => {
             AddData()
         },
     });
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
-
+    console.log(errors);
 
     const AddData = async () => {
         try {

@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { useFormik } from 'formik'
 import { HSeparator } from 'components/separator/Separator'
 import { putApi } from 'services/api'
+import { moduleAddSchema } from 'schema/moduleAddSchema'
 
 
 
@@ -18,7 +19,7 @@ const Edit = (props) => {
 
     const formik = useFormik({
         initialValues: initialValues,
-        // validationSchema: validationAddSchema,
+        validationSchema: moduleAddSchema,
         enableReinitialize: true,
         onSubmit: (values, { resetForm }) => {
             EditData()
