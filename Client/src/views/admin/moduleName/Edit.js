@@ -4,12 +4,11 @@ import React, { useState } from 'react'
 import { useFormik } from 'formik'
 import { HSeparator } from 'components/separator/Separator'
 import { putApi } from 'services/api'
-import { validationAddSchema } from 'schema/validationAddSchema'
 
 
 
 const Edit = (props) => {
-    const { onClose, isOpen, fetchData, selectedId, editdata, setAction, fetchViewData } = props;
+    const { onClose, isOpen, fetchData, selectedId, editdata, setAction } = props;
     const [isLoding, setIsLoding] = useState(false)
 
     const initialValues = {
@@ -34,9 +33,7 @@ const Edit = (props) => {
             if (response.status === 200) {
                 onClose()
                 fetchData()
-                if (fetchViewData) {
-                    fetchViewData()
-                }
+
                 setAction((pre) => !pre)
             }
         }

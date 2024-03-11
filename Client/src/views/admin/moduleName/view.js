@@ -17,23 +17,6 @@ const View = (props) => {
         setEditModal(false)
     }
 
-    const fetchViewData = async () => {
-        setIsLoding(true)
-        try {
-            if (selectedId) {
-                let response = await getApi(`api/validation/view/`, selectedId)
-                setData(response.data)
-            }
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setIsLoding(false)
-        }
-    }
-    useEffect(() => {
-        fetchViewData()
-    }, [selectedId, editModal])
-
     return (
         <div>
             <Modal onClose={onClose} isOpen={isOpen} isCentered size="lg">
@@ -61,7 +44,7 @@ const View = (props) => {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
-            <Edit isOpen={editModal} onClose={handleEditClose} selectedId={props.selectedId} editdata={data} setAction={setAction} fetchData={fetchData} fetchViewData={fetchViewData} />
+            <Edit isOpen={editModal} onClose={handleEditClose} selectedId={props.selectedId} editdata={data} setAction={setAction} fetchData={fetchData} />
         </div>
     )
 }
