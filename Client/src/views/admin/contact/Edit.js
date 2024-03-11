@@ -107,7 +107,7 @@ const Edit = (props) => {
             try {
                 setIsLoding(true)
                 response = await getApi('api/contact/view/', props?.selectedId ? props?.selectedId : param.id)
-                setInitialValues(response?.data?.contact)
+                setInitialValues((prev) => ({ ...prev, ...response?.data?.contact }))
                 // values.firstName = response?.data?.contact?.firstName;
                 // values.lastName = response?.data?.contact?.lastName;
                 // values.title = response?.data?.contact?.title;
@@ -169,8 +169,8 @@ const Edit = (props) => {
             <Drawer isOpen={props.isOpen} size={props.size}>
                 <DrawerOverlay />
                 <DrawerContent>
-                    <DrawerHeader justifyContent='space-between' display='flex' >
-                        Edit Contacts
+                    <DrawerHeader alignItems={"center"} justifyContent='space-between' display='flex' >
+                        Edit Contact
                         <IconButton onClick={handleClose} icon={<CloseIcon />} />
                     </DrawerHeader>
                     <DrawerBody>
@@ -822,8 +822,7 @@ const Edit = (props) => {
                     <DrawerFooter>
                         <Button
                             sx={{ textTransform: "capitalize" }}
-                            variant="solid"
-                            colorScheme="green"
+                            variant="brand"
                             type="submit" size="sm"
                             disabled={isLoding ? true : false}
                             onClick={handleSubmit}

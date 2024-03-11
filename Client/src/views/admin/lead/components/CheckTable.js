@@ -74,7 +74,7 @@ import AdvanceSearch from "components/search/advanceSearch";
 import DataNotFound from "components/notFoundData";
 
 export default function CheckTable(props) {
-  const { columnsData, tableData, dataColumn, fetchData, isLoding, setIsLoding, allData, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, callAccess, emailAccess, setAction, action } = props;
+  const { columnsData, tableData, dataColumn, fetchData, isLoding, setIsLoding, allData, state, access, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, callAccess, emailAccess, setAction, action } = props;
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   const [leadData, setLeadData] = useState([])
@@ -172,19 +172,35 @@ export default function CheckTable(props) {
       setAdvaceSearch(false)
       setSearchClear(true)
       resetForm();
+      setSearchbox('');
     }
   })
   const handleClear = () => {
-    setDisplaySearchData(false)
+    setDisplaySearchData(false);
+    navigate('/lead')
   }
 
-  const resetForm1 = () => {
-    setTempSelectedColumns(dynamicColumns)
+  const findStatus = () => {
+    const searchResult = allData?.filter(
+      (item) =>
+        (!state || (item?.leadStatus && item?.leadStatus.toLowerCase().includes(state?.toLowerCase())))
+    )
+    let getValue = [state || undefined].filter(value => value);
+    setGetTagValues(getValue)
+    setSearchedData(searchResult);
+    setDisplaySearchData(true)
+    setAdvaceSearch(false)
+    setSearchClear(true)
   }
 
   useEffect(() => {
     setSearchedData && setSearchedData(data);
   }, []);
+
+  useEffect(() => {
+    state && findStatus()
+  }, [state, allData]);
+
   const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm, dirty } = formik
   const tableInstance = useTable(
     {
@@ -344,7 +360,7 @@ export default function CheckTable(props) {
               >
                 Leads  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
               </Text>
-              <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={dataColumn} onSearch={handleSearch} />
+              <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={dataColumn} onSearch={handleSearch} setGetTagValues={setGetTagValues} />
               <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} mt={{ sm: "5px", md: "0" }} size="sm">Advance Search</Button>
               {displaySearchData ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>Clear</Button> : ""}
               {(selectedValues.length > 0 && access?.delete) && <DeleteIcon cursor={"pointer"} onClick={() => setDelete(true)} color={'red'} ms={2} />}
@@ -377,8 +393,9 @@ export default function CheckTable(props) {
                 borderRadius='full'
                 variant='solid'
                 colorScheme="gray"
+                textTransform={"capitalize"}
               >
-                <TagLabel>{item}</TagLabel>
+                <TagLabel >{item}</TagLabel>
                 {/* <TagCloseButton /> */}
               </Tag>
             ))}

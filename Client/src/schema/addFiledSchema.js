@@ -25,6 +25,6 @@ const labelValidation = yup
 export const addFiledSchema = yup.object({
     name: nameValidation,
     label: labelValidation,
-    type: yup.string().required('Type is required'),
-    belongsTo: yup.string().required('Belongs To is required'),
+    type: yup.string().required('Type is required')
+    // belongsTo: yup.string().required('Belongs To is required'),
 });

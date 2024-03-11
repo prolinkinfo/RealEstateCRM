@@ -52,7 +52,7 @@ const Add = (props) => {
 
     const initialFieldValues = Object.fromEntries(
         (props?.leadData?.fields || []).map(field => [field?.name, ''])
-      );
+    );
 
     const initialValues = {
         ...initialFieldValues,
@@ -98,8 +98,8 @@ const Add = (props) => {
             <Drawer isOpen={props.isOpen} size={props.size}>
                 <DrawerOverlay />
                 <DrawerContent>
-                    <DrawerHeader justifyContent='space-between' display='flex' >
-                        Add leads
+                    <DrawerHeader alignItems={"center"} justifyContent='space-between' display='flex'  >
+                        Add Lead
                         <IconButton onClick={props.onClose} icon={<CloseIcon />} />
                     </DrawerHeader>
                     <DrawerBody>

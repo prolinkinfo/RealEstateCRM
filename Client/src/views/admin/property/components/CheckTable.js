@@ -202,6 +202,7 @@ export default function CheckTable(props) {
       setAdvaceSearch(false)
       setSearchClear(true)
       resetForm();
+      setSearchbox('');
     }
   })
   const handleClear = () => {
@@ -298,7 +299,7 @@ export default function CheckTable(props) {
               >
                 Properties (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
               </Text>
-              <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={dataColumn} onSearch={handleSearch} />
+              <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={dataColumn} onSearch={handleSearch} setGetTagValues={setGetTagValues} />
               <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} mt={{ sm: "5px", md: "0" }} size="sm">Advance Search</Button>
               {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>Clear</Button> : ""}
               {(selectedValues.length > 0 && access?.delete) && <DeleteIcon cursor={"pointer"} onClick={() => setDelete(true)} color={'red'} ms={2} />}
@@ -331,7 +332,9 @@ export default function CheckTable(props) {
                 borderRadius='full'
                 variant='solid'
                 colorScheme="gray"
+                textTransform={"capitalize"}
               >
+
                 <TagLabel>{item}</TagLabel>
                 {/* <TagCloseButton /> */}
               </Tag>

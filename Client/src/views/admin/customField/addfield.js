@@ -2,6 +2,7 @@ import { DeleteIcon } from '@chakra-ui/icons'
 import { Button, Checkbox, Flex, FormLabel, Grid, GridItem, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Spinner, Text } from '@chakra-ui/react'
 import { useFormik } from 'formik'
 import React, { useState } from 'react'
+import { toast } from 'react-toastify'
 import { addFiledSchema } from 'schema'
 import { postApi } from 'services/api'
 import * as yup from 'yup'
@@ -122,7 +123,7 @@ const Addfield = (props) => {
         },
         onSubmit: (values, { resetForm }) => {
             fetchAddData()
-            resetForm()
+
         },
     });
 
@@ -149,7 +150,11 @@ const Addfield = (props) => {
             if (response.status === 200) {
                 setValidationType('')
                 props.onClose()
+                resetForm()
                 props.fetchData()
+            }
+            if (!response.response.data?.success) {
+                toast.error(response.response.data?.message);
             }
         }
         catch {
@@ -244,7 +249,7 @@ const Addfield = (props) => {
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                        Belongs To{headingsData?.length > 0 ? <Text color={"red"}>*</Text> : ''}
+                                        Belongs To
                                         {/* Belongs To */}
                                     </FormLabel>
                                     <Select

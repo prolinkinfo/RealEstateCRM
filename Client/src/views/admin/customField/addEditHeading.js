@@ -1,6 +1,7 @@
 import { Button, Checkbox, Flex, FormLabel, Grid, GridItem, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Spinner, Text } from '@chakra-ui/react'
 import { useFormik } from 'formik'
 import React, { useState, useEffect } from 'react'
+import { toast } from 'react-toastify'
 import { postApi, putApi } from 'services/api'
 import * as yup from 'yup'
 
@@ -52,7 +53,8 @@ const AddEditHeading = (props) => {
             let response = await postApi('api/custom-field/add-heading', addDataPayload);
             if (response.status === 200) {
                 props.onClose(false);
-                props.fetchData();
+            } else {
+                toast.error(response.response.data)
             }
         }
         catch {

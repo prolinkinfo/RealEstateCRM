@@ -27,149 +27,139 @@ import Card from 'components/card/Card';
 function PropertyImport() {
 
     const location = useLocation();
-    const { fileData } = location.state || {};
+    const { fileData, customFields } = location.state || {};
     const [importedFileFields, setImportedFileFields] = useState([]);
     const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
     const [importedFileData, setImportedFileData] = useState([]);
     const [isLoding, setIsLoding] = useState(false);
     const navigate = useNavigate();
     const userId = JSON.parse(localStorage.getItem("user"))?._id;
+    const [filterProperty, setFilterProperty] = useState([]);
 
     const columns = [
         { Header: 'Fields In Crm', accessor: 'crmFields' },
         { Header: 'Fields In File', accessor: 'fileFields' },
     ];
 
-    const fieldsInCrm = [
-        { Header: 'Property Type', accessor: 'propertyType' },
-        { Header: "Property Address", accessor: "propertyAddress" },
-        { Header: "Listing Price", accessor: "listingPrice" },
-        { Header: "Square Footage", accessor: "squareFootage" },
-        { Header: "Number of Bedrooms", accessor: "numberofBedrooms" },
-        { Header: "Number of Bathrooms", accessor: "numberofBathrooms" },
-        { Header: "Year Built", accessor: "yearBuilt" },
-        { Header: "Property Description", accessor: "propertyDescription" },
-        { Header: "Lot Size", accessor: "lotSize" },
-        { Header: "Parking Availability", accessor: "parkingAvailability" },
-        { Header: "Appliances Included", accessor: "appliancesIncluded" },
-        { Header: "Heating And Cooling Systems", accessor: "heatingAndCoolingSystems" },
-        { Header: "Flooring Type", accessor: "flooringType" },
-        { Header: "Exterior Features", accessor: "exteriorFeatures" },
-        { Header: "Community Amenities", accessor: "communityAmenities" },
-        // { Header: "", accessor: "propertyPhotos" },
-        // { Header: "", accessor: "virtualToursOrVideos" },
-        // { Header: "", accessor: "floorPlans" },
-        // { Header: "", accessor: "propertyDocuments" },
-        // { Header: "", accessor: "purchaseHistory" },
-        { Header: "Listing Status", accessor: "listingStatus" },
-        { Header: "Listing Agent Or Team", accessor: "listingAgentOrTeam" },
-        { Header: "Listing Date", accessor: "listingDate" },
-        { Header: "Marketing Description", accessor: "marketingDescription" },
-        { Header: "Multiple Listing Service", accessor: "multipleListingService" },
-        { Header: "Previous Owners", accessor: "previousOwners" },
-        { Header: "Property Taxes", accessor: "propertyTaxes" },
-        { Header: "Homeowners Association", accessor: "homeownersAssociation" },
-        { Header: "Mortgage Information", accessor: "mortgageInformation" },
-        { Header: "Sellers", accessor: "sellers" },
-        { Header: "Buyers", accessor: "buyers" },
-        { Header: "Property Managers", accessor: "propertyManagers" },
-        { Header: "Contractors Or Service Providers", accessor: "contractorsOrServiceProviders" },
-        { Header: "internalNotesOrComments", accessor: "internalNotesOrComments" }
-    ];
+    // const fieldsInCrm = [
+    //     { Header: 'Property Type', accessor: 'propertyType' },
+    //     { Header: "Property Address", accessor: "propertyAddress" },
+    //     { Header: "Listing Price", accessor: "listingPrice" },
+    //     { Header: "Square Footage", accessor: "squareFootage" },
+    //     { Header: "Number of Bedrooms", accessor: "numberofBedrooms" },
+    //     { Header: "Number of Bathrooms", accessor: "numberofBathrooms" },
+    //     { Header: "Year Built", accessor: "yearBuilt" },
+    //     { Header: "Property Description", accessor: "propertyDescription" },
+    //     { Header: "Lot Size", accessor: "lotSize" },
+    //     { Header: "Parking Availability", accessor: "parkingAvailability" },
+    //     { Header: "Appliances Included", accessor: "appliancesIncluded" },
+    //     { Header: "Heating And Cooling Systems", accessor: "heatingAndCoolingSystems" },
+    //     { Header: "Flooring Type", accessor: "flooringType" },
+    //     { Header: "Exterior Features", accessor: "exteriorFeatures" },
+    //     { Header: "Community Amenities", accessor: "communityAmenities" },
+    //     // { Header: "", accessor: "propertyPhotos" },
+    //     // { Header: "", accessor: "virtualToursOrVideos" },
+    //     // { Header: "", accessor: "floorPlans" },
+    //     // { Header: "", accessor: "propertyDocuments" },
+    //     // { Header: "", accessor: "purchaseHistory" },
+    //     { Header: "Listing Status", accessor: "listingStatus" },
+    //     { Header: "Listing Agent Or Team", accessor: "listingAgentOrTeam" },
+    //     { Header: "Listing Date", accessor: "listingDate" },
+    //     { Header: "Marketing Description", accessor: "marketingDescription" },
+    //     { Header: "Multiple Listing Service", accessor: "multipleListingService" },
+    //     { Header: "Previous Owners", accessor: "previousOwners" },
+    //     { Header: "Property Taxes", accessor: "propertyTaxes" },
+    //     { Header: "Homeowners Association", accessor: "homeownersAssociation" },
+    //     { Header: "Mortgage Information", accessor: "mortgageInformation" },
+    //     { Header: "Sellers", accessor: "sellers" },
+    //     { Header: "Buyers", accessor: "buyers" },
+    //     { Header: "Property Managers", accessor: "propertyManagers" },
+    //     { Header: "Contractors Or Service Providers", accessor: "contractorsOrServiceProviders" },
+    //     { Header: "internalNotesOrComments", accessor: "internalNotesOrComments" }
+    // ];
 
+    // const initialValues = {
+    //     propertyType: "",
+    //     propertyAddress: "",
+    //     listingPrice: "",
+    //     squareFootage: "",
+    //     numberofBedrooms: "",
+    //     numberofBathrooms: "",
+    //     yearBuilt: "",
+    //     propertyDescription: "",
+    //     lotSize: "",
+    //     parkingAvailability: "",
+    //     appliancesIncluded: "",
+    //     heatingAndCoolingSystems: "",
+    //     flooringType: "",
+    //     exteriorFeatures: "",
+    //     communityAmenities: "",
+    //     // propertyPhotos: "",
+    //     // virtualToursOrVideos: "",
+    //     // floorPlans: "",
+    //     // propertyDocuments: "",
+    //     // purchaseHistory: "",
+    //     listingStatus: "",
+    //     listingAgentOrTeam: "",
+    //     listingDate: "",
+    //     marketingDescription: "",
+    //     multipleListingService: "",
+    //     previousOwners: "",
+    //     propertyTaxes: "",
+    //     homeownersAssociation: "",
+    //     mortgageInformation: "",
+    //     sellers: "",
+    //     buyers: "",
+    //     propertyManagers: "",
+    //     contractorsOrServiceProviders: "",
+    //     internalNotesOrComments: "",
+    //     createBy: '',
+    //     deleted: '',
+    //     createdDate: ''
+    // };
+
+
+    const initialFieldValues = Object.fromEntries(
+        (customFields || []).map(field => [field?.name, ''])
+    );
     const initialValues = {
-        propertyType: "",
-        propertyAddress: "",
-        listingPrice: "",
-        squareFootage: "",
-        numberofBedrooms: "",
-        numberofBathrooms: "",
-        yearBuilt: "",
-        propertyDescription: "",
-        lotSize: "",
-        parkingAvailability: "",
-        appliancesIncluded: "",
-        heatingAndCoolingSystems: "",
-        flooringType: "",
-        exteriorFeatures: "",
-        communityAmenities: "",
-        // propertyPhotos: "",
-        // virtualToursOrVideos: "",
-        // floorPlans: "",
-        // propertyDocuments: "",
-        // purchaseHistory: "",
-        listingStatus: "",
-        listingAgentOrTeam: "",
-        listingDate: "",
-        marketingDescription: "",
-        multipleListingService: "",
-        previousOwners: "",
-        propertyTaxes: "",
-        homeownersAssociation: "",
-        mortgageInformation: "",
-        sellers: "",
-        buyers: "",
-        propertyManagers: "",
-        contractorsOrServiceProviders: "",
-        internalNotesOrComments: "",
-        createBy: '',
-        deleted: '',
-        createdDate: ''
+        ...initialFieldValues
     };
+
+    const fieldsInCrm = [
+        ...customFields?.map((field) => ({ Header: field?.label, accessor: field?.name, type: field?.type, formikType: field?.validations?.find(obj => obj.hasOwnProperty('formikType')) }))
+    ];
 
     const formik = useFormik({
         initialValues: initialValues,
         onSubmit: (values, { resetForm }) => {
 
-            const propertiesData = importedFileData?.map((item, ind) => {
-                const listingDate = moment(item[values.listingDate || "listingDate"]);
-                const numberofBedrooms = item[values.numberofBedrooms || "numberofBedrooms"] || '';
-                const numberofBathrooms = item[values.numberofBathrooms || "numberofBathrooms"] || '';
-                const yearBuilt = item[values.yearBuilt || "yearBuilt"] || '';
-                const previousOwners = item[values.previousOwners || "previousOwners"] || '';
-
-                return {
-                    propertyType: item[values.propertyType || "propertyType"] || '',
-                    propertyAddress: item[values.propertyAddress || "propertyAddress"] || '',
-                    listingPrice: item[values.listingPrice || "listingPrice"] || '',
-                    squareFootage: item[values.squareFootage || "squareFootage"] || '',
-                    numberofBedrooms: parseInt(numberofBedrooms) || null,
-                    numberofBathrooms: parseInt(numberofBathrooms, 10) || null,
-                    yearBuilt: parseInt(yearBuilt, 10) || '',
-                    propertyDescription: item[values.propertyDescription || "propertyDescription"] || '',
-                    lotSize: item[values.lotSize || "lotSize"] || '',
-                    parkingAvailability: item[values.parkingAvailability || "parkingAvailability"] || '',
-                    appliancesIncluded: item[values.appliancesIncluded || "appliancesIncluded"] || '',
-                    heatingAndCoolingSystems: item[values.heatingAndCoolingSystems || "heatingAndCoolingSystems"] || '',
-                    flooringType: item[values.flooringType || "flooringType"] || '',
-                    exteriorFeatures: item[values.exteriorFeatures || "exteriorFeatures"] || '',
-                    communityAmenities: item[values.communityAmenities || "communityAmenities"] || '',
-                    // propertyPhotos: "",
-                    // virtualToursOrVideos: "",
-                    // floorPlans: "",
-                    // propertyDocuments: "",
-                    // purchaseHistory: "",
-                    listingStatus: item[values.listingStatus || "listingStatus"] || '',
-                    listingAgentOrTeam: item[values.listingAgentOrTeam || "listingAgentOrTeam"] || '',
-                    listingDate: listingDate.isValid() ? item[values.listingDate || "listingDate"] || '' : '',
-                    marketingDescription: item[values.marketingDescription || "marketingDescription"] || '',
-                    multipleListingService: item[values.multipleListingService || "multipleListingService"] || '',
-                    previousOwners: parseInt(previousOwners, 10) || null,
-                    propertyTaxes: item[values.propertyTaxes || "propertyTaxes"] || '',
-                    homeownersAssociation: item[values.homeownersAssociation || "homeownersAssociation"] || '',
-                    mortgageInformation: item[values.mortgageInformation || "mortgageInformation"] || '',
-                    sellers: item[values.sellers || "sellers"] || '',
-                    buyers: item[values.buyers || "buyers"] || '',
-                    propertyManagers: item[values.propertyManagers || "propertyManagers"] || '',
-                    contractorsOrServiceProviders: item[values.contractorsOrServiceProviders || "contractorsOrServiceProviders"] || '',
-                    internalNotesOrComments: item[values.internalNotesOrComments || "internalNotesOrComments"] || '',
-                    createBy: userId,
-                    deleted: item[values.deleted || "deleted"] || false,
+            const leadsData = importedFileData?.map((item, ind) => {
+                const lead = {
                     createdDate: new Date(),
-                }
+                    deleted: item[values.deleted || "deleted"] || false,
+                    createBy: JSON.parse(localStorage.getItem('user'))._id,
+                };
+
+                fieldsInCrm?.forEach(field => {
+                    const selectedField = values[field?.accessor];
+                    const fieldValue = item[selectedField] || '';
+
+                    if (field?.type?.toLowerCase() === "date") {
+                        lead[field?.accessor] = moment(fieldValue).isValid() ? fieldValue : '';
+                    } else if (field?.type?.toLowerCase() === "number" && ['positive', 'negative'].includes(field?.formikType?.toLowerCase())) {
+                        lead[field?.accessor] = parseFloat(fieldValue) || '';
+                    } else if (field?.type?.toLowerCase() === "number") {
+                        lead[field?.accessor] = parseInt(fieldValue, 10) || '';
+                    } else {
+                        lead[field?.accessor] = fieldValue;
+                    }
+                });
+
+                return lead;
             });
 
-            AddData(propertiesData);
+            AddData(leadsData);
         }
     })
 
@@ -261,8 +251,20 @@ function PropertyImport() {
         }
     }, [fileData]);
 
-    // const filterLead = fieldsInCrm.filter(field => importedFileFields.find(data => field.accessor === data || field.Header === data))
-    const filterLead = importedFileFields.filter(field => fieldsInCrm.find(data => field === data.accessor || field === data.Header))
+    // const filterProperty = fieldsInCrm.filter(field => importedFileFields.find(data => field.accessor === data || field.Header === data))
+    // const filterProperty = importedFileFields.filter(field => fieldsInCrm.find(data => field === data.accessor || field === data.Header))
+
+    useEffect(() => {
+        const filterPropertyData = importedFileFields.filter(field => {
+            const result = fieldsInCrm.find(data => field === data?.accessor || field === data?.Header);
+            if (result) {
+                setFieldValue(result?.accessor, field);
+                return true;
+            }
+            return false;
+        });
+        setFilterProperty(filterPropertyData);
+    }, [importedFileFields]);
 
 
     return (
@@ -346,7 +348,7 @@ function PropertyImport() {
                                         name={item.accessor}
                                         onChange={handleChange}
                                     >
-                                        <option value=''> {filterLead ? filterLead.find((data) => (item.Header === data || item.accessor === data) && data) ? filterLead.find((data) => (item.Header === data || item.accessor === data) && data) : 'Select Field In File' : 'Select Field In File'}</option>                                        {
+                                        <option value=''> {filterProperty ? filterProperty.find((data) => (item.Header === data || item.accessor === data) && data) ? filterProperty.find((data) => (item.Header === data || item.accessor === data) && data) : 'Select Field In File' : 'Select Field In File'}</option>                                        {
                                             importedFileFields?.map(field => (
                                                 <option value={field} key={field}>{field}</option>
                                             ))
@@ -359,7 +361,7 @@ function PropertyImport() {
                 </Grid>
 
                 <Flex Flex justifyContent={'end'} mt='5' >
-                    <Button size="sm" onClick={() => handleSubmit()} variant="brand">Next</Button>
+                    <Button size="sm" onClick={() => handleSubmit()} variant="brand">Save</Button>
                 </Flex>
             </Card>
         </>

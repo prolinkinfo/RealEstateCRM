@@ -108,6 +108,91 @@ const file = async (req, res) => {
     }
 }
 
+const addDocumentContact = async (req, res) => {
+    try {
+        const { filename, folderName, linkContact, createBy } = req.body;
+
+        if (!linkContact) {
+            return res.status(404).json({ message: 'Select valid contact ' });
+        }
+
+        const url = req.protocol + '://' + req.get('host');
+
+        const files = req.files.map((file) => ({
+            fileName: filename || file.filename,
+            path: file.path,
+            linkContact: linkContact,
+            linkLead: null,
+            img: `${url}/api/document/images/${file.filename}`,
+            createOn: new Date(),
+        }));
+
+        // Check if the folder exists in the database
+        let folder = await DocumentSchema.findOne({ folderName });
+
+        if (!folder) {
+            // DocumentSchema does not exist, create a new folder and add the file
+            folder = new DocumentSchema({
+                folderName,
+                file: files, // Directly assign the files array
+                createBy
+            });
+        } else {
+            folder.file.push(...files); // Use spread operator to add elements of the files array
+        }
+
+        // Save the folder in the database
+        await folder.save();
+
+        res.json({ message: 'Folder and files added successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ err, error: req });
+    }
+}
+
+const addDocumentLead = async (req, res) => {
+    try {
+        const { filename, folderName, linkLead, createBy } = req.body;
+
+        if (!linkLead) {
+            return res.status(404).json({ message: 'Select valid contact ' });
+        }
+
+        const url = req.protocol + '://' + req.get('host');
+
+        const files = req.files.map((file) => ({
+            fileName: filename || file.filename,
+            path: file.path,
+            linkContact: null,
+            linkLead: linkLead,
+            img: `${url}/api/document/images/${file.filename}`,
+            createOn: new Date(),
+        }));
+
+        // Check if the folder exists in the database
+        let folder = await DocumentSchema.findOne({ folderName });
+
+        if (!folder) {
+            // DocumentSchema does not exist, create a new folder and add the file
+            folder = new DocumentSchema({
+                folderName,
+                file: files, // Directly assign the files array
+                createBy
+            });
+        } else {
+            folder.file.push(...files); // Use spread operator to add elements of the files array
+        }
+
+        // Save the folder in the database
+        await folder.save();
+
+        res.json({ message: 'Folder and files added successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ err, error: req });
+    }
+}
 
 const downloadFile = async (req, res) => {
     try {
@@ -201,4 +286,4 @@ const LinkDocument = async (req, res) => {
     }
 };
 
-module.exports = { file, upload, index, downloadFile, deleteFile, LinkDocument }
+module.exports = { file, upload, index, downloadFile, addDocumentContact, addDocumentLead, deleteFile, LinkDocument }

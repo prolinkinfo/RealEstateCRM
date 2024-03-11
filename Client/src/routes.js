@@ -21,6 +21,9 @@ import ChangeImage from "views/admin/image";
 import Validation from "views/admin/validation";
 import CustomField from "views/admin/customField";
 import TableField from "views/admin/tableField";
+import { TbExchange, TbTableColumn } from "react-icons/tb";
+import { GrValidate } from "react-icons/gr";
+import { VscFileSubmodule } from "react-icons/vsc";
 
 // Admin Imports
 const MainDashboard = React.lazy(() => import("views/admin/default"));
@@ -70,6 +73,7 @@ const SignInCentered = React.lazy(() => import("views/auth/signIn"));
 // admin setting 
 const AdminSetting = React.lazy(() => import("views/admin/adminSetting"));
 const validation = React.lazy(() => import("views/admin/validation"));
+const module = React.lazy(() => import("views/admin/moduleName"));
 
 
 const routes = [
@@ -84,14 +88,14 @@ const routes = [
   // ========================== Admin Layout ==========================
   // ------------- lead Routes ------------------------
   {
-    name: "Lead",
+    name: "Leads",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/lead",
     icon: <Icon as={MdLeaderboard} width='20px' height='20px' color='inherit' />,
     component: Lead,
   },
   {
-    name: "Lead",
+    name: "Leads",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     under: "lead",
     parentName: "Lead",
@@ -133,14 +137,14 @@ const routes = [
   },
   // ------------- Property Routes ------------------------
   {
-    name: "Property",
+    name: "Properties",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/properties",
     icon: <Icon as={LuBuilding2} width='20px' height='20px' color='inherit' />,
     component: Property,
   },
   {
-    name: "Property ",
+    name: "Properties ",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     parentName: "Property",
     under: "properties",
@@ -177,14 +181,14 @@ const routes = [
   // },
   // ------------- Task Routes ------------------------
   {
-    name: "Task",
+    name: "Tasks",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/task",
     icon: <Icon as={FaTasks} width='20px' height='20px' color='inherit' />,
     component: Task,
   },
   {
-    name: "Task ",
+    name: "Tasks",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     under: "task",
     parentName: "Task",
@@ -193,14 +197,14 @@ const routes = [
   },
   // ------------- Meeting Routes ------------------------
   {
-    name: "Meeting",
+    name: "Meetings",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/metting",
     icon: <Icon as={SiGooglemeet} width='20px' height='20px' color='inherit' />,
     component: Meeting,
   },
   {
-    name: "Meeting ",
+    name: "Meetings ",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     under: "metting",
     parentName: "Meeting",
@@ -209,14 +213,14 @@ const routes = [
   },
   // ------------- Phone Routes ------------------------
   {
-    name: "Call",
+    name: "Calls",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/phone-call",
     icon: <Icon as={PiPhoneCallBold} width='20px' height='20px' color='inherit' />,
     component: PhoneCall,
   },
   {
-    name: "Call ",
+    name: "Calls",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     under: "phone-call",
     parentName: "Call",
@@ -226,14 +230,14 @@ const routes = [
   // ------------- Email Routes------------------------
   {
     // separator: 'History',
-    name: "Email",
+    name: "Emails",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/email",
     icon: <Icon as={AiOutlineMail} width='20px' height='20px' color='inherit' />,
     component: EmailHistory,
   },
   {
-    name: "Email ",
+    name: "Emails ",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     under: "email",
     parentName: "Email",
@@ -279,7 +283,7 @@ const routes = [
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/change-images",
     under: "image",
-    icon: <Icon as={FaCreativeCommonsBy} width='20px' height='20px' color='inherit' />,
+    icon: <Icon as={TbExchange} width='20px' height='20px' color='inherit' />,
     component: ChangeImage,
   },
   {
@@ -287,7 +291,7 @@ const routes = [
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/validations",
     under: "Validation",
-    icon: <Icon as={FaCreativeCommonsBy} width='20px' height='20px' color='inherit' />,
+    icon: <Icon as={GrValidate} width='20px' height='20px' color='inherit' />,
     component: Validation,
   },
   {
@@ -295,8 +299,16 @@ const routes = [
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/table-field",
     under: "tableField",
-    icon: <Icon as={FaWpforms} width='20px' height='20px' color='inherit' />,
+    icon: <Icon as={TbTableColumn} width='20px' height='20px' color='inherit' />,
     component: TableField,
+  },
+  {
+    name: "Module",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/module",
+    under: "module",
+    icon: <Icon as={VscFileSubmodule} width='20px' height='20px' color='inherit' />,
+    component: module,
   },
   // // ------------- Text message Routes ------------------------
   // {

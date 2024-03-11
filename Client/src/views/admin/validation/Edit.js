@@ -378,13 +378,13 @@ const Edit = (props) => {
                                         disabled={values?.validations[4]?.types === true ? false : true}
                                         fontSize='sm'
                                         onChange={handleChange} onBlur={handleBlur}
-                                        value={values.validations[3].massage}
+                                        value={values.validations[4].massage}
                                         name={`validations[${3}].message`}
                                         placeholder='Enter Formik Type Message'
                                         fontWeight='500'
                                         borderColor={errors?.validations && touched?.validations && errors?.validations[3]?.message && touched?.validations[3]?.message ? "red.300" : null}
                                     />
-                                    <Text mb='10px' color={'red'}> {errors?.validations && touched?.validations && touched?.validations[3]?.message && errors?.validations[3]?.message}</Text>
+                                    {/* <Text mb='10px' color={'red'}> {errors?.validations && touched?.validations && touched?.validations[3]?.message && errors?.validations[3]?.message}</Text> */}
                                 </GridItem>
 
                             </Grid>

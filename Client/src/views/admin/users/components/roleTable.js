@@ -1,5 +1,5 @@
 import {
-  Box, Button, Checkbox,
+  Box, Button,
   Flex, Table,
   Tbody,
   Td,
@@ -20,12 +20,10 @@ import {
 // Custom components
 import Card from "components/card/Card";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
-import Pagination from "components/pagination/Pagination";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { LiaCriticalRole } from "react-icons/lia";
-import RoleModal from "./roleModal";
 import DataNotFound from "components/notFoundData";
+import { useState } from "react";
+import { FaCreativeCommonsBy } from "react-icons/fa";
+
 
 export default function RoleTable(props) {
   const { columnsData, tableData, title, fetchData, selectedValues, setSelectedValues, roleModal, setRoleModal } = props;
@@ -34,6 +32,9 @@ export default function RoleTable(props) {
   const data = useMemo(() => tableData, [tableData]);
   const user = JSON.parse(localStorage.getItem("user"))
   const [gopageValue, setGopageValue] = useState()
+  const buttonbg = useColorModeValue("gray.200", "white");
+  const textColor = useColorModeValue("secondaryGray.900", "white");
+  const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
 
   const tableInstance = useTable(
     {
@@ -59,8 +60,6 @@ export default function RoleTable(props) {
     setGopageValue(pageOptions.length)
   }
 
-  const textColor = useColorModeValue("secondaryGray.900", "white");
-  const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
 
   return (
     <Card
@@ -79,7 +78,7 @@ export default function RoleTable(props) {
           lineHeight='100%'>
           {title}  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
         </Text>
-     {user?.role === 'superAdmin' &&   <Button onClick={() => setRoleModal(true)} leftIcon={<LiaCriticalRole />} size="sm" colorScheme="gray" >Change Role</Button>}
+        {user?.role === 'superAdmin' && <Button onClick={() => setRoleModal(true)} leftIcon={<FaCreativeCommonsBy />} bg={buttonbg} size="sm" colorScheme="gray" >Change Role</Button>}
       </Flex>
       <Box overflowY={'auto'} className="table-container-property" >
         <Table  {...getTableProps()} variant='simple' color='gray.500' mb='24px'>

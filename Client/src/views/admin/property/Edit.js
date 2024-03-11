@@ -108,7 +108,7 @@ const Edit = (props) => {
             try {
                 setIsLoding(true)
                 response = await getApi('api/property/view/', props?.selectedId ? props?.selectedId : param.id)
-                setInitialValues(response?.data?.property)
+                setInitialValues((prev) => ({ ...prev, ...response?.data?.property }))
                 //1. basicPropertyInformation
                 // values.propertyType = response?.data?.property?.propertyType;
                 // values.propertyAddress = response?.data?.property?.propertyAddress;
@@ -168,7 +168,7 @@ const Edit = (props) => {
             <Drawer isOpen={props.isOpen} size={props.size}>
                 <DrawerOverlay />
                 <DrawerContent>
-                    <DrawerHeader justifyContent='space-between' display='flex' >
+                    <DrawerHeader alignItems={"center"} justifyContent='space-between' display='flex' >
                         Edit Property
                         <IconButton onClick={handleClose} icon={<CloseIcon />} />
                     </DrawerHeader>
@@ -697,8 +697,7 @@ const Edit = (props) => {
                     <DrawerFooter>
                         <Button size="sm"
                             sx={{ textTransform: "capitalize" }}
-                            variant="solid"
-                            colorScheme="green"
+                            variant="brand"
                             disabled={isLoding ? true : false}
                             type="submit"
                             onClick={handleSubmit}

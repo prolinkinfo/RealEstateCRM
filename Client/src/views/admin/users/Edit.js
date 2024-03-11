@@ -37,9 +37,10 @@ const Edit = (props) => {
 
     const handleCloseModal = () => {
         setEdit(false);
+        resetForm();
         // Dispatch setUser action to set user data
     };
-    const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue } = formik
+    const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
 
     const [isLoding, setIsLoding] = useState(false)
 
@@ -96,7 +97,7 @@ const Edit = (props) => {
 
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                First Name
+                                First Name<Text color={"red"}>*</Text>
                             </FormLabel>
                             <Input
                                 fontSize='sm'
@@ -126,7 +127,7 @@ const Edit = (props) => {
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Email
+                                Email<Text color={"red"}>*</Text>
                             </FormLabel>
                             <Input
                                 fontSize='sm'

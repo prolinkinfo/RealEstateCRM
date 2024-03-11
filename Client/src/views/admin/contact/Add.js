@@ -109,8 +109,8 @@ const Add = (props) => {
             <Drawer isOpen={props.isOpen} size={props.size}>
                 <DrawerOverlay />
                 <DrawerContent>
-                    <DrawerHeader justifyContent='space-between' display='flex' >
-                        Add Contacts
+                    <DrawerHeader alignItems={"center"} justifyContent='space-between' display='flex' >
+                        Add Contact
                         <IconButton onClick={props.onClose} icon={<CloseIcon />} />
                     </DrawerHeader>
                     <DrawerBody>

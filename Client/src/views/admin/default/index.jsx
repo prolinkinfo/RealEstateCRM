@@ -127,41 +127,41 @@ export default function UserReports() {
 
   const fetchData = async () => {
     let taskData;
-    // setTimeout(async () => {
-    if (user.role === "superAdmin") {
-      taskData = await getApi("api/task/")
-    } else if (taskView?.create || taskView?.update || taskView?.delete || taskView?.view) {
-      taskData = await getApi(`api/task/?createBy=${user._id}`)
-    }
-    setTask(taskData?.data);
-    // }, 4000);
-    let contact;
-    // setTimeout(async () => {
-    if (user.role === "superAdmin") {
-      contact = await getApi("api/contact/")
-    } else if (contactsView?.create || contactsView?.update || contactsView?.delete || contactsView?.view) {
-      contact = await getApi(`api/contact/?createBy=${user._id}`)
-    }
-    setContactData(contact?.data);
-    // }, 4000);
-    let lead;
-    // setTimeout(async () => {
-    if (user.role === "superAdmin") {
-      lead = await getApi("api/lead/")
-    } else if (leadView?.create || leadView?.update || leadView?.delete || leadView?.view) {
-      lead = await getApi(`api/lead/?createBy=${user._id}`)
-    }
-    setLeadData(lead?.data);
-    // }, 4000);
-    let property;
-    // setTimeout(async () => {
-    if (user.role === "superAdmin") {
-      property = await getApi("api/property/")
-    } else if (proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view) {
-      property = await getApi(`api/property/?createBy=${user._id}`)
-    }
-    setPropertyData(property?.data);
-    // }, 4000);
+    setTimeout(async () => {
+      if (user.role === "superAdmin") {
+        taskData = await getApi("api/task/")
+      } else if (taskView?.create || taskView?.update || taskView?.delete || taskView?.view) {
+        taskData = await getApi(`api/task/?createBy=${user._id}`)
+      }
+      setTask(taskData?.data);
+      // }, 4000);
+      let contact;
+      // setTimeout(async () => {
+      if (user.role === "superAdmin") {
+        contact = await getApi("api/contact/")
+      } else if (contactsView?.create || contactsView?.update || contactsView?.delete || contactsView?.view) {
+        contact = await getApi(`api/contact/?createBy=${user._id}`)
+      }
+      setContactData(contact?.data);
+      // }, 4000);
+      let lead;
+      // setTimeout(async () => {
+      if (user.role === "superAdmin") {
+        lead = await getApi("api/lead/")
+      } else if (leadView?.create || leadView?.update || leadView?.delete || leadView?.view) {
+        lead = await getApi(`api/lead/?createBy=${user._id}`)
+      }
+      setLeadData(lead?.data);
+      // }, 4000);
+      let property;
+      // setTimeout(async () => {
+      if (user.role === "superAdmin") {
+        property = await getApi("api/property/")
+      } else if (proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view) {
+        property = await getApi(`api/property/?createBy=${user._id}`)
+      }
+      setPropertyData(property?.data);
+    }, 3000);
   };
   useEffect(() => {
     fetchData();
@@ -209,7 +209,15 @@ export default function UserReports() {
       color: "#DB5436"
     },
   ]
-
+  const navigateTo = {
+    Lead: '/lead',
+    Contact: '/contacts',
+    Meeting: '/metting',
+    Call: '/phone-call',
+    Task: '/task',
+    Email: '/email',
+    Property: '/properties',
+  };
   return (
     <>
       <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} gap="20px" mb="20px">
@@ -319,7 +327,10 @@ export default function UserReports() {
           </Card>
         </GridItem>
       </Grid>
-      <SimpleGrid gap="20px" columns={{ base: 1, md: 2, lg: 3 }} my="20px">
+      <SimpleGrid gap="20px" columns={{
+        base: 1, md: (leadView?.create || leadView?.update || leadView?.delete || leadView?.view) && (taskView?.create || taskView?.update || taskView?.delete || taskView?.view) ? 2 : 2, lg:
+          (leadView?.create || leadView?.update || leadView?.delete || leadView?.view) && (taskView?.create || taskView?.update || taskView?.delete || taskView?.view) ? 3 : 2
+      }} my="20px">
 
         <Card >
           <Heading size="md" pb={3}>Statistics</Heading>
@@ -334,7 +345,7 @@ export default function UserReports() {
                 (item.name === 'Task' && (taskView?.create || taskView?.update || taskView?.delete || taskView?.view))
               )
                 &&
-                <Box border={"1px solid #e5e5e5"} p={2} m={1} key={i}>
+                <Box border={"1px solid #e5e5e5"} p={2} m={1} cursor={'pointer'} key={i} onClick={() => navigate(navigateTo[item.name])}>
                   <Flex justifyContent={"space-between"}>
                     <Text fontSize="sm" fontWeight={600} pb={2}>{item?.name}</Text>
                     <Text fontSize="sm" fontWeight={600} pb={2}><CountUpComponent targetNumber={item?.length} /></Text>
@@ -349,13 +360,15 @@ export default function UserReports() {
           ))}
         </Card>
 
-        <Card>
+        {(leadView?.create || leadView?.update || leadView?.delete || leadView?.view) && <Card>
           <Heading size="md" pb={2}>Lead Statistics</Heading>
           {(leadView?.create || leadView?.update || leadView?.delete || leadView?.view) &&
             <Grid templateColumns="repeat(12, 1fr)" gap={2}>
               <GridItem colSpan={{ base: 12, md: 6 }}>
                 <Box backgroundColor={"#ebf5ff"}
                   borderRadius={"10px"}
+                  cursor={"pointer"}
+                  onClick={() => navigate('/lead')}
                   p={2} m={1} textAlign={"center"}>
                   <Heading size="sm" pb={3} color={"#1f7eeb"}>Total Leads </Heading>
                   <Text fontWeight={600} color={"#1f7eeb"}><CountUpComponent targetNumber={leadData?.length || 0} /> </Text>
@@ -364,6 +377,8 @@ export default function UserReports() {
               <GridItem colSpan={{ base: 12, md: 6 }}>
                 <Box backgroundColor={"#eaf9e6"}
                   borderRadius={"10px"}
+                  cursor={"pointer"}
+                  onClick={() => navigate('/lead', { state: 'active' })}
                   p={2} m={1} textAlign={"center"}>
                   <Heading size="sm" pb={3} color={"#43882f"} >Active Leads </Heading>
                   <Text fontWeight={600} color={"#43882f"}><CountUpComponent targetNumber={leadData && leadData.length > 0 && leadData?.filter(lead => lead?.leadStatus === "active")?.length || 0} /></Text>
@@ -371,7 +386,9 @@ export default function UserReports() {
               </GridItem>
               <GridItem colSpan={{ base: 12, md: 6 }}>
                 <Box backgroundColor={"#fbf4dd"}
+                  onClick={() => navigate('/lead', { state: 'pending' })}
                   borderRadius={"10px"}
+                  cursor={"pointer"}
                   p={2} m={1} textAlign={"center"}>
                   <Heading size="sm" pb={3} color={"#a37f08"}>Pending Leads</Heading>
                   <Text fontWeight={600} color={"#a37f08"}><CountUpComponent targetNumber={leadData && leadData.length > 0 && leadData?.filter(lead => lead?.leadStatus === "pending")?.length || 0} /></Text>
@@ -381,6 +398,8 @@ export default function UserReports() {
               <GridItem colSpan={{ base: 12, md: 6 }}>
                 <Box backgroundColor={"#ffeeeb"}
                   borderRadius={"10px"}
+                  cursor={"pointer"}
+                  onClick={() => navigate('/lead', { state: 'sold' })}
                   p={2} m={1} textAlign={"center"}>
                   <Heading size="sm" pb={3} color={"#d6401d"}>Sold Leads </Heading>
                   <Text fontWeight={600} color={"#d6401d"}><CountUpComponent targetNumber={leadData && leadData.length > 0 && leadData?.filter(lead => lead?.leadStatus === "sold")?.length || 0} /></Text>
@@ -392,14 +411,15 @@ export default function UserReports() {
             <PieChart leadData={leadData} />
           </Flex>
 
-        </Card>
+        </Card>}
 
-        <Card >
+        {(taskView?.create || taskView?.update || taskView?.delete || taskView?.view) && <Card >
           <Heading size="md" pb={3}>Task Statistics</Heading>
           <Grid templateColumns="repeat(12, 1fr)" gap={2} mb={2}>
             <GridItem colSpan={{ base: 12 }}>
               <Box backgroundColor={"#ebf5ff"}
-                borderRadius={"10px"}
+                onClick={() => navigate('/task')}
+                borderRadius={"10px"} cursor={'pointer'}
                 p={2} m={1} textAlign={"center"}>
                 <Heading size="sm" pb={3} color={"#1f7eeb"}>Total Tasks </Heading>
                 <Text fontWeight={600} color={"#1f7eeb"}><CountUpComponent targetNumber={task?.length || 0} /></Text>
@@ -421,7 +441,7 @@ export default function UserReports() {
               </Flex>
             </Box>
           ))}
-        </Card>
+        </Card>}
       </SimpleGrid>
 
     </>

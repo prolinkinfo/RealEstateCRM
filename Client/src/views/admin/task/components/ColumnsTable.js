@@ -103,7 +103,7 @@ export default function ColumnsTable(props) {
                     {title}  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
                 </Heading>
                 <Button onClick={() => setTaskModel(true)} leftIcon={<AddIcon />} colorScheme="gray" size="sm" bg={buttonbg}>Add New</Button>
-                <AddTask fetchData={fetchData} isOpen={taskModel} leadContect={splitValue[0]} onClose={setTaskModel} from="lead" id={param.id} />
+                {taskModel && <AddTask fetchData={fetchData} isOpen={taskModel} leadContect={splitValue[0]} onClose={setTaskModel} from="lead" id={param.id} />}
             </Flex>
             <Box overflowY={'auto'} className="table-container p0" >
                 <Table {...getTableProps()} variant='simple' color='gray.500' mb='24px'>

@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 import { fetchImage } from '../../../redux/imageSlice'
 
 const ImageView = (props) => {
-    const { data, fetchData, setImageData } = props;
+    const { data, fetchData, setImageData, handleDeleteOpen, imageviewData } = props;
     const [isLoding, setIsLoding] = useState(false)
     const dispatch = useDispatch()
 
@@ -50,6 +50,7 @@ const ImageView = (props) => {
             setIsLoding(false)
         }
     };
+
     return (
         <div>
             <Modal onClose={props.onClose} isOpen={props.isOpen} isCentered size='xl'>
@@ -118,6 +119,11 @@ const ImageView = (props) => {
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme="brand" mr={2} size='sm' onClick={() => setImageData(data)} disabled={isLoding ? true : false}>{isLoding ? <Spinner /> : 'Set Image'}</Button>
+                        <Button colorScheme="red"
+                            size='sm'
+                            disabled={data?.isActive === true ? true : false}
+                            onClick={() => { handleDeleteOpen(imageviewData); }}
+                        >Delete</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

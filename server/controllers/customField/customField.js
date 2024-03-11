@@ -8,7 +8,9 @@ async function getNextAutoIncrementValue() {
 
 const index = async (req, res) => {
     try {
-        const result = await CustomField.find(req.query);
+        const query = req.query
+        query.deleted = false;
+        const result = await CustomField.find(query);
         result.sort((a, b) => {
             return a.no - b.no;
         });
@@ -339,7 +341,12 @@ const createNewModule = async (req, res) => {
         }
         const nextAutoIncrementValue = await getNextAutoIncrementValue();
 
-        const newModule = new CustomField({ moduleName, fields: req.body.fields || [], headings: req.body.headings || [], no: nextAutoIncrementValue });
+        const newModule = new CustomField({ moduleName, fields: req.body.fields || [], headings: req.body.headings || [], no: nextAutoIncrementValue, createdDate: new Date() });
+
+        const schemaFields = {};
+        const moduleSchema = new mongoose.Schema(schemaFields);
+        mongoose.model(moduleName, moduleSchema, moduleName);
+
         await newModule.save();
 
         return res.status(200).json({ message: "Module added successfully", data: newModule });
@@ -350,14 +357,87 @@ const createNewModule = async (req, res) => {
     }
 };
 
+const changeModuleName = async (req, res) => {
+    try {
+        const moduleName = req.body.moduleName;
+        const oldModule = await CustomField.findOne({ _id: req.params.id });
+        let result = await CustomField.findOneAndUpdate(
+            { _id: req.params.id },
+            { $set: { moduleName: moduleName } },
+            { new: true }
+        );
+
+        if (!result) {
+            return res.status(404).json({ success: false, message: 'Module not found' });
+        }
+
+        // Function to change module name without losing data
+        const changeModuleName = async (oldModuleName, newModuleName) => {
+
+            // Check if the old module schema exists
+            if (await mongoose.models[oldModuleName]) {
+
+                // Get the old module model
+                const OldModule = await mongoose.model(oldModuleName);
+
+                // Define the new schema with the same fields
+                const newModuleSchema = await new mongoose.Schema(OldModule.schema.obj);
+
+                // Change the collection name in MongoDB
+                await OldModule.collection.rename(`${newModuleName}`);
+
+                // Change the model name to the new module name
+                await mongoose.model(newModuleName, newModuleSchema, newModuleName);
+                delete mongoose.models[oldModuleName];
+
+                async function checkModuleExistence(moduleName) {
+                    let exists = false;
+                    while (!exists) {
+                        if (mongoose.models[moduleName]) {
+                            exists = true;
+                        } else {
+                            console.log(`Module ${moduleName} does not exist, waiting...`);
+                            await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for 1 second
+                        }
+                    }
+                }
+                await checkModuleExistence(newModuleName);
+
+            } else {
+                console.log(`Module ${oldModuleName} does not exist`)
+            }
+        };
+
+        await changeModuleName(oldModule?.moduleName, moduleName);
+
+        return res.status(200).json({ message: `Module name changed from ${oldModule?.moduleName} to ${moduleName}`, result });
+
+    } catch (err) {
+        console.error('Failed to create module:', err);
+        return res.status(400).json({ success: false, message: 'Failed to Create module', error: err.toString() });
+    }
+};
+
 const addHeading = async (req, res) => {
     try {
-        const result = await CustomField.updateOne({ _id: req.body.moduleId }, { $push: { headings: { $each: req.body.headings } } });
+        const existingField = await CustomField.findOne({ _id: req.body.moduleId });
 
-        if (result?.modifiedCount > 0) {
-            return res.status(200).json({ message: "Headings added successfully", result });
+        if (existingField) {
+            const headingExists = existingField.headings.some(heading => req.body.headings[0].heading.includes(heading.heading));
+
+            if (!headingExists) {
+                // If the heading doesn't exist, perform the update
+                await CustomField.updateOne(
+                    { _id: req.body.moduleId },
+                    { $push: { headings: { $each: req.body.headings } } }
+                );
+                res.status(200).send('Headings added successfully');
+            } else {
+                // Handle the case where the heading already exists
+                res.status(400).send('Heading already exists');
+            }
         } else {
-            return res.status(404).json({ success: false, message: 'Failed to add headings', result });
+            res.status(404).send('Field not found');
         }
 
     } catch (err) {
@@ -539,8 +619,58 @@ const changeIsTableFields = async (req, res) => {
 
     } catch (err) {
         console.error('Failed to change table fields :', err);
-        return res.status(400).json({ message: 'Failed to change ', error: err.toString() });
+        return res.status(400).json({ success: false, message: 'Failed to change ', error: err.toString() });
+    }
+};
+const deletmodule = async (req, res) => {
+    try {
+        const module = await CustomField.findByIdAndUpdate(req.params.id, { deleted: true });
+        res.status(200).json({ message: "Module delete successfully", module })
+    } catch (err) {
+        res.status(404).json({ message: "error", err })
+    }
+}
+const deleteManyModule = async (req, res) => {
+    try {
+        const module = await CustomField.updateMany({ _id: { $in: req.body } }, { $set: { deleted: true } });
+        res.status(200).json({ message: "Many module delete successfully", module })
+    } catch (err) {
+        res.status(404).json({ message: "error", err })
+    }
+}
+
+const changeFieldsBelongsTo = async (req, res) => {
+    try {
+        const headingId = req.params.id;
+        const moduleId = req.body?.moduleId;
+        const updates = req.body?.updates;
+
+        const headingExists = await CustomField.findOne({ _id: moduleId, 'headings._id': headingId });
+
+        if (!headingExists) {
+            return res.status(404).json({ success: false, message: "Module or Heading not found" });
+        }
+
+        const updateOperations = updates?.map(update => ({
+            updateOne: {
+                filter: { _id: moduleId, 'fields._id': new mongoose.Types.ObjectId(update.fieldId) },
+                update: { $set: { 'fields.$[field].belongsTo': update.belongsTo } },
+                arrayFilters: [{ 'field._id': new mongoose.Types.ObjectId(update.fieldId) }]
+            }
+        }));
+
+        const result = await CustomField.bulkWrite(updateOperations);
+
+        if (!result) {
+            return res.status(404).json({ success: false, message: 'Fields not found' });
+        }
+
+        return res.status(200).json({ message: 'Updated successfully', result });
+
+    } catch (err) {
+        console.error('Failed to change belongs fields :', err);
+        return res.status(400).json({ success: false, message: 'Failed to change', error: err.toString() });
     }
 };
 
-module.exports = { index, add, editWholeFieldsArray, editSingleField, view, deleteField, deleteManyFields, createNewModule, addHeading, editSingleHeading, editWholeHeadingsArray, deleteHeading, deleteManyHeadings, changeIsTableField, changeIsTableFields };
+module.exports = { index, add, editWholeFieldsArray, editSingleField, view, changeModuleName, deleteField, deleteManyFields, deletmodule, deleteManyModule, createNewModule, addHeading, editSingleHeading, editWholeHeadingsArray, deleteHeading, deleteManyHeadings, changeIsTableField, changeIsTableFields, changeFieldsBelongsTo };

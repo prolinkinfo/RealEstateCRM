@@ -52,19 +52,19 @@ const AddPhoneCall = (props) => {
 
     const fetchDataR = async () => {
         if (props.id && props.lead !== 'true') {
-            let response = await getApi('api/contact/view/', props.id)
-            if (response?.status === 200) {
-                setFieldValue('recipient', response?.data?.contact?.phoneNumber);
-                setFieldValue('createBy', props?.id);
-                values.recipient = response?.data?.contact?.phoneNumber
-            }
+            // let response = await getApi('api/contact/view/', props.id)
+            // if (response?.status === 200) {
+            setFieldValue('recipient', props?.viewData?.contact?.phoneNumber);
+            setFieldValue('createBy', props?.id);
+            values.recipient = props?.viewData?.contact?.phoneNumber
+            // }
         } else if (props.id && props.lead === 'true') {
-            let response = await getApi('api/lead/view/', props.id)
-            if (response?.status === 200) {
-                setFieldValue('recipient', response?.data?.lead?.leadPhoneNumber);
-                setFieldValue('createByLead', props.id);
-                values.recipient = response?.data?.lead?.leadPhoneNumber
-            }
+            // let response = await getApi('api/lead/view/', props.id)
+            // if (response?.status === 200) {
+            setFieldValue('recipient', props?.viewData?.lead?.leadPhoneNumber);
+            setFieldValue('createByLead', props.id);
+            values.recipient = props?.viewData?.lead?.leadPhoneNumber
+            // }
         }
     }
 
@@ -97,7 +97,7 @@ const AddPhoneCall = (props) => {
                                 fontWeight='500'
                                 borderColor={errors.recipient && touched.recipient ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.recipient && touched.recipient && errors.recipient}</Text>
+                            <Text mb='10px' fontSize='sm' color={'red'}> {errors.recipient && touched.recipient && errors.recipient}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -113,7 +113,7 @@ const AddPhoneCall = (props) => {
                                 fontWeight='500'
                                 borderColor={errors?.startDate && touched?.startDate ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.startDate && touched.startDate && errors.startDate}</Text>
+                            <Text mb='10px' fontSize='sm' color={'red'}> {errors.startDate && touched.startDate && errors.startDate}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -130,7 +130,7 @@ const AddPhoneCall = (props) => {
                                 fontWeight='500'
                                 borderColor={errors?.endDate && touched?.endDate ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.endDate && touched.endDate && errors.endDate}</Text>
+                            <Text mb='10px' fontSize='sm' color={'red'}> {errors.endDate && touched.endDate && errors.endDate}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -145,7 +145,7 @@ const AddPhoneCall = (props) => {
                                 fontWeight='500'
                                 borderColor={errors.callDuration && touched.callDuration ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.callDuration && touched.callDuration && errors.callDuration}</Text>
+                            <Text mb='10px' fontSize='sm' color={'red'}> {errors.callDuration && touched.callDuration && errors.callDuration}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -161,7 +161,7 @@ const AddPhoneCall = (props) => {
                                 fontWeight='500'
                                 borderColor={errors.callNotes && touched.callNotes ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.callNotes && touched.callNotes && errors.callNotes}</Text>
+                            <Text mb='10px' fontSize='sm' color={'red'}> {errors.callNotes && touched.callNotes && errors.callNotes}</Text>
                         </GridItem>
                     </Grid>
                 </ModalBody>
