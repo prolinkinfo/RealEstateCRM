@@ -4,12 +4,52 @@ const bcrypt = require('bcrypt');
 const { initializeLeadSchema } = require("../model/schema/lead");
 const { initializeContactSchema } = require("../model/schema/contact");
 const { initializePropertySchema } = require("../model/schema/property");
-const { createNewModule } = require("../controllers/customField/customField.js")
+const { createNewModule } = require("../controllers/customField/customField.js");
+const customField = require('../model/schema/customField.js');
 
 const initializedSchemas = async () => {
     await initializeLeadSchema();
     await initializeContactSchema();
     await initializePropertySchema();
+
+    const CustomFields = await customField.find({ deleted: false });
+
+    const createDynamicSchemas = async (CustomFields) => {
+        for (const module of CustomFields) {
+            const { moduleName, fields } = module;
+
+            // Check if schema already exists
+            if (!mongoose.models[moduleName]) {
+                // Create schema object
+                const schemaFields = {};
+                for (const field of fields) {
+                    schemaFields[field.name] = { type: field.backendType };
+                }
+                // Create Mongoose schema
+                const moduleSchema = new mongoose.Schema(schemaFields);
+                // Create Mongoose model
+                mongoose.model(moduleName, moduleSchema, moduleName);
+                console.log(`Schema created for module: ${moduleName}`);
+            } else {
+                // console.log(`Schema for module ${moduleName} already exists`);
+            }
+        }
+    };
+
+    createDynamicSchemas(CustomFields);
+
+    // const mongooseModels = mongoose.models;
+    // const schemas = Object.keys(mongooseModels).map(modelName => {
+    //     const model = mongooseModels[modelName];
+    //     return {
+    //         modelName,
+    //         schema: model.schema
+    //     };
+    // });
+
+    // // Log or process the schemas as needed
+    // console.log("All initialized schemas:", schemas);
+
 }
 
 const connectDB = async (DATABASE_URL, DATABASE) => {

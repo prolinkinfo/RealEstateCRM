@@ -342,6 +342,11 @@ const createNewModule = async (req, res) => {
         const nextAutoIncrementValue = await getNextAutoIncrementValue();
 
         const newModule = new CustomField({ moduleName, fields: req.body.fields || [], headings: req.body.headings || [], no: nextAutoIncrementValue, createdDate: new Date() });
+
+        const schemaFields = {};
+        const moduleSchema = new mongoose.Schema(schemaFields);
+        mongoose.model(moduleName, moduleSchema, moduleName);
+
         await newModule.save();
 
         return res.status(200).json({ message: "Module added successfully", data: newModule });
@@ -355,7 +360,7 @@ const createNewModule = async (req, res) => {
 const changeModuleName = async (req, res) => {
     try {
         const moduleName = req.body.moduleName;
-
+        const oldModule = await CustomField.findOne({ _id: req.params.id });
         let result = await CustomField.findOneAndUpdate(
             { _id: req.params.id },
             { $set: { moduleName: moduleName } },
@@ -366,7 +371,48 @@ const changeModuleName = async (req, res) => {
             return res.status(404).json({ success: false, message: 'Module not found' });
         }
 
-        return res.status(200).json({ message: "Module Name Change Successfully", result });
+        // Function to change module name without losing data
+        const changeModuleName = async (oldModuleName, newModuleName) => {
+
+            // Check if the old module schema exists
+            if (await mongoose.models[oldModuleName]) {
+
+                // Get the old module model
+                const OldModule = await mongoose.model(oldModuleName);
+
+                // Define the new schema with the same fields
+                const newModuleSchema = await new mongoose.Schema(OldModule.schema.obj);
+
+                // Change the collection name in MongoDB
+                await OldModule.collection.rename(`${newModuleName}`);
+
+                // Change the model name to the new module name
+                await mongoose.model(newModuleName, newModuleSchema, newModuleName);
+                delete mongoose.models[oldModuleName];
+
+                async function checkModuleExistence(moduleName) {
+                    let exists = false;
+                    while (!exists) {
+                        if (mongoose.models[moduleName]) {
+                            console.log(`Module ${moduleName} exists`);
+                            exists = true;
+                            return res.status(400).json({ message: `Module ${moduleName} exists` });
+                        } else {
+                            console.log(`Module ${moduleName} does not exist, waiting...`);
+                            await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for 1 second
+                        }
+                    }
+                }
+                await checkModuleExistence(newModuleName);
+
+            } else {
+                return res.status(400).json({ message: `Module ${oldModuleName} does not exist` });
+            }
+        };
+
+        await changeModuleName(oldModule?.moduleName, moduleName);
+
+        return res.status(200).json({ message: `Module name changed from ${oldModule?.moduleName} to ${moduleName}`, result });
 
     } catch (err) {
         console.error('Failed to create module:', err);
