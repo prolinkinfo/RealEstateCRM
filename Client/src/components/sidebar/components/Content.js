@@ -19,7 +19,7 @@ function SidebarContent(props) {
       <Brand from={from} largeLogo={largeLogo}
         openSidebar={openSidebar} setOpenSidebar={setOpenSidebar}
       />
-      <Stack direction='column' mb='auto' pt={4}
+      <Stack direction='column' mb='auto' pt={2}
       >
 
         <Box
