@@ -26,7 +26,6 @@ const Add = (props) => {
     });
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
-    console.log(errors);
 
     const AddData = async () => {
         try {
