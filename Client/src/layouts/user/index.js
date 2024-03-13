@@ -13,6 +13,7 @@ import { MdHome, MdLock } from 'react-icons/md';
 import Spinner from 'components/spinner/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchImage } from '../../redux/imageSlice';
+import { getApi } from 'services/api';
 
 const MainDashboard = React.lazy(() => import("views/admin/default"));
 const SignInCentered = React.lazy(() => import("views/auth/signIn"));
@@ -23,12 +24,38 @@ export default function User(props) {
     // states and functions
     const [fixed] = useState(false);
     const [toggleSidebar, setToggleSidebar] = useState(false);
+    const [route, setRoute] = useState();
     const [openSidebar, setOpenSidebar] = useState(true)
     const user = JSON.parse(localStorage.getItem("user"))
     // functions for changing the states from components
     const getRoute = () => {
         return window.location.pathname !== '/admin/full-screen-maps';
     };
+
+
+    const fetchRoute = async () => {
+        let response = await getApi("api/route/");
+        setRoute(response.data);
+    };
+    console.log(route);
+
+    const pathName = (name) => {
+        return `/${name.toLowerCase().replace(/ /g, '-')}`;
+    }
+
+    const getAllRoute = route?.map((item, i) => (
+        {
+            name: item?.moduleName,
+            layout: [ROLE_PATH.user],
+            path: pathName(item.moduleName),
+            icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
+            component: MainDashboard,
+        }))
+    console.log(getAllRoute);
+
+    useEffect(() => {
+        fetchRoute();
+    }, []);
 
     const layoutName = user?.roles?.map(item => `/${item.roleName}`)
 
