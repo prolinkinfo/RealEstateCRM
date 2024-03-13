@@ -5,7 +5,7 @@ import { SearchIcon } from '@chakra-ui/icons';
 const CustomSearchInput = ({ allData, setSearchbox, setDisplaySearchData, searchbox, dataColumn, onSearch, setGetTagValues, setGopageValue }) => {
 
     const handleInputChange = (e) => {
-        const searchTerm = e.target.value;
+        const searchTerm = e.target.value.toLowerCase();
 
         const results = allData.filter((item) => {
             // Check if any of the specified columns contains the search term
