@@ -37,21 +37,11 @@ export default function User(props) {
         let response = await getApi("api/route/");
         setRoute(response.data);
     };
-    console.log(route);
 
     const pathName = (name) => {
         return `/${name.toLowerCase().replace(/ /g, '-')}`;
     }
 
-    const getAllRoute = route?.map((item, i) => (
-        {
-            name: item?.moduleName,
-            layout: [ROLE_PATH.user],
-            path: pathName(item.moduleName),
-            icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
-            component: MainDashboard,
-        }))
-    console.log(getAllRoute);
 
     useEffect(() => {
         fetchRoute();
@@ -110,6 +100,39 @@ export default function User(props) {
     const accessRoute = newRoute?.filter(item => Object.keys(mergedPermissions)?.find(data => (data?.toLowerCase() === item?.name?.toLowerCase()) || (data?.toLowerCase() === item.parentName?.toLowerCase())))
 
     routes.push(...accessRoute)
+
+    // const getAllRoute = route?.map((item, i) => {
+
+    //     if (!routes.includes(item.moduleName)) {
+    //         return (
+    //             routes.push({
+    //                 name: item?.moduleName,
+    //                 layout: [ROLE_PATH.user],
+    //                 path: pathName(item.moduleName),
+    //                 icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
+    //                 component: MainDashboard,
+    //             })
+
+
+    //         )
+    //     }
+
+    // })
+    const getAllRoute = route?.map((item, i) => {
+        if (routes?.filter(({ name }) => name !== item.moduleName)) {
+            routes.push(
+                {
+                    name: item?.moduleName,
+                    layout: [ROLE_PATH.user],
+                    path: pathName(item.moduleName),
+                    icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
+                    component: MainDashboard,
+                });
+        }
+    });
+
+    console.log(routes);
+
 
     const getActiveRoute = (routes) => {
         let activeRoute = 'Prolink';
@@ -199,18 +222,18 @@ export default function User(props) {
 
 
     const getRoutes = (routes) => {
-        return routes.map((prop, key) => {
+        return routes?.map((prop, key) => {
             // if (!prop.under && prop.layout === '/admin') {
-            if (!prop.under && prop.layout !== '/auth') {
-                return <Route path={prop.path} element={<prop.component />} key={key} />;
-            } else if (prop.under) {
-                return <Route path={prop.path} element={<prop.component />} key={key} />
+            if (!prop?.under && prop?.layout !== '/auth') {
+                return <Route path={prop?.path} element={prop && <prop.component />} key={key} />;
+            } else if (prop?.under) {
+                return <Route path={prop?.path} element={prop && <prop.component />} key={key} />
             }
-            if (prop.collapse) {
-                return getRoutes(prop.items);
+            if (prop?.collapse) {
+                return getRoutes(prop?.items);
             }
-            if (prop.category) {
-                return getRoutes(prop.items);
+            if (prop?.category) {
+                return getRoutes(prop?.items);
             } else {
                 return null;
             }
