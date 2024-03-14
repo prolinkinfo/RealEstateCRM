@@ -382,8 +382,6 @@ const createNewModule = async (req, res) => {
             )
         }
 
-
-
         return res.status(200).json({ message: "Module added successfully", data: newModule });
 
     } catch (err) {
@@ -405,6 +403,11 @@ const changeModuleName = async (req, res) => {
         if (!result) {
             return res.status(404).json({ success: false, message: 'Module not found' });
         }
+
+        await RoleAccess.updateMany(
+            { "access.title": oldModule.moduleName }, // Filter criteria to find the documents
+            { $set: { "access.$.title": moduleName } } // Update operation
+        );
 
         // Function to change module name without losing data
         const changeModuleName = async (oldModuleName, newModuleName) => {
