@@ -1,10 +1,8 @@
 const mongoose = require("mongoose");
 const CustomField = require("../../model/schema/customField");
+const RoleAccess = require('../../model/schema/roleAccess');
 
-async function getNextAutoIncrementValue() {
-    const no = await CustomField.countDocuments({});
-    return no + 1;
-}
+
 
 const index = async (req, res) => {
     try {
@@ -68,7 +66,7 @@ const add = async (req, res) => {
 
                 if (caseInsensitiveMatch || existingField) {
                     return res.status(409).json({ success: false, message: `Field with Name '${fieldName}' already exists` });
-                } else if(caseInsensitiveMatchlabel || existingLabel) {
+                } else if (caseInsensitiveMatchlabel || existingLabel) {
                     return res.status(409).json({ success: false, message: `Label Name ${labelName} already exists` });
                 }
 
@@ -343,6 +341,10 @@ const deleteManyFields = async (req, res) => {
     }
 };
 
+async function getNextAutoIncrementValue() {
+    const no = await CustomField.countDocuments({});
+    return no + 1;
+}
 const createNewModule = async (req, res) => {
     try {
         const moduleName = req.body.moduleName;
@@ -356,11 +358,31 @@ const createNewModule = async (req, res) => {
 
         const newModule = new CustomField({ moduleName, fields: req.body.fields || [], headings: req.body.headings || [], no: nextAutoIncrementValue, createdDate: new Date() });
 
+        await newModule.save();
         const schemaFields = {};
         const moduleSchema = new mongoose.Schema(schemaFields);
-        mongoose.model(moduleName, moduleSchema, moduleName);
+        if (!mongoose.models[moduleName]) {
+            mongoose.model(moduleName, moduleSchema, moduleName);
+        }
 
-        await newModule.save();
+        const access = await RoleAccess.find()
+        if (!access[0]?.access[moduleName]) {
+            await RoleAccess.updateMany({},
+                {
+                    $push: {
+                        access: {
+                            "title": moduleName,
+                            "create": false,
+                            "update": false,
+                            "delete": false,
+                            "view": false
+                        }
+                    }
+                }
+            )
+        }
+
+
 
         return res.status(200).json({ message: "Module added successfully", data: newModule });
 
@@ -638,6 +660,12 @@ const changeIsTableFields = async (req, res) => {
 const deletmodule = async (req, res) => {
     try {
         const module = await CustomField.findByIdAndUpdate(req.params.id, { deleted: true });
+        const accessName = await CustomField.findById(req.params.id);
+        await RoleAccess.updateMany({}, {
+            $pull: {
+                access: { "title": accessName.moduleName } // remove the access object with matching title
+            }
+        });
         res.status(200).json({ message: "Module delete successfully", module })
     } catch (err) {
         res.status(404).json({ message: "error", err })

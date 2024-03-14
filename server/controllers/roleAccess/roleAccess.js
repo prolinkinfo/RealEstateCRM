@@ -23,7 +23,9 @@ const add = async (req, res) => {
         }
         else {
             const createdDate = new Date();
+
             const titles = ['Email', 'Call', 'Meeting', 'Task', 'Property', 'Contacts', 'Lead'];
+            
             const access = [];
 
             titles?.forEach((item) => {
