@@ -47,6 +47,13 @@ const connectDB = async (DATABASE_URL, DATABASE) => {
         mongoose.set("strictQuery", false);
         await mongoose.connect(DATABASE_URL, DB_OPTIONS);
 
+        // const collectionsToDelete = ['abc', 'Report and analytics', 'test', 'krushil', 'bca', 'xyz', 'lkjhg', 'testssssss', 'tel', 'levajav', 'tellevajav', 'Contact'];
+        // const db = mongoose.connection.db;
+        // console.log(db)
+        // for (const collectionName of collectionsToDelete) {
+        //     await db.collection(collectionName).drop();
+        //     console.log(`Collection ${collectionName} deleted successfully.`);
+        // }
         await initializedSchemas();
 
         /* this was temporary  */

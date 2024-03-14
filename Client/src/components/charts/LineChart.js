@@ -4,7 +4,7 @@ import { HasAccess } from "../../redux/accessUtils";
 
 const ApexChart = (props) => {
   const { data } = props;
-  const [contactsView, taskView, leadView, proprtyView, emailView, callView, meetingView] = HasAccess(["Contacts", "Task", "Lead", "Property", "Email", "Call", "Meeting"]);
+  const [contactsView, taskView, leadView, proprtyView, emailView, callView, meetingView] = HasAccess(["Contact", "Task", "Lead", "Property", "Email", "Call", "Meeting"]);
   let permissions = []
   let permissionsLength = []
   data?.forEach(item => {
@@ -51,7 +51,7 @@ const ApexChart = (props) => {
       }
     }
   });
-  
+
   const state = {
     series: [
       {

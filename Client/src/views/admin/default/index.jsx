@@ -44,7 +44,7 @@ export default function UserReports() {
   const [data, setData] = useState([]);
   const [propertyData, setPropertyData] = useState([]);
   const navigate = useNavigate();
-  const [contactsView, taskView, leadView, proprtyView, emailView, callView, meetingView] = HasAccess(["Contacts", "Task", "Lead", "Property", "Email", "Call", "Meeting"]);
+  const [contactsView, taskView, leadView, proprtyView, emailView, callView, meetingView] = HasAccess(["Contact", "Task", "Lead", "Property", "Email", "Call", "Meeting"]);
 
   const options = {
     chart: {
