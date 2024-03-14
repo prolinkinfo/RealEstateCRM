@@ -42,21 +42,34 @@ const add = async (req, res) => {
 
             if (existingSchema) {
                 const fieldName = req.body.fields?.[0]?.name;
+                const labelName = req.body.fields?.[0]?.label;
                 const fieldType = req.body.fields?.[0]?.backendType || "Mixed";
+
+                // console.log(labelName,"labelName")
 
                 // Check if the field name already exists in the schema (case-insensitive)
                 const caseInsensitiveMatch = Object.keys(existingSchema.paths)?.find(path => {
-                    return path.toLowerCase() === fieldName.toLowerCase();
+                    return path.toLowerCase() === fieldName.toLowerCase() || path.toLowerCase() === labelName.toLowerCase();
+                });
+                const caseInsensitiveMatchlabel = Object.keys(existingSchema.paths)?.find(path => {
+                    return path.toLowerCase() === labelName.toLowerCase();
                 });
 
                 // Check for duplicate name in dynamic fields (case-insensitive)
                 const existingField = await CustomField.findOne({
                     _id: req.body.moduleId,
-                    'fields.name': { $regex: new RegExp(`^${req.body?.fields[0]?.name}$`, 'i') }
+                    'fields.name': { $regex: new RegExp(`^${req.body?.fields[0]?.name}$`, 'i') },
+                });
+
+                const existingLabel = await CustomField.findOne({
+                    _id: req.body.moduleId,
+                    'fields.label': { $regex: new RegExp(`^${req.body?.fields[0]?.label}$`, 'i') },
                 });
 
                 if (caseInsensitiveMatch || existingField) {
-                    return res.status(409).json({ success: false, message: `Field with name '${fieldName}' already exists` });
+                    return res.status(409).json({ success: false, message: `Field with Name '${fieldName}' already exists` });
+                } else if(caseInsensitiveMatchlabel || existingLabel) {
+                    return res.status(409).json({ success: false, message: `Label Name ${labelName} already exists` });
                 }
 
                 // Add fields in CustomField collection
