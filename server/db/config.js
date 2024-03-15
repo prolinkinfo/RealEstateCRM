@@ -67,9 +67,9 @@ const connectDB = async (DATABASE_URL, DATABASE) => {
         };
 
         // Create default modules
-        await createNewModule({ body: { moduleName: 'Lead', fields: [], headings: [] } }, mockRes);
-        await createNewModule({ body: { moduleName: 'Contact', fields: [], headings: [] } }, mockRes);
-        await createNewModule({ body: { moduleName: 'Property', fields: [], headings: [] } }, mockRes);
+        await createNewModule({ body: { moduleName: 'Lead', fields: [], headings: [], isDefault: true } }, mockRes);
+        await createNewModule({ body: { moduleName: 'Contact', fields: [], headings: [], isDefault: true } }, mockRes);
+        await createNewModule({ body: { moduleName: 'Property', fields: [], headings: [], isDefault: true } }, mockRes);
         /*  */
 
         let adminExisting = await User.find({ role: 'superAdmin' });
