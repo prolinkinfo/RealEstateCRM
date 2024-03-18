@@ -116,7 +116,7 @@ const Index = (props) => {
     const [data, setData] = useState([]);
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
-    const [permission, leadAccess, contactAccess] = HasAccess(["Call", 'Lead', 'Contact']);
+    const [permission, leadAccess, contactAccess] = HasAccess(["Calls", 'Leads', 'Contacts']);
 
     const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },

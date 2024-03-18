@@ -126,7 +126,7 @@ const Task = () => {
     const [data, setData] = useState([]);
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
-    const [permission, leadAccess, contactAccess] = HasAccess(["Task", 'Lead', 'Contact']);
+    const [permission, leadAccess, contactAccess] = HasAccess(["Tasks", 'Leads', 'Contacts']);
     const location = useLocation();
     const state = location.state;
     const tableColumns = [

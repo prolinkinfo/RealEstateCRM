@@ -35,7 +35,7 @@ export default function User(props) {
 
     const fetchRoute = async () => {
         let response = await getApi("api/route/");
-        setRoute(response.data);
+        setRoute(response?.data);
     };
 
     const pathName = (name) => {
@@ -101,37 +101,21 @@ export default function User(props) {
 
     routes.push(...accessRoute)
 
-    // const getAllRoute = route?.map((item, i) => {
-
-    //     if (!routes.includes(item.moduleName)) {
-    //         return (
-    //             routes.push({
-    //                 name: item?.moduleName,
-    //                 layout: [ROLE_PATH.user],
-    //                 path: pathName(item.moduleName),
-    //                 icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
-    //                 component: MainDashboard,
-    //             })
-
-
-    //         )
-    //     }
-
-    // })
-    const getAllRoute = route?.map((item, i) => {
-        if (routes?.filter(({ name }) => name !== item.moduleName)) {
-            routes.push(
-                {
+    route?.map((item, i) => {
+        if (!routes.some(route => route.name === item.moduleName)) {
+            return (
+                routes.push({
                     name: item?.moduleName,
                     layout: [ROLE_PATH.user],
                     path: pathName(item.moduleName),
                     icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
                     component: MainDashboard,
-                });
+                })
+            )
         }
-    });
+    })
 
-    console.log(routes);
+
 
 
     const getActiveRoute = (routes) => {
@@ -157,19 +141,19 @@ export default function User(props) {
     };
     const under = (routes) => {
         let activeRoute = false
-        for (let i = 0; i < routes.length; i++) {
-            if (routes[i].collapse) {
-                let collapseActiveRoute = getActiveRoute(routes[i].items);
+        for (let i = 0; i < routes?.length; i++) {
+            if (routes[i]?.collapse) {
+                let collapseActiveRoute = getActiveRoute(routes[i]?.items);
                 if (collapseActiveRoute !== activeRoute) {
                     return collapseActiveRoute;
                 }
-            } else if (routes[i].category) {
-                let categoryActiveRoute = getActiveRoute(routes[i].items);
+            } else if (routes[i]?.category) {
+                let categoryActiveRoute = getActiveRoute(routes[i]?.items);
                 if (categoryActiveRoute !== activeRoute) {
                     return categoryActiveRoute;
                 }
             } else {
-                if (window.location.href.indexOf(routes[i].path.replace("/:id", "")) !== -1) {
+                if (window.location.href?.indexOf(routes[i]?.path?.replace("/:id", "")) !== -1) {
                     return routes[i];
                 }
             }

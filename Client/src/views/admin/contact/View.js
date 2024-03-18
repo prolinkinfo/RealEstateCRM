@@ -67,7 +67,7 @@ const View = () => {
     const size = "lg";
     const navigate = useNavigate()
 
-    const [permission, callAccess, emailAccess, taskAccess, meetingAccess] = HasAccess(['Contacts', 'Call', 'Email', 'Task', 'Meeting']);
+    const [permission, callAccess, emailAccess, taskAccess, meetingAccess] = HasAccess(['Contacts', 'Calls', 'Emails', 'Tasks', 'Meetings']);
 
     const columnsDataColumns = [
         { Header: "sender", accessor: "senderName", },

@@ -100,7 +100,7 @@ const Index = () => {
     const size = "lg";
     const user = JSON.parse(localStorage.getItem("user"));
     const navigate = useNavigate();
-    const [permission, emailAccess, callAccess] = HasAccess(['Lead', 'Email', 'Call']);
+    const [permission, emailAccess, callAccess] = HasAccess(['Leads', 'Emails', 'Calls']);
     const [isLoding, setIsLoding] = useState(false);
     const [data, setData] = useState([]);
     // const [displaySearchData, setDisplaySearchData] = useState(false);

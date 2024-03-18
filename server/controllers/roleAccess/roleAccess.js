@@ -25,7 +25,7 @@ const add = async (req, res) => {
         else {
             const createdDate = new Date();
 
-            const titles = ['Email', 'Call', 'Meeting', 'Task', 'Property', 'Contact', 'Lead'];
+            const titles = ['Emails', 'Calls', 'Meetings', 'Tasks', 'Properties', 'Contacts', 'Leads'];
             const customModules = Array.from(await customField.find(), item => item.moduleName);
             customModules.forEach(module => {
                 if (!titles?.includes(module)) {
