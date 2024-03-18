@@ -188,7 +188,7 @@ import DataNotFound from "../notFoundData";
 
 const CommonCheckTable = (props) => {
     // const { isLoding, title, columnData, dataColumn, tableData, allData, ManageGrid, setSearchedData, deleteMany, setDisplaySearchData, displaySearchData, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, AdvanceSearch, BackButton, getTagValuesOutside, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
-    const { isLoding, title, columnData, dataColumn, searchedDataOut, setSearchedDataOut, tableData, state, allData, ManageGrid, deleteMany, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, AdvanceSearch, searchDisplay, setSearchDisplay, BackButton, getTagValuesOutside, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
+    const { isLoding, title, columnData, dataColumn, searchedDataOut, setSearchedDataOut, tableData, state, allData, ManageGrid, deleteMany, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, checkBox, AdvanceSearch, searchDisplay, setSearchDisplay, BackButton, getTagValuesOutside, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
 
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -298,9 +298,9 @@ const CommonCheckTable = (props) => {
 
     const handleCheckboxChange = (event, value) => {
         if (event.target.checked) {
-            setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
+            setSelectedValues && setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
         } else {
-            setSelectedValues((prevSelectedValues) =>
+            setSelectedValues && setSelectedValues((prevSelectedValues) =>
                 prevSelectedValues.filter((selectedValue) => selectedValue !== value)
             );
         }
@@ -519,7 +519,8 @@ const CommonCheckTable = (props) => {
                                                         else {
                                                             data = (
                                                                 <Flex align="center" >
-                                                                    {item.Header === "#" && <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues?.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />}
+                                                                    {(item.Header === "#" && (checkBox || checkBox === undefined)) && <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues?.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />}
+                                                                   
                                                                     <Text color={textColor} fontSize="sm" fontWeight="700">
                                                                         {item.Header === "#" ? cell?.row?.index + 1 : cell?.value ? cell?.value : '-'}
                                                                     </Text>
