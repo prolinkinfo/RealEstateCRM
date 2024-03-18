@@ -1,3 +1,4 @@
+const customField = require('../../model/schema/customField');
 const RoleAccess = require('../../model/schema/roleAccess');
 const User = require('../../model/schema/user');
 
@@ -23,7 +24,15 @@ const add = async (req, res) => {
         }
         else {
             const createdDate = new Date();
-            const titles = ['Email', 'Call', 'Meeting', 'Task', 'Property', 'Contacts', 'Lead'];
+
+            const titles = ['Emails', 'Calls', 'Meetings', 'Tasks', 'Properties', 'Contacts', 'Leads'];
+            const customModules = Array.from(await customField.find(), item => item.moduleName);
+            customModules.forEach(module => {
+                if (!titles?.includes(module)) {
+                    titles.push(module);
+                }
+            });
+
             const access = [];
 
             titles?.forEach((item) => {

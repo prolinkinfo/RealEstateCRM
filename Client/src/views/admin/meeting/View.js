@@ -32,7 +32,7 @@ const View = () => {
         fetchData()
     }, [])
 
-    const [contactAccess, leadAccess] = HasAccess(['Contacts','Lead'])
+    const [contactAccess, leadAccess] = HasAccess(['Contacts','Leads'])
 
     return (
         <>

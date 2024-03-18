@@ -30,8 +30,11 @@ export function SidebarLinks(props) {
   // this function creates the links from the secondary accordions (for example auth -> sign-in -> default)
   const createLinks = (routes) => {
 
+    // console.log("routes--::", routes)
     return routes?.map((route, index) => {
-      if (route.category) {
+      // console.log("print--::", route?.path, !route?.under, user?.role, route?.layout)
+      // console.log("route--::", !route?.under && user?.role && route?.layout?.includes(`/${user?.role}`))
+      if (route?.category) {
         return (
           <>
             <Text
@@ -46,21 +49,21 @@ export function SidebarLinks(props) {
               pt='18px'
               pb='10px'
               key={index}>
-              {route.name}
+              {route?.name}
             </Text>
-            {createLinks(route.items)}
+            {createLinks(route?.items)}
           </>
         );
-      } else if (!route.under && user?.role && route.layout?.includes(`/${user.role}`)) {
+      } else if (!route?.under && user?.role && route?.layout?.includes(`/${user?.role}`)) {
         return (
           <NavLink key={index} to={route.path}>
-            {route.separator &&
+            {route?.separator &&
               <Box position='relative'
                 margin='20px 0'
               >
                 <Divider />
                 <AbsoluteCenter textTransform={'capitalize'} bg='white' width={'max-content'} padding='0 10px' textAlign={'center'}>
-                  {route.separator}
+                  {route?.separator}
                 </AbsoluteCenter>
               </Box>
             }

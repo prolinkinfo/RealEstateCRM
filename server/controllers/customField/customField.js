@@ -1,10 +1,8 @@
 const mongoose = require("mongoose");
 const CustomField = require("../../model/schema/customField");
+const RoleAccess = require('../../model/schema/roleAccess');
 
-async function getNextAutoIncrementValue() {
-    const no = await CustomField.countDocuments({});
-    return no + 1;
-}
+
 
 const index = async (req, res) => {
     try {
@@ -42,21 +40,34 @@ const add = async (req, res) => {
 
             if (existingSchema) {
                 const fieldName = req.body.fields?.[0]?.name;
+                const labelName = req.body.fields?.[0]?.label;
                 const fieldType = req.body.fields?.[0]?.backendType || "Mixed";
+
+                // console.log(labelName,"labelName")
 
                 // Check if the field name already exists in the schema (case-insensitive)
                 const caseInsensitiveMatch = Object.keys(existingSchema.paths)?.find(path => {
-                    return path.toLowerCase() === fieldName.toLowerCase();
+                    return path.toLowerCase() === fieldName.toLowerCase() || path.toLowerCase() === labelName.toLowerCase();
+                });
+                const caseInsensitiveMatchlabel = Object.keys(existingSchema.paths)?.find(path => {
+                    return path.toLowerCase() === labelName.toLowerCase();
                 });
 
                 // Check for duplicate name in dynamic fields (case-insensitive)
                 const existingField = await CustomField.findOne({
                     _id: req.body.moduleId,
-                    'fields.name': { $regex: new RegExp(`^${req.body?.fields[0]?.name}$`, 'i') }
+                    'fields.name': { $regex: new RegExp(`^${req.body?.fields[0]?.name}$`, 'i') },
+                });
+
+                const existingLabel = await CustomField.findOne({
+                    _id: req.body.moduleId,
+                    'fields.label': { $regex: new RegExp(`^${req.body?.fields[0]?.label}$`, 'i') },
                 });
 
                 if (caseInsensitiveMatch || existingField) {
-                    return res.status(409).json({ success: false, message: `Field with name '${fieldName}' already exists` });
+                    return res.status(409).json({ success: false, message: `Field with Name '${fieldName}' already exists` });
+                } else if (caseInsensitiveMatchlabel || existingLabel) {
+                    return res.status(409).json({ success: false, message: `Label Name ${labelName} already exists` });
                 }
 
                 // Add fields in CustomField collection
@@ -330,6 +341,10 @@ const deleteManyFields = async (req, res) => {
     }
 };
 
+async function getNextAutoIncrementValue() {
+    const no = await CustomField.countDocuments({});
+    return no + 1;
+}
 const createNewModule = async (req, res) => {
     try {
         const moduleName = req.body.moduleName;
@@ -345,10 +360,30 @@ const createNewModule = async (req, res) => {
 
         const schemaFields = {};
         const moduleSchema = new mongoose.Schema(schemaFields);
-        mongoose.model(moduleName, moduleSchema, moduleName);
+        if (!mongoose.models[moduleName]) {
+            mongoose.model(moduleName, moduleSchema, moduleName);
+        } else if (mongoose.models[moduleName] && !req?.body?.isDefault) {
+            return res.status(400).json({ success: false, message: `Module name already exist` });
+        }
+
+        const access = await RoleAccess.find()
+        if (!access[0]?.access[moduleName]) {
+            await RoleAccess.updateMany({},
+                {
+                    $push: {
+                        access: {
+                            "title": moduleName,
+                            "create": false,
+                            "update": false,
+                            "delete": false,
+                            "view": false
+                        }
+                    }
+                }
+            )
+        }
 
         await newModule.save();
-
         return res.status(200).json({ message: "Module added successfully", data: newModule });
 
     } catch (err) {
@@ -370,6 +405,11 @@ const changeModuleName = async (req, res) => {
         if (!result) {
             return res.status(404).json({ success: false, message: 'Module not found' });
         }
+
+        await RoleAccess.updateMany(
+            { "access.title": oldModule.moduleName }, // Filter criteria to find the documents
+            { $set: { "access.$.title": moduleName } } // Update operation
+        );
 
         // Function to change module name without losing data
         const changeModuleName = async (oldModuleName, newModuleName) => {
@@ -625,6 +665,12 @@ const changeIsTableFields = async (req, res) => {
 const deletmodule = async (req, res) => {
     try {
         const module = await CustomField.findByIdAndUpdate(req.params.id, { deleted: true });
+        const accessName = await CustomField.findById(req.params.id);
+        await RoleAccess.updateMany({}, {
+            $pull: {
+                access: { "title": accessName.moduleName } // remove the access object with matching title
+            }
+        });
         res.status(200).json({ message: "Module delete successfully", module })
     } catch (err) {
         res.status(404).json({ message: "error", err })

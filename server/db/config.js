@@ -47,6 +47,13 @@ const connectDB = async (DATABASE_URL, DATABASE) => {
         mongoose.set("strictQuery", false);
         await mongoose.connect(DATABASE_URL, DB_OPTIONS);
 
+        // const collectionsToDelete = ['abc', 'Report and analytics', 'test', 'krushil', 'bca', 'xyz', 'lkjhg', 'testssssss', 'tel', 'levajav', 'tellevajav', 'Contact'];
+        // const db = mongoose.connection.db;
+        // console.log(db)
+        // for (const collectionName of collectionsToDelete) {
+        //     await db.collection(collectionName).drop();
+        //     console.log(`Collection ${collectionName} deleted successfully.`);
+        // }
         await initializedSchemas();
 
         /* this was temporary  */
@@ -60,9 +67,9 @@ const connectDB = async (DATABASE_URL, DATABASE) => {
         };
 
         // Create default modules
-        await createNewModule({ body: { moduleName: 'Lead', fields: [], headings: [] } }, mockRes);
-        await createNewModule({ body: { moduleName: 'Contact', fields: [], headings: [] } }, mockRes);
-        await createNewModule({ body: { moduleName: 'Property', fields: [], headings: [] } }, mockRes);
+        await createNewModule({ body: { moduleName: 'Leads', fields: [], headings: [], isDefault: true } }, mockRes);
+        await createNewModule({ body: { moduleName: 'Contacts', fields: [], headings: [], isDefault: true } }, mockRes);
+        await createNewModule({ body: { moduleName: 'Properties', fields: [], headings: [], isDefault: true } }, mockRes);
         /*  */
 
         let adminExisting = await User.find({ role: 'superAdmin' });

@@ -37,9 +37,9 @@ export const putApi = async (path, data, id) => {
     }
 }
 
-export const deleteApi = async (path, id) => {
+export const deleteApi = async (path, param) => {
     try {
-        let result = await axios.delete(constant.baseUrl + path + id, {
+        let result = await axios.delete(constant.baseUrl + path + param, {
             headers: {
                 Authorization: localStorage.getItem("token") || sessionStorage.getItem("token")
             }

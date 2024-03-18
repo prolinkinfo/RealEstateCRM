@@ -261,7 +261,7 @@ export default function CheckTable(props) {
     fetchData()
   }, [action])
 
-  const [contactAccess, leadAccess] = HasAccess(['Contacts', 'Lead'])
+  const [contactAccess, leadAccess] = HasAccess(['Contacts', 'Leads'])
 
   const handleSearch = (results) => {
     setSearchedData(results);

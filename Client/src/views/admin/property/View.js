@@ -84,7 +84,7 @@ const View = () => {
     }, [action])
 
 
-    const [permission, contactAccess, emailAccess, callAccess] = HasAccess(['Property', 'Contacts', 'Email', 'Call']);
+    const [permission, contactAccess, emailAccess, callAccess] = HasAccess(['Properties', 'Contacts', 'Emails', 'Calls']);
 
     return (
         <>

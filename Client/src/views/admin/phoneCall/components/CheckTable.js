@@ -97,7 +97,7 @@ export default function CheckTable(props) {
     { Header: "Created", accessor: "timestamp" }
   ];
 
-  const [contactAccess, leadAccess] = HasAccess(['Contacts', 'Lead'])
+  const [contactAccess, leadAccess] = HasAccess(['Contacts', 'Leads'])
 
   let isColumnSelected;
   const toggleColumnVisibility = (columnKey) => {

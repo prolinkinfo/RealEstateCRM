@@ -9,6 +9,7 @@ const reportingRoute = require('./reporting/_routes');
 const documentRoute = require('./document/_routes');
 const userRoute = require('./user/_routes');
 
+const route = require('./route/_routes');
 const emailRoute = require('./emailHistory/_routes');
 const phoneCallRoute = require('./phoneCall/_routes');
 const TextMsgRoute = require('./textMsg/_routes');
@@ -34,6 +35,8 @@ router.use('/email', emailRoute);
 router.use('/phoneCall', phoneCallRoute);
 router.use('/text-msg', TextMsgRoute);
 router.use('/meeting', meetingRoute);
+
+router.use('/route', route);
 router.use('/role-access', roleAccessRoute);
 router.use("/images", imagesRoute);
 router.use("/custom-field", customFieldRoute);
