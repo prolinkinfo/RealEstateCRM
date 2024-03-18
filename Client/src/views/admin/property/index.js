@@ -129,7 +129,7 @@ const Index = () => {
 
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
-        const result = await getApi(`api/custom-field/?moduleName=Property`);
+        const result = await getApi(`api/custom-field/?moduleName=Properties`);
         setPropertyData(result?.data);
 
         const tempTableColumns = [
