@@ -130,12 +130,12 @@ const Index = () => {
 
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
-        const result = await getApi(`api/custom-field/?moduleName=Lead`);
+        const result = await getApi(`api/custom-field/?moduleName=Leads`);
         setLeadData(result?.data);
 
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-            ...result?.data?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => ({ Header: field?.label, accessor: field?.name })),
+            ...(result?.data?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => ({ Header: field?.label, accessor: field?.name })) || []),
             {
                 Header: "Action", isSortable: false, center: true,
                 cell: ({ row }) => (
@@ -161,7 +161,6 @@ const Index = () => {
         ];
 
         setSelectedColumns(JSON.parse(JSON.stringify(tempTableColumns)));
-        setColumns(JSON.parse(JSON.stringify(tempTableColumns)));
         setColumns(tempTableColumns);
         setTableColumns(JSON.parse(JSON.stringify(tempTableColumns)));
         setIsLoding(false);
