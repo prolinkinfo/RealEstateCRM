@@ -79,7 +79,7 @@ const Index = () => {
 
   useEffect(() => {
     fetchData()
-  }, [])
+  }, [action])
 
   return (
     <div>
