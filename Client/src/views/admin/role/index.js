@@ -79,7 +79,7 @@ const Index = () => {
 
   useEffect(() => {
     fetchData()
-  }, [])
+  }, [action])
 
   return (
     <div>
@@ -110,6 +110,7 @@ const Index = () => {
         BackButton={<Button onClick={() => navigate('/admin-setting')} variant="brand" size="sm" leftIcon={<IoIosArrowBack />} ml={2}>Back</Button>}
         deleteMany={true}
         access={true}
+        checkBox={false}
         ManageGrid={false}
         onOpen={onOpen}
       />

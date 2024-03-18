@@ -135,7 +135,7 @@ const Index = () => {
 
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
-        const result = await getApi(`api/custom-field/?moduleName=Contact`);
+        const result = await getApi(`api/custom-field/?moduleName=Contacts`);
         setContactData(result?.data);
 
         const tempTableColumns = [
