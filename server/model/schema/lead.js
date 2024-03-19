@@ -64,5 +64,5 @@ const initializeLeadSchema = async () => {
     });
 };
 
-const Lead = mongoose.model('Lead', leadSchema, 'Lead');
+const Lead = mongoose.model('Leads', leadSchema, 'Leads');
 module.exports = { Lead, initializeLeadSchema };

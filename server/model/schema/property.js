@@ -74,5 +74,5 @@ const initializePropertySchema = async () => {
     });
 };
 
-const Property = mongoose.model('Property', propertySchema, 'Property');
+const Property = mongoose.model('Properties', propertySchema, 'Properties');
 module.exports = { Property, initializePropertySchema };
