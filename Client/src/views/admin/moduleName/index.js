@@ -98,19 +98,21 @@ const Index = () => {
                                 <Card>
                                     <Flex alignItems={"center"} justifyContent={"space-between"}>
                                         <Flex>
-                                            <Checkbox disabled={item.moduleName === 'Property' || item.moduleName === 'Contact' || item.moduleName === 'Lead'} colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(item?._id)} onChange={(event) => handleCheckboxChange(event, item?._id)} me="10px" />
+                                            <Checkbox disabled={item.moduleName === 'Properties' || item.moduleName === 'Contacts' || item.moduleName === 'Leads'} colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(item?._id)} onChange={(event) => handleCheckboxChange(event, item?._id)} me="10px" />
                                             <Tooltip hasArrow label={item?.moduleName} bg='gray.200' color='gray' textTransform={"capitalize"} fontSize='sm'>
-                                                <Heading size="md" fontWeight={"500"} textTransform={"capitalize"} sx={{
+                                                <Heading size="md" fontWeight={"500"} sx={{
                                                     textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '6rem',
                                                     overflow: 'hidden'
                                                 }}
-                                                >{item?.moduleName}</Heading>
+                                                >
+                                                    {item?.moduleName}
+                                                </Heading>
 
                                             </Tooltip>
                                         </Flex>
                                         <Flex>
-                                            <Button size='sm' disabled={item.moduleName === 'Property' || item.moduleName === 'Contact' || item.moduleName === 'Lead'} variant='outline' me={2} color={'green'} onClick={() => handleEditOpen(item)}><EditIcon /></Button>
-                                            <Button size='sm' disabled={item.moduleName === 'Property' || item.moduleName === 'Contact' || item.moduleName === 'Lead'} variant='outline' me={2} color={'red'} onClick={() => handleDeleteOpen(item)}><DeleteIcon /></Button>
+                                            <Button size='sm' disabled={item.moduleName === 'Properties' || item.moduleName === 'Contacts' || item.moduleName === 'Leads'} variant='outline' me={2} color={'green'} onClick={() => handleEditOpen(item)}><EditIcon /></Button>
+                                            <Button size='sm' disabled={item.moduleName === 'Properties' || item.moduleName === 'Contacts' || item.moduleName === 'Leads'} variant='outline' me={2} color={'red'} onClick={() => handleDeleteOpen(item)}><DeleteIcon /></Button>
                                         </Flex>
                                     </Flex>
                                 </Card>
