@@ -1,32 +1,64 @@
 // Chakra imports
-import { Portal, Box, useDisclosure, Flex } from '@chakra-ui/react';
+import { Portal, Box, useDisclosure, Flex, Icon } from '@chakra-ui/react';
 import Footer from 'components/footer/FooterAdmin.js';
 // Layout components
 import Navbar from 'components/navbar/NavbarAdmin.js';
 import Sidebar from 'components/sidebar/Sidebar.js';
 import Spinner from 'components/spinner/Spinner';
 import { SidebarContext } from 'contexts/SidebarContext';
-import { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { ROLE_PATH } from '../../roles';
 import routes from 'routes.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchImage } from '../../redux/imageSlice';
+import { getApi } from 'services/api';
+import { MdHome, MdLock } from 'react-icons/md';
+import DynamicPage from 'views/admin/dynamicPage';
+
+const MainDashboard = React.lazy(() => import("views/admin/default"));
 
 // Custom Chakra theme
 export default function Dashboard(props) {
 	const { ...rest } = props;
 	// states and functions
 	const [fixed] = useState(false);
+	const [route, setRoute] = useState();
 	const [toggleSidebar, setToggleSidebar] = useState(false);
 	const [openSidebar, setOpenSidebar] = useState(false)
 	const user = JSON.parse(localStorage.getItem("user"))
 
+	const fetchRoute = async () => {
+		let response = await getApi("api/route/");
+		setRoute(response?.data);
+	};
+	const pathName = (name) => {
+		return `/${name.toLowerCase().replace(/ /g, '-')}`;
+	}
+
+	useEffect(() => {
+		fetchRoute();
+	}, []);
 	// functions for changing the states from components
 	const getRoute = () => {
 		return window.location.pathname !== '/admin/full-screen-maps';
 	};
+
+	route?.map((item, i) => {
+		if (!routes.some(route => route.name === item.moduleName)) {
+			return (
+				routes.push({
+					name: item?.moduleName,
+					layout: [ROLE_PATH.superAdmin],
+					path: pathName(item.moduleName),
+					icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
+					component: DynamicPage,
+				})
+			)
+		}
+	})
+
 	const getActiveRoute = (routes) => {
 		let activeRoute = 'Prolink';
 		for (let i = 0; i < routes.length; i++) {
