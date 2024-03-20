@@ -54,7 +54,7 @@ const Report = () => {
                     dataColumn={tableColumns}
                     allData={data}
                     tableData={data}
-                    AdvanceSearch={() => ""}
+                    AdvanceSearch={false}
                     tableCustomFields={[]}
                     deleteMany={true}
                     ManageGrid={false}

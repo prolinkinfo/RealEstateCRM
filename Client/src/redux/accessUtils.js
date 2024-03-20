@@ -31,21 +31,26 @@ export const HasAccess = (actions) => {
             return role?.access?.find(a => a.title === action);
         });
 
-        access.forEach(permission => {
-            const { title, ...rest } = permission;
+        access?.forEach(permission => {
+            // Check if permission is defined
+            if (permission) {
+                // Destructure permission only if it's defined
+                const { title, ...rest } = permission;
 
-            if (!mergedPermissions[title]) {
-                mergedPermissions[title] = { ...rest };
-            } else {
-                // Merge with priority to true values
-                Object.keys(rest).forEach(key => {
-                    if (mergedPermissions[title][key] !== true) {
-                        mergedPermissions[title][key] = rest[key];
-                    }
-                });
+                if (!mergedPermissions[title]) {
+                    mergedPermissions[title] = { ...rest };
+                } else {
+                    // Merge with priority to true values
+                    Object.keys(rest).forEach(key => {
+                        if (mergedPermissions[title][key] !== true) {
+                            mergedPermissions[title][key] = rest[key];
+                        }
+                    });
+                }
             }
         });
     });
+
 
     // Return permissions for each action
     return actions.map(action => (

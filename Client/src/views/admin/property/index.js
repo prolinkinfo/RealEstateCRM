@@ -46,7 +46,7 @@
 //     useEffect(() => {
 //         setColumns(tableColumns)
 //     }, [onClose])
-//     const [permission] = HasAccess(['Property']);
+//     const [permission] = HasAccess(['Properties']);
 
 //     return (
 //         <div>
@@ -102,7 +102,7 @@ const Index = () => {
     const size = "lg";
     const user = JSON.parse(localStorage.getItem("user"));
     const navigate = useNavigate();
-    const [permission] = HasAccess(['Property']);
+    const [permission] = HasAccess(['Properties']);
     const [isLoding, setIsLoding] = useState(false);
     const [data, setData] = useState([]);
     const [displaySearchData, setDisplaySearchData] = useState(false);
@@ -129,7 +129,7 @@ const Index = () => {
 
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
-        const result = await getApi(`api/custom-field/?moduleName=Property`);
+        const result = await getApi(`api/custom-field/?moduleName=Properties`);
         setPropertyData(result?.data);
 
         const tempTableColumns = [

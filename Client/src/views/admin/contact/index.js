@@ -105,7 +105,7 @@ const Index = () => {
     const size = "lg";
     const user = JSON.parse(localStorage.getItem("user"));
     const navigate = useNavigate();
-    const [permission, emailAccess, callAccess] = HasAccess(['Contacts', 'Email', 'Call']);
+    const [permission, emailAccess, callAccess] = HasAccess(['Contacts', 'Emails', 'Calls']);
     const [isLoding, setIsLoding] = useState(false);
     const [data, setData] = useState([]);
     // const [displaySearchData, setDisplaySearchData] = useState(false);
@@ -135,7 +135,7 @@ const Index = () => {
 
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
-        const result = await getApi(`api/custom-field/?moduleName=Contact`);
+        const result = await getApi(`api/custom-field/?moduleName=Contacts`);
         setContactData(result?.data);
 
         const tempTableColumns = [

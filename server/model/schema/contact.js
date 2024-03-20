@@ -78,5 +78,5 @@ const initializeContactSchema = async () => {
     });
 };
 
-const Contact = mongoose.model('Contact', contactSchema, 'Contact');
+const Contact = mongoose.model('Contacts', contactSchema, 'Contacts');
 module.exports = { Contact, initializeContactSchema };

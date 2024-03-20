@@ -75,7 +75,7 @@ const View = () => {
     const [addEmailHistory, setAddEmailHistory] = useState(false);
     const [addPhoneCall, setAddPhoneCall] = useState(false);
 
-    const [permission, taskPermission, meetingPermission, callAccess, emailAccess, taskAccess, meetingAccess] = HasAccess(['Lead', 'Task', 'Meeting', 'Call', 'Email', 'Task', 'Meeting']);
+    const [permission, taskPermission, meetingPermission, callAccess, emailAccess, taskAccess, meetingAccess] = HasAccess(['Leads', 'Tasks', 'Meetings', 'Calls', 'Emails', 'Tasks', 'Meetings']);
 
     const columnsDataColumns = [
         { Header: "sender", accessor: "senderName", },
@@ -135,7 +135,7 @@ const View = () => {
     }
 
     const fetchCustomData = async () => {
-        const response = await getApi('api/custom-field?moduleName=Lead')
+        const response = await getApi('api/custom-field?moduleName=Leads')
         setLeadData(response.data)
     }
 

@@ -123,7 +123,7 @@ const Index = () => {
     const [data, setData] = useState([]);
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
-    const [permission] = HasAccess(['Meeting'])
+    const [permission] = HasAccess(['Meetings'])
     const tableColumns = [
         {
             Header: "#",

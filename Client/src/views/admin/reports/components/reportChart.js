@@ -48,7 +48,6 @@ const ReportChart = (props) => {
         }
     };
 
-
     const series = Object.keys(reportChart).map((key) => {
         const dataSet = reportChart[key][0];
 

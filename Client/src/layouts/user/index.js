@@ -13,6 +13,7 @@ import { MdHome, MdLock } from 'react-icons/md';
 import Spinner from 'components/spinner/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchImage } from '../../redux/imageSlice';
+import { getApi } from 'services/api';
 
 const MainDashboard = React.lazy(() => import("views/admin/default"));
 const SignInCentered = React.lazy(() => import("views/auth/signIn"));
@@ -23,12 +24,28 @@ export default function User(props) {
     // states and functions
     const [fixed] = useState(false);
     const [toggleSidebar, setToggleSidebar] = useState(false);
+    const [route, setRoute] = useState();
     const [openSidebar, setOpenSidebar] = useState(true)
     const user = JSON.parse(localStorage.getItem("user"))
     // functions for changing the states from components
     const getRoute = () => {
         return window.location.pathname !== '/admin/full-screen-maps';
     };
+
+
+    const fetchRoute = async () => {
+        let response = await getApi("api/route/");
+        setRoute(response?.data);
+    };
+
+    const pathName = (name) => {
+        return `/${name.toLowerCase().replace(/ /g, '-')}`;
+    }
+
+
+    useEffect(() => {
+        fetchRoute();
+    }, []);
 
     const layoutName = user?.roles?.map(item => `/${item.roleName}`)
 
@@ -84,6 +101,23 @@ export default function User(props) {
 
     routes.push(...accessRoute)
 
+    route?.map((item, i) => {
+        if (!routes.some(route => route.name === item.moduleName)) {
+            return (
+                routes.push({
+                    name: item?.moduleName,
+                    layout: [ROLE_PATH.user],
+                    path: pathName(item.moduleName),
+                    icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
+                    component: MainDashboard,
+                })
+            )
+        }
+    })
+
+
+
+
     const getActiveRoute = (routes) => {
         let activeRoute = 'Prolink';
         for (let i = 0; i < routes.length; i++) {
@@ -107,19 +141,19 @@ export default function User(props) {
     };
     const under = (routes) => {
         let activeRoute = false
-        for (let i = 0; i < routes.length; i++) {
-            if (routes[i].collapse) {
-                let collapseActiveRoute = getActiveRoute(routes[i].items);
+        for (let i = 0; i < routes?.length; i++) {
+            if (routes[i]?.collapse) {
+                let collapseActiveRoute = getActiveRoute(routes[i]?.items);
                 if (collapseActiveRoute !== activeRoute) {
                     return collapseActiveRoute;
                 }
-            } else if (routes[i].category) {
-                let categoryActiveRoute = getActiveRoute(routes[i].items);
+            } else if (routes[i]?.category) {
+                let categoryActiveRoute = getActiveRoute(routes[i]?.items);
                 if (categoryActiveRoute !== activeRoute) {
                     return categoryActiveRoute;
                 }
             } else {
-                if (window.location.href.indexOf(routes[i].path.replace("/:id", "")) !== -1) {
+                if (window.location.href?.indexOf(routes[i]?.path?.replace("/:id", "")) !== -1) {
                     return routes[i];
                 }
             }
@@ -172,18 +206,18 @@ export default function User(props) {
 
 
     const getRoutes = (routes) => {
-        return routes.map((prop, key) => {
+        return routes?.map((prop, key) => {
             // if (!prop.under && prop.layout === '/admin') {
-            if (!prop.under && prop.layout !== '/auth') {
-                return <Route path={prop.path} element={<prop.component />} key={key} />;
-            } else if (prop.under) {
-                return <Route path={prop.path} element={<prop.component />} key={key} />
+            if (!prop?.under && prop?.layout !== '/auth') {
+                return <Route path={prop?.path} element={prop && <prop.component />} key={key} />;
+            } else if (prop?.under) {
+                return <Route path={prop?.path} element={prop && <prop.component />} key={key} />
             }
-            if (prop.collapse) {
-                return getRoutes(prop.items);
+            if (prop?.collapse) {
+                return getRoutes(prop?.items);
             }
-            if (prop.category) {
-                return getRoutes(prop.items);
+            if (prop?.category) {
+                return getRoutes(prop?.items);
             } else {
                 return null;
             }
