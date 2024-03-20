@@ -132,7 +132,7 @@ const View = () => {
     }
 
     const fetchCustomData = async () => {
-        const response = await getApi('api/custom-field?moduleName=Contact')
+        const response = await getApi('api/custom-field?moduleName=Contacts')
         setContactData(response.data)
     }
 
