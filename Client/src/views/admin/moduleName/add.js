@@ -19,7 +19,7 @@ const Add = (props) => {
 
     const formik = useFormik({
         initialValues: initialValues,
-        // validationSchema: validationsAddSchema,
+        validationSchema: validationsAddSchema,
         onSubmit: (values, { resetForm }) => {
             AddData()
         },
@@ -61,7 +61,7 @@ const Add = (props) => {
                             <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                                 <GridItem colSpan={{ base: 12 }}>
                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='2px'>
-                                        Name
+                                        Name<Text color={"red"}>*</Text>
                                     </FormLabel>
                                     <Input
                                         fontSize='sm'
