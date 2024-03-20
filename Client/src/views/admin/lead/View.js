@@ -135,7 +135,7 @@ const View = () => {
     }
 
     const fetchCustomData = async () => {
-        const response = await getApi('api/custom-field?moduleName=Lead')
+        const response = await getApi('api/custom-field?moduleName=Leads')
         setLeadData(response.data)
     }
 

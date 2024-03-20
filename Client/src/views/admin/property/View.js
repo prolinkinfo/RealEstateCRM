@@ -74,7 +74,7 @@ const View = () => {
     }
 
     const fetchCustomData = async () => {
-        const response = await getApi('api/custom-field?moduleName=Property')
+        const response = await getApi('api/custom-field?moduleName=Properties')
         setPropertyData(response.data)
     }
 
@@ -170,7 +170,7 @@ const View = () => {
 
                         <TabPanels>
                             <TabPanel pt={4} p={0}>
-                                <CustomView data={propertyData[0]} fieldData={data}  />
+                                <CustomView data={propertyData[0]} fieldData={data} />
                             </TabPanel>
 
                             <TabPanel pt={4} p={0}>
