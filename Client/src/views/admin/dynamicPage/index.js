@@ -29,29 +29,36 @@ const Index = () => {
     const [selectedColumns, setSelectedColumns] = useState([]);
     const [action, setAction] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [leadData, setLeadData] = useState([]);
+    const [moduleData, setModuleData] = useState({});
     const [edit, setEdit] = useState(false);
     const [deleteModel, setDelete] = useState(false);
     const [selectedId, setSelectedId] = useState();
     const [selectedValues, setSelectedValues] = useState([]);
     const [isImport, setIsImport] = useState(false);
 
-    const fetchData = async () => {
+    const path = (name) => {
+        return `${name.toLowerCase().replace(/ /g, '-')}`;
+    }
+
+    const fetchData = async (id) => {
         setIsLoding(true);
-        // let result = await getApi(`api/form?moduleId=65b8b9ab300470dd6f6034da`);
-        // setData(result?.data);
+        let result = await getApi(`api/form?moduleId=${id}`);
+        console.log(result?.data?.data);
+        setData(result?.data?.data);
         setIsLoding(false);
     };
 
-    console.log(title)
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
-        const result = await getApi(`api/custom-field/?moduleName=${title}`);
-        setLeadData(result?.data);
+        // const result = await getApi(`api/custom-field/?moduleName=${title}`);
+        const result = await getApi(`api/custom-field`);
+        const singaleData = result?.data?.find((item) => path(item?.moduleName) === title)
+        setModuleData(singaleData);
+        fetchData(singaleData?._id);
 
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-            ...(result?.data?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => ({ Header: field?.label, accessor: field?.name })) || []),
+            ...(singaleData?.fields?.filter((field) => field?.isTableField === true)?.map((field) => ({ Header: field?.label, accessor: field?.name })) || []),
             {
                 Header: "Action", isSortable: false, center: true,
                 cell: ({ row }) => (
@@ -79,7 +86,7 @@ const Index = () => {
     }
 
     useEffect(() => {
-        fetchData();
+        // fetchData();
         fetchCustomDataFields();
     }, [action, title])
 
@@ -95,7 +102,7 @@ const Index = () => {
 
                 <GridItem colSpan={6}>
                     <CommonCheckTable
-                        title={title}
+                        title={moduleData?.moduleName}
                         isLoding={isLoding}
                         columnData={columns}
                         dataColumn={dataColumn}
@@ -106,7 +113,7 @@ const Index = () => {
                         // setDisplaySearchData={setDisplaySearchData}
                         // searchedData={searchedData}
                         // setSearchedData={setSearchedData}
-                        tableCustomFields={leadData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
+                        tableCustomFields={moduleData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
                         access={permission}
                         action={action}
                         setAction={setAction}
@@ -123,9 +130,9 @@ const Index = () => {
                 </GridItem>
             </Grid>
             }
-            {isOpen && <Add isOpen={isOpen} title={title} size={size} leadData={leadData[0]} onClose={onClose} setAction={setAction} action={action} />}
+            {isOpen && <Add isOpen={isOpen} title={title} size={size} leadData={moduleData[0]} onClose={onClose} setAction={setAction} action={action} />}
             {deleteModel && <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/form/deleteMany' data={selectedValues} method='many' setAction={setAction} />}
-            {edit && <Edit isOpen={edit} title={title} size={size} leadData={leadData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={leadData?.[0]?._id} />}
+            {edit && <Edit isOpen={edit} title={title} size={size} leadData={moduleData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={moduleData?.[0]?._id} />}
 
 
         </div>
