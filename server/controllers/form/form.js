@@ -36,6 +36,41 @@ const index = async (req, res) => {
     }
 };
 
+const view = async (req, res) => {
+    try {
+        if (!req?.query?.moduleId) {
+            return res.status(400).send({ success: false, message: "moduleId is required" });
+        }
+
+        const customField = await CustomField.findById(req.query?.moduleId).select("moduleName");
+
+        if (!customField) {
+            return res.status(404).send({ success: false, message: "Module not found" });
+        }
+
+        const collectionName = customField.moduleName;
+        const collectionExists = await mongoose.connection.db.listCollections({ name: collectionName }).hasNext();
+
+        if (!collectionExists) {
+            return res.status(404).send({ success: false, message: "Collection does not exist" });
+        }
+
+        const ExistingModel = mongoose.model(collectionName);
+
+        if (!ExistingModel) {
+            return res.status(500).send({ success: false, message: 'Model not found' });
+        }
+
+        let allData = await ExistingModel.findOne({ _id: req.params.id });
+
+        return res.status(200).json({ data: allData });
+
+    } catch (err) {
+        console.error(`Failed to display Record`, err);
+        return res.status(400).json({ success: false, message: `no data found`, error: err.toString() });
+    }
+};
+
 const add = async (req, res) => {
     try {
         if (!req?.body?.moduleId) {
@@ -187,4 +222,4 @@ const edit = async (req, res) => {
     }
 };
 
-module.exports = { index, add, edit, deleteField, deleteManyField };
+module.exports = { index, view, add, edit, deleteField, deleteManyField };
