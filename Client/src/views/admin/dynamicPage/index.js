@@ -130,9 +130,9 @@ const Index = () => {
                 </GridItem>
             </Grid>
             }
-            {isOpen && <Add isOpen={isOpen} title={title} size={size} leadData={moduleData[0]} onClose={onClose} setAction={setAction} action={action} />}
+            {isOpen && <Add isOpen={isOpen} title={title} size={size} moduleData={moduleData} onClose={onClose} setAction={setAction} action={action} />}
             {deleteModel && <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/form/deleteMany' data={selectedValues} method='many' setAction={setAction} />}
-            {edit && <Edit isOpen={edit} title={title} size={size} leadData={moduleData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={moduleData?.[0]?._id} />}
+            {edit && <Edit isOpen={edit} title={title} size={size} moduleData={moduleData} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={moduleData?.[0]?._id} />}
 
         </div>
     )

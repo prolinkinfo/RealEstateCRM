@@ -15,7 +15,7 @@ const Add = (props) => {
     const [isLoding, setIsLoding] = useState(false)
 
     const initialFieldValues = Object.fromEntries(
-        (props?.leadData?.fields || []).map(field => [field?.name, ''])
+        (props?.moduleData?.fields || []).map(field => [field?.name, ''])
     );
 
     const initialValues = {
@@ -26,7 +26,7 @@ const Add = (props) => {
     const formik = useFormik({
         initialValues: initialValues,
         // validationSchema: validationSchema,
-        validationSchema: yup.object().shape(generateValidationSchema(props?.leadData?.fields)),
+        validationSchema: yup.object().shape(generateValidationSchema(props?.moduleData?.fields)),
         onSubmit: (values, { resetForm }) => {
             AddData();
         },
@@ -37,7 +37,7 @@ const Add = (props) => {
     const AddData = async () => {
         try {
             setIsLoding(true)
-            let response = await postApi('api/form/add', { ...values, moduleId: props?.leadData?._id })
+            let response = await postApi('api/form/add', { ...values, moduleId: props?.moduleData?._id })
             if (response.status === 200) {
                 props.onClose();
                 formik.resetForm();
@@ -66,7 +66,7 @@ const Add = (props) => {
                         <IconButton onClick={props.onClose} icon={<CloseIcon />} />
                     </DrawerHeader>
                     <DrawerBody>
-                        <CustomForm leadData={props.leadData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
+                        <CustomForm moduleData={props.moduleData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
                     </DrawerBody>
                     <DrawerFooter>
                         <Button sx={{ textTransform: "capitalize" }} size="sm" disabled={isLoding ? true : false} variant="brand" type="submit" onClick={handleSubmit}                        >

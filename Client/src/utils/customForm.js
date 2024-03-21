@@ -3,13 +3,13 @@ import { Grid, GridItem, Heading, FormLabel, Input, Text, InputLeftElement, Inpu
 import { HSeparator } from 'components/separator/Separator';
 import { EmailIcon, PhoneIcon, StarIcon } from '@chakra-ui/icons';
 
-const CustomForm = ({ leadData, values, handleChange, handleBlur, errors, touched, setFieldValue }) => {
+const CustomForm = ({ moduleData, values, handleChange, handleBlur, errors, touched, setFieldValue }) => {
     return (
         <Grid templateColumns="repeat(12, 1fr)" gap={3}>
-            {leadData?.headings?.length > 0 ?
+            {moduleData?.headings?.length > 0 ?
                 <>
                     {
-                        leadData?.headings?.map((item, ind) => (
+                        moduleData?.headings?.map((item, ind) => (
                             <>
                                 <GridItem colSpan={{ base: 12 }}>
                                     {ind !== 0 && <HSeparator />}
@@ -18,7 +18,7 @@ const CustomForm = ({ leadData, values, handleChange, handleBlur, errors, touche
                                     </Heading>
                                 </GridItem>
                                 {
-                                    leadData?.fields?.filter((itm) => itm?.belongsTo === item?._id)?.map((field) => (
+                                    moduleData?.fields?.filter((itm) => itm?.belongsTo === item?._id)?.map((field) => (
                                         <GridItem colSpan={{ base: 12, sm: 6 }}>
                                             {field.type === 'check' ? '' : <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px' htmlFor={field.name}>{field.label} {field.validation && field.validation.find((validation) => validation.require) && (
                                                 <span style={{ color: 'red' }}>*</span>
@@ -104,7 +104,7 @@ const CustomForm = ({ leadData, values, handleChange, handleBlur, errors, touche
                         ))
                     }
                     <>
-                        {leadData?.fields?.filter((itm) => !itm?.belongsTo)?.map((field) => (
+                        {moduleData?.fields?.filter((itm) => !itm?.belongsTo)?.map((field) => (
                             <GridItem colSpan={{ base: 12, sm: 6 }}>
                                 {field.type === 'check' ? '' : <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px' htmlFor={field.name}>{field.label} {field.validation && field.validation.find((validation) => validation.require) && (
                                     <span style={{ color: 'red' }}>*</span>
@@ -186,7 +186,7 @@ const CustomForm = ({ leadData, values, handleChange, handleBlur, errors, touche
                 </>
                 :
                 <>
-                    {leadData?.fields?.filter((itm) => !itm?.belongsTo)?.map((field) => (
+                    {moduleData?.fields?.filter((itm) => !itm?.belongsTo)?.map((field) => (
                         <GridItem colSpan={{ base: 12, sm: 6 }}>
                             {field.type === 'check' ? '' : <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px' htmlFor={field.name}>{field.label} {field.validation && field.validation.find((validation) => validation.require) && (
                                 <span style={{ color: 'red' }}>*</span>
