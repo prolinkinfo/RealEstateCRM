@@ -43,7 +43,6 @@ const Index = () => {
     const fetchData = async (id) => {
         setIsLoding(true);
         let result = await getApi(`api/form?moduleId=${id}`);
-        console.log(result?.data?.data);
         setData(result?.data?.data);
         setIsLoding(false);
     };
@@ -69,7 +68,7 @@ const Index = () => {
                                 {permission?.update &&
                                     <MenuItem py={2.5} icon={<EditIcon fontSize={15} mb={1} />} onClick={() => { setEdit(true); setSelectedId(row?.values?._id); }}>Edit</MenuItem>}
                                 {permission?.view &&
-                                    <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { navigate(`/leadView/${row?.values?._id}`) }}>View</MenuItem>}
+                                    <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { navigate(`/${title}/${row?.values?._id}`) }}>View</MenuItem>}
                                 {permission?.delete &&
                                     <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} mb={1} />} onClick={() => { setDelete(true); setSelectedValues([row?.values?._id]); }}>Delete</MenuItem>}
                             </MenuList>
@@ -98,41 +97,45 @@ const Index = () => {
         <div>
             {isLoding ? <Flex justifyContent={'center'} alignItems={'center'} width="100%" color={'black'} fontSize="sm" fontWeight="700">
                 <Spinner />
-            </Flex> : <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={4}>
+            </Flex> :
+                <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={4}>
 
-                <GridItem colSpan={6}>
-                    <CommonCheckTable
-                        title={moduleData?.moduleName}
-                        isLoding={isLoding}
-                        columnData={columns}
-                        dataColumn={dataColumn}
-                        allData={data}
-                        // tableData={displaySearchData ? searchedData : data}
-                        tableData={data}
-                        // displaySearchData={displaySearchData}
-                        // setDisplaySearchData={setDisplaySearchData}
-                        // searchedData={searchedData}
-                        // setSearchedData={setSearchedData}
-                        tableCustomFields={moduleData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
-                        access={permission}
-                        action={action}
-                        setAction={setAction}
-                        selectedColumns={selectedColumns}
-                        setSelectedColumns={setSelectedColumns}
-                        isOpen={isOpen}
-                        onClose={onclose}
-                        onOpen={onOpen}
-                        selectedValues={selectedValues}
-                        setSelectedValues={setSelectedValues}
-                        setDelete={setDelete}
-                        setIsImport={setIsImport}
-                    />
-                </GridItem>
-            </Grid>
+                    <GridItem colSpan={6}>
+                        <CommonCheckTable
+                            title={moduleData?.moduleName}
+                            isLoding={isLoding}
+                            columnData={columns}
+                            dataColumn={dataColumn}
+                            allData={data}
+                            // tableData={displaySearchData ? searchedData : data}
+                            tableData={data}
+                            // displaySearchData={displaySearchData}
+                            // setDisplaySearchData={setDisplaySearchData}
+                            // searchedData={searchedData}
+                            // setSearchedData={setSearchedData}
+                            tableCustomFields={moduleData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
+                            access={permission}
+                            action={action}
+                            setAction={setAction}
+                            selectedColumns={selectedColumns}
+                            setSelectedColumns={setSelectedColumns}
+                            isOpen={isOpen}
+                            onClose={onclose}
+                            onOpen={onOpen}
+                            selectedValues={selectedValues}
+                            setSelectedValues={setSelectedValues}
+                            setDelete={setDelete}
+                            setIsImport={setIsImport}
+                        />
+                    </GridItem>
+                </Grid>
             }
+            {console.log(selectedValues)}
             {isOpen && <Add isOpen={isOpen} title={title} size={size} moduleData={moduleData} onClose={onClose} setAction={setAction} action={action} />}
-            {deleteModel && <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/form/deleteMany' data={selectedValues} method='many' setAction={setAction} />}
-            {edit && <Edit isOpen={edit} title={title} size={size} moduleData={moduleData} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={moduleData?.[0]?._id} />}
+            {deleteModel && <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues}
+                url='api/form/deleteMany'
+                data={selectedValues} method='many' setAction={setAction} moduleId={moduleData?._id} />}
+            {edit && <Edit isOpen={edit} title={title} size={size} moduleData={moduleData} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={moduleData?._id} />}
 
         </div>
     )
