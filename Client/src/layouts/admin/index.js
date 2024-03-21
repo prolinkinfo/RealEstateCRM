@@ -16,6 +16,7 @@ import { fetchImage } from '../../redux/imageSlice';
 import { getApi } from 'services/api';
 import { MdHome, MdLock } from 'react-icons/md';
 import DynamicPage from 'views/admin/dynamicPage';
+import DynamicPageview from 'views/admin/dynamicPage/DynamicPageview';
 
 const MainDashboard = React.lazy(() => import("views/admin/default"));
 
@@ -54,7 +55,23 @@ export default function Dashboard(props) {
 					path: pathName(item.moduleName),
 					icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
 					component: DynamicPage,
-				})
+				},
+					{
+						// name: "Leads",
+						// layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+						// under: "lead",
+						// parentName: "Leads",
+						// path: "/leadView/:id",
+						// component: LeadView,
+						name: item?.moduleName,
+						layout: [ROLE_PATH.superAdmin],
+						under: item?.moduleName,
+						parentName: item?.moduleName,
+						path: `${pathName(item.moduleName)}/:id`,
+						icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
+						component: DynamicPageview,
+					},
+				)
 			)
 		}
 	})
