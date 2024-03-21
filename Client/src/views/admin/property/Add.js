@@ -1,10 +1,8 @@
 import { CloseIcon } from '@chakra-ui/icons';
-import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormLabel, Grid, GridItem, Heading, IconButton, Input, Select, Text, Textarea } from '@chakra-ui/react';
-import { HSeparator } from 'components/separator/Separator';
+import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, IconButton } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
 import { useState } from 'react';
-import { propertySchema } from 'schema';
 import { postApi } from 'services/api';
 import { generateValidationSchema } from 'utils';
 import CustomForm from 'utils/customForm';
@@ -98,11 +96,6 @@ const Add = (props) => {
             setIsLoding(false)
         }
     };
-
-    const handleCancel = () => {
-        formik.resetForm();
-        props.onClose()
-    }
 
     return (
         <div>
@@ -625,7 +618,7 @@ const Add = (props) => {
 
 
                         </Grid> */}
-                        <CustomForm leadData={props.propertyData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
+                        <CustomForm moduleData={props.propertyData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
 
                     </DrawerBody>
 

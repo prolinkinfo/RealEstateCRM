@@ -98,10 +98,6 @@ export default function User(props) {
             }
         ]
 
-    const accessRoute = newRoute?.filter(item => Object.keys(mergedPermissions)?.find(data => (data?.toLowerCase() === item?.name?.toLowerCase()) || (data?.toLowerCase() === item.parentName?.toLowerCase())))
-
-    routes.push(...accessRoute)
-
     route?.map((item, i) => {
         if (!routes.some(route => route.name === item.moduleName)) {
             return (
@@ -115,6 +111,10 @@ export default function User(props) {
             )
         }
     })
+    const accessRoute = newRoute?.filter(item => Object.keys(mergedPermissions)?.find(data => (data?.toLowerCase() === item?.name?.toLowerCase()) || (data?.toLowerCase() === item.parentName?.toLowerCase())))
+
+    routes.push(...accessRoute)
+
 
 
 

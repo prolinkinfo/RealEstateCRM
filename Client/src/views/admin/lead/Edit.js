@@ -131,7 +131,7 @@ const Edit = (props) => {
                                 <Spinner />
                             </Flex>
                             :
-                            <CustomForm leadData={props.leadData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
+                            <CustomForm moduleData={props.leadData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
 
                         }
                     </DrawerBody>
