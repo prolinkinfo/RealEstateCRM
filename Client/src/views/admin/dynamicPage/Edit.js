@@ -16,7 +16,7 @@ import * as yup from 'yup'
 const Edit = (props) => {
     const [isLoding, setIsLoding] = useState(false);
     const initialFieldValues = Object.fromEntries(
-        (props?.leadData?.fields || []).map(field => [field?.name, ''])
+        (props?.moduleData?.fields || []).map(field => [field?.name, ''])
     );
 
     const [initialValues, setInitialValues] = useState({
@@ -24,12 +24,12 @@ const Edit = (props) => {
         createBy: JSON.parse(localStorage.getItem('user'))._id
     })
     const param = useParams()
-
+    console.log(initialValues);
     const formik = useFormik({
         initialValues: initialValues,
         enableReinitialize: true,
         // validationSchema: leadSchema,
-        validationSchema: yup.object().shape(generateValidationSchema(props?.leadData?.fields)),
+        validationSchema: yup.object().shape(generateValidationSchema(props?.moduleData?.fields)),
         onSubmit: (values, { resetForm }) => {
             EditData();
         },
@@ -58,14 +58,15 @@ const Edit = (props) => {
         props.setSelectedId && props?.setSelectedId()
         formik.resetForm();
     }
-
-    let response
+    let response;
     const fetchData = async () => {
         if (props?.selectedId || param.id) {
             try {
+                console.log(props.moduleId);
                 setIsLoding(true)
-                response = await getApi('api/lead/view/', props?.selectedId ? props?.selectedId : param.id)
-                let editData = response?.data?.lead;
+                response = await getApi(`api/form/view/${props?.selectedId || param.id}?moduleId=${props.moduleId}`)
+                console.log(response);
+                let editData = response?.data?.data;
                 setInitialValues((prev) => ({ ...prev, ...editData }));
 
             } catch (e) {
@@ -96,7 +97,7 @@ const Edit = (props) => {
                                 <Spinner />
                             </Flex>
                             :
-                            <CustomForm leadData={props.leadData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
+                            <CustomForm moduleData={props.moduleData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
 
                         }
                     </DrawerBody>
