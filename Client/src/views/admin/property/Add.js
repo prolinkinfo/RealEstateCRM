@@ -85,7 +85,7 @@ const Add = (props) => {
     const AddData = async () => {
         try {
             setIsLoding(true)
-            let response = await postApi('api/property/add', values)
+            let response = await postApi('api/form/add', { ...values, moduleId: props?.propertyData?._id })
             if (response.status === 200) {
                 props.onClose();
                 formik.resetForm();
