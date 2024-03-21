@@ -43,7 +43,6 @@ const Index = () => {
     const fetchData = async (id) => {
         setIsLoding(true);
         let result = await getApi(`api/form?moduleId=${id}`);
-        console.log(result?.data?.data);
         setData(result?.data?.data);
         setIsLoding(false);
     };
@@ -130,9 +129,12 @@ const Index = () => {
                 </GridItem>
             </Grid>
             }
+            {console.log(selectedValues)}
             {isOpen && <Add isOpen={isOpen} title={title} size={size} moduleData={moduleData} onClose={onClose} setAction={setAction} action={action} />}
-            {deleteModel && <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/form/deleteMany' data={selectedValues} method='many' setAction={setAction} />}
-            {edit && <Edit isOpen={edit} title={title} size={size} moduleData={moduleData} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={moduleData?.[0]?._id} />}
+            {deleteModel && <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues}
+                url='api/form/deleteMany'
+                data={selectedValues} method='many' setAction={setAction} moduleId={moduleData?._id} />}
+            {edit && <Edit isOpen={edit} title={title} size={size} moduleData={moduleData} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={moduleData?._id} />}
 
         </div>
     )
