@@ -358,7 +358,24 @@ const createNewModule = async (req, res) => {
 
         const newModule = new CustomField({ moduleName, fields: req.body.fields || [], headings: req.body.headings || [], no: nextAutoIncrementValue, createdDate: new Date() });
 
-        const schemaFields = {};
+        const schemaFields = {
+            createBy: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+                required: true
+            },
+            updatedDate: {
+                type: Date,
+                default: Date.now
+            },
+            createdDate: {
+                type: Date,
+            },
+            deleted: {
+                type: Boolean,
+                default: false,
+            },
+        };
         const moduleSchema = new mongoose.Schema(schemaFields);
         if (!mongoose.models[moduleName]) {
             mongoose.model(moduleName, moduleSchema, moduleName);
