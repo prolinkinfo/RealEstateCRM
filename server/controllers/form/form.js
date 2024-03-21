@@ -26,7 +26,8 @@ const index = async (req, res) => {
             return res.status(500).send({ success: false, message: 'Model not found' });
         }
 
-        const allData = await ExistingModel.find({ deleted: false });
+        // const allData = await ExistingModel.find({ deleted: false });
+        const allData = await ExistingModel.find();
 
         return res.status(200).json({ data: allData });
 
