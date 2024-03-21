@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const fetchSchemaFields = async () => {
     const CustomFieldModel = mongoose.model('CustomField');
-    return await CustomFieldModel.find({ moduleName: "Property" });
+    return await CustomFieldModel.find({ moduleName: "Properties" });
 };
 
 const propertySchema = new mongoose.Schema({

@@ -1,10 +1,8 @@
 import { CloseIcon } from '@chakra-ui/icons';
-import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormLabel, Grid, GridItem, Heading, IconButton, Input, Select, Text, Textarea } from '@chakra-ui/react';
-import { HSeparator } from 'components/separator/Separator';
+import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, IconButton } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
 import { useState } from 'react';
-import { propertySchema } from 'schema';
 import { postApi } from 'services/api';
 import { generateValidationSchema } from 'utils';
 import CustomForm from 'utils/customForm';
@@ -85,7 +83,7 @@ const Add = (props) => {
     const AddData = async () => {
         try {
             setIsLoding(true)
-            let response = await postApi('api/property/add', values)
+            let response = await postApi('api/form/add', { ...values, moduleId: props?.propertyData?._id })
             if (response.status === 200) {
                 props.onClose();
                 formik.resetForm();
@@ -98,11 +96,6 @@ const Add = (props) => {
             setIsLoding(false)
         }
     };
-
-    const handleCancel = () => {
-        formik.resetForm();
-        props.onClose()
-    }
 
     return (
         <div>

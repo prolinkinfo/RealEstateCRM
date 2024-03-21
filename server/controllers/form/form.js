@@ -4,30 +4,33 @@ const CustomField = require("../../model/schema/customField");
 const add = async (req, res) => {
     try {
         if (!req?.body?.moduleId) {
-            return res.status(400).send({ success: false, message: "moduleId is required" })
+            return res.status(400).send({ success: false, message: "moduleId is required" });
         }
 
-        const customField = await CustomField.findOne({ _id: req.body?.moduleId }).select("moduleName");
+        const customField = await CustomField.findById(req.body?.moduleId).select("moduleName");
 
         if (!customField) {
             return res.status(404).send({ success: false, message: "Module not found" });
         }
 
-        const collectionExists = await mongoose.connection.db.listCollections({ name: (`${customField?.moduleName}`) }).hasNext();
+        const collectionName = customField.moduleName;
+        const collectionExists = await mongoose.connection.db.listCollections({ name: collectionName }).hasNext();
 
         if (!collectionExists) {
-            return res.status(404).send({ success: false, message: "Collection not exists" })
+            return res.status(404).send({ success: false, message: "Collection does not exist" });
         }
 
-        const ExistingModel = mongoose.model(`${customField?.moduleName}`);
+        const ExistingModel = mongoose.model(collectionName);
 
-        if (typeof ExistingModel !== 'function') {
-            return res.status(500).send({ success: false, message: 'Invalid model' });
+        if (!ExistingModel) {
+            return res.status(500).send({ success: false, message: 'Model not found' });
         }
 
-        req.body.createdDate = new Date();
         const newDocument = new ExistingModel(req.body);
+        newDocument.createdDate = new Date();
+
         await newDocument.save();
+        
         return res.status(200).json({ message: 'Record added successfully', data: newDocument });
 
     } catch (err) {

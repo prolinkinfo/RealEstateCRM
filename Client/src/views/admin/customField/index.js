@@ -1,9 +1,8 @@
 
 import React, { useEffect, useState } from 'react'
 import { AddIcon, ChevronDownIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
-import { Box, Button, Flex, Menu, Heading, MenuButton, Select, Checkbox, GridItem, Text, MenuItem, Grid, MenuList, FormLabel, Input, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Flex, Menu, MenuButton, Checkbox, GridItem, Text, MenuItem, Grid, MenuList, useColorModeValue } from '@chakra-ui/react';
 import Card from 'components/card/Card'
-import { useFormik } from 'formik';
 import Addfield from './addfield'
 import { getApi, putApi } from 'services/api';
 import EditField from './editfield';
@@ -38,7 +37,6 @@ const CustomField = () => {
     const [selectedHeadingId, setSelectedHeadingId] = useState('');
     const [headingId, setHeadingId] = useState('');
     const [heading, setHeading] = useState('');
-    const [draggedData, setDraggedData] = useState([]);
 
     const [selectedId, setSelectedId] = useState('')
     const [validations, setValidations] = useState([])
