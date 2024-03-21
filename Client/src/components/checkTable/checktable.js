@@ -389,6 +389,7 @@ const CommonCheckTable = (props) => {
                                 fontSize="22px"
                                 fontWeight="700"
                                 lineHeight="100%"
+                                textTransform={'capitalize'}
                             >
                                 {title} (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
                             </Text>
@@ -520,7 +521,7 @@ const CommonCheckTable = (props) => {
                                                             data = (
                                                                 <Flex align="center" >
                                                                     {(item.Header === "#" && (checkBox || checkBox === undefined)) && <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues?.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />}
-                                                                   
+
                                                                     <Text color={textColor} fontSize="sm" fontWeight="700">
                                                                         {item.Header === "#" ? cell?.row?.index + 1 : cell?.value ? cell?.value : '-'}
                                                                     </Text>
