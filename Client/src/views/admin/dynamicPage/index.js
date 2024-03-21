@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { HasAccess } from "../../../redux/accessUtils";
 import { Grid, GridItem, Text, Menu, MenuButton, MenuItem, MenuList, useDisclosure, Flex } from '@chakra-ui/react';
-import { DeleteIcon, ViewIcon, EditIcon, EmailIcon, PhoneIcon } from "@chakra-ui/icons";
+import { DeleteIcon, ViewIcon, EditIcon } from "@chakra-ui/icons";
 import { CiMenuKebab } from "react-icons/ci";
 import { getApi } from "services/api";
 import CommonCheckTable from '../../../components/checkTable/checktable';
@@ -133,7 +133,6 @@ const Index = () => {
             {isOpen && <Add isOpen={isOpen} title={title} size={size} leadData={moduleData[0]} onClose={onClose} setAction={setAction} action={action} />}
             {deleteModel && <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/form/deleteMany' data={selectedValues} method='many' setAction={setAction} />}
             {edit && <Edit isOpen={edit} title={title} size={size} leadData={moduleData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={moduleData?.[0]?._id} />}
-
 
         </div>
     )
