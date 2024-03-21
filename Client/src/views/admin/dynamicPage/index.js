@@ -10,12 +10,7 @@ import Add from './add';
 import Edit from './Edit';
 import Delete from './Delete';
 import Spinner from 'components/spinner/Spinner';
-// import Add from "./Add";
-// import Edit from "./Edit";
-// import Delete from './Delete';
-// import AddEmailHistory from "views/admin/emailHistory/components/AddEmail";
-// import AddPhoneCall from "views/admin/phoneCall/components/AddPhoneCall";
-// import ImportModal from './components/ImportModal';
+
 
 const Index = () => {
     const pathName = window.location.pathname.split('/')
@@ -23,7 +18,7 @@ const Index = () => {
     const size = "lg";
     const user = JSON.parse(localStorage.getItem("user"));
     const navigate = useNavigate();
-    const [permission, emailAccess, callAccess] = HasAccess([title, 'Emails', 'Calls']);
+    const [permission] = HasAccess([title]);
     const [isLoding, setIsLoding] = useState(false);
     const [data, setData] = useState([]);
     // const [displaySearchData, setDisplaySearchData] = useState(false);
@@ -37,20 +32,18 @@ const Index = () => {
     const [leadData, setLeadData] = useState([]);
     const [edit, setEdit] = useState(false);
     const [deleteModel, setDelete] = useState(false);
-    const [addPhoneCall, setAddPhoneCall] = useState(false);
-    const [callSelectedId, setCallSelectedId] = useState();
-    const [addEmailHistory, setAddEmailHistory] = useState(false);
     const [selectedId, setSelectedId] = useState();
     const [selectedValues, setSelectedValues] = useState([]);
     const [isImport, setIsImport] = useState(false);
 
     const fetchData = async () => {
         setIsLoding(true);
-        // let result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
+        // let result = await getApi(`api/form?moduleId=65b8b9ab300470dd6f6034da`);
         // setData(result?.data);
         setIsLoding(false);
     };
 
+    console.log(title)
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
         const result = await getApi(`api/custom-field/?moduleName=${title}`);
@@ -133,7 +126,7 @@ const Index = () => {
             {isOpen && <Add isOpen={isOpen} title={title} size={size} leadData={leadData[0]} onClose={onClose} setAction={setAction} action={action} />}
             {deleteModel && <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/form/deleteMany' data={selectedValues} method='many' setAction={setAction} />}
             {edit && <Edit isOpen={edit} title={title} size={size} leadData={leadData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={leadData?.[0]?._id} />}
-          
+
 
         </div>
     )
