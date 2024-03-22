@@ -120,6 +120,9 @@ const Index = () => {
     const [selectedId, setSelectedId] = useState();
     const [selectedValues, setSelectedValues] = useState([]);
     const [isImport, setIsImport] = useState(false);
+    const [emailRec, setEmailRec] = useState('');
+
+   
 
     const fetchData = async () => {
         setIsLoding(true);
@@ -128,17 +131,25 @@ const Index = () => {
         setIsLoding(false);
     };
 
+    const handleOpenEmail = (id) => {
+        if (id) {
+            console.log(id)
+            const filterData = data?.find((item) => item?._id === id);
+            setEmailRec(filterData?.leadEmail);
+            setAddEmailHistory(true);
+        }
+    }
+console.log(data)
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
         const result = await getApi(`api/custom-field/?moduleName=Leads`);
         setLeadData(result?.data);
-
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
             ...(result?.data?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => ({ Header: field?.label, accessor: field?.name })) || []),
             {
                 Header: "Action", isSortable: false, center: true,
-                cell: ({ row }) => (
+                cell: ({ row, i }) => (
                     <Text fontSize="md" fontWeight="900" textAlign={"center"} >
                         <Menu isLazy  >
                             <MenuButton><CiMenuKebab /></MenuButton>
@@ -148,7 +159,7 @@ const Index = () => {
                                 {callAccess?.create &&
                                     <MenuItem py={2.5} width={"165px"} onClick={() => { setAddPhoneCall(true); setCallSelectedId(row?.values?._id) }} icon={<PhoneIcon fontSize={15} mb={1} />}>Create Call</MenuItem>}
                                 {emailAccess?.create &&
-                                    <MenuItem py={2.5} width={"165px"} onClick={() => { setAddEmailHistory(true); setSelectedId(row?.values?._id) }} icon={<EmailIcon fontSize={15} mb={1} />}>Send Email</MenuItem>}
+                                    <MenuItem py={2.5} width={"165px"} onClick={() => { handleOpenEmail(row?.values?._id); setSelectedId(row?.values?._id) }} icon={<EmailIcon fontSize={15} mb={1} />}>Send Email</MenuItem>}
                                 {permission?.view &&
                                     <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { navigate(`/leadView/${row?.values?._id}`) }}>View</MenuItem>}
                                 {permission?.delete &&
@@ -213,7 +224,7 @@ const Index = () => {
             {isOpen && <Add isOpen={isOpen} size={size} leadData={leadData[0]} onClose={onClose} setAction={setAction} action={action} />}
             {edit && <Edit isOpen={edit} size={size} leadData={leadData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={leadData?.[0]?._id} />}
             {deleteModel && <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/lead/deleteMany' data={selectedValues} method='many' setAction={setAction} />}
-            {addEmailHistory && <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} lead='true' id={selectedId} />}
+            {addEmailHistory && <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} lead='true' id={selectedId} leadEmail={emailRec} />}
             {addPhoneCall && <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} lead='true' id={callSelectedId} />}
             {isImport && <ImportModal text='Lead file' isOpen={isImport} onClose={setIsImport} customFields={leadData?.[0]?.fields || []} />}
 

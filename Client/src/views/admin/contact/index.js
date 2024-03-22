@@ -125,6 +125,7 @@ const Index = () => {
     const [selectedId, setSelectedId] = useState();
     const [selectedValues, setSelectedValues] = useState([]);
     const [isImportContact, setIsImport] = useState(false);
+    const [emailRec, setEmailRec] = useState('');
 
     const fetchData = async () => {
         setIsLoding(true)
@@ -133,6 +134,16 @@ const Index = () => {
         setIsLoding(false)
     };
 
+    const handleOpenEmail = (id) => {
+        if (id) {
+            console.log(id)
+            const filterData = data?.find((item) => item?._id === id);
+            console.log(filterData,"filterData")
+            setEmailRec(filterData?.email);
+            setAddEmailHistory(true);
+        }
+    }
+    
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
         const result = await getApi(`api/custom-field/?moduleName=Contacts`);
@@ -153,7 +164,7 @@ const Index = () => {
                                 {callAccess?.create &&
                                     <MenuItem py={2.5} width={"165px"} onClick={() => { setAddPhoneCall(true); setCallSelectedId(row?.values?._id) }} icon={<PhoneIcon fontSize={15} mb={1} />}>Create Call</MenuItem>}
                                 {emailAccess?.create &&
-                                    <MenuItem py={2.5} width={"165px"} onClick={() => { setAddEmailHistory(true); setSelectedId(row?.values?._id) }} icon={<EmailIcon fontSize={15} mb={1} />}>Send Email</MenuItem>}
+                                    <MenuItem py={2.5} width={"165px"} onClick={() => { handleOpenEmail(row?.values?._id); setSelectedId(row?.values?._id) }} icon={<EmailIcon fontSize={15} mb={1} />}>Send Email</MenuItem>}
                                 {permission?.view &&
                                     <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { navigate(`/contactView/${row?.values?._id}`) }}>View</MenuItem>}
                                 {permission?.delete &&
@@ -218,7 +229,7 @@ const Index = () => {
             {isOpen && <Add isOpen={isOpen} size={size} contactData={contactData[0]} onClose={onClose} setAction={setAction} action={action} />}
             {edit && <Edit isOpen={edit} size={size} contactData={contactData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={contactData?.[0]?._id} />}
             {deleteModel && <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/contact/deleteMany' data={selectedValues} method='many' setAction={setAction} />}
-            {addEmailHistory && <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={selectedId} />}
+            {addEmailHistory && <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={selectedId} contactEmail={emailRec}/>}
             {addPhoneCall && <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} id={callSelectedId} />}
             {isImportContact && <ImportModal text='Contact file' isOpen={isImportContact} onClose={setIsImport} customFields={contactData?.[0]?.fields || []} />}
 

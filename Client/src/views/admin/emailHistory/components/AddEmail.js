@@ -16,7 +16,7 @@ const AddEmailHistory = (props) => {
 
     const initialValues = {
         sender: user?._id,
-        recipient: props.lead !== 'true' ? props?.viewData?.contact?.email : props?.viewData?.lead?.leadEmail,
+        recipient: props.lead !== 'true' ? props?.contactEmail : props?.leadEmail,
         subject: '',
         message: '',
         createBy: '',
