@@ -122,7 +122,7 @@ const Index = () => {
     const [isImport, setIsImport] = useState(false);
     const [emailRec, setEmailRec] = useState('');
 
-   
+
 
     const fetchData = async () => {
         setIsLoding(true);
@@ -131,15 +131,13 @@ const Index = () => {
         setIsLoding(false);
     };
 
-    const handleOpenEmail = (id) => {
+    const handleOpenEmail = (id, dataLead) => {
         if (id) {
-            console.log(id)
-            const filterData = data?.find((item) => item?._id === id);
-            setEmailRec(filterData?.leadEmail);
+            setEmailRec(dataLead?.leadEmail);
             setAddEmailHistory(true);
         }
     }
-console.log(data)
+
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
         const result = await getApi(`api/custom-field/?moduleName=Leads`);
@@ -159,7 +157,7 @@ console.log(data)
                                 {callAccess?.create &&
                                     <MenuItem py={2.5} width={"165px"} onClick={() => { setAddPhoneCall(true); setCallSelectedId(row?.values?._id) }} icon={<PhoneIcon fontSize={15} mb={1} />}>Create Call</MenuItem>}
                                 {emailAccess?.create &&
-                                    <MenuItem py={2.5} width={"165px"} onClick={() => { handleOpenEmail(row?.values?._id); setSelectedId(row?.values?._id) }} icon={<EmailIcon fontSize={15} mb={1} />}>Send Email</MenuItem>}
+                                    <MenuItem py={2.5} width={"165px"} onClick={() => { handleOpenEmail(row?.values?._id, row?.values); setSelectedId(row?.values?._id) }} icon={<EmailIcon fontSize={15} mb={1} />}>Send Email</MenuItem>}
                                 {permission?.view &&
                                     <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { navigate(`/leadView/${row?.values?._id}`) }}>View</MenuItem>}
                                 {permission?.delete &&

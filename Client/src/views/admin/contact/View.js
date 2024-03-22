@@ -140,8 +140,6 @@ const View = () => {
         if (fetchCustomData) fetchCustomData()
     }, [action])
 
-    console.log(allData,"allData")
-
     return (
         <>
             {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} contactData={contactData[0]} />}
