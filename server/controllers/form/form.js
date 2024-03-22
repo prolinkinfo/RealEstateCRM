@@ -26,8 +26,7 @@ const index = async (req, res) => {
             return res.status(500).send({ success: false, message: 'Model not found' });
         }
 
-        // const allData = await ExistingModel.find({ deleted: false });
-        const allData = await ExistingModel.find();
+        const allData = await ExistingModel.find({ deleted: false });
 
         return res.status(200).json({ data: allData });
 
@@ -137,7 +136,7 @@ const deleteField = async (req, res) => {
             return res.status(500).send({ success: false, message: 'Invalid model' });
         }
 
-        const result = await ExistingModel.deleteOne({ _id: req.params.id });
+        const result = await ExistingModel.findByIdAndUpdate(req.params.id, { deleted: true });
 
         return res.status(200).json({ message: 'Record deleted successfully', data: result });
 
@@ -172,7 +171,7 @@ const deleteManyField = async (req, res) => {
             return res.status(500).send({ success: false, message: 'Invalid model' });
         }
 
-        const result = await ExistingModel.deleteMany({ _id: { $in: req.body.ids } });
+        const result = await ExistingModel.updateMany({ _id: { $in: req.body.ids } }, { $set: { deleted: true } });
 
         return res.status(200).json({ message: 'Record deleted successfully', data: result });
 
