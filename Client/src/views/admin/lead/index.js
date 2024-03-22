@@ -133,6 +133,7 @@ const Index = () => {
 
     const handleOpenEmail = (id, dataLead) => {
         if (id) {
+            console.log(dataLead)
             setEmailRec(dataLead?.leadEmail);
             setAddEmailHistory(true);
         }
@@ -157,7 +158,9 @@ const Index = () => {
                                 {callAccess?.create &&
                                     <MenuItem py={2.5} width={"165px"} onClick={() => { setAddPhoneCall(true); setCallSelectedId(row?.values?._id) }} icon={<PhoneIcon fontSize={15} mb={1} />}>Create Call</MenuItem>}
                                 {emailAccess?.create &&
-                                    <MenuItem py={2.5} width={"165px"} onClick={() => { handleOpenEmail(row?.values?._id, row?.values); setSelectedId(row?.values?._id) }} icon={<EmailIcon fontSize={15} mb={1} />}>Send Email</MenuItem>}
+                                    <MenuItem py={2.5} width={"165px"} onClick={() => {
+                                        handleOpenEmail(row?.values?._id, row?.original); setSelectedId(row?.values?._id)
+                                    }} icon={<EmailIcon fontSize={15} mb={1} />}>Send Email</MenuItem>}
                                 {permission?.view &&
                                     <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { navigate(`/leadView/${row?.values?._id}`) }}>View</MenuItem>}
                                 {permission?.delete &&
