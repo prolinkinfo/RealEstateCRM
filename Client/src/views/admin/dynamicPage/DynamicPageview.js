@@ -151,143 +151,43 @@ const View = () => {
                     <Spinner />
                 </Flex> :
                 <>
-                    {/* <Tabs >
-                        <Grid templateColumns={'repeat(12, 1fr)'} mb={3} gap={1}>
-                            <GridItem colSpan={{ base: 12, md: 6 }}>
-                                <TabList sx={{
-                                    border: "none",
-                                    '& button:focus': { boxShadow: 'none', },
-                                    '& button': {
-                                        margin: { sm: "0 3px", md: "0 5px" }, padding: { sm: "5px", md: "8px" }, border: '2px solid #8080803d', borderTopLeftRadius: "10px", borderTopRightRadius: "10px", borderBottom: 0, fontSize: { sm: "12px", md: "16px" }
-                                    },
-                                    '& button[aria-selected="true"]': {
-                                        border: "2px solid brand.200", borderBottom: 0, zIndex: '0'
-                                    },
-                                }} >
-                                    <Tab>Information</Tab>
-                                    <Tab> Communication</Tab>
-                                    <Tab>Document</Tab>
-                                </TabList>
-
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, md: 6 }} mt={{ sm: "3px", md: "5px" }} >
-                                <Flex justifyContent={"right"}>
-                                    <Menu>
-                                        {(user.role === 'superAdmin' || (permission?.create || permission?.update || permission?.delete)) && <MenuButton size="sm" variant="outline" colorScheme='blackAlpha' mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
-                                            Actions
-                                        </MenuButton>}
+                    <GridItem colSpan={{ base: 12, md: 6 }} mt={{ sm: "3px", md: "5px" }} >
+                        <Flex justifyContent={"right"}>
+                            <Menu>
+                                <MenuButton size="sm" variant="outline" colorScheme='blackAlpha' mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
+                                    Actions
+                                </MenuButton>
+                                <MenuDivider />
+                                <MenuList minWidth={2}>
+                                    <MenuItem color={'blue'} onClick={() => onOpen()} alignItems={"start"} icon={<AddIcon />}>Add</MenuItem>
+                                    <MenuItem onClick={() => setEdit(true)} alignItems={"start"} icon={<EditIcon />}>Edit</MenuItem>
+                                    <>
                                         <MenuDivider />
-                                        <MenuList minWidth={2}>
-                                            {(user.role === 'superAdmin' || permission?.create) && <MenuItem color={'blue'} onClick={() => onOpen()} alignItems={"start"} icon={<AddIcon />}>Add</MenuItem>}
-                                            {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => setEdit(true)} alignItems={"start"} icon={<EditIcon />}>Edit</MenuItem>}
-                                            {(user.role === 'superAdmin' || permission?.delete) && <>
-                                                <MenuDivider />
-                                                <MenuItem alignItems={"start"} color={'red'} onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
-                                            </>}
-                                        </MenuList>
-                                    </Menu>
-                                    <Link to="/lead">
-                                        <Button leftIcon={<IoIosArrowBack />} size='sm' variant="brand">
-                                            Back
-                                        </Button>
-                                    </Link>
-                                </Flex>
-                            </GridItem>
-                        </Grid>
-
-                        <TabPanels>
-                            <TabPanel pt={4} p={0}>
-                                <CustomView data={leadData[0]} fieldData={data} toCamelCase={toCamelCase} />
-
-                            </TabPanel>
-                            <TabPanel pt={4} p={0}>
-                                <GridItem colSpan={{ base: 4 }} >
-                                    <Grid overflow={'hidden'} templateColumns={{ base: "1fr" }} gap={4}>
-                                        <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
-                                            {emailAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
-                                                <Card >
-
-                                                    <ColumnsTable fetchData={fetchData} emailAccess={emailAccess} columnsData={columnsDataColumns} lead='true' tableData={showEmail ? allData.Email : allData?.Email?.length > 0 ? [allData.Email[0]] : []} title={'Email '} />
-
-                                                    <AddEmailHistory viewData={allData} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} setAction={setAction} lead='true' id={param.id} />
-                                                    {allData.Email?.length > 1 &&
-                                                        <div style={{ display: "flex", justifyContent: "end" }}>
-                                                            <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showEmail ? setShowEmail(false) : setShowEmail(true)}>{showEmail ? "Show less" : "Show more"}</Button>
-                                                        </div>}
-                                                </Card>
-                                            </GridItem>}
-                                            {callAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
-                                                <Card>
-                                                    <PhoneCall callAccess={callAccess} fetchData={fetchData} columnsData={columnsDataColumns} lead='true' tableData={showCall ? allData?.phoneCall : allData?.phoneCall?.length > 0 ? [allData?.phoneCall[0]] : []} title={'Call '} />
-                                                    {allData?.phoneCall?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
-                                                        <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showCall ? setShowCall(false) : setShowCall(true)}>{showCall ? "Show less" : "Show more"}</Button>
-                                                    </div>}
-                                                    <AddPhoneCall viewData={allData} fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} setAction={setAction} data={data?.contact} id={param.id} lead='true' />
-                                                </Card>
-                                            </GridItem>}
-                                            {taskAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
-                                                <Card >
-                                                    <TaskColumnsTable fetchData={fetchData} columnsData={taskColumns} lead='true' tableData={showTasks ? allData?.task : allData?.task?.length > 0 ? [allData?.task[0]] : []} title={'Task '} action={action} setAction={setAction} access={taskAccess} />
-                                                    {
-                                                        allData?.task?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
-                                                            <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showTasks ? setShowTasks(false) : setShowTasks(true)}>{showTasks ? "Show less" : "Show more"}</Button>
-                                                        </div>}
-                                                </Card>
-                                            </GridItem>}
-                                            {
-                                                meetingAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
-                                                    <Card>
-                                                        <MeetingColumnsTable fetchData={fetchData} columnsData={MeetingColumns} lead='true' tableData={showMeetings ? allData?.meeting : allData?.meeting?.length > 0 ? [allData?.meeting[0]] : []} title={'Meeting '} action={action} setAction={setAction} access={meetingAccess} />
-                                                        {
-                                                            allData?.meeting?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
-                                                                <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showMeetings ? setShowMeetings(false) : setShowMeetings(true)}>{showMeetings ? "Show less" : "Show more"}</Button>
-                                                            </div>}
-                                                        {addMeeting && <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="lead" id={param.id} setAction={setAction} />}                                                    </Card>
-                                                </GridItem>}
-                                        </Grid>
-                                    </Grid>
-                                </GridItem>
-                            </TabPanel>
-                            <TabPanel pt={4} p={0}>
-                                <GridItem colSpan={{ base: 4 }} >
-                                    <Card minH={'50vh'} >
-                                        <Flex alignItems={'center'} justifyContent={'space-between'} mb='2'>
-                                            <Heading size="md" mb={3}>
-                                                Documents
-                                            </Heading>
-                                            <Button leftIcon={<AddIcon />} size='sm' variant='brand' onClick={() => setAddDocument(true)}>Add Document</Button>
-                                        </Flex>
-                                        <AddDocumentModal addDocument={addDocument} setAddDocument={setAddDocument} linkId={param.id} from="lead" setAction={setAction} />
-                                        <HSeparator />
-                                        <VStack mt={4} alignItems="flex-start">
-                                            {allData?.Document?.length > 0 ? allData?.Document?.map((item) => (
-                                                <FolderTreeView name={item.folderName} item={item}>
-                                                    {item?.files?.map((file) => (
-                                                        <FolderTreeView download={download} data={file} name={file.fileName} isFile from="lead" />
-                                                    ))}
-                                                </FolderTreeView>
-                                            )) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                                                <DataNotFound />
-                                            </Text>}
-                                        </VStack>
-                                    </Card>
-                                </GridItem>
-                            </TabPanel>
-
-                        </TabPanels>
-                    </Tabs>
-                    {(user.role === 'superAdmin' || (permission?.update || permission?.delete)) && <Card mt={3}>
+                                        <MenuItem alignItems={"start"} color={'red'} onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
+                                    </>
+                                </MenuList>
+                            </Menu>
+                            <Link to="/lead">
+                                <Button leftIcon={<IoIosArrowBack />} size='sm' variant="brand">
+                                    Back
+                                </Button>
+                            </Link>
+                        </Flex>
+                    </GridItem>
+                    <Box style={{ margin: "10px 0" }}>
+                        <CustomView data={leadData[0]} fieldData={data} />
+                    </Box>
+                    <Card mt={3}>
                         <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                             <GridItem colStart={6} >
                                 <Flex justifyContent={"right"}>
-                                    {(user.role === 'superAdmin' || permission?.update) ? <Button size='sm' onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button> : ''}
-                                    {(user.role === 'superAdmin' || permission?.delete) ? <Button size='sm' style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button> : ''}
+                                    <Button size='sm' onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button>
+                                    <Button size='sm' style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>
                                 </Flex>
                             </GridItem>
                         </Grid>
                     </Card>
-                    } */}
-                    hello
+
                 </>
             }
         </>
