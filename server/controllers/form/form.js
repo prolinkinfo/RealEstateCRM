@@ -96,6 +96,8 @@ const add = async (req, res) => {
         if (!ExistingModel) {
             return res.status(500).send({ success: false, message: 'Model not found' });
         }
+        req.body.updatedDate = new Date();
+        req.body.deleted = false;
 
         const newDocument = new ExistingModel(req.body);
         newDocument.createdDate = new Date();
