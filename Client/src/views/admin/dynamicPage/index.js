@@ -43,8 +43,10 @@ const Index = () => {
     const fetchData = async (id) => {
         setIsLoding(true);
         let result = await getApi(`api/form?moduleId=${id}`);
-        setData(result?.data?.data);
-        setIsLoding(false);
+        if (result.status === 200) {
+            setData(result?.data?.data);
+            setIsLoding(false);
+        }
     };
 
     const fetchCustomDataFields = async () => {
@@ -68,7 +70,7 @@ const Index = () => {
                                 {permission?.update &&
                                     <MenuItem py={2.5} icon={<EditIcon fontSize={15} mb={1} />} onClick={() => { setEdit(true); setSelectedId(row?.values?._id); }}>Edit</MenuItem>}
                                 {permission?.view &&
-                                    <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { navigate(`/${title}/${row?.values?._id}`) }}>View</MenuItem>}
+                                    <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { navigate(`/${title}/${row?.values?._id}`, { state: { module: singaleData } }) }}>View</MenuItem>}
                                 {permission?.delete &&
                                     <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} mb={1} />} onClick={() => { setDelete(true); setSelectedValues([row?.values?._id]); }}>Delete</MenuItem>}
                             </MenuList>
@@ -77,7 +79,6 @@ const Index = () => {
                 )
             },
         ];
-
         setSelectedColumns(JSON.parse(JSON.stringify(tempTableColumns)));
         setColumns(tempTableColumns);
         setTableColumns(JSON.parse(JSON.stringify(tempTableColumns)));
@@ -130,7 +131,6 @@ const Index = () => {
                     </GridItem>
                 </Grid>
             }
-            {console.log(selectedValues)}
             {isOpen && <Add isOpen={isOpen} title={title} size={size} moduleData={moduleData} onClose={onClose} setAction={setAction} action={action} />}
             {deleteModel && <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues}
                 url='api/form/deleteMany'

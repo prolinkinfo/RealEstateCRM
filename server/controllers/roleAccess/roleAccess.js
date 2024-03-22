@@ -47,11 +47,11 @@ const add = async (req, res) => {
 
                 const role = new RoleAccess({ roleName: roleName, description, access, createdDate });
                 await role.save();
+                return res.status(200).json({ message: `${roleName} Role created successfully` });
             }).catch(error => {
                 console.error("Error occurred:", error);
             });
 
-            return res.status(200).json({ message: `${roleName} Role created successfully` });
         }
     } catch (err) {
         console.error('Failed to create role:', err);
