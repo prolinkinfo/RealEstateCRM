@@ -247,14 +247,14 @@ const CommonCheckTable = (props) => {
     };
 
     const handleClear = () => {
-        AdvanceSearch ? props.setSearchDisplay(false) : setDisplaySearchData(false)
+        AdvanceSearch ? props?.setSearchDisplay(false) : setDisplaySearchData(false)
         if (searchboxOutside) {
             setSearchboxOutside('')
         } else {
             setSearchbox('');
         }
         setGetTagValues([]);
-        if (props.getTagValuesOutSide) {
+        if (props?.getTagValuesOutSide) {
             setGetTagValuesOutside([]);
         }
         setGopageValue(1);
@@ -267,7 +267,7 @@ const CommonCheckTable = (props) => {
     const findStatus = () => {
         const searchResult = allData?.filter(
             (item) =>
-                (!state || (item?.status && item?.status.toLowerCase().includes(state?.toLowerCase())))
+                (!state || (item?.status && item?.status?.toLowerCase().includes(state?.toLowerCase())))
         )
         let getValue = [state || undefined].filter(value => value);
         setGetTagValues(getValue)
@@ -323,7 +323,7 @@ const CommonCheckTable = (props) => {
             if (selectedIds && selectedIds?.length > 0) {
                 const selectedRecordsWithSpecificFileds = tableData?.filter((rec) => selectedIds.includes(rec._id))?.map((rec) => {
                     const selectedFieldsData = {};
-                    csvColumns.forEach((property) => {
+                    csvColumns?.forEach((property) => {
                         selectedFieldsData[property.accessor] = rec[property.accessor];
                     });
                     return selectedFieldsData;
@@ -332,8 +332,8 @@ const CommonCheckTable = (props) => {
             } else {
                 const AllRecordsWithSpecificFileds = tableData?.map((rec) => {
                     const selectedFieldsData = {};
-                    csvColumns.forEach((property) => {
-                        selectedFieldsData[property.accessor] = rec[property.accessor];
+                    csvColumns?.forEach((property) => {
+                        selectedFieldsData[property?.accessor] = rec[property?.accessor];
                     });
                     return selectedFieldsData;
                 });
@@ -345,11 +345,11 @@ const CommonCheckTable = (props) => {
     };
 
     const convertJsonToCsvOrExcel = (jsonArray, csvColumns, fileName, extension) => {
-        const csvHeader = csvColumns.map((col) => col.Header);
+        const csvHeader = csvColumns?.map((col) => col?.Header);
 
         const csvContent = [
             csvHeader,
-            ...jsonArray.map((row) => csvColumns.map((col) => row[col.accessor]))
+            ...jsonArray?.map((row) => csvColumns?.map((col) => row[col?.accessor]))
         ];
 
         const ws = XLSX.utils.aoa_to_sheet(csvContent);
@@ -581,7 +581,7 @@ const CommonCheckTable = (props) => {
                     </ModalContent>
                 </Modal>
 
-            </Card >
+            </Card>
         </>
     );
 }
