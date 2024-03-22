@@ -104,6 +104,7 @@ export default function User(props) {
                 newRoute.push({
                     name: item?.moduleName,
                     layout: [ROLE_PATH.user],
+                    parentName: item?.moduleName,
                     path: pathName(item.moduleName),
                     icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
                     component: DynamicPage,
