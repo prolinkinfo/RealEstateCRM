@@ -15,9 +15,14 @@ const Index = () => {
   const [roleModal, setRoleModal] = useState(false);
   const [access, setAccess] = useState([])
   const [roleId, setRoleId] = useState('')
+  const [searchboxOutside, setSearchboxOutside] = useState('');
+  const [getTagValuesOutSide, setGetTagValuesOutside] = useState([]);
+  const [displaySearchData, setDisplaySearchData] = useState(false);
   const [addRoleModal, setAddRoleModal] = useState(false);
   const [accessRole, setAccessRole] = useState([])
   const [roleName, setRoleName] = useState('')
+  const [searchedData, setSearchedData] = useState([]);
+
   const columns = [
     {
       Header: "#",
@@ -107,10 +112,18 @@ const Index = () => {
         tableData={data}
         AdvanceSearch={() => ""}
         tableCustomFields={[]}
+        searchedDataOut={searchedData}
+        searchDisplay={displaySearchData}
+        setSearchDisplay={setDisplaySearchData}
+        setSearchedDataOut={setSearchedData}
+        searchboxOutside={searchboxOutside}
+        setSearchboxOutside={setSearchboxOutside}
         BackButton={<Button onClick={() => navigate('/admin-setting')} variant="brand" size="sm" leftIcon={<IoIosArrowBack />} ml={2}>Back</Button>}
         deleteMany={true}
         access={true}
         checkBox={false}
+        getTagValuesOutSide={getTagValuesOutSide}
+        setGetTagValuesOutside={setGetTagValuesOutside}
         ManageGrid={false}
         onOpen={onOpen}
       />
