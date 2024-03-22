@@ -51,7 +51,6 @@ const Index = () => {
 
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
-        // const result = await getApi(`api/custom-field/?moduleName=${title}`);
         const result = await getApi(`api/custom-field`);
         const singaleData = result?.data?.find((item) => path(item?.moduleName) === title)
         setModuleData(singaleData);
