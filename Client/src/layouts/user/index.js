@@ -99,9 +99,9 @@ export default function User(props) {
         ]
 
     route?.map((item, i) => {
-        if (!routes.some(route => route.name === item.moduleName)) {
+        if (!newRoute.some(route => route.name === item.moduleName)) {
             return (
-                routes.push({
+                newRoute.push({
                     name: item?.moduleName,
                     layout: [ROLE_PATH.user],
                     path: pathName(item.moduleName),
