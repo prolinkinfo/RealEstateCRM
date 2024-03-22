@@ -10,7 +10,7 @@ import Spinner from "components/spinner/Spinner";
 import { constant } from "constant";
 import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getApi } from "services/api";
 import { HasAccess } from "../../../redux/accessUtils";
@@ -28,7 +28,6 @@ const View = () => {
     const textColor = useColorModeValue("gray.500", "white");
 
     const [data, setData] = useState()
-    const [allData, setAllData] = useState([])
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [edit, setEdit] = useState(false);
     const [deleteModel, setDelete] = useState(false);
@@ -36,9 +35,14 @@ const View = () => {
     const [action, setAction] = useState(false)
     const [leadData, setLeadData] = useState([])
     const location = useLocation()
+    const navigate = useNavigate()
     const module = location.state.module;
     const size = "lg";
+    console.log(location)
 
+    const pathName = (name) => {
+        return `/${name.toLowerCase().replace(/ /g, '-')}`;
+    }
 
     const [permission, taskPermission, meetingPermission, callAccess, emailAccess, taskAccess, meetingAccess] = HasAccess(['Leads', 'Tasks', 'Meetings', 'Calls', 'Emails', 'Tasks', 'Meetings']);
 
@@ -54,13 +58,6 @@ const View = () => {
             }
         }
     }
-    // const fetchData = async () => {
-    //     setIsLoding(true)
-    //     let response = await getApi('api/lead/view/', param.id)
-    //     setAllData(response.data);
-    //     setIsLoding(false)
-    // }
-    console.log(param.id)
     const fetchData = async () => {
         if (param.id) {
             try {
@@ -119,7 +116,7 @@ const View = () => {
                                     </>
                                 </MenuList>
                             </Menu>
-                            <Link to="/lead">
+                            <Link to={pathName(module.moduleName)}>
                                 <Button leftIcon={<IoIosArrowBack />} size='sm' variant="brand">
                                     Back
                                 </Button>
