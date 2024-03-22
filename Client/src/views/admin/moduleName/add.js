@@ -31,7 +31,12 @@ const Add = (props) => {
     const AddData = async () => {
         try {
             setIsLoding(true)
-            let response = await postApi('api/custom-field/add-module', values);
+
+            const payload = {
+                moduleName: values?.moduleName,
+            }
+
+            let response = await postApi('api/custom-field/add-module', payload);
             if (response.status === 200) {
                 fetchData()
                 onClose()

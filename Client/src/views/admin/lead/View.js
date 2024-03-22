@@ -383,7 +383,7 @@ const View = () => {
                                                     {/* {(allData?.Email && allData?.Email?.length > 0) ?
                                                         <ColumnsTable fetchData={fetchData} emailAccess={emailAccess} columnsData={columnsDataColumns} lead='true' tableData={showEmail ? allData.Email : [allData.Email[0]]} title={'Email '} />
                                                         : emailAccess?.create && <Button size="sm" onClick={() => setAddEmailHistory(true)} leftIcon={<BsFillSendFill />} colorScheme="gray" bg={buttonbg} >Send Email </Button>} */}
-                                                    <ColumnsTable fetchData={fetchData} emailAccess={emailAccess} columnsData={columnsDataColumns} lead='true' tableData={showEmail ? allData.Email : allData?.Email?.length > 0 ? [allData.Email[0]] : []} title={'Email '} />
+                                                    <ColumnsTable fetchData={fetchData} viewData={allData} emailAccess={emailAccess} columnsData={columnsDataColumns} lead='true' tableData={showEmail ? allData.Email : allData?.Email?.length > 0 ? [allData.Email[0]] : []} title={'Email '} />
 
                                                     <AddEmailHistory viewData={allData} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} data={data?.contact} setAction={setAction} lead='true' id={param.id} />
                                                     {allData.Email?.length > 1 &&
