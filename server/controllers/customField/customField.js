@@ -355,7 +355,7 @@ const createNewModule = async (req, res) => {
         const existingModule = await CustomField.findOne({ moduleName: { $regex: new RegExp(`^${moduleName}$`, 'i') } }).exec();
 
         if (existingModule) {
-            return res.status(400).json({ success: false, message: `Module name already exist` });
+            return res.status(400).json({ success: false, message: `Module name not available !` });
         }
         const nextAutoIncrementValue = await getNextAutoIncrementValue();
         const fields = [
