@@ -6,8 +6,6 @@ import { HSeparator } from "components/separator/Separator";
 
 const CustomView = ({ data, toCamelCase, fieldData }) => {
 
-    console.log("data--::", data?.moduleName)
-    console.log("fieldData--::", fieldData)
     const headingLength = data?.headings?.length % 3
     const headingLengthMd = data?.headings?.length % 2
     const lastLength = data?.headings.length - headingLength
