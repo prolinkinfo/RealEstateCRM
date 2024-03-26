@@ -2,13 +2,17 @@ import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, 
 import Spinner from 'components/spinner/Spinner';
 import React from 'react';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { fetchRouteData } from '../../../redux/routeSlice';
 import { deleteManyApi } from 'services/api';
 import { deleteApi } from 'services/api';
 
 const Delete = (props) => {
     const { selectedId, fetchData, onClose, isOpen, data, setSelectedValues } = props;
     const [isLoding, setIsLoding] = useState(false)
+
+    const dispatch = useDispatch();
 
     const handleDeleteClick = async () => {
         if (props.method === 'one') {
@@ -17,6 +21,7 @@ const Delete = (props) => {
                     setIsLoding(true)
                     const response = await deleteApi('api/custom-field/module/', selectedId)
                     if (response.status === 200) {
+                        await dispatch(fetchRouteData());
                         onClose()
                         fetchData()
                     }
@@ -32,6 +37,7 @@ const Delete = (props) => {
                 setIsLoding(true)
                 let response = await deleteManyApi('api/custom-field/deleteMany-Module', data)
                 if (response.status === 200) {
+                    await dispatch(fetchRouteData());
                     setSelectedValues([])
                     onClose(false)
                     fetchData()

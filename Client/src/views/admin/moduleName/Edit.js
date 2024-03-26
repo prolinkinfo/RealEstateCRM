@@ -39,7 +39,6 @@ const Edit = (props) => {
             fetchData()
             setAction((pre) => !pre)
         }
-
     }
 
     const changeImage = async (file) => {
