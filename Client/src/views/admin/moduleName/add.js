@@ -1,4 +1,4 @@
-import { Button, Checkbox, Flex, FormLabel, Grid, GridItem, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Text } from '@chakra-ui/react'
+import { Box, Button, Checkbox, Flex, FormLabel, Grid, GridItem, Heading, Icon, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Text, useColorModeValue } from '@chakra-ui/react'
 import Spinner from 'components/spinner/Spinner'
 import React, { useState } from 'react'
 import { useFormik } from 'formik'
@@ -6,15 +6,19 @@ import { HSeparator } from 'components/separator/Separator'
 import { postApi } from 'services/api'
 import { moduleAddSchema } from 'schema/moduleAddSchema'
 import { toast } from 'react-toastify'
+import Dropzone from "components/Dropzone";
+import { MdUpload } from "react-icons/md";
 
 
 
 const Add = (props) => {
     const { onClose, isOpen, fetchData, setAction } = props;
     const [isLoding, setIsLoding] = useState(false)
+    const brandColor = useColorModeValue("brand.500", "white");
 
     const initialValues = {
         moduleName: "",
+        icon: ""
     };
 
     const formik = useFormik({
@@ -31,12 +35,13 @@ const Add = (props) => {
     const AddData = async () => {
         try {
             setIsLoding(true)
+            const formData = new FormData();
 
-            const payload = {
-                moduleName: values?.moduleName,
-            }
+            formData.append("moduleName", values?.moduleName)
+            formData.append("icon", values?.icon?.[0])
 
-            let response = await postApi('api/custom-field/add-module', payload);
+
+            let response = await postApi('api/custom-field/add-module', formData);
             if (response.status === 200) {
                 fetchData()
                 onClose()
@@ -54,6 +59,7 @@ const Add = (props) => {
         }
     }
 
+
     return (
         <div>
             <Modal onClose={onClose} isOpen={isOpen} isCentered size='2xl'>
@@ -64,6 +70,31 @@ const Add = (props) => {
                     <ModalBody>
                         <>
                             <Grid templateColumns="repeat(12, 1fr)" gap={3}>
+
+                                <GridItem colSpan={{ base: 12 }}>
+                                    <Dropzone
+                                        w={{ base: "100%" }}
+                                        me='36px'
+                                        minH={100}
+                                        img={props.text === 'Property Photos' ? 'img' : ''}
+                                        isMultipleAllow={false}
+                                        height={'100%'}
+                                        onFileSelect={(file) => setFieldValue('icon',file)}
+                                        content={
+                                            <Box>
+                                                <Icon as={MdUpload} w='50px' h='50px' color={brandColor} />
+                                                <Flex justify='center' mx='auto' mb='12px'>
+                                                    <Text fontSize='sm' fontWeight='700' color={brandColor}>
+                                                        Upload File
+                                                    </Text>
+                                                </Flex>
+                                                {values?.icon.length > 0 && <Text fontSize='sm' fontWeight='500' color='secondaryGray.500'>
+                                                    Selected Files : {values?.icon.length}
+                                                </Text>}
+                                            </Box>
+                                        }
+                                    />
+                                </GridItem>
                                 <GridItem colSpan={{ base: 12 }}>
                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='2px'>
                                         Name<Text color={"red"}>*</Text>

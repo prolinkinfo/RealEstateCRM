@@ -351,6 +351,8 @@ async function getNextAutoIncrementValue() {
 const createNewModule = async (req, res) => {
     try {
         const moduleName = req.body.moduleName;
+        const url = req.protocol + '://' + req?.get('host');
+        const file = `${url}/api/custom-field/icon/${req?.file?.filename}`;
 
         const existingModule = await CustomField.findOne({ moduleName: { $regex: new RegExp(`^${moduleName}$`, 'i') } }).exec();
 
@@ -358,6 +360,7 @@ const createNewModule = async (req, res) => {
             return res.status(400).json({ success: false, message: `Module name not available !` });
         }
         const nextAutoIncrementValue = await getNextAutoIncrementValue();
+
         const fields = [
             {
                 "name": "createBy",
@@ -433,7 +436,7 @@ const createNewModule = async (req, res) => {
             },
         ]
 
-        const newModule = new CustomField({ moduleName, fields: fields, headings: req.body.headings || [], no: nextAutoIncrementValue, createdDate: new Date() });
+        const newModule = new CustomField({ moduleName, icon: req?.file?.filename ? file : "", fields: fields, headings: req.body.headings || [], no: nextAutoIncrementValue, createdDate: new Date() });
 
         const schemaFields = {
             createBy: {
@@ -486,6 +489,32 @@ const createNewModule = async (req, res) => {
         return res.status(400).json({ success: false, message: 'Failed to Create module', error: err.toString() });
     }
 };
+
+const changeIcon = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (!req?.file) {
+            return res.status(400).send({ success: false, message: 'No icon uploaded.' });
+        }
+
+        const existingDocument = await CustomField.findOne({ _id: id });
+
+        if (existingDocument) {
+            const url = req.protocol + '://' + req.get('host');
+            const file = `${url}/api/custom-field/icon/${req?.file?.filename}`;
+
+            let result = await CustomField.findByIdAndUpdate({ _id: id }, { $set: { icon: file } }, { new: true });
+            return res.send({ data: result, message: 'Icon updated successfully.' })
+        }
+    
+
+    } catch (err) {
+        console.error('Failed to update icon :', err);
+        return res.status(400).json({ success: false, message: 'Failed to update icon' });
+    }
+};
+
 
 const changeModuleName = async (req, res) => {
     try {
@@ -814,4 +843,4 @@ const changeFieldsBelongsTo = async (req, res) => {
     }
 };
 
-module.exports = { index, add, editWholeFieldsArray, editSingleField, view, changeModuleName, deleteField, deleteManyFields, deletmodule, deleteManyModule, createNewModule, addHeading, editSingleHeading, editWholeHeadingsArray, deleteHeading, deleteManyHeadings, changeIsTableField, changeIsTableFields, changeFieldsBelongsTo };
+module.exports = { index, add, editWholeFieldsArray, editSingleField, view, changeModuleName, deleteField, deleteManyFields, deletmodule, deleteManyModule, createNewModule, changeIcon, addHeading, editSingleHeading, editWholeHeadingsArray, deleteHeading, deleteManyHeadings, changeIsTableField, changeIsTableFields, changeFieldsBelongsTo };

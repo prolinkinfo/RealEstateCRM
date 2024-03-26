@@ -99,6 +99,9 @@ const customFieldSchema = new mongoose.Schema({
         unique: true,
         trim: true
     },
+    icon:{
+        type : String,
+    },
     no: {
         type: Number
     },

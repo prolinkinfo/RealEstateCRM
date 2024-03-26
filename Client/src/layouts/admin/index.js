@@ -17,6 +17,7 @@ import { getApi } from 'services/api';
 import { MdHome, MdLock } from 'react-icons/md';
 import DynamicPage from 'views/admin/dynamicPage';
 import DynamicPageview from 'views/admin/dynamicPage/DynamicPageview';
+import { fetchRouteData } from '../../redux/routeSlice';
 
 const MainDashboard = React.lazy(() => import("views/admin/default"));
 
@@ -25,22 +26,20 @@ export default function Dashboard(props) {
 	const { ...rest } = props;
 	// states and functions
 	const [fixed] = useState(false);
-	const [route, setRoute] = useState();
 	const [toggleSidebar, setToggleSidebar] = useState(false);
 	const [openSidebar, setOpenSidebar] = useState(false)
 	const user = JSON.parse(localStorage.getItem("user"))
+	const route = useSelector((state)=>state?.route?.data)
+	const dispatch = useDispatch();
 
-	const fetchRoute = async () => {
-		let response = await getApi("api/route/");
-		setRoute(response?.data);
-	};
 	const pathName = (name) => {
 		return `/${name.toLowerCase().replace(/ /g, '-')}`;
 	}
 
-	useEffect(() => {
-		fetchRoute();
+	useEffect(async() => {
+		await dispatch(fetchRouteData());
 	}, []);
+
 	// functions for changing the states from components
 	const getRoute = () => {
 		return window.location.pathname !== '/admin/full-screen-maps';
@@ -53,7 +52,7 @@ export default function Dashboard(props) {
 					name: item?.moduleName,
 					layout: [ROLE_PATH.superAdmin],
 					path: pathName(item.moduleName),
-					icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
+					icon:item?.icon ? <img src={item?.icon} width='20px' height='20px' alt='icon'/> :<Icon as={MdHome} width='20px' height='20px' color='inherit' />,
 					component: DynamicPage,
 				},
 					{
@@ -68,7 +67,7 @@ export default function Dashboard(props) {
 						under: item?.moduleName,
 						parentName: item?.moduleName,
 						path: `${pathName(item.moduleName)}/:id`,
-						icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
+						icon:item?.icon ? <img src={item?.icon} width='20px' height='20px' alt='icon'/> :<Icon as={MdHome} width='20px' height='20px' color='inherit' />,
 						component: DynamicPageview,
 					},
 				)
@@ -98,7 +97,6 @@ export default function Dashboard(props) {
 		return activeRoute;
 	};
 
-	const dispatch = useDispatch();
 
 	useEffect(() => {
 		dispatch(fetchImage());
