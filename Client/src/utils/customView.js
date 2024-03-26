@@ -6,8 +6,6 @@ import { HSeparator } from "components/separator/Separator";
 
 const CustomView = ({ data, toCamelCase, fieldData }) => {
 
-
-    console.log(data);
     const headingLength = data?.headings?.length % 3
     const headingLengthMd = data?.headings?.length % 2
     const lastLength = data?.headings.length - headingLength
@@ -63,7 +61,12 @@ const CustomView = ({ data, toCamelCase, fieldData }) => {
                 }}>
                     <Card>
                         <Grid templateColumns="repeat(12, 1fr)" gap={3}>
-
+                            <GridItem colSpan={12}>
+                                <Heading as="h1" size="md" mb='10px'>
+                                    {data?.moduleName} view page
+                                </Heading>
+                                <HSeparator />
+                            </GridItem>
                             {
                                 data?.fields?.map((field) => (
                                     <GridItem colSpan={{ base: 12, md: 6 }} key={field?.name}>
