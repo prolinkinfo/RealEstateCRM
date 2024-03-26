@@ -18,6 +18,7 @@ import { MdHome, MdLock } from 'react-icons/md';
 import DynamicPage from 'views/admin/dynamicPage';
 import DynamicPageview from 'views/admin/dynamicPage/DynamicPageview';
 import { fetchRouteData } from '../../redux/routeSlice';
+import { LuChevronRightCircle } from 'react-icons/lu';
 
 const MainDashboard = React.lazy(() => import("views/admin/default"));
 
@@ -81,31 +82,7 @@ export default function Dashboard(props) {
 			route?.map((item, i) => {
 				let rec = routes.find(route => route?.name === item?.moduleName)
 				if (!routes.some(route => route?.name === item?.moduleName)) {
-					// routes.push({
-					// 	name: item?.moduleName,
-					// 	layout: [ROLE_PATH.superAdmin],
-					// 	path: pathName(item.moduleName),
-					// 	icon: item?.icon ? (
-					// 		<img src={item?.icon} width="20px" height="20px" alt="icon" />
-					// 	) : (
-					// 		<Icon as={MdHome} width="20px" height="20px" color="inherit" />
-					// 	),
-					// 	component: DynamicPage,
-					// });
 
-					// routes.push({
-					// 	name: item?.moduleName,
-					// 	layout: [ROLE_PATH.superAdmin],
-					// 	under: item?.moduleName,
-					// 	parentName: item?.moduleName,
-					// 	path: `${pathName(item.moduleName)}/:id`,
-					// 	icon: item?.icon ? (
-					// 		<img src={item?.icon} width="20px" height="20px" alt="icon" />
-					// 	) : (
-					// 		<Icon as={MdHome} width="20px" height="20px" color="inherit" />
-					// 	),
-					// 	component: DynamicPageview,
-					// });
 					const newRoute = [{
 						name: item?.moduleName,
 						layout: [ROLE_PATH.superAdmin],
@@ -113,7 +90,7 @@ export default function Dashboard(props) {
 						icon: item?.icon ? (
 							<img src={item?.icon} width="20px" height="20px" alt="icon" />
 						) : (
-							<Icon as={MdHome} width="20px" height="20px" color="inherit" />
+							<Icon as={LuChevronRightCircle} width="20px" height="20px" color="inherit" />
 						),
 						component: DynamicPage,
 					},
@@ -126,7 +103,7 @@ export default function Dashboard(props) {
 						icon: item?.icon ? (
 							<img src={item?.icon} width="20px" height="20px" alt="icon" />
 						) : (
-							<Icon as={MdHome} width="20px" height="20px" color="inherit" />
+							<Icon as={LuChevronRightCircle} width="20px" height="20px" color="inherit" />
 						),
 						component: DynamicPageview,
 					}
