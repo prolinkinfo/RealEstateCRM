@@ -58,7 +58,7 @@ const Edit = (props) => {
                 toast.error(response?.response?.data?.message);
             }
         } catch (e) {
-            console.log(e);
+            console.log(e); 
         }
         finally {
             setIsLoding(false)

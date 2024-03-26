@@ -8,6 +8,8 @@ import { moduleAddSchema } from 'schema/moduleAddSchema'
 import { toast } from 'react-toastify'
 import Dropzone from "components/Dropzone";
 import { MdUpload } from "react-icons/md";
+import { fetchRouteData } from '../../../redux/routeSlice'
+import { useDispatch } from 'react-redux'
 
 
 
@@ -15,7 +17,7 @@ const Add = (props) => {
     const { onClose, isOpen, fetchData, setAction } = props;
     const [isLoding, setIsLoding] = useState(false)
     const brandColor = useColorModeValue("brand.500", "white");
-
+    const dispatch = useDispatch();
     const initialValues = {
         moduleName: "",
         icon: ""
@@ -44,6 +46,7 @@ const Add = (props) => {
             let response = await postApi('api/custom-field/add-module', formData);
             if (response.status === 200) {
                 fetchData()
+                await dispatch(fetchRouteData());
                 onClose()
                 resetForm()
                 setAction((pre) => !pre)
@@ -79,7 +82,7 @@ const Add = (props) => {
                                         img={props.text === 'Property Photos' ? 'img' : ''}
                                         isMultipleAllow={false}
                                         height={'100%'}
-                                        onFileSelect={(file) => setFieldValue('icon',file)}
+                                        onFileSelect={(file) => setFieldValue('icon', file)}
                                         content={
                                             <Box>
                                                 <Icon as={MdUpload} w='50px' h='50px' color={brandColor} />

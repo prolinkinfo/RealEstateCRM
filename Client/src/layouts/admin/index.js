@@ -10,7 +10,7 @@ import React, { Suspense, useEffect } from 'react';
 import { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { ROLE_PATH } from '../../roles';
-import routes from 'routes.js';
+import newRoutes from 'routes.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchImage } from '../../redux/imageSlice';
 import { getApi } from 'services/api';
@@ -29,51 +29,122 @@ export default function Dashboard(props) {
 	const [toggleSidebar, setToggleSidebar] = useState(false);
 	const [openSidebar, setOpenSidebar] = useState(false)
 	const user = JSON.parse(localStorage.getItem("user"))
-	const route = useSelector((state)=>state?.route?.data)
+	// let routes = newRoutes;
+	const [routes, setRoutes] = useState(newRoutes)
+	const route = useSelector((state) => state?.route?.data)
 	const dispatch = useDispatch();
 
 	const pathName = (name) => {
 		return `/${name.toLowerCase().replace(/ /g, '-')}`;
 	}
 
-	useEffect(async() => {
-		await dispatch(fetchRouteData());
-	}, []);
-
 	// functions for changing the states from components
 	const getRoute = () => {
 		return window.location.pathname !== '/admin/full-screen-maps';
 	};
 
-	route?.map((item, i) => {
-		if (!routes.some(route => route.name === item.moduleName)) {
-			return (
-				routes.push({
-					name: item?.moduleName,
-					layout: [ROLE_PATH.superAdmin],
-					path: pathName(item.moduleName),
-					icon:item?.icon ? <img src={item?.icon} width='20px' height='20px' alt='icon'/> :<Icon as={MdHome} width='20px' height='20px' color='inherit' />,
-					component: DynamicPage,
-				},
+	// const dynamicRoute = () => {
+	// 	route && route?.length > 0 && route?.map((item, i) => {
+	// 		if (!routes.some(route => route?.name === item?.moduleName)) {
+	// 			return (
+	// 				routes.push({
+	// 					name: item?.moduleName,
+	// 					layout: [ROLE_PATH.superAdmin],
+	// 					path: pathName(item.moduleName),
+	// 					icon: item?.icon ? <img src={item?.icon} width='20px' height='20px' alt='icon' /> : <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
+	// 					component: DynamicPage,
+	// 				},
+	// 					{
+	// 						// name: "Leads",
+	// 						// layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+	// 						// under: "lead",
+	// 						// parentName: "Leads",
+	// 						// path: "/leadView/:id",
+	// 						// component: LeadView,
+	// 						name: item?.moduleName,
+	// 						layout: [ROLE_PATH.superAdmin],
+	// 						under: item?.moduleName,
+	// 						parentName: item?.moduleName,
+	// 						path: `${pathName(item.moduleName)}/:id`,
+	// 						icon: item?.icon ? <img src={item?.icon} width='20px' height='20px' alt='icon' /> : <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
+	// 						component: DynamicPageview,
+	// 					},
+	// 				)
+	// 			)
+	// 		}
+	// 	})
+
+	// }
+	const dynamicRoute = () => {
+		route &&
+			route?.length > 0 &&
+			route?.map((item, i) => {
+				let rec = routes.find(route => route?.name === item?.moduleName)
+				if (!routes.some(route => route?.name === item?.moduleName)) {
+					// routes.push({
+					// 	name: item?.moduleName,
+					// 	layout: [ROLE_PATH.superAdmin],
+					// 	path: pathName(item.moduleName),
+					// 	icon: item?.icon ? (
+					// 		<img src={item?.icon} width="20px" height="20px" alt="icon" />
+					// 	) : (
+					// 		<Icon as={MdHome} width="20px" height="20px" color="inherit" />
+					// 	),
+					// 	component: DynamicPage,
+					// });
+
+					// routes.push({
+					// 	name: item?.moduleName,
+					// 	layout: [ROLE_PATH.superAdmin],
+					// 	under: item?.moduleName,
+					// 	parentName: item?.moduleName,
+					// 	path: `${pathName(item.moduleName)}/:id`,
+					// 	icon: item?.icon ? (
+					// 		<img src={item?.icon} width="20px" height="20px" alt="icon" />
+					// 	) : (
+					// 		<Icon as={MdHome} width="20px" height="20px" color="inherit" />
+					// 	),
+					// 	component: DynamicPageview,
+					// });
+					const newRoute = [{
+						name: item?.moduleName,
+						layout: [ROLE_PATH.superAdmin],
+						path: pathName(item.moduleName),
+						icon: item?.icon ? (
+							<img src={item?.icon} width="20px" height="20px" alt="icon" />
+						) : (
+							<Icon as={MdHome} width="20px" height="20px" color="inherit" />
+						),
+						component: DynamicPage,
+					},
 					{
-						// name: "Leads",
-						// layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-						// under: "lead",
-						// parentName: "Leads",
-						// path: "/leadView/:id",
-						// component: LeadView,
 						name: item?.moduleName,
 						layout: [ROLE_PATH.superAdmin],
 						under: item?.moduleName,
 						parentName: item?.moduleName,
 						path: `${pathName(item.moduleName)}/:id`,
-						icon:item?.icon ? <img src={item?.icon} width='20px' height='20px' alt='icon'/> :<Icon as={MdHome} width='20px' height='20px' color='inherit' />,
+						icon: item?.icon ? (
+							<img src={item?.icon} width="20px" height="20px" alt="icon" />
+						) : (
+							<Icon as={MdHome} width="20px" height="20px" color="inherit" />
+						),
 						component: DynamicPageview,
-					},
-				)
-			)
-		}
-	})
+					}
+					]
+					setRoutes((pre) => [...pre, ...newRoute])
+				} else if (routes.some(route => route?.name === item?.moduleName) && rec.icon?.props?.src !== item?.icon) {
+					const updatedData = routes.map(i => {
+						if (i.name === item?.moduleName) {
+							return { ...i, icon: <img src={item?.icon} width="20px" height="20px" alt="icon" /> };
+						}
+						return i;
+					});
+
+					setRoutes(updatedData)
+
+				}
+			});
+	};
 
 	const getActiveRoute = (routes) => {
 		let activeRoute = 'Prolink';
@@ -99,8 +170,13 @@ export default function Dashboard(props) {
 
 
 	useEffect(() => {
-		dispatch(fetchImage());
-	}, [dispatch]);
+		dynamicRoute();
+	}, [route]);
+
+	useEffect(async () => {
+		await dispatch(fetchRouteData());
+		await dispatch(fetchImage());
+	}, []);
 
 	const largeLogo = useSelector((state) => state?.images?.image?.filter(item => item.isActive === true));
 
