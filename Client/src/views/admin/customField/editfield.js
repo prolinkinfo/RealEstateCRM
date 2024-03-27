@@ -383,7 +383,7 @@ const EditField = (props) => {
                                             Validation
                                         </Heading>
                                         <Flex>
-                                            {!validations?.length > 0 && <Select
+                                            {validations?.length > 0 && <Select
                                                 value={validationType}
                                                 name="validations"
                                                 // onChange={handleChange}
