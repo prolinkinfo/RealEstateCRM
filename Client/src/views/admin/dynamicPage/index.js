@@ -99,7 +99,6 @@ const Index = () => {
                 <Spinner />
             </Flex> :
                 <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={4}>
-
                     <GridItem colSpan={6}>
                         <CommonCheckTable
                             title={moduleData?.moduleName}
@@ -113,7 +112,7 @@ const Index = () => {
                             // setDisplaySearchData={setDisplaySearchData}
                             // searchedData={searchedData}
                             // setSearchedData={setSearchedData}
-                            tableCustomFields={moduleData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
+                            tableCustomFields={moduleData?.fields?.filter((field) => field?.isTableField === true) || []}
                             access={permission}
                             action={action}
                             setAction={setAction}
