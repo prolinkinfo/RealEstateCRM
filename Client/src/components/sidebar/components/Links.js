@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { NavLink, useLocation } from "react-router-dom";
 // chakra imports
-import { AbsoluteCenter, Box, Divider, Flex, HStack, Text, useColorModeValue, useDisclosure } from "@chakra-ui/react";
+import { AbsoluteCenter, Box, Divider, Flex, HStack, Text, Tooltip, useColorModeValue, useDisclosure } from "@chakra-ui/react";
 
 export function SidebarLinks(props) {
   //   Chakra color mode
@@ -94,6 +94,10 @@ export function SidebarLinks(props) {
                         <Text
                           me='auto'
                           pb={"3px"}
+                          textOverflow={"ellipsis"}
+                          overflowX="hidden"
+                          whiteSpace='nowrap'
+                          width="190px"
                           color={
                             activeRoute(route.path.toLowerCase())
                               ? activeColor
@@ -104,7 +108,9 @@ export function SidebarLinks(props) {
                               ? "bold"
                               : "normal"
                           }>
-                          {route.name}
+                          <Tooltip hasArrow label={route.name}>
+                            {route.name}
+                          </Tooltip>
                         </Text>
                       </Flex>
                       :
