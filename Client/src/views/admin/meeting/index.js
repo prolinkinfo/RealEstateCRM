@@ -124,6 +124,19 @@ const Index = () => {
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
     const [permission] = HasAccess(['Meetings'])
+    const actionHeader = {
+        Header: "Action", isSortable: false, center: true,
+        cell: ({ row }) => (
+            <Text fontSize="md" fontWeight="900" textAlign={"center"}>
+                <Menu isLazy  >
+                    <MenuButton><CiMenuKebab /></MenuButton>
+                    <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
+                        {permission?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/metting/${row?.values._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>}
+                    </MenuList>
+                </Menu>
+            </Text>
+        )
+    }
     const tableColumns = [
         {
             Header: "#",
@@ -135,19 +148,8 @@ const Index = () => {
         { Header: "date & Time", accessor: "dateTime", },
         { Header: "time stamp", accessor: "timestamp", },
         { Header: "create By", accessor: "createdByName", },
-        {
-            Header: "Action", isSortable: false, center: true,
-            cell: ({ row }) => (
-                <Text fontSize="md" fontWeight="900" textAlign={"center"}>
-                    <Menu isLazy  >
-                        <MenuButton><CiMenuKebab /></MenuButton>
-                        <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
-                            {permission?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/metting/${row?.values._id}`)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>}
-                        </MenuList>
-                    </Menu>
-                </Text>
-            )
-        },
+        ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : [])
+
     ];
 
     const fetchData = async () => {

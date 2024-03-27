@@ -65,7 +65,6 @@ const Edit = (props) => {
                 console.log(props.moduleId);
                 setIsLoding(true)
                 response = await getApi(`api/form/view/${props?.selectedId || param.id}?moduleId=${props.moduleId}`)
-                console.log(response);
                 let editData = response?.data?.data;
                 setInitialValues((prev) => ({ ...prev, ...editData }));
 
