@@ -162,6 +162,7 @@ export default function AdminNavbar(props) {
 						borderRadius='inherit'
 						fontWeight='bold'
 						fontSize='34px'
+						textTransform={"capitalize"}
 						_hover={{ color: { mainText } }}
 						_active={{
 							bg: 'inherit',

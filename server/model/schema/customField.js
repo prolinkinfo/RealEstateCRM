@@ -58,6 +58,10 @@ const fieldsSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    isDefault: {
+        type: Boolean,
+        default: false
+    },
     delete: {
         type: Boolean,
         default: false
@@ -94,6 +98,9 @@ const customFieldSchema = new mongoose.Schema({
         required: true,
         unique: true,
         trim: true
+    },
+    icon:{
+        type : String,
     },
     no: {
         type: Number

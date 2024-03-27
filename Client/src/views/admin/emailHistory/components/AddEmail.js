@@ -16,7 +16,7 @@ const AddEmailHistory = (props) => {
 
     const initialValues = {
         sender: user?._id,
-        recipient: '',
+        recipient: props.lead !== 'true' ? props?.contactEmail : props?.leadEmail,
         subject: '',
         message: '',
         createBy: '',
@@ -27,6 +27,7 @@ const AddEmailHistory = (props) => {
     const formik = useFormik({
         initialValues: initialValues,
         validationSchema: emailSchema,
+        enableReinitialize: true,
         onSubmit: (values, { resetForm }) => {
             AddData();
             resetForm();
@@ -51,27 +52,27 @@ const AddEmailHistory = (props) => {
         }
     };
 
-    const fetchRecipientData = async () => {
+    const fetchRecipientData = () => {
         if (props.id && props.lead !== 'true') {
             // let response = await getApi('api/contact/view/', props.id)
             // if (response?.status === 200) {
-            setFieldValue('recipient', props?.viewData?.contact?.email);
+            // setFieldValue('recipient', props?.viewData?.contact?.email);
             setFieldValue('createBy', props.id);
-            values.recipient = props?.viewData?.contact?.email
+            // values.recipient = props?.viewData?.contact?.email
             // }
         } else if (props.id && props.lead === 'true') {
             // let response = await getApi('api/lead/view/', props.id)
             // if (response?.status === 200) {
-            setFieldValue('recipient', props?.viewData?.lead?.leadEmail);
+            // setFieldValue('recipient', props?.viewData?.lead?.leadEmail);
             setFieldValue('createByLead', props.id);
-            values.recipient = props?.viewData?.lead?.leadEmail
+            // values.recipient = props?.viewData?.lead?.leadEmail
             // }
         }
     }
-
     useEffect(() => {
         fetchRecipientData()
-    }, [props.id])
+    }, [props.id,props.lead])
+
 
     return (
         <Modal onClose={onClose} isOpen={isOpen} isCentered>

@@ -2,17 +2,19 @@ const mongoose = require("mongoose");
 const CustomField = require("../../model/schema/customField");
 const RoleAccess = require('../../model/schema/roleAccess');
 
-
-
 const index = async (req, res) => {
     try {
         const query = req.query
         query.deleted = false;
-        const result = await CustomField.find(query);
-        result.sort((a, b) => {
+        let result = await CustomField.find(query);
+        let filteredResult = result.map(item => ({
+            ...item.toObject(), // Convert Mongoose document to plain object
+            fields: item?.fields?.filter(field => !field.isDefault && !field.delete)
+        }));
+        filteredResult.sort((a, b) => {
             return a.no - b.no;
         });
-        return res.send(result);
+        return res.send(filteredResult);
     } catch (err) {
         console.error('Failed', err);
         return res.status(400).json({ success: false, message: 'Failed', error: err.toString() });
@@ -345,20 +347,116 @@ async function getNextAutoIncrementValue() {
     const no = await CustomField.countDocuments({});
     return no + 1;
 }
+
 const createNewModule = async (req, res) => {
     try {
         const moduleName = req.body.moduleName;
+        const url = req.protocol + '://' + req?.get('host');
+        const file = `${url}/api/custom-field/icon/${req?.file?.filename}`;
 
         const existingModule = await CustomField.findOne({ moduleName: { $regex: new RegExp(`^${moduleName}$`, 'i') } }).exec();
 
         if (existingModule) {
-            return res.status(400).json({ success: false, message: `Module name already exist` });
+            return res.status(400).json({ success: false, message: `Module name not available !` });
         }
         const nextAutoIncrementValue = await getNextAutoIncrementValue();
 
-        const newModule = new CustomField({ moduleName, fields: req.body.fields || [], headings: req.body.headings || [], no: nextAutoIncrementValue, createdDate: new Date() });
+        const fields = [
+            {
+                "name": "createBy",
+                "label": "createBy",
+                "type": "text",
+                "fixed": false,
+                "delete": false,
+                "isDefault": true,
+                "belongsTo": null,
+                "backendType": "Mixed",
+                "isTableField": true,
+                "options": [],
+                "validation": [
+                    {
+                        "require": true,
+                        "message": "",
+                    },
+                ],
+            },
+            {
+                "name": "updatedDate",
+                "label": "updatedDate",
+                "type": "text",
+                "fixed": false,
+                "delete": false,
+                "isDefault": true,
+                "belongsTo": null,
+                "backendType": "Mixed",
+                "isTableField": true,
+                "options": [],
+                "validation": [
+                    {
+                        "require": true,
+                        "message": "",
+                    },
+                ],
+            },
+            {
+                "name": "createdDate",
+                "label": "createdDate",
+                "type": "text",
+                "fixed": false,
+                "delete": false,
+                "isDefault": true,
+                "belongsTo": null,
+                "backendType": "Mixed",
+                "isTableField": true,
+                "options": [],
+                "validation": [
+                    {
+                        "require": true,
+                        "message": "",
+                    },
+                ],
+            },
+            {
+                "name": "deleted",
+                "label": "deleted",
+                "type": "text",
+                "fixed": false,
+                "delete": false,
+                "isDefault": true,
+                "belongsTo": null,
+                "backendType": "Mixed",
+                "isTableField": true,
+                "options": [],
+                "validation": [
+                    {
+                        "require": true,
+                        "message": "",
+                    },
+                ],
+            },
+        ]
 
-        const schemaFields = {};
+        const newModule = new CustomField({ moduleName, icon: req?.file?.filename ? file : "", fields: fields, headings: req.body.headings || [], no: nextAutoIncrementValue, createdDate: new Date() });
+
+        const schemaFields = {
+            createBy: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+                required: true
+            },
+            updatedDate: {
+                type: Date,
+                default: Date.now
+            },
+            createdDate: {
+                type: Date,
+            },
+            deleted: {
+                type: Boolean,
+                default: false,
+            },
+        };
+
         const moduleSchema = new mongoose.Schema(schemaFields);
         if (!mongoose.models[moduleName]) {
             mongoose.model(moduleName, moduleSchema, moduleName);
@@ -391,6 +489,32 @@ const createNewModule = async (req, res) => {
         return res.status(400).json({ success: false, message: 'Failed to Create module', error: err.toString() });
     }
 };
+
+const changeIcon = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (!req?.file) {
+            return res.status(400).send({ success: false, message: 'No icon uploaded.' });
+        }
+
+        const existingDocument = await CustomField.findOne({ _id: id });
+
+        if (existingDocument) {
+            const url = req.protocol + '://' + req.get('host');
+            const file = `${url}/api/custom-field/icon/${req?.file?.filename}`;
+
+            let result = await CustomField.findByIdAndUpdate({ _id: id }, { $set: { icon: file } }, { new: true });
+            return res.send({ data: result, message: 'Icon updated successfully.' })
+        }
+    
+
+    } catch (err) {
+        console.error('Failed to update icon :', err);
+        return res.status(400).json({ success: false, message: 'Failed to update icon' });
+    }
+};
+
 
 const changeModuleName = async (req, res) => {
     try {
@@ -719,4 +843,4 @@ const changeFieldsBelongsTo = async (req, res) => {
     }
 };
 
-module.exports = { index, add, editWholeFieldsArray, editSingleField, view, changeModuleName, deleteField, deleteManyFields, deletmodule, deleteManyModule, createNewModule, addHeading, editSingleHeading, editWholeHeadingsArray, deleteHeading, deleteManyHeadings, changeIsTableField, changeIsTableFields, changeFieldsBelongsTo };
+module.exports = { index, add, editWholeFieldsArray, editSingleField, view, changeModuleName, deleteField, deleteManyFields, deletmodule, deleteManyModule, createNewModule, changeIcon, addHeading, editSingleHeading, editWholeHeadingsArray, deleteHeading, deleteManyHeadings, changeIsTableField, changeIsTableFields, changeFieldsBelongsTo };

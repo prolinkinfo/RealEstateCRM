@@ -27,21 +27,31 @@ const add = async (req, res) => {
 
             const titles = ['Emails', 'Calls', 'Meetings', 'Tasks', 'Properties', 'Contacts', 'Leads'];
             const customModules = Array.from(await customField.find(), item => item.moduleName);
-            customModules.forEach(module => {
-                if (!titles?.includes(module)) {
-                    titles.push(module);
+
+            async function processModules() {
+                for (const module of customModules) {
+                    const item = await customField.findOne({ moduleName: module });
+                    if (item && !item.deleted && !titles?.includes(module)) {
+                        titles.push(module);
+                    }
                 }
+            }
+
+            // Call the async function
+            processModules().then(async () => {
+                const access = [];
+
+                await titles?.forEach((item) => {
+                    access.push({ title: item, create: false, update: false, delete: false, view: false });
+                })
+
+                const role = new RoleAccess({ roleName: roleName, description, access, createdDate });
+                await role.save();
+                return res.status(200).json({ message: `${roleName} Role created successfully` });
+            }).catch(error => {
+                console.error("Error occurred:", error);
             });
 
-            const access = [];
-
-            titles?.forEach((item) => {
-                access.push({ title: item, create: false, update: false, delete: false, view: false });
-            })
-
-            const role = new RoleAccess({ roleName: roleName, description, access, createdDate });
-            await role.save();
-            return res.status(200).json({ message: `${roleName} Role created successfully` });
         }
     } catch (err) {
         console.error('Failed to create role:', err);

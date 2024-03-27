@@ -46,7 +46,7 @@ const index = async (req, res) => {
             { $match: query },
             {
                 $lookup: {
-                    from: 'Lead', // Assuming this is the collection name for 'leads'
+                    from: 'Leads', // Assuming this is the collection name for 'leads'
                     localField: 'createByLead',
                     foreignField: '_id',
                     as: 'createByrefLead'
@@ -54,7 +54,7 @@ const index = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'Contact',
+                    from: 'Contacts',
                     localField: 'createBy',
                     foreignField: '_id',
                     as: 'contact'

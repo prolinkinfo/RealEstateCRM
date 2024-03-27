@@ -55,7 +55,29 @@ const CustomView = ({ data, toCamelCase, fieldData }) => {
                         </GridItem>
                     </>)
                 )}
-            </> : ''
+            </> :
+                <GridItem colSpan={{
+                    base: 12,
+                }}>
+                    <Card>
+                        <Grid templateColumns="repeat(12, 1fr)" gap={3}>
+                            <GridItem colSpan={12}>
+                                <Heading as="h1" size="md" mb='10px'>
+                                    {data?.moduleName} view page
+                                </Heading>
+                                <HSeparator />
+                            </GridItem>
+                            {
+                                data?.fields?.map((field) => (
+                                    <GridItem colSpan={{ base: 12, md: 6 }} key={field?.name}>
+                                        <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> {field?.label}</Text>
+                                        <Text color={'blackAlpha.900'} fontSize="sm" > {fieldData && fieldData[field?.name] !== undefined ? fieldData[field?.name] : "N/A"}</Text>
+                                    </GridItem>
+                                ))
+                            }
+                        </Grid>
+                    </Card>
+                </GridItem>
             }
         </Grid>
     )

@@ -1,18 +1,26 @@
 // Chakra imports
-import { Portal, Box, useDisclosure, Flex } from '@chakra-ui/react';
+import { Portal, Box, useDisclosure, Flex, Icon } from '@chakra-ui/react';
 import Footer from 'components/footer/FooterAdmin.js';
 // Layout components
 import Navbar from 'components/navbar/NavbarAdmin.js';
 import Sidebar from 'components/sidebar/Sidebar.js';
 import Spinner from 'components/spinner/Spinner';
 import { SidebarContext } from 'contexts/SidebarContext';
-import { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { ROLE_PATH } from '../../roles';
-import routes from 'routes.js';
+import newRoutes from 'routes.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchImage } from '../../redux/imageSlice';
+import { getApi } from 'services/api';
+import { MdHome, MdLock } from 'react-icons/md';
+import DynamicPage from 'views/admin/dynamicPage';
+import DynamicPageview from 'views/admin/dynamicPage/DynamicPageview';
+import { fetchRouteData } from '../../redux/routeSlice';
+import { LuChevronRightCircle } from 'react-icons/lu';
+
+const MainDashboard = React.lazy(() => import("views/admin/default"));
 
 // Custom Chakra theme
 export default function Dashboard(props) {
@@ -22,11 +30,151 @@ export default function Dashboard(props) {
 	const [toggleSidebar, setToggleSidebar] = useState(false);
 	const [openSidebar, setOpenSidebar] = useState(false)
 	const user = JSON.parse(localStorage.getItem("user"))
+	// let routes = newRoutes;
+	const [routes, setRoutes] = useState(newRoutes)
+	const route = useSelector((state) => state?.route?.data)
+	const dispatch = useDispatch();
+
+	const pathName = (name) => {
+		return `/${name.toLowerCase().replace(/ /g, '-')}`;
+	}
 
 	// functions for changing the states from components
 	const getRoute = () => {
 		return window.location.pathname !== '/admin/full-screen-maps';
 	};
+
+	console.log(routes, "routes")
+	console.log(route, "routeroute")
+
+	// const dynamicRoute = () => {
+	// 	route && route?.length > 0 && route?.map((item, i) => {
+	// 		if (!routes.some(route => route?.name === item?.moduleName)) {
+	// 			return (
+	// 				routes.push({
+	// 					name: item?.moduleName,
+	// 					layout: [ROLE_PATH.superAdmin],
+	// 					path: pathName(item.moduleName),
+	// 					icon: item?.icon ? <img src={item?.icon} width='20px' height='20px' alt='icon' /> : <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
+	// 					component: DynamicPage,
+	// 				},
+	// 					{
+	// 						// name: "Leads",
+	// 						// layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+	// 						// under: "lead",
+	// 						// parentName: "Leads",
+	// 						// path: "/leadView/:id",
+	// 						// component: LeadView,
+	// 						name: item?.moduleName,
+	// 						layout: [ROLE_PATH.superAdmin],
+	// 						under: item?.moduleName,
+	// 						parentName: item?.moduleName,
+	// 						path: `${pathName(item.moduleName)}/:id`,
+	// 						icon: item?.icon ? <img src={item?.icon} width='20px' height='20px' alt='icon' /> : <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
+	// 						component: DynamicPageview,
+	// 					},
+	// 				)
+	// 			)
+	// 		}
+	// 	})
+
+	// }
+	const dynamicRoute = () => {
+		route &&
+			route?.length > 0 &&
+			route?.map((item, i) => {
+				let rec = routes.find(route => route?.name === item?.moduleName)
+				if (!routes.some(route => route?.name === item?.moduleName)) {
+					console.log("111")
+					// routes.push({
+					// 	name: item?.moduleName,
+					// 	layout: [ROLE_PATH.superAdmin],
+					// 	path: pathName(item.moduleName),
+					// 	icon: item?.icon ? (
+					// 		<img src={item?.icon} width="20px" height="20px" alt="icon" />
+					// 	) : (
+					// 		<Icon as={MdHome} width="20px" height="20px" color="inherit" />
+					// 	),
+					// 	component: DynamicPage,
+					// });
+
+					const newRoute = [{
+						name: item?.moduleName,
+						layout: [ROLE_PATH.superAdmin],
+						path: pathName(item.moduleName),
+						icon: item?.icon ? (
+							<img src={item?.icon} width="20px" height="20px" alt="icon" />
+						) : (
+							<Icon as={LuChevronRightCircle} width="20px" height="20px" color="inherit" />
+						),
+						component: DynamicPage,
+					},
+					{
+						name: item?.moduleName,
+						layout: [ROLE_PATH.superAdmin],
+						under: item?.moduleName,
+						parentName: item?.moduleName,
+						path: `${pathName(item.moduleName)}/:id`,
+						icon: item?.icon ? (
+							<img src={item?.icon} width="20px" height="20px" alt="icon" />
+						) : (
+							<Icon as={LuChevronRightCircle} width="20px" height="20px" color="inherit" />
+						),
+						component: DynamicPageview,
+					}
+					]
+					setRoutes((pre) => [...pre, ...newRoute])
+				} else if (routes.some(route => route?.name === item?.moduleName) && rec.icon?.props?.src !== item?.icon) {
+					console.log("2222")
+
+					const updatedData = routes?.map(i => {
+						if (i.name === item?.moduleName) {
+							return { ...i, icon: <img src={item?.icon} width="20px" height="20px" alt="icon" /> };
+						}
+						return i;
+					});
+					setRoutes(updatedData)
+				} else if (routes.find(route => route?.name !== item?.moduleName)) {
+
+					console.log("route---::", routes)
+					console.log("newRoutesnewRoutes---::", item?.moduleName, routes.some(route => route?.name?.toLowerCase() !== item?.moduleName?.toLowerCase()))
+
+					if (routes.some(route => route?.name?.toLowerCase() !== item?.moduleName?.toLowerCase())) {
+
+						const newRoute = [{
+							name: item?.moduleName,
+							layout: [ROLE_PATH.superAdmin],
+							path: pathName(item.moduleName),
+							icon: item?.icon ? (
+								<img src={item?.icon} width="20px" height="20px" alt="icon" />
+							) : (
+								<Icon as={MdHome} width="20px" height="20px" color="inherit" />
+							),
+							component: DynamicPage,
+						},
+						{
+							name: item?.moduleName,
+							layout: [ROLE_PATH.superAdmin],
+							under: item?.moduleName,
+							parentName: item?.moduleName,
+							path: `${pathName(item.moduleName)}/:id`,
+							icon: item?.icon ? (
+								<img src={item?.icon} width="20px" height="20px" alt="icon" />
+							) : (
+								<Icon as={MdHome} width="20px" height="20px" color="inherit" />
+							),
+							component: DynamicPageview,
+						}
+						]
+					console.log("333",[...newRoutes, ...newRoute])
+
+						setRoutes(() => [...newRoutes, ...newRoute])
+					}
+				}
+
+			});
+	};
+
 	const getActiveRoute = (routes) => {
 		let activeRoute = 'Prolink';
 		for (let i = 0; i < routes.length; i++) {
@@ -49,11 +197,15 @@ export default function Dashboard(props) {
 		return activeRoute;
 	};
 
-	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(fetchImage());
-	}, [dispatch]);
+		dynamicRoute();
+	}, [route]);
+
+	useEffect(async () => {
+		await dispatch(fetchRouteData());
+		await dispatch(fetchImage());
+	}, []);
 
 	const largeLogo = useSelector((state) => state?.images?.image?.filter(item => item.isActive === true));
 

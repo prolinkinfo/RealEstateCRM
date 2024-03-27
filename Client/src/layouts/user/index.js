@@ -14,6 +14,8 @@ import Spinner from 'components/spinner/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchImage } from '../../redux/imageSlice';
 import { getApi } from 'services/api';
+import DynamicPage from 'views/admin/dynamicPage';
+import { LuChevronRightCircle } from 'react-icons/lu';
 
 const MainDashboard = React.lazy(() => import("views/admin/default"));
 const SignInCentered = React.lazy(() => import("views/auth/signIn"));
@@ -97,23 +99,23 @@ export default function User(props) {
             }
         ]
 
-    const accessRoute = newRoute?.filter(item => Object.keys(mergedPermissions)?.find(data => (data?.toLowerCase() === item?.name?.toLowerCase()) || (data?.toLowerCase() === item.parentName?.toLowerCase())))
-
-    routes.push(...accessRoute)
-
     route?.map((item, i) => {
-        if (!routes.some(route => route.name === item.moduleName)) {
+        if (!newRoute.some(route => route.name === item.moduleName)) {
             return (
-                routes.push({
+                newRoute.push({
                     name: item?.moduleName,
                     layout: [ROLE_PATH.user],
                     path: pathName(item.moduleName),
-                    icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
-                    component: MainDashboard,
+                    icon: <Icon as={LuChevronRightCircle} width='20px' height='20px' color='inherit' />,
+                    component: DynamicPage,
                 })
             )
         }
     })
+    const accessRoute = newRoute?.filter(item => Object.keys(mergedPermissions)?.find(data => (data?.toLowerCase() === item?.name?.toLowerCase()) || (data?.toLowerCase() === item.parentName?.toLowerCase())))
+
+    routes.push(...accessRoute)
+
 
 
 

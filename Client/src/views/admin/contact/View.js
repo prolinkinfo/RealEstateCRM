@@ -120,7 +120,7 @@ const View = () => {
         setIsLoding(true)
         let response = await getApi('api/contact/view/', param.id)
         setData(response.data?.contact);
-        setAllData(response.data);
+        setAllData(response?.data);
         setIsLoding(false)
     }
     useEffect(() => {
@@ -145,7 +145,7 @@ const View = () => {
             {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} contactData={contactData[0]} />}
             <Edit isOpen={edit} contactData={contactData[0]} size={size} onClose={setEdit} setAction={setAction} moduleId={contactData?.[0]?._id} />
             <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/contact/delete/' id={param.id} />
-            <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} viewData={allData} />
+            <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} viewData={allData} lead="false"/>
 
             {isLoding ?
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
@@ -219,7 +219,7 @@ const View = () => {
                                         <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
                                             {emailAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
                                                 <Card overflow={'scroll'}>
-                                                    <ColumnsTable fetchData={fetchData} emailAccess={emailAccess} columnsData={columnsDataColumns} tableData={showEmail ? allData.EmailHistory : allData?.EmailHistory?.length > 0 ? [allData.EmailHistory[0]] : []} title={'Email '} />
+                                                    <ColumnsTable viewData={allData} fetchData={fetchData} emailAccess={emailAccess} columnsData={columnsDataColumns} tableData={showEmail ? allData.EmailHistory : allData?.EmailHistory?.length > 0 ? [allData.EmailHistory[0]] : []} title={'Email '} />
                                                     {/* {(allData?.EmailHistory && allData?.EmailHistory?.length) ? <ColumnsTable fetchData={fetchData} emailAccess={emailAccess} columnsData={columnsDataColumns} tableData={showEmail ? allData.EmailHistory : [allData.EmailHistory[0]]} title={'Email '} /> : emailAccess?.create && <Button onClick={() => setAddEmailHistory(true)} leftIcon={<BsFillSendFill />} colorScheme="gray" size='sm'>Send Email </Button>}
                                                     <AddEmailHistory fetchData={fetchData} setAction={setAction} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} /> */}
                                                     {allData?.EmailHistory?.length > 1 &&

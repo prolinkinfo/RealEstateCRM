@@ -14,41 +14,6 @@ import * as yup from 'yup'
 const Add = (props) => {
     const [isLoding, setIsLoding] = useState(false)
 
-    // const initialValues = {
-    //     // Lead Information:
-    //     leadName: '',
-    //     leadEmail: '',
-    //     leadPhoneNumber: '',
-    //     leadAddress: '',
-    //     // Lead Source and Details:
-    //     leadSource: '',
-    //     leadStatus: '',
-    //     leadSourceDetails: '',
-    //     leadCampaign: '',
-    //     leadSourceChannel: '',
-    //     leadSourceMedium: '',
-    //     leadSourceCampaign: '',
-    //     leadSourceReferral: '',
-    //     // Lead Assignment and Ownership:
-    //     leadAssignedAgent: '',
-    //     leadOwner: '',
-    //     leadCommunicationPreferences: '',
-    //     // Lead Dates and Follow-up:
-    //     leadCreationDate: '',
-    //     leadConversionDate: '',
-    //     leadFollowUpDate: '',
-    //     leadFollowUpStatus: '',
-    //     // Lead Scoring and Nurturing:
-    //     leadScore: '',
-    //     leadNurturingWorkflow: '',
-    //     leadEngagementLevel: '',
-    //     leadConversionRate: '',
-    //     leadNurturingStage: '',
-    //     leadNextAction: '',
-    //     createBy: JSON.parse(localStorage.getItem('user'))._id,
-    // };
-
-    // const initialFieldValues = Object.fromEntries(props?.leadData && props?.leadData?.fields?.length > 0 && props?.leadData?.fields?.map(field => [field?.name, '']))
 
     const initialFieldValues = Object.fromEntries(
         (props?.leadData?.fields || []).map(field => [field?.name, ''])
@@ -197,7 +162,7 @@ const Add = (props) => {
                                 ))
                             }
                         </Grid> */}
-                        <CustomForm leadData={props.leadData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
+                        <CustomForm moduleData={props.leadData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
                     </DrawerBody>
                     <DrawerFooter>
                         <Button sx={{ textTransform: "capitalize" }} size="sm" disabled={isLoding ? true : false} variant="brand" type="submit" onClick={handleSubmit}                        >

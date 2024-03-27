@@ -114,7 +114,7 @@ const Add = (props) => {
                         <IconButton onClick={props.onClose} icon={<CloseIcon />} />
                     </DrawerHeader>
                     <DrawerBody>
-                        <CustomForm leadData={props.contactData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
+                        <CustomForm moduleData={props.contactData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
 
                         {/* <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                             {props.contactData.fields?.map(field => (

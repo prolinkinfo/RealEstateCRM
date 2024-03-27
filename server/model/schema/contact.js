@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const fetchSchemaFields = async () => {
     const CustomFieldModel = mongoose.model('CustomField');
-    return await CustomFieldModel.find({ moduleName: "Contact" });
+    return await CustomFieldModel.find({ moduleName: "Contacts" });
 };
 
 const contactSchema = new mongoose.Schema({
@@ -27,7 +27,7 @@ const contactSchema = new mongoose.Schema({
     // // 4. Property of Interest
     interestProperty: [{
         type: mongoose.Schema.ObjectId,
-        ref: 'Property',
+        ref: 'Properties',
     }],
     // // 5. History:
     // notesandComments: String,

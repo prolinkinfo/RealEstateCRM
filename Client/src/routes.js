@@ -146,7 +146,7 @@ const routes = [
   {
     name: "Properties ",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-    parentName: "Property",
+    parentName: "Properties",
     under: "properties",
     path: "/propertyView/:id",
     component: PropertyView,
