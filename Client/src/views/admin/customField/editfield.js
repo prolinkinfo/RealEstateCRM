@@ -158,10 +158,10 @@ const EditField = (props) => {
         <div>
             <Modal onClose={props.onClose} isOpen={props.isOpen} isCentered>
                 <ModalOverlay />
-                <ModalContent maxWidth={"2xl"}>
+                <ModalContent maxWidth={"2xl"} height={"580px"}>
                     <ModalHeader>Edit Field</ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody>
+                    <ModalBody overflowY={"auto"} height={"400px"}>
                         <>
                             <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}>
