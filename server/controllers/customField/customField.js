@@ -351,7 +351,7 @@ async function getNextAutoIncrementValue() {
 const createNewModule = async (req, res) => {
     try {
         const moduleName = req.body.moduleName;
-        const url = req.protocol + '://' + req?.get('host');
+        const url = req?.body?.isDefault ? "" : req.protocol + '://' + req?.get('host');
         const file = `${url}/api/custom-field/icon/${req?.file?.filename}`;
 
         const existingModule = await CustomField.findOne({ moduleName: { $regex: new RegExp(`^${moduleName}$`, 'i') } }).exec();
@@ -507,7 +507,7 @@ const changeIcon = async (req, res) => {
             let result = await CustomField.findByIdAndUpdate({ _id: id }, { $set: { icon: file } }, { new: true });
             return res.send({ data: result, message: 'Icon updated successfully.' })
         }
-    
+
 
     } catch (err) {
         console.error('Failed to update icon :', err);
