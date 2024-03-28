@@ -167,7 +167,7 @@ const View = () => {
                                     },
                                 }} >
                                     <Tab >Information</Tab>
-                                    <Tab>Communication</Tab>
+                                    {(emailAccess?.view || callAccess?.view || taskAccess?.view || meetingAccess?.view) && <Tab> Communication</Tab>}
                                     <Tab>Document</Tab>
                                     <Tab>Social Media</Tab>
                                 </TabList>

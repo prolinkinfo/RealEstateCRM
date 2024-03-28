@@ -53,6 +53,7 @@ const AddEditHeading = (props) => {
             let response = await postApi('api/custom-field/add-heading', addDataPayload);
             if (response.status === 200) {
                 props.onClose(false);
+                props.fetchData();
             } else {
                 toast.error(response.response.data)
             }

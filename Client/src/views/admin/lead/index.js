@@ -143,33 +143,34 @@ const Index = () => {
         setIsLoding(true);
         const result = await getApi(`api/custom-field/?moduleName=Leads`);
         setLeadData(result?.data);
+        const actionHeader = {
+            Header: "Action", isSortable: false, center: true,
+            cell: ({ row, i }) => (
+                <Text fontSize="md" fontWeight="900" textAlign={"center"} >
+                    <Menu isLazy  >
+                        <MenuButton><CiMenuKebab /></MenuButton>
+                        <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
+                            {permission?.update &&
+                                <MenuItem py={2.5} icon={<EditIcon fontSize={15} mb={1} />} onClick={() => { setEdit(true); setSelectedId(row?.values?._id); }}>Edit</MenuItem>}
+                            {callAccess?.create &&
+                                <MenuItem py={2.5} width={"165px"} onClick={() => { setAddPhoneCall(true); setCallSelectedId(row?.values?._id) }} icon={<PhoneIcon fontSize={15} mb={1} />}>Create Call</MenuItem>}
+                            {emailAccess?.create &&
+                                <MenuItem py={2.5} width={"165px"} onClick={() => {
+                                    handleOpenEmail(row?.values?._id, row?.original); setSelectedId(row?.values?._id)
+                                }} icon={<EmailIcon fontSize={15} mb={1} />}>Send Email</MenuItem>}
+                            {permission?.view &&
+                                <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { navigate(`/leadView/${row?.values?._id}`) }}>View</MenuItem>}
+                            {permission?.delete &&
+                                <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} mb={1} />} onClick={() => { setDelete(true); setSelectedValues([row?.values?._id]); }}>Delete</MenuItem>}
+                        </MenuList>
+                    </Menu>
+                </Text>
+            )
+        }
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
             ...(result?.data?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => ({ Header: field?.label, accessor: field?.name })) || []),
-            {
-                Header: "Action", isSortable: false, center: true,
-                cell: ({ row, i }) => (
-                    <Text fontSize="md" fontWeight="900" textAlign={"center"} >
-                        <Menu isLazy  >
-                            <MenuButton><CiMenuKebab /></MenuButton>
-                            <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
-                                {permission?.update &&
-                                    <MenuItem py={2.5} icon={<EditIcon fontSize={15} mb={1} />} onClick={() => { setEdit(true); setSelectedId(row?.values?._id); }}>Edit</MenuItem>}
-                                {callAccess?.create &&
-                                    <MenuItem py={2.5} width={"165px"} onClick={() => { setAddPhoneCall(true); setCallSelectedId(row?.values?._id) }} icon={<PhoneIcon fontSize={15} mb={1} />}>Create Call</MenuItem>}
-                                {emailAccess?.create &&
-                                    <MenuItem py={2.5} width={"165px"} onClick={() => {
-                                        handleOpenEmail(row?.values?._id, row?.original); setSelectedId(row?.values?._id)
-                                    }} icon={<EmailIcon fontSize={15} mb={1} />}>Send Email</MenuItem>}
-                                {permission?.view &&
-                                    <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { navigate(`/leadView/${row?.values?._id}`) }}>View</MenuItem>}
-                                {permission?.delete &&
-                                    <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} mb={1} />} onClick={() => { setDelete(true); setSelectedValues([row?.values?._id]); }}>Delete</MenuItem>}
-                            </MenuList>
-                        </Menu>
-                    </Text>
-                )
-            },
+            ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : [])
         ];
 
         setSelectedColumns(JSON.parse(JSON.stringify(tempTableColumns)));

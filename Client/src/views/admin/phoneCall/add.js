@@ -86,6 +86,9 @@ const AddPhoneCall = (props) => {
                 setFieldValue('recipient', response?.data?.lead?.leadPhoneNumber);
                 values.recipient = response?.data?.lead?.leadPhoneNumber
             }
+        } else {
+            setFieldValue('recipient', "");
+
         }
     }
 
@@ -93,6 +96,8 @@ const AddPhoneCall = (props) => {
         fetchRecipientData()
     }, [values.createBy, values.createByLead])
 
+
+    console.log(values.createByLead, values.recipient, "values")
     return (
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
             <ModalOverlay />
@@ -180,7 +185,7 @@ const AddPhoneCall = (props) => {
                             <Input
                                 fontSize='sm'
                                 disabled
-                                value={values.recipient}
+                                value={values.recipient ? values.recipient : ""}
                                 name="recipient"
                                 placeholder='Recipient'
                                 fontWeight='500'

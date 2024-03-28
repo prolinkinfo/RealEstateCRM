@@ -129,6 +129,24 @@ const Task = () => {
     const [permission, leadAccess, contactAccess] = HasAccess(["Tasks", 'Leads', 'Contacts']);
     const location = useLocation();
     const state = location.state;
+    const actionHeader = {
+        Header: "Action", isSortable: false, center: true,
+        cell: ({ row }) => (
+            <Text fontSize="md" fontWeight="900" textAlign={"center"}>
+                <Menu isLazy >
+                    <MenuButton ><CiMenuKebab /></MenuButton>
+                    <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
+                        {permission?.update &&
+                            <MenuItem py={2.5} icon={<EditIcon fontSize={15} mb={1} />} onClick={() => { setEdit(true); setSelectedId(row?.values?._id); }}>Edit</MenuItem>}
+                        {permission?.view &&
+                            <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { setEventView(true); setId(row?.original._id) }}>View</MenuItem>}
+                        {permission?.delete &&
+                            <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} mb={1} />} onClick={() => { setDeleteMany(true); setSelectedValues([row?.values?._id]); }}>Delete</MenuItem>}
+                    </MenuList>
+                </Menu>
+            </Text>
+        )
+    }
     const tableColumns = [
         {
             Header: "#",
@@ -169,24 +187,7 @@ const Task = () => {
         { Header: "Assign To", accessor: "assignmentToName", type: 'text', formikType: '' },
         { Header: "Start Date", accessor: "start", type: 'date', formikType: '' },
         { Header: "End Date", accessor: "end", type: 'date', formikType: '' },
-        {
-            Header: "Action", isSortable: false, center: true,
-            cell: ({ row }) => (
-                <Text fontSize="md" fontWeight="900" textAlign={"center"}>
-                    <Menu isLazy >
-                        <MenuButton ><CiMenuKebab /></MenuButton>
-                        <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
-                            {permission?.update &&
-                                <MenuItem py={2.5} icon={<EditIcon fontSize={15} mb={1} />} onClick={() => { setEdit(true); setSelectedId(row?.values?._id); }}>Edit</MenuItem>}
-                            {permission?.view &&
-                                <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { setEventView(true); setId(row?.original._id) }}>View</MenuItem>}
-                            {permission?.delete &&
-                                <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} mb={1} />} onClick={() => { setDeleteMany(true); setSelectedValues([row?.values?._id]); }}>Delete</MenuItem>}
-                        </MenuList>
-                    </Menu>
-                </Text>
-            )
-        },
+        ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : []),
     ];
 
     const fetchData = async () => {
