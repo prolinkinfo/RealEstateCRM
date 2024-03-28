@@ -117,7 +117,24 @@ const Index = (props) => {
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
     const [permission, leadAccess, contactAccess] = HasAccess(["Calls", 'Leads', 'Contacts']);
-
+    const actionHeader = {
+        Header: "Action", accessor: 'action', isSortable: false, center: true,
+        cell: ({ row }) => (
+            <Text fontSize="md" fontWeight="900" textAlign={"center"}>
+                <Menu isLazy  >
+                    <MenuButton><CiMenuKebab /></MenuButton>
+                    <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
+                        {permission?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/phone-call/${row?.values._id}`)} icon={<ViewIcon mb={'2px'} fontSize={15} />}>View</MenuItem>}
+                        {row?.original?.createBy && contactAccess?.view ?
+                            <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(row?.original?.createBy && `/contactView/${row?.original.createBy}`)} icon={row?.original.createBy && <IoIosContact fontSize={15} />}>  {(row?.original.createBy && contactAccess?.view) && "contact"}
+                            </MenuItem>
+                            : ''}
+                        {row?.original.createByLead && leadAccess?.view ? <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(`/leadView/${row?.original.createByLead}`)} icon={row?.original.createByLead && leadAccess?.view && <MdLeaderboard style={{ marginBottom: '4px' }} fontSize={15} />}>{row?.original.createByLead && leadAccess?.view && 'lead'}</MenuItem> : ''}
+                    </MenuList>
+                </Menu>
+            </Text>
+        )
+    };
     const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
         { Header: 'sender Name', accessor: 'senderName' },
@@ -172,24 +189,7 @@ const Index = (props) => {
                 </Text>
             )
         },
-        {
-            Header: "Action", accessor: 'action', isSortable: false, center: true,
-            cell: ({ row }) => (
-                <Text fontSize="md" fontWeight="900" textAlign={"center"}>
-                    <Menu isLazy  >
-                        <MenuButton><CiMenuKebab /></MenuButton>
-                        <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
-                            {permission?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/phone-call/${row?.values._id}`)} icon={<ViewIcon mb={'2px'} fontSize={15} />}>View</MenuItem>}
-                            {row?.original?.createBy && contactAccess?.view ?
-                                <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(row?.original?.createBy && `/contactView/${row?.original.createBy}`)} icon={row?.original.createBy && <IoIosContact fontSize={15} />}>  {(row?.original.createBy && contactAccess?.view) && "contact"}
-                                </MenuItem>
-                                : ''}
-                            {row?.original.createByLead && leadAccess?.view ? <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(`/leadView/${row?.original.createByLead}`)} icon={row?.original.createByLead && leadAccess?.view && <MdLeaderboard style={{ marginBottom: '4px' }} fontSize={15} />}>{row?.original.createByLead && leadAccess?.view && 'lead'}</MenuItem> : ''}
-                        </MenuList>
-                    </Menu>
-                </Text>
-            )
-        },
+        ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : [])
     ];
 
     const fetchData = async () => {

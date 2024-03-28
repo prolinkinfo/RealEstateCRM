@@ -167,7 +167,7 @@ const View = () => {
                                     },
                                 }} >
                                     <Tab >Information</Tab>
-                                    <Tab>Communication</Tab>
+                                    {(emailAccess?.view || callAccess?.view || taskAccess?.view || meetingAccess?.view) && <Tab> Communication</Tab>}
                                     <Tab>Document</Tab>
                                     <Tab>Social Media</Tab>
                                 </TabList>
@@ -202,20 +202,38 @@ const View = () => {
                         <TabPanels>
                             <TabPanel pt={4} p={0}>
                                 <CustomView data={contactData[0]} fieldData={data} toCamelCase={toCamelCase} />
+                                <GridItem colSpan={{ base: 12 }} mt={4}>
+                                    <Card >
+                                        <Grid templateColumns={{ base: "1fr" }} gap={4}>
+                                            <GridItem colSpan={2}>
+                                                <Box>
+                                                    <Flex alignItems={'center'} mb={2} justifyContent={'space-between'}>
+                                                        <Heading size="md">
+                                                            Property of Interest({allData?.interestProperty?.interestProperty?.length})
+                                                        </Heading>
+                                                        <Button onClick={() => setPropertyModel(true)} leftIcon={<LuBuilding2 />} size="sm" colorScheme="gray" bg={buttonbg}>Select Interested Property  </Button>
+                                                        <PropertyModel fetchData={fetchData} isOpen={propertyModel} onClose={setPropertyModel} id={param.id} interestProperty={data?.interestProperty} />
+                                                    </Flex>
+                                                    {/* <HSeparator / >  */}
+                                                </Box>
 
+                                                <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
+                                                    <GridItem colSpan={{ base: 2 }}>
+                                                        {/* {allData?.interestProperty?.interestProperty?.length > 0 && <PropertyTable fetchData={fetchData} columnsData={PropertyColumn} tableData={allData?.interestProperty?.interestProperty} title={'Interested Property'} / >} */}
+                                                        <PropertyTable fetchData={fetchData} columnsData={PropertyColumn} tableData={allData?.interestProperty?.interestProperty?.length > 0 ? allData?.interestProperty?.interestProperty : []} title={'Interested Property'} />
+                                                    </GridItem>
+                                                </Grid>
+                                            </GridItem>
+
+                                        </Grid>
+                                    </Card>
+                                </GridItem>
 
                             </TabPanel>
                             <TabPanel pt={4} p={0}>
                                 <GridItem colSpan={{ base: 12 }} >
                                     <Grid templateColumns={{ base: "1fr" }} gap={4}>
-                                        {/* <GridItem colSpan={2}>
-                                            <Box>
-                                                <Heading size="md" mb={3}>
-                                                    Communication
-                                                </Heading>
-                                                <HSeparator />
-                                            </Box>
-                                        </GridItem> */}
+
                                         <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
                                             {emailAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
                                                 <Card overflow={'scroll'}>
