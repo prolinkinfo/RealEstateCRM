@@ -44,9 +44,6 @@ export default function Dashboard(props) {
 		return window.location.pathname !== '/admin/full-screen-maps';
 	};
 
-	console.log(routes, "routes")
-	console.log(route, "routeroute")
-
 	// const dynamicRoute = () => {
 	// 	route && route?.length > 0 && route?.map((item, i) => {
 	// 		if (!routes.some(route => route?.name === item?.moduleName)) {
@@ -166,7 +163,7 @@ export default function Dashboard(props) {
 							component: DynamicPageview,
 						}
 						]
-					console.log("333",[...newRoutes, ...newRoute])
+						console.log("333", [...newRoutes, ...newRoute])
 
 						setRoutes(() => [...newRoutes, ...newRoute])
 					}

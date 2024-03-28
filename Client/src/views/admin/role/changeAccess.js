@@ -165,10 +165,10 @@ function ChangeAccess(props) {
   return (
     <Modal onClose={() => setEditModal(false)} isOpen={editModal} isCentered size={"xl"}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent height={"580px"} maxWidth={"2xl"}>
         <ModalHeader textTransform={"capitalize"}>{name} Access</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
+        <ModalBody overflow={"auto"} height={"400px"}>
           <Table>
             <Thead>
               {headerGroups?.map((headerGroup, index) => (
@@ -220,7 +220,7 @@ function ChangeAccess(props) {
                       fontSize="sm"
                       fontWeight="700"
                     >
-                        <DataNotFound />
+                      <DataNotFound />
                     </Text>
                   </Td>
                 </Tr>

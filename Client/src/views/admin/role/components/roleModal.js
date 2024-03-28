@@ -128,7 +128,7 @@ function RoleModal(props) {
     <>
       <Modal onClose={() => setRoleModal(false)} isOpen={isOpen} isCentered size={"xl"}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent height={"580px"} maxWidth={"2xl"}>
           <ModalHeader>
             <Flex justifyContent={'space-between'}>
               <Text textTransform={"capitalize"}>{name} Access</Text>
@@ -144,7 +144,7 @@ function RoleModal(props) {
               <ModalCloseButton mt='2' />
             </Flex>
           </ModalHeader>
-          <ModalBody>
+          <ModalBody overflow={"auto"} height={"400px"}>
             <Table>
               <Thead>
                 {headerGroups?.map((headerGroup, index) => (
@@ -152,19 +152,18 @@ function RoleModal(props) {
                     {headerGroup.headers?.map((column, index) => (
                       <Th
                         sx={{ width: "10px" }}
-                        pe="10px"
                         key={index}
                         borderColor={borderColor}
                         display={column.display === false && "none"}
                       >
-                        <Flex
+                        {/* <Flex
                           justify="space-between"
                           align="center"
                           fontSize={{ sm: "10px", lg: "12px" }}
                           color="gray.400"
-                        >
-                          {column.display !== false && column.render("Header")}
-                        </Flex>
+                        > */}
+                        {column.display !== false && column.render("Header")}
+                        {/* </Flex> */}
                       </Th>
                     ))}
                   </Tr>
@@ -196,7 +195,7 @@ function RoleModal(props) {
                         fontSize="sm"
                         fontWeight="700"
                       >
-                          <DataNotFound />
+                        <DataNotFound />
                       </Text>
                     </Td>
                   </Tr>
