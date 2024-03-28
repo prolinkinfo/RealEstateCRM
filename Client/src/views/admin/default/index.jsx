@@ -31,12 +31,14 @@ import { HasAccess } from "../../../redux/accessUtils";
 import PieChart from "components/charts/PieChart";
 import ReactApexChart from 'react-apexcharts';
 import CountUpComponent from "../../../../src/components/countUpComponent/countUpComponent";
+import Spinner from 'components/spinner/Spinner';
 
 export default function UserReports() {
   // Chakra Color Mode
   const brandColor = useColorModeValue("brand.500", "white");
   const boxBg = useColorModeValue("secondaryGray.300", "whiteAlpha.100");
   const user = JSON.parse(localStorage.getItem("user"));
+  const [isLoding, setIsLoding] = useState(false);
 
   const [task, setTask] = useState([]);
   const [contactData, setContactData] = useState([]);
@@ -168,10 +170,12 @@ export default function UserReports() {
   }, []);
 
   const fetchProgressChart = async () => {
+    setIsLoding(true);
     let result = await getApi(user?.role === 'superAdmin' ? 'api/reporting/line-chart' : `api/reporting/line-chart?createBy=${user?._id}`);
     if (result && result?.status === 200) {
       setData(result?.data)
     }
+    setIsLoding(false);
   }
   useEffect(() => {
     fetchProgressChart()
@@ -358,8 +362,10 @@ export default function UserReports() {
             </>
 
           ))} */}
-          {data && data.length > 0 && data?.map((item, i) => (
-            <>
+          {
+            !isLoding ?
+            data && data.length > 0 && data?.map((item, i) => (
+              <>
                 <Box border={"1px solid #e5e5e5"} p={2} m={1} cursor={'pointer'} key={i} onClick={() => navigate(navigateTo[item.name])}>
                   <Flex justifyContent={"space-between"}>
                     <Text fontSize="sm" fontWeight={600} pb={2}>{item?.name}</Text>
@@ -369,9 +375,10 @@ export default function UserReports() {
                     colorScheme={item?.color}
                     size='xs' value={item?.length} width={"100%"} />
                 </Box>
-            </>
+              </>
 
-          ))}
+            )):<div style={{display:"flex",justifyContent:"center",alignItems:"center"}}><Spinner/></div>
+          }
         </Card>
 
         {(leadView?.create || leadView?.update || leadView?.delete || leadView?.view) && <Card>
