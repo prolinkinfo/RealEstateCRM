@@ -334,15 +334,15 @@ export default function UserReports() {
 
         <Card >
           <Heading size="md" pb={3}>Statistics</Heading>
-          {data && data.length > 0 && data?.map((item, i) => (
+          {/* {data && data.length > 0 && data?.map((item, i) => (
             <>
-              {((item.name === 'Lead' && (leadView?.create || leadView?.update || leadView?.delete || leadView?.view)) ||
-                (item.name === 'Contact' && (contactsView?.create || contactsView?.update || contactsView?.delete || contactsView?.view)) ||
-                (item.name === 'Meeting' && (meetingView?.create || meetingView?.update || meetingView?.delete || meetingView?.view)) ||
-                (item.name === 'Call' && (callView?.create || callView?.update || callView?.delete || callView?.view)) ||
-                (item.name === 'Email' && (emailView?.create || emailView?.update || emailView?.delete || emailView?.view)) ||
-                (item.name === 'Property' && (proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view)) ||
-                (item.name === 'Task' && (taskView?.create || taskView?.update || taskView?.delete || taskView?.view))
+              {((item.name === 'Leads' && (leadView?.create || leadView?.update || leadView?.delete || leadView?.view)) ||
+                (item.name === 'Contacts' && (contactsView?.create || contactsView?.update || contactsView?.delete || contactsView?.view)) ||
+                (item.name === 'Meetings' && (meetingView?.create || meetingView?.update || meetingView?.delete || meetingView?.view)) ||
+                (item.name === 'Calls' && (callView?.create || callView?.update || callView?.delete || callView?.view)) ||
+                (item.name === 'Emails' && (emailView?.create || emailView?.update || emailView?.delete || emailView?.view)) ||
+                (item.name === 'Properties' && (proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view)) ||
+                (item.name === 'Tasks' && (taskView?.create || taskView?.update || taskView?.delete || taskView?.view))
               )
                 &&
                 <Box border={"1px solid #e5e5e5"} p={2} m={1} cursor={'pointer'} key={i} onClick={() => navigate(navigateTo[item.name])}>
@@ -355,6 +355,20 @@ export default function UserReports() {
                     size='xs' value={item?.length} width={"100%"} />
                 </Box>
               }
+            </>
+
+          ))} */}
+          {data && data.length > 0 && data?.map((item, i) => (
+            <>
+                <Box border={"1px solid #e5e5e5"} p={2} m={1} cursor={'pointer'} key={i} onClick={() => navigate(navigateTo[item.name])}>
+                  <Flex justifyContent={"space-between"}>
+                    <Text fontSize="sm" fontWeight={600} pb={2}>{item?.name}</Text>
+                    <Text fontSize="sm" fontWeight={600} pb={2}><CountUpComponent targetNumber={item?.length} /></Text>
+                  </Flex>
+                  <Progress
+                    colorScheme={item?.color}
+                    size='xs' value={item?.length} width={"100%"} />
+                </Box>
             </>
 
           ))}
