@@ -1,6 +1,4 @@
 const nodemailer = require('nodemailer');
-const User = require('../model/schema/user');
-const bcrypt = require('bcrypt');
 
 // Function to send an email
 const sendEmail = async (to, subject, text) => {
