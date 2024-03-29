@@ -193,23 +193,21 @@ const Index = () => {
                 </Text>
             )
         }
-        const statusHeader = {
-            Header: "Status", isSortable: false, center: true,
-            cell: ({ row }) => (
-                <div className="selectOpt" >
-                    <Select defaultValue={'active'} className={changeStatus(row)} onChange={(e) => setStatusData(row, e)} height={7} width={130} value={row.original.leadStatus} style={{ fontSize: "14px" }}>
-                        <option value='active'>Active</option>
-                        <option value='sold'>Sold</option>
-                        <option value='pending'>Pending</option>
-                    </Select>
-                </div>
-            )
-        }
-
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
+            {
+                Header: "Status", isSortable: false, center: true,
+                cell: ({ row }) => (
+                    <div className="selectOpt" >
+                        <Select defaultValue={'active'} className={changeStatus(row)} onChange={(e) => setStatusData(row, e)} height={7} width={130} value={row.original.leadStatus} style={{ fontSize: "14px" }}>
+                            <option value='active'>Active</option>
+                            <option value='sold'>Sold</option>
+                            <option value='pending'>Pending</option>
+                        </Select>
+                    </div>
+                )
+            },
             ...(result?.data?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => (field?.name !== "leadStatus" && { Header: field?.label, accessor: field?.name })) || []),
-            ...([statusHeader]),
             ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : []),
 
         ];
