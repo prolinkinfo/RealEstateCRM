@@ -3,6 +3,8 @@ const nodemailer = require('nodemailer');
 // Function to send an email
 const sendEmail = async (to, subject, text) => {
     try {
+        console.log("user---::", process.env.user)
+        console.log("pass---::", process.env.pass)
         if (to && process.env.user && process.env.pass) {
             // Create a transporter using the SMTP settings for Outlook
             const transporter = nodemailer.createTransport({
