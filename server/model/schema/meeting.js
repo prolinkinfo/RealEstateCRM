@@ -30,4 +30,4 @@ const meetingHistory = new mongoose.Schema({
     },
 })
 
-module.exports = mongoose.model('MeetingHistory', meetingHistory, 'MeetingHistory');
+module.exports = mongoose.model('Meetings', meetingHistory, 'Meetings');

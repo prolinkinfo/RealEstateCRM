@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const emailHistory = new mongoose.Schema({
+const email = new mongoose.Schema({
     sender: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -31,4 +31,4 @@ const emailHistory = new mongoose.Schema({
     },
 })
 
-module.exports = mongoose.model('EmailHistory', emailHistory, 'EmailHistory');
+module.exports = mongoose.model('Emails', email, 'Emails');
