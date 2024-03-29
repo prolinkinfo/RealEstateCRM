@@ -16,70 +16,70 @@ const contactFields = [
             },
         ],
     },
-    {
-        "name": "facebookProfile",
-        "label": "Facebook",
-        "type": "url",
-        "fixed": true,
-        "delete": false,
-        "belongsTo": null,
-        "backendType": "Mixed",
-        "isTableField": false,
-        "validation": [
-            {
-                "message": "Invalid type value for facebook",
-                "formikType": "url",
-            }
-        ],
-    },
-    {
-        "name": "linkedInProfile",
-        "label": "LinkedIn Profile URL",
-        "type": "url",
-        "fixed": true,
-        "delete": false,
-        "belongsTo": null,
-        "backendType": "Mixed",
-        "isTableField": false,
-        "validation": [
-            {
-                "message": "Invalid type value for LinkedIn Profile URL",
-                "formikType": "url",
-            }
-        ],
-    },
-    {
-        "name": "twitterHandle",
-        "label": "Twitter Username",
-        "type": "url",
-        "fixed": true,
-        "delete": false,
-        "belongsTo": null,
-        "backendType": "Mixed",
-        "isTableField": false,
-        "validation": [
-            {
-                "message": "Invalid type value for Twitter Username",
-                "formikType": "url",
-            }
-        ],
-    },
-    {
-        "name": "otherProfiles",
-        "label": "Other Social Media Profiles URL",
-        "type": "url",
-        "fixed": true,
-        "delete": false,
-        "belongsTo": null,
-        "backendType": "Mixed",
-        "isTableField": false,
-        "validation": [
-            {
-                "message": "Invalid type value for Other Social Media Profiles URL",
-                "formikType": "url",
-            }
-        ],
-    },
+    // {
+    //     "name": "facebookProfile",
+    //     "label": "Facebook",
+    //     "type": "url",
+    //     "fixed": true,
+    //     "delete": false,
+    //     "belongsTo": null,
+    //     "backendType": "Mixed",
+    //     "isTableField": false,
+    //     "validation": [
+    //         {
+    //             "message": "Invalid type value for facebook",
+    //             "formikType": "url",
+    //         }
+    //     ],
+    // },
+    // {
+    //     "name": "linkedInProfile",
+    //     "label": "LinkedIn Profile URL",
+    //     "type": "url",
+    //     "fixed": true,
+    //     "delete": false,
+    //     "belongsTo": null,
+    //     "backendType": "Mixed",
+    //     "isTableField": false,
+    //     "validation": [
+    //         {
+    //             "message": "Invalid type value for LinkedIn Profile URL",
+    //             "formikType": "url",
+    //         }
+    //     ],
+    // },
+    // {
+    //     "name": "twitterHandle",
+    //     "label": "Twitter Username",
+    //     "type": "url",
+    //     "fixed": true,
+    //     "delete": false,
+    //     "belongsTo": null,
+    //     "backendType": "Mixed",
+    //     "isTableField": false,
+    //     "validation": [
+    //         {
+    //             "message": "Invalid type value for Twitter Username",
+    //             "formikType": "url",
+    //         }
+    //     ],
+    // },
+    // {
+    //     "name": "otherProfiles",
+    //     "label": "Other Social Media Profiles URL",
+    //     "type": "url",
+    //     "fixed": true,
+    //     "delete": false,
+    //     "belongsTo": null,
+    //     "backendType": "Mixed",
+    //     "isTableField": false,
+    //     "validation": [
+    //         {
+    //             "message": "Invalid type value for Other Social Media Profiles URL",
+    //             "formikType": "url",
+    //         }
+    //     ],
+    // },
     {
         "name": "phoneNumber",
         "label": "Phone Number",
