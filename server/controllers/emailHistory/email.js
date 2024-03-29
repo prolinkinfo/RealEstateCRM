@@ -26,7 +26,7 @@ const add = async (req, res) => {
         const user = await User.findById({ _id: email.sender });
         user.emailsent = user.emailsent + 1;
         await user.save();
-        // sendEmail(email.recipient, email.subject, email.message)
+        sendEmail(email.recipient, email.subject, email.message)
 
         const result = new Email(email);
         await result.save();
