@@ -5,15 +5,15 @@ import { HasAccess } from "../../redux/accessUtils";
 const ApexChart = (props) => {
   const { data } = props;
 
-  
+
   const [contactsView, taskView, leadView, proprtyView, emailView, callView, meetingView] = HasAccess(["Contacts", "Tasks", "Leads", "Properties", "Emails", "Calls", "Meetings"]);
   let permissions = []
   let permissionsLength = []
 
   data?.forEach(item => {
-      if (item.name) {
-        permissions.push(item.name);
-        permissionsLength.push(item.length);
+    if (item.name) {
+      permissions.push(item.name);
+      permissionsLength.push(item.length);
     }
   });
   // data?.forEach(item => {
