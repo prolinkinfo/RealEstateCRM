@@ -132,7 +132,7 @@ export default function Dashboard(props) {
 							icon: item?.icon ? (
 								<img src={item?.icon} width="20px" height="20px" alt="icon" />
 							) : (
-								<Icon as={MdHome} width="20px" height="20px" color="inherit" />
+								<Icon as={LuChevronRightCircle} width="20px" height="20px" color="inherit" />
 							),
 							component: DynamicPage,
 						},
@@ -145,7 +145,7 @@ export default function Dashboard(props) {
 							icon: item?.icon ? (
 								<img src={item?.icon} width="20px" height="20px" alt="icon" />
 							) : (
-								<Icon as={MdHome} width="20px" height="20px" color="inherit" />
+								<Icon as={LuChevronRightCircle} width="20px" height="20px" color="inherit" />
 							),
 							component: DynamicPageview,
 						}
