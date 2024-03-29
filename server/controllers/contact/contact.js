@@ -81,7 +81,7 @@ const view = async (req, res) => {
             { $match: { createBy: contact._id } },
             {
                 $lookup: {
-                    from: 'Contact', // Assuming this is the collection name for 'contacts'
+                    from: 'Contacts', // Assuming this is the collection name for 'contacts'
                     localField: 'createBy',
                     foreignField: '_id',
                     as: 'createByRef'
@@ -127,12 +127,12 @@ const view = async (req, res) => {
                 }
             },
         ]);
-        
+
         let phoneCallHistory = await phoneCall.aggregate([
             { $match: { createBy: contact._id } },
             {
                 $lookup: {
-                    from: 'Contact',
+                    from: 'Contacts',
                     localField: 'createBy',
                     foreignField: '_id',
                     as: 'contact'
@@ -172,7 +172,7 @@ const view = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'Contact',
+                    from: 'Contacts',
                     localField: 'attendes',
                     foreignField: '_id',
                     as: 'contact'
@@ -204,7 +204,7 @@ const view = async (req, res) => {
             { $match: { createFor: contact._id } },
             {
                 $lookup: {
-                    from: 'Contact',
+                    from: 'Contacts',
                     localField: 'createFor',
                     foreignField: '_id',
                     as: 'contact'
@@ -237,7 +237,7 @@ const view = async (req, res) => {
             { $match: { assignmentTo: contact._id } },
             {
                 $lookup: {
-                    from: 'Contact',
+                    from: 'Contacts',
                     localField: 'assignmentTo',
                     foreignField: '_id',
                     as: 'contact'

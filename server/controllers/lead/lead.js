@@ -91,7 +91,7 @@ const view = async (req, res) => {
         { $match: { createByLead: lead._id } },
         {
             $lookup: {
-                from: 'Lead', // Assuming this is the collection name for 'leads'
+                from: 'Leads', // Assuming this is the collection name for 'leads'
                 localField: 'createByLead',
                 foreignField: '_id',
                 as: 'createByrefLead'
@@ -141,7 +141,7 @@ const view = async (req, res) => {
         { $match: { createByLead: lead._id } },
         {
             $lookup: {
-                from: 'Lead', // Assuming this is the collection name for 'leads'
+                from: 'Leads', // Assuming this is the collection name for 'leads'
                 localField: 'createByLead',
                 foreignField: '_id',
                 as: 'createByrefLead'
@@ -173,7 +173,7 @@ const view = async (req, res) => {
         { $match: { assignmentToLead: lead._id } },
         {
             $lookup: {
-                from: 'Lead',
+                from: 'Leads',
                 localField: 'assignmentToLead',
                 foreignField: '_id',
                 as: 'lead'
@@ -211,7 +211,7 @@ const view = async (req, res) => {
         },
         {
             $lookup: {
-                from: 'Lead',
+                from: 'Leads',
                 localField: 'assignmentToLead',
                 foreignField: '_id',
                 as: 'lead'
