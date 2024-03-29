@@ -77,6 +77,8 @@ export default function Dashboard(props) {
 
 	// }
 	const dynamicRoute = () => {
+		let apiData = []
+
 		route &&
 			route?.length > 0 &&
 			route?.map((item, i) => {
@@ -118,9 +120,10 @@ export default function Dashboard(props) {
 						return i;
 					});
 					setRoutes(updatedData)
-				} else if (routes.find(route => route?.name !== item?.moduleName)) {
+				}
+				if (routes.find(route => route?.name !== item?.moduleName)) {
 
-					if (routes.some(route => route?.name?.toLowerCase() !== item?.moduleName?.toLowerCase())) {
+					if (!newRoutes.find(route => route?.name?.toLowerCase() === item?.moduleName?.toLowerCase())) {
 
 						const newRoute = [{
 							name: item?.moduleName,
@@ -148,11 +151,15 @@ export default function Dashboard(props) {
 						}
 						]
 
-						// setRoutes(() => [...newRoutes, ...newRoute])
+						apiData.push(...newRoute)
 					}
 				}
 
 			});
+
+		let filterData = [...newRoutes, ...apiData]
+		setRoutes(filterData)
+
 	};
 
 	const getActiveRoute = (routes) => {
