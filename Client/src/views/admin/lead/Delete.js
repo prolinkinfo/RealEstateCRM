@@ -8,7 +8,6 @@ const Delete = (props) => {
     const [isLoding, setIsLoding] = useState(false)
     const navigate = useNavigate()
     const param = useParams()
-    console.log(param);
     const handleDeleteClick = async () => {
         if (props.method === 'one') {
             try {
@@ -26,7 +25,6 @@ const Delete = (props) => {
         } else if (props.method === 'many') {
             try {
                 setIsLoding(true)
-                console.log(props.data, "Delete");
                 let response = await deleteManyApi(props.url, props.data)
                 if (response.status === 200) {
                     props.setSelectedValues([])
