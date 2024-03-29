@@ -30,4 +30,4 @@ const phoneCall = new mongoose.Schema({
     },
 })
 
-module.exports = mongoose.model('PhoneCall', phoneCall, 'PhoneCall');
+module.exports = mongoose.model('Calls', phoneCall, 'Calls');

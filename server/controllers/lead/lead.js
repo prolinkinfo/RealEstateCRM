@@ -1,5 +1,5 @@
 const { Lead } = require('../../model/schema/lead')
-const EmailHistory = require('../../model/schema/email');
+const email = require('../../model/schema/email');
 const PhoneCall = require('../../model/schema/phoneCall');
 const Task = require('../../model/schema/task')
 const MeetingHistory = require('../../model/schema/meeting')
@@ -87,7 +87,7 @@ const view = async (req, res) => {
     }
     query.createByLead = req.params.id
 
-    let Email = await EmailHistory.aggregate([
+    let Email = await email.aggregate([
         { $match: { createByLead: lead._id } },
         {
             $lookup: {

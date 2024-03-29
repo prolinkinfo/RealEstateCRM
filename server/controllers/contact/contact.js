@@ -1,5 +1,5 @@
 const { Contact } = require('../../model/schema/contact')
-const emailHistory = require('../../model/schema/email')
+const email = require('../../model/schema/email')
 const MeetingHistory = require('../../model/schema/meeting')
 const phoneCall = require('../../model/schema/phoneCall')
 const Task = require('../../model/schema/task')
@@ -77,7 +77,7 @@ const view = async (req, res) => {
         let interestProperty = await Contact.findOne({ _id: req.params.id }).populate("interestProperty")
 
         if (!contact) return res.status(404).json({ message: 'No data found.' })
-        let EmailHistory = await emailHistory.aggregate([
+        let EmailHistory = await email.aggregate([
             { $match: { createBy: contact._id } },
             {
                 $lookup: {

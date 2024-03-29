@@ -1,5 +1,5 @@
 const { sendEmail } = require('../../middelwares/mail');
-const EmailHistory = require('../../model/schema/email');
+const Email = require('../../model/schema/email');
 const User = require('../../model/schema/user');
 const mongoose = require('mongoose');
 
@@ -28,7 +28,7 @@ const add = async (req, res) => {
         await user.save();
         // sendEmail(email.recipient, email.subject, email.message)
 
-        const result = new EmailHistory(email);
+        const result = new Email(email);
         await result.save();
         res.status(200).json({ result });
     } catch (err) {
@@ -44,7 +44,7 @@ const index = async (req, res) => {
             query.sender = new mongoose.Types.ObjectId(query.sender);
         }
 
-        let result = await EmailHistory.aggregate([
+        let result = await Email.aggregate([
             { $match: query },
             {
                 $lookup: {
@@ -112,11 +112,11 @@ const index = async (req, res) => {
 
 const view = async (req, res) => {
     try {
-        let result = await EmailHistory.findOne({ _id: req.params.id })
+        let result = await Email.findOne({ _id: req.params.id })
 
         if (!result) return res.status(404).json({ message: "no Data Found." })
 
-        let response = await EmailHistory.aggregate([
+        let response = await Email.aggregate([
             { $match: { _id: result._id } },
             {
                 $lookup: {
