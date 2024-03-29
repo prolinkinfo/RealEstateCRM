@@ -142,7 +142,7 @@ const Index = () => {
     const setStatusData = async (cell, e) => {
         try {
             setIsLoding(true)
-            let response = await putApi(`api/lead/changeStatus/${cell.original.leadStatus}`, { leadStatus: e.target.value });
+            let response = await putApi(`api/lead/changeStatus/${cell.original._id}`, { leadStatus: e.target.value });
             if (response.status === 200) {
                 setAction((pre) => !pre)
             }
