@@ -112,14 +112,14 @@ function UserModal(props) {
       <Modal onClose={() => setOpenUser(false)} isOpen={isOpen} isCentered size={"4xl"} style={{ height: "560px" }}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>
+          <ModalHeader height={"580px"} >
             <Flex justifyContent={'space-between'}>
               <Text>Users</Text>
               <Button variant="brand" size="sm" me={'2rem'} onClick={() => { setOpenUser(false); setUserModal(true) }}>Manage Users</Button>
               <ModalCloseButton mt='2' />
             </Flex>
           </ModalHeader>
-          <ModalBody>
+          <ModalBody overflow={"auto"} height={"400px"}>
             <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
               <Thead>
                 {headerGroups?.map((headerGroup, index) => (

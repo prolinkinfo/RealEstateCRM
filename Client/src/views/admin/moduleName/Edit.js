@@ -35,9 +35,13 @@ const Edit = (props) => {
     const EditData = async () => {
         let response = await putApi(`api/custom-field/change-module-name/${selectedId}`, values);
         if (response.status === 200) {
+            await dispatch(fetchRouteData())
             onClose()
             fetchData()
             setAction((pre) => !pre)
+            toast.success(response?.data?.message);
+        } else {
+            toast.error(response?.response?.data?.message);
         }
     }
 
@@ -57,7 +61,7 @@ const Edit = (props) => {
                 toast.error(response?.response?.data?.message);
             }
         } catch (e) {
-            console.log(e); 
+            console.log(e);
         }
         finally {
             setIsLoding(false)

@@ -31,12 +31,14 @@ import { HasAccess } from "../../../redux/accessUtils";
 import PieChart from "components/charts/PieChart";
 import ReactApexChart from 'react-apexcharts';
 import CountUpComponent from "../../../../src/components/countUpComponent/countUpComponent";
+import Spinner from 'components/spinner/Spinner';
 
 export default function UserReports() {
   // Chakra Color Mode
   const brandColor = useColorModeValue("brand.500", "white");
   const boxBg = useColorModeValue("secondaryGray.300", "whiteAlpha.100");
   const user = JSON.parse(localStorage.getItem("user"));
+  const [isLoding, setIsLoding] = useState(false);
 
   const [task, setTask] = useState([]);
   const [contactData, setContactData] = useState([]);
@@ -168,10 +170,12 @@ export default function UserReports() {
   }, []);
 
   const fetchProgressChart = async () => {
+    setIsLoding(true);
     let result = await getApi(user?.role === 'superAdmin' ? 'api/reporting/line-chart' : `api/reporting/line-chart?createBy=${user?._id}`);
     if (result && result?.status === 200) {
       setData(result?.data)
     }
+    setIsLoding(false);
   }
   useEffect(() => {
     fetchProgressChart()
@@ -334,15 +338,15 @@ export default function UserReports() {
 
         <Card >
           <Heading size="md" pb={3}>Statistics</Heading>
-          {data && data.length > 0 && data?.map((item, i) => (
+          {/* {data && data.length > 0 && data?.map((item, i) => (
             <>
-              {((item.name === 'Lead' && (leadView?.create || leadView?.update || leadView?.delete || leadView?.view)) ||
-                (item.name === 'Contact' && (contactsView?.create || contactsView?.update || contactsView?.delete || contactsView?.view)) ||
-                (item.name === 'Meeting' && (meetingView?.create || meetingView?.update || meetingView?.delete || meetingView?.view)) ||
-                (item.name === 'Call' && (callView?.create || callView?.update || callView?.delete || callView?.view)) ||
-                (item.name === 'Email' && (emailView?.create || emailView?.update || emailView?.delete || emailView?.view)) ||
-                (item.name === 'Property' && (proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view)) ||
-                (item.name === 'Task' && (taskView?.create || taskView?.update || taskView?.delete || taskView?.view))
+              {((item.name === 'Leads' && (leadView?.create || leadView?.update || leadView?.delete || leadView?.view)) ||
+                (item.name === 'Contacts' && (contactsView?.create || contactsView?.update || contactsView?.delete || contactsView?.view)) ||
+                (item.name === 'Meetings' && (meetingView?.create || meetingView?.update || meetingView?.delete || meetingView?.view)) ||
+                (item.name === 'Calls' && (callView?.create || callView?.update || callView?.delete || callView?.view)) ||
+                (item.name === 'Emails' && (emailView?.create || emailView?.update || emailView?.delete || emailView?.view)) ||
+                (item.name === 'Properties' && (proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view)) ||
+                (item.name === 'Tasks' && (taskView?.create || taskView?.update || taskView?.delete || taskView?.view))
               )
                 &&
                 <Box border={"1px solid #e5e5e5"} p={2} m={1} cursor={'pointer'} key={i} onClick={() => navigate(navigateTo[item.name])}>
@@ -357,7 +361,24 @@ export default function UserReports() {
               }
             </>
 
-          ))}
+          ))} */}
+          {
+            !isLoding ?
+            data && data.length > 0 && data?.map((item, i) => (
+              <>
+                <Box border={"1px solid #e5e5e5"} p={2} m={1} cursor={'pointer'} key={i} onClick={() => navigate(navigateTo[item.name])}>
+                  <Flex justifyContent={"space-between"}>
+                    <Text fontSize="sm" fontWeight={600} pb={2}>{item?.name}</Text>
+                    <Text fontSize="sm" fontWeight={600} pb={2}><CountUpComponent targetNumber={item?.length} /></Text>
+                  </Flex>
+                  <Progress
+                    colorScheme={item?.color}
+                    size='xs' value={item?.length} width={"100%"} />
+                </Box>
+              </>
+
+            )):<div style={{display:"flex",justifyContent:"center",alignItems:"center"}}><Spinner/></div>
+          }
         </Card>
 
         {(leadView?.create || leadView?.update || leadView?.delete || leadView?.view) && <Card>

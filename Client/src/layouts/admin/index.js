@@ -44,59 +44,14 @@ export default function Dashboard(props) {
 		return window.location.pathname !== '/admin/full-screen-maps';
 	};
 
-	console.log(routes, "routes")
-	console.log(route, "routeroute")
-
-	// const dynamicRoute = () => {
-	// 	route && route?.length > 0 && route?.map((item, i) => {
-	// 		if (!routes.some(route => route?.name === item?.moduleName)) {
-	// 			return (
-	// 				routes.push({
-	// 					name: item?.moduleName,
-	// 					layout: [ROLE_PATH.superAdmin],
-	// 					path: pathName(item.moduleName),
-	// 					icon: item?.icon ? <img src={item?.icon} width='20px' height='20px' alt='icon' /> : <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
-	// 					component: DynamicPage,
-	// 				},
-	// 					{
-	// 						// name: "Leads",
-	// 						// layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-	// 						// under: "lead",
-	// 						// parentName: "Leads",
-	// 						// path: "/leadView/:id",
-	// 						// component: LeadView,
-	// 						name: item?.moduleName,
-	// 						layout: [ROLE_PATH.superAdmin],
-	// 						under: item?.moduleName,
-	// 						parentName: item?.moduleName,
-	// 						path: `${pathName(item.moduleName)}/:id`,
-	// 						icon: item?.icon ? <img src={item?.icon} width='20px' height='20px' alt='icon' /> : <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
-	// 						component: DynamicPageview,
-	// 					},
-	// 				)
-	// 			)
-	// 		}
-	// 	})
-
-	// }
 	const dynamicRoute = () => {
+		let apiData = []
+
 		route &&
 			route?.length > 0 &&
 			route?.map((item, i) => {
 				let rec = routes.find(route => route?.name === item?.moduleName)
 				if (!routes.some(route => route?.name === item?.moduleName)) {
-					console.log("111")
-					// routes.push({
-					// 	name: item?.moduleName,
-					// 	layout: [ROLE_PATH.superAdmin],
-					// 	path: pathName(item.moduleName),
-					// 	icon: item?.icon ? (
-					// 		<img src={item?.icon} width="20px" height="20px" alt="icon" />
-					// 	) : (
-					// 		<Icon as={MdHome} width="20px" height="20px" color="inherit" />
-					// 	),
-					// 	component: DynamicPage,
-					// });
 
 					const newRoute = [{
 						name: item?.moduleName,
@@ -125,7 +80,6 @@ export default function Dashboard(props) {
 					]
 					setRoutes((pre) => [...pre, ...newRoute])
 				} else if (routes.some(route => route?.name === item?.moduleName) && rec.icon?.props?.src !== item?.icon) {
-					console.log("2222")
 
 					const updatedData = routes?.map(i => {
 						if (i.name === item?.moduleName) {
@@ -134,12 +88,10 @@ export default function Dashboard(props) {
 						return i;
 					});
 					setRoutes(updatedData)
-				} else if (routes.find(route => route?.name !== item?.moduleName)) {
+				}
+				if (routes.find(route => route?.name !== item?.moduleName)) {
 
-					console.log("route---::", routes)
-					console.log("newRoutesnewRoutes---::", item?.moduleName, routes.some(route => route?.name?.toLowerCase() !== item?.moduleName?.toLowerCase()))
-
-					if (routes.some(route => route?.name?.toLowerCase() !== item?.moduleName?.toLowerCase())) {
+					if (!newRoutes.find(route => route?.name?.toLowerCase() === item?.moduleName?.toLowerCase())) {
 
 						const newRoute = [{
 							name: item?.moduleName,
@@ -148,7 +100,7 @@ export default function Dashboard(props) {
 							icon: item?.icon ? (
 								<img src={item?.icon} width="20px" height="20px" alt="icon" />
 							) : (
-								<Icon as={MdHome} width="20px" height="20px" color="inherit" />
+								<Icon as={LuChevronRightCircle} width="20px" height="20px" color="inherit" />
 							),
 							component: DynamicPage,
 						},
@@ -161,18 +113,21 @@ export default function Dashboard(props) {
 							icon: item?.icon ? (
 								<img src={item?.icon} width="20px" height="20px" alt="icon" />
 							) : (
-								<Icon as={MdHome} width="20px" height="20px" color="inherit" />
+								<Icon as={LuChevronRightCircle} width="20px" height="20px" color="inherit" />
 							),
 							component: DynamicPageview,
 						}
 						]
-					console.log("333",[...newRoutes, ...newRoute])
 
-						setRoutes(() => [...newRoutes, ...newRoute])
+						apiData.push(...newRoute)
 					}
 				}
 
 			});
+
+		let filterData = [...newRoutes, ...apiData]
+		setRoutes(filterData)
+
 	};
 
 	const getActiveRoute = (routes) => {

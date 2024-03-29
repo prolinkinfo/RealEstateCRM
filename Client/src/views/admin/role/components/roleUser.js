@@ -87,7 +87,7 @@ const RoleUser = (props) => {
                         <ModalCloseButton mt='2' />
                     </Flex>
                 </ModalHeader>
-                <ModalBody>
+                <ModalBody overflowY={"auto"} height={"400px"}>
                     <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
                         <Thead>
                             {headerGroups?.map((headerGroup, index) => (

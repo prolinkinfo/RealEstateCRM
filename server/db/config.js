@@ -6,6 +6,8 @@ const { initializeContactSchema } = require("../model/schema/contact");
 const { initializePropertySchema } = require("../model/schema/property");
 const { createNewModule } = require("../controllers/customField/customField.js");
 const customField = require('../model/schema/customField.js');
+const { contactFields } = require('./contactFields.js');
+const { leadFields } = require('./leadFields.js');
 
 const initializedSchemas = async () => {
     await initializeLeadSchema();
@@ -13,7 +15,6 @@ const initializedSchemas = async () => {
     await initializePropertySchema();
 
     const CustomFields = await customField.find({ deleted: false });
-
     const createDynamicSchemas = async (CustomFields) => {
         for (const module of CustomFields) {
             const { moduleName, fields } = module;
@@ -67,10 +68,11 @@ const connectDB = async (DATABASE_URL, DATABASE) => {
         };
 
         // Create default modules
-        await createNewModule({ body: { moduleName: 'Leads', fields: [], headings: [], isDefault: true } }, mockRes);
-        await createNewModule({ body: { moduleName: 'Contacts', fields: [], headings: [], isDefault: true } }, mockRes);
+        await createNewModule({ body: { moduleName: 'Leads', fields: leadFields, headings: [], isDefault: true } }, mockRes);
+        await createNewModule({ body: { moduleName: 'Contacts', fields: contactFields, headings: [], isDefault: true } }, mockRes);
         await createNewModule({ body: { moduleName: 'Properties', fields: [], headings: [], isDefault: true } }, mockRes);
         /*  */
+        await initializedSchemas();
 
         let adminExisting = await User.find({ role: 'superAdmin' });
         if (adminExisting.length <= 0) {
