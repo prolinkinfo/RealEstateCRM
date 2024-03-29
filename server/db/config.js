@@ -13,7 +13,6 @@ const initializedSchemas = async () => {
     await initializePropertySchema();
 
     const CustomFields = await customField.find({ deleted: false });
-
     const createDynamicSchemas = async (CustomFields) => {
         for (const module of CustomFields) {
             const { moduleName, fields } = module;
@@ -37,6 +36,191 @@ const initializedSchemas = async () => {
     createDynamicSchemas(CustomFields);
 
 }
+
+const leadFields = [
+    {
+        "name": "leadStatus",
+        "label": "Lead Status",
+        "type": "select",
+        "fixed": false,
+        "delete": false,
+        "belongsTo": null,
+        "backendType": "Mixed",
+        "isTableField": true,
+        "options": [
+            {
+                "name": "Active",
+                "value": "active",
+            },
+            {
+                "name": "Pending",
+                "value": "pending",
+            },
+            {
+                "name": "Sold",
+                "value": "sold",
+            }
+        ],
+        "validation": [
+            {
+                "message": "Invalid type value for Lead Status",
+                "formikType": "String",
+            }
+        ],
+    },
+    {
+        "name": "leadName",
+        "label": "Lead Name",
+        "type": "text",
+        "fixed": true,
+        "delete": false,
+        "belongsTo": null,
+        "backendType": "String",
+        "isTableField": true,
+        "options": [],
+        "validation": [
+            {
+                "require": true,
+                "message": "",
+            },
+        ],
+    },
+    {
+        "name": "leadEmail",
+        "label": "Lead Email",
+        "type": "email",
+        "fixed": true,
+        "delete": false,
+        "belongsTo": null,
+        "backendType": "String",
+        "isTableField": true,
+        "options": [],
+        "validation": [
+            {
+                "require": true,
+                "message": "",
+            },
+        ],
+    },
+    {
+        "name": "leadPhoneNumber",
+        "label": "Lead Phone Number",
+        "type": "tel",
+        "fixed": true,
+        "delete": false,
+        "belongsTo": null,
+        "backendType": "String",
+        "isTableField": true,
+        "options": [],
+        "validation": [
+            {
+                "require": true,
+                "message": "",
+            },
+        ],
+    },
+]
+
+const contactFields = [
+    {
+        "name": "email",
+        "label": "Email",
+        "type": "email",
+        "fixed": true,
+        "delete": false,
+        "belongsTo": null,
+        "backendType": "String",
+        "isTableField": true,
+        "options": [],
+        "validation": [
+            {
+                "require": true,
+                "message": "",
+            },
+        ],
+    },
+    {
+        "name": "facebookProfile",
+        "label": "Facebook",
+        "type": "url",
+        "fixed": true,
+        "delete": false,
+        "belongsTo": null,
+        "backendType": "Mixed",
+        "isTableField": false,
+        "validation": [
+            {
+                "message": "Invalid type value for facebook",
+                "formikType": "url",
+            }
+        ],
+    },
+    {
+        "name": "linkedInProfile",
+        "label": "LinkedIn Profile URL",
+        "type": "url",
+        "fixed": true,
+        "delete": false,
+        "belongsTo": null,
+        "backendType": "Mixed",
+        "isTableField": false,
+        "validation": [
+            {
+                "message": "Invalid type value for LinkedIn Profile URL",
+                "formikType": "url",
+            }
+        ],
+    },
+    {
+        "name": "twitterHandle",
+        "label": "Twitter Username",
+        "type": "url",
+        "fixed": true,
+        "delete": false,
+        "belongsTo": null,
+        "backendType": "Mixed",
+        "isTableField": false,
+        "validation": [
+            {
+                "message": "Invalid type value for Twitter Username",
+                "formikType": "url",
+            }
+        ],
+    },
+    {
+        "name": "otherProfiles",
+        "label": "Other Social Media Profiles URL",
+        "type": "url",
+        "fixed": true,
+        "delete": false,
+        "belongsTo": null,
+        "backendType": "Mixed",
+        "isTableField": false,
+        "validation": [
+            {
+                "message": "Invalid type value for Other Social Media Profiles URL",
+                "formikType": "url",
+            }
+        ],
+    },
+    {
+        "name": "phoneNumber",
+        "label": "Phone Number",
+        "type": "tel",
+        "fixed": true,
+        "delete": false,
+        "belongsTo": null,
+        "backendType": "Number",
+        "isTableField": true,
+        "options": [],
+        "validation": [
+            {
+                "require": true,
+                "message": "",
+            },
+        ],
+    },
+]
 
 const connectDB = async (DATABASE_URL, DATABASE) => {
     try {
@@ -67,10 +251,11 @@ const connectDB = async (DATABASE_URL, DATABASE) => {
         };
 
         // Create default modules
-        await createNewModule({ body: { moduleName: 'Leads', fields: [], headings: [], isDefault: true } }, mockRes);
-        await createNewModule({ body: { moduleName: 'Contacts', fields: [], headings: [], isDefault: true } }, mockRes);
+        await createNewModule({ body: { moduleName: 'Leads', fields: leadFields, headings: [], isDefault: true } }, mockRes);
+        await createNewModule({ body: { moduleName: 'Contacts', fields: contactFields, headings: [], isDefault: true } }, mockRes);
         await createNewModule({ body: { moduleName: 'Properties', fields: [], headings: [], isDefault: true } }, mockRes);
         /*  */
+        await initializedSchemas();
 
         let adminExisting = await User.find({ role: 'superAdmin' });
         if (adminExisting.length <= 0) {
