@@ -83,7 +83,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { HasAccess } from "../../../redux/accessUtils";
-import { Grid, GridItem, Text, Menu, MenuButton, MenuItem, MenuList, useDisclosure } from '@chakra-ui/react';
+import { Grid, GridItem, Text, Menu, MenuButton, MenuItem, MenuList, useDisclosure, Select } from '@chakra-ui/react';
 import { DeleteIcon, ViewIcon, EditIcon, EmailIcon, PhoneIcon } from "@chakra-ui/icons";
 import { CiMenuKebab } from "react-icons/ci";
 import { getApi } from "services/api";
@@ -94,6 +94,7 @@ import Delete from './Delete';
 import AddEmailHistory from "views/admin/emailHistory/components/AddEmail";
 import AddPhoneCall from "views/admin/phoneCall/components/AddPhoneCall";
 import ImportModal from './components/ImportModal';
+import { putApi } from 'services/api';
 
 const Index = () => {
     const title = "Leads";
@@ -138,7 +139,32 @@ const Index = () => {
             setAddEmailHistory(true);
         }
     }
-
+    const setStatusData = async (cell, e) => {
+        try {
+            setIsLoding(true)
+            let response = await putApi(`api/lead/changeStatus/${cell.original.leadStatus}`, { leadStatus: e.target.value });
+            if (response.status === 200) {
+                setAction((pre) => !pre)
+            }
+        } catch (e) {
+            console.log(e);
+        }
+        finally {
+            setIsLoding(false)
+        }
+    }
+    const changeStatus = (cell) => {
+        switch (cell.original.leadStatus) {
+            case 'pending':
+                return 'pending';
+            case 'active':
+                return 'completed';
+            case 'sold':
+                return 'onHold';
+            default:
+                return 'completed';
+        }
+    }
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
         const result = await getApi(`api/custom-field/?moduleName=Leads`);
@@ -167,10 +193,25 @@ const Index = () => {
                 </Text>
             )
         }
+        const statusHeader = {
+            Header: "Status", isSortable: false, center: true,
+            cell: ({ row }) => (
+                <div className="selectOpt" >
+                    <Select defaultValue={'active'} className={changeStatus(row)} onChange={(e) => setStatusData(row, e)} height={7} width={130} value={row.original.leadStatus} style={{ fontSize: "14px" }}>
+                        <option value='active'>Active</option>
+                        <option value='sold'>Sold</option>
+                        <option value='pending'>Pending</option>
+                    </Select>
+                </div>
+            )
+        }
+
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-            ...(result?.data?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => ({ Header: field?.label, accessor: field?.name })) || []),
-            ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : [])
+            ...(result?.data?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => (field?.name !== "leadStatus" && { Header: field?.label, accessor: field?.name })) || []),
+            ...([statusHeader]),
+            ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : []),
+
         ];
 
         setSelectedColumns(JSON.parse(JSON.stringify(tempTableColumns)));
