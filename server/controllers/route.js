@@ -36,9 +36,10 @@ router.use('/phoneCall', phoneCallRoute);
 router.use('/text-msg', TextMsgRoute);
 router.use('/meeting', meetingRoute);
 
-router.use('/route', route);
-router.use('/role-access', roleAccessRoute);
 router.use("/images", imagesRoute);
+router.use('/role-access', roleAccessRoute);
+router.use('/route', route);
+
 router.use("/custom-field", customFieldRoute);
 router.use("/validation", validationRoute);
 router.use("/form", formRoute);
