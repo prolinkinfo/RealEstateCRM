@@ -5,7 +5,7 @@ import { HSeparator } from "components/separator/Separator";
 import Spinner from "components/spinner/Spinner";
 import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getApi } from "services/api";
 import Add from "./Add";
 // import Delete from "./Delete";
@@ -22,6 +22,8 @@ import csv from '../../../assets/img/fileImage/csv.png'
 import file from '../../../assets/img/fileImage/file.png'
 import CustomView from "utils/customView";
 import CommonCheckTable from "components/checkTable/checktable";
+import CommonDeleteModel from "components/commonDeleteModel";
+import { deleteApi } from "services/api";
 
 const View = () => {
 
@@ -45,6 +47,7 @@ const View = () => {
     const [isLoding, setIsLoding] = useState(false)
     const [displayPropertyPhoto, setDisplayPropertyPhoto] = useState(false)
     const [type, setType] = useState(false)
+    const navigate = useNavigate();
 
     const size = "lg";
 
@@ -73,6 +76,23 @@ const View = () => {
         setPropertyData(response.data)
     }
 
+    const handleDeleteProperties=async(id)=>{
+        try {
+            setIsLoding(true)
+            let response = await deleteApi('api/property/delete/', id)
+            if (response.status === 200) {
+                setDelete(false)
+                setAction((pre) => !pre)
+                navigate('/properties')
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        finally {
+            setIsLoding(false)
+        }
+    }
+
     useEffect(() => {
         fetchData()
         if (fetchCustomData) fetchCustomData()
@@ -85,14 +105,12 @@ const View = () => {
         <>
             <Add isOpen={isOpen} size={size} onClose={onClose} setPropertyData={setPropertyData} propertyData={propertyData[0]} />
             <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} setPropertyData={setPropertyData} propertyData={propertyData[0]} />
-            {/* <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/property/delete/' id={param.id} /> */}
+            <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Property' handleDeleteData={handleDeleteProperties} ids={param.id} />
 
             {isLoding ?
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                     <Spinner />
                 </Flex> : <>
-                    
-
                     <Tabs >
                         <Grid templateColumns={'repeat(12, 1fr)'} mb={3} gap={1}>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
