@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
-import { Button, Flex, Menu, MenuButton, MenuItem, MenuList, Select, Text, useDisclosure } from '@chakra-ui/react';
+import { Button,  Menu, MenuButton, MenuItem, MenuList, Select, Text, useDisclosure } from '@chakra-ui/react';
 import { getApi } from 'services/api';
-import CheckTable from './components/CheckTable';
 import AddTask from './components/addTask';
 import { HasAccess } from '../../../redux/accessUtils';
 import CommonCheckTable from '../../../components/checkTable/checktable';
@@ -11,7 +10,6 @@ import { SearchIcon } from "@chakra-ui/icons";
 import { CiMenuKebab } from 'react-icons/ci';
 import EditTask from './components/editTask';
 import EventView from './eventView';
-import DeleteTask from './components/deleteTask';
 import ImportModal from '../lead/components/ImportModal';
 import { putApi } from 'services/api';
 import { useLocation } from 'react-router-dom';
@@ -221,7 +219,6 @@ const Task = () => {
             <AddTask isOpen={isOpen} fetchData={fetchData} onClose={onClose} />
             <EditTask isOpen={edit} onClose={setEdit} viewClose={onClose} id={selectedId} setAction={setAction} />
             <EventView fetchData={fetchData} isOpen={eventView} access={permission} contactAccess={contactAccess} leadAccess={leadAccess} onClose={setEventView} info={id} setAction={setAction} action={action} />
-            {/* <DeleteTask isOpen={deleteMany} onClose={setDeleteMany} viewClose={onClose} url='api/task/deleteMany' method='many' data={selectedValues} setSelectedValues={setSelectedValues} redirectPage={"/task"} fetchData={fetchData} setAction={setAction} /> */}
             <CommonDeleteModel isOpen={deleteMany} onClose={() => setDeleteMany(false)} type='Tasks' handleDeleteData={handleDeleteTask} ids={selectedValues} />
             <ImportModal text='Lead file' fetchData={fetchData} isOpen={isImportLead} onClose={setIsImportLead} />
         </div>

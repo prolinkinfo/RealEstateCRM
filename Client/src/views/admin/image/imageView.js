@@ -1,6 +1,6 @@
-import { Button, Flex, Grid, GridItem, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
+import { Button, Grid, GridItem, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useState } from 'react';
 import { putApi } from 'services/api';
 import Dropzone from "components/Dropzone";

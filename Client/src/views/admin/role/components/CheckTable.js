@@ -1,15 +1,10 @@
 import {
   Box,
-  Checkbox,
   Flex,
   Grid,
   GridItem,
-  Menu,
   Button,
-  Tab,
-  TabList,
   Table,
-  Tabs,
   Tbody,
   Td,
   Text,
@@ -17,8 +12,6 @@ import {
   Thead,
   Tr,
   useColorModeValue,
-  TabPanels,
-  TabPanel,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useEffect, useMemo, useState } from "react";
@@ -30,28 +23,23 @@ import {
 } from "react-table";
 
 // Custom components
-import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
+import { AddIcon } from "@chakra-ui/icons";
 import Card from "components/card/Card";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
-import Pagination from "components/pagination/Pagination";
 import Spinner from "components/spinner/Spinner";
-import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
-import { getApi } from "services/api";
-import ChangeAccess from "../changeAccess";
+import {  useNavigate } from "react-router-dom";
 import RoleModal from "./roleModal";
 import AddRole from "../Add";
 import { IoIosArrowBack } from "react-icons/io";
 import DataNotFound from "components/notFoundData";
 
 export default function CheckTable(props) {
-  const { columnsData, name, tableData, handleClick, fetchData, isLoding, setAction, _id, action } = props;
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { columnsData, tableData,  fetchData, isLoding, setAction } = props;
+  const { onOpen } = useDisclosure();
 
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   const columns = useMemo(() => columnsData, [columnsData]);
-  const [selectedValues, setSelectedValues] = useState([]);
 
   const [roleModal, setRoleModal] = useState(false);
   const [access, setAccess] = useState([])
@@ -59,14 +47,10 @@ export default function CheckTable(props) {
   const [roleName, setRoleName] = useState('')
   const [roleId, setRoleId] = useState('')
   const [gopageValue, setGopageValue] = useState()
-  // const [data, setData] = useState([])
   const data = useMemo(() => tableData, [tableData]);
   const [addRoleModal, setAddRoleModal] = useState(false);
   const navigate = useNavigate();
-  // const fetchData = async () => {
-  //   let result = await getApi('api/contact/');
-  //   setData(result.data);
-  // }
+
   const user = JSON.parse(localStorage.getItem("user"))
 
   const rowColumns = [
@@ -168,11 +152,7 @@ export default function CheckTable(props) {
                         <span style={{ textTransform: "capitalize", marginRight: "8px" }}>
                           {column.render("Header")}
                         </span>
-                        {/* {column.isSortable !== false && (
-                          <span>
-                            {column.isSorted ? (column.isSortedDesc ? <FaSortDown /> : <FaSortUp />) : <FaSort />}
-                          </span>
-                        )} */}
+                     
                       </Flex>
                     </Th>
                   ))}
@@ -254,7 +234,6 @@ export default function CheckTable(props) {
                             {...cell?.getCellProps()}
                             key={index}
                             fontSize={{ sm: "14px" }}
-                            // minW={{ sm: "150px", md: "200px", lg: "auto" }}
                             borderColor="transparent"
                           >
                             {data}
@@ -269,7 +248,6 @@ export default function CheckTable(props) {
           </Table>
         </Box>
 
-        {/* {data.map(item => ( */}
 
         {access && <RoleModal isOpen={roleModal}
           setRoleModal={setRoleModal}

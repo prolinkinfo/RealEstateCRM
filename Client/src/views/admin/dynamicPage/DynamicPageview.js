@@ -1,6 +1,6 @@
 import { AddIcon, ChevronDownIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import {
-    Box, Button, Flex, Grid, GridItem, Heading, Menu, MenuButton, MenuDivider, MenuItem, MenuList,
+    Box, Button, Flex, Grid, GridItem, Menu, MenuButton, MenuDivider, MenuItem, MenuList,
 
     useColorModeValue,
     useDisclosure,
@@ -14,7 +14,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getApi } from "services/api";
 import { HasAccess } from "../../../redux/accessUtils";
-import DataNotFound from "components/notFoundData";
 import CustomView from "utils/customView";
 import { useLocation } from 'react-router-dom';
 
@@ -91,9 +90,7 @@ const View = () => {
 
     return (
         <>
-            {/* {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} setLeadData={setLeadData} leadData={leadData[0]} setAction={setAction} />}
-            <Edit isOpen={edit} size={size} onClose={setEdit} setLeadData={setLeadData} leadData={leadData[0]} setAction={setAction} moduleId={leadData?.[0]?._id} />
-            <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/lead/delete/' id={param.id} setAction={setAction} /> */}
+            
 
             {isLoding ?
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >

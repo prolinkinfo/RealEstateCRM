@@ -1,4 +1,3 @@
-import { AddIcon } from '@chakra-ui/icons'
 import { Button, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react'
 import Spinner from 'components/spinner/Spinner'
 import { useEffect, useState } from 'react'

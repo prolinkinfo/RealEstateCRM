@@ -1,19 +1,17 @@
 import { AddIcon, ChevronDownIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { AspectRatio, Box, Button, Flex, Grid, GridItem, Heading, Image, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useColorModeValue, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Flex, Grid, GridItem, Heading, Image, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useColorModeValue, useDisclosure } from "@chakra-ui/react";
 import Card from "components/card/Card";
 import { HSeparator } from "components/separator/Separator";
 import Spinner from "components/spinner/Spinner";
-import moment from "moment/moment";
 import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { Link, useParams } from "react-router-dom";
 import { getApi } from "services/api";
 import Add from "./Add";
-import Delete from "./Delete";
+// import Delete from "./Delete";
 import Edit from "./Edit";
 import PropertyPhoto from "./components/propertyPhoto";
 import { HasAccess } from "../../../redux/accessUtils";
-import CountUpComponent from "components/countUpComponent/countUpComponent";
 import DataNotFound from "components/notFoundData";
 import xlsx from '../../../assets/img/fileImage/xlsx.png'
 import jpg from '../../../assets/img/fileImage/jpg.png'
@@ -89,40 +87,13 @@ const View = () => {
         <>
             <Add isOpen={isOpen} size={size} onClose={onClose} setPropertyData={setPropertyData} propertyData={propertyData[0]} />
             <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} setPropertyData={setPropertyData} propertyData={propertyData[0]} />
-            <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/property/delete/' id={param.id} />
+            {/* <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/property/delete/' id={param.id} /> */}
 
             {isLoding ?
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                     <Spinner />
                 </Flex> : <>
-                    {/* <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
-                        <GridItem colStart={6} >
-                            <Flex justifyContent={"right"}>
-                                <Menu>
-                                    {(permission?.create || permission?.update || permission?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
-                                        Actions
-                                    </MenuButton>}
-                                    <MenuDivider />
-                                    <MenuList>
-                                        {permission?.create && <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
-                                        {permission?.update && <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
-
-                                        {permission?.delete &&
-                                            <>
-                                                <MenuDivider />
-                                                <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
-                                            </>
-                                        }
-                                    </MenuList>
-                                </Menu>
-                                <Link to="/properties">
-                                    <Button leftIcon={<IoIosArrowBack />} variant="brand">
-                                        Back
-                                    </Button>
-                                </Link>
-                            </Flex>
-                        </GridItem>
-                    </Grid> */}
+                    
 
                     <Tabs >
                         <Grid templateColumns={'repeat(12, 1fr)'} mb={3} gap={1}>

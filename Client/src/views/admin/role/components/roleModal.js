@@ -11,15 +11,11 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Flex,
   Text,
   Td,
-  TableCaption,
-  TableContainer,
-  Checkbox,
   useColorModeValue,
 } from "@chakra-ui/react";
 import Spinner from "components/spinner/Spinner";
@@ -29,9 +25,6 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
-import { useFormik } from "formik";
-import { Link, useParams } from "react-router-dom";
-import { putApi } from "services/api";
 import ChangeAccess from "../changeAccess";
 import UserModal from "./userModal";
 import { getApi } from "services/api";
@@ -41,7 +34,6 @@ function RoleModal(props) {
   const {
     name,
     tableData,
-    handleClick,
     fetchData,
     columnsData,
     isOpen,
@@ -51,7 +43,6 @@ function RoleModal(props) {
     _id,
     setAccessRole,
     onOpen,
-    onClose,
     setRoleModal,
   } = props;
 
@@ -71,7 +62,6 @@ function RoleModal(props) {
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   const columns = useMemo(() => columnsData, [columnsData]);
-  const [selectedValues, setSelectedValues] = useState([]);
   const [isLoding, setIsLoding] = useState(false);
 
   const [editModal, setEditModal] = useState(false);
@@ -94,19 +84,11 @@ function RoleModal(props) {
 
 
   const {
-    getTableProps,
     getTableBodyProps,
     headerGroups,
     prepareRow,
     page,
-    canPreviousPage,
-    canNextPage,
     pageOptions,
-    pageCount,
-    gotoPage,
-    nextPage,
-    previousPage,
-    setPageSize,
     state: { pageIndex, pageSize },
   } = tableInstance;
 
@@ -156,14 +138,8 @@ function RoleModal(props) {
                         borderColor={borderColor}
                         display={column.display === false && "none"}
                       >
-                        {/* <Flex
-                          justify="space-between"
-                          align="center"
-                          fontSize={{ sm: "10px", lg: "12px" }}
-                          color="gray.400"
-                        > */}
+                      
                         {column.display !== false && column.render("Header")}
-                        {/* </Flex> */}
                       </Th>
                     ))}
                   </Tr>

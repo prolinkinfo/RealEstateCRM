@@ -1,13 +1,10 @@
-import { AddIcon } from '@chakra-ui/icons'
-import { Box, Button, Flex, Grid, GridItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useBreakpointValue } from '@chakra-ui/react'
+import {  Button, Grid, GridItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useBreakpointValue } from '@chakra-ui/react'
 import Spinner from 'components/spinner/Spinner'
 import { useFormik } from 'formik'
 import { useState } from 'react'
 import { postApi } from 'services/api'
 import UploadImg from './components/Upload';
-import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import Card from 'components/card/Card'
 import { fetchImage } from '../../../redux/imageSlice'
 import { useDispatch } from 'react-redux'
 

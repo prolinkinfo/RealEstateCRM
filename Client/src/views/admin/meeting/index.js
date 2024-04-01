@@ -92,7 +92,6 @@ import { useEffect, useState } from 'react';
 import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
 import { Button, Flex, Menu, MenuButton, MenuItem, MenuList, Text, useDisclosure } from '@chakra-ui/react';
 import { getApi } from 'services/api';
-import CheckTable from './components/CheckTable';
 import { HasAccess } from '../../../redux/accessUtils';
 import CommonCheckTable from '../../../components/checkTable/checktable';
 import { SearchIcon } from "@chakra-ui/icons";

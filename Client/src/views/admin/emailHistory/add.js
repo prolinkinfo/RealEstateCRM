@@ -1,4 +1,3 @@
-import { AddIcon } from '@chakra-ui/icons';
 import { Button, Flex, FormLabel, Grid, GridItem, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Radio, RadioGroup, Select, Stack, Text, Textarea } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
 import ContactModel from "components/commonTableModel/ContactModel";
@@ -167,7 +166,6 @@ const AddEmailHistory = (props) => {
                                     </>
                                     : ''
                             }
-                            {/* <Text mb='10px' color={'red'}> {errors.createBy && touched.createBy && errors.createBy}</Text> */}
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>

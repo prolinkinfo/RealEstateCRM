@@ -19,7 +19,6 @@ import {
 
 // Custom components
 import Card from "components/card/Card";
-import CountUpComponent from "components/countUpComponent/countUpComponent";
 import Pagination from "components/pagination/Pagination";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -86,15 +85,6 @@ export default function PropertyTable(props) {
       style={{ border: '1px solid gray.200' }
       }
       overflowX={{ sm: "scroll", lg: "hidden" }}>
-      {/* <Flex px='25px' justify='space-between' mb='20px' align='center'>
-        <Text
-          color={textColor}
-          fontSize='22px'
-          fontWeight='700'
-          lineHeight='100%'>
-          {title}  (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
-        </Text>
-      </Flex> */}
       <Box overflowY={'auto'} className="table-container-property" >
         <Table  {...getTableProps()} variant='simple' color='gray.500' mb='24px'>
           <Thead >
@@ -149,7 +139,6 @@ export default function PropertyTable(props) {
                           <Text
                             me="10px"
                             sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                            // color={textColor}
                             color='brand.600'
                             fontSize="sm"
                             fontWeight="700"
@@ -163,9 +152,7 @@ export default function PropertyTable(props) {
 
                         <Text
                           me="10px"
-                          // sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
                           color={textColor}
-                          // color='brand.600'
                           fontSize="sm"
                           fontWeight="700"
                         >

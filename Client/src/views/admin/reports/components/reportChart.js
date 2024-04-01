@@ -91,7 +91,6 @@ const ReportChart = (props) => {
                         <option value='all'>All</option>
                         <option value='EmailDetails'>Email</option>
                         <option value='outboundcall'>Call</option>
-                        {/* <option value='TextSent'>TextSent</option> */}
                     </Select>
                     <Box width={{ base: '100%', md: 'auto' }} flexWrap={'wrap'} justifyContent={'left'} mb={{ base: 3, md: 'auto' }} display='flex'>
                         <ReactDatePicker selected={startDate} onChange={(date) => setStartDate(date)} className='datePickerBorder' />
@@ -102,7 +101,6 @@ const ReportChart = (props) => {
                             <Stack direction='row'>
                                 <Radio value='day' >Daily</Radio>
                                 <Radio value='week'>Weekly</Radio>
-                                {/* <Radio value='Monthly' onClick={() => updateData('Monthly')}>Monthly</Radio> */}
                             </Stack>
                         </RadioGroup>
                     </Box>
@@ -114,8 +112,6 @@ const ReportChart = (props) => {
                         <ReactApexChart
                             options={options}
                             series={selectedSeries}
-                            // type='bar'
-                            // type='line'
                             type='area'
                             height={300}
                         />

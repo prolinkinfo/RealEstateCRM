@@ -27,7 +27,6 @@ const CallAdvanceSearch = (props) => {
             const searchResult = allData?.filter(
                 (item) =>
                     (!values?.senderName || (item?.senderName && item?.senderName.toLowerCase().includes(values?.senderName?.toLowerCase()))) &&
-                    // (!values?.realetedTo || (item?.realetedTo && item?.realetedTo.toLowerCase().includes(values?.realetedTo?.toLowerCase()))) &&
                     (!values?.realetedTo || (values.realetedTo === "contact" ? item.createBy : item.createByLead)) &&
                     (!values?.createByName || (item?.createByName && item?.createByName.toLowerCase().includes(values?.createByName?.toLowerCase())))
             )

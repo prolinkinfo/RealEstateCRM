@@ -1,4 +1,3 @@
-import { AddIcon } from '@chakra-ui/icons';
 import { Button, Flex, FormLabel, Grid, GridItem, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Radio, RadioGroup, Select, Stack, Text, Textarea } from '@chakra-ui/react';
 import ContactModel from "components/commonTableModel/ContactModel";
 import LeadModel from "components/commonTableModel/LeadModel";

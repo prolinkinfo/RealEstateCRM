@@ -28,9 +28,6 @@ const StripeContainer = () => {
                     </Flex>
                 </Card>
             </GridItem>
-            {/* <GridItem>
-                <Button leftIcon={<FaHistory />} variant="brand">History</Button>
-            </GridItem> */}
         </Grid>
 
     );

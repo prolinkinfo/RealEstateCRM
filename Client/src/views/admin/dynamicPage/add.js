@@ -1,11 +1,8 @@
-import { CloseIcon, PhoneIcon } from '@chakra-ui/icons';
-import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormLabel, Grid, GridItem, Heading, IconButton, Input, InputGroup, InputLeftElement, Select, Text } from '@chakra-ui/react';
-import { HSeparator } from 'components/separator/Separator';
+import { CloseIcon } from '@chakra-ui/icons';
+import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, IconButton } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
-import { useEffect, useState } from 'react';
-import { leadSchema } from 'schema';
-import { getApi } from 'services/api';
+import { useState } from 'react';
 import { postApi } from 'services/api';
 import { generateValidationSchema } from 'utils';
 import CustomForm from 'utils/customForm';
@@ -25,7 +22,6 @@ const Add = (props) => {
 
     const formik = useFormik({
         initialValues: initialValues,
-        // validationSchema: validationSchema,
         validationSchema: yup.object().shape(generateValidationSchema(props?.moduleData?.fields)),
         onSubmit: (values, { resetForm }) => {
             AddData();

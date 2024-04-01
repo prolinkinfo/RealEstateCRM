@@ -2,14 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import Papa from 'papaparse';
 import {
-    Box,
     Flex,
-    Table,
-    Tbody,
-    Td,
-    Th,
-    Thead,
-    Tr,
     useColorModeValue,
     Select,
     Button,
@@ -29,7 +22,6 @@ function ContactImport() {
     const location = useLocation();
     const { fileData, customFields } = location.state || {};
     const [importedFileFields, setImportedFileFields] = useState([]);
-    const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
     const [importedFileData, setImportedFileData] = useState([]);
     const [isLoding, setIsLoding] = useState(false);
     const navigate = useNavigate();
@@ -41,133 +33,6 @@ function ContactImport() {
         { Header: 'Fields In File', accessor: 'fileFields' },
     ];
 
-    // const fieldsInCrm = [
-    //     { Header: 'First Name', accessor: 'firstName' },
-    //     { Header: "Last Name", accessor: "lastName" },
-    //     { Header: "Title", accessor: "title" },
-    //     { Header: "Email", accessor: "email" },
-    //     { Header: "Phone Number", accessor: "phoneNumber" },
-    //     { Header: "Mobile Number", accessor: "mobileNumber" },
-    //     { Header: "Physical Address", accessor: "physicalAddress" },
-    //     { Header: "Mailling Address", accessor: "mailingAddress" },
-    //     { Header: "Preferred Contact Method", accessor: "preferredContactMethod" },
-    //     { Header: "Lead Source", accessor: "leadSource" },
-    //     { Header: "Referral Source", accessor: "referralSource" },
-    //     { Header: "Campaign Source", accessor: "campaignSource" },
-    //     { Header: "Lead Status", accessor: "leadStatus" },
-    //     { Header: "Lead Rating", accessor: "leadRating" },
-    //     { Header: "Lead Conversion Probability", accessor: "leadConversionProbability" },
-    //     { Header: "Notes and Comments", accessor: "notesandComments" },
-    //     { Header: "Tags Or Labels For Categorizing Contacts", accessor: "tagsOrLabelsForcategorizingcontacts" },
-    //     { Header: "Birthday", accessor: "birthday" },
-    //     { Header: "Anniversary", accessor: "anniversary" },
-    //     { Header: "Key Milestones", accessor: "keyMilestones" },
-    //     { Header: "Date of Birth", accessor: "dob" },
-    //     { Header: "Gender", accessor: "gender" },
-    //     { Header: "Occupation", accessor: "occupation" },
-    //     { Header: "Interests Or Hobbies", accessor: "interestsOrHobbies" },
-    //     { Header: "Communication Frequency", accessor: "communicationFrequency" },
-    //     { Header: "Preferences", accessor: "preferences" },
-    //     { Header: "LinkedIn Profile URL", accessor: "linkedInProfile" },
-    //     { Header: "Facebook", accessor: "facebookProfile" },
-    //     { Header: "Twitter Username", accessor: "twitterHandle" },
-    //     { Header: "Other Social Media Profiles URL", accessor: "otherProfiles" },
-    //     { Header: "Assigned Agent or Team Member", accessor: "agentOrTeamMember" },
-    //     { Header: "Internal Notes or Comments for Team Collaboration", accessor: "internalNotesOrComments" }
-    // ];
-
-    // const initialValues = {
-    //     firstName: "",
-    //     lastName: "",
-    //     title: "",
-    //     email: "",
-    //     phoneNumber: "",
-    //     mobileNumber: "",
-    //     physicalAddress: "",
-    //     mailingAddress: "",
-    //     preferredContactMethod: "",
-    //     leadSource: "",
-    //     referralSource: "",
-    //     campaignSource: "",
-    //     leadStatus: "",
-    //     leadRating: "",
-    //     leadConversionProbability: "",
-    //     notesandComments: "",
-    //     tagsOrLabelsForcategorizingcontacts: "",
-    //     birthday: "",
-    //     anniversary: "",
-    //     keyMilestones: "",
-    //     dob: "",
-    //     gender: "",
-    //     occupation: "",
-    //     interestsOrHobbies: "",
-    //     communicationFrequency: "",
-    //     preferences: "",
-    //     linkedInProfile: "",
-    //     facebookProfile: "",
-    //     twitterHandle: "",
-    //     otherProfiles: "",
-    //     agentOrTeamMember: "",
-    //     internalNotesOrComments: "",
-    //     createBy: "",
-    //     deleted: "",
-    //     createBy: "",
-    // };
-
-    // const formik = useFormik({
-    //     initialValues: initialValues,
-    //     onSubmit: (values, { resetForm }) => {
-
-    //         const contactsData = importedFileData?.map((item, ind) => {
-    //             const birthday = moment(item[values.birthday || "birthday"]);
-    //             const anniversary = moment(item[values.anniversary || "anniversary"]);
-    //             const dob = moment(item[values.dob || "dob"]);
-    //             const phoneNumber = item[values.phoneNumber || 'phoneNumber'] || '';
-    //             const mobileNumber = item[values.mobileNumber || 'mobileNumber'] || '';
-    //             const leadRating = item[values.leadRating || 'leadRating'] || '';
-
-    //             return {
-    //                 firstName: item[values.firstName || "firstName"] || '',
-    //                 lastName: item[values.lastName || "lastName"] || '',
-    //                 title: item[values.title || "title"] || '',
-    //                 email: item[values.email || "email"] || '',
-    //                 phoneNumber: parseInt(phoneNumber, 10) || null,
-    //                 mobileNumber: parseInt(mobileNumber, 10) || null,
-    //                 physicalAddress: item[values.physicalAddress || "physicalAddress"] || '',
-    //                 mailingAddress: item[values.mailingAddress || "mailingAddress"] || '',
-    //                 preferredContactMethod: item[values.preferredContactMethod || "preferredContactMethod"] || '',
-    //                 leadSource: item[values.leadSource || "leadSource"] || '',
-    //                 referralSource: item[values.referralSource || "referralSource"] || '',
-    //                 campaignSource: item[values.campaignSource || "campaignSource"] || '',
-    //                 leadStatus: item[values.leadStatus || "leadStatus"] || '',
-    //                 leadRating: parseFloat(leadRating) || null,
-    //                 leadConversionProbability: item[values.leadConversionProbability || "leadConversionProbability"] || '',
-    //                 notesandComments: item[values.notesandComments || "notesandComments"] || '',
-    //                 tagsOrLabelsForcategorizingcontacts: item[values.tagsOrLabelsForcategorizingcontacts || "tagsOrLabelsForcategorizingcontacts"] || '',
-    //                 birthday: birthday.isValid() ? item[values.birthday || "birthday"] || '' : '',
-    //                 anniversary: anniversary.isValid() ? item[values.anniversary || "anniversary"] || '' : '',
-    //                 keyMilestones: item[values.keyMilestones || "keyMilestones"] || '',
-    //                 dob: dob.isValid() ? item[values.dob || "dob"] || '' : '',
-    //                 gender: item[values.gender || "gender"] || '',
-    //                 occupation: item[values.occupation || "occupation"] || '',
-    //                 interestsOrHobbies: item[values.interestsOrHobbies || "interestsOrHobbies"] || '',
-    //                 communicationFrequency: item[values.communicationFrequency || "communicationFrequency"] || '',
-    //                 preferences: item[values.preferences || "preferences"] || '',
-    //                 linkedInProfile: item[values.linkedInProfile || "linkedInProfile"] || '',
-    //                 facebookProfile: item[values.facebookProfile || "facebookProfile"] || '',
-    //                 twitterHandle: item[values.twitterHandle || "twitterHandle"] || '',
-    //                 otherProfiles: item[values.otherProfiles || "otherProfiles"] || '',
-    //                 agentOrTeamMember: item[values.agentOrTeamMember || "agentOrTeamMember"] || '',
-    //                 internalNotesOrComments: item[values.internalNotesOrComments || "internalNotesOrComments"] || '',
-    //                 deleted: item[values.deleted || "deleted"] || false,
-    //                 createBy: JSON.parse(localStorage.getItem('user'))._id,
-    //                 createdDate: new Date()
-    //             }
-    //         });
-
-    //         AddData(contactsData);
-    //     }
-    // })
 
     const initialFieldValues = Object.fromEntries(
         (customFields || []).map(field => [field?.name, ''])
@@ -301,8 +166,6 @@ function ContactImport() {
         }
     }, [fileData]);
 
-    // const filterContact = fieldsInCrm.filter(field => importedFileFields.find(data => field.accessor === data || field.Header === data))
-    // const filterContact = importedFileFields.filter(field => fieldsInCrm.find(data => field === data.accessor || field === data.Header))
 
     useEffect(() => {
         const filterContactData = importedFileFields?.filter(field => {
@@ -324,54 +187,6 @@ function ContactImport() {
                     fontWeight="700"
                     mb='20px'
                 >Import Contacts</Text>
-                {/* <Table variant="simple" color="gray.500" mb="24px">
-                    <Thead pe="10px" borderColor={borderColor}>
-                        <Tr>
-                            {
-                                columns.map((column, index) => (
-                                    <Th pe="10px" key={index} borderColor={borderColor}>
-                                        <Flex
-                                            justify="space-between"
-                                            align="center"
-                                            fontSize={{ sm: "14px", lg: "16px" }}
-                                            color=" secondaryGray.900"
-                                        >
-                                            <span style={{ textTransform: "uppercase" }}>
-                                                {column.Header}
-                                            </span>
-                                        </Flex>
-                                    </Th>
-                                ))
-                            }
-                        </Tr>
-                    </Thead>
-                    <Tbody overflowY={"auto"}>
-                        {
-                            fieldsInCrm?.map((item) => (
-                                <Tr key={item.id}>
-                                    <Td>{item.Header}</Td>
-                                    <Td>
-                                        <Select
-                                            variant="flushed"
-                                            fontWeight='500'
-                                            isSearchable
-                                            placeholder={'Select Field In File'}
-                                            value={values[item.accessor]}
-                                            name={item.accessor}
-                                            onChange={handleChange}
-                                        >
-                                            {
-                                                importedFileFields?.map(field => (
-                                                    <option value={field} key={field}>{field}</option>
-                                                ))
-                                            }
-                                        </Select>
-                                    </Td>
-                                </Tr>
-                            ))
-                        }
-                    </Tbody>
-                </Table> */}
                 <Grid templateColumns="repeat(12, 1fr)" mb={3} pb={2} gap={1} borderBottom={'1px solid #e2e8f0'}>
                     {
                         columns.map((column, index) => (

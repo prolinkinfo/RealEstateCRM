@@ -2,7 +2,6 @@ import Card from "components/card/Card";
 import { useEffect, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import { getApi } from 'services/api';
-import CheckTable from "./components/CheckTable";
 import ReportChart from './components/reportChart';
 import CommonCheckTable from "components/checkTable/checktable";
 
@@ -46,7 +45,6 @@ const Report = () => {
         <div>
             <ReportChart />
             <Card mt={4}>
-                {/* <CheckTable columnsData={tableColumns} barData={data} isLoding={isLoding} /> */}
                 <CommonCheckTable
                     title={title}
                     isLoding={isLoding}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Flex, Menu, MenuButton, Select, Checkbox, GridItem, Text, MenuItem, Grid, MenuList, FormLabel, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Flex, Menu, MenuButton, Checkbox, GridItem, Text, MenuItem, Grid, MenuList, useColorModeValue } from '@chakra-ui/react';
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { IoIosArrowBack } from 'react-icons/io';
 import Card from 'components/card/Card';

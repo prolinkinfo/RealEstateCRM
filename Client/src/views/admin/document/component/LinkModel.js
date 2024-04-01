@@ -1,5 +1,5 @@
 import { LinkIcon } from '@chakra-ui/icons';
-import { Button, Flex, FormLabel, Grid, GridItem, IconButton, Input, List, ListItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Radio, RadioGroup, Select, Stack, Text, useDisclosure } from '@chakra-ui/react';
+import { Button, Flex, FormLabel, Grid, GridItem, IconButton, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Radio, RadioGroup, Select, Stack, Text, useDisclosure } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -11,7 +11,6 @@ import { LiaMousePointerSolid } from 'react-icons/lia';
 const Link = (props) => {
     const { setLinkDocument } = props;
     const [isLoding, setIsLoding] = useState(false)
-    const { isOpen, onOpen, onClose } = useDisclosure();
     const [data, setData] = useState([])
     const [contactModelOpen, setContactModel] = useState(false);
     const [leadModelOpen, setLeadModel] = useState(false);
@@ -107,31 +106,7 @@ const Link = (props) => {
                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                         Link Contact
                                     </FormLabel>
-                                    {/* <Input
-                                    onFocus={onOpen}
-                                    fontSize='sm'
-                                    onChange={handleChange}
-                                    onBlur={() => setTimeout(onClose, 200)}
-                                    value={values?.linkLabel}
-                                    name="linkLabel"
-                                    placeholder='Link Contact'
-                                    fontWeight='500'
-                                    borderColor={errors?.linkLabel && touched?.linkLabel ? "red.300" : null}
-                                />
-                                {isOpen && values?.linkLabel && (
-                                    <List position={'relative'} border={'1px solid'} bg={'gray.100'} width={'100%'} borderRadius={'0px 0px 20px 20px'} lineHeight={1} >
-                                        {data?.filter((option) => option?.label?.toLowerCase()?.includes(values?.linkLabel.toLowerCase())).map((option, index) => (
-                                            <ListItem p={3} borderBottom={'2px solid #efefef'} sx={{ '&:last-child': { borderBottom: 'none' } }} key={option?.value} cursor={'pointer'}
-                                                onClick={() => {
-                                                    setFieldValue('linkContact', option?.value)
-                                                    setFieldValue('linkLabel', option?.label)
-                                                }}
-                                            >
-                                                {option?.label}
-                                            </ListItem>
-                                        ))}
-                                    </List>
-                                )} */}
+                                   
                                     <Flex>
 
                                         <Select
@@ -157,31 +132,7 @@ const Link = (props) => {
                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                         Link Lead
                                     </FormLabel>
-                                    {/* <Input
-                                        onFocus={onOpen}
-                                        fontSize='sm'
-                                        onChange={handleChange}
-                                        onBlur={() => setTimeout(onClose, 200)}
-                                        value={values?.linkLabel}
-                                        name="linkLabel"
-                                        placeholder='Link Lead'
-                                        fontWeight='500'
-                                        borderColor={errors?.linkLabel && touched?.linkLabel ? "red.300" : null}
-                                    />
-                                    {isOpen && values?.linkLabel && (
-                                        <List position={'relative'} border={'1px solid'} bg={'gray.100'} width={'100%'} borderRadius={'0px 0px 20px 20px'} lineHeight={1} >
-                                            {data?.filter((option) => option?.label?.toLowerCase()?.includes(values?.linkLabel.toLowerCase())).map((option, index) => (
-                                                <ListItem p={3} borderBottom={'2px solid #efefef'} sx={{ '&:last-child': { borderBottom: 'none' } }} key={option?.value} cursor={'pointer'}
-                                                    onClick={() => {
-                                                        setFieldValue('linkLead', option?.value)
-                                                        setFieldValue('linkLabel', option?.label)
-                                                    }}
-                                                >
-                                                    {option?.label}
-                                                </ListItem>
-                                            ))} 
-                                        </List>
-                                    )} */}
+                                    
                                     <Flex>
 
                                         <Select
