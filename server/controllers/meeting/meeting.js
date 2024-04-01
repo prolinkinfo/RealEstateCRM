@@ -15,6 +15,8 @@ const add = async (req, res) => {
 const index = async (req, res) => {
     try {
         const query = req.query
+        query.deleted = false;
+
         if (query.createdBy) {
             query.createdBy = new mongoose.Types.ObjectId(query.createdBy);
         }
@@ -105,7 +107,7 @@ const view = async (req, res) => {
                 }
             },
         ])
-    
+
         res.status(200).json(response[0])
     } catch (err) {
         console.error('Failed :', err);
