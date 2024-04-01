@@ -21,6 +21,7 @@ import xls from '../../../assets/img/fileImage/xls.png'
 import csv from '../../../assets/img/fileImage/csv.png'
 import file from '../../../assets/img/fileImage/file.png'
 import CustomView from "utils/customView";
+import CommonCheckTable from "components/checkTable/checktable";
 
 const View = () => {
 
@@ -30,7 +31,7 @@ const View = () => {
     const textColor = useColorModeValue("gray.500", "white");
 
     const [data, setData] = useState()
-    const [filteredContacts, setFilteredContacts] = useState()
+    const [filteredContacts, setFilteredContacts] = useState([])
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [edit, setEdit] = useState(false);
     const [deleteModel, setDelete] = useState(false);
@@ -58,9 +59,6 @@ const View = () => {
 
     const [dynamicColumns, setDynamicColumns] = useState([...contactColumns]);
     const [selectedColumns, setSelectedColumns] = useState([...contactColumns]);
-
-    const [addEmailHistory, setAddEmailHistory] = useState(false);
-    const [addPhoneCall, setAddPhoneCall] = useState(false);
 
     const fetchData = async () => {
         setIsLoding(true)
@@ -141,6 +139,39 @@ const View = () => {
                         <TabPanels>
                             <TabPanel pt={4} p={0}>
                                 <CustomView data={propertyData[0]} fieldData={data} />
+                                {console.log(filteredContacts, contactColumns)}
+                                {filteredContacts?.length > 0 &&
+                                    <GridItem colSpan={{ base: 12 }} mt={4}>
+                                        <Grid templateColumns={{ base: "1fr" }} >
+                                            <GridItem colSpan={2}>
+                                                {/* <Box>
+                                                        <Heading size="md" mb={3}>
+                                                            Interested Contact (<CountUpComponent key={filteredContacts?.length} targetNumber={filteredContacts?.length} />)
+                                                        </Heading>
+                                                    </Box> */}
+                                                <Grid templateColumns={'repeat(2, 1fr)'} >
+                                                    <GridItem colSpan={{ base: 2 }}>
+                                                        <CommonCheckTable
+                                                            AdvanceSearch={false}
+                                                            ManageGrid={false}
+                                                            access={false}
+                                                            columnData={contactColumns}
+                                                            dataColumn={contactColumns}
+                                                            title={"Interested Contact"}
+                                                            allData={filteredContacts}
+                                                            tableData={filteredContacts}
+                                                            dynamicColumns={dynamicColumns}
+                                                             setDynamicColumns={setDynamicColumns} 
+                                                             selectedColumns={selectedColumns} 
+                                                             setSelectedColumns={setSelectedColumns} 
+                                                              size={"md"} />
+                                                    </GridItem>
+                                                </Grid>
+                                            </GridItem>
+
+                                        </Grid>
+                                    </GridItem>
+                                }
                             </TabPanel>
 
                             <TabPanel pt={4} p={0}>
