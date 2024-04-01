@@ -58,6 +58,7 @@ import { useFormik } from "formik";
 import { CiMenuKebab } from "react-icons/ci";
 import CustomSearchInput from "components/search/search";
 import DataNotFound from "components/notFoundData";
+import Delete from "../../lead/Delete";
 
 export default function CheckTable(props) {
   const { setMeeting, className, addMeeting, from, columnsData, dataColumn, tableData, fetchData, access, isLoding, allData, setSearchedData, setDisplaySearchData, displaySearchData, selectedColumns, setSelectedColumns, dynamicColumns, setDynamicColumns, setAction, action } = props;
@@ -188,6 +189,7 @@ export default function CheckTable(props) {
 
   const handleCheckboxChange = (event, value) => {
     if (event.target.checked) {
+      console.log(value,"valuevalue")
       setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
     } else {
       setSelectedValues((prevSelectedValues) =>
@@ -241,6 +243,8 @@ export default function CheckTable(props) {
     }
   };
 
+  console.log(selectedValues,"selectedValues")
+
   const convertJsonToCsvOrExcel = (jsonArray, csvColumns, fileName, extension) => {
     const csvHeader = csvColumns.map((col) => col.Header);
 
@@ -292,7 +296,7 @@ export default function CheckTable(props) {
               <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={dataColumn} onSearch={handleSearch} setGetTagValues={setGetTagValues} />
               <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} onClick={() => setAdvaceSearch(true)} mt={{ sm: "5px", md: "0" }} size="sm">Advance Search</Button>
               {displaySearchData === true ? <Button variant="outline" size="sm" colorScheme='red' ms={2} onClick={() => { handleClear(); setSearchbox(''); setGetTagValues([]) }}>Clear</Button> : ""}
-              {selectedValues.length > 0 && <DeleteIcon cursor={"pointer"} onClick={() => setDelete(true)} color={'red'} ms={2} />}
+              {(selectedValues.length > 0 && access?.delete) && <DeleteIcon cursor={"pointer"} onClick={() => setDelete(true)} color={'red'} ms={2} />}
             </Flex>
           </GridItem>
           <GridItem colSpan={{ base: 12, md: 4 }} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
@@ -626,6 +630,8 @@ export default function CheckTable(props) {
           </ModalFooter>
         </ModalContent>
       </Modal>
+       {/* Delete model */}
+       <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/meeting/deleteMany' data={selectedValues} method='many' setAction={setAction} />
     </>
   );
 }

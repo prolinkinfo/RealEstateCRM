@@ -98,6 +98,8 @@ import AddPhoneCall from "../phoneCall/components/AddPhoneCall";
 import { HasAccess } from "../../../redux/accessUtils";
 import CommonCheckTable from "../../../components/checkTable/checktable";
 import ImportModal from "./components/ImportModel";
+import CommonDeleteModel from 'components/commonDeleteModel';
+import { deleteManyApi } from 'services/api';
 
 const Index = () => {
 
@@ -182,6 +184,23 @@ const Index = () => {
         setIsLoding(false);
     };
 
+    const handleDeleteContact = async (ids) => {
+        try {
+            setIsLoding(true)
+            let response = await deleteManyApi('api/contact/deleteMany', ids)
+            if (response.status === 200) {
+                setSelectedValues([])
+                setDelete(false)
+                setAction((pre) => !pre)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        finally {
+            setIsLoding(false)
+        }
+    }
+
     useEffect(() => {
         fetchData();
         fetchCustomDataFields();
@@ -227,7 +246,7 @@ const Index = () => {
             </Grid>
             {isOpen && <Add isOpen={isOpen} size={size} contactData={contactData[0]} onClose={onClose} setAction={setAction} action={action} />}
             {edit && <Edit isOpen={edit} size={size} contactData={contactData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={contactData?.[0]?._id} />}
-            {deleteModel && <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/contact/deleteMany' data={selectedValues} method='many' setAction={setAction} />}
+            {deleteModel && <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Contacts' handleDeleteData={handleDeleteContact} ids={selectedValues} />}
             {addEmailHistory && <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={selectedId} contactEmail={emailRec} />}
             {addPhoneCall && <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} id={callSelectedId} />}
             {isImportContact && <ImportModal text='Contact file' isOpen={isImportContact} onClose={setIsImport} customFields={contactData?.[0]?.fields || []} />}
