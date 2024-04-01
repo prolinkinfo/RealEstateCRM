@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { Link, useParams } from "react-router-dom";
 import { getApi } from "services/api";
-import CheckTable from "../contact/components/CheckTable";
 import Add from "./Add";
 import Delete from "./Delete";
 import Edit from "./Edit";

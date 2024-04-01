@@ -2,19 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import Papa from 'papaparse';
 import {
-    Box,
     Flex,
-    Table,
-    Tbody,
-    Td,
-    Th,
-    Thead,
-    Tr,
     useColorModeValue,
     Select,
     Button,
     Text,
-    TableContainer,
     Grid,
     GridItem
 } from "@chakra-ui/react";
