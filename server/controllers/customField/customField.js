@@ -435,6 +435,9 @@ const createNewModule = async (req, res) => {
                 ],
             },
         ]
+        if (req.body.fields && req.body.fields.length > 0) {
+            fields.push(...req.body.fields);
+        }
 
         const newModule = new CustomField({ moduleName, icon: req?.file?.filename ? file : "", fields: fields, headings: req.body.headings || [], no: nextAutoIncrementValue, createdDate: new Date() });
 

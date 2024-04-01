@@ -75,23 +75,6 @@ const lineChart = async (req, res) => {
         path: 'roles'
     })
 
-    // const mergedRoles = userDetails?.roles?.reduce((acc, current) => {
-    //     current?.access?.forEach(permission => {
-    //         const existingPermission = acc.find(item => item.title === permission.title);
-    //         console.log("existingPermission ::--",existingPermission)
-    //         if (existingPermission) {
-    //             Object.keys(permission).forEach(key => {
-    //                 if (permission[key] === true) {
-    //                     existingPermission[key] = true;
-    //                 }
-    //             });
-    //         } else {
-    //             acc.push(permission);
-    //         }
-    //     });
-    //     return acc;
-    // }, []);
-    
     const mergedRoles = userDetails?.roles?.reduce((acc, current) => {
         current?.access?.forEach(permission => {
             const existingPermissionIndex = acc.findIndex(item => item.title === permission.title);
@@ -167,11 +150,11 @@ const lineChart = async (req, res) => {
 
                     result.push(newObj);
                 }
-            
+
             }
         }
     }
-   
+
     res.send(result)
 }
 

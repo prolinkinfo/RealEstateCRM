@@ -97,7 +97,6 @@ const AddPhoneCall = (props) => {
     }, [values.createBy, values.createByLead])
 
 
-    console.log(values.createByLead, values.recipient, "values")
     return (
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
             <ModalOverlay />

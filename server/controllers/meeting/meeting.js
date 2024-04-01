@@ -113,4 +113,22 @@ const view = async (req, res) => {
     }
 }
 
-module.exports = { add, index, view }
+const deleteData = async (req, res) => {
+    try {
+        const meeting = await MeetingHistory.findByIdAndUpdate(req.params.id, { deleted: true });
+        res.status(200).json({ message: "done", meeting: meeting })
+    } catch (err) {
+        res.status(404).json({ message: "error", err })
+    }
+}
+
+const deleteMany = async (req, res) => {
+    try {
+        const meeting = await MeetingHistory.updateMany({ _id: { $in: req.body } }, { $set: { deleted: true } });
+        res.status(200).json({ message: "done", meeting })
+    } catch (err) {
+        res.status(404).json({ message: "error", err })
+    }
+}
+
+module.exports = { add, index, view, deleteData, deleteMany }
