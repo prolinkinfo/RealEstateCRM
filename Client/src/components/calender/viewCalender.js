@@ -6,11 +6,11 @@ import { useEffect, useState } from 'react'
 import { BiLink } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 import { getApi } from 'services/api'
-import DeleteTask from './components/deleteTask'
-import EditTask from './components/editTask'
+// import DeleteTask from './components/deleteTask'
+// import EditTask from './components/editTask'
 import { useNavigate } from 'react-router-dom';
 
-const EventView = (props) => {
+const ViewCalender = (props) => {
     const { onClose, isOpen, info, fetchData, setAction, action, access, contactAccess, leadAccess } = props
     const [data, setData] = useState()
     const [edit, setEdit] = useState(false);
@@ -20,9 +20,26 @@ const EventView = (props) => {
     const navigate = useNavigate()
 
     const fetchViewData = async () => {
-        if (info) {
+        if (info?.event?.groupId === "task") {
             setIsLoding(true)
             let result = await getApi('api/task/view/', info?.event ? info?.event?.id : info);
+            setData(result?.data);
+            setIsLoding(false)
+        } else if (info?.event?.groupId === "call") {
+            setIsLoding(true)
+            let result = await getApi('api/call/view/', info?.event ? info?.event?.id : info);
+            setData(result?.data);
+            setIsLoding(false)
+
+        } else if (info?.event?.groupId === "meeting") {
+            setIsLoding(true)
+            let result = await getApi('api/meeting/view/', info?.event ? info?.event?.id : info);
+            setData(result?.data);
+            setIsLoding(false)
+
+        } else if (info?.event?.groupId === "email") {
+            setIsLoding(true)
+            let result = await getApi('api/email/view/', info?.event ? info?.event?.id : info);
             setData(result?.data);
             setIsLoding(false)
         }
@@ -41,11 +58,11 @@ const EventView = (props) => {
         }
     }
     return (
-        <Modal isOpen={isOpen} size={'md'} isCentered>
+        <div> <Modal isOpen={isOpen} size={'md'} isCentered>
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader justifyContent='space-between' display='flex' >
-                    Task
+                    <span style={{ textTransform: "capitalize" }}>{info?.event?.groupId}</span>
                     <IconButton onClick={() => onClose(false)} icon={<CloseIcon />} />
                 </ModalHeader>
                 {isLoding ?
@@ -55,7 +72,14 @@ const EventView = (props) => {
 
                         <ModalBody>
                             <Grid templateColumns="repeat(12, 1fr)" gap={3} >
-
+                                {data && Object.keys(data).length > 0 && Object.keys(data)?.map((item) =>
+                                    <GridItem colSpan={{ base: 12, md: 6 }} >
+                                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> {item}</Text>
+                                        <Text>{data[item] ? data[item] : ' - '}</Text>
+                                    </GridItem>
+                                )}
+                            </Grid>
+                            {/* <Grid templateColumns="repeat(12, 1fr)" gap={3} >
                                 <GridItem colSpan={{ base: 12, md: 6 }} >
                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Title </Text>
                                     <Text>{data?.title ? data?.title : ' - '}</Text>
@@ -106,7 +130,7 @@ const EventView = (props) => {
                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task notes </Text>
                                     <Text>{data?.notes ? data?.notes : ' - '}</Text>
                                 </GridItem>
-                            </Grid>
+                            </Grid> */}
 
                         </ModalBody>
                         <DrawerFooter>
@@ -114,13 +138,13 @@ const EventView = (props) => {
                             {access?.update || user?.role === "superAdmin" && <IconButton variant='outline' onClick={() => setEdit(true)} ml={3} borderRadius="10px" size="md" icon={<EditIcon />} />}
                             {access?.delete || user?.role === "superAdmin" && <IconButton colorScheme='red' onClick={() => setDelete(true)} ml={3} borderRadius="10px" size="md" icon={<DeleteIcon />} />}
 
-                            <EditTask setAction={setAction} isOpen={edit} onClose={setEdit} viewClose={onClose} id={info?.event ? info?.event?.id : info} from="view" />
-                            <DeleteTask fetchData={props.fetchData} isOpen={deleteModel} onClose={setDelete} viewClose={onClose} url='api/task/delete/' method='one' id={info?.event ? info?.event?.id : info} />
+                            {/* <EditTask setAction={setAction} isOpen={edit} onClose={setEdit} viewClose={onClose} id={info?.event ? info?.event?.id : info} from="view" /> */}
+                            {/* <DeleteTask fetchData={props.fetchData} isOpen={deleteModel} onClose={setDelete} viewClose={onClose} url='api/task/delete/' method='one' id={info?.event ? info?.event?.id : info} /> */}
                         </DrawerFooter>
                     </>}
             </ModalContent>
-        </Modal>
+        </Modal></div>
     )
 }
 
-export default EventView
+export default ViewCalender

@@ -6,13 +6,13 @@ import { useEffect, useState } from 'react'
 import { BiLink } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 import { getApi } from 'services/api'
-import DeleteTask from './components/deleteTask'
-import EditTask from './components/editTask'
+// import DeleteTask from './components/deleteTask'
+// import EditTask from './components/editTask'
 import { useNavigate } from 'react-router-dom';
 
-const EventView = (props) => {
+const CallView = (props) => {
     const { onClose, isOpen, info, fetchData, setAction, action, access, contactAccess, leadAccess } = props
-    const [data, setData] = useState()
+    const [data, setData] = useState();
     const [edit, setEdit] = useState(false);
     const [deleteModel, setDelete] = useState(false);
     const user = JSON.parse(localStorage.getItem("user"))
@@ -22,7 +22,7 @@ const EventView = (props) => {
     const fetchViewData = async () => {
         if (info) {
             setIsLoding(true)
-            let result = await getApi('api/task/view/', info?.event ? info?.event?.id : info);
+            let result = await getApi('api/phoneCall/view/', info?.event ? info?.event?.id : info);
             setData(result?.data);
             setIsLoding(false)
         }
@@ -40,12 +40,13 @@ const EventView = (props) => {
             navigate(`/view/${info}`)
         }
     }
+
     return (
         <Modal isOpen={isOpen} size={'md'} isCentered>
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader justifyContent='space-between' display='flex' >
-                    Task
+                    Call
                     <IconButton onClick={() => onClose(false)} icon={<CloseIcon />} />
                 </ModalHeader>
                 {isLoding ?
@@ -57,20 +58,40 @@ const EventView = (props) => {
                             <Grid templateColumns="repeat(12, 1fr)" gap={3} >
 
                                 <GridItem colSpan={{ base: 12, md: 6 }} >
-                                    <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Title </Text>
-                                    <Text>{data?.title ? data?.title : ' - '}</Text>
+                                    <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Recipient </Text>
+                                    <Text>{data?.recipient ? data?.recipient : ' - '}</Text>
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, md: 6 }} >
+                                    <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Sender Name  </Text>
+                                    <Text>{data?.senderName ? data?.senderName :'-'}</Text>
+                                </GridItem>
+                                <GridItem colSpan={{ base: 12, md: 6 }} >
+                                    <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Start Date </Text>
+                                    <Text>{data?.startDate ? moment(data?.startDate).format('lll ') : ' - '}</Text>
+                                </GridItem>
+                                <GridItem colSpan={{ base: 12, md: 6 }} >
+                                    <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> End Date </Text>
+                                    <Text>{data?.endDate ? moment(data?.endDate).format('lll ') : ' - '}</Text>
+                                </GridItem>
+                                <GridItem colSpan={{ base: 12, md: 6 }} >
+                                    <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Call Duration</Text>
+                                    <Text>{data?.callDuration ? data?.callDuration :'-'}</Text>
+                                </GridItem>
+                                <GridItem colSpan={{ base: 12, md: 6 }} >
+                                    <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Created By</Text>
+                                    <Text>{data?.createByName ? data?.createByName :'-'}</Text>
+                                </GridItem>
+                                <GridItem colSpan={{ base: 12, md: 6 }} >
+                                    <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Call Notes</Text>
+                                    <Text>{data?.callNotes ? data?.callNotes :'-'}</Text>
+                                </GridItem>
+                                {/* <GridItem colSpan={{ base: 12, md: 6 }} >
                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Related To </Text>
                                     <Text>{data?.category ? data?.category : ' - '}</Text>
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, md: 6 }} >
                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task start </Text>
                                     <Text>{data?.start ? moment(data?.start).format('L LT') : ' - '}</Text>
-                                </GridItem>
-                                <GridItem colSpan={{ base: 12, md: 6 }} >
-                                    <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task end  </Text>
-                                    <Text>{data?.end ? moment(data?.end).format('L LT') : moment(data?.start).format('L')}</Text>
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, md: 6 }} >
                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Link </Text>
@@ -105,17 +126,17 @@ const EventView = (props) => {
                                 <GridItem colSpan={{ base: 12 }} >
                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task notes </Text>
                                     <Text>{data?.notes ? data?.notes : ' - '}</Text>
-                                </GridItem>
+                                </GridItem> */}
                             </Grid>
 
                         </ModalBody>
                         <DrawerFooter>
-                            {access?.view || user?.role === "superAdmin" && <IconButton variant='outline' colorScheme={'green'} onClick={() => handleViewOpen()} borderRadius="10px" size="md" icon={<ViewIcon />} />}
-                            {access?.update || user?.role === "superAdmin" && <IconButton variant='outline' onClick={() => setEdit(true)} ml={3} borderRadius="10px" size="md" icon={<EditIcon />} />}
-                            {access?.delete || user?.role === "superAdmin" && <IconButton colorScheme='red' onClick={() => setDelete(true)} ml={3} borderRadius="10px" size="md" icon={<DeleteIcon />} />}
+                            {access?.view && <IconButton variant='outline' colorScheme={'green'} onClick={() => handleViewOpen()} borderRadius="10px" size="md" icon={<ViewIcon />} />}
+                            {access?.update && <IconButton variant='outline' onClick={() => setEdit(true)} ml={3} borderRadius="10px" size="md" icon={<EditIcon />} />}
+                            {access?.delete && <IconButton colorScheme='red' onClick={() => setDelete(true)} ml={3} borderRadius="10px" size="md" icon={<DeleteIcon />} />}
 
-                            <EditTask setAction={setAction} isOpen={edit} onClose={setEdit} viewClose={onClose} id={info?.event ? info?.event?.id : info} from="view" />
-                            <DeleteTask fetchData={props.fetchData} isOpen={deleteModel} onClose={setDelete} viewClose={onClose} url='api/task/delete/' method='one' id={info?.event ? info?.event?.id : info} />
+                            {/* <EditTask setAction={setAction} isOpen={edit} onClose={setEdit} viewClose={onClose} id={info?.event ? info?.event?.id : info} from="view" />
+                            <DeleteTask fetchData={props.fetchData} isOpen={deleteModel} onClose={setDelete} viewClose={onClose} url='api/task/delete/' method='one' id={info?.event ? info?.event?.id : info} /> */}
                         </DrawerFooter>
                     </>}
             </ModalContent>
@@ -123,4 +144,4 @@ const EventView = (props) => {
     )
 }
 
-export default EventView
+export default CallView
