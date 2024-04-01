@@ -95,6 +95,8 @@ import AddEmailHistory from "views/admin/emailHistory/components/AddEmail";
 import AddPhoneCall from "views/admin/phoneCall/components/AddPhoneCall";
 import ImportModal from './components/ImportModal';
 import { putApi } from 'services/api';
+import CommonDeleteModel from 'components/commonDeleteModel';
+import { deleteManyApi } from 'services/api';
 
 const Index = () => {
     const title = "Leads";
@@ -218,6 +220,23 @@ const Index = () => {
         setIsLoding(false);
     }
 
+    const handleDeleteLead=async(ids)=>{
+        try {
+            setIsLoding(true)
+            let response = await deleteManyApi('api/lead/deleteMany', ids)
+            if (response.status === 200) {
+                setSelectedValues([])
+                setDelete(false)
+                setAction((pre) => !pre)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        finally {
+            setIsLoding(false)
+        }
+    }
+
     useEffect(() => {
         fetchData();
         fetchCustomDataFields();
@@ -264,7 +283,7 @@ const Index = () => {
 
             {isOpen && <Add isOpen={isOpen} size={size} leadData={leadData[0]} onClose={onClose} setAction={setAction} action={action} />}
             {edit && <Edit isOpen={edit} size={size} leadData={leadData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={leadData?.[0]?._id} />}
-            {deleteModel && <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/lead/deleteMany' data={selectedValues} method='many' setAction={setAction} />}
+            {deleteModel && <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Leads' handleDeleteData={handleDeleteLead} ids={selectedValues} />}
             {addEmailHistory && <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} lead='true' id={selectedId} leadEmail={emailRec} />}
             {addPhoneCall && <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} lead='true' id={callSelectedId} />}
             {isImport && <ImportModal text='Lead file' isOpen={isImport} onClose={setIsImport} customFields={leadData?.[0]?.fields || []} />}

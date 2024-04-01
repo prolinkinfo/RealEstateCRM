@@ -101,6 +101,8 @@ import ImportModal from '../lead/components/ImportModal';
 import { useNavigate } from 'react-router-dom';
 import MeetingAdvanceSearch from './components/MeetingAdvanceSearch';
 import AddMeeting from './components/Addmeeting';
+import CommonDeleteModel from 'components/commonDeleteModel';
+import { deleteManyApi } from 'services/api';
 
 const Index = () => {
     const title = "Meeting";
@@ -159,6 +161,23 @@ const Index = () => {
         setIsLoding(false)
     }
 
+    const handleDeleteMeeting=async(ids)=>{
+        try {
+            setIsLoding(true)
+            let response = await deleteManyApi('api/meeting/deleteMany', ids)
+            if (response.status === 200) {
+                setSelectedValues([])
+                setDeleteMany(false)
+                setAction((pre) => !pre)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        finally {
+            setIsLoding(false)
+        }
+    }
+
     const [columns, setColumns] = useState([...tableColumns]);
     const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
     const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
@@ -196,7 +215,6 @@ const Index = () => {
                 AdvanceSearch={
                     <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} mt={{ sm: "5px", md: "0" }} size="sm" onClick={() => setAdvanceSearch(true)}>Advance Search</Button>
                 }
-                deleteMany={'true'}
                 getTagValuesOutSide={getTagValuesOutSide}
                 searchboxOutside={searchboxOutside}
                 setGetTagValuesOutside={setGetTagValuesOutside}
@@ -214,6 +232,10 @@ const Index = () => {
                 setSearchbox={setSearchboxOutside}
             />
             <AddMeeting setAction={setAction} isOpen={isOpen} onClose={onClose} />
+
+            {/* Delete model */}
+            {/* <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/meeting/deleteMany' data={selectedValues} method='many' setAction={setAction} /> */}
+            <CommonDeleteModel isOpen={deleteMany} onClose={()=>setDeleteMany(false)} type='Meetings' handleDeleteData={handleDeleteMeeting} ids={selectedValues}/>
         </div>
     )
 }

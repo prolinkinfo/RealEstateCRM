@@ -96,6 +96,8 @@ import Delete from './Delete';
 import AddEmailHistory from "views/admin/emailHistory/components/AddEmail";
 import AddPhoneCall from "views/admin/phoneCall/components/AddPhoneCall";
 import ImportModal from './components/ImportModal';
+import CommonDeleteModel from 'components/commonDeleteModel';
+import { deleteManyApi } from 'services/api';
 
 const Index = () => {
     const title = "Properties";
@@ -164,6 +166,23 @@ const Index = () => {
         setIsLoding(false);
     }
 
+    const handleDeleteProperties = async (ids) => {
+        try {
+            setIsLoding(true)
+            let response = await deleteManyApi('api/property/deleteMany', ids)
+            if (response.status === 200) {
+                setSelectedValues([])
+                setDelete(false)
+                setAction((pre) => !pre)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        finally {
+            setIsLoding(false)
+        }
+    }
+
     useEffect(() => {
         fetchData();
         fetchCustomDataFields();
@@ -209,7 +228,7 @@ const Index = () => {
             </Grid>
             {isOpen && <Add propertyData={propertyData[0]} isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} />}
             {edit && <Edit isOpen={edit} size={size} propertyData={propertyData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} />}
-            {deleteModel && <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/property/deleteMany' data={selectedValues} method='many' setAction={setAction} />}
+            {deleteModel && <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Properties' handleDeleteData={handleDeleteProperties} ids={selectedValues} />}
             {isImportProperty && <ImportModal text='Property file' isOpen={isImportProperty} onClose={setIsImportProperty} customFields={propertyData?.[0]?.fields || []} />}
 
         </div>
