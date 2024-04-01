@@ -31,7 +31,7 @@ const rolesSlice = createSlice({
             })
             .addCase(fetchRoles.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.roles = action.payload.roles; // Set roles in the state
+                state.roles = action?.payload?.roles || []; // Set roles in the state
                 state.user = action.payload; // Set roles in the state
             })
             .addCase(fetchRoles.rejected, (state, action) => {
