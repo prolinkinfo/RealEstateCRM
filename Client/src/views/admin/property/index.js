@@ -184,8 +184,8 @@ const Index = () => {
                             columnData={columns}
                             dataColumn={dataColumn}
                             allData={data}
-                            // tableData={displaySearchData ? searchedData : data}
                             tableData={data}
+                            // tableData={displaySearchData ? searchedData : data}
                             // displaySearchData={displaySearchData}
                             // setDisplaySearchData={setDisplaySearchData}
                             // searchedData={searchedData}
