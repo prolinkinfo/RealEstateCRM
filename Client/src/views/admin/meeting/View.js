@@ -8,6 +8,9 @@ import { IoIosArrowBack } from "react-icons/io";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { HasAccess } from "../../../redux/accessUtils";
 import { getApi } from "services/api";
+import { DeleteIcon } from "@chakra-ui/icons";
+import { deleteApi } from "services/api";
+import CommonDeleteModel from "components/commonDeleteModel";
 
 const View = () => {
 
@@ -16,11 +19,13 @@ const View = () => {
     const [data, setData] = useState()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [edit, setEdit] = useState(false);
-    const [deleteModel, setDelete] = useState(false);
+    const [deleteMany, setDeleteMany] = useState(false);
     const user = JSON.parse(localStorage.getItem("user"))
     const size = "lg";
     const [isLoding, setIsLoding] = useState(false)
     const navigate = useNavigate()
+    const params = useParams();
+
 
     const fetchData = async () => {
         setIsLoding(true)
@@ -32,11 +37,26 @@ const View = () => {
         fetchData()
     }, [])
 
-    const [contactAccess, leadAccess] = HasAccess(['Contacts','Leads'])
+    const handleDeleteMeeting = async (ids) => {
+        try {
+            setIsLoding(true)
+            let response = await deleteApi('api/meeting/delete/', params.id)
+            if (response.status === 200) {
+                setDeleteMany(false)
+                navigate(-1)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        finally {
+            setIsLoding(false)
+        }
+    }
+
+    const [permission, contactAccess, leadAccess] = HasAccess(['Meetings', 'Contacts', 'Leads'])
 
     return (
         <>
-
             {isLoding ?
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                     <Spinner />
@@ -117,10 +137,20 @@ const View = () => {
                         </GridItem>
 
                     </Grid>
-
+                    {(user.role === 'superAdmin' || (permission?.update || permission?.delete)) && <Card mt={3}>
+                        <Grid templateColumns="repeat(6, 1fr)" gap={1}>
+                            <GridItem colStart={6} >
+                                <Flex justifyContent={"right"}>
+                                    {(user.role === 'superAdmin' || permission?.delete) ? <Button size='sm' style={{ background: 'red.800' }} onClick={() => setDeleteMany(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button> : ''}
+                                </Flex>
+                            </GridItem>
+                        </Grid>
+                    </Card>
+                    }
 
                 </>}
-
+            {/* Delete model */}
+            <CommonDeleteModel isOpen={deleteMany} onClose={() => setDeleteMany(false)} type='Meetings' handleDeleteData={handleDeleteMeeting} ids={params.id} />
         </>
     );
 };
