@@ -63,14 +63,13 @@ const index = async (req, res) => {
 const view = async (req, res) => {
     try {
         let result = await MeetingHistory.findOne({ _id: req.params.id })
-
         if (!result) return res.status(404).json({ message: "no Data Found." })
 
         let response = await MeetingHistory.aggregate([
             { $match: { _id: result._id } },
             {
                 $lookup: {
-                    from: 'Contact',
+                    from: 'Contacts',
                     localField: 'attendes',
                     foreignField: '_id',
                     as: 'attendes'
@@ -78,7 +77,7 @@ const view = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'Lead',
+                    from: 'Leads',
                     localField: 'attendesLead',
                     foreignField: '_id',
                     as: 'attendesLead'
@@ -106,6 +105,7 @@ const view = async (req, res) => {
                 }
             },
         ])
+    
         res.status(200).json(response[0])
     } catch (err) {
         console.error('Failed :', err);

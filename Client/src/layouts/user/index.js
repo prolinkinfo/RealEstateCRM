@@ -16,9 +16,11 @@ import { fetchImage } from '../../redux/imageSlice';
 import { getApi } from 'services/api';
 import DynamicPage from 'views/admin/dynamicPage';
 import { LuChevronRightCircle } from 'react-icons/lu';
+import { FaCalendarAlt } from 'react-icons/fa';
 
 const MainDashboard = React.lazy(() => import("views/admin/default"));
 const SignInCentered = React.lazy(() => import("views/auth/signIn"));
+const Calender = React.lazy(() => import("views/admin/calender"));
 
 // Custom Chakra theme
 export default function User(props) {
@@ -96,7 +98,14 @@ export default function User(props) {
                 path: "/sign-in",
                 icon: <Icon as={MdLock} width='20px' height='20px' color='inherit' />,
                 component: SignInCentered,
-            }
+            },
+            {
+                name: "Calender",
+                layout: [ROLE_PATH.user],
+                path: "/calender",
+                icon: <Icon as={FaCalendarAlt} width='20px' height='20px' color='inherit' />,
+                component: Calender,
+            },
         ]
 
     route?.map((item, i) => {
