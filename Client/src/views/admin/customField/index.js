@@ -6,14 +6,15 @@ import Card from 'components/card/Card'
 import Addfield from './addfield'
 import { getApi, putApi } from 'services/api';
 import EditField from './editfield';
-import DeleteFiled from './deletefield';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { BiGridVertical } from "react-icons/bi";
 import AddEditHeading from "./addEditHeading";
-import DeleteHeading from './deleteHeading';
 import { useNavigate } from 'react-router-dom';
 import { IoIosArrowBack } from 'react-icons/io';
 import Spinner from "components/spinner/Spinner";
+import CommonDeleteModel from 'components/commonDeleteModel';
+import { deleteApi } from 'services/api';
+import { deleteManyApi } from 'services/api';
 
 const CustomField = () => {
     const [addFieldModel, setAddFieldModel] = useState(false);
@@ -24,20 +25,18 @@ const CustomField = () => {
     const [fields, setFields] = useState([])
     const [editModal, setEditModal] = useState(false)
     const [updateField, setUpdateField] = useState({})
-    const [deleteModal, setDeleteModal] = useState(false)
     const [deleteMany, setDeleteMany] = useState(false)
     const [selectedValues, setSelectedValues] = useState([]);
 
     const [addHeadingModel, setAddHeadingModel] = useState(false);
     const [deleteManyHeadings, setDeleteManyHeadings] = useState(false);
-    const [deleteHeadingModal, setDeleteHeadingModal] = useState(false);
     const [editHeadingModal, setEditHeadingModal] = useState(false);
     const [updateHeading, setUpdateHeading] = useState({});
     const [selectedHeadings, setSelectedHeadings] = useState([]);
-    const [selectedHeadingId, setSelectedHeadingId] = useState('');
     const [headingId, setHeadingId] = useState('');
     const [heading, setHeading] = useState('');
-
+    const [isLoding, setIsLoding] = useState(false)
+    const [method, setMethod] = useState('')
     const [selectedId, setSelectedId] = useState('')
     const [validations, setValidations] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -128,6 +127,92 @@ const CustomField = () => {
         setIsLoading(false)
     }
 
+    const handleDeleteFiled = async (id, fieldsIds) => {
+        if (method === 'one') {
+            try {
+                setIsLoding(true)
+                const response = await deleteApi(`api/custom-field/delete/${id}?moduleId=`, moduleId)
+                if (response.status === 200) {
+                    setDeleteMany(false)
+                    fetchData()
+                }
+            } catch (error) {
+                console.log(error)
+            }
+            finally {
+                setIsLoding(false)
+            }
+        } else if (method === 'many') {
+            try {
+                setIsLoding(true)
+                const payload = {
+                    moduleId: data[0]?._id,
+                    fieldsIds: fieldsIds
+                }
+                let response = await deleteManyApi('api/custom-field/deleteMany', payload)
+                if (response.status === 200) {
+                    setSelectedValues([])
+                    setDeleteMany(false)
+                    fetchData()
+                }
+            } catch (error) {
+                console.log(error)
+            }
+            finally {
+                setIsLoding(false)
+            }
+        }
+    };
+
+    const handleDeleteHeading = async (id, headingsIds) => {
+        if (method === 'one') {
+            try {
+                setIsLoding(true)
+                const response = await deleteApi(`api/custom-field/delete-heading/${id}?moduleId=`, moduleId)
+                if (response.status === 200) {
+                    setDeleteManyHeadings(false)
+                    fetchData()
+                }
+            } catch (error) {
+                console.log(error)
+            }
+            finally {
+                setIsLoding(false)
+            }
+        } else if (method === 'many') {
+            try {
+                setIsLoding(true)
+                const payload = {
+                    moduleId: data[0]?._id,
+                    headingsIds: headingsIds
+                }
+                let response = await deleteManyApi('api/custom-field/deleteMany-headings', payload)
+                if (response.status === 200) {
+                    setSelectedHeadings([])
+                    setDeleteManyHeadings(false)
+                    fetchData()
+                }
+            } catch (error) {
+                console.log(error)
+            }
+            finally {
+                setIsLoding(false)
+            }
+        }
+    };
+
+    const handleOpenDeleteMany = (id, type) => {
+        setMethod(type)
+        setSelectedId(id);
+        setDeleteMany(true);
+    }
+
+    const handleOpenDeleteModel = (id, type) => {
+        setMethod(type)
+        setSelectedId(id);
+        setDeleteManyHeadings(true);
+    }
+
     useEffect(() => {
         if (fetchData) fetchData()
     }, [moduleName, headingId])
@@ -141,7 +226,7 @@ const CustomField = () => {
                             fontSize="22px"
                             fontWeight="700"
                         >{moduleName ? 'Custom Heading' : 'Select Module'}</Text>
-                        {selectedHeadings.length > 0 && <Button color="red" ml='2' onClick={() => setDeleteManyHeadings(true)} size='sm' ><DeleteIcon /></Button>}
+                        {selectedHeadings.length > 0 && <Button color="red" ml='2' onClick={() => handleOpenDeleteModel('', 'many')} size='sm' ><DeleteIcon /></Button>}
                     </Flex>
                     <Box>
                         <Flex>
@@ -211,7 +296,7 @@ const CustomField = () => {
                                                                 </Text>
                                                                 <span className="EditDelete">
                                                                     <Button size='sm' variant='outline' me={2} color={'green'} onClick={() => { setEditHeadingModal(true); setUpdateHeading(item) }}><EditIcon /></Button>
-                                                                    {item.fixed ? <Button size='sm' variant='outline' me={2} color={'gray'}><DeleteIcon /></Button> : <Button size='sm' variant='outline' me={2} color={'red'} onClick={() => { setDeleteHeadingModal(true); setSelectedHeadingId(item?._id) }}><DeleteIcon /></Button>}
+                                                                    {item.fixed ? <Button size='sm' variant='outline' me={2} color={'gray'}><DeleteIcon /></Button> : <Button size='sm' variant='outline' me={2} color={'red'} onClick={() => {handleOpenDeleteModel(item?._id,'one')}}><DeleteIcon /></Button>}
                                                                 </span>
                                                             </Flex>
                                                         </div>
@@ -235,7 +320,7 @@ const CustomField = () => {
                             fontSize="22px"
                             fontWeight="700"
                         >{moduleName && 'Custom Field'}</Text>
-                        {selectedValues.length > 0 && <Button color="red" ml='2' onClick={() => setDeleteMany(true)} size='sm' ><DeleteIcon /></Button>}
+                        {selectedValues.length > 0 && <Button color="red" ml='2' onClick={() => handleOpenDeleteMany('', 'many')} size='sm' ><DeleteIcon /></Button>}
                     </Flex>
 
                     <Box>
@@ -297,7 +382,7 @@ const CustomField = () => {
                                                                             </Text>
                                                                             <span className="EditDelete">
                                                                                 <Button size='sm' variant='outline' me={2} color={'green'} onClick={() => { setEditModal(true); setUpdateField(item) }}><EditIcon /></Button>
-                                                                                {item.fixed ? <Button size='sm' variant='outline' me={2} color={'gray'}><DeleteIcon /></Button> : <Button size='sm' variant='outline' me={2} color={'red'} onClick={() => { setDeleteModal(true); setSelectedId(item?._id) }}><DeleteIcon /></Button>}
+                                                                                {item.fixed ? <Button size='sm' variant='outline' me={2} color={'gray'}><DeleteIcon /></Button> : <Button size='sm' variant='outline' me={2} color={'red'} onClick={() => { handleOpenDeleteMany(item?._id, "one"); }}><DeleteIcon /></Button>}
                                                                             </span>
                                                                         </Flex>
                                                                     </div>
@@ -318,12 +403,11 @@ const CustomField = () => {
             </Card>}
             <Addfield isOpen={addFieldModel} onClose={setAddFieldModel} moduleName={moduleName} field={data[0]?.fields} validations={validations} moduleId={data[0]?._id} fetchData={fetchData} headingsData={data?.[0]?.headings} />
             <EditField isOpen={editModal} onClose={setEditModal} field={data[0]?.fields} moduleId={data[0]?._id} validations={validations} fetchData={fetchData} updateFiled={updateField} headingsData={data?.[0]?.headings} />
-            <DeleteFiled method='one' isOpen={deleteModal} onClose={setDeleteModal} moduleName={moduleName} moduleId={data[0]?._id} selectedId={selectedId} fetchData={fetchData} updateFiled={updateField} />
-            <DeleteFiled method='many' isOpen={deleteMany} onClose={setDeleteMany} url={'api/custom-field/deleteMany'} moduleName={moduleName} moduleId={data[0]?._id} selectedId={selectedId} fetchData={fetchData} updateFiled={updateField} setSelectedValues={setSelectedValues} data={selectedValues} />
 
             <AddEditHeading isOpen={addHeadingModel || editHeadingModal} onClose={editHeadingModal ? setEditHeadingModal : setAddHeadingModel} moduleName={moduleName} moduleId={data[0]?._id} fetchData={fetchData} updateData={updateHeading} setUpdateData={setUpdateHeading} />
-            <DeleteHeading method='one' isOpen={deleteHeadingModal} onClose={setDeleteHeadingModal} moduleName={moduleName} moduleId={data[0]?._id} selectedId={selectedHeadingId} fetchData={fetchData} updateFiled={updateHeading} />
-            <DeleteHeading method='many' isOpen={deleteManyHeadings} onClose={setDeleteManyHeadings} url={'api/custom-field/deleteMany-headings'} moduleName={moduleName} moduleId={data[0]?._id} selectedId={selectedHeadingId} fetchData={fetchData} updateFiled={updateHeading} setSelectedValues={setSelectedHeadings} data={selectedHeadings} />
+
+            <CommonDeleteModel isOpen={deleteMany} onClose={() => setDeleteMany(false)} type={method === "one" ? 'Leads Filed' : 'Leads Fileds'} handleDeleteData={handleDeleteFiled} ids={selectedId} selectedValues={selectedValues} />
+            <CommonDeleteModel isOpen={deleteManyHeadings} onClose={() => setDeleteManyHeadings(false)} type={method === "one" ? 'Leads Heading' : 'Leads Headings'} handleDeleteData={handleDeleteHeading} ids={selectedId} selectedValues={selectedHeadings} />
 
         </>
     )

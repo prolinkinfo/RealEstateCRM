@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { deleteApi, deleteManyApi } from 'services/api';
 
 const CommonDeleteModel = (props) => {
-    const { isOpen, onClose, type,handleDeleteData,ids } = props
+    const { isOpen, onClose, type,handleDeleteData,ids,selectedValues } = props
     const [isLoding, setIsLoding] = useState(false)
     const navigate = useNavigate()
     const param = useParams()
@@ -43,7 +43,7 @@ const CommonDeleteModel = (props) => {
     // };
 
     const handleDelete = () => {
-        handleDeleteData(ids)
+        handleDeleteData(ids,selectedValues)
     }
 
     const handleClose = () => {
