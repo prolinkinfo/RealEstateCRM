@@ -187,15 +187,12 @@ import AdvanceSearchUsingCustomFields from "../search/advanceSearch";
 import DataNotFound from "../notFoundData";
 
 const CommonCheckTable = (props) => {
-    // const { isLoding, title, columnData, dataColumn, tableData, allData, ManageGrid, setSearchedData, deleteMany, setDisplaySearchData, displaySearchData, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, AdvanceSearch, BackButton, getTagValuesOutside, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
     const { isLoding, title, columnData, size, dataColumn, searchedDataOut, setSearchedDataOut, tableData, state, allData, ManageGrid, deleteMany, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, checkBox, AdvanceSearch, searchDisplay, setSearchDisplay, BackButton, getTagValuesOutside, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
 
 
-    console.log(size)
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
 
-    // const columns = useMemo(() => columnData, [columnData]);
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
     const columns = useMemo(() => dataColumn, [dataColumn]);
@@ -204,7 +201,6 @@ const CommonCheckTable = (props) => {
     const data = useMemo(() => (AdvanceSearch ? searchDisplay : displaySearchData) ? (AdvanceSearch ? searchedDataOut : searchedData) : tableData, [(AdvanceSearch ? searchDisplay : displaySearchData) ? (AdvanceSearch ? searchedDataOut : searchedData) : tableData]);
     const [manageColumns, setManageColumns] = useState(false);
     const [csvColumns, setCsvColumns] = useState([]);
-    // const [searchbox, setSearchbox] = useState(searchboxOutside ? searchboxOutside : '');
     const [searchbox, setSearchbox] = useState('');
     const [getTagValues, setGetTagValues] = useState(props.getTagValuesOutSide ? props.getTagValuesOutSide : []);
     const [advaceSearch, setAdvaceSearch] = useState(false);
@@ -275,7 +271,6 @@ const CommonCheckTable = (props) => {
         setGetTagValues(getValue)
         AdvanceSearch ? setSearchedDataOut && setSearchedDataOut(searchResult) : setSearchedData && setSearchedData(searchResult);
         AdvanceSearch ? setSearchDisplay && setSearchDisplay(true) : setDisplaySearchData && setDisplaySearchData(searchResult);
-        // setSearchedData(searchResult);
         setDisplaySearchData(true)
         setAdvaceSearch(false)
     }
@@ -395,7 +390,6 @@ const CommonCheckTable = (props) => {
                             >
                                 {title} (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
                             </Text>
-                            {/* <CustomSearchInput setSearchbox={setSearchbox} setDisplaySearchData={setDisplaySearchData} searchbox={searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={setGetTagValues} setGopageValue={setGopageValue} /> */}
                             <CustomSearchInput setSearchbox={setSearchboxOutside ? setSearchboxOutside : setSearchbox} setDisplaySearchData={setSearchboxOutside ? props.setSearchDisplay : setDisplaySearchData} searchbox={searchboxOutside ? searchboxOutside : searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={props.setGetTagValuesOutside ? props.setGetTagValuesOutside : setGetTagValues} setGopageValue={setGopageValue} />
                             {
                                 AdvanceSearch ? AdvanceSearch : AdvanceSearch !== false &&
