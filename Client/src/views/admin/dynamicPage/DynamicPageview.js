@@ -37,14 +37,12 @@ const View = () => {
     const navigate = useNavigate()
     const module = location.state.module;
     const size = "lg";
-    console.log(location)
 
     const pathName = (name) => {
         return `/${name.toLowerCase().replace(/ /g, '-')}`;
     }
 
     const [permission, taskPermission, meetingPermission, callAccess, emailAccess, taskAccess, meetingAccess] = HasAccess(['Leads', 'Tasks', 'Meetings', 'Calls', 'Emails', 'Tasks', 'Meetings']);
-
 
     const download = async (data) => {
         if (data) {
@@ -57,6 +55,7 @@ const View = () => {
             }
         }
     }
+    
     const fetchData = async () => {
         if (param.id) {
             try {
@@ -90,8 +89,6 @@ const View = () => {
 
     return (
         <>
-            
-
             {isLoding ?
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                     <Spinner />
