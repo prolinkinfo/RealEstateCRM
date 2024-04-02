@@ -8,7 +8,6 @@ import { getApi } from "services/api";
 import CommonCheckTable from '../../../components/checkTable/checktable';
 import Add from './add';
 import Edit from './Edit';
-import Delete from './Delete';
 import Spinner from 'components/spinner/Spinner';
 import CommonDeleteModel from 'components/commonDeleteModel';
 import { deleteManyApi } from 'services/api';
