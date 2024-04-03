@@ -190,8 +190,6 @@ const CommonCheckTable = (props) => {
     // const { isLoding, title, columnData, dataColumn, tableData, allData, ManageGrid, setSearchedData, deleteMany, setDisplaySearchData, displaySearchData, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, AdvanceSearch, BackButton, getTagValuesOutside, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
     const { isLoding, title, columnData, size, dataColumn, searchedDataOut, setSearchedDataOut, tableData, state, allData, ManageGrid, deleteMany, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, checkBox, AdvanceSearch, searchDisplay, setSearchDisplay, BackButton, getTagValuesOutside, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
 
-
-    console.log(size)
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
 
@@ -283,12 +281,11 @@ const CommonCheckTable = (props) => {
         state && findStatus()
     }, [state, allData]);
 
+
     let isColumnSelected;
     const toggleColumnVisibility = (columnKey) => {
         setColumn(columnKey);
-
         isColumnSelected = tempSelectedColumns?.some((column) => column?.accessor === columnKey);
-
         if (isColumnSelected) {
             const updatedColumns = tempSelectedColumns?.filter((column) => column?.accessor !== columnKey);
             setTempSelectedColumns(updatedColumns);

@@ -40,8 +40,6 @@ const Index = () => {
     const [isImport, setIsImport] = useState(false);
     const [emailRec, setEmailRec] = useState('');
 
-
-
     const fetchData = async () => {
         setIsLoding(true);
         let result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
@@ -70,6 +68,7 @@ const Index = () => {
             setIsLoding(false)
         }
     }
+
     const changeStatus = (cell) => {
         switch (cell.original.leadStatus) {
             case 'pending':
@@ -82,12 +81,16 @@ const Index = () => {
                 return 'completed';
         }
     }
+
+
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
+       
         const result = await getApi(`api/custom-field/?moduleName=Leads`);
         setLeadData(result?.data);
+
         const actionHeader = {
-            Header: "Action", isSortable: false, center: true,
+            Header: "Action", accessor:"action",isSortable: false, center: true,
             cell: ({ row, i }) => (
                 <Text fontSize="md" fontWeight="900" textAlign={"center"} >
                     <Menu isLazy  >
@@ -100,7 +103,7 @@ const Index = () => {
                             {emailAccess?.create &&
                                 <MenuItem py={2.5} width={"165px"} onClick={() => {
                                     handleOpenEmail(row?.values?._id, row?.original); setSelectedId(row?.values?._id)
-                                }} icon={<EmailIcon fontSize={15} mb={1} />}>Send Email</MenuItem>}
+                                }} icon={<EmailIcon fontSize={15} mb={1} />}>EmailSend </MenuItem>}
                             {permission?.view &&
                                 <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { navigate(`/leadView/${row?.values?._id}`) }}>View</MenuItem>}
                             {permission?.delete &&
@@ -113,7 +116,7 @@ const Index = () => {
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
             {
-                Header: "Status", isSortable: false, center: true,
+                Header: "Status", accessor:"leadStatus",isSortable: true, center: true,
                 cell: ({ row }) => (
                     <div className="selectOpt" >
                         <Select defaultValue={'active'} className={changeStatus(row)} onChange={(e) => setStatusData(row, e)} height={7} width={130} value={row.original.leadStatus} style={{ fontSize: "14px" }}>
@@ -151,6 +154,7 @@ const Index = () => {
             setIsLoding(false)
         }
     }
+
 
     useEffect(() => {
         fetchData();

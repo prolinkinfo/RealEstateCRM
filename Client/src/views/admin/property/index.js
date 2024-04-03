@@ -49,6 +49,7 @@ const Index = () => {
         setPropertyData(result?.data);
         const actionHeader = {
             Header: "Action",
+            accessor:"action",
             isSortable: false,
             center: true,
             cell: ({ row }) => (

@@ -59,10 +59,10 @@ const Index = () => {
             isSortable: false,
             width: 10
         },
-        { Header: 'agenda', accessor: 'agenda' },
-        { Header: "date & Time", accessor: "dateTime", },
-        { Header: "time stamp", accessor: "timestamp", },
-        { Header: "create By", accessor: "createdByName", },
+        { Header: 'Agenda', accessor: 'agenda' },
+        { Header: "Date & Time", accessor: "dateTime", },
+        { Header: "Time Stamp", accessor: "timestamp", },
+        { Header: "Create By", accessor: "createdByName", },
         ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : [])
 
     ];
