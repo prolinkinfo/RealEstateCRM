@@ -1,177 +1,5 @@
-// import { Box, Flex, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
-// import { useColorModeValue } from '@chakra-ui/system';
-// import Card from 'components/card/Card';
-// import CountUpComponent from 'components/countUpComponent/countUpComponent';
-// import Pagination from 'components/pagination/Pagination';
-// import Spinner from 'components/spinner/Spinner';
-// import { useMemo, useState } from 'react';
-// import { FaSort, FaSortDown, FaSortUp } from 'react-icons/fa';
-// import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table';
-
-// const CommonCheckTable = (props) => {
-//     const { columnData, data, isLoding, title } = props;
-
-//     const textColor = useColorModeValue("secondaryGray.900", "white");
-//     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
-//     const columns = useMemo(() => columnData, [columnData]);
-//     // const [selectedValues, setSelectedValues] = useState([]);
-//     const [eventView, setEventView] = useState(false)
-//     const [id, setId] = useState()
-//     const [gopageValue, setGopageValue] = useState()
-
-//     // const data = useMemo(() => tableData, [tableData]);
-
-//     const tableInstance = useTable(
-//         {
-//             columns, data,
-//             initialState: { pageIndex: 0 }
-//         },
-//         useGlobalFilter,
-//         useSortBy,
-//         usePagination
-//     );
-
-//     const {
-//         getTableProps,
-//         getTableBodyProps,
-//         headerGroups,
-//         prepareRow,
-//         page,
-//         canPreviousPage,
-//         canNextPage,
-//         pageOptions,
-//         pageCount,
-//         gotoPage,
-//         nextPage,
-//         previousPage,
-//         setPageSize,
-//         state: { pageIndex, pageSize }
-//     } = tableInstance;
-
-//     if (pageOptions.length < gopageValue) {
-//         setGopageValue(pageOptions.length)
-//     }
-
-//     return (
-//         <Card
-//             direction="column"
-//             w="100%"
-//             px="0px"
-//             overflowX={{ sm: "scroll", lg: "hidden" }}
-//         >
-//             <Flex px="25px" justify="space-between" mb="20px" align="center">
-//                 <Text
-//                     color={'secondaryGray.900'}
-//                     fontSize="22px"
-//                     fontWeight="700"
-//                     lineHeight="100%"
-//                 >
-//                     {title} (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
-//                 </Text>
-//             </Flex>
-
-//             <Box overflowY={"auto"} className={'table-fix-container'}>
-//                 <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
-//                     <Thead>
-//                         {headerGroups?.map((headerGroup, index) => (
-//                             <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
-//                                 {headerGroup.headers?.map((column, index) => (
-//                                     <Th
-//                                         {...column.getHeaderProps(column.isSortable !== false && column.getSortByToggleProps())}
-//                                         pe="10px"
-//                                         key={index}
-//                                         borderColor={borderColor}
-//                                     >
-//                                         <Flex
-//                                             justify="space-between"
-//                                             align="center"
-//                                             fontSize={{ sm: "10px", lg: "12px" }}
-//                                             color="gray.400"
-//                                         >
-//                                             {column.render("Header")}
-//                                             {column.isSortable !== false && (
-//                                                 <span>
-//                                                     {column.isSorted ? (column.isSortedDesc ? <FaSortDown /> : <FaSortUp />) : <FaSort />}
-//                                                 </span>
-//                                             )}
-//                                         </Flex>
-//                                     </Th>
-//                                 ))}
-//                             </Tr>
-//                         ))}
-//                     </Thead>
-//                     <Tbody {...getTableBodyProps()}>
-//                         {isLoding ?
-//                             <Tr>
-//                                 <Td colSpan={columns?.length}>
-//                                     <Flex justifyContent={'center'} alignItems={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-//                                         <Spinner />
-//                                     </Flex>
-//                                 </Td>
-//                             </Tr>
-//                             : data?.length === 0 ? (
-//                                 <Tr>
-//                                     <Td colSpan={columns.length}>
-//                                         <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-//                                             -- No Data Found --
-//                                         </Text>
-//                                     </Td>
-//                                 </Tr>
-//                             ) : page?.map((row, i) => {
-//                                 prepareRow(row);
-//                                 return (
-//                                     <Tr {...row?.getRowProps()} key={i}>
-//                                         {row?.cells?.map((cell, index) => {
-//                                             let data = "";
-//                                             columnData.forEach((item) => {
-//                                                 if (cell?.column.Header === item.Header) {
-//                                                     if (item.cell && typeof item.cell === 'function') {
-//                                                         data = (
-//                                                             <Flex align="center">
-//                                                                 <Text color={textColor} fontSize="sm" fontWeight="700">
-//                                                                     {item.cell(cell)}
-//                                                                 </Text>
-//                                                             </Flex>
-//                                                         );
-//                                                     } else {
-//                                                         data = (
-//                                                             <Flex align="center">
-//                                                                 <Text color={textColor} fontSize="sm" fontWeight="700">
-//                                                                     {item.Header === "#" ? cell?.row?.index + 1 : cell?.value}
-//                                                                 </Text>
-//                                                             </Flex>
-//                                                         );
-//                                                     }
-//                                                 }
-//                                             });
-//                                             return (
-//                                                 <Td
-//                                                     {...cell?.getCellProps()}
-//                                                     key={index}
-//                                                     fontSize={{ sm: "14px" }}
-//                                                     minW={{ sm: "150px", md: "200px", lg: "auto" }}
-//                                                     borderColor="transparent"
-//                                                 >
-//                                                     {data}
-//                                                 </Td>
-//                                             );
-//                                         })}
-//                                     </Tr>
-//                                 );
-//                             })}
-//                     </Tbody>
-//                 </Table>
-//             </Box>
-//             {data?.length > 5 && <Pagination gotoPage={gotoPage} gopageValue={gopageValue} setGopageValue={setGopageValue} pageCount={pageCount} canPreviousPage={canPreviousPage} previousPage={previousPage} canNextPage={canNextPage} pageOptions={pageOptions} setPageSize={setPageSize} nextPage={nextPage} pageSize={pageSize} pageIndex={pageIndex} />}
-//         </Card>
-//     );
-// }
-
-// export default CommonCheckTable
-
-
 import { useMemo, useState, useEffect } from 'react';
-import { Box, Flex, Table, Tbody, Td, Text, Th, Thead, Tr, Button, HStack, Tag, TagLabel, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Grid, GridItem, Checkbox, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react';
+import { Box, Flex, Table, Tbody, Td, Text, Th, Thead, Tr, Button, HStack, Tag, TagLabel, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Grid, GridItem, Checkbox, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, TagCloseButton } from '@chakra-ui/react';
 import { useColorModeValue } from '@chakra-ui/system';
 import { BsColumnsGap } from "react-icons/bs";
 import { FaSort, FaSortDown, FaSortUp } from 'react-icons/fa';
@@ -185,10 +13,10 @@ import Spinner from 'components/spinner/Spinner';
 import CustomSearchInput from "../search/search";
 import AdvanceSearchUsingCustomFields from "../search/advanceSearch";
 import DataNotFound from "../notFoundData";
+import moment from 'moment';
 
 const CommonCheckTable = (props) => {
-    const { isLoding, title, columnData, size, dataColumn, searchedDataOut, setSearchedDataOut, tableData, state, allData, ManageGrid, deleteMany, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, checkBox, AdvanceSearch, searchDisplay, setSearchDisplay, BackButton, getTagValuesOutside, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
-
+    const { isLoding, title, columnData, size, dataColumn, searchedDataOut, setSearchedDataOut, tableData, state, allData, ManageGrid, deleteMany, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, checkBox, AdvanceSearch, searchDisplay, setSearchDisplay, BackButton, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
 
@@ -201,6 +29,7 @@ const CommonCheckTable = (props) => {
     const [manageColumns, setManageColumns] = useState(false);
     const [csvColumns, setCsvColumns] = useState([]);
     const [searchbox, setSearchbox] = useState('');
+    const [searchValue, setSearchValue] = useState({})
     const [getTagValues, setGetTagValues] = useState(props.getTagValuesOutSide ? props.getTagValuesOutSide : []);
     const [advaceSearch, setAdvaceSearch] = useState(false);
     const [column, setColumn] = useState('');
@@ -242,6 +71,78 @@ const CommonCheckTable = (props) => {
     const handleSearch = (results) => {
         AdvanceSearch ? setSearchedDataOut(results) : setSearchedData(results);
     };
+
+    const handleAdvanceSearch = (values) => {
+        setSearchValue(values)
+        const searchResult = allData?.filter(item => {
+            return tableCustomFields.every(field => {
+                const fieldValue = values[field.name];
+                const itemValue = item[field.name];
+
+                if (field.type === 'select') {
+                    return !fieldValue || itemValue === fieldValue;
+                }
+                else if (field.type === 'number') {
+                    return (
+                        [null, undefined, ''].includes(fieldValue) ||
+                        (itemValue !== undefined &&
+                            itemValue.toString().includes(fieldValue.toString()))
+                    );
+                }
+                else if (field.type === 'date') {
+                    const fromDate = values[`from${field.name}`];
+                    const toDate = values[`to${field.name}`];
+
+                    if (!fromDate && !toDate) {
+                        return true; // No date range specified
+                    }
+
+                    const timeItemDate = new Date(itemValue);
+                    const timeMomentDate = moment(timeItemDate).format('YYYY-MM-DD');
+
+                    return (
+                        (!fromDate || (timeMomentDate >= fromDate)) &&
+                        (!toDate || (timeMomentDate <= toDate))
+                    );
+                }
+                else {
+                    // Default case for text, email
+                    return !fieldValue || itemValue?.toLowerCase()?.includes(fieldValue?.toLowerCase());
+                }
+            });
+        });
+
+      console.log(tableCustomFields,"tableCustomFields")
+        const getValue = tableCustomFields.reduce((result, field) => {
+            if (field.type === 'date') {
+                const fromDate = values[`from${field.name}`];
+                const toDate = values[`to${field.name}`];
+
+                if (fromDate || toDate) {
+                    result.push({
+                        name: [`from${field.name}`, `to${field.name}`],
+                        value: `From: ${fromDate} To: ${toDate}`
+                    })
+                }
+            } else if (values[field.name]) {
+                result.push({
+                    name: [field.name],
+                    value: values[field.name]
+                })
+            }
+
+            return result;
+        }, []);
+       
+        setGetTagValues(getValue);
+        setSearchedData(searchResult);
+        setDisplaySearchData(true);
+        setAdvaceSearch(false);
+        if (setSearchbox) {
+            setSearchbox('');
+        }
+    }
+
 
     const handleClear = () => {
         AdvanceSearch ? props?.setSearchDisplay(false) : setDisplaySearchData(false)
@@ -354,6 +255,51 @@ const CommonCheckTable = (props) => {
         setSelectedValues([])
     };
 
+    const handleRemove = (name) => {
+        const filter = (props.getTagValuesOutSide || []).concat(getTagValues || []).filter((item) => {
+            if (Array.isArray(name?.name)) {
+                return name.name?.toString() !== item.name?.toString();
+            }
+        });
+        let updatedSearchValue = { ...searchValue };
+        for (let key in updatedSearchValue) {
+            console.log("updatedSearchValue[key]---::", updatedSearchValue, "::--::", name.name, key)
+            if (updatedSearchValue.hasOwnProperty(key)) {
+                if (name.name.includes(key)) {
+                    delete updatedSearchValue[key];
+                }
+                if (updatedSearchValue[key] === "") {
+                    delete updatedSearchValue[key];
+                }
+            }
+        }
+
+        handleAdvanceSearch(updatedSearchValue)
+        setGetTagValues(filter)
+        if (filter?.length === 0) {
+            handleClear();
+        }
+    }
+    // const handleRemove = (name) => {
+    //     const filter = (props.getTagValuesOutSide || []).concat(getTagValues || []).filter((item) => item !== name)
+    //     let updatedSearchValue = { ...searchValue };
+
+    //     for (let key in updatedSearchValue) {
+    //         if (updatedSearchValue.hasOwnProperty(key)) {
+    //             if (updatedSearchValue[key] === name) {
+    //                 updatedSearchValue[key] = "";
+    //             }
+    //         }
+    //     }
+
+
+    //     handleAdvanceSearch(updatedSearchValue)
+    //     setGetTagValues(filter)
+    //     if (filter?.length === 0) {
+    //         handleClear();
+    //     }
+    // }
+
     useEffect(() => {
         AdvanceSearch ? setSearchedDataOut && setSearchedDataOut(data) : setSearchedData && setSearchedData(data);
     }, []);
@@ -408,6 +354,7 @@ const CommonCheckTable = (props) => {
                         advaceSearch={advaceSearch}
                         tableCustomFields={tableCustomFields}
                         setSearchbox={setSearchbox}
+                        handleAdvanceSearch={handleAdvanceSearch}
                     />
                     <GridItem colSpan={{ base: 12, md: 4 }} display={"flex"} justifyContent={"end"} alignItems={"center"} textAlign={"right"}>
                         {ManageGrid !== false &&
@@ -429,17 +376,17 @@ const CommonCheckTable = (props) => {
                         {BackButton && BackButton}
                     </GridItem>
                     <HStack spacing={4} mb={2}>
-                        {(props.getTagValuesOutSide || []).concat(getTagValues || []).map((item) => (
+                        {(props.getTagValuesOutSide || []).concat(getTagValues || []).map((item, i) => (
                             <Tag
                                 size={"md"}
                                 p={2}
-                                key={item}
+                                key={item.value}
                                 borderRadius='full'
                                 variant='solid'
                                 colorScheme="gray"
                             >
-                                <TagLabel>{item}</TagLabel>
-                                {/* <TagCloseButton /> */}
+                                <TagLabel>{item.value}</TagLabel>
+                                <TagCloseButton onClick={() => handleRemove(item)} />
                             </Tag>
                         ))}
                     </HStack>
