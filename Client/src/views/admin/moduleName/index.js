@@ -11,6 +11,11 @@ import Delete from './Delete'
 import { IoIosArrowBack } from 'react-icons/io'
 import DataNotFound from 'components/notFoundData'
 import Spinner from '../../../components/spinner/Spinner'
+import { deleteManyApi } from 'services/api'
+import { fetchRouteData } from '../../../redux/routeSlice';
+import CommonDeleteModel from 'components/commonDeleteModel';
+import { useDispatch } from 'react-redux'
+import { deleteApi } from 'services/api'
 
 const Index = () => {
     const navigate = useNavigate()
@@ -18,7 +23,6 @@ const Index = () => {
     const [viewModal, setViewModal] = useState(false)
     const [addModal, setAddModal] = useState(false)
     const [deleteModal, setDeleteModal] = useState(false)
-    const [deleteMany, setDeleteMany] = useState(false)
     const [action, setAction] = useState(false)
     const [selectedId, setselectedId] = useState()
     const [editdata, setEditData] = useState([])
@@ -26,6 +30,10 @@ const Index = () => {
     const [selectedValues, setSelectedValues] = useState([]);
     const [isLoding, setIsLoding] = useState(false)
     const textColor = useColorModeValue("gray.500", "white");
+    const [method, setMethod] = useState('')
+
+    const dispatch = useDispatch();
+
 
     const fetchData = async () => {
         setIsLoding(true)
@@ -50,10 +58,7 @@ const Index = () => {
         setEditData(item)
         setEdit(!editModal)
     }
-    const handleViewOpen = (item) => {
-        setselectedId(item?._id)
-        setViewModal(!viewModal)
-    }
+
     const handleViewClose = () => {
         setViewModal(false)
     }
@@ -63,13 +68,12 @@ const Index = () => {
     const handleAddClose = () => {
         setAddModal(false)
     }
-    const handleDeleteOpen = (item) => {
+    const handleDeleteOpen = (item, type) => {
+        setMethod(type)
         setselectedId(item?._id)
         setDeleteModal(!deleteModal)
     }
-    const handleDeleteClose = () => {
-        setDeleteModal(false)
-    }
+
     const handleCheckboxChange = (event, value) => {
         if (event.target.checked) {
             setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
@@ -79,10 +83,51 @@ const Index = () => {
             );
         }
     };
+
+    const handleDeleteModule = async (ids, selectedIds) => {
+        if (method === 'one') {
+            console.log("one")
+            try {
+                if (ids) {
+                    setIsLoding(true)
+                    const response = await deleteApi('api/custom-field/module/', ids)
+                    if (response.status === 200) {
+                        await dispatch(fetchRouteData());
+                        setDeleteModal(false)
+                        fetchData()
+                    }
+                }
+            } catch (error) {
+                console.log(error)
+            }
+            finally {
+                setIsLoding(false)
+            }
+        } else if (method === 'many') {
+            console.log("many")
+            try {
+                setIsLoding(true)
+                let response = await deleteManyApi('api/custom-field/deleteMany-Module', selectedIds)
+                if (response.status === 200) {
+                    await dispatch(fetchRouteData());
+                    setSelectedValues([])
+                    setDeleteModal(false)
+                    fetchData()
+                }
+            } catch (error) {
+                console.log(error)
+            }
+            finally {
+                setIsLoding(false)
+            }
+        }
+
+    };
+
     return (
         <div>
             <Flex justifyContent={"end"} mb={3}>
-                {selectedValues.length > 0 && <Button variant='outline' colorScheme='brand' color={"red"} mr={2} leftIcon={<DeleteIcon />} onClick={() => setDeleteMany(true)} size='sm' >Delete</Button>}
+                {selectedValues.length > 0 && <Button variant='outline' colorScheme='brand' color={"red"} mr={2} leftIcon={<DeleteIcon />} onClick={() => { handleDeleteOpen('', 'many') }} size='sm' >Delete</Button>}
                 <Button size='sm' variant='brand' me={1} onClick={() => handleAddOpen()} leftIcon={<AddIcon />}>Add New</Button>
                 <Button size='sm' variant='brand' onClick={() => navigate(-1)} leftIcon={<IoIosArrowBack />}> Back</Button>
             </Flex>
@@ -112,7 +157,7 @@ const Index = () => {
                                         </Flex>
                                         <Flex>
                                             <Button size='sm' disabled={item.moduleName === 'Properties' || item.moduleName === 'Contacts' || item.moduleName === 'Leads'} variant='outline' me={2} color={'green'} onClick={() => handleEditOpen(item)}><EditIcon /></Button>
-                                            <Button size='sm' disabled={item.moduleName === 'Properties' || item.moduleName === 'Contacts' || item.moduleName === 'Leads'} variant='outline' me={2} color={'red'} onClick={() => handleDeleteOpen(item)}><DeleteIcon /></Button>
+                                            <Button size='sm' disabled={item.moduleName === 'Properties' || item.moduleName === 'Contacts' || item.moduleName === 'Leads'} variant='outline' me={2} color={'red'} onClick={() => handleDeleteOpen(item, 'one')}><DeleteIcon /></Button>
                                         </Flex>
                                     </Flex>
                                 </Card>
@@ -125,11 +170,10 @@ const Index = () => {
                         </Text>
                     </Card>
             }
-           
+            {console.log(selectedValues)}
             <Add isOpen={addModal} onClose={handleAddClose} fetchData={fetchData} setAction={setAction} />
             <Edit isOpen={editModal} onClose={handleEditClose} selectedId={selectedId} editdata={editdata} setAction={setAction} fetchData={fetchData} />
-            <Delete method='one' isOpen={deleteModal} onClose={handleDeleteClose} selectedId={selectedId} fetchData={fetchData} />
-            <Delete method='many' isOpen={deleteMany} onClose={setDeleteMany} selectedId={selectedId} fetchData={fetchData} setSelectedValues={setSelectedValues} data={selectedValues} />
+            <CommonDeleteModel isOpen={deleteModal} onClose={() => setDeleteModal(false)} type={'Module'} handleDeleteData={handleDeleteModule} ids={selectedId} selectedValues={selectedValues} />
             <View isOpen={viewModal} onClose={handleViewClose} selectedId={selectedId} setAction={setAction} fetchData={fetchData} />
         </div>
     )
