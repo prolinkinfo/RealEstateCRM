@@ -9,6 +9,9 @@ const Report = () => {
     const title = 'Reports'
     const [data, setData] = useState([])
     const [isLoding, setIsLoding] = useState(false)
+    const [selectedValues, setSelectedValues] = useState([]);
+    const [selectedColumns, setSelectedColumns] = useState([]);
+    const [columns, setColumns] = useState([]);
 
     const user = JSON.parse(localStorage.getItem("user"))
 
@@ -16,6 +19,19 @@ const Report = () => {
         { Header: 'Email Sent', accessor: 'emailsent' },
         { Header: "Outbound Calls", accessor: "outboundcall" },
     ];
+
+
+    const fetchCustomDataFields = async () => {
+        const tempTableColumns = [
+            { Header: 'Name', accessor: 'firstName' },
+            { Header: 'Email Sent', accessor: 'emailsent' },
+            { Header: "Outbound Calls", accessor: "outboundcall" },
+
+        ];
+        setSelectedColumns(JSON.parse(JSON.stringify(tempTableColumns)));
+    }
+
+
 
     if (user.role === 'superAdmin') {
         tableColumns.unshift({
@@ -39,7 +55,9 @@ const Report = () => {
 
     useEffect(() => {
         fetchData()
+        fetchCustomDataFields()
     }, [])
+
 
     return (
         <div>
@@ -55,7 +73,10 @@ const Report = () => {
                     AdvanceSearch={false}
                     tableCustomFields={[]}
                     deleteMany={true}
-                    ManageGrid={false}
+                    selectedValues={selectedValues}
+                    setSelectedValues={setSelectedValues}
+                    selectedColumns={selectedColumns}
+                    setSelectedColumns={setSelectedColumns}
                 />
             </Card>
         </div>

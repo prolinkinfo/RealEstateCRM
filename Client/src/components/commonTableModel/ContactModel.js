@@ -11,7 +11,6 @@ const ContactModel = (props) => {
     const { onClose, isOpen, fieldName, setFieldValue, data } = props
     const [selectedValues, setSelectedValues] = useState();
     const [isLoding, setIsLoding] = useState(false)
-    // const [data, setData] = useState([])
 
     const columns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
