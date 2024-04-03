@@ -50,8 +50,8 @@ const Index = (props) => {
     };
     const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-        { Header: 'sender Name', accessor: 'senderName' },
-        { Header: "recipient", accessor: "createByName", },
+        { Header: 'Sender Name', accessor: 'senderName' },
+        { Header: "Recipient", accessor: "createByName", },
         {
             Header: "Realeted To", accessor: "realeted", cell: ({ row }) => (
                 <Text  >
@@ -94,7 +94,7 @@ const Index = (props) => {
                 </Text>
             )
         },
-        { Header: "timestamp", accessor: "timestamp", },
+        { Header: "Timestamp", accessor: "timestamp", },
         {
             Header: "Created", accessor: 'created', cell: ({ row }) => (
                 <Text fontSize="sm" fontWeight="700">
