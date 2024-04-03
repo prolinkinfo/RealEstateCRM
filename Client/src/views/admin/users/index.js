@@ -93,6 +93,10 @@ import AddUser from './Add';
 import Edit from './Edit';
 import Delete from './Delete';
 import UserAdvanceSearch from './components/userAdvanceSearch';
+import { deleteApi } from 'services/api';
+import { deleteManyApi } from 'services/api';
+import CommonDeleteModel from 'components/commonDeleteModel';
+
 
 const Index = (props) => {
     const title = "Users";
@@ -145,6 +149,24 @@ const Index = (props) => {
         setIsLoding(false)
     }
 
+    const handleDeleteClick = async () => {
+
+        try {
+            setIsLoding(true)
+            let response = await deleteManyApi(`api/user/deleteMany`, selectedValues)
+            if (response.status === 200) {
+                setSelectedValues([])
+                setDelete(false)
+                setAction((pre) => !pre)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        finally {
+            setIsLoding(false)
+        }
+    };
+
     const [columns, setColumns] = useState([...tableColumns]);
     const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
     const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
@@ -153,6 +175,7 @@ const Index = (props) => {
         fetchData();
     }, [action])
 
+    
     return (
         <div>
             <CommonCheckTable
@@ -189,7 +212,10 @@ const Index = (props) => {
             />
             <AddUser isOpen={isOpen} size={"sm"} setAction={setAction} onClose={onClose} />
             <Edit isOpen={edit} size={"sm"} setAction={setAction} onClose={onClose} fetchData={fetchData} data={editData} setEdit={setEdit} selectedId={selectedId} />
-            <Delete isOpen={deleteMany} onClose={setDelete} setAction={setAction} setSelectedValues={setSelectedValues} url='api/user/deleteMany' data={selectedValues} method='many' />
+            {/* <Delete isOpen={deleteMany} onClose={setDelete} setAction={setAction} setSelectedValues={setSelectedValues} url='api/user/deleteMany' data={selectedValues} method='many' /> */}
+            <CommonDeleteModel isOpen={deleteMany} onClose={() => setDelete(false)} type='User' handleDeleteData={handleDeleteClick} ids={''} selectedValues={selectedValues} />
+
+
 
             <UserAdvanceSearch
                 advanceSearch={advanceSearch}

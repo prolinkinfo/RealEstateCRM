@@ -147,9 +147,7 @@ const Index = () => {
             }
             {isOpen && <Add isOpen={isOpen} title={title} size={size} moduleData={moduleData} onClose={onClose} setAction={setAction} action={action} />}
             {deleteModel && <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type={title} handleDeleteData={handleDelete} ids={selectedValues} selectedValues={moduleData?._id} />}
-            {/* {deleteModel && <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues}
-                url='api/form/deleteMany'
-                data={selectedValues} method='many' setAction={setAction} moduleId={moduleData?._id} />} */}
+           
             {edit && <Edit isOpen={edit} title={title} size={size} moduleData={moduleData} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={moduleData?._id} />}
 
         </div>

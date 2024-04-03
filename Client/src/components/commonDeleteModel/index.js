@@ -4,11 +4,11 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const CommonDeleteModel = (props) => {
-    const { isOpen, onClose, type,handleDeleteData,ids,selectedValues } = props
+    const { isOpen, onClose, type, handleDeleteData, ids, selectedValues } = props
     const [isLoding, setIsLoding] = useState(false)
-   
+
     const handleDelete = () => {
-        handleDeleteData(ids,selectedValues)
+        handleDeleteData(ids, selectedValues)
     }
 
     const handleClose = () => {
