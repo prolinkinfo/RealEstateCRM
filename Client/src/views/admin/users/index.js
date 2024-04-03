@@ -14,7 +14,6 @@ import { MdLeaderboard } from 'react-icons/md';
 import { IoIosArrowBack, IoIosContact } from 'react-icons/io';
 import AddUser from './Add';
 import Edit from './Edit';
-import Delete from './Delete';
 import UserAdvanceSearch from './components/userAdvanceSearch';
 import { deleteApi } from 'services/api';
 import { deleteManyApi } from 'services/api';
@@ -41,11 +40,7 @@ const Index = (props) => {
     const [data, setData] = useState([]);
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
-    const [columns, setColumns] = useState([...tableColumns]);
-    const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
-    const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
-
-
+   
     const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
         { Header: 'email Id', accessor: 'username' },
@@ -68,6 +63,10 @@ const Index = (props) => {
             )
         },
     ];
+
+    const [columns, setColumns] = useState([...tableColumns]);
+    const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
+    const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 
     const fetchData = async () => {
         setIsLoding(true)
@@ -93,11 +92,11 @@ const Index = (props) => {
             setIsLoding(false)
         }
     };
-
+   
     useEffect(() => {
         fetchData();
     }, [action])
-
+    
     return (
         <div>
             <CommonCheckTable
