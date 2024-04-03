@@ -125,15 +125,7 @@ const Index = () => {
                         </Text>
                     </Card>
             }
-            {/* {
-                isLoding == false && moduleData.length <= 0 &&
-                <Card mt='5'>
-                    <Text textAlign={'center'} width="100%" color={'gray.500'} fontSize="sm" fontWeight="700">
-                        <DataNotFound />
-                    </Text>
-                </Card>
-            } */}
-
+           
             <Add isOpen={addModal} onClose={handleAddClose} fetchData={fetchData} setAction={setAction} />
             <Edit isOpen={editModal} onClose={handleEditClose} selectedId={selectedId} editdata={editdata} setAction={setAction} fetchData={fetchData} />
             <Delete method='one' isOpen={deleteModal} onClose={handleDeleteClose} selectedId={selectedId} fetchData={fetchData} />

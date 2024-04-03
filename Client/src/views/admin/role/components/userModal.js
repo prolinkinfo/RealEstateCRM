@@ -16,7 +16,6 @@ import {
   Flex,
   Text,
   Td,
-  Checkbox,
   useColorModeValue,
 } from "@chakra-ui/react";
 import Spinner from "components/spinner/Spinner";
@@ -26,7 +25,6 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
-import { Link } from "react-router-dom";
 import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 import Pagination from "components/pagination/Pagination";
 import RoleUser from "./roleUser";
@@ -140,7 +138,6 @@ function UserModal(props) {
                         >
                           <span style={{
                             textTransform: "capitalize",
-                            //  marginRight: "8px"
                           }}>
                             {column.render("Header")}
                           </span>
@@ -181,7 +178,6 @@ function UserModal(props) {
                           if (cell?.column.Header === "#") {
                             data = (
                               <Flex align="center" >
-                                {/* {cell?.row?.original?.role !== 'superAdmin' ? <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" /> : <Text me="28px"></Text>} */}
                                 <Text color={textColor} fontSize="sm" fontWeight="700">
                                   {cell?.row?.index + 1}
                                 </Text>

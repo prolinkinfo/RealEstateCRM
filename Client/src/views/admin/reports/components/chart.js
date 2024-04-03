@@ -1,15 +1,11 @@
-import { Box, Grid, Radio, RadioGroup, Select, Stack } from '@chakra-ui/react';
+import { Grid } from '@chakra-ui/react';
 import Card from "components/card/Card";
-import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ReactApexChart from "react-apexcharts";
-import ReactDatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
-import { postApi } from "services/api";
 
 
 const ReportChart = (props) => {
-    const { dashboard } = props;
     const [Chartseries, setChartSeries] = useState([44, 55, 13, 33]);
 
     const options = {

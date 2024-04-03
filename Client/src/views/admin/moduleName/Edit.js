@@ -1,12 +1,11 @@
-import { Box, Button, Checkbox, Flex, FormLabel, Grid, GridItem, Heading, Icon, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Text, useColorModeValue } from '@chakra-ui/react'
+import {Button, FormLabel, Grid, GridItem, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useColorModeValue } from '@chakra-ui/react'
 import Spinner from 'components/spinner/Spinner'
-import React, { useEffect, useState } from 'react'
+import React, {useState } from 'react'
 import { useFormik } from 'formik'
 import { HSeparator } from 'components/separator/Separator'
 import { putApi } from 'services/api'
 import { moduleAddSchema } from 'schema/moduleAddSchema'
 import Dropzone from "components/Dropzone";
-import { MdUpload } from "react-icons/md";
 import { toast } from 'react-toastify'
 import { fetchRouteData } from '../../../redux/routeSlice'
 import { useDispatch } from 'react-redux'
@@ -14,7 +13,6 @@ import { useDispatch } from 'react-redux'
 const Edit = (props) => {
     const { onClose, isOpen, fetchData, selectedId, editdata, setAction } = props;
     const [isLoding, setIsLoding] = useState(false)
-    const brandColor = useColorModeValue("brand.500", "white");
     const dispatch = useDispatch();
 
     const initialValues = {

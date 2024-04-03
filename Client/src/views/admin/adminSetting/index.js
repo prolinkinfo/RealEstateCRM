@@ -1,4 +1,4 @@
-import { Icon, SimpleGrid, useColorModeValue } from '@chakra-ui/react';
+import { Icon, SimpleGrid } from '@chakra-ui/react';
 import MiniStatistics from "components/card/MiniStatistics";
 import IconBox from 'components/icons/IconBox';
 import { FaCreativeCommonsBy, FaWpforms } from "react-icons/fa";
@@ -12,9 +12,6 @@ import { VscFileSubmodule } from "react-icons/vsc";
 
 const Index = () => {
     const navigate = useNavigate();
-    const brandColor = useColorModeValue("brand.500", "white");
-    const boxBg = useColorModeValue("secondaryGray.300", "whiteAlpha.100");
-
     return (
         <div>
             <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} gap="20px" mb="20px">
@@ -30,7 +27,6 @@ const Index = () => {
                         />
                     }
                     name="Users"
-                // value={task?.length || 0}
                 />
                 <MiniStatistics
                     fontsize="md"
@@ -45,7 +41,6 @@ const Index = () => {
 
                     }
                     name="Roles"
-                // value={contactData?.length || 0}
                 />
                 <MiniStatistics
                     fontsize="md"

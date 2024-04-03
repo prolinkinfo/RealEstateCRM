@@ -2,7 +2,6 @@ import { Button, FormLabel, Grid, GridItem, Input, Modal, ModalBody, ModalCloseB
 import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
-import { BsFillTelephoneFill } from 'react-icons/bs';
 import { phoneCallSchema } from 'schema';
 import { getApi, postApi } from 'services/api';
 
@@ -54,19 +53,14 @@ const AddPhoneCall = (props) => {
     const fetchDataR = async () => {
         if (props?.viewData?.lead?.leadPhoneNumber) {
             if (props.id && props.lead !== 'true') {
-                // let response = await getApi('api/contact/view/', props.id)
-                // if (response?.status === 200) {
                 setFieldValue('recipient', props?.viewData?.contact?.phoneNumber);
                 setFieldValue('createBy', props?.id);
                 values.recipient = props?.viewData?.contact?.phoneNumber
-                // }
             } else if (props.id && props.lead === 'true') {
                 let response = await getApi('api/lead/view/', props.id)
                 if (response?.status === 200) {
                     setFieldValue('recipient', response?.data?.lead?.leadPhoneNumber);
-                    // setFieldValue('recipient', props?.viewData?.lead?.leadPhoneNumber);
                     setFieldValue('createByLead', props.id);
-                    // values.recipient = props?.viewData?.lead?.leadPhoneNumber
                     values.recipient = response?.data?.lead?.leadPhoneNumber
                 }
             }

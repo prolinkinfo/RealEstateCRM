@@ -1,14 +1,14 @@
 import React from 'react';
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Grid, GridItem, Input, FormLabel, Select, Text, Button, } from '@chakra-ui/react';
+import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Grid, GridItem, Input, FormLabel, Text, Button, } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
 import moment from 'moment';
 
 
 
 const MeetingAdvanceSearch = (props) => {
-    const { state, allData, advanceSearch, setAdvanceSearch, isLoding, setGetTagValues, setSearchedData, setDisplaySearchData, setSearchClear, setSearchbox } = props;
+    const {allData, advanceSearch, setAdvanceSearch, isLoding, setGetTagValues, setSearchedData, setDisplaySearchData, setSearchbox } = props;
 
     const initialValues = {
         agenda: '',

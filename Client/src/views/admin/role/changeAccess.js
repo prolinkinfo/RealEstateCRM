@@ -11,14 +11,11 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Flex,
   Text,
   Td,
-  TableCaption,
-  TableContainer,
   Checkbox,
   useColorModeValue,
 } from "@chakra-ui/react";
@@ -30,7 +27,6 @@ import {
   useTable,
 } from "react-table";
 import { useFormik } from "formik";
-import { useParams } from "react-router-dom";
 import { putApi } from "services/api";
 import DataNotFound from "components/notFoundData";
 
@@ -39,28 +35,19 @@ function ChangeAccess(props) {
     columnsData,
     name,
     tableData,
-    handleClick,
     fetchData,
-    isOpen,
-    setAction,
     setAccess,
     _id,
-    accessRole,
     setAccessRole,
-    onClose,
     setRoleModal,
     editModal, setEditModal,
-    onOpen,
   } = props;
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   const columns = useMemo(() => columnsData, [columnsData]);
-  const [selectedValues, setSelectedValues] = useState([]);
   const [isLoding, setIsLoding] = useState(false);
 
-  const [deleteModel, setDelete] = useState(false);
-  const [selectedId, setSelectedId] = useState();
   const [gopageValue, setGopageValue] = useState();
   const data = useMemo(() => tableData, [tableData]);
   const user = JSON.parse(localStorage.getItem("user"));
@@ -77,19 +64,11 @@ function ChangeAccess(props) {
   );
 
   const {
-    getTableProps,
     getTableBodyProps,
     headerGroups,
     prepareRow,
     page,
-    canPreviousPage,
-    canNextPage,
     pageOptions,
-    pageCount,
-    gotoPage,
-    nextPage,
-    previousPage,
-    setPageSize,
     state: { pageIndex, pageSize },
   } = tableInstance;
 
@@ -101,7 +80,6 @@ function ChangeAccess(props) {
     roleName: name,
     access: tableData,
   };
-  const param = useParams();
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -112,11 +90,7 @@ function ChangeAccess(props) {
   });
 
   const {
-    errors,
-    touched,
     values,
-    handleBlur,
-    handleChange,
     handleSubmit,
     setFieldValue,
   } = formik;
@@ -154,10 +128,7 @@ function ChangeAccess(props) {
     }
   };
 
-  const handleClose = () => {
-    props.onClose(false);
-  };
-
+  
   useEffect(() => {
     fetchData()
   }, [editModal])

@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react'
 import { BiLink } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 import { getApi } from 'services/api'
-import DeleteTask from './components/deleteTask'
 import EditTask from './components/editTask'
 import { useNavigate } from 'react-router-dom';
 
@@ -115,7 +114,7 @@ const EventView = (props) => {
                             {access?.delete || user?.role === "superAdmin" && <IconButton colorScheme='red' onClick={() => setDelete(true)} ml={3} borderRadius="10px" size="md" icon={<DeleteIcon />} />}
 
                             <EditTask setAction={setAction} isOpen={edit} onClose={setEdit} viewClose={onClose} id={info?.event ? info?.event?.id : info} from="view" />
-                            <DeleteTask fetchData={props.fetchData} isOpen={deleteModel} onClose={setDelete} viewClose={onClose} url='api/task/delete/' method='one' id={info?.event ? info?.event?.id : info} />
+                            {/* <DeleteTask fetchData={props.fetchData} isOpen={deleteModel} onClose={setDelete} viewClose={onClose} url='api/task/delete/' method='one' id={info?.event ? info?.event?.id : info} /> */}
                         </DrawerFooter>
                     </>}
             </ModalContent>

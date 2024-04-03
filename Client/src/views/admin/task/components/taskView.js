@@ -10,7 +10,6 @@ import { getApi } from 'services/api'
 import Card from 'components/card/Card'
 import { IoIosArrowBack } from "react-icons/io";
 import AddTask from './addTask'
-import DeleteTask from './deleteTask'
 import EditTask from './editTask'
 import { HasAccess } from '../../../../redux/accessUtils';
 import { HSeparator } from 'components/separator/Separator';
@@ -142,7 +141,7 @@ const TaskView = (props) => {
             {/* Edittask modal */}
             <EditTask isOpen={edit} onClose={setEdit} viewClose={onClose} id={id?.event ? id?.event?._def?.extendedProps?._id : id} />
             {/* Deletetask modal */}
-            <DeleteTask isOpen={deleteModel} onClose={setDelete} viewClose={onClose} url='api/task/delete/' method='one' id={id?.event ? id?.event?._def?.extendedProps?._id : id} redirectPage={"/task"} />
+            {/* <DeleteTask isOpen={deleteModel} onClose={setDelete} viewClose={onClose} url='api/task/delete/' method='one' id={id?.event ? id?.event?._def?.extendedProps?._id : id} redirectPage={"/task"} /> */}
         </div>
     )
 }

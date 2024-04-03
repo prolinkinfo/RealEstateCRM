@@ -1,19 +1,17 @@
 import { AddIcon, ChevronDownIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { AspectRatio, Box, Button, Flex, Grid, GridItem, Heading, Image, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useColorModeValue, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Flex, Grid, GridItem, Heading, Image, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useColorModeValue, useDisclosure } from "@chakra-ui/react";
 import Card from "components/card/Card";
 import { HSeparator } from "components/separator/Separator";
 import Spinner from "components/spinner/Spinner";
-import moment from "moment/moment";
 import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getApi } from "services/api";
 import Add from "./Add";
-import Delete from "./Delete";
+// import Delete from "./Delete";
 import Edit from "./Edit";
 import PropertyPhoto from "./components/propertyPhoto";
 import { HasAccess } from "../../../redux/accessUtils";
-import CountUpComponent from "components/countUpComponent/countUpComponent";
 import DataNotFound from "components/notFoundData";
 import xlsx from '../../../assets/img/fileImage/xlsx.png'
 import jpg from '../../../assets/img/fileImage/jpg.png'
@@ -23,6 +21,9 @@ import xls from '../../../assets/img/fileImage/xls.png'
 import csv from '../../../assets/img/fileImage/csv.png'
 import file from '../../../assets/img/fileImage/file.png'
 import CustomView from "utils/customView";
+import CommonCheckTable from "components/checkTable/checktable";
+import CommonDeleteModel from "components/commonDeleteModel";
+import { deleteApi } from "services/api";
 
 const View = () => {
 
@@ -32,7 +33,7 @@ const View = () => {
     const textColor = useColorModeValue("gray.500", "white");
 
     const [data, setData] = useState()
-    const [filteredContacts, setFilteredContacts] = useState()
+    const [filteredContacts, setFilteredContacts] = useState([])
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [edit, setEdit] = useState(false);
     const [deleteModel, setDelete] = useState(false);
@@ -46,6 +47,7 @@ const View = () => {
     const [isLoding, setIsLoding] = useState(false)
     const [displayPropertyPhoto, setDisplayPropertyPhoto] = useState(false)
     const [type, setType] = useState(false)
+    const navigate = useNavigate();
 
     const size = "lg";
 
@@ -61,9 +63,6 @@ const View = () => {
     const [dynamicColumns, setDynamicColumns] = useState([...contactColumns]);
     const [selectedColumns, setSelectedColumns] = useState([...contactColumns]);
 
-    const [addEmailHistory, setAddEmailHistory] = useState(false);
-    const [addPhoneCall, setAddPhoneCall] = useState(false);
-
     const fetchData = async () => {
         setIsLoding(true)
         let response = await getApi('api/property/view/', param.id)
@@ -75,6 +74,23 @@ const View = () => {
     const fetchCustomData = async () => {
         const response = await getApi('api/custom-field?moduleName=Properties')
         setPropertyData(response.data)
+    }
+
+    const handleDeleteProperties=async(id)=>{
+        try {
+            setIsLoding(true)
+            let response = await deleteApi('api/property/delete/', id)
+            if (response.status === 200) {
+                setDelete(false)
+                setAction((pre) => !pre)
+                navigate('/properties')
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        finally {
+            setIsLoding(false)
+        }
     }
 
     useEffect(() => {
@@ -89,41 +105,12 @@ const View = () => {
         <>
             <Add isOpen={isOpen} size={size} onClose={onClose} setPropertyData={setPropertyData} propertyData={propertyData[0]} />
             <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} setPropertyData={setPropertyData} propertyData={propertyData[0]} />
-            <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/property/delete/' id={param.id} />
+            <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Property' handleDeleteData={handleDeleteProperties} ids={param.id} />
 
             {isLoding ?
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                     <Spinner />
                 </Flex> : <>
-                    {/* <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
-                        <GridItem colStart={6} >
-                            <Flex justifyContent={"right"}>
-                                <Menu>
-                                    {(permission?.create || permission?.update || permission?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
-                                        Actions
-                                    </MenuButton>}
-                                    <MenuDivider />
-                                    <MenuList>
-                                        {permission?.create && <MenuItem onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
-                                        {permission?.update && <MenuItem onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
-
-                                        {permission?.delete &&
-                                            <>
-                                                <MenuDivider />
-                                                <MenuItem onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
-                                            </>
-                                        }
-                                    </MenuList>
-                                </Menu>
-                                <Link to="/properties">
-                                    <Button leftIcon={<IoIosArrowBack />} variant="brand">
-                                        Back
-                                    </Button>
-                                </Link>
-                            </Flex>
-                        </GridItem>
-                    </Grid> */}
-
                     <Tabs >
                         <Grid templateColumns={'repeat(12, 1fr)'} mb={3} gap={1}>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
@@ -170,6 +157,39 @@ const View = () => {
                         <TabPanels>
                             <TabPanel pt={4} p={0}>
                                 <CustomView data={propertyData[0]} fieldData={data} />
+                                {console.log(filteredContacts, contactColumns)}
+                                {filteredContacts?.length > 0 &&
+                                    <GridItem colSpan={{ base: 12 }} mt={4}>
+                                        <Grid templateColumns={{ base: "1fr" }} >
+                                            <GridItem colSpan={2}>
+                                                {/* <Box>
+                                                        <Heading size="md" mb={3}>
+                                                            Interested Contact (<CountUpComponent key={filteredContacts?.length} targetNumber={filteredContacts?.length} />)
+                                                        </Heading>
+                                                    </Box> */}
+                                                <Grid templateColumns={'repeat(2, 1fr)'} >
+                                                    <GridItem colSpan={{ base: 2 }}>
+                                                        <CommonCheckTable
+                                                            AdvanceSearch={false}
+                                                            ManageGrid={false}
+                                                            access={false}
+                                                            columnData={contactColumns}
+                                                            dataColumn={contactColumns}
+                                                            title={"Interested Contact"}
+                                                            allData={filteredContacts}
+                                                            tableData={filteredContacts}
+                                                            dynamicColumns={dynamicColumns}
+                                                             setDynamicColumns={setDynamicColumns} 
+                                                             selectedColumns={selectedColumns} 
+                                                             setSelectedColumns={setSelectedColumns} 
+                                                              size={"md"} />
+                                                    </GridItem>
+                                                </Grid>
+                                            </GridItem>
+
+                                        </Grid>
+                                    </GridItem>
+                                }
                             </TabPanel>
 
                             <TabPanel pt={4} p={0}>

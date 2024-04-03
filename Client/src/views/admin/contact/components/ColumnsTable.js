@@ -13,7 +13,7 @@ import {
   useColorModeValue
 } from "@chakra-ui/react";
 import moment from 'moment';
-import { useMemo, useState, useEffect, useRef } from "react";
+import { useMemo, useState, useEffect } from "react";
 import {
   useGlobalFilter,
   usePagination,
@@ -22,10 +22,8 @@ import {
 } from "react-table";
 
 // Custom components
-import Card from "components/card/Card";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
 import Pagination from "components/pagination/Pagination";
-import { BsFillSendFill } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
 import AddEmailHistory from "../../emailHistory/components/AddEmail";
 import { AddIcon } from "@chakra-ui/icons";

@@ -19,12 +19,9 @@ import { toast } from "react-toastify";
 import { getApi } from "services/api";
 import AddEmailHistory from "../emailHistory/components/AddEmail";
 import AddMeeting from "../meeting/components/Addmeeting";
-import MeetingTable from "../meeting/components/CheckTable";
 import AddPhoneCall from "../phoneCall/components/AddPhoneCall";
-import TaskTable from "../task/components/CheckTable.js";
 import AddTask from "../task/components/addTask";
 import Add from "./Add";
-import Delete from "./Delete";
 import Edit from "./Edit";
 import ColumnsTable from "./components/ColumnsTable";
 import PhoneCall from "./components/phonCall";
@@ -36,6 +33,8 @@ import TaskColumnsTable from "../task/components/ColumnsTable";
 import DataNotFound from "components/notFoundData";
 import CustomView from "utils/customView";
 import AddDocumentModal from "utils/addDocumentModal";
+import CommonDeleteModel from "components/commonDeleteModel";
+import { deleteApi } from "services/api";
 
 const View = () => {
 
@@ -123,6 +122,24 @@ const View = () => {
         setAllData(response?.data);
         setIsLoding(false)
     }
+
+    const handleDeleteContact=async(id)=>{
+        try {
+            setIsLoding(true)
+            let response = await deleteApi('api/contact/delete/', id)
+            if (response.status === 200) {
+                setDelete(false)
+                setAction((pre) => !pre)
+                navigate('/contacts')
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        finally {
+            setIsLoding(false)
+        }
+    }
+
     useEffect(() => {
         fetchData()
     }, [action])
@@ -144,7 +161,8 @@ const View = () => {
         <>
             {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} contactData={contactData[0]} />}
             <Edit isOpen={edit} contactData={contactData[0]} size={size} onClose={setEdit} setAction={setAction} moduleId={contactData?.[0]?._id} />
-            <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/contact/delete/' id={param.id} />
+            {/* <Delete isOpen={deleteModel} onClose={setDelete} method='one' url='api/contact/delete/' id={param.id} /> */}
+            <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Contact' handleDeleteData={handleDeleteContact} ids={param.id} />
             <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} viewData={allData} lead="false" />
 
             {isLoding ?

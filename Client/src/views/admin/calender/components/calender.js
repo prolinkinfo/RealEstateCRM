@@ -1,13 +1,11 @@
 import FullCalendar from '@fullcalendar/react';
 import Card from 'components/card/Card';
-import { useEffect, useState } from 'react';
-
+import { useEffect, useState } from 'react'
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from '@fullcalendar/list';
 import multiMonthPlugin from '@fullcalendar/multimonth';
 import timeGridPlugin from '@fullcalendar/timegrid';
-// import EventView from '../eventView';
 import { Flex, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
 import AddTask from 'views/admin/task/components/addTask';
 import EventView from 'views/admin/task/eventView';
@@ -26,7 +24,6 @@ const Calender = (props) => {
     const [meetingInfo, setMeetingInfo] = useState()
     const [callInfo, setCallInfo] = useState()
     const [emailInfo, setEmailInfo] = useState()
-    const [info, setInfo] = useState();
     const [date, setDate] = useState()
 
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -55,16 +52,10 @@ const Calender = (props) => {
             setEmailInfo(info)
             setEmailView(true)
         }
-       
-        // alert('Event: ' + info.event.title);
-        // alert('View: ' + info.view.type);
-
-        // info.el.style.borderColor = 'red';
     }
     const [currentView, setCurrentView] = useState('');
 
     useEffect(() => {
-        // Set the initial view to 'dayGridMonth' when the component mounts
         setCurrentView('dayGridMonth');
     }, []);
     return (
@@ -90,7 +81,6 @@ const Calender = (props) => {
                 </div>
                 <FullCalendar
                     plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin, multiMonthPlugin]}
-                    // initialView="dayGridMonth"
                     initialView={currentView}
                     height="600px"
                     dateClick={handleDateClick}

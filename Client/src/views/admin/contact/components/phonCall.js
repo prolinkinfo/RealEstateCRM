@@ -22,10 +22,8 @@ import {
 } from "react-table";
 
 // Custom components
-import Card from "components/card/Card";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
 import Pagination from "components/pagination/Pagination";
-import { BsFillTelephoneFill } from "react-icons/bs";
 import { MdOutlineMessage } from "react-icons/md";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import AddPhoneCall from "../../phoneCall/components/AddPhoneCall";
