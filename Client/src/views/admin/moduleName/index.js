@@ -86,7 +86,6 @@ const Index = () => {
 
     const handleDeleteModule = async (ids, selectedIds) => {
         if (method === 'one') {
-            console.log("one")
             try {
                 if (ids) {
                     setIsLoding(true)
@@ -104,7 +103,6 @@ const Index = () => {
                 setIsLoding(false)
             }
         } else if (method === 'many') {
-            console.log("many")
             try {
                 setIsLoding(true)
                 let response = await deleteManyApi('api/custom-field/deleteMany-Module', selectedIds)
