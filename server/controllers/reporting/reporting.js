@@ -202,7 +202,7 @@ const data = async (req, res) => {
             { $match: matchFilter },
             {
                 $lookup: {
-                    from: 'Contact',
+                    from: 'Contacts',
                     localField: 'createBy',
                     foreignField: '_id',
                     as: 'contact'
@@ -275,7 +275,7 @@ const data = async (req, res) => {
             { $match: matchFilter },
             {
                 $lookup: {
-                    from: 'Contact',
+                    from: 'Contacts',
                     localField: 'createBy',
                     foreignField: '_id',
                     as: 'contact'
