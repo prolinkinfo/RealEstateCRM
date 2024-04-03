@@ -28,9 +28,8 @@ const AddUser = (props) => {
     const formik = useFormik({
         initialValues: initialValues,
         validationSchema: userSchema,
-        onSubmit: (values, { resetForm }) => {
+        onSubmit: (values) => {
             AddData();
-            resetForm();
         },
     });
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
@@ -41,6 +40,7 @@ const AddUser = (props) => {
             let response = await postApi('api/user/register', values)
             if (response && response.status === 200) {
                 props.onClose();
+                resetForm();
                 setAction((pre) => !pre)
             } else {
                 toast.error(response.response.data?.message)
