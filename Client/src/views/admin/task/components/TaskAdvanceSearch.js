@@ -3,12 +3,15 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Grid, GridItem, Input, FormLabel, Select, Text, Button, } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
-
+import { setSearchValue, setGetTagValues, getSearchData } from '../../../../redux/advanceSearchSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const TaskAdvanceSearch = (props) => {
-    const { state, allData, advanceSearch, setAdvanceSearch, isLoding, setGetTagValues, setSearchedData, setDisplaySearchData, setSearchClear, setSearchbox } = props;
-
+    const { state, allData, advanceSearch, setAdvanceSearch, isLoding, setSearchedData, setDisplaySearchData, setSearchClear, setSearchbox } = props;
+    const dispatch = useDispatch()
+    const searchResult = useSelector((state) => state?.advanceSearchData?.searchResult)
+    console.log(searchResult, "searchResult")
     const initialValues = {
         title: '',
         category: '',
@@ -34,23 +37,74 @@ const TaskAdvanceSearch = (props) => {
         initialValues: initialValues,
         validationSchema: validationSchema,
         onSubmit: (values, { resetForm }) => {
-            const searchResult = allData?.filter(
-                (item) => {
 
-                    return ((!values?.title || (item?.title && item?.title.toLowerCase().includes(values?.title?.toLowerCase()))) &&
-                        (!values.status || (item?.status && item?.status.toLowerCase().includes(values.status?.toLowerCase()))) &&
-                        (!values?.category || (item?.category && item?.category.toLowerCase().includes(values?.category?.toLowerCase()))) &&
-                        (!values?.start || (item?.start && item?.start.toLowerCase().includes(values?.start?.toLowerCase()))) &&
-                        (!values?.end || (item?.end && item?.end.toString().includes(values?.end))) &&
-                        (!values?.assignmentToName || (item?.assignmentToName && item?.assignmentToName.toLowerCase().includes(values?.assignmentToName?.toLowerCase()))) &&
-                        ([null, undefined, ''].includes(values?.fromLeadScore) || [null, undefined, ''].includes(values?.toLeadScore) ||
-                            ((item?.leadScore || item?.leadScore === 0) &&
-                                (parseInt(item?.leadScore, 10) >= parseInt(values.fromLeadScore, 10) || 0) &&
-                                (parseInt(item?.leadScore, 10) <= parseInt(values.toLeadScore, 10) || 0)))
-                    )
-                });
-            let getValue = [values.title, values?.category, values.status, state && state, values?.start, values?.end, values?.assignmentToName, (![null, undefined, ''].includes(values?.fromLeadScore) && `${values.fromLeadScore}-${values.toLeadScore}`) || undefined].filter(value => value);
-            setGetTagValues(getValue)
+            dispatch(setSearchValue(values))
+            dispatch(getSearchData({ values: values, allData: allData, type: 'Tasks' }))
+            // const searchResult = allData?.filter(
+            //     (item) => {
+            //         return ((!values?.title || (item?.title && item?.title.toLowerCase().includes(values?.title?.toLowerCase()))) &&
+            //             (!values.status || (item?.status && item?.status.toLowerCase().includes(values.status?.toLowerCase()))) &&
+            //             (!values?.category || (item?.category && item?.category.toLowerCase().includes(values?.category?.toLowerCase()))) &&
+            //             (!values?.start || (item?.start && item?.start.toLowerCase().includes(values?.start?.toLowerCase()))) &&
+            //             (!values?.end || (item?.end && item?.end.toString().includes(values?.end))) &&
+            //             (!values?.assignmentToName || (item?.assignmentToName && item?.assignmentToName.toLowerCase().includes(values?.assignmentToName?.toLowerCase()))) &&
+            //             ([null, undefined, ''].includes(values?.fromLeadScore) || [null, undefined, ''].includes(values?.toLeadScore) ||
+            //                 ((item?.leadScore || item?.leadScore === 0) &&
+            //                     (parseInt(item?.leadScore, 10) >= parseInt(values.fromLeadScore, 10) || 0) &&
+            //                     (parseInt(item?.leadScore, 10) <= parseInt(values.toLeadScore, 10) || 0)))
+            //         )
+            //     });
+            // let getValue = [values.title, values?.category, values.status, state && state, values?.start, values?.end, values?.assignmentToName, (![null, undefined, ''].includes(values?.fromLeadScore) && `${values.fromLeadScore}-${values.toLeadScore}`) || undefined].filter(value => value);
+            const getValue = [
+                {
+                    name: ["title"],
+                    value: values.title
+                },
+                {
+                    name: ["status"],
+                    value: values.status
+                },
+                {
+                    name: ["category"],
+                    value: values.category
+                },
+                {
+                    name: ["assignmentToName"],
+                    value: values.assignmentToName
+                },
+                {
+                    name: ["start"],
+                    value: values.start
+                },
+                {
+                    name: ["end"],
+                    value: values.end
+                }
+            ]
+            // const getValue = tableCustomFields.reduce((result, field) => {
+            //     if (field.type === 'date') {
+            //         const fromDate = values[`from${field.name}`];
+            //         const toDate = values[`to${field.name}`];
+
+            //         if (fromDate || toDate) {
+            //             result.push({
+            //                 name: [`from${field.name}`, `to${field.name}`],
+            //                 value: `From: ${fromDate} To: ${toDate}`
+            //             })
+            //         }
+            //     } else if (values[field.name]) {
+            //         result.push({
+            //             name: [field.name],
+            //             value: values[field.name]
+            //         })
+            //     }
+
+            //     return result;
+            // }, []);
+
+
+            dispatch(setGetTagValues(getValue.filter(item => item.value)))
+
             setSearchedData(searchResult);
             setDisplaySearchData(true);
             setAdvanceSearch(false);

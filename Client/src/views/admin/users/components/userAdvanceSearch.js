@@ -3,11 +3,13 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Grid, GridItem, Input, FormLabel, Select, Text, Button, } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
-
-
+import { getSearchData, setGetTagValues, setSearchValue } from '../../../../redux/advanceSearchSlice';
+import { useDispatch } from 'react-redux';
 
 const UserAdvanceSearch = (props) => {
-    const { state, allData, advanceSearch, setAdvanceSearch, isLoding, setGetTagValues, setSearchedData, setDisplaySearchData, setSearchbox } = props;
+    const { state, allData, advanceSearch, setAdvanceSearch, isLoding, setSearchedData, setDisplaySearchData, setSearchbox } = props;
+
+    const dispatch = useDispatch();
 
     const initialValues = {
         firstName: '',
@@ -23,16 +25,32 @@ const UserAdvanceSearch = (props) => {
         initialValues: initialValues,
         validationSchema: validationSchema,
         onSubmit: (values, { resetForm }) => {
-            const searchResult = allData?.filter(
-                (item) =>
-                    (!values?.firstName || (item?.firstName && item?.firstName.toLowerCase().includes(values?.firstName?.toLowerCase()))) &&
-                    (!values?.username || (item?.username && item?.username.toLowerCase().includes(values?.username?.toLowerCase()))) &&
-                    (!values?.lastName || (item?.lastName && item?.lastName.toLowerCase().includes(values?.lastName?.toLowerCase())))
-            )
-            let getValue = [values.firstName, values?.username, values?.lastName].filter(value => value);
+            dispatch(setSearchValue(values))
+            dispatch(getSearchData({ values: values, allData: allData, type: 'Users' }))
+            // const searchResult = allData?.filter(
+            //     (item) =>
+            //         (!values?.firstName || (item?.firstName && item?.firstName.toLowerCase().includes(values?.firstName?.toLowerCase()))) &&
+            //         (!values?.username || (item?.username && item?.username.toLowerCase().includes(values?.username?.toLowerCase()))) &&
+            //         (!values?.lastName || (item?.lastName && item?.lastName.toLowerCase().includes(values?.lastName?.toLowerCase())))
+            // )
+            // let getValue = [values.firstName, values?.username, values?.lastName].filter(value => value);
             resetForm();
-            setGetTagValues(getValue)
-            setSearchedData(searchResult);
+            const getValue = [
+                {
+                    name: ["firstName"],
+                    value: values.firstName
+                },
+                {
+                    name: ["lastName"],
+                    value: values.lastName
+                },
+                {
+                    name: ["username"],
+                    value: values.username
+                },
+            ]
+            dispatch(setGetTagValues(getValue.filter(item => item.value)))
+            // setSearchedData(searchResult);
             setDisplaySearchData(true)
             setAdvanceSearch(false)
             setSearchbox('');

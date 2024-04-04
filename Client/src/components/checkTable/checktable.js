@@ -14,26 +14,35 @@ import CustomSearchInput from "../search/search";
 import AdvanceSearchUsingCustomFields from "../search/advanceSearch";
 import DataNotFound from "../notFoundData";
 import moment from 'moment';
+import { useSelector, useDispatch } from 'react-redux';
+import { getSearchData, setGetTagValues, setSearchValue } from '../../redux/advanceSearchSlice'
 
 const CommonCheckTable = (props) => {
-    const { isLoding, title, columnData, size, dataColumn, searchedDataOut, setSearchedDataOut, tableData, state, allData, ManageGrid, deleteMany, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, checkBox, AdvanceSearch, searchDisplay, setSearchDisplay, BackButton, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
+    const { isLoding, title, columnData, size, dataColumn, setSearchedDataOut, tableData, state, allData, ManageGrid, deleteMany, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, checkBox, AdvanceSearch, searchDisplay, setSearchDisplay, BackButton, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
-
+    const searchedDataOut = useSelector((state) => state?.advanceSearchData?.searchResult)
+    console.log(searchedDataOut, "searchedDataOut")
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
     const columns = useMemo(() => dataColumn, [dataColumn]);
     const [tempSelectedColumns, setTempSelectedColumns] = useState(dataColumn); // State to track changes
 
+    const searchValue = useSelector((state) => state?.advanceSearchData?.searchValue)
+    const getTagValues = useSelector((state) => state?.advanceSearchData?.getTagValues)
     const data = useMemo(() => (AdvanceSearch ? searchDisplay : displaySearchData) ? (AdvanceSearch ? searchedDataOut : searchedData) : tableData, [(AdvanceSearch ? searchDisplay : displaySearchData) ? (AdvanceSearch ? searchedDataOut : searchedData) : tableData]);
     const [manageColumns, setManageColumns] = useState(false);
     const [csvColumns, setCsvColumns] = useState([]);
     const [searchbox, setSearchbox] = useState('');
-    const [searchValue, setSearchValue] = useState({})
-    const [getTagValues, setGetTagValues] = useState(props.getTagValuesOutSide ? props.getTagValuesOutSide : []);
+    // const [searchValue, setSearchValue] = useState(advanceSearchData || {})
+    // const [getTagValues, setGetTagValues] = useState(props.getTagValuesOutSide ? props.getTagValuesOutSide : []);
     const [advaceSearch, setAdvaceSearch] = useState(false);
     const [column, setColumn] = useState('');
     const [gopageValue, setGopageValue] = useState();
+
+    const dispatch = useDispatch();
+
+    console.log("redux", getTagValues)
 
     const tableInstance = useTable(
         {
@@ -73,8 +82,8 @@ const CommonCheckTable = (props) => {
     };
 
     const handleAdvanceSearch = (values) => {
-        setSearchValue(values)
-        const searchResult = allData?.filter(item => {
+        dispatch(setSearchValue(values))
+        const searchResult = AdvanceSearch ? dispatch(getSearchData({ values: values, allData: allData, type: title })) : allData?.filter(item => {
             return tableCustomFields.every(field => {
                 const fieldValue = values[field.name];
                 const itemValue = item[field.name];
@@ -111,8 +120,6 @@ const CommonCheckTable = (props) => {
                 }
             });
         });
-
-      console.log(tableCustomFields,"tableCustomFields")
         const getValue = tableCustomFields.reduce((result, field) => {
             if (field.type === 'date') {
                 const fromDate = values[`from${field.name}`];
@@ -133,8 +140,7 @@ const CommonCheckTable = (props) => {
 
             return result;
         }, []);
-       
-        setGetTagValues(getValue);
+        dispatch(setGetTagValues(getValue))
         setSearchedData(searchResult);
         setDisplaySearchData(true);
         setAdvaceSearch(false);
@@ -151,7 +157,7 @@ const CommonCheckTable = (props) => {
         } else {
             setSearchbox('');
         }
-        setGetTagValues([]);
+        dispatch(setGetTagValues([]))
         if (props?.getTagValuesOutSide) {
             setGetTagValuesOutside([]);
         }
@@ -168,7 +174,8 @@ const CommonCheckTable = (props) => {
                 (!state || (item?.status && item?.status?.toLowerCase().includes(state?.toLowerCase())))
         )
         let getValue = [state || undefined].filter(value => value);
-        setGetTagValues(getValue)
+
+        dispatch(setGetTagValues(getValue))
         AdvanceSearch ? setSearchedDataOut && setSearchedDataOut(searchResult) : setSearchedData && setSearchedData(searchResult);
         AdvanceSearch ? setSearchDisplay && setSearchDisplay(true) : setDisplaySearchData && setDisplaySearchData(searchResult);
         setDisplaySearchData(true)
@@ -256,14 +263,14 @@ const CommonCheckTable = (props) => {
     };
 
     const handleRemove = (name) => {
-        const filter = (props.getTagValuesOutSide || []).concat(getTagValues || []).filter((item) => {
+        const filter = (getTagValues || []).filter((item) => {
             if (Array.isArray(name?.name)) {
                 return name.name?.toString() !== item.name?.toString();
             }
         });
+
         let updatedSearchValue = { ...searchValue };
         for (let key in updatedSearchValue) {
-            console.log("updatedSearchValue[key]---::", updatedSearchValue, "::--::", name.name, key)
             if (updatedSearchValue.hasOwnProperty(key)) {
                 if (name.name.includes(key)) {
                     delete updatedSearchValue[key];
@@ -275,30 +282,12 @@ const CommonCheckTable = (props) => {
         }
 
         handleAdvanceSearch(updatedSearchValue)
-        setGetTagValues(filter)
+
+        dispatch(setGetTagValues(filter))
         if (filter?.length === 0) {
             handleClear();
         }
     }
-    // const handleRemove = (name) => {
-    //     const filter = (props.getTagValuesOutSide || []).concat(getTagValues || []).filter((item) => item !== name)
-    //     let updatedSearchValue = { ...searchValue };
-
-    //     for (let key in updatedSearchValue) {
-    //         if (updatedSearchValue.hasOwnProperty(key)) {
-    //             if (updatedSearchValue[key] === name) {
-    //                 updatedSearchValue[key] = "";
-    //             }
-    //         }
-    //     }
-
-
-    //     handleAdvanceSearch(updatedSearchValue)
-    //     setGetTagValues(filter)
-    //     if (filter?.length === 0) {
-    //         handleClear();
-    //     }
-    // }
 
     useEffect(() => {
         AdvanceSearch ? setSearchedDataOut && setSearchedDataOut(data) : setSearchedData && setSearchedData(data);
@@ -376,7 +365,7 @@ const CommonCheckTable = (props) => {
                         {BackButton && BackButton}
                     </GridItem>
                     <HStack spacing={4} mb={2}>
-                        {(props.getTagValuesOutSide || []).concat(getTagValues || []).map((item, i) => (
+                        {(getTagValues || []).map((item, i) => (
                             <Tag
                                 size={"md"}
                                 p={2}
