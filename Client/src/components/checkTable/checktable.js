@@ -279,7 +279,6 @@ console.log(searchedDataOut,"searchedDataOut")
 
         let updatedSearchValue = { ...searchValue };
         for (let key in updatedSearchValue) {
-            console.log("updatedSearchValue[key]---::", updatedSearchValue, "::--::", name.name, key)
             if (updatedSearchValue.hasOwnProperty(key)) {
                 if (name.name.includes(key)) {
                     delete updatedSearchValue[key];
@@ -297,25 +296,6 @@ console.log(searchedDataOut,"searchedDataOut")
             handleClear();
         }
     }
-    // const handleRemove = (name) => {
-    //     const filter = (props.getTagValuesOutSide || []).concat(getTagValues || []).filter((item) => item !== name)
-    //     let updatedSearchValue = { ...searchValue };
-
-    //     for (let key in updatedSearchValue) {
-    //         if (updatedSearchValue.hasOwnProperty(key)) {
-    //             if (updatedSearchValue[key] === name) {
-    //                 updatedSearchValue[key] = "";
-    //             }
-    //         }
-    //     }
-
-
-    //     handleAdvanceSearch(updatedSearchValue)
-    //     setGetTagValues(filter)
-    //     if (filter?.length === 0) {
-    //         handleClear();
-    //     }
-    // }
 
     useEffect(() => {
         AdvanceSearch ? setSearchedDataOut && setSearchedDataOut(data) : setSearchedData && setSearchedData(data);

@@ -4,8 +4,6 @@ import Spinner from "components/spinner/Spinner"
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { getApi } from 'services/api'
-// import DeleteTask from './components/deleteTask'
-// import EditTask from './components/editTask'
 import { useNavigate } from 'react-router-dom';
 
 const EmailView = (props) => {
@@ -38,8 +36,6 @@ const EmailView = (props) => {
         }
     }
 
-    console.log(data,"data")
-
     return (
         <Modal isOpen={isOpen} size={'md'} isCentered>
             <ModalOverlay />
@@ -62,7 +58,7 @@ const EmailView = (props) => {
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, md: 6 }} >
                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Sender Email  </Text>
-                                    <Text>{data?.senderEmail ? data?.senderEmail :'-'}</Text>
+                                    <Text>{data?.senderEmail ? data?.senderEmail : '-'}</Text>
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, md: 6 }} >
                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Start Date </Text>
@@ -74,11 +70,11 @@ const EmailView = (props) => {
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, md: 6 }} >
                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Subject </Text>
-                                    <Text>{data?.subject ? data?.subject :'-'}</Text>
+                                    <Text>{data?.subject ? data?.subject : '-'}</Text>
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, md: 6 }} >
                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Message </Text>
-                                    <Text>{data?.message ? data?.message :'-'}</Text>
+                                    <Text>{data?.message ? data?.message : '-'}</Text>
                                 </GridItem>
                             </Grid>
 
@@ -87,9 +83,6 @@ const EmailView = (props) => {
                             {access?.view && <IconButton variant='outline' colorScheme={'green'} onClick={() => handleViewOpen()} borderRadius="10px" size="md" icon={<ViewIcon />} />}
                             {access?.update && <IconButton variant='outline' onClick={() => setEdit(true)} ml={3} borderRadius="10px" size="md" icon={<EditIcon />} />}
                             {access?.delete && <IconButton colorScheme='red' onClick={() => setDelete(true)} ml={3} borderRadius="10px" size="md" icon={<DeleteIcon />} />}
-
-                            {/* <EditTask setAction={setAction} isOpen={edit} onClose={setEdit} viewClose={onClose} id={info?.event ? info?.event?.id : info} from="view" />
-                            <DeleteTask fetchData={props.fetchData} isOpen={deleteModel} onClose={setDelete} viewClose={onClose} url='api/task/delete/' method='one' id={info?.event ? info?.event?.id : info} /> */}
                         </DrawerFooter>
                     </>}
             </ModalContent>

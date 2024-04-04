@@ -167,7 +167,6 @@ const Index = () => {
                         </Text>
                     </Card>
             }
-            {console.log(selectedValues)}
             <Add isOpen={addModal} onClose={handleAddClose} fetchData={fetchData} setAction={setAction} />
             <Edit isOpen={editModal} onClose={handleEditClose} selectedId={selectedId} editdata={editdata} setAction={setAction} fetchData={fetchData} />
             <CommonDeleteModel isOpen={deleteModal} onClose={() => setDeleteModal(false)} type={'Module'} handleDeleteData={handleDeleteModule} ids={selectedId} selectedValues={selectedValues} />
