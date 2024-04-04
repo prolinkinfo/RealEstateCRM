@@ -47,8 +47,8 @@ const MeetingAdvanceSearch = (props) => {
             //     }
             // )
 
-            const dateFrom = `${values?.startDate && `From: ${values?.startDate}`} ${values?.endDate && `To: ${values?.endDate}`}`;
-            const timeDateFrom = `${values?.timeStartDate && `From: ${values?.timeStartDate}`} ${values?.timeEndDate && `To: ${values?.timeEndDate}`}`
+            const dateFrom = `${values?.startDate && `From: ${values?.startDate}`}${values?.endDate && ` To: ${values?.endDate}`}`;
+            const timeDateFrom = `${values?.timeStartDate && `From: ${values?.timeStartDate}`}${values?.timeEndDate && ` To: ${values?.timeEndDate}`}`
             // let getValue = [values.agenda, values?.createBy, (values?.startDate || values?.endDate) && dateFrom, (values?.timeStartDate || values?.timeEndDate) && timeDateFrom].filter(value => value);
 
             const getValue = [
@@ -70,7 +70,6 @@ const MeetingAdvanceSearch = (props) => {
                     value: timeDateFrom
                 }
             ]
-            console.log(getValue.filter(item => item.value), "ssssssssss")
             dispatch(setGetTagValues(getValue.filter(item => item.value)))
             // setSearchedData(searchResult);
             setDisplaySearchData(true)
