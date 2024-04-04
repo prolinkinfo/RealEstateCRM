@@ -112,7 +112,7 @@ const CommonCheckTable = (props) => {
             });
         });
 
-      console.log(tableCustomFields,"tableCustomFields")
+        console.log(tableCustomFields, "tableCustomFields")
         const getValue = tableCustomFields.reduce((result, field) => {
             if (field.type === 'date') {
                 const fromDate = values[`from${field.name}`];
@@ -133,7 +133,7 @@ const CommonCheckTable = (props) => {
 
             return result;
         }, []);
-       
+
         setGetTagValues(getValue);
         setSearchedData(searchResult);
         setDisplaySearchData(true);
@@ -263,7 +263,6 @@ const CommonCheckTable = (props) => {
         });
         let updatedSearchValue = { ...searchValue };
         for (let key in updatedSearchValue) {
-            console.log("updatedSearchValue[key]---::", updatedSearchValue, "::--::", name.name, key)
             if (updatedSearchValue.hasOwnProperty(key)) {
                 if (name.name.includes(key)) {
                     delete updatedSearchValue[key];
@@ -280,25 +279,6 @@ const CommonCheckTable = (props) => {
             handleClear();
         }
     }
-    // const handleRemove = (name) => {
-    //     const filter = (props.getTagValuesOutSide || []).concat(getTagValues || []).filter((item) => item !== name)
-    //     let updatedSearchValue = { ...searchValue };
-
-    //     for (let key in updatedSearchValue) {
-    //         if (updatedSearchValue.hasOwnProperty(key)) {
-    //             if (updatedSearchValue[key] === name) {
-    //                 updatedSearchValue[key] = "";
-    //             }
-    //         }
-    //     }
-
-
-    //     handleAdvanceSearch(updatedSearchValue)
-    //     setGetTagValues(filter)
-    //     if (filter?.length === 0) {
-    //         handleClear();
-    //     }
-    // }
 
     useEffect(() => {
         AdvanceSearch ? setSearchedDataOut && setSearchedDataOut(data) : setSearchedData && setSearchedData(data);

@@ -8,7 +8,6 @@ import { IoIosArrowBack } from "react-icons/io";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getApi } from "services/api";
 import Add from "./Add";
-// import Delete from "./Delete";
 import Edit from "./Edit";
 import PropertyPhoto from "./components/propertyPhoto";
 import { HasAccess } from "../../../redux/accessUtils";
@@ -76,7 +75,7 @@ const View = () => {
         setPropertyData(response.data)
     }
 
-    const handleDeleteProperties=async(id)=>{
+    const handleDeleteProperties = async (id) => {
         try {
             setIsLoding(true)
             let response = await deleteApi('api/property/delete/', id)
@@ -157,16 +156,10 @@ const View = () => {
                         <TabPanels>
                             <TabPanel pt={4} p={0}>
                                 <CustomView data={propertyData[0]} fieldData={data} />
-                                {console.log(filteredContacts, contactColumns)}
                                 {filteredContacts?.length > 0 &&
                                     <GridItem colSpan={{ base: 12 }} mt={4}>
                                         <Grid templateColumns={{ base: "1fr" }} >
                                             <GridItem colSpan={2}>
-                                                {/* <Box>
-                                                        <Heading size="md" mb={3}>
-                                                            Interested Contact (<CountUpComponent key={filteredContacts?.length} targetNumber={filteredContacts?.length} />)
-                                                        </Heading>
-                                                    </Box> */}
                                                 <Grid templateColumns={'repeat(2, 1fr)'} >
                                                     <GridItem colSpan={{ base: 2 }}>
                                                         <CommonCheckTable
@@ -179,10 +172,10 @@ const View = () => {
                                                             allData={filteredContacts}
                                                             tableData={filteredContacts}
                                                             dynamicColumns={dynamicColumns}
-                                                             setDynamicColumns={setDynamicColumns} 
-                                                             selectedColumns={selectedColumns} 
-                                                             setSelectedColumns={setSelectedColumns} 
-                                                              size={"md"} />
+                                                            setDynamicColumns={setDynamicColumns}
+                                                            selectedColumns={selectedColumns}
+                                                            setSelectedColumns={setSelectedColumns}
+                                                            size={"md"} />
                                                     </GridItem>
                                                 </Grid>
                                             </GridItem>
@@ -306,7 +299,6 @@ const View = () => {
                                                         <HSeparator />
                                                     </Box>
                                                 </GridItem>
-                                                {/* <Flex flexWrap={'wrap'} alingItem={'center'} > */}
                                                 <GridItem colSpan={12} sx={{ maxHeight: '200px', overflowX: 'auto' }}>
                                                     {data?.propertyDocuments?.length > 0 ?
                                                         (data && data?.propertyDocuments?.length > 0 && data?.propertyDocuments?.map((item) => {
@@ -332,8 +324,6 @@ const View = () => {
                                                             <DataNotFound />
                                                         </Text>}
                                                 </GridItem>
-
-                                                {/* </Flex> */}
                                             </Grid>
                                             {data?.propertyDocuments?.length > 0 ?
                                                 <Flex justifyContent={"end"} mt={1}>
