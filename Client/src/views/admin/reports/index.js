@@ -23,6 +23,7 @@ const Report = () => {
 
     const fetchCustomDataFields = async () => {
         const tempTableColumns = [
+            { Header: '#', accessor: '_id' },
             { Header: 'Name', accessor: 'firstName' },
             { Header: 'Email Sent', accessor: 'emailsent' },
             { Header: "Outbound Calls", accessor: "outboundcall" },
