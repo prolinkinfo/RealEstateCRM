@@ -3,12 +3,15 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Grid, GridItem, Input, FormLabel, Select, Text, Button, } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
+import { setSearchValue, getSearchData, setGetTagValues } from '../../../../redux/advanceSearchSlice';
+import { useDispatch } from 'react-redux';
 
 
 
 const EmailAdvanceSearch = (props) => {
-    const { state, allData, advanceSearch, setAdvanceSearch, isLoding, setGetTagValues, setSearchedData, setDisplaySearchData, setSearchClear, setSearchbox } = props;
+    const { state, allData, advanceSearch, setAdvanceSearch, isLoding, setSearchedData, setDisplaySearchData, setSearchClear, setSearchbox } = props;
 
+    const dispatch = useDispatch();
     const initialValues = {
         senderName: '',
         realetedTo: '',
@@ -23,15 +26,30 @@ const EmailAdvanceSearch = (props) => {
         initialValues: initialValues,
         validationSchema: validationSchema,
         onSubmit: (values, { resetForm }) => {
-            const searchResult = allData?.filter(
-                (item) =>
-                    (!values?.senderName || (item?.senderName && item?.senderName.toLowerCase().includes(values?.senderName?.toLowerCase()))) &&
-                    (!values?.realetedTo || (values.realetedTo === "contact" ? item.createBy : item.createByLead)) &&
-                    (!values?.createByName || (item?.createByName && item?.createByName.toLowerCase().includes(values?.createByName?.toLowerCase())))
-            )
-            let getValue = [values.senderName, values?.realetedTo, values?.createByName].filter(value => value);
-            setGetTagValues(getValue)
-            setSearchedData(searchResult);
+            dispatch(setSearchValue(values))
+            dispatch(getSearchData({ values: values, allData: allData, type: 'Email' }))
+            // const searchResult = allData?.filter(
+            //     (item) =>
+            //         (!values?.senderName || (item?.senderName && item?.senderName.toLowerCase().includes(values?.senderName?.toLowerCase()))) &&
+            //         (!values?.realetedTo || (values.realetedTo === "contact" ? item.createBy : item.createByLead)) &&
+            //         (!values?.createByName || (item?.createByName && item?.createByName.toLowerCase().includes(values?.createByName?.toLowerCase())))
+            // )
+            // let getValue = [values.senderName, values?.realetedTo, values?.createByName].filter(value => value);
+            const getValue = [
+                {
+                    name: ["senderName"],
+                    value: values.senderName
+                },
+                {
+                    name: ["realetedTo"],
+                    value: values.realetedTo
+                },
+                {
+                    name: ["createByName"],
+                    value: values.createByName
+                },
+            ]
+            dispatch(setGetTagValues(getValue.filter(item => item.value)))
             setDisplaySearchData(true)
             setAdvanceSearch(false)
             resetForm();

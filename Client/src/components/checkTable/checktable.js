@@ -22,7 +22,7 @@ const CommonCheckTable = (props) => {
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
     const searchedDataOut = useSelector((state) => state?.advanceSearchData?.searchResult)
-console.log(searchedDataOut,"searchedDataOut")
+    console.log(searchedDataOut, "searchedDataOut")
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
     const columns = useMemo(() => dataColumn, [dataColumn]);
@@ -263,19 +263,11 @@ console.log(searchedDataOut,"searchedDataOut")
     };
 
     const handleRemove = (name) => {
-        console.log(name, "name")
         const filter = (getTagValues || []).filter((item) => {
             if (Array.isArray(name?.name)) {
                 return name.name?.toString() !== item.name?.toString();
             }
         });
-        // const filter = (props.getTagValuesOutSide || []).concat(getTagValues || []).filter((item) => {
-        //     if (Array.isArray(name?.name)) {
-        //         return name.name?.toString() !== item.name?.toString();
-        //     }
-        // });
-
-        console.log("filter::--", filter)
 
         let updatedSearchValue = { ...searchValue };
         for (let key in updatedSearchValue) {

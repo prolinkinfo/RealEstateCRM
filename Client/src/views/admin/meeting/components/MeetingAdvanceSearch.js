@@ -4,13 +4,13 @@ import * as yup from "yup";
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Grid, GridItem, Input, FormLabel, Text, Button, } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
 import moment from 'moment';
-import { getSearchData, setSearchValue } from '../../../../redux/advanceSearchSlice';
+import { getSearchData, setGetTagValues, setSearchValue } from '../../../../redux/advanceSearchSlice';
 import { useDispatch } from 'react-redux';
 
 
 
 const MeetingAdvanceSearch = (props) => {
-    const { allData, advanceSearch, setAdvanceSearch, isLoding, setGetTagValues, setSearchedData, setDisplaySearchData, setSearchbox } = props;
+    const { allData, advanceSearch, setAdvanceSearch, isLoding, setSearchedData, setDisplaySearchData, setSearchbox } = props;
 
     const dispatch = useDispatch();
     const initialValues = {
@@ -29,8 +29,8 @@ const MeetingAdvanceSearch = (props) => {
         initialValues: initialValues,
         validationSchema: validationSchema,
         onSubmit: (values, { resetForm }) => {
-            dispatch(getSearchData({ values: values, allData: allData, type: 'Meeting' }))
             dispatch(setSearchValue(values))
+            dispatch(getSearchData({ values: values, allData: allData, type: 'Meeting' }))
             // const searchResult = allData?.filter(
             //     (item) => {
             //         const itemDate = new Date(item.dateTime);
@@ -49,8 +49,29 @@ const MeetingAdvanceSearch = (props) => {
 
             const dateFrom = `${values?.startDate && `From: ${values?.startDate}`} ${values?.endDate && `To: ${values?.endDate}`}`;
             const timeDateFrom = `${values?.timeStartDate && `From: ${values?.timeStartDate}`} ${values?.timeEndDate && `To: ${values?.timeEndDate}`}`
-            let getValue = [values.agenda, values?.createBy, (values?.startDate || values?.endDate) && dateFrom, (values?.timeStartDate || values?.timeEndDate) && timeDateFrom].filter(value => value);
-            dispatch(setGetTagValues(getValue))
+            // let getValue = [values.agenda, values?.createBy, (values?.startDate || values?.endDate) && dateFrom, (values?.timeStartDate || values?.timeEndDate) && timeDateFrom].filter(value => value);
+
+            const getValue = [
+                {
+                    name: ["agenda"],
+                    value: values.agenda
+                },
+                {
+                    name: ["createBy"],
+                    value: values.createBy
+                },
+                {
+                    name: ["startDate", "endDate"],
+                    value: dateFrom
+                },
+
+                {
+                    name: ["timeStartDate", "timeEndDate"],
+                    value: timeDateFrom
+                }
+            ]
+            console.log(getValue.filter(item => item.value), "ssssssssss")
+            dispatch(setGetTagValues(getValue.filter(item => item.value)))
             // setSearchedData(searchResult);
             setDisplaySearchData(true)
             setAdvanceSearch(false)

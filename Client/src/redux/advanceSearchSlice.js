@@ -15,7 +15,6 @@ const advanceSearchSlice = createSlice({
             state.searchValue = action.payload;
         },
         setGetTagValues(state, action) {
-            console.log("action.payload", action.payload)
             state.getTagValues = action.payload;
         },
         getSearchData(state, action) {
@@ -43,13 +42,29 @@ const advanceSearchSlice = createSlice({
                             const timeItemDate = new Date(item.timestamp);
                             const timeMomentDate = moment(timeItemDate).format('YYYY-MM-DD');
                             return (
-                                (!action?.payload?.agenda || (item?.agenda && item?.agenda.toLowerCase().includes(action?.payload?.agenda?.toLowerCase()))) &&
-                                (!action?.payload?.createBy || (item?.createBy && item?.createBy.toLowerCase().includes(action?.payload?.createBy?.toLowerCase()))) &&
-                                (!action?.payload?.startDate || (momentDate >= action?.payload.startDate)) &&
-                                (!action?.payload?.endDate || (momentDate <= action?.payload.endDate)) &&
-                                (!action?.payload.timeStartDate || (timeMomentDate >= action?.payload.timeStartDate)) &&
-                                (!action?.payload.timeEndDate || (timeMomentDate <= action?.payload.timeEndDate)))
+                                (!action?.payload?.values?.agenda || (item?.agenda && item?.agenda.toLowerCase().includes(action?.payload?.values?.agenda?.toLowerCase()))) &&
+                                (!action?.payload?.values?.createBy || (item?.createBy && item?.createBy.toLowerCase().includes(action?.payload?.values?.createBy?.toLowerCase()))) &&
+                                (!action?.payload?.values?.startDate || (momentDate >= action?.payload?.values?.startDate)) &&
+                                (!action?.payload?.values?.endDate || (momentDate <= action?.payload?.values?.endDate)) &&
+                                (!action?.payload?.values?.timeStartDate || (timeMomentDate >= action?.payload?.values?.timeStartDate)) &&
+                                (!action?.payload?.values?.timeEndDate || (timeMomentDate <= action?.payload?.values?.timeEndDate)))
                         }
+                    )
+                    break;
+                case 'Calls':
+                    state.searchResult = action.payload.allData?.filter(
+                        (item) =>
+                            (!action.payload.values?.senderName || (item?.senderName && item?.senderName.toLowerCase().includes(action.payload.values?.senderName?.toLowerCase()))) &&
+                            (!action.payload.values?.realetedTo || (action.payload.values.realetedTo === "contact" ? item.createBy : item.createByLead)) &&
+                            (!action.payload.values?.createByName || (item?.createByName && item?.createByName.toLowerCase().includes(action.payload.values?.createByName?.toLowerCase())))
+                    )
+                    break;
+                case 'Email':
+                    state.searchResult = action.payload.allData?.filter(
+                        (item) =>
+                            (!action.payload.values?.senderName || (item?.senderName && item?.senderName.toLowerCase().includes(action.payload.values?.senderName?.toLowerCase()))) &&
+                            (!action.payload.values?.realetedTo || (action.payload.values.realetedTo === "contact" ? item.createBy : item.createByLead)) &&
+                            (!action.payload.values?.createByName || (item?.createByName && item?.createByName.toLowerCase().includes(action.payload.values?.createByName?.toLowerCase())))
                     )
                     break;
                 default:
