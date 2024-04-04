@@ -166,6 +166,7 @@ const AdvanceSearch = ({ handleAdvanceSearch,setAdvaceSearch,search, advaceSearc
                                                             onBlur={handleBlur}
                                                             value={values[`to${field.name}`]}
                                                             type="date"
+                                                            min={values[`from${field.name}`]}
                                                             name={`to${field.name}`}
                                                             fontWeight='500'
                                                         />
