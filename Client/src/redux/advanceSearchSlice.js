@@ -67,6 +67,14 @@ const advanceSearchSlice = createSlice({
                             (!action.payload.values?.createByName || (item?.createByName && item?.createByName.toLowerCase().includes(action.payload.values?.createByName?.toLowerCase())))
                     )
                     break;
+                case 'Users':
+                    state.searchResult = action?.payload?.allData?.filter(
+                        (item) =>
+                            (!action.payload?.values?.firstName || (item?.firstName && item?.firstName.toLowerCase().includes(action.payload?.values?.firstName?.toLowerCase()))) &&
+                            (!action.payload?.values?.username || (item?.username && item?.username.toLowerCase().includes(action.payload?.values?.username?.toLowerCase()))) &&
+                            (!action.payload?.values?.lastName || (item?.lastName && item?.lastName.toLowerCase().includes(action.payload?.values?.lastName?.toLowerCase())))
+                    )
+                    break;
                 default:
                 // state.count += 3;
             }
