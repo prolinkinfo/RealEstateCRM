@@ -9,7 +9,13 @@ const ApexChart = (props) => {
   let soldLength = leadData && leadData.length > 0 ? leadData?.filter(lead => lead?.leadStatus === "sold")?.length : 0;
 
   const series = [activeLength, pendingLength, soldLength];
-  const scaledSeries = series.map(value => value === 0 ? (value + 1 / leadData?.length) : ((value * 100) / leadData?.length))
+  const scaledSeries = series?.map(value => {
+    if (leadData?.length === 0) {
+        return NaN;
+    } else {
+        return value === 0 ? NaN : ((value * 100) / leadData?.length);
+    }
+});
 
 
   const options = {

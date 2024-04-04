@@ -1,85 +1,3 @@
-// import { Grid, GridItem, useDisclosure } from '@chakra-ui/react';
-// import { useEffect, useState } from 'react';
-// import { getApi } from "services/api";
-// import { HasAccess } from "../../../redux/accessUtils";
-// import CheckTable from './components/CheckTable';
-
-// const Index = () => {
-
-//     const [isLoding, setIsLoding] = useState(false);
-//     const [data, setData] = useState([]);
-//     const [displaySearchData, setDisplaySearchData] = useState(false);
-//     const [searchedData, setSearchedData] = useState([]);
-//     const user = JSON.parse(localStorage.getItem("user"));
-
-//     const [permission, emailAccess, callAccess] = HasAccess(['Lead', 'Email', 'Call']);
-//     const tableColumns = [
-//         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-//         { Header: 'Name', accessor: 'leadName', width: 20 },
-//         { Header: "Status", accessor: "leadStatus", },
-//         { Header: "Email", accessor: "leadEmail", },
-//         { Header: "Phone Number", accessor: "leadPhoneNumber", },
-//         { Header: "Owner", accessor: "leadOwner", },
-//         { Header: "Score", accessor: "leadScore", },
-//         { Header: "Action", isSortable: false, center: true },
-//     ];
-
-//     const [dynamicColumns, setDynamicColumns] = useState([...tableColumns]);
-//     const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
-//     const [action, setAction] = useState(false)
-//     const [columns, setColumns] = useState(tableColumns);
-//     const { isOpen, onOpen, onClose } = useDisclosure()
-//     const size = "lg";
-
-//     const dataColumn = dynamicColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
-
-//     const fetchData = async () => {
-//         setIsLoding(true)
-//         let result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
-//         setData(result.data);
-//         setIsLoding(false)
-//     }
-
-//     useEffect(() => {
-//         setColumns(tableColumns)
-//     }, [action])
-
-//     return (
-//         <div>
-//             <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={4}>
-//                 <GridItem colSpan={6}>
-//                     <CheckTable
-//                         isLoding={isLoding}
-//                         setIsLoding={setIsLoding}
-//                         columnsData={tableColumns}
-//                         isOpen={isOpen}
-//                         setAction={setAction}
-//                         dataColumn={dataColumn}
-//                         action={action}
-//                         setSearchedData={setSearchedData}
-//                         allData={data}
-//                         displaySearchData={displaySearchData}
-//                         tableData={displaySearchData ? searchedData : data}
-//                         fetchData={fetchData}
-//                         setDisplaySearchData={setDisplaySearchData}
-//                         setDynamicColumns={setDynamicColumns}
-//                         dynamicColumns={dynamicColumns}
-//                         selectedColumns={selectedColumns}
-//                         access={permission}
-//                         setSelectedColumns={setSelectedColumns}
-//                         emailAccess={emailAccess}
-//                         callAccess={callAccess}
-//                     />
-//                 </GridItem>
-//             </Grid>
-
-//         </div>
-//     )
-// }
-
-// export default Index
-
-
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { HasAccess } from "../../../redux/accessUtils";
@@ -90,11 +8,12 @@ import { getApi } from "services/api";
 import CommonCheckTable from '../../../components/checkTable/checktable';
 import Add from "./Add";
 import Edit from "./Edit";
-import Delete from './Delete';
 import AddEmailHistory from "views/admin/emailHistory/components/AddEmail";
 import AddPhoneCall from "views/admin/phoneCall/components/AddPhoneCall";
 import ImportModal from './components/ImportModal';
 import { putApi } from 'services/api';
+import CommonDeleteModel from 'components/commonDeleteModel';
+import { deleteManyApi } from 'services/api';
 
 const Index = () => {
     const title = "Leads";
@@ -104,8 +23,6 @@ const Index = () => {
     const [permission, emailAccess, callAccess] = HasAccess(['Leads', 'Emails', 'Calls']);
     const [isLoding, setIsLoding] = useState(false);
     const [data, setData] = useState([]);
-    // const [displaySearchData, setDisplaySearchData] = useState(false);
-    // const [searchedData, setSearchedData] = useState([]);
     const [tableColumns, setTableColumns] = useState([]);
     const [columns, setColumns] = useState([]);
     const [dataColumn, setDataColumn] = useState([]);
@@ -122,8 +39,6 @@ const Index = () => {
     const [selectedValues, setSelectedValues] = useState([]);
     const [isImport, setIsImport] = useState(false);
     const [emailRec, setEmailRec] = useState('');
-
-
 
     const fetchData = async () => {
         setIsLoding(true);
@@ -153,6 +68,7 @@ const Index = () => {
             setIsLoding(false)
         }
     }
+
     const changeStatus = (cell) => {
         switch (cell.original.leadStatus) {
             case 'pending':
@@ -165,12 +81,16 @@ const Index = () => {
                 return 'completed';
         }
     }
+
+
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
+       
         const result = await getApi(`api/custom-field/?moduleName=Leads`);
         setLeadData(result?.data);
+
         const actionHeader = {
-            Header: "Action", isSortable: false, center: true,
+            Header: "Action", accessor:"action",isSortable: false, center: true,
             cell: ({ row, i }) => (
                 <Text fontSize="md" fontWeight="900" textAlign={"center"} >
                     <Menu isLazy  >
@@ -183,7 +103,7 @@ const Index = () => {
                             {emailAccess?.create &&
                                 <MenuItem py={2.5} width={"165px"} onClick={() => {
                                     handleOpenEmail(row?.values?._id, row?.original); setSelectedId(row?.values?._id)
-                                }} icon={<EmailIcon fontSize={15} mb={1} />}>Send Email</MenuItem>}
+                                }} icon={<EmailIcon fontSize={15} mb={1} />}>EmailSend </MenuItem>}
                             {permission?.view &&
                                 <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { navigate(`/leadView/${row?.values?._id}`) }}>View</MenuItem>}
                             {permission?.delete &&
@@ -196,7 +116,7 @@ const Index = () => {
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
             {
-                Header: "Status", isSortable: false, center: true,
+                Header: "Status", accessor:"leadStatus",isSortable: true, center: true,
                 cell: ({ row }) => (
                     <div className="selectOpt" >
                         <Select defaultValue={'active'} className={changeStatus(row)} onChange={(e) => setStatusData(row, e)} height={7} width={130} value={row.original.leadStatus} style={{ fontSize: "14px" }}>
@@ -218,6 +138,24 @@ const Index = () => {
         setIsLoding(false);
     }
 
+    const handleDeleteLead=async(ids)=>{
+        try {
+            setIsLoding(true)
+            let response = await deleteManyApi('api/lead/deleteMany', ids)
+            if (response.status === 200) {
+                setSelectedValues([])
+                setDelete(false)
+                setAction((pre) => !pre)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        finally {
+            setIsLoding(false)
+        }
+    }
+
+
     useEffect(() => {
         fetchData();
         fetchCustomDataFields();
@@ -238,12 +176,7 @@ const Index = () => {
                             columnData={columns}
                             dataColumn={dataColumn}
                             allData={data}
-                            // tableData={displaySearchData ? searchedData : data}
                             tableData={data}
-                            // displaySearchData={displaySearchData}
-                            // setDisplaySearchData={setDisplaySearchData}
-                            // searchedData={searchedData}
-                            // setSearchedData={setSearchedData}
                             tableCustomFields={leadData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
                             access={permission}
                             action={action}
@@ -264,7 +197,7 @@ const Index = () => {
 
             {isOpen && <Add isOpen={isOpen} size={size} leadData={leadData[0]} onClose={onClose} setAction={setAction} action={action} />}
             {edit && <Edit isOpen={edit} size={size} leadData={leadData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={leadData?.[0]?._id} />}
-            {deleteModel && <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/lead/deleteMany' data={selectedValues} method='many' setAction={setAction} />}
+            {deleteModel && <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Leads' handleDeleteData={handleDeleteLead} ids={selectedValues} />}
             {addEmailHistory && <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} lead='true' id={selectedId} leadEmail={emailRec} />}
             {addPhoneCall && <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} lead='true' id={callSelectedId} />}
             {isImport && <ImportModal text='Lead file' isOpen={isImport} onClose={setIsImport} customFields={leadData?.[0]?.fields || []} />}

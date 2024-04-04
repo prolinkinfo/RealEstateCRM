@@ -122,22 +122,6 @@ const Call = () => {
                 )}
                 <Text mb='10px' color={'red'}> {errors.recipient && touched.recipient && errors.recipient}</Text>
             </GridItem>
-            {/* <GridItem colSpan={{ base: 12 }} >
-                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                    Call Duration
-                </FormLabel>
-                <Input
-                    fontSize='sm'
-                    onChange={handleChange}
-                    value={values.callDuration}
-                    name="callDuration"
-                    placeholder='callDuration'
-                    fontWeight='500'
-                    borderColor={errors?.callDuration && touched?.callDuration ? "red.300" : null}
-                />
-
-                <Text mb='10px' color={'red'}> {errors.callDuration && touched.callDuration && errors.callDuration}</Text>
-            </GridItem> */}
             <GridItem colSpan={{ base: 12 }} >
                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                     Call Notes

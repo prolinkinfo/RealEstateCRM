@@ -22,14 +22,13 @@ import { HSeparator } from "components/separator/Separator";
 import { useEffect, useState } from "react";
 import { LuBuilding2 } from "react-icons/lu";
 import { MdAddTask, MdContacts, MdLeaderboard } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getApi } from "services/api";
 import ReportChart from "../reports/components/reportChart";
 import Chart from "components/charts/LineChart.js";
 // import Chart from "../reports/components/chart";
 import { HasAccess } from "../../../redux/accessUtils";
 import PieChart from "components/charts/PieChart";
-import ReactApexChart from 'react-apexcharts';
 import CountUpComponent from "../../../../src/components/countUpComponent/countUpComponent";
 import Spinner from 'components/spinner/Spinner';
 
@@ -47,85 +46,6 @@ export default function UserReports() {
   const [propertyData, setPropertyData] = useState([]);
   const navigate = useNavigate();
   const [contactsView, taskView, leadView, proprtyView, emailView, callView, meetingView] = HasAccess(["Contacts", "Tasks", "Leads", "Properties", "Emails", "Calls", "Meetings"]);
-
-  const options = {
-    chart: {
-      height: 350,
-      type: 'radialBar',
-    },
-    plotOptions: {
-      radialBar: {
-        dataLabels: {
-          name: {
-            fontSize: '22px',
-          },
-          value: {
-            fontSize: '16px',
-          },
-          total: {
-            show: true,
-            label: 'Total',
-            formatter: function () {
-              return 249;
-            }
-          }
-        }
-      }
-    },
-    labels: ['Apples', 'Oranges', 'Bananas', 'Berries'],
-  };
-
-  const options4 = {
-    chart: {
-      type: 'radialBar',
-      height: 350,
-      width: 380,
-    },
-    plotOptions: {
-      radialBar: {
-        size: undefined,
-        inverseOrder: true,
-        hollow: {
-          margin: 40,
-          size: '48%',
-          background: 'transparent',
-
-        },
-        dataLabels: {
-          name: {
-            fontSize: '22px',
-          },
-          value: {
-            fontSize: '16px',
-          },
-          total: {
-            show: true,
-            label: 'Total',
-            formatter: function () {
-              return 249;
-            }
-          }
-        },
-        track: {
-          show: false,
-        },
-        startAngle: -180,
-        endAngle: 180
-
-      },
-    },
-    stroke: {
-      lineCap: 'round'
-    },
-    labels: ['June', 'May', 'April'],
-    legend: {
-      show: true,
-      floating: true,
-      position: 'right',
-      offsetX: 152,
-      offsetY: 215
-    },
-  }
 
   const fetchData = async () => {
     let taskData;
@@ -291,16 +211,7 @@ export default function UserReports() {
       </SimpleGrid>
 
       <Grid Grid templateColumns="repeat(12, 1fr)" gap={3} >
-        {/* <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
-          <Card>
-            <ReactApexChart options={options} series={[44, 55, 67, 83]} type="radialBar" height={350} />
-          </Card>
-        </GridItem>
-        <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
-          <Card>
-            <ReactApexChart options={options4} series={[71, 63, 77]} type="radialBar" height={350} />
-          </Card>
-        </GridItem> */}
+       
         <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
           <Card>
             <Flex mb={3} alignItems={"center"} justifyContent={"space-between"}>
@@ -338,30 +249,7 @@ export default function UserReports() {
 
         <Card >
           <Heading size="md" pb={3}>Statistics</Heading>
-          {/* {data && data.length > 0 && data?.map((item, i) => (
-            <>
-              {((item.name === 'Leads' && (leadView?.create || leadView?.update || leadView?.delete || leadView?.view)) ||
-                (item.name === 'Contacts' && (contactsView?.create || contactsView?.update || contactsView?.delete || contactsView?.view)) ||
-                (item.name === 'Meetings' && (meetingView?.create || meetingView?.update || meetingView?.delete || meetingView?.view)) ||
-                (item.name === 'Calls' && (callView?.create || callView?.update || callView?.delete || callView?.view)) ||
-                (item.name === 'Emails' && (emailView?.create || emailView?.update || emailView?.delete || emailView?.view)) ||
-                (item.name === 'Properties' && (proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view)) ||
-                (item.name === 'Tasks' && (taskView?.create || taskView?.update || taskView?.delete || taskView?.view))
-              )
-                &&
-                <Box border={"1px solid #e5e5e5"} p={2} m={1} cursor={'pointer'} key={i} onClick={() => navigate(navigateTo[item.name])}>
-                  <Flex justifyContent={"space-between"}>
-                    <Text fontSize="sm" fontWeight={600} pb={2}>{item?.name}</Text>
-                    <Text fontSize="sm" fontWeight={600} pb={2}><CountUpComponent targetNumber={item?.length} /></Text>
-                  </Flex>
-                  <Progress
-                    colorScheme={item?.color}
-                    size='xs' value={item?.length} width={"100%"} />
-                </Box>
-              }
-            </>
-
-          ))} */}
+          
           {
             !isLoding ?
             data && data.length > 0 && data?.map((item, i) => (

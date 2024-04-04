@@ -54,7 +54,6 @@ const TaskAdvanceSearch = (props) => {
             setSearchedData(searchResult);
             setDisplaySearchData(true);
             setAdvanceSearch(false);
-            // setSearchClear(true)
             resetForm();
             setSearchbox('');
         }
@@ -96,7 +95,6 @@ const TaskAdvanceSearch = (props) => {
                                     name="status"
                                     onChange={handleChange}
                                     fontWeight='500'
-                                // placeholder={'Select Lead Status'}
                                 >
                                     {!state && <option value=''>Select Status</option>}
                                     <option value='completed'>Completed</option>

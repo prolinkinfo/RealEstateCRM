@@ -22,10 +22,8 @@ import {
 } from "react-table";
 
 // Custom components
-import Card from "components/card/Card";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
 import Pagination from "components/pagination/Pagination";
-import { SiGooglemeet } from "react-icons/si";
 import { Link, useParams } from "react-router-dom";
 import AddMeeting from "./Addmeeting";
 import { AddIcon } from "@chakra-ui/icons";

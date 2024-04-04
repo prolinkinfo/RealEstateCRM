@@ -75,6 +75,11 @@ option {
   max-height: 63vh;
   overflow-y: auto;
 }
+.small-table-fix-container {
+  min-height: 15vh;
+  max-height: 63vh;
+  overflow-y: auto;
+}
 
 .table-fix-container thead {
   border-bottom: 1px solid black;

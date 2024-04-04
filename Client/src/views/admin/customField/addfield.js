@@ -60,14 +60,9 @@ const Addfield = (props) => {
         ],
     };
 
-    const underHeadingSchema = yup.object({
-        belongsTo: yup.string().required("Belongs to field is required")
-    });
-
     const formik = useFormik({
         initialValues: initialValues,
         validationSchema: addFiledSchema,
-        // validationSchema: headingsData?.length > 0 ? addFiledSchema.concat(underHeadingSchema) : addFiledSchema,
         validate: (values) => {
             const errors = {};
             if (values?.validation && (values.validation[1]?.min || values?.type === 'range') && values.validation[1]?.value === '') {
@@ -349,7 +344,6 @@ const Addfield = (props) => {
                                             {validations?.length > 0 && <Select
                                                 value={validationType}
                                                 name="validations"
-                                                // onChange={handleChange}
                                                 onChange={(e) => {
                                                     setValidationType(e.target.value)
                                                     if (e.target.value) {

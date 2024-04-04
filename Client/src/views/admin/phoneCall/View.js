@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Grid, GridItem, Heading, Text, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Flex, Grid, GridItem, Heading, Text } from "@chakra-ui/react";
 import Card from "components/card/Card";
 import { HSeparator } from "components/separator/Separator";
 import Spinner from "components/spinner/Spinner";
@@ -108,16 +108,6 @@ const View = () => {
                     </Grid>
                 </>}
 
-            {/* <Card mt={3}>
-                <Grid templateColumns="repeat(6, 1fr)" gap={1}>
-                    <GridItem colStart={6} >
-                        <Flex justifyContent={"right"}>
-                            <Button onClick={() => setEdit(true)} leftIcon={<EditIcon />} variant="outline" colorScheme="green">Edit</Button>
-                            <Button style={{ background: 'red.800' }} ml={2.5} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>
-                        </Flex>
-                    </GridItem>
-                </Grid>
-            </Card> */}
         </>
     );
 };

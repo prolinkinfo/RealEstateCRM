@@ -2,7 +2,6 @@ import Card from "components/card/Card";
 import { useEffect, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import { getApi } from 'services/api';
-import CheckTable from "./components/CheckTable";
 import ReportChart from './components/reportChart';
 import CommonCheckTable from "components/checkTable/checktable";
 
@@ -10,6 +9,9 @@ const Report = () => {
     const title = 'Reports'
     const [data, setData] = useState([])
     const [isLoding, setIsLoding] = useState(false)
+    const [selectedValues, setSelectedValues] = useState([]);
+    const [selectedColumns, setSelectedColumns] = useState([]);
+    const [columns, setColumns] = useState([]);
 
     const user = JSON.parse(localStorage.getItem("user"))
 
@@ -17,6 +19,19 @@ const Report = () => {
         { Header: 'Email Sent', accessor: 'emailsent' },
         { Header: "Outbound Calls", accessor: "outboundcall" },
     ];
+
+
+    const fetchCustomDataFields = async () => {
+        const tempTableColumns = [
+            { Header: 'Name', accessor: 'firstName' },
+            { Header: 'Email Sent', accessor: 'emailsent' },
+            { Header: "Outbound Calls", accessor: "outboundcall" },
+
+        ];
+        setSelectedColumns(JSON.parse(JSON.stringify(tempTableColumns)));
+    }
+
+
 
     if (user.role === 'superAdmin') {
         tableColumns.unshift({
@@ -40,13 +55,14 @@ const Report = () => {
 
     useEffect(() => {
         fetchData()
+        fetchCustomDataFields()
     }, [])
+
 
     return (
         <div>
             <ReportChart />
             <Card mt={4}>
-                {/* <CheckTable columnsData={tableColumns} barData={data} isLoding={isLoding} /> */}
                 <CommonCheckTable
                     title={title}
                     isLoding={isLoding}
@@ -57,7 +73,10 @@ const Report = () => {
                     AdvanceSearch={false}
                     tableCustomFields={[]}
                     deleteMany={true}
-                    ManageGrid={false}
+                    selectedValues={selectedValues}
+                    setSelectedValues={setSelectedValues}
+                    selectedColumns={selectedColumns}
+                    setSelectedColumns={setSelectedColumns}
                 />
             </Card>
         </div>

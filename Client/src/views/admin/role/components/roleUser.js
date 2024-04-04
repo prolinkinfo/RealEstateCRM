@@ -3,13 +3,12 @@ import DataNotFound from 'components/notFoundData';
 import Pagination from 'components/pagination/Pagination';
 import React, { useEffect, useMemo, useState } from 'react'
 import { FaSort, FaSortDown, FaSortUp } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table';
 import { putApi } from 'services/api';
 
 const RoleUser = (props) => {
 
-    const { setUserModal, userModal, tableData, userFetchData, columnsData, setOpenUser, _id, userRole, fetchData } = props;
+    const { setUserModal, userModal, tableData, columnsData, setOpenUser, _id, userRole, fetchData } = props;
 
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");

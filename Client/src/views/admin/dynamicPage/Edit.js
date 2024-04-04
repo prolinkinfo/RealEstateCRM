@@ -1,12 +1,9 @@
-import { CloseIcon, PhoneIcon } from '@chakra-ui/icons';
-import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, FormLabel, Grid, GridItem, Heading, IconButton, Input, InputGroup, InputLeftElement, Select, Text } from '@chakra-ui/react';
-import { HSeparator } from 'components/separator/Separator';
+import { CloseIcon } from '@chakra-ui/icons';
+import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex,  IconButton} from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { leadSchema } from 'schema';
 import { putApi } from 'services/api';
 import { getApi } from 'services/api';
 import { generateValidationSchema } from '../../../utils';
@@ -28,7 +25,6 @@ const Edit = (props) => {
     const formik = useFormik({
         initialValues: initialValues,
         enableReinitialize: true,
-        // validationSchema: leadSchema,
         validationSchema: yup.object().shape(generateValidationSchema(props?.moduleData?.fields)),
         onSubmit: (values, { resetForm }) => {
             EditData();

@@ -1,6 +1,4 @@
-import { AddIcon } from "@chakra-ui/icons";
-import { Button, Grid, GridItem, Text, useDisclosure } from "@chakra-ui/react";
-import CheckTable from "./components/CheckTable";
+import { Button, Text, useDisclosure } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { getApi } from "services/api";
 import CommonCheckTable from "components/checkTable/checktable";
@@ -18,7 +16,6 @@ const Index = () => {
   const [searchboxOutside, setSearchboxOutside] = useState('');
   const [getTagValuesOutSide, setGetTagValuesOutside] = useState([]);
   const [displaySearchData, setDisplaySearchData] = useState(false);
-  const [addRoleModal, setAddRoleModal] = useState(false);
   const [accessRole, setAccessRole] = useState([])
   const [roleName, setRoleName] = useState('')
   const [searchedData, setSearchedData] = useState([]);
@@ -63,16 +60,12 @@ const Index = () => {
     { Header: "update", accessor: "update", width: '20px' },
     { Header: "delete", accessor: "delete", width: '20px' },
   ]
-  // const { isOpen, onOpen, onClose } = useDisclosure();
   const [action, setAction] = useState(false);
   const [isLoding, setIsLoding] = useState(false);
   const [data, setData] = useState([]);
   const size = "lg";
   const navigate = useNavigate()
 
-  // const handleClick = () => {
-  //   onOpen();
-  // };
 
 
   const fetchData = async () => {
@@ -88,21 +81,7 @@ const Index = () => {
 
   return (
     <div>
-      {/* <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
-                <GridItem colStart={6} textAlign={"right"}>
-                    <Button onClick={() => handleClick()} leftIcon={<AddIcon />} variant="brand">Add</Button>
-                </GridItem>
-            </Grid> */}
-      {/* <CheckTable
-        // isOpen={isOpen}
-        // onClose={onClose}
-        isLoding={isLoding}
-        tableData={data}
-        setAction={setAction}
-        fetchData={fetchData}
-        action={action}
-        columnsData={columns}
-      /> */}
+     
       <CommonCheckTable
         title={title}
         isLoding={isLoding}

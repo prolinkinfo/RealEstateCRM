@@ -9,22 +9,25 @@ import View from './view'
 import { useNavigate } from 'react-router-dom'
 import { CiMenuKebab } from 'react-icons/ci'
 import Add from './add'
-import Delete from './Delete'
 import { IoIosArrowBack } from 'react-icons/io'
 import DataNotFound from 'components/notFoundData'
+import CommonDeleteModel from 'components/commonDeleteModel';
+import { deleteApi } from 'services/api'
+import { deleteManyApi } from 'services/api';
 
 const Index = () => {
     const navigate = useNavigate()
     const [editModal, setEdit] = useState(false)
     const [viewModal, setViewModal] = useState(false)
     const [addModal, setAddModal] = useState(false)
-    const [deleteModal, setDeleteModal] = useState(false)
     const [deleteMany, setDeleteMany] = useState(false)
     const [action, setAction] = useState(false)
     const [selectedId, setselectedId] = useState()
     const [editdata, setEditData] = useState([])
     const [validationData, setValidateData] = useState([])
     const [selectedValues, setSelectedValues] = useState([]);
+    const [method, setMethod] = useState('')
+    const [isLoding, setIsLoding] = useState(false)
 
     const fetchData = async () => {
         let response = await getApi(`api/validation`);
@@ -56,13 +59,7 @@ const Index = () => {
     const handleAddClose = () => {
         setAddModal(false)
     }
-    const handleDeleteOpen = (item) => {
-        setselectedId(item._id)
-        setDeleteModal(!viewModal)
-    }
-    const handleDeleteClose = () => {
-        setDeleteModal(false)
-    }
+
     const handleCheckboxChange = (event, value) => {
         if (event.target.checked) {
             setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
@@ -72,10 +69,53 @@ const Index = () => {
             );
         }
     };
+
+    const handleOpenDeleteMany = (id, type) => {
+        setMethod(type)
+        setselectedId(id);
+        setDeleteMany(true);
+    }
+
+    const handleDeleteValidation = async (id, fieldsIds) => {
+        if (method === 'one') {
+            try {
+                if (id) {
+                    setIsLoding(true)
+                    const response = await deleteApi('api/validation/delete/', id)
+                    if (response.status === 200) {
+                        setDeleteMany(false)
+                        fetchData()
+                    }
+                }
+            } catch (error) {
+                console.log(error)
+            }
+            finally {
+                setIsLoding(false)
+            }
+        } else if (method === 'many') {
+            try {
+                setIsLoding(true)
+                let response = await deleteManyApi('api/validation/deleteMany', fieldsIds)
+                if (response.status === 200) {
+                    setSelectedValues([])
+                    setDeleteMany(false)
+                    fetchData()
+                }
+            } catch (error) {
+                console.log(error)
+            }
+            finally {
+                setIsLoding(false)
+            }
+        }
+
+    };
+
     return (
         <div>
             <Flex justifyContent={"end"} mb={3}>
-                {selectedValues.length > 0 && <Button variant='outline' colorScheme='brand' color={"red"} mr={2} leftIcon={<DeleteIcon />} onClick={() => setDeleteMany(true)} size='sm' >Delete</Button>}
+                {selectedValues.length > 0 && <Button variant='outline' colorScheme='brand' color={"red"} mr={2} leftIcon={<DeleteIcon />} onClick={() => handleOpenDeleteMany('',"many")} size='sm' >Delete</Button>}
                 <Button size='sm' variant='brand' me={1} onClick={() => handleAddOpen()} leftIcon={<AddIcon />}>Add New</Button>
                 <Button size='sm' variant='brand' onClick={() => navigate(-1)} leftIcon={<IoIosArrowBack />}> Back</Button>
             </Flex>
@@ -94,7 +134,7 @@ const Index = () => {
                                     <MenuList minW={'fit-content'} transform={"translate(-71px, 0px) !important;"}>
                                         <MenuItem py={2.5} alignItems={'start'} onClick={() => handleEditOpen(item)} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>
                                         <MenuItem py={2.5} alignItems={'start'} color={'green'} onClick={() => handleViewOpen(item)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>
-                                        <MenuItem py={2.5} alignItems={'start'} color={'red'} icon={<DeleteIcon fontSize={15} />} onClick={() => handleDeleteOpen(item)}>Delete</MenuItem>
+                                        <MenuItem py={2.5} alignItems={'start'} color={'red'} icon={<DeleteIcon fontSize={15} />} onClick={() =>handleOpenDeleteMany(item._id,"one")}>Delete</MenuItem>
                                     </MenuList>
                                 </Menu>
                             </Flex>
@@ -139,9 +179,9 @@ const Index = () => {
 
             <Add isOpen={addModal} onClose={handleAddClose} fetchData={fetchData} setAction={setAction} />
             <Edit isOpen={editModal} onClose={handleEditClose} selectedId={selectedId} editdata={editdata} setAction={setAction} fetchData={fetchData} />
-            <Delete method='one' isOpen={deleteModal} onClose={handleDeleteClose} selectedId={selectedId} fetchData={fetchData} />
-            <Delete method='many' isOpen={deleteMany} onClose={setDeleteMany} selectedId={selectedId} fetchData={fetchData} setSelectedValues={setSelectedValues} data={selectedValues} />
             <View isOpen={viewModal} onClose={handleViewClose} selectedId={selectedId} setAction={setAction} fetchData={fetchData} />
+       
+            <CommonDeleteModel isOpen={deleteMany} onClose={() => setDeleteMany(false)} type={method === "one" ? 'Validation' : 'Validations'} handleDeleteData={handleDeleteValidation} ids={selectedId} selectedValues={selectedValues} />
         </div>
     )
 }

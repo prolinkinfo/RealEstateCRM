@@ -40,23 +40,7 @@ const View = () => {
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                     <Spinner />
                 </Flex> : <>
-
-                    {/* <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={1}>
-                        <GridItem colStart={6} >
-                            <Flex justifyContent={'right'} >
-                                <Link to={"/email"}>
-                                    <Button leftIcon={<IoIosArrowBack />} variant="brand">
-                                        Back
-                                    </Button>
-                                </Link>
-                            </Flex>
-                        </GridItem>
-                    </Grid> */}
-
-
                     <Grid templateColumns="repeat(4, 1fr)" gap={3}>
-
-
                         <GridItem colSpan={{ base: 4 }}>
                             <Card >
                                 <Grid templateColumns={{ base: "1fr" }} gap={4}>

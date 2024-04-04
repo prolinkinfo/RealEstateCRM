@@ -51,7 +51,6 @@ import Pagination from "components/pagination/Pagination";
 import Spinner from "components/spinner/Spinner";
 import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import Delete from "../Delete";
 import AddUser from "../Add";
 import { useFormik } from "formik";
 import * as yup from "yup"
@@ -264,7 +263,7 @@ export default function CheckTable(props) {
           </HStack>
         </Grid>
         {/* Delete model */}
-        <Delete isOpen={deleteModel} onClose={setDelete} setAction={setAction} setSelectedValues={setSelectedValues} url='api/user/deleteMany' data={selectedValues} method='many' />
+        {/* <Delete isOpen={deleteModel} onClose={setDelete} setAction={setAction} setSelectedValues={setSelectedValues} url='api/user/deleteMany' data={selectedValues} method='many' /> */}
 
         <Box overflowY={"auto"} className="table-fix-container">
           <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">

@@ -65,8 +65,6 @@ const PhoneCallView = React.lazy(() => import("views/admin/phoneCall/View"));
 
 const Report = React.lazy(() => import("views/admin/reports"));
 
-const TextMsg = React.lazy(() => import("views/admin/textMsg"));
-const TextMsgView = React.lazy(() => import("views/admin/textMsg/View"));
 
 // Auth Imports
 const SignInCentered = React.lazy(() => import("views/auth/signIn"));

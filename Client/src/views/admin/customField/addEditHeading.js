@@ -1,6 +1,6 @@
-import { Button, Checkbox, Flex, FormLabel, Grid, GridItem, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Spinner, Text } from '@chakra-ui/react'
+import { Button, FormLabel, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, Text } from '@chakra-ui/react'
 import { useFormik } from 'formik'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { toast } from 'react-toastify'
 import { postApi, putApi } from 'services/api'
 import * as yup from 'yup'
@@ -93,7 +93,6 @@ const AddEditHeading = (props) => {
                     <ModalBody>
                         <>
                             <Grid templateColumns="repeat(12, 1fr)" gap={3}>
-                                {/* <GridItem colSpan={{ base: 12, sm: 6, md: 4 }}> */}
                                 <GridItem colSpan={{ base: 12 }} >
                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                         Heading<Text color={"red"}>*</Text>

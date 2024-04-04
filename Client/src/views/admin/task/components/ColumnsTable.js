@@ -22,10 +22,9 @@ import {
 import { AddIcon } from "@chakra-ui/icons";
 
 // Custom components
-import Card from "components/card/Card";
 import CountUpComponent from "components/countUpComponent/countUpComponent";
 import Pagination from "components/pagination/Pagination";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import EventView from "../eventView";
 import AddTask from "./addTask";
 import DataNotFound from "components/notFoundData";
@@ -81,7 +80,6 @@ export default function ColumnsTable(props) {
     }
 
     useEffect(() => {
-        // Update gopageValue only after the initial render 
         if (gopageValue === undefined && pageOptions.length < gopageValue) {
             setGopageValue(pageOptions.length);
         }

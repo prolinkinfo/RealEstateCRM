@@ -8,8 +8,9 @@ import { getApi } from "services/api";
 import CommonCheckTable from '../../../components/checkTable/checktable';
 import Add from './add';
 import Edit from './Edit';
-import Delete from './Delete';
 import Spinner from 'components/spinner/Spinner';
+import CommonDeleteModel from 'components/commonDeleteModel';
+import { deleteManyApi } from 'services/api';
 
 
 const Index = () => {
@@ -21,8 +22,6 @@ const Index = () => {
     const [permission] = HasAccess([title]);
     const [isLoding, setIsLoding] = useState(false);
     const [data, setData] = useState([]);
-    // const [displaySearchData, setDisplaySearchData] = useState(false);
-    // const [searchedData, setSearchedData] = useState([]);
     const [tableColumns, setTableColumns] = useState([]);
     const [columns, setColumns] = useState([]);
     const [dataColumn, setDataColumn] = useState([]);
@@ -85,6 +84,26 @@ const Index = () => {
         setTableColumns(JSON.parse(JSON.stringify(tempTableColumns)));
         setIsLoding(false);
     }
+    const handleDelete = async (id, moduleId) => {
+        try {
+            setIsLoding(true)
+            const payload = {
+                moduleId: moduleId,
+                ids: id
+            }
+            let response = await deleteManyApi('api/form/deleteMany', payload)
+            if (response.status === 200) {
+                setSelectedValues([])
+                setDelete(false)
+                setAction((pre) => !pre)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        finally {
+            setIsLoding(false)
+        }
+    }
 
     useEffect(() => {
         // fetchData();
@@ -108,12 +127,7 @@ const Index = () => {
                             columnData={columns}
                             dataColumn={dataColumn}
                             allData={data}
-                            // tableData={displaySearchData ? searchedData : data}
                             tableData={data}
-                            // displaySearchData={displaySearchData}
-                            // setDisplaySearchData={setDisplaySearchData}
-                            // searchedData={searchedData}
-                            // setSearchedData={setSearchedData}
                             tableCustomFields={moduleData?.fields?.filter((field) => field?.isTableField === true) || []}
                             access={permission}
                             action={action}
@@ -132,9 +146,8 @@ const Index = () => {
                 </Grid>
             }
             {isOpen && <Add isOpen={isOpen} title={title} size={size} moduleData={moduleData} onClose={onClose} setAction={setAction} action={action} />}
-            {deleteModel && <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues}
-                url='api/form/deleteMany'
-                data={selectedValues} method='many' setAction={setAction} moduleId={moduleData?._id} />}
+            {deleteModel && <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type={title} handleDeleteData={handleDelete} ids={selectedValues} selectedValues={moduleData?._id} />}
+           
             {edit && <Edit isOpen={edit} title={title} size={size} moduleData={moduleData} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={moduleData?._id} />}
 
         </div>
