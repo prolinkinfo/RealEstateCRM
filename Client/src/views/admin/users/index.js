@@ -40,10 +40,23 @@ const Index = (props) => {
     const [data, setData] = useState([]);
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
-   
+
     const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-        { Header: 'email Id', accessor: 'username' },
+        {
+            Header: 'email Id', accessor: 'username', cell: (cell) => (
+                <Link to={`/userView/${cell?.row?.values._id}`}>
+                    <Text
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.value}
+                    </Text>
+                </Link>)
+        },
         { Header: "first Name", accessor: "firstName", },
         { Header: "last Name", accessor: "lastName", },
         { Header: "role", accessor: "role", },
@@ -92,11 +105,11 @@ const Index = (props) => {
             setIsLoding(false)
         }
     };
-   
+
     useEffect(() => {
         fetchData();
     }, [action])
-    
+
     return (
         <div>
             <CommonCheckTable

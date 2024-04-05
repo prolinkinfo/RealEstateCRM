@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import {  ViewIcon } from '@chakra-ui/icons';
+import { ViewIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList, Text, useDisclosure } from '@chakra-ui/react';
 import { getApi } from 'services/api';
 import { HasAccess } from '../../../redux/accessUtils';
@@ -50,8 +50,21 @@ const Index = (props) => {
     };
     const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
+        {
+            Header: "recipient", accessor: "createByName", cell: (cell) => (
+                <Link to={`/Email/${cell?.row?.values._id}`}>
+                    <Text
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.value || '-'}
+                    </Text>
+                </Link>)
+        },
         { Header: 'sender Name', accessor: 'senderName' },
-        { Header: "recipient", accessor: "createByName", },
         {
             Header: "Realeted To", accessor: 'realeted', cell: ({ row }) => (
                 <Text  >
