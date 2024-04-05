@@ -45,20 +45,16 @@ export default function UserReports() {
   const [contactsView, taskView, leadView, proprtyView, emailView, callView, meetingView] = HasAccess(["Contacts", "Tasks", "Leads", "Properties", "Emails", "Calls", "Meetings"]);
 
   const fetchData = async () => {
-    setTimeout(async () => {
-      let res;
-      if (user?.role === "superAdmin") {
-        res = await getApi("api/status/")
-      } else if (leadView?.create || leadView?.update || leadView?.delete || leadView?.view) {
-        res = await getApi(`api/status/?createBy=${user?._id}`)
-      }
-      setAllData(res?.data?.data);
-    }, 3000);
+    let responseData;
+    if (user?.role === "superAdmin") {
+      responseData = await getApi("api/status/");
+    } else if (leadView?.create || leadView?.update || leadView?.delete || leadView?.view) {
+      responseData = await getApi(`api/status/?createBy=${user?._id}`);
+    }
+
+    setAllData(responseData?.data?.data);
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const fetchProgressChart = async () => {
     setIsLoding(true);
@@ -127,6 +123,12 @@ export default function UserReports() {
     Email: '/email',
     Property: '/properties',
   };
+
+  useEffect(() => {
+    fetchData();
+  }, [user?._id]);
+
+
   return (
     <>
       <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} gap="20px" mb="20px">
