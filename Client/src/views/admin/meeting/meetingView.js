@@ -32,7 +32,7 @@ const MeetingView = (props) => {
         fetchViewData()
     }, [action, info])
 
-    const [contactAccess, leadAccess] = HasAccess(['Contacts','Leads'])
+    const [contactAccess, leadAccess] = HasAccess(['Contacts', 'Leads'])
 
     const handleViewOpen = () => {
         if (info?.event) {
@@ -45,7 +45,7 @@ const MeetingView = (props) => {
     return (
         <Modal isOpen={isOpen} size={'md'} isCentered>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent height={"70%"}>
                 <ModalHeader justifyContent='space-between' display='flex' >
                     Meeting
                     <IconButton onClick={() => onClose(false)} icon={<CloseIcon />} />
@@ -55,7 +55,7 @@ const MeetingView = (props) => {
                         <Spinner />
                     </Flex> : <>
 
-                        <ModalBody>
+                        <ModalBody overflowY={"auto"}>
                             <Grid templateColumns="repeat(12, 1fr)" gap={3} >
                                 <GridItem colSpan={{ base: 12, md: 6 }} >
                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Agenda </Text>

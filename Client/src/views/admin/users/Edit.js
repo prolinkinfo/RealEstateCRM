@@ -67,6 +67,7 @@ const Edit = (props) => {
                 }
 
 
+                dispatch(fetchRoles(user?._id))
                 handleCloseModal();
                 fetchData()
                 props.setAction((pre) => !pre)

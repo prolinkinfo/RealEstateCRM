@@ -27,8 +27,7 @@ import { toast } from "react-toastify";
 import jwtDecode from "jwt-decode";
 import { ThemeEditor } from "./ThemeEditor";
 import FixedPlugin from "components/fixedPlugin/FixedPlugin";
-import { useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
 export default function HeaderLinks(props) {
 	const { secondary, setOpenSidebar, openSidebar, routes } = props;
 	// Chakra Color Mode
@@ -46,22 +45,16 @@ export default function HeaderLinks(props) {
 	);
 	// const borderButton = useColorModeValue('secondaryGray.500', 'whiteAlpha.200');
 
-	const [loginUser, setLoginUser] = useState();
+	// const [loginUser, setLoginUser] = useState();
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const userData = useSelector(state => state.user.user)
 
 	const data = typeof userData === 'string' ? JSON.parse(userData) : userData
 	const user = data?.firstName + " " + data?.lastName;
 	const userId = JSON.parse(localStorage.getItem("user"))?._id;
+	const loginUser = useSelector((state) => state?.user?.user)
 
-	const fetchData = async () => {
-		let response = await getApi("api/user/view/", userId);
-		setLoginUser(response.data);
-	};
-
-	useEffect(() => {
-		fetchData();
-	}, []);
 
 	const [isLogoutScheduled, setIsLogoutScheduled] = useState(false);
 

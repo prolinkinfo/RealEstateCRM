@@ -4,7 +4,7 @@ import { getApi } from 'services/api';
 // Assume you have an initialState for roles
 const initialState = {
     roles: [],
-    user: [], // Initial empty array for roles
+    user: {}, // Initial empty array for roles
     status: 'idle', // Possible statuses: 'idle', 'loading', 'succeeded', 'failed'
     error: null,
 };

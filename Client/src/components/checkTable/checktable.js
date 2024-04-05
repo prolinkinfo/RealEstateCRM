@@ -42,7 +42,6 @@ const CommonCheckTable = (props) => {
 
     const dispatch = useDispatch();
 
-    console.log("redux", getTagValues)
 
     const tableInstance = useTable(
         {
@@ -76,6 +75,7 @@ const CommonCheckTable = (props) => {
     if (pageOptions && pageOptions?.length > 0 && pageOptions?.length < gopageValue) {
         setGopageValue(pageOptions.length)
     }
+
 
     const handleSearch = (results) => {
         AdvanceSearch ? setSearchedDataOut(results) : setSearchedData(results);
@@ -120,6 +120,7 @@ const CommonCheckTable = (props) => {
                 }
             });
         });
+
         const getValue = tableCustomFields.reduce((result, field) => {
             if (field.type === 'date') {
                 const fromDate = values[`from${field.name}`];
@@ -303,7 +304,6 @@ const CommonCheckTable = (props) => {
             setCsvColumns([...tempCsvColumns])
         }
     }, [selectedColumns]);
-
     return (
         <>
             <Card
@@ -356,9 +356,14 @@ const CommonCheckTable = (props) => {
                                     </MenuItem>
                                     {typeof setIsImport === "function" && <MenuItem width={"165px"} onClick={() => setIsImport(true)}> Import {title}
                                     </MenuItem>}
-                                    <MenuDivider />
-                                    <MenuItem width={"165px"} onClick={() => handleExportLeads('csv')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as CSV' : 'Export as CSV'}</MenuItem>
-                                    <MenuItem width={"165px"} onClick={() => handleExportLeads('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem>
+                                    {
+                                        allData && allData?.length > 0 &&
+                                        <>
+                                            <MenuDivider />
+                                            <MenuItem width={"165px"} onClick={() => handleExportLeads('csv')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as CSV' : 'Export as CSV'}</MenuItem>
+                                            <MenuItem width={"165px"} onClick={() => handleExportLeads('xlsx')}>{selectedValues && selectedValues?.length > 0 ? 'Export Selected Data as Excel' : 'Export as Excel'}</MenuItem>
+                                        </>
+                                    }
                                 </MenuList>
                             </Menu>}
                         {(access?.create || access === true) && <Button onClick={() => handleClick()} size="sm" variant="brand" leftIcon={<AddIcon />}>Add New</Button>}
