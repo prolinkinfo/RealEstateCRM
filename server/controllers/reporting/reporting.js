@@ -198,100 +198,325 @@ const data = async (req, res) => {
         }
 
 
+        // let EmailDetails = await email.aggregate([
+        //     { $match: matchFilter },
+        //     {
+        //         $lookup: {
+        //             from: 'Contacts',
+        //             localField: 'createBy',
+        //             foreignField: '_id',
+        //             as: 'contact'
+        //         }
+        //     },
+        //     {
+        //         $lookup: {
+        //             from: 'Leads',
+        //             localField: 'createByLead',
+        //             foreignField: '_id',
+        //             as: 'lead'
+        //         }
+        //     },
+        //     {
+        //         $lookup: {
+        //             from: 'User',
+        //             localField: 'sender',
+        //             foreignField: '_id',
+        //             as: 'users'
+        //         }
+        //     },
+        //     { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
+        //     { $unwind: '$contact' },
+        //     { $unwind: '$lead' },
+        //     { $match: { 'contact.deleted': false, 'users.deleted': false } },
+        //     { $match: { 'lead.deleted': false, 'users.deleted': false } },
+        //     { $group: { _id: groupFields, Emailcount: { $sum: 1 }, id: { $first: "$_id" } } },
+        //     { $sort: { "_id.year": -1, "_id.month": 1, "_id.day": -1 } },
+        //     { $group: { _id: "$_id.week", emails: { $push: "$$ROOT" }, totalEmails: { $sum: "$Emailcount" } } },
+        //     {
+        //         $project: {
+        //             _id: 0,
+        //             startDate: { $dateToString: { format: "%Y-%m-%d", date: startDate } },
+        //             endDate: { $dateToString: { format: "%Y-%m-%d", date: endDate } },
+        //             totalEmails: 1,
+        //             Emails2: {
+        //                 $map: {
+        //                     input: "$emails",
+        //                     as: "email",
+        //                     in: {
+        //                         _id: "$$email.id",
+        //                         date: {
+        //                             $dateToString: { date: { $dateFromParts: { year: { $ifNull: ["$$email._id.year", "$_id.year"] }, month: { $ifNull: ["$$email._id.month", 1] }, day: { $ifNull: ["$$email._id.day", 1] } } } },
+        //                         },
+        //                         Emailcount: "$$email.Emailcount",
+        //                     },
+        //                 },
+        //             },
+        //         },
+        //     },
+        //     { $unwind: "$Emails2" },
+        //     {
+        //         $group: {
+        //             _id: { startDate: "$startDate", endDate: "$endDate", _id: "$Emails2._id" },
+        //             date: { $first: "$Emails2.date" },
+        //             Emailcount: { $first: "$Emails2.Emailcount" },
+        //         },
+        //     },
+        //     {
+        //         $project: {
+        //             _id: 0,
+        //             startDate: "$_id.startDate",
+        //             endDate: "$_id.endDate",
+        //             Emails: {
+        //                 _id: "$_id._id",
+        //                 date: "$date",
+        //                 Emailcount: "$Emailcount",
+        //             },
+        //         },
+        //     },
+        //     { $group: { _id: null, startDate: { $first: "$startDate" }, endDate: { $first: "$endDate" }, totalEmails: { $sum: "$Emails.Emailcount" }, Emails: { $push: "$Emails" } } },
+        //     { $unwind: "$Emails" }, // Unwind the "Emails" array to work on each element separately
+        //     { $sort: { "Emails.date": 1 } }, // Sort the Emails array by the "date" field in ascending order
+        //     { $group: { _id: "$_id", startDate: { $first: "$startDate" }, endDate: { $first: "$endDate" }, totalEmails: { $first: "$totalEmails" }, Emails: { $push: "$Emails" }, }, },
+        //     { $project: { _id: 0, startDate: 1, endDate: 1, totalEmails: 1, Emails: 1, }, },
+        // ]);
+
+        // let EmailDetails = await email.aggregate([
+        //     { $match: matchFilter },
+        //     { $lookup: { from: 'Contacts', localField: 'createBy', foreignField: '_id', as: 'contact' } },
+        //     { $unwind: { path: '$contact', preserveNullAndEmptyArrays: true } },
+        //     { $lookup: { from: 'Leads', localField: 'createByLead', foreignField: '_id', as: 'lead' } },
+        //     { $unwind: { path: '$lead', preserveNullAndEmptyArrays: true } },
+        //     { $lookup: { from: 'User', localField: 'sender', foreignField: '_id', as: 'users' } },
+        //     { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
+        //     {
+        //         // $match: {
+        //         //     'contact.deleted': false,
+        //         //     'users.deleted': false,
+        //         //     'lead.deleted': false
+        //         // }
+        //         $match: {
+        //             'contact.deleted': { $ne: true },
+        //             'users.deleted': { $ne: true },
+        //             'lead.deleted': { $ne: true }
+        //         }
+        //     },
+        //     {
+        //         $group: {
+        //             _id: groupFields,
+        //             Emailcount: { $sum: 1 },
+        //             id: { $first: '$_id' }
+        //         }
+        //         // {
+        //         //     $group: {
+        //         //         _id: {
+        //         //             year: { $year: '$date' },
+        //         //             month: { $month: '$date' },
+        //         //             day: { $dayOfMonth: '$date' }
+        //         //         },
+        //         //         Emailcount: { $sum: 1 },
+        //         //         id: { $first: '$_id' }
+        //         //     }
+        //     },
+        //     {
+        //         $sort: {
+        //             '_id.year': -1,
+        //             '_id.month': 1,
+        //             '_id.day': -1
+        //         }
+        //     },
+        //     // {
+        //     //     $group: {
+        //     //         _id: { week: { $week: '$date' } },
+        //     //         emails: { $push: '$$ROOT' },
+        //     //         totalEmails: { $sum: '$Emailcount' }
+        //     //     }
+        //     // },
+        //     { $group: { _id: "$_id.week", calls: { $push: "$$ROOT" }, totalEmails: { $sum: "$Emailcount" } } },
+
+        //     {
+        //         $project: {
+        //             _id: 0,
+        //             startDate: { $dateToString: { format: '%Y-%m-%d', date: startDate } },
+        //             endDate: { $dateToString: { format: '%Y-%m-%d', date: endDate } },
+        //             totalEmails: 1,
+        //             Emails: {
+        //                 $map: {
+        //                     input: '$emails',
+        //                     as: 'email',
+        //                     in: {
+        //                         _id: '$$email.id',
+        //                         date: {
+        //                             $dateToString: {
+        //                                 date: {
+        //                                     $dateFromParts: {
+        //                                         year: { $ifNull: ['$$email._id.year', '$_id.year'] },
+        //                                         month: { $ifNull: ['$$email._id.month', 1] },
+        //                                         day: { $ifNull: ['$$email._id.day', 1] }
+        //                                     }
+        //                                 }
+        //                             }
+        //                         },
+        //                         Emailcount: '$$email.Emailcount'
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     },
+        //     { $unwind: '$Emails' },
+        //     {
+        //         $group: {
+        //             _id: { startDate: '$startDate', endDate: '$endDate', _id: '$Emails._id' },
+        //             date: { $first: '$Emails.date' },
+        //             Emailcount: { $first: '$Emails.Emailcount' }
+        //         }
+        //     },
+        //     {
+        //         $project: {
+        //             _id: 0,
+        //             startDate: '$_id.startDate',
+        //             endDate: '$_id.endDate',
+        //             Emails: {
+        //                 _id: '$_id._id',
+        //                 date: '$date',
+        //                 Emailcount: '$Emailcount'
+        //             }
+        //         }
+        //     },
+        //     {
+        //         $group: {
+        //             _id: null,
+        //             startDate: { $first: '$startDate' },
+        //             endDate: { $first: '$endDate' },
+        //             totalEmails: { $sum: '$Emails.Emailcount' },
+        //             Emails: { $push: '$Emails' }
+        //         }
+        //     },
+        //     { $unwind: '$Emails' },
+        //     { $sort: { 'Emails.date': 1 } },
+        //     {
+        //         $group: {
+        //             _id: '$_id',
+        //             startDate: { $first: '$startDate' },
+        //             endDate: { $first: '$endDate' },
+        //             totalEmails: { $first: '$totalEmails' },
+        //             Emails: { $push: '$Emails' }
+        //         }
+        //     },
+        //     { $project: { _id: 0, startDate: 1, endDate: 1, totalEmails: 1, Emails: 1 } }
+        // ]);
         let EmailDetails = await email.aggregate([
             { $match: matchFilter },
-            {
-                $lookup: {
-                    from: 'Contacts',
-                    localField: 'createBy',
-                    foreignField: '_id',
-                    as: 'contact'
-                }
-            },
-            {
-                $lookup: {
-                    from: 'User',
-                    localField: 'sender',
-                    foreignField: '_id',
-                    as: 'users'
-                }
-            },
+            { $lookup: { from: 'Contacts', localField: 'createBy', foreignField: '_id', as: 'contact' } },
+            { $unwind: { path: '$contact', preserveNullAndEmptyArrays: true } },
+            { $lookup: { from: 'Leads', localField: 'createByLead', foreignField: '_id', as: 'lead' } },
+            { $unwind: { path: '$lead', preserveNullAndEmptyArrays: true } },
+            { $lookup: { from: 'User', localField: 'sender', foreignField: '_id', as: 'users' } },
             { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
-            { $unwind: '$contact' },
-            { $match: { 'contact.deleted': false, 'users.deleted': false } },
-            { $group: { _id: groupFields, Emailcount: { $sum: 1 }, id: { $first: "$_id" } } },
-            { $sort: { "_id.year": -1, "_id.month": 1, "_id.day": -1 } },
-            { $group: { _id: "$_id.week", emails: { $push: "$$ROOT" }, totalEmails: { $sum: "$Emailcount" } } },
             {
-                $project: {
-                    _id: 0,
-                    startDate: { $dateToString: { format: "%Y-%m-%d", date: startDate } },
-                    endDate: { $dateToString: { format: "%Y-%m-%d", date: endDate } },
-                    totalEmails: 1,
-                    Emails2: {
-                        $map: {
-                            input: "$emails",
-                            as: "email",
-                            in: {
-                                _id: "$$email.id",
-                                date: {
-                                    $dateToString: { date: { $dateFromParts: { year: { $ifNull: ["$$email._id.year", "$_id.year"] }, month: { $ifNull: ["$$email._id.month", 1] }, day: { $ifNull: ["$$email._id.day", 1] } } } },
-                                },
-                                Emailcount: "$$email.Emailcount",
-                            },
-                        },
-                    },
-                },
+                $match: {
+                    'contact.deleted': { $ne: true },
+                    'users.deleted': { $ne: true },
+                    'lead.deleted': { $ne: true }
+                }
             },
-            { $unwind: "$Emails2" },
             {
                 $group: {
-                    _id: { startDate: "$startDate", endDate: "$endDate", _id: "$Emails2._id" },
-                    date: { $first: "$Emails2.date" },
-                    Emailcount: { $first: "$Emails2.Emailcount" },
-                },
+                    _id: groupFields,
+                    Emailcount: { $sum: 1 },
+                    id: { $first: '$_id' }
+                }
+            },
+            {
+                $sort: {
+                    '_id.year': -1,
+                    '_id.month': 1,
+                    '_id.day': -1
+                }
+            },
+
+            { $group: { _id: "$_id.week", emails: { $push: "$$ROOT" }, totalEmails: { $sum: "$Emailcount" } } },
+
+            {
+                $project: {
+                    _id: 0,
+                    startDate: { $dateToString: { format: '%Y-%m-%d', date: startDate } },
+                    endDate: { $dateToString: { format: '%Y-%m-%d', date: endDate } },
+                    totalEmails: 1,
+                    Emails: {
+                        $map: {
+                            input: '$emails',
+                            as: 'email',
+                            in: {
+                                _id: '$$email.id',
+                                date: {
+                                    $dateToString: { date: { $dateFromParts: { year: { $ifNull: ['$$email._id.year', '$_id.year'] }, month: { $ifNull: ['$$email._id.month', 1] }, day: { $ifNull: ['$$email._id.day', 1] } } } }
+                                },
+                                Emailcount: '$$email.Emailcount'
+                            }
+                        }
+                    }
+                }
+            },
+            { $unwind: '$Emails' },
+            {
+                $group: {
+                    _id: { startDate: '$startDate', endDate: '$endDate', _id: '$Emails._id' },
+                    date: { $first: '$Emails.date' },
+                    Emailcount: { $first: '$Emails.Emailcount' }
+                }
             },
             {
                 $project: {
                     _id: 0,
-                    startDate: "$_id.startDate",
-                    endDate: "$_id.endDate",
+                    startDate: '$_id.startDate',
+                    endDate: '$_id.endDate',
                     Emails: {
-                        _id: "$_id._id",
-                        date: "$date",
-                        Emailcount: "$Emailcount",
-                    },
-                },
+                        _id: '$_id._id',
+                        date: '$date',
+                        Emailcount: '$Emailcount'
+                    }
+                }
             },
-            { $group: { _id: null, startDate: { $first: "$startDate" }, endDate: { $first: "$endDate" }, totalEmails: { $sum: "$Emails.Emailcount" }, Emails: { $push: "$Emails" } } },
-            { $unwind: "$Emails" }, // Unwind the "Emails" array to work on each element separately
-            { $sort: { "Emails.date": 1 } }, // Sort the Emails array by the "date" field in ascending order
-            { $group: { _id: "$_id", startDate: { $first: "$startDate" }, endDate: { $first: "$endDate" }, totalEmails: { $first: "$totalEmails" }, Emails: { $push: "$Emails" }, }, },
-            { $project: { _id: 0, startDate: 1, endDate: 1, totalEmails: 1, Emails: 1, }, },
+            {
+                $group: {
+                    _id: null,
+                    startDate: { $first: '$startDate' },
+                    endDate: { $first: '$endDate' },
+                    totalEmails: { $sum: '$Emails.Emailcount' },
+                    Emails: { $push: '$Emails' }
+                }
+            },
+            { $unwind: '$Emails' },
+            { $sort: { 'Emails.date': 1 } },
+            {
+                $group: {
+                    _id: '$_id',
+                    startDate: { $first: '$startDate' },
+                    endDate: { $first: '$endDate' },
+                    totalEmails: { $first: '$totalEmails' },
+                    Emails: { $push: '$Emails' }
+                }
+            },
+            { $project: { _id: 0, startDate: 1, endDate: 1, totalEmails: 1, Emails: 1 } }
         ]);
+
 
 
         let outboundcall = await PhoneCall.aggregate([
             { $match: matchFilter },
-            {
-                $lookup: {
-                    from: 'Contacts',
-                    localField: 'createBy',
-                    foreignField: '_id',
-                    as: 'contact'
-                }
-            },
-            {
-                $lookup: {
-                    from: 'User',
-                    localField: 'sender',
-                    foreignField: '_id',
-                    as: 'users'
-                }
-            },
+            { $lookup: { from: 'Contacts', localField: 'createBy', foreignField: '_id', as: 'contact' } },
+            { $unwind: { path: '$contact', preserveNullAndEmptyArrays: true } },
+            { $lookup: { from: 'Leads', localField: 'createByLead', foreignField: '_id', as: 'lead' } },
+            { $unwind: { path: '$lead', preserveNullAndEmptyArrays: true } },
+            { $lookup: { from: 'User', localField: 'sender', foreignField: '_id', as: 'users' } },
             { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
-            { $unwind: '$contact' },
-            { $match: { 'contact.deleted': false, 'users.deleted': false } },
+            {
+                $match: {
+                    'contact.deleted': { $ne: true },
+                    'users.deleted': { $ne: true },
+                    'lead.deleted': { $ne: true }
+                }
+            },
             { $group: { _id: groupFields, Callcount: { $sum: 1 }, id: { $first: "$_id" } } },
             { $sort: { "_id.year": -1, "_id.month": 1, "_id.day": -1 } },
             { $group: { _id: "$_id.week", calls: { $push: "$$ROOT" }, totalCall: { $sum: "$Callcount" } } },
@@ -342,6 +567,7 @@ const data = async (req, res) => {
             { $group: { _id: "$_id", startDate: { $first: "$startDate" }, endDate: { $first: "$endDate" }, totalCall: { $first: "$totalCall" }, Calls: { $push: "$Calls" }, }, },
             { $project: { _id: 0, startDate: 1, endDate: 1, totalCall: 1, Calls: 1, }, },
         ]);
+
 
         let TextSent = await TextMsg.aggregate([
             { $match: matchFilter },
