@@ -105,7 +105,7 @@ export default function LeadTable(props) {
       </Flex>
       <Box overflowY={'auto'} className="table-container-property" >
         <Table  {...getTableProps()} variant='simple' color='gray.500' mb='24px'>
-          <Thead >
+          <Thead zIndex={1}>
             {headerGroups?.map((headerGroup, index) => (
               <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
                 {headerGroup.headers.map((column, index) => (

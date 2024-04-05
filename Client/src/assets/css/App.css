@@ -68,6 +68,9 @@ option {
   top: 0;
   height: 25px;
   background: #ffffff;
+  border-bottom: 1px solid black;
+  box-shadow: -2px 0px 4px -2px #5c5d5efa;
+
 }
 
 .table-fix-container {

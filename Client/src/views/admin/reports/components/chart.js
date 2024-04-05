@@ -45,7 +45,7 @@ const ReportChart = (props) => {
                     />
                 </div>
             </Grid>
-        </Card >
+        </Card>
     )
 }
 

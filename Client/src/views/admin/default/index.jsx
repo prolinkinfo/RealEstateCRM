@@ -211,11 +211,11 @@ export default function UserReports() {
       </SimpleGrid>
 
       <Grid Grid templateColumns="repeat(12, 1fr)" gap={3} >
-       
+
         <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
           <Card>
             <Flex mb={3} alignItems={"center"} justifyContent={"space-between"}>
-              <Heading size="md">Report</Heading>
+              <Heading size="md">Email and Call Report</Heading>
               <IconButton
                 color={"green.500"}
                 onClick={() => navigate("/reporting-analytics")}
@@ -232,7 +232,7 @@ export default function UserReports() {
         <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
           <Card>
             <Flex mb={5} alignItems={"center"} justifyContent={"space-between"}>
-              <Heading size="md">Report</Heading>
+              <Heading size="md">Module Data Report</Heading>
 
             </Flex>
             <Box mb={3}>
@@ -249,23 +249,23 @@ export default function UserReports() {
 
         <Card >
           <Heading size="md" pb={3}>Statistics</Heading>
-          
+
           {
             !isLoding ?
-            data && data.length > 0 && data?.map((item, i) => (
-              <>
-                <Box border={"1px solid #e5e5e5"} p={2} m={1} cursor={'pointer'} key={i} onClick={() => navigate(navigateTo[item.name])}>
-                  <Flex justifyContent={"space-between"}>
-                    <Text fontSize="sm" fontWeight={600} pb={2}>{item?.name}</Text>
-                    <Text fontSize="sm" fontWeight={600} pb={2}><CountUpComponent targetNumber={item?.length} /></Text>
-                  </Flex>
-                  <Progress
-                    colorScheme={item?.color}
-                    size='xs' value={item?.length} width={"100%"} />
-                </Box>
-              </>
+              data && data.length > 0 && data?.map((item, i) => (
+                <>
+                  <Box border={"1px solid #e5e5e5"} p={2} m={1} cursor={'pointer'} key={i} onClick={() => navigate(navigateTo[item.name])}>
+                    <Flex justifyContent={"space-between"}>
+                      <Text fontSize="sm" fontWeight={600} pb={2}>{item?.name}</Text>
+                      <Text fontSize="sm" fontWeight={600} pb={2}><CountUpComponent targetNumber={item?.length} /></Text>
+                    </Flex>
+                    <Progress
+                      colorScheme={item?.color}
+                      size='xs' value={item?.length} width={"100%"} />
+                  </Box>
+                </>
 
-            )):<div style={{display:"flex",justifyContent:"center",alignItems:"center"}}><Spinner/></div>
+              )) : <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}><Spinner /></div>
           }
         </Card>
 
