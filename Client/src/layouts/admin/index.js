@@ -254,7 +254,6 @@ export default function Dashboard(props) {
 
 	useEffect(() => {
 		if (window.location.pathname === "/default") {
-			console.log(window.location.pathname === "/default", "jjjjj")
 			dispatch(fetchRoles(userId))
 		}
 	}, [userId]);

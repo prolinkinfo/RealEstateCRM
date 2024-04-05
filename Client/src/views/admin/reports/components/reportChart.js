@@ -62,7 +62,6 @@ const ReportChart = (props) => {
             seriesData = seriesData.concat(
                 dataSet?.Calls?.map((item) => ({ x: item?.date, y: item?.Callcount }))
             );
-            console.log(seriesData, "seriesData")
         }
         if (dataSet?.TextMsges) {
             seriesData = seriesData.concat(

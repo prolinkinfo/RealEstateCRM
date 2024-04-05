@@ -20,6 +20,7 @@ const imagesRoute = require('./images/_routes');
 const customFieldRoute = require("./customField/_routes");
 const validationRoute = require("./validation/_routes");
 const formRoute = require("./form/_routes");
+const statusRoute = require("./status/_routes");
 
 //Api`s
 router.use('/contact', contactRoute);
@@ -43,5 +44,6 @@ router.use('/route', route);
 router.use("/custom-field", customFieldRoute);
 router.use("/validation", validationRoute);
 router.use("/form", formRoute);
+router.use("/status", statusRoute);
 
 module.exports = router;
