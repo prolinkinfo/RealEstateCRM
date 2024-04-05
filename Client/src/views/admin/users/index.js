@@ -1,49 +1,53 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import { AddIcon, DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
-import { Button, Flex, Menu, MenuButton, MenuItem, MenuList, Text, useDisclosure } from '@chakra-ui/react';
+import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
+import { Button, Menu, MenuButton, MenuItem, MenuList, Text, useDisclosure } from '@chakra-ui/react';
 import { getApi } from 'services/api';
-import CheckTable from './components/CheckTable';
-import { HasAccess } from '../../../redux/accessUtils';
-import { useLocation } from 'react-router-dom';
 import CommonCheckTable from '../../../components/checkTable/checktable';
 import { SearchIcon } from "@chakra-ui/icons";
 import { CiMenuKebab } from 'react-icons/ci';
-import moment from 'moment';
-import { MdLeaderboard } from 'react-icons/md';
-import { IoIosArrowBack, IoIosContact } from 'react-icons/io';
+import { IoIosArrowBack } from 'react-icons/io';
 import AddUser from './Add';
 import Edit from './Edit';
 import UserAdvanceSearch from './components/userAdvanceSearch';
-import { deleteApi } from 'services/api';
 import { deleteManyApi } from 'services/api';
 import CommonDeleteModel from 'components/commonDeleteModel';
 
 
-const Index = (props) => {
+const Index = () => {
     const title = "Users";
-    const size = "lg";
     const [action, setAction] = useState(false);
     const [edit, setEdit] = useState(false);
     const [editData, setEditData] = useState({});
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [id, setId] = useState('')
     const [selectedId, setSelectedId] = useState();
     const [deleteMany, setDelete] = useState(false);
     const [selectedValues, setSelectedValues] = useState([]);
     const [advanceSearch, setAdvanceSearch] = useState(false);
     const [getTagValuesOutSide, setGetTagValuesOutside] = useState([]);
     const [searchboxOutside, setSearchboxOutside] = useState('');
-    const user = JSON.parse(localStorage.getItem("user"));
     const navigate = useNavigate();
     const [isLoding, setIsLoding] = useState(false);
     const [data, setData] = useState([]);
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
-   
+
     const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-        { Header: 'email Id', accessor: 'username' },
+        {
+            Header: 'email Id', accessor: 'username', cell: (cell) => (
+                <Link to={`/userView/${cell?.row?.values._id}`}>
+                    <Text
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.value}
+                    </Text>
+                </Link>)
+        },
         { Header: "first Name", accessor: "firstName", },
         { Header: "last Name", accessor: "lastName", },
         { Header: "role", accessor: "role", },
@@ -92,11 +96,11 @@ const Index = (props) => {
             setIsLoding(false)
         }
     };
-   
+
     useEffect(() => {
         fetchData();
     }, [action])
-    
+
     return (
         <div>
             <CommonCheckTable
@@ -147,8 +151,6 @@ const Index = (props) => {
                 setGetTagValues={setGetTagValuesOutside}
                 setSearchbox={setSearchboxOutside}
             />
-
-            {/* <Add isOpen={isOpen} size={"sm"} onClose={onClose} setAction={setAction} /> */}
         </div>
     )
 }

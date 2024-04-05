@@ -26,7 +26,6 @@ import { useNavigate } from "react-router-dom";
 import { getApi } from "services/api";
 import ReportChart from "../reports/components/reportChart";
 import Chart from "components/charts/LineChart.js";
-// import Chart from "../reports/components/chart";
 import { HasAccess } from "../../../redux/accessUtils";
 import PieChart from "components/charts/PieChart";
 import CountUpComponent from "../../../../src/components/countUpComponent/countUpComponent";
@@ -39,55 +38,17 @@ export default function UserReports() {
   const user = JSON.parse(localStorage.getItem("user"));
   const [isLoding, setIsLoding] = useState(false);
 
-  const [task, setTask] = useState([]);
-  const [contactData, setContactData] = useState([]);
-  const [leadData, setLeadData] = useState([]);
+  const [allData, setAllData] = useState([]);
   const [data, setData] = useState([]);
-  const [propertyData, setPropertyData] = useState([]);
   const navigate = useNavigate();
-  const [contactsView, taskView, leadView, proprtyView, emailView, callView, meetingView] = HasAccess(["Contacts", "Tasks", "Leads", "Properties", "Emails", "Calls", "Meetings"]);
+  const [contactsView, taskView, leadView, proprtyView] = HasAccess(["Contacts", "Tasks", "Leads", "Properties"]);
 
   const fetchData = async () => {
-    let taskData;
-    setTimeout(async () => {
-      if (user?.role === "superAdmin") {
-        taskData = await getApi("api/task/")
-      } else if (taskView?.create || taskView?.update || taskView?.delete || taskView?.view) {
-        taskData = await getApi(`api/task/?createBy=${user?._id}`)
-      }
-      setTask(taskData?.data);
-      // }, 4000);
-      let contact;
-      // setTimeout(async () => {
-      if (user?.role === "superAdmin") {
-        contact = await getApi("api/contact/")
-      } else if (contactsView?.create || contactsView?.update || contactsView?.delete || contactsView?.view) {
-        contact = await getApi(`api/contact/?createBy=${user?._id}`)
-      }
-      setContactData(contact?.data);
-      // }, 4000);
-      let lead;
-      // setTimeout(async () => {
-      if (user?.role === "superAdmin") {
-        lead = await getApi("api/lead/")
-      } else if (leadView?.create || leadView?.update || leadView?.delete || leadView?.view) {
-        lead = await getApi(`api/lead/?createBy=${user?._id}`)
-      }
-      setLeadData(lead?.data);
-      // }, 4000);
-      let property;
-      // setTimeout(async () => {
-      if (user?.role === "superAdmin") {
-        property = await getApi("api/property/")
-      } else if (proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view) {
-        property = await getApi(`api/property/?createBy=${user?._id}`)
-      }
-      setPropertyData(property?.data);
-    }, 3000);
+    let responseData = await getApi(`api/status/?createBy=${user?._id}`);
+
+    setAllData(responseData?.data?.data);
   };
-  useEffect(() => {
-    fetchData();
-  }, []);
+
 
   const fetchProgressChart = async () => {
     setIsLoding(true);
@@ -101,35 +62,49 @@ export default function UserReports() {
     fetchProgressChart()
   }, [])
 
+  const findModuleData = (title) => {
+    const filterData = data?.find(item => item?.name === title)
+    return filterData?.length || 0
+  }
+
+  const findLeadStatus = (title) => {
+    const filterData = allData?.leadData?.filter(item => item?.leadStatus === title)
+    return filterData?.length || 0
+  }
+  const findTaskStatus = (title) => {
+    const filterData = allData?.taskData?.filter(item => item?.status === title)
+    return filterData?.length || 0
+  }
+
   const taskStatus = [
     {
       name: "Completed",
       status: 'completed',
-      length: task && task?.length > 0 && task?.filter(item => item?.status === "completed")?.length || 0,
+      length: findTaskStatus('completed'),
       color: "#4d8f3a"
     },
     {
       name: "Pending",
       status: 'pending',
-      length: task && task?.length > 0 && task?.filter(item => item?.status === "pending")?.length || 0,
+      length: findTaskStatus('pending'),
       color: "#a37f08"
     },
     {
       name: "In Progress",
       status: 'inProgress',
-      length: task && task?.length > 0 && task?.filter(item => item?.status === "inProgress")?.length || 0,
+      length: findTaskStatus('inProgress'),
       color: "#7038db"
     },
     {
       name: "Todo",
       status: 'todo',
-      length: task && task?.length > 0 && task?.filter(item => item?.status === "todo")?.length || 0,
+      length: findTaskStatus('todo'),
       color: "#1f7eeb"
     },
     {
       name: "On Hold",
       status: 'onHold',
-      length: task && task?.length > 0 && task?.filter(item => item?.status === "onHold")?.length || 0,
+      length: findTaskStatus('onHold'),
       color: "#DB5436"
     },
   ]
@@ -142,6 +117,12 @@ export default function UserReports() {
     Email: '/email',
     Property: '/properties',
   };
+
+  useEffect(() => {
+    fetchData();
+  }, [user?._id]);
+
+
   return (
     <>
       <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} gap="20px" mb="20px">
@@ -158,7 +139,7 @@ export default function UserReports() {
               />
             }
             name="Tasks"
-            value={task?.length || 0}
+            value={findModuleData("Tasks")}
           />}
         {(contactsView?.create || contactsView?.update || contactsView?.delete || contactsView?.view) &&
           <MiniStatistics
@@ -174,7 +155,7 @@ export default function UserReports() {
               />
             }
             name="Contacts"
-            value={contactData?.length || 0}
+            value={findModuleData("Contacts")}
           />}
         {(leadView?.create || leadView?.update || leadView?.delete || leadView?.view) &&
           <MiniStatistics
@@ -190,7 +171,7 @@ export default function UserReports() {
               />
             }
             name="Leads"
-            value={leadData?.length || 0}
+            value={findModuleData("Leads")}
           />}
         {(proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view) &&
           <MiniStatistics
@@ -206,16 +187,16 @@ export default function UserReports() {
               />
             }
             name="Property"
-            value={propertyData?.length || 0}
+            value={findModuleData("Properties")}
           />}
       </SimpleGrid>
 
       <Grid Grid templateColumns="repeat(12, 1fr)" gap={3} >
-       
+
         <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
           <Card>
             <Flex mb={3} alignItems={"center"} justifyContent={"space-between"}>
-              <Heading size="md">Report</Heading>
+              <Heading size="md">Email and Call Report</Heading>
               <IconButton
                 color={"green.500"}
                 onClick={() => navigate("/reporting-analytics")}
@@ -232,7 +213,7 @@ export default function UserReports() {
         <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
           <Card>
             <Flex mb={5} alignItems={"center"} justifyContent={"space-between"}>
-              <Heading size="md">Report</Heading>
+              <Heading size="md">Module Data Report</Heading>
 
             </Flex>
             <Box mb={3}>
@@ -249,23 +230,23 @@ export default function UserReports() {
 
         <Card >
           <Heading size="md" pb={3}>Statistics</Heading>
-          
+
           {
             !isLoding ?
-            data && data.length > 0 && data?.map((item, i) => (
-              <>
-                <Box border={"1px solid #e5e5e5"} p={2} m={1} cursor={'pointer'} key={i} onClick={() => navigate(navigateTo[item.name])}>
-                  <Flex justifyContent={"space-between"}>
-                    <Text fontSize="sm" fontWeight={600} pb={2}>{item?.name}</Text>
-                    <Text fontSize="sm" fontWeight={600} pb={2}><CountUpComponent targetNumber={item?.length} /></Text>
-                  </Flex>
-                  <Progress
-                    colorScheme={item?.color}
-                    size='xs' value={item?.length} width={"100%"} />
-                </Box>
-              </>
+              data && data.length > 0 && data?.map((item, i) => (
+                <>
+                  <Box border={"1px solid #e5e5e5"} p={2} m={1} cursor={'pointer'} key={i} onClick={() => navigate(navigateTo[item.name])}>
+                    <Flex justifyContent={"space-between"}>
+                      <Text fontSize="sm" fontWeight={600} pb={2}>{item?.name}</Text>
+                      <Text fontSize="sm" fontWeight={600} pb={2}><CountUpComponent targetNumber={item?.length} /></Text>
+                    </Flex>
+                    <Progress
+                      colorScheme={item?.color}
+                      size='xs' value={item?.length} width={"100%"} />
+                  </Box>
+                </>
 
-            )):<div style={{display:"flex",justifyContent:"center",alignItems:"center"}}><Spinner/></div>
+              )) : <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}><Spinner /></div>
           }
         </Card>
 
@@ -280,27 +261,27 @@ export default function UserReports() {
                   onClick={() => navigate('/lead')}
                   p={2} m={1} textAlign={"center"}>
                   <Heading size="sm" pb={3} color={"#1f7eeb"}>Total Leads </Heading>
-                  <Text fontWeight={600} color={"#1f7eeb"}><CountUpComponent targetNumber={leadData?.length || 0} /> </Text>
+                  <Text fontWeight={600} color={"#1f7eeb"}><CountUpComponent targetNumber={allData?.leadData?.length || 0} /> </Text>
                 </Box>
               </GridItem>
               <GridItem colSpan={{ base: 12, md: 6 }}>
                 <Box backgroundColor={"#eaf9e6"}
                   borderRadius={"10px"}
                   cursor={"pointer"}
-                  onClick={() => navigate('/lead', { state: 'active' })}
+                  // onClick={() => navigate('/lead', { state: 'active' })}
                   p={2} m={1} textAlign={"center"}>
                   <Heading size="sm" pb={3} color={"#43882f"} >Active Leads </Heading>
-                  <Text fontWeight={600} color={"#43882f"}><CountUpComponent targetNumber={leadData && leadData.length > 0 && leadData?.filter(lead => lead?.leadStatus === "active")?.length || 0} /></Text>
+                  <Text fontWeight={600} color={"#43882f"}><CountUpComponent targetNumber={findLeadStatus("active")} /></Text>
                 </Box>
               </GridItem>
               <GridItem colSpan={{ base: 12, md: 6 }}>
                 <Box backgroundColor={"#fbf4dd"}
-                  onClick={() => navigate('/lead', { state: 'pending' })}
+                  // onClick={() => navigate('/lead', { state: 'pending' })}
                   borderRadius={"10px"}
                   cursor={"pointer"}
                   p={2} m={1} textAlign={"center"}>
                   <Heading size="sm" pb={3} color={"#a37f08"}>Pending Leads</Heading>
-                  <Text fontWeight={600} color={"#a37f08"}><CountUpComponent targetNumber={leadData && leadData.length > 0 && leadData?.filter(lead => lead?.leadStatus === "pending")?.length || 0} /></Text>
+                  <Text fontWeight={600} color={"#a37f08"}><CountUpComponent targetNumber={findLeadStatus("pending")} /></Text>
                 </Box>
               </GridItem>
 
@@ -308,16 +289,16 @@ export default function UserReports() {
                 <Box backgroundColor={"#ffeeeb"}
                   borderRadius={"10px"}
                   cursor={"pointer"}
-                  onClick={() => navigate('/lead', { state: 'sold' })}
+                  // onClick={() => navigate('/lead', { state: 'sold' })}
                   p={2} m={1} textAlign={"center"}>
                   <Heading size="sm" pb={3} color={"#d6401d"}>Sold Leads </Heading>
-                  <Text fontWeight={600} color={"#d6401d"}><CountUpComponent targetNumber={leadData && leadData.length > 0 && leadData?.filter(lead => lead?.leadStatus === "sold")?.length || 0} /></Text>
+                  <Text fontWeight={600} color={"#d6401d"}><CountUpComponent targetNumber={findLeadStatus("sold")} /></Text>
                 </Box>
               </GridItem>
             </Grid>
           }
           <Flex justifyContent={"center"}  >
-            <PieChart leadData={leadData} />
+            <PieChart leadData={allData?.leadData} />
           </Flex>
 
         </Card>}
@@ -331,13 +312,14 @@ export default function UserReports() {
                 borderRadius={"10px"} cursor={'pointer'}
                 p={2} m={1} textAlign={"center"}>
                 <Heading size="sm" pb={3} color={"#1f7eeb"}>Total Tasks </Heading>
-                <Text fontWeight={600} color={"#1f7eeb"}><CountUpComponent targetNumber={task?.length || 0} /></Text>
+                <Text fontWeight={600} color={"#1f7eeb"}><CountUpComponent targetNumber={allData?.taskData?.length || 0} /></Text>
               </Box>
             </GridItem>
           </Grid>
           {taskStatus && taskStatus.length > 0 && taskStatus?.map((item) => (
             <Box my={1.5}>
-              <Flex justifyContent={"space-between"} cursor={'pointer'} onClick={() => navigate('/task', { state: item.status })} alignItems={"center"} padding={4} backgroundColor={"#0b0b0b17"} borderRadius={"10px"}>
+              {/* <Flex justifyContent={"space-between"} cursor={'pointer'} onClick={() => navigate('/task', { state: item.status })} alignItems={"center"} padding={4} backgroundColor={"#0b0b0b17"} borderRadius={"10px"}> */}
+              <Flex justifyContent={"space-between"} cursor={'pointer'} alignItems={"center"} padding={4} backgroundColor={"#0b0b0b17"} borderRadius={"10px"}>
                 <Flex alignItems={"center"}>
                   <Box height={"18px"} width={"18px"} lineHeight={"18px"} textAlign={"center"} border={`1px solid ${item.color}`} display={"flex"} justifyContent={"center"} alignItems={"center"} borderRadius={"50%"} margin={"0 auto"} >
                     <Box backgroundColor={`${item.color}`} height={"10px"} width={"10px"} borderRadius={"50%"}></Box>

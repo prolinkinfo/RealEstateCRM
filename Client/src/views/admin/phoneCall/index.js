@@ -50,8 +50,21 @@ const Index = (props) => {
     };
     const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
+        {
+            Header: "Recipient", accessor: "createByName", cell: (cell) => (
+                <Link to={`/phone-call/${cell?.row?.values._id}`}>
+                    <Text
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.value || ' - '}
+                    </Text>
+                </Link>)
+        },
         { Header: 'Sender Name', accessor: 'senderName' },
-        { Header: "Recipient", accessor: "createByName", },
         {
             Header: "Realeted To", accessor: "realeted", cell: ({ row }) => (
                 <Text  >

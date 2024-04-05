@@ -10,8 +10,8 @@ const Report = () => {
     const [data, setData] = useState([])
     const [isLoding, setIsLoding] = useState(false)
     const [selectedValues, setSelectedValues] = useState([]);
-    const [selectedColumns, setSelectedColumns] = useState([]);
-    const [columns, setColumns] = useState([]);
+    // const [selectedColumns, setSelectedColumns] = useState([]);
+    // const [columns, setColumns] = useState([]);
 
     const user = JSON.parse(localStorage.getItem("user"))
 
@@ -23,6 +23,7 @@ const Report = () => {
 
     const fetchCustomDataFields = async () => {
         const tempTableColumns = [
+            { Header: '#', accessor: '_id' },
             { Header: 'Name', accessor: 'firstName' },
             { Header: 'Email Sent', accessor: 'emailsent' },
             { Header: "Outbound Calls", accessor: "outboundcall" },
@@ -52,7 +53,9 @@ const Report = () => {
         setIsLoding(false)
     }
 
-
+    const [columns, setColumns] = useState([...tableColumns]);
+    const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
+    const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
     useEffect(() => {
         fetchData()
         fetchCustomDataFields()
@@ -67,7 +70,7 @@ const Report = () => {
                     title={title}
                     isLoding={isLoding}
                     columnData={tableColumns}
-                    dataColumn={tableColumns}
+                    dataColumn={dataColumn}
                     allData={data}
                     tableData={data}
                     AdvanceSearch={false}

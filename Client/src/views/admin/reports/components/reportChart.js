@@ -30,6 +30,7 @@ const ReportChart = (props) => {
             setReportChart(result?.data)
         }
     }
+    console.log(reportChart);
 
     const options = {
         chart: {
@@ -50,22 +51,21 @@ const ReportChart = (props) => {
 
     const series = Object.keys(reportChart).map((key) => {
         const dataSet = reportChart[key][0];
-
         let seriesData = [];
 
         if (dataSet?.Emails) {
             seriesData = seriesData.concat(
-                dataSet.Emails.map((item) => ({ x: item.date, y: item.Emailcount }))
+                dataSet?.Emails?.map((item) => ({ x: item?.date, y: item?.Emailcount }))
             );
         }
         if (dataSet?.Calls) {
             seriesData = seriesData.concat(
-                dataSet.Calls.map((item) => ({ x: item.date, y: item.Callcount }))
+                dataSet?.Calls?.map((item) => ({ x: item?.date, y: item?.Callcount }))
             );
         }
         if (dataSet?.TextMsges) {
             seriesData = seriesData.concat(
-                dataSet.TextMsges.map((item) => ({ x: item.date, y: item.TextSentCount }))
+                dataSet?.TextMsges?.map((item) => ({ x: item?.date, y: item?.TextSentCount }))
             );
         }
 
@@ -82,7 +82,7 @@ const ReportChart = (props) => {
     }, [startDate, endDate, selection])
 
 
-    const selectedSeries = select === 'all' ? series : series.filter(series => series.name === select);
+    const selectedSeries = select === 'all' ? series : series?.filter(series => series?.name === select);
     return (
         <Card>
             {!dashboard &&

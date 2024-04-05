@@ -19,6 +19,7 @@ import DynamicPage from 'views/admin/dynamicPage';
 import DynamicPageview from 'views/admin/dynamicPage/DynamicPageview';
 import { fetchRouteData } from '../../redux/routeSlice';
 import { LuChevronRightCircle } from 'react-icons/lu';
+import { fetchRoles } from '../../redux/roleSlice';
 
 const MainDashboard = React.lazy(() => import("views/admin/default"));
 
@@ -29,7 +30,9 @@ export default function Dashboard(props) {
 	const [fixed] = useState(false);
 	const [toggleSidebar, setToggleSidebar] = useState(false);
 	const [openSidebar, setOpenSidebar] = useState(false)
-	const user = JSON.parse(localStorage.getItem("user"))
+	// const user = JSON.parse(localStorage.getItem("user"))
+	const userId = JSON.parse(localStorage.getItem("user"))?._id;
+
 	// let routes = newRoutes;
 	const [routes, setRoutes] = useState(newRoutes)
 	const route = useSelector((state) => state?.route?.data)
@@ -38,6 +41,7 @@ export default function Dashboard(props) {
 	const pathName = (name) => {
 		return `/${name.toLowerCase().replace(/ /g, '-')}`;
 	}
+
 
 	// functions for changing the states from components
 	const getRoute = () => {
@@ -247,6 +251,13 @@ export default function Dashboard(props) {
 			}
 		});
 	};
+
+	useEffect(() => {
+		if (window.location.pathname === "/default") {
+			dispatch(fetchRoles(userId))
+		}
+	}, [userId]);
+
 	document.documentElement.dir = 'ltr';
 	const { onOpen } = useDisclosure();
 	document.documentElement.dir = 'ltr';

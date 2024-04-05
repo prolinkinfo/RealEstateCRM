@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
-import { Button,  Menu, MenuButton, MenuItem, MenuList, Select, Text, useDisclosure } from '@chakra-ui/react';
+import { Button, Menu, MenuButton, MenuItem, MenuList, Select, Text, useDisclosure } from '@chakra-ui/react';
 import { getApi } from 'services/api';
 import AddTask from './components/addTask';
 import { HasAccess } from '../../../redux/accessUtils';

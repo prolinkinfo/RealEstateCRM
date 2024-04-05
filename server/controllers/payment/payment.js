@@ -65,7 +65,7 @@ const add = async (req, res) => {
         });
         res.json({ url: session.url });
     } catch (e) {
-        console.log(e)
+        console.log("error: ", e);
         res.status(500).json({ error: e.message });
     }
 }
