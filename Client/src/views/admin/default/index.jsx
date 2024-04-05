@@ -26,7 +26,6 @@ import { useNavigate } from "react-router-dom";
 import { getApi } from "services/api";
 import ReportChart from "../reports/components/reportChart";
 import Chart from "components/charts/LineChart.js";
-// import Chart from "../reports/components/chart";
 import { HasAccess } from "../../../redux/accessUtils";
 import PieChart from "components/charts/PieChart";
 import CountUpComponent from "../../../../src/components/countUpComponent/countUpComponent";
@@ -42,7 +41,7 @@ export default function UserReports() {
   const [allData, setAllData] = useState([]);
   const [data, setData] = useState([]);
   const navigate = useNavigate();
-  const [contactsView, taskView, leadView, proprtyView, emailView, callView, meetingView] = HasAccess(["Contacts", "Tasks", "Leads", "Properties", "Emails", "Calls", "Meetings"]);
+  const [contactsView, taskView, leadView, proprtyView] = HasAccess(["Contacts", "Tasks", "Leads", "Properties"]);
 
   const fetchData = async () => {
     let responseData;

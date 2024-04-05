@@ -32,9 +32,7 @@ const CommonCheckTable = (props) => {
     const data = useMemo(() => (AdvanceSearch ? searchDisplay : displaySearchData) ? (AdvanceSearch ? searchedDataOut : searchedData) : tableData, [(AdvanceSearch ? searchDisplay : displaySearchData) ? (AdvanceSearch ? searchedDataOut : searchedData) : tableData]);
     const [manageColumns, setManageColumns] = useState(false);
     const [csvColumns, setCsvColumns] = useState([]);
-    const [searchbox, setSearchbox] = useState('');
-    // const [searchValue, setSearchValue] = useState(advanceSearchData || {})
-    // const [getTagValues, setGetTagValues] = useState(props.getTagValuesOutSide ? props.getTagValuesOutSide : []);
+    const [searchbox, setSearchbox] = useState('');  
     const [advaceSearch, setAdvaceSearch] = useState(false);
     const [column, setColumn] = useState('');
     const [gopageValue, setGopageValue] = useState();
