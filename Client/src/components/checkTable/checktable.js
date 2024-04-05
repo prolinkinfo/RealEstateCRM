@@ -22,7 +22,6 @@ const CommonCheckTable = (props) => {
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
     const searchedDataOut = useSelector((state) => state?.advanceSearchData?.searchResult)
-    console.log(searchedDataOut, "searchedDataOut")
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
     const columns = useMemo(() => dataColumn, [dataColumn]);

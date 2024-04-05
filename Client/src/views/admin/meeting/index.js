@@ -7,7 +7,7 @@ import CommonCheckTable from '../../../components/checkTable/checktable';
 import { SearchIcon } from "@chakra-ui/icons";
 import { CiMenuKebab } from 'react-icons/ci';
 import ImportModal from '../lead/components/ImportModal';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import MeetingAdvanceSearch from './components/MeetingAdvanceSearch';
 import AddMeeting from './components/Addmeeting';
 import CommonDeleteModel from 'components/commonDeleteModel';
@@ -49,7 +49,7 @@ const Index = () => {
                         {permission?.delete && <MenuItem py={2.5} color={'red'} onClick={() => { setDeleteMany(true); setSelectedValues([row?.values?._id]); }} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>}
                     </MenuList>
                 </Menu>
-            </Text >
+            </Text>
         )
     }
     const tableColumns = [
@@ -59,7 +59,18 @@ const Index = () => {
             isSortable: false,
             width: 10
         },
-        { Header: 'Agenda', accessor: 'agenda' },
+        {
+            Header: 'Agenda', accessor: 'agenda', cell: (cell) => (
+                <Link to={`/metting/${cell?.row?.values._id}`}> <Text
+                    me="10px"
+                    sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                    color='brand.600'
+                    fontSize="sm"
+                    fontWeight="700"
+                >
+                    {cell?.value || ' - '}
+                </Text></Link>)
+        },
         { Header: "Date & Time", accessor: "dateTime", },
         { Header: "Time Stamp", accessor: "timestamp", },
         { Header: "Create By", accessor: "createdByName", },
