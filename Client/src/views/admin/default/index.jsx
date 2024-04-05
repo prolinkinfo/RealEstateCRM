@@ -44,12 +44,7 @@ export default function UserReports() {
   const [contactsView, taskView, leadView, proprtyView] = HasAccess(["Contacts", "Tasks", "Leads", "Properties"]);
 
   const fetchData = async () => {
-    let responseData;
-    if (user?.role === "superAdmin") {
-      responseData = await getApi("api/status/");
-    } else if (leadView?.create || leadView?.update || leadView?.delete || leadView?.view) {
-      responseData = await getApi(`api/status/?createBy=${user?._id}`);
-    }
+    let responseData = await getApi(`api/status/?createBy=${user?._id}`);
 
     setAllData(responseData?.data?.data);
   };
@@ -273,7 +268,7 @@ export default function UserReports() {
                 <Box backgroundColor={"#eaf9e6"}
                   borderRadius={"10px"}
                   cursor={"pointer"}
-                  onClick={() => navigate('/lead', { state: 'active' })}
+                  // onClick={() => navigate('/lead', { state: 'active' })}
                   p={2} m={1} textAlign={"center"}>
                   <Heading size="sm" pb={3} color={"#43882f"} >Active Leads </Heading>
                   <Text fontWeight={600} color={"#43882f"}><CountUpComponent targetNumber={findLeadStatus("active")} /></Text>
@@ -281,7 +276,7 @@ export default function UserReports() {
               </GridItem>
               <GridItem colSpan={{ base: 12, md: 6 }}>
                 <Box backgroundColor={"#fbf4dd"}
-                  onClick={() => navigate('/lead', { state: 'pending' })}
+                  // onClick={() => navigate('/lead', { state: 'pending' })}
                   borderRadius={"10px"}
                   cursor={"pointer"}
                   p={2} m={1} textAlign={"center"}>
@@ -294,7 +289,7 @@ export default function UserReports() {
                 <Box backgroundColor={"#ffeeeb"}
                   borderRadius={"10px"}
                   cursor={"pointer"}
-                  onClick={() => navigate('/lead', { state: 'sold' })}
+                  // onClick={() => navigate('/lead', { state: 'sold' })}
                   p={2} m={1} textAlign={"center"}>
                   <Heading size="sm" pb={3} color={"#d6401d"}>Sold Leads </Heading>
                   <Text fontWeight={600} color={"#d6401d"}><CountUpComponent targetNumber={findLeadStatus("sold")} /></Text>
@@ -323,7 +318,8 @@ export default function UserReports() {
           </Grid>
           {taskStatus && taskStatus.length > 0 && taskStatus?.map((item) => (
             <Box my={1.5}>
-              <Flex justifyContent={"space-between"} cursor={'pointer'} onClick={() => navigate('/task', { state: item.status })} alignItems={"center"} padding={4} backgroundColor={"#0b0b0b17"} borderRadius={"10px"}>
+              {/* <Flex justifyContent={"space-between"} cursor={'pointer'} onClick={() => navigate('/task', { state: item.status })} alignItems={"center"} padding={4} backgroundColor={"#0b0b0b17"} borderRadius={"10px"}> */}
+              <Flex justifyContent={"space-between"} cursor={'pointer'} alignItems={"center"} padding={4} backgroundColor={"#0b0b0b17"} borderRadius={"10px"}>
                 <Flex alignItems={"center"}>
                   <Box height={"18px"} width={"18px"} lineHeight={"18px"} textAlign={"center"} border={`1px solid ${item.color}`} display={"flex"} justifyContent={"center"} alignItems={"center"} borderRadius={"50%"} margin={"0 auto"} >
                     <Box backgroundColor={`${item.color}`} height={"10px"} width={"10px"} borderRadius={"50%"}></Box>
