@@ -404,7 +404,7 @@ const data = async (req, res) => {
         //     },
         //     { $project: { _id: 0, startDate: 1, endDate: 1, totalEmails: 1, Emails: 1 } }
         // ]);
-        let EmailDetails = await email.aggregate([
+        let Email = await email.aggregate([
             { $match: matchFilter },
             { $lookup: { from: 'Contacts', localField: 'createBy', foreignField: '_id', as: 'contact' } },
             { $unwind: { path: '$contact', preserveNullAndEmptyArrays: true } },
@@ -502,7 +502,7 @@ const data = async (req, res) => {
 
 
 
-        let outboundcall = await PhoneCall.aggregate([
+        let Call = await PhoneCall.aggregate([
             { $match: matchFilter },
             { $lookup: { from: 'Contacts', localField: 'createBy', foreignField: '_id', as: 'contact' } },
             { $unwind: { path: '$contact', preserveNullAndEmptyArrays: true } },
@@ -641,10 +641,10 @@ const data = async (req, res) => {
             { $project: { _id: 0, startDate: 1, endDate: 1, totalTextSent: 1, TextMsges: 1, }, },
         ]);
 
-        if (EmailDetails.length <= 0 && outboundcall.length <= 0 && TextSent.length <= 0) {
+        if (Email.length <= 0 && Call.length <= 0 && TextSent.length <= 0) {
             res.status(200).json({ totalEmails: 0, totalCall: 0, totalTextSent: 0 });
         } else {
-            res.status(200).json({ EmailDetails, outboundcall });
+            res.status(200).json({ Email, Call });
             // res.status(200).json({ EmailDetails, outboundcall, TextSent });
         }
 
