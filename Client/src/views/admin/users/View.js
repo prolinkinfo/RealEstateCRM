@@ -32,7 +32,6 @@ const View = () => {
     const navigate = useNavigate()
     const handleOpenModal = (userData) => {
         setEdit(true)
-        // dispatch(setIsOpen(true)); // Dispatch setIsOpen action with true value
         dispatch(setUser(userData)); // Dispatch setUser action to set user data
     };
 

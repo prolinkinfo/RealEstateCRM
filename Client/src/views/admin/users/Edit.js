@@ -2,18 +2,18 @@ import { CloseIcon, PhoneIcon } from '@chakra-ui/icons';
 import { Button, FormLabel, Grid, GridItem, IconButton, Input, InputGroup, InputLeftElement, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { fetchRoles } from '../../../redux/roleSlice';
 import { userSchema } from 'schema';
-import { getApi, putApi } from 'services/api';
-import { useDispatch, useSelector } from 'react-redux';
+import { putApi } from 'services/api';
+import { useDispatch } from 'react-redux';
 import { setUser } from '../../../redux/localSlice';
 
 
 const Edit = (props) => {
-    const { onClose, isOpen, fetchData, data, userData, setEdit } = props
+    const { isOpen, fetchData, data, userData, setEdit } = props
 
     const initialValues = {
         firstName: data ? data?.firstName : '',
@@ -38,9 +38,8 @@ const Edit = (props) => {
     const handleCloseModal = () => {
         setEdit(false);
         resetForm();
-        // Dispatch setUser action to set user data
     };
-    const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
+    const { errors, touched, values, handleBlur, handleChange, handleSubmit, resetForm } = formik
 
     const [isLoding, setIsLoding] = useState(false)
 
@@ -82,7 +81,6 @@ const Edit = (props) => {
         }
     };
 
-    const param = useParams()
 
     return (
         <Modal isOpen={isOpen} isCentered>
