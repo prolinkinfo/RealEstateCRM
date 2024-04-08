@@ -12,8 +12,9 @@ import {
 import Dropzone from "components/Dropzone";
 import { MdUpload } from "react-icons/md";
 
-export default function Upload(props) {
-    const { used, total, count, ...rest } = props;
+export default function CommonFileUpload(props) {
+    // const { used, total, count, ...rest } = props;
+    const { count, text, onFileSelect } = props;
     // Chakra Color Mode
     const textColorPrimary = useColorModeValue("secondaryGray.900", "white");
     const brandColor = useColorModeValue("brand.500", "white");
@@ -25,10 +26,10 @@ export default function Upload(props) {
                     w={{ base: "100%" }}
                     me='36px'
                     minH={200}
-                    img={props.text === 'Property Photos' ? 'img' : ''}
+                    img={text === 'Property Photos' ? 'img' : ''}
                     csv={'csv'}
                     height={'100%'}
-                    onFileSelect={props.onFileSelect}
+                    onFileSelect={onFileSelect}
                     isMultipleAllow={false}
                     content={
                         <Box>
@@ -53,7 +54,7 @@ export default function Upload(props) {
                         textAlign='start'
                         fontSize='2xl'
                         mt={{ base: "20px" }}>
-                        Upload {props.text}
+                        Upload {text}
                     </Text>
                     <Text
                         color={textColorSecondary}

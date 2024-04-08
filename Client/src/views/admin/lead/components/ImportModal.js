@@ -4,6 +4,7 @@ import { useFormik } from 'formik'
 import { useState } from 'react'
 import Upload from './Upload'
 import { useNavigate } from 'react-router-dom'
+import CommonFileUpload from 'components/commonFileUpload'
 
 const ImportModal = (props) => {
     const { onClose, isOpen, text, customFields } = props
@@ -49,7 +50,7 @@ const ImportModal = (props) => {
                 <ModalBody>
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12 }}>
-                            <Upload count={values.lead.length} onFileSelect={(file) => setFieldValue('lead', file)} text={text} />
+                            <CommonFileUpload count={values.lead.length} onFileSelect={(file) => setFieldValue('lead', file)} text={text} />
                             <Text mb='10px' color={'red'}> {errors.lead && touched.lead && <>Please Select {text}</>}</Text>
                         </GridItem>
                     </Grid>
