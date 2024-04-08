@@ -1,9 +1,6 @@
-import { AddIcon } from '@chakra-ui/icons'
 import { Button, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import LeadTable from './Lead'
-import { getApi } from 'services/api'
-import { postApi } from 'services/api'
 import Spinner from 'components/spinner/Spinner'
 import { GiClick } from "react-icons/gi";
 
@@ -25,15 +22,7 @@ const ContactModel = (props) => {
     ];
 
     const user = JSON.parse(localStorage.getItem("user"))
-    // const fetchLeadData = async () => {
-    //     setIsLoding(true)
-    //     let result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
-    //     if (result && result.status == 200) {
-    //         setData(result?.data);
-    //     }
-    //     setIsLoding(false)
-    // }
-
+   
     const handleSubmit = async () => {
         try {
             setIsLoding(true)
@@ -47,10 +36,6 @@ const ContactModel = (props) => {
             setIsLoding(false)
         }
     }
-
-    // useEffect(() => {
-    //     fetchLeadData()
-    // }, [])
 
     return (
         <Modal onClose={onClose} size='full' isOpen={isOpen} >

@@ -45,7 +45,6 @@ const add = async (req, res) => {
                 const labelName = req.body.fields?.[0]?.label;
                 const fieldType = req.body.fields?.[0]?.backendType || "Mixed";
 
-                // console.log(labelName,"labelName")
 
                 // Check if the field name already exists in the schema (case-insensitive)
                 const caseInsensitiveMatch = Object.keys(existingSchema.paths)?.find(path => {

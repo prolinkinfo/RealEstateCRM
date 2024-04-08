@@ -64,8 +64,6 @@ const advanceSearchSlice = createSlice({
                         (item) =>
                             (!action.payload.values?.leadStatus || (item?.leadStatus && item?.leadStatus.toLowerCase().includes(action.payload.values?.leadStatus?.toLowerCase())))
                     )
-                    console.log("action--::", action.payload.allData)
-                    console.log("values--::", action.payload.values)
                     break;
                 case 'Email':
                     state.searchResult = action.payload.allData?.filter(

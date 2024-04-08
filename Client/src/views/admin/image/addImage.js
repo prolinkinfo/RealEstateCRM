@@ -9,7 +9,7 @@ import { fetchImage } from '../../../redux/imageSlice'
 import { useDispatch } from 'react-redux'
 
 const AddImage = (props) => {
-    const { imageModal, setImageModal, fetchData } = props
+    const { imageModal, setImageModal } = props
     const [isLoding, setIsLoding] = useState(false)
 
     const dispatch = useDispatch()

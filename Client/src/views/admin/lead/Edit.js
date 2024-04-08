@@ -1,12 +1,9 @@
-import { CloseIcon, PhoneIcon } from '@chakra-ui/icons';
-import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, FormLabel, Grid, GridItem, Heading, IconButton, Input, InputGroup, InputLeftElement, Select, Text } from '@chakra-ui/react';
-import { HSeparator } from 'components/separator/Separator';
+import { CloseIcon } from '@chakra-ui/icons';
+import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, IconButton } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { leadSchema } from 'schema';
 import { putApi } from 'services/api';
 import { getApi } from 'services/api';
 import { generateValidationSchema } from '../../../utils';
@@ -18,7 +15,7 @@ const Edit = (props) => {
     const initialFieldValues = Object.fromEntries(
         (props?.leadData?.fields || []).map(field => [field?.name, ''])
     );
-    // const [initialValues, setInitialValues] = useState({
+
     //     // Lead Information:
     //     leadName: '',
     //     leadEmail: '',
@@ -60,7 +57,6 @@ const Edit = (props) => {
     const formik = useFormik({
         initialValues: initialValues,
         enableReinitialize: true,
-        // validationSchema: leadSchema,
         validationSchema: yup.object().shape(generateValidationSchema(props?.leadData?.fields)),
         onSubmit: (values, { resetForm }) => {
             EditData();
@@ -72,7 +68,6 @@ const Edit = (props) => {
     const EditData = async () => {
         try {
             setIsLoding(true)
-            // let response = await putApi(`api/lead/edit/${props?.selectedId || param.id}`, values)
             let response = await putApi(`api/form/edit/${props?.selectedId || param.id}`, { ...values, moduleId: props.moduleId })
             if (response.status === 200) {
                 props.onClose();
@@ -100,9 +95,6 @@ const Edit = (props) => {
                 response = await getApi('api/lead/view/', props?.selectedId ? props?.selectedId : param.id)
                 let editData = response?.data?.lead;
                 setInitialValues((prev) => ({ ...prev, ...editData }));
-                // editData.leadCreationDate = moment(response?.data?.lead?.leadCreationDate).format('YYYY-MM-DD');
-                // editData.leadConversionDate = moment(response?.data?.lead?.leadConversionDate).format('YYYY-MM-DD');
-                // editData.leadFollowUpDate = moment(response?.data?.lead?.leadFollowUpDate).format('YYYY-MM-DD');
             } catch (e) {
                 console.error(e)
             } finally {

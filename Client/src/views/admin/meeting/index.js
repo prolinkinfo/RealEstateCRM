@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
-import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
-import { Button, Flex, Menu, MenuButton, MenuItem, MenuList, Text, useDisclosure } from '@chakra-ui/react';
+import { DeleteIcon, ViewIcon } from '@chakra-ui/icons';
+import { Button, Menu, MenuButton, MenuItem, MenuList, Text, useDisclosure } from '@chakra-ui/react';
 import { getApi } from 'services/api';
 import { HasAccess } from '../../../redux/accessUtils';
 import CommonCheckTable from '../../../components/checkTable/checktable';
 import { SearchIcon } from "@chakra-ui/icons";
 import { CiMenuKebab } from 'react-icons/ci';
-import ImportModal from '../lead/components/ImportModal';
 import { Link, useNavigate } from 'react-router-dom';
 import MeetingAdvanceSearch from './components/MeetingAdvanceSearch';
 import AddMeeting from './components/Addmeeting';
@@ -15,21 +14,15 @@ import { deleteManyApi } from 'services/api';
 
 const Index = () => {
     const title = "Meeting";
-    const size = "lg";
     const navigate = useNavigate()
     const [action, setAction] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [edit, setEdit] = useState(false);
-    const [eventView, setEventView] = useState(false)
-    const [id, setId] = useState('')
-    const [selectedId, setSelectedId] = useState();
     const [selectedValues, setSelectedValues] = useState([]);
     const [advanceSearch, setAdvanceSearch] = useState(false);
     const [getTagValuesOutSide, setGetTagValuesOutside] = useState([]);
     const [searchboxOutside, setSearchboxOutside] = useState('');
     const user = JSON.parse(localStorage.getItem("user"));
     const [deleteMany, setDeleteMany] = useState(false);
-    const [addMeeting, setAddMeeting] = useState(false);
     const [isLoding, setIsLoding] = useState(false);
     const [data, setData] = useState([]);
     const [displaySearchData, setDisplaySearchData] = useState(false);
