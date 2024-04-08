@@ -2,7 +2,6 @@ import { Button, Grid, GridItem, Modal, ModalBody, ModalCloseButton, ModalConten
 import Spinner from 'components/spinner/Spinner'
 import { useFormik } from 'formik'
 import { useState } from 'react'
-import Upload from './Upload'
 import { useNavigate } from 'react-router-dom'
 import CommonFileUpload from 'components/commonFileUpload'
 
