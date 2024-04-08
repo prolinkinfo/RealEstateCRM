@@ -14,7 +14,7 @@ import ImportModal from './components/ImportModal';
 import { putApi } from 'services/api';
 import CommonDeleteModel from 'components/commonDeleteModel';
 import { deleteManyApi } from 'services/api';
-import { getSearchData } from '../../../redux/advanceSearchSlice';
+import { getSearchData, setGetTagValues } from '../../../redux/advanceSearchSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Index = () => {
@@ -96,11 +96,16 @@ const Index = () => {
     useEffect(() => {
         if (location?.state) {
             setSearchDisplay(true)
-            const searchData = dispatch(getSearchData({ values: payload, allData: data, type: "Leads" }))
-            console.log("data---::", searchData)
+            dispatch(getSearchData({ values: payload, allData: data, type: "Leads" }))
+            const getValue = [
+                {
+                    name: ["leadStatus"],
+                    value: location?.state
+                }
+            ]
+            dispatch(setGetTagValues(getValue.filter(item => item.value)))
         }
     }, [data, location?.state])
-    console.log("searchedDataOut---::", searchedDataOut)
 
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
