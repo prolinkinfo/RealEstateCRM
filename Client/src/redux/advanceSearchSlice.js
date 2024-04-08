@@ -59,6 +59,14 @@ const advanceSearchSlice = createSlice({
                             (!action.payload.values?.createByName || (item?.createByName && item?.createByName.toLowerCase().includes(action.payload.values?.createByName?.toLowerCase())))
                     )
                     break;
+                case 'Leads':
+                    state.searchResult = action.payload.allData?.filter(
+                        (item) =>
+                            (!action.payload.values?.leadStatus || (item?.leadStatus && item?.leadStatus.toLowerCase().includes(action.payload.values?.leadStatus?.toLowerCase())))
+                    )
+                    console.log("action--::", action.payload.allData)
+                    console.log("values--::", action.payload.values)
+                    break;
                 case 'Email':
                     state.searchResult = action.payload.allData?.filter(
                         (item) =>
