@@ -15,7 +15,7 @@ import { putApi } from 'services/api';
 import CommonDeleteModel from 'components/commonDeleteModel';
 import { deleteManyApi } from 'services/api';
 import { getSearchData } from '../../../redux/advanceSearchSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Index = () => {
     const title = "Leads";
@@ -27,6 +27,7 @@ const Index = () => {
 
     const [permission, emailAccess, callAccess] = HasAccess(['Leads', 'Emails', 'Calls']);
     const [isLoding, setIsLoding] = useState(false);
+    const [searchDisplay, setSearchDisplay] = useState(false);
     const [data, setData] = useState([]);
     const [tableColumns, setTableColumns] = useState([]);
     const [columns, setColumns] = useState([]);
@@ -90,10 +91,16 @@ const Index = () => {
     const payload = {
         leadStatus: location?.state
     }
+    const searchedDataOut = useSelector((state) => state?.advanceSearchData?.searchResult)
 
     useEffect(() => {
-        dispatch(getSearchData({ values: payload, allData: data, type: "Leads" }))
+        if (location?.state) {
+            setSearchDisplay(true)
+            const searchData = dispatch(getSearchData({ values: payload, allData: data, type: "Leads" }))
+            console.log("data---::", searchData)
+        }
     }, [data, location?.state])
+    console.log("searchedDataOut---::", searchedDataOut)
 
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
@@ -185,10 +192,12 @@ const Index = () => {
                         <CommonCheckTable
                             title={title}
                             isLoding={isLoding}
+                            searchDisplay={searchDisplay}
+                            setSearchDisplay={setSearchDisplay}
                             columnData={columns}
                             dataColumn={dataColumn}
                             allData={data}
-                            tableData={data}
+                            tableData={searchDisplay ? searchedDataOut : data}
                             tableCustomFields={leadData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
                             access={permission}
                             action={action}

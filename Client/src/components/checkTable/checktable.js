@@ -21,18 +21,18 @@ const CommonCheckTable = (props) => {
     const { isLoding, title, columnData, size, dataColumn, setSearchedDataOut, tableData, state, allData, ManageGrid, deleteMany, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, checkBox, AdvanceSearch, searchDisplay, setSearchDisplay, BackButton, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
-    const searchedDataOut = useSelector((state) => state?.advanceSearchData?.searchResult)
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
     const columns = useMemo(() => dataColumn, [dataColumn]);
     const [tempSelectedColumns, setTempSelectedColumns] = useState(dataColumn); // State to track changes
 
+    const searchedDataOut = useSelector((state) => state?.advanceSearchData?.searchResult)
     const searchValue = useSelector((state) => state?.advanceSearchData?.searchValue)
     const getTagValues = useSelector((state) => state?.advanceSearchData?.getTagValues)
     const data = useMemo(() => (AdvanceSearch ? searchDisplay : displaySearchData) ? (AdvanceSearch ? searchedDataOut : searchedData) : tableData, [(AdvanceSearch ? searchDisplay : displaySearchData) ? (AdvanceSearch ? searchedDataOut : searchedData) : tableData]);
     const [manageColumns, setManageColumns] = useState(false);
     const [csvColumns, setCsvColumns] = useState([]);
-    const [searchbox, setSearchbox] = useState('');  
+    const [searchbox, setSearchbox] = useState('');
     const [advaceSearch, setAdvaceSearch] = useState(false);
     const [column, setColumn] = useState('');
     const [gopageValue, setGopageValue] = useState();
