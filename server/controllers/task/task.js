@@ -13,7 +13,7 @@ const index = async (req, res) => {
             { $match: query },
             {
                 $lookup: {
-                    from: 'Contact',
+                    from: 'Contacts',
                     localField: 'assignmentTo',
                     foreignField: '_id',
                     as: 'contact'
@@ -21,7 +21,7 @@ const index = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'Lead', // Assuming this is the collection name for 'leads'
+                    from: 'Leads', // Assuming this is the collection name for 'leads'
                     localField: 'assignmentToLead',
                     foreignField: '_id',
                     as: 'Lead'
@@ -52,7 +52,6 @@ const index = async (req, res) => {
             },
             { $project: { users: 0, contact: 0, Lead: 0 } },
         ]);
-
         res.send(result);
     } catch (error) {
         console.error("Error:", error);
@@ -137,7 +136,7 @@ const view = async (req, res) => {
             { $match: { _id: response._id } },
             {
                 $lookup: {
-                    from: 'Contact',
+                    from: 'Contacts',
                     localField: 'assignmentTo',
                     foreignField: '_id',
                     as: 'contact'
@@ -145,7 +144,7 @@ const view = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'Lead', // Assuming this is the collection name for 'leads'
+                    from: 'Leads', // Assuming this is the collection name for 'leads'
                     localField: 'assignmentToLead',
                     foreignField: '_id',
                     as: 'Lead'

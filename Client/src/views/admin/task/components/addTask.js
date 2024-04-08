@@ -54,10 +54,10 @@ const AddTask = (props) => {
             setIsLoding(true)
 
             if (values?.start) {
-                values.start = isChecked ? moment(values.start).format('YYYY-MM-DD') || '' : moment(values.start).format('YYYY-MM-DDTHH:mm') || '';
+                values.start = isChecked ? moment(values.start).format('YYYY-MM-DD') || '' : moment(values.start).format('YYYY-MM-DD HH:mm') || '';
             }
             if (values?.end) {
-                values.end = isChecked ? moment(values.end).format('YYY-MM-DD') || '' : moment(values.end).format('YYYY-MM-DDTHH:mm') || '';
+                values.end = isChecked ? moment(values.end).format('YYY-MM-DD') || '' : moment(values.end).format('YYYY-MM-DD HH:mm') || '';
             }
 
             let response = await postApi('api/task/add', values)

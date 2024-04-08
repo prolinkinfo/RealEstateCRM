@@ -3,7 +3,7 @@ import moment from 'moment';
 import { useFormik } from 'formik';
 import { Box, Button, Flex, FormLabel, Grid, GridItem, Input, InputGroup, InputLeftElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Spinner, Text } from '@chakra-ui/react';
 
-const AdvanceSearch = ({ handleAdvanceSearch,setAdvaceSearch,search, advaceSearch, isLoding, allData, setDisplaySearchData, setSearchedData, setGetTagValues, setSearchClear, tableCustomFields, setSearchbox }) => {
+const AdvanceSearch = ({ handleAdvanceSearch, setAdvaceSearch, search, advaceSearch, isLoding, allData, setDisplaySearchData, setSearchedData, setGetTagValues, setSearchClear, tableCustomFields, setSearchbox }) => {
 
     const initialFieldValues = Object.fromEntries(
         (tableCustomFields || []).flatMap(field => {
