@@ -2,17 +2,14 @@ import { Button, FormLabel, Grid, GridItem, Input, Modal, ModalBody, ModalCloseB
 import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
-import { BsFillSendFill } from 'react-icons/bs';
 import { emailSchema } from 'schema';
-import { getApi, postApi } from 'services/api';
+import { postApi } from 'services/api';
 
 
 const AddEmailHistory = (props) => {
     const { onClose, isOpen, fetchData, setAction } = props
     const user = JSON.parse(localStorage.getItem('user'))
     const [isLoding, setIsLoding] = useState(false)
-    const [contactModelOpen, setContactModel] = useState(false);
-    const [leadModelOpen, setLeadModel] = useState(false);
 
     const initialValues = {
         sender: user?._id,
@@ -55,19 +52,10 @@ const AddEmailHistory = (props) => {
 
     const fetchRecipientData = () => {
         if (props.id && props.lead !== 'true') {
-            // let response = await getApi('api/contact/view/', props.id)
-            // if (response?.status === 200) {
-            // setFieldValue('recipient', props?.viewData?.contact?.email);
+           
             setFieldValue('createByContact', props.id);
-            // values.recipient = props?.viewData?.contact?.email
-            // }
         } else if (props.id && props.lead === 'true') {
-            // let response = await getApi('api/lead/view/', props.id)
-            // if (response?.status === 200) {
-            // setFieldValue('recipient', props?.viewData?.lead?.leadEmail);
             setFieldValue('createByLead', props.id);
-            // values.recipient = props?.viewData?.lead?.leadEmail
-            // }
         }
     }
     useEffect(() => {

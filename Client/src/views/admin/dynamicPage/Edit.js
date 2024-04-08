@@ -21,7 +21,6 @@ const Edit = (props) => {
         createBy: JSON.parse(localStorage.getItem('user'))._id
     })
     const param = useParams()
-    console.log(initialValues);
     const formik = useFormik({
         initialValues: initialValues,
         enableReinitialize: true,
@@ -58,7 +57,6 @@ const Edit = (props) => {
     const fetchData = async () => {
         if (props?.selectedId || param.id) {
             try {
-                console.log(props.moduleId);
                 setIsLoding(true)
                 response = await getApi(`api/form/view/${props?.selectedId || param.id}?moduleId=${props.moduleId}`)
                 let editData = response?.data?.data;

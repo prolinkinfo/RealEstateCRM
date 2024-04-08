@@ -60,7 +60,6 @@ const Index = () => {
 
     const handleOpenEmail = (id, dataLead) => {
         if (id) {
-            console.log(dataLead)
             setEmailRec(dataLead?.leadEmail);
             setAddEmailHistory(true);
         }

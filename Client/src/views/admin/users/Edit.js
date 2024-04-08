@@ -3,7 +3,6 @@ import { Button, FormLabel, Grid, GridItem, IconButton, Input, InputGroup, Input
 import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { fetchRoles } from '../../../redux/roleSlice';
 import { userSchema } from 'schema';

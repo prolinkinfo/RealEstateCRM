@@ -2,8 +2,8 @@ import { Button, Grid, GridItem, Modal, ModalBody, ModalCloseButton, ModalConten
 import Spinner from 'components/spinner/Spinner'
 import { useFormik } from 'formik'
 import { useState } from 'react'
-import UploadImport from './UploadImport'
 import { useNavigate } from 'react-router-dom'
+import CommonFileUpload from 'components/commonFileUpload'
 
 const ImportModal = (props) => {
     const { onClose, isOpen, fetchData, text, customFields } = props
@@ -50,7 +50,7 @@ const ImportModal = (props) => {
                 <ModalBody>
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12 }}>
-                            <UploadImport count={values.property.length} onFileSelect={(file) => setFieldValue('property', file)} text={text} />
+                            <CommonFileUpload count={values.property.length} onFileSelect={(file) => setFieldValue('property', file)} text={text} />
                             <Text mb='10px' color={'red'}> {errors.property && touched.property && <>Please Select {text}</>}</Text>
                         </GridItem>
                     </Grid>

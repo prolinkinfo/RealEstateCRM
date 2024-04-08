@@ -374,7 +374,6 @@ const CustomField = () => {
 
                                                                             <Text display='flex' alignItems='center' size='sm' colorScheme='gray' ms='4px' mt={4} fontSize='md' fontWeight='500' mb='8px' >
                                                                                 <div {...provided.dragHandleProps} style={{ marginRight: '10px', cursor: 'grab' }} size={18} >
-                                                                                    {/* Wrap the BiGridVertical icon with the drag handle */}
                                                                                     <BiGridVertical size={18} />
                                                                                 </div>
                                                                                 {!item.fixed && <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(item?._id)} onChange={(event) => handleCheckboxChange(event, item?._id)} me="10px" />}
