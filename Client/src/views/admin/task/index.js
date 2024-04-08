@@ -18,7 +18,6 @@ import { deleteManyApi } from 'services/api';
 
 const Task = () => {
     const title = "Tasks";
-    const size = "lg";
     const [action, setAction] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [edit, setEdit] = useState(false);

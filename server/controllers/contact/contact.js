@@ -78,11 +78,11 @@ const view = async (req, res) => {
 
         if (!contact) return res.status(404).json({ message: 'No data found.' })
         let EmailHistory = await email.aggregate([
-            { $match: { createBy: contact._id } },
+            { $match: { createByContact: contact._id } },
             {
                 $lookup: {
                     from: 'Contacts', // Assuming this is the collection name for 'contacts'
-                    localField: 'createBy',
+                    localField: 'createByContact',
                     foreignField: '_id',
                     as: 'createByRef'
                 }
@@ -129,11 +129,11 @@ const view = async (req, res) => {
         ]);
 
         let phoneCallHistory = await phoneCall.aggregate([
-            { $match: { createBy: contact._id } },
+            { $match: { createByContact: contact._id } },
             {
                 $lookup: {
                     from: 'Contacts',
-                    localField: 'createBy',
+                    localField: 'createByContact',
                     foreignField: '_id',
                     as: 'contact'
                 }
@@ -181,7 +181,7 @@ const view = async (req, res) => {
             {
                 $lookup: {
                     from: 'User',
-                    localField: 'createdBy',
+                    localField: 'createBy',
                     foreignField: '_id',
                     as: 'users'
                 }

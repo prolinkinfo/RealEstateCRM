@@ -21,13 +21,14 @@ const AddEmailHistory = (props) => {
         recipient: '',
         subject: '',
         callNotes: '',
-        createBy: '',
+        createByContact: '',
         createByLead: '',
         startDate: new Date(),
         endDate: '',
         category: 'contact',
         assignmentTo: '',
         assignmentToLead: '',
+        createBy: user?._id,
     }
     const formik = useFormik({
         initialValues: initialValues,
@@ -71,8 +72,8 @@ const AddEmailHistory = (props) => {
     }, [props, values.category])
 
     const fetchRecipientData = async () => {
-        if (values.createBy) {
-            let response = await getApi('api/contact/view/', values.createBy)
+        if (values.createByContact) {
+            let response = await getApi('api/contact/view/', values.createByContact)
             if (response?.status === 200) {
                 setFieldValue('recipient', response?.data?.contact?.email);
                 values.recipient = response?.data?.contact?.email
@@ -88,7 +89,7 @@ const AddEmailHistory = (props) => {
 
     useEffect(() => {
         fetchRecipientData()
-    }, [values.createBy, values.createByLead])
+    }, [values.createByContact, values.createByLead])
 
     return (
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
@@ -98,7 +99,7 @@ const AddEmailHistory = (props) => {
                 <ModalCloseButton />
                 <ModalBody>
                     {/* Contact Model  */}
-                    <ContactModel isOpen={contactModelOpen} data={assignmentToData} onClose={setContactModel} fieldName='createBy' setFieldValue={setFieldValue} />
+                    <ContactModel isOpen={contactModelOpen} data={assignmentToData} onClose={setContactModel} fieldName='createByContact' setFieldValue={setFieldValue} />
                     {/* Lead Model  */}
                     <LeadModel isOpen={leadModelOpen} data={assignmentToData} onClose={setLeadModel} fieldName='createByLead' setFieldValue={setFieldValue} />
 
@@ -107,7 +108,7 @@ const AddEmailHistory = (props) => {
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Related
                             </FormLabel>
-                            <RadioGroup onChange={(e) => { setFieldValue('category', e); setFieldValue('createBy', ''); setFieldValue('createByLead', ''); }} value={values.category}>
+                            <RadioGroup onChange={(e) => { setFieldValue('category', e); setFieldValue('createByContact', ''); setFieldValue('createByLead', ''); }} value={values.category}>
                                 <Stack direction='row'>
                                     <Radio value='Contact'>Contact</Radio>
                                     <Radio value='Lead'>Lead</Radio>
@@ -124,13 +125,13 @@ const AddEmailHistory = (props) => {
                                         </FormLabel>
                                         <Flex justifyContent={'space-between'}>
                                             <Select
-                                                value={values.createBy}
-                                                name="createBy"
+                                                value={values.createByContact}
+                                                name="createByContact"
                                                 onChange={handleChange}
-                                                mb={errors.createBy && touched.createBy ? undefined : '10px'}
+                                                mb={errors.createByContact && touched.createByContact ? undefined : '10px'}
                                                 fontWeight='500'
                                                 placeholder={'Assignment To'}
-                                                borderColor={errors.createBy && touched.createBy ? "red.300" : null}
+                                                borderColor={errors.createByContact && touched.createByContact ? "red.300" : null}
                                             >
                                                 {assignmentToData?.map((item) => {
                                                     return <option value={item._id} key={item._id}>{values.category === 'Contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>

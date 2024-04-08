@@ -21,8 +21,6 @@ const Index = () => {
     const [permission] = HasAccess(['Properties']);
     const [isLoding, setIsLoding] = useState(false);
     const [data, setData] = useState([]);
-    const [displaySearchData, setDisplaySearchData] = useState(false);
-    const [searchedData, setSearchedData] = useState([]);
     const [tableColumns, setTableColumns] = useState([]);
     const [columns, setColumns] = useState([]);
     const [dataColumn, setDataColumn] = useState([]);
@@ -49,7 +47,7 @@ const Index = () => {
         setPropertyData(result?.data);
         const actionHeader = {
             Header: "Action",
-            accessor:"action",
+            accessor: "action",
             isSortable: false,
             center: true,
             cell: ({ row }) => (

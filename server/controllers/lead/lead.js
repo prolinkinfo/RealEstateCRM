@@ -220,7 +220,7 @@ const view = async (req, res) => {
         {
             $lookup: {
                 from: 'User',
-                localField: 'createdBy',
+                localField: 'createBy',
                 foreignField: '_id',
                 as: 'users'
             }

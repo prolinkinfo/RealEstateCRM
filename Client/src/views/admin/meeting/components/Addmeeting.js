@@ -27,7 +27,7 @@ const AddMeeting = (props) => {
         related: props.leadContect === 'contactView' ? 'Contact' : props.leadContect === 'leadView' ? 'Lead' : 'None',
         dateTime: '',
         notes: '',
-        createdBy: user?._id,
+        createBy: user?._id,
     }
 
     const formik = useFormik({

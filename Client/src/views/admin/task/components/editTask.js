@@ -11,7 +11,7 @@ import Spinner from 'components/spinner/Spinner';
 import moment from 'moment';
 
 const EditTask = (props) => {
-    const { onClose, isOpen, fetchData, setAction } = props
+    const { onClose, isOpen, setAction } = props
     const [isChecked, setIsChecked] = useState(false);
     const userId = JSON.parse(localStorage.getItem('user'))._id
     const user = JSON.parse(localStorage.getItem("user"))
@@ -65,7 +65,6 @@ const EditTask = (props) => {
                 formik.resetForm()
                 props.viewClose();
                 onClose(false)
-                // fetchData()
                 setAction((pre) => !pre)
             }
         } catch (e) {

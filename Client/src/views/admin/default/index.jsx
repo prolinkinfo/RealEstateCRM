@@ -268,7 +268,7 @@ export default function UserReports() {
                 <Box backgroundColor={"#eaf9e6"}
                   borderRadius={"10px"}
                   cursor={"pointer"}
-                  // onClick={() => navigate('/lead', { state: 'active' })}
+                  onClick={() => navigate('/lead', { state: 'active' })}
                   p={2} m={1} textAlign={"center"}>
                   <Heading size="sm" pb={3} color={"#43882f"} >Active Leads </Heading>
                   <Text fontWeight={600} color={"#43882f"}><CountUpComponent targetNumber={findLeadStatus("active")} /></Text>
@@ -276,7 +276,7 @@ export default function UserReports() {
               </GridItem>
               <GridItem colSpan={{ base: 12, md: 6 }}>
                 <Box backgroundColor={"#fbf4dd"}
-                  // onClick={() => navigate('/lead', { state: 'pending' })}
+                  onClick={() => navigate('/lead', { state: 'pending' })}
                   borderRadius={"10px"}
                   cursor={"pointer"}
                   p={2} m={1} textAlign={"center"}>
@@ -289,7 +289,7 @@ export default function UserReports() {
                 <Box backgroundColor={"#ffeeeb"}
                   borderRadius={"10px"}
                   cursor={"pointer"}
-                  // onClick={() => navigate('/lead', { state: 'sold' })}
+                  onClick={() => navigate('/lead', { state: 'sold' })}
                   p={2} m={1} textAlign={"center"}>
                   <Heading size="sm" pb={3} color={"#d6401d"}>Sold Leads </Heading>
                   <Text fontWeight={600} color={"#d6401d"}><CountUpComponent targetNumber={findLeadStatus("sold")} /></Text>

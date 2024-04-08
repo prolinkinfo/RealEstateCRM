@@ -33,9 +33,9 @@ import { HasAccess } from "../../../redux/accessUtils";
 import DataNotFound from "components/notFoundData";
 import CustomView from "utils/customView";
 import AddDocumentModal from "utils/addDocumentModal";
-import { useLocation } from 'react-router-dom';
 import CommonDeleteModel from "components/commonDeleteModel";
 import { deleteApi } from "services/api";
+import MeetingColumnsTable from "../meeting/components/ColumnsTable";
 
 const View = () => {
 
@@ -59,7 +59,6 @@ const View = () => {
     const [addDocument, setAddDocument] = useState(false);
     const [action, setAction] = useState(false)
     const [leadData, setLeadData] = useState([])
-    const location = useLocation()
     const navigate = useNavigate();
     const size = "lg";
 
@@ -68,6 +67,7 @@ const View = () => {
 
     const [permission, taskPermission, meetingPermission, callAccess, emailAccess, taskAccess, meetingAccess] = HasAccess(['Leads', 'Tasks', 'Meetings', 'Calls', 'Emails', 'Tasks', 'Meetings']);
 
+
     const columnsDataColumns = [
         { Header: "sender", accessor: "senderName", },
         { Header: "recipient", accessor: "createByName", },
@@ -75,7 +75,12 @@ const View = () => {
         { Header: "Created", accessor: "createBy", },
     ];
 
-
+    const MeetingColumns = [
+        { Header: 'agenda', accessor: 'agenda' },
+        { Header: "date Time", accessor: "dateTime", },
+        { Header: "times tamp", accessor: "timestamp", },
+        { Header: "create By", accessor: "createdByName", },
+    ];
     const taskColumns = [
         { Header: 'Title', accessor: 'title' },
         { Header: "Category", accessor: "category", },
@@ -104,7 +109,7 @@ const View = () => {
         setIsLoding(false)
     }
 
-    const handleDeleteLead=async(id)=>{
+    const handleDeleteLead = async (id) => {
         try {
             setIsLoding(true)
             let response = await deleteApi('api/lead/delete/', id)
@@ -231,15 +236,23 @@ const View = () => {
                                                         </div>}
                                                 </Card>
                                             </GridItem>}
-                                            {
-                                                meetingAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
+                                            {/* {meetingAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
                                                     <Card>
                                                         {
                                                             allData?.meeting?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                                 <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showMeetings ? setShowMeetings(false) : setShowMeetings(true)}>{showMeetings ? "Show less" : "Show more"}</Button>
                                                             </div>}
                                                         {addMeeting && <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="lead" id={param.id} setAction={setAction} />}                                                    </Card>
-                                                </GridItem>}
+                                                </GridItem>} */}
+                                            {meetingAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
+                                                <Card overflow={'scroll'}>
+                                                    <MeetingColumnsTable fetchData={fetchData} columnsData={MeetingColumns} tableData={showMeetings ? allData?.meeting : allData?.meeting?.length > 0 ? [allData?.meeting[0]] : []} title={'Meeting '} action={action} setAction={setAction} access={meetingAccess} />
+                                                    <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="contact" id={param.id} setAction={setAction} />
+                                                    {allData?.meetingHistory?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
+                                                        <Button colorScheme="brand" size='sm' variant="outline" display="flex" justifyContant="end" onClick={() => showMeetings ? setShowMeetings(false) : setShowMeetings(true)}>{showMeetings ? "Show less" : "Show more"}</Button>
+                                                    </div>}
+                                                </Card>
+                                            </GridItem>}
                                         </Grid>
                                     </Grid>
                                 </GridItem>

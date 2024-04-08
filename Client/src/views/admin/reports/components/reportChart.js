@@ -30,7 +30,6 @@ const ReportChart = (props) => {
             setReportChart(result?.data)
         }
     }
-    console.log(reportChart);
 
     const options = {
         chart: {

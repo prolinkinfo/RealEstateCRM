@@ -106,7 +106,6 @@ const Index = () => {
     }
 
     useEffect(() => {
-        // fetchData();
         fetchCustomDataFields();
     }, [action, title])
 

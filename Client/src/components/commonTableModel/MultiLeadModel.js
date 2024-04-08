@@ -1,9 +1,6 @@
-import { AddIcon } from '@chakra-ui/icons'
 import { Button, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import LeadTable from './Lead'
-import { getApi } from 'services/api'
-import { postApi } from 'services/api'
 import Spinner from 'components/spinner/Spinner'
 import { GiClick } from "react-icons/gi";
 
@@ -11,7 +8,6 @@ const MultiLeadModel = (props) => {
     const { onClose, isOpen, fieldName, setFieldValue,data } = props
     const [selectedValues, setSelectedValues] = useState([]);
     const [isLoding, setIsLoding] = useState(false)
-    // const [data, setData] = useState([])
 
     const columns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
@@ -25,14 +21,7 @@ const MultiLeadModel = (props) => {
     ];
 
     const user = JSON.parse(localStorage.getItem("user"))
-    // const fetchLeadData = async () => {
-    //     setIsLoding(true)
-    //     let result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
-    //     if (result && result.status == 200) {
-    //         setData(result?.data);
-    //     }
-    //     setIsLoding(false)
-    // }
+   
     const uniqueValues = [...new Set(selectedValues)];
 
     const handleSubmit = async () => {
@@ -40,7 +29,6 @@ const MultiLeadModel = (props) => {
             setIsLoding(true)
             setFieldValue(fieldName, uniqueValues)
             onClose()
-            // setSelectedValues([])
         }
         catch (e) {
             console.log(e)
@@ -49,10 +37,6 @@ const MultiLeadModel = (props) => {
             setIsLoding(false)
         }
     }
-
-    // useEffect(() => {
-    //     fetchLeadData()
-    // }, [])
 
     return (
         <Modal onClose={onClose} size='full' isOpen={isOpen} >

@@ -5,19 +5,19 @@ const mongoose = require('mongoose');
 
 const add = async (req, res) => {
     try {
-        const { sender, recipient, subject, message, startDate, endDate, createBy, createByLead } = req.body;
+        const { sender, recipient, subject, message, startDate, endDate, createByContact, createBy, createByLead } = req.body;
 
-        if (createBy && !mongoose.Types.ObjectId.isValid(createBy)) {
-            res.status(400).json({ error: 'Invalid createBy value' });
+        if (createByContact && !mongoose.Types.ObjectId.isValid(createByContact)) {
+            res.status(400).json({ error: 'Invalid createByContact value' });
         }
         if (createByLead && !mongoose.Types.ObjectId.isValid(createByLead)) {
             res.status(400).json({ error: 'Invalid createByLead value' });
         }
 
-        const email = { sender, recipient, subject, message, startDate, endDate }
+        const email = { sender, recipient, subject, message, startDate, endDate, createBy }
 
-        if (createBy) {
-            email.createBy = createBy;
+        if (createByContact) {
+            email.createByContact = createByContact;
         }
         if (createByLead) {
             email.createByLead = createByLead;
@@ -26,7 +26,7 @@ const add = async (req, res) => {
         const user = await User.findById({ _id: email.sender });
         user.emailsent = user.emailsent + 1;
         await user.save();
-        
+
         const result = new Email(email);
         await result.save();
         // sendEmail(email.recipient, email.subject, email.message)
@@ -57,7 +57,7 @@ const index = async (req, res) => {
             {
                 $lookup: {
                     from: 'Contacts', // Assuming this is the collection name for 'contacts'
-                    localField: 'createBy',
+                    localField: 'createByContact',
                     foreignField: '_id',
                     as: 'createByRef'
                 }
@@ -129,7 +129,7 @@ const view = async (req, res) => {
             {
                 $lookup: {
                     from: 'Contact', // Assuming this is the collection name for 'contacts'
-                    localField: 'createBy',
+                    localField: 'createByContact',
                     foreignField: '_id',
                     as: 'createByRef'
                 }

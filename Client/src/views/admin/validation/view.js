@@ -1,10 +1,8 @@
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
-import { Box, Button, Flex, Grid, GridItem, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react'
-import Card from 'components/card/Card';
+import { Box, Button, Flex, Grid, GridItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react'
 import { HSeparator } from 'components/separator/Separator';
 import Spinner from 'components/spinner/Spinner'
 import React, { useEffect, useState } from 'react'
-import { useParams } from "react-router-dom";
 import { getApi } from 'services/api';
 import Edit from './Edit';
 

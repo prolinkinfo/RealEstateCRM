@@ -22,13 +22,14 @@ const AddPhoneCall = (props) => {
         recipient: '',
         callDuration: '',
         callNotes: '',
-        createBy: '',
+        createByContact: '',
         createByLead: '',
         startDate: new Date(),
         endDate: '',
         category: 'contact',
         assignmentTo: '',
         assignmentToLead: '',
+        createBy: user?._id,
     }
     const formik = useFormik({
         initialValues: initialValues,
@@ -73,8 +74,8 @@ const AddPhoneCall = (props) => {
     }, [props?.date, values.category])
 
     const fetchRecipientData = async () => {
-        if (values.createBy) {
-            let response = await getApi('api/contact/view/', values.createBy)
+        if (values.createByContact) {
+            let response = await getApi('api/contact/view/', values.createByContact)
             if (response?.status === 200) {
                 setFieldValue('recipient', response?.data?.contact?.phoneNumber);
                 values.recipient = response?.data?.contact?.phoneNumber
@@ -104,7 +105,7 @@ const AddPhoneCall = (props) => {
                 <ModalCloseButton />
                 <ModalBody>
                     {/* Contact Model  */}
-                    <ContactModel isOpen={contactModelOpen} data={assignmentToData} onClose={setContactModel} fieldName='createBy' setFieldValue={setFieldValue} />
+                    <ContactModel isOpen={contactModelOpen} data={assignmentToData} onClose={setContactModel} fieldName='createByContact' setFieldValue={setFieldValue} />
                     {/* Lead Model  */}
                     <LeadModel isOpen={leadModelOpen} data={assignmentToData} onClose={setLeadModel} fieldName='createByLead' setFieldValue={setFieldValue} />
 
@@ -113,7 +114,7 @@ const AddPhoneCall = (props) => {
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Related
                             </FormLabel>
-                            <RadioGroup onChange={(e) => { setFieldValue('category', e); setFieldValue('createBy', ''); setFieldValue('createByLead', ''); }} value={values.category}>
+                            <RadioGroup onChange={(e) => { setFieldValue('category', e); setFieldValue('createByContact', ''); setFieldValue('createByLead', ''); }} value={values.category}>
                                 <Stack direction='row'>
                                     <Radio value='Contact'>Contact</Radio>
                                     <Radio value='Lead'>Lead</Radio>
@@ -130,13 +131,13 @@ const AddPhoneCall = (props) => {
                                         </FormLabel>
                                         <Flex justifyContent={'space-between'}>
                                             <Select
-                                                value={values.createBy}
-                                                name="createBy"
+                                                value={values.createByContact}
+                                                name="createByContact"
                                                 onChange={handleChange}
-                                                mb={errors.createBy && touched.createBy ? undefined : '10px'}
+                                                mb={errors.createByContact && touched.createByContact ? undefined : '10px'}
                                                 fontWeight='500'
                                                 placeholder={'Assignment To'}
-                                                borderColor={errors.createBy && touched.createBy ? "red.300" : null}
+                                                borderColor={errors.createByContact && touched.createByContact ? "red.300" : null}
                                             >
                                                 {assignmentToData?.map((item) => {
                                                     return <option value={item._id} key={item._id}>{values.category === 'Contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
@@ -144,7 +145,7 @@ const AddPhoneCall = (props) => {
                                             </Select>
                                             <IconButton onClick={() => setContactModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
                                         </Flex>
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.createBy && touched.createBy && errors.createBy}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.createByContact && touched.createByContact && errors.createByContact}</Text>
                                     </GridItem>
                                 </>
                                 : values.category === "Lead" ?

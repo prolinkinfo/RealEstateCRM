@@ -60,7 +60,7 @@ const Index = () => {
         const result = await getApi(`api/custom-field/?moduleName=Contacts`);
         setContactData(result?.data);
         const actionHeader = {
-            Header: "Action",accessor:"action", isSortable: false, center: true,
+            Header: "Action", accessor: "action", isSortable: false, center: true,
             cell: ({ row }) => (
                 <Text fontSize="md" fontWeight="900" textAlign={"center"} >
                     <Menu isLazy  >
@@ -134,11 +134,6 @@ const Index = () => {
                             dataColumn={dataColumn}
                             allData={data}
                             tableData={data}
-                            // tableData={displaySearchData ? searchedData : data}
-                            // displaySearchData={displaySearchData}
-                            // setDisplaySearchData={setDisplaySearchData}
-                            // searchedData={searchedData}
-                            // setSearchedData={setSearchedData}
                             tableCustomFields={contactData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
                             access={permission}
                             action={action}

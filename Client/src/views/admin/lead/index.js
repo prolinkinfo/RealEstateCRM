@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { HasAccess } from "../../../redux/accessUtils";
 import { Grid, GridItem, Text, Menu, MenuButton, MenuItem, MenuList, useDisclosure, Select } from '@chakra-ui/react';
 import { DeleteIcon, ViewIcon, EditIcon, EmailIcon, PhoneIcon } from "@chakra-ui/icons";
@@ -14,14 +14,20 @@ import ImportModal from './components/ImportModal';
 import { putApi } from 'services/api';
 import CommonDeleteModel from 'components/commonDeleteModel';
 import { deleteManyApi } from 'services/api';
+import { getSearchData, setGetTagValues } from '../../../redux/advanceSearchSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Index = () => {
     const title = "Leads";
     const size = "lg";
     const user = JSON.parse(localStorage.getItem("user"));
     const navigate = useNavigate();
+    const location = useLocation();
+    const dispatch = useDispatch();
+
     const [permission, emailAccess, callAccess] = HasAccess(['Leads', 'Emails', 'Calls']);
     const [isLoding, setIsLoding] = useState(false);
+    const [searchDisplay, setSearchDisplay] = useState(false);
     const [data, setData] = useState([]);
     const [tableColumns, setTableColumns] = useState([]);
     const [columns, setColumns] = useState([]);
@@ -49,7 +55,6 @@ const Index = () => {
 
     const handleOpenEmail = (id, dataLead) => {
         if (id) {
-            console.log(dataLead)
             setEmailRec(dataLead?.leadEmail);
             setAddEmailHistory(true);
         }
@@ -82,15 +87,33 @@ const Index = () => {
         }
     }
 
+    const payload = {
+        leadStatus: location?.state
+    }
+    const searchedDataOut = useSelector((state) => state?.advanceSearchData?.searchResult)
+
+    useEffect(() => {
+        if (location?.state) {
+            setSearchDisplay(true)
+            dispatch(getSearchData({ values: payload, allData: data, type: "Leads" }))
+            const getValue = [
+                {
+                    name: ["leadStatus"],
+                    value: location?.state
+                }
+            ]
+            dispatch(setGetTagValues(getValue.filter(item => item.value)))
+        }
+    }, [data, location?.state])
 
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
-       
+
         const result = await getApi(`api/custom-field/?moduleName=Leads`);
         setLeadData(result?.data);
 
         const actionHeader = {
-            Header: "Action", accessor:"action",isSortable: false, center: true,
+            Header: "Action", accessor: "action", isSortable: false, center: true,
             cell: ({ row, i }) => (
                 <Text fontSize="md" fontWeight="900" textAlign={"center"} >
                     <Menu isLazy  >
@@ -116,7 +139,7 @@ const Index = () => {
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
             {
-                Header: "Status", accessor:"leadStatus",isSortable: true, center: true,
+                Header: "Status", accessor: "leadStatus", isSortable: true, center: true,
                 cell: ({ row }) => (
                     <div className="selectOpt" >
                         <Select defaultValue={'active'} className={changeStatus(row)} onChange={(e) => setStatusData(row, e)} height={7} width={130} value={row.original.leadStatus} style={{ fontSize: "14px" }}>
@@ -138,7 +161,7 @@ const Index = () => {
         setIsLoding(false);
     }
 
-    const handleDeleteLead=async(ids)=>{
+    const handleDeleteLead = async (ids) => {
         try {
             setIsLoding(true)
             let response = await deleteManyApi('api/lead/deleteMany', ids)
@@ -173,10 +196,12 @@ const Index = () => {
                         <CommonCheckTable
                             title={title}
                             isLoding={isLoding}
+                            searchDisplay={searchDisplay}
+                            setSearchDisplay={setSearchDisplay}
                             columnData={columns}
                             dataColumn={dataColumn}
                             allData={data}
-                            tableData={data}
+                            tableData={searchDisplay ? searchedDataOut : data}
                             tableCustomFields={leadData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
                             access={permission}
                             action={action}

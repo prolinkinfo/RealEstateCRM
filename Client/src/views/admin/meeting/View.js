@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Grid, GridItem, Heading, Text, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Flex, Grid, GridItem, Heading, Text } from "@chakra-ui/react";
 import Card from "components/card/Card";
 import { HSeparator } from "components/separator/Separator";
 import Spinner from "components/spinner/Spinner";
@@ -17,11 +17,8 @@ const View = () => {
     const param = useParams()
 
     const [data, setData] = useState()
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    const [edit, setEdit] = useState(false);
     const [deleteMany, setDeleteMany] = useState(false);
     const user = JSON.parse(localStorage.getItem("user"))
-    const size = "lg";
     const [isLoding, setIsLoding] = useState(false)
     const navigate = useNavigate()
     const params = useParams();
