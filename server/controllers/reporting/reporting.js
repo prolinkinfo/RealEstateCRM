@@ -54,7 +54,7 @@ const lineChart = async (req, res) => {
     const taskData = task.filter(item => item.createBy !== null);
 
     let meetingHistory = await MeetingHistory.find(query).populate({
-        path: 'createdBy',
+        path: 'createBy',
         match: { deleted: false } // Populate only if createBy.deleted is false
     }).exec()
     const meetingHistoryData = meetingHistory.filter(item => item.createdBy !== null);

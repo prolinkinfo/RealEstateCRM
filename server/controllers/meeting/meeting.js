@@ -17,8 +17,8 @@ const index = async (req, res) => {
         const query = req.query
         query.deleted = false;
 
-        if (query.createdBy) {
-            query.createdBy = new mongoose.Types.ObjectId(query.createdBy);
+        if (query.createBy) {
+            query.createBy = new mongoose.Types.ObjectId(query.createBy);
         }
 
         const meetings = await MeetingHistory.aggregate([
@@ -34,7 +34,7 @@ const index = async (req, res) => {
             {
                 $lookup: {
                     from: 'User',
-                    localField: 'createdBy',
+                    localField: 'createBy',
                     foreignField: '_id',
                     as: 'users'
                 }
@@ -88,7 +88,7 @@ const view = async (req, res) => {
             {
                 $lookup: {
                     from: 'User',
-                    localField: 'createdBy',
+                    localField: 'createBy',
                     foreignField: '_id',
                     as: 'users'
                 }

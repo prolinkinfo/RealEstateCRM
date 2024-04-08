@@ -4,7 +4,7 @@ const auth = require('../../middelwares/auth');
 
 const router = express.Router();
 
-router.get('/', calender.index)
+router.get('/', auth, calender.index)
 
 
 module.exports = router

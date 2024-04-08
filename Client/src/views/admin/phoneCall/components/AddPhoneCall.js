@@ -16,10 +16,11 @@ const AddPhoneCall = (props) => {
         recipient: '',
         callDuration: '',
         callNotes: '',
-        createBy: '',
+        createByContact: '',
         createByLead: '',
         startDate: '',
         endDate: '',
+        createBy: user?._id,
     }
 
     const formik = useFormik({
@@ -30,7 +31,7 @@ const AddPhoneCall = (props) => {
             resetForm();
         },
     });
-    
+
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue } = formik
 
     const AddData = async () => {
@@ -54,7 +55,7 @@ const AddPhoneCall = (props) => {
         if (props?.viewData?.lead?.leadPhoneNumber) {
             if (props.id && props.lead !== 'true') {
                 setFieldValue('recipient', props?.viewData?.contact?.phoneNumber);
-                setFieldValue('createBy', props?.id);
+                setFieldValue('createByContact', props?.id);
                 values.recipient = props?.viewData?.contact?.phoneNumber
             } else if (props.id && props.lead === 'true') {
                 let response = await getApi('api/lead/view/', props.id)
@@ -69,7 +70,7 @@ const AddPhoneCall = (props) => {
                 let response = await getApi('api/contact/view/', props.id)
                 if (response?.status === 200) {
                     setFieldValue('recipient', response?.data?.contact?.phoneNumber);
-                    setFieldValue('createBy', props?.id);
+                    setFieldValue('createByContact', props?.id);
                     values.recipient = response?.data?.contact?.phoneNumber
                 }
             } else if (props.id && props.lead === 'true') {
