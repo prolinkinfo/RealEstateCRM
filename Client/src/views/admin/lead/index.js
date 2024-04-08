@@ -46,6 +46,11 @@ const Index = () => {
     const [isImport, setIsImport] = useState(false);
     const [emailRec, setEmailRec] = useState('');
 
+    const searchedDataOut = useSelector((state) => state?.advanceSearchData?.searchResult)
+    const payload = {
+        leadStatus: location?.state
+    }
+
     const fetchData = async () => {
         setIsLoding(true);
         let result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
@@ -88,24 +93,7 @@ const Index = () => {
         }
     }
 
-    const payload = {
-        leadStatus: location?.state
-    }
-    const searchedDataOut = useSelector((state) => state?.advanceSearchData?.searchResult)
 
-    useEffect(() => {
-        if (location?.state) {
-            setSearchDisplay(true)
-            dispatch(getSearchData({ values: payload, allData: data, type: "Leads" }))
-            const getValue = [
-                {
-                    name: ["leadStatus"],
-                    value: location?.state
-                }
-            ]
-            dispatch(setGetTagValues(getValue.filter(item => item.value)))
-        }
-    }, [data, location?.state])
 
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
@@ -188,6 +176,20 @@ const Index = () => {
     useEffect(() => {
         setDataColumn(tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header)));
     }, [tableColumns, selectedColumns])
+
+    useEffect(() => {
+        if (location?.state) {
+            setSearchDisplay(true)
+            dispatch(getSearchData({ values: payload, allData: data, type: "Leads" }))
+            const getValue = [
+                {
+                    name: ["leadStatus"],
+                    value: location?.state
+                }
+            ]
+            dispatch(setGetTagValues(getValue.filter(item => item.value)))
+        }
+    }, [data, location?.state])
 
     return (
         <div>
