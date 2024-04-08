@@ -17,13 +17,17 @@ const email = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Lead",
     },
-    createBy: {
+    createByContact: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Contact',
     },
     timestamp: {
         type: Date,
         default: Date.now
+    },
+    createBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
     },
     deleted: {
         type: Boolean,

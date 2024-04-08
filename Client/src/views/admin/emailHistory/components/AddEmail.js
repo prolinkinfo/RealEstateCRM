@@ -19,10 +19,11 @@ const AddEmailHistory = (props) => {
         recipient: props.lead !== 'true' ? props?.contactEmail : props?.leadEmail,
         subject: '',
         message: '',
-        createBy: '',
+        createByContact: '',
         createByLead: '',
         startDate: '',
         endDate: '',
+        createBy: user?._id,
     }
     const formik = useFormik({
         initialValues: initialValues,
@@ -57,7 +58,7 @@ const AddEmailHistory = (props) => {
             // let response = await getApi('api/contact/view/', props.id)
             // if (response?.status === 200) {
             // setFieldValue('recipient', props?.viewData?.contact?.email);
-            setFieldValue('createBy', props.id);
+            setFieldValue('createByContact', props.id);
             // values.recipient = props?.viewData?.contact?.email
             // }
         } else if (props.id && props.lead === 'true') {
@@ -71,7 +72,7 @@ const AddEmailHistory = (props) => {
     }
     useEffect(() => {
         fetchRecipientData()
-    }, [props.id,props.lead])
+    }, [props.id, props.lead])
 
 
     return (
