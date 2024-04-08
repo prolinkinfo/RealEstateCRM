@@ -33,7 +33,6 @@ import { HasAccess } from "../../../redux/accessUtils";
 import DataNotFound from "components/notFoundData";
 import CustomView from "utils/customView";
 import AddDocumentModal from "utils/addDocumentModal";
-import { useLocation } from 'react-router-dom';
 import CommonDeleteModel from "components/commonDeleteModel";
 import { deleteApi } from "services/api";
 
@@ -59,7 +58,6 @@ const View = () => {
     const [addDocument, setAddDocument] = useState(false);
     const [action, setAction] = useState(false)
     const [leadData, setLeadData] = useState([])
-    const location = useLocation()
     const navigate = useNavigate();
     const size = "lg";
 

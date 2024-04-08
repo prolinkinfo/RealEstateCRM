@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { HasAccess } from "../../../redux/accessUtils";
 import { Grid, GridItem, Text, Menu, MenuButton, MenuItem, MenuList, useDisclosure, Select } from '@chakra-ui/react';
 import { DeleteIcon, ViewIcon, EditIcon, EmailIcon, PhoneIcon } from "@chakra-ui/icons";
@@ -14,12 +14,17 @@ import ImportModal from './components/ImportModal';
 import { putApi } from 'services/api';
 import CommonDeleteModel from 'components/commonDeleteModel';
 import { deleteManyApi } from 'services/api';
+import { getSearchData } from '../../../redux/advanceSearchSlice';
+import { useDispatch } from 'react-redux';
 
 const Index = () => {
     const title = "Leads";
     const size = "lg";
     const user = JSON.parse(localStorage.getItem("user"));
     const navigate = useNavigate();
+    const location = useLocation();
+    const dispatch = useDispatch();
+
     const [permission, emailAccess, callAccess] = HasAccess(['Leads', 'Emails', 'Calls']);
     const [isLoding, setIsLoding] = useState(false);
     const [data, setData] = useState([]);
@@ -82,15 +87,22 @@ const Index = () => {
         }
     }
 
+    const payload = {
+        leadStatus: location?.state
+    }
+
+    useEffect(() => {
+        dispatch(getSearchData({ values: payload, allData: data, type: "Leads" }))
+    }, [data, location?.state])
 
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
-       
+
         const result = await getApi(`api/custom-field/?moduleName=Leads`);
         setLeadData(result?.data);
 
         const actionHeader = {
-            Header: "Action", accessor:"action",isSortable: false, center: true,
+            Header: "Action", accessor: "action", isSortable: false, center: true,
             cell: ({ row, i }) => (
                 <Text fontSize="md" fontWeight="900" textAlign={"center"} >
                     <Menu isLazy  >
@@ -116,7 +128,7 @@ const Index = () => {
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
             {
-                Header: "Status", accessor:"leadStatus",isSortable: true, center: true,
+                Header: "Status", accessor: "leadStatus", isSortable: true, center: true,
                 cell: ({ row }) => (
                     <div className="selectOpt" >
                         <Select defaultValue={'active'} className={changeStatus(row)} onChange={(e) => setStatusData(row, e)} height={7} width={130} value={row.original.leadStatus} style={{ fontSize: "14px" }}>
@@ -138,7 +150,7 @@ const Index = () => {
         setIsLoding(false);
     }
 
-    const handleDeleteLead=async(ids)=>{
+    const handleDeleteLead = async (ids) => {
         try {
             setIsLoding(true)
             let response = await deleteManyApi('api/lead/deleteMany', ids)
