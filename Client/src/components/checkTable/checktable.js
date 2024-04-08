@@ -149,7 +149,8 @@ const CommonCheckTable = (props) => {
 
 
     const handleClear = () => {
-        AdvanceSearch ? props?.setSearchDisplay(false) : setDisplaySearchData(false)
+        // AdvanceSearch ? props?.setSearchDisplay(false) : setDisplaySearchData(false)
+        setSearchDisplay(false) || setDisplaySearchData(false)
         if (searchboxOutside) {
             setSearchboxOutside('')
         } else {
@@ -325,7 +326,8 @@ const CommonCheckTable = (props) => {
                                 AdvanceSearch ? AdvanceSearch : AdvanceSearch !== false &&
                                     <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} mt={{ sm: "5px", md: "0" }} size="sm" onClick={() => setAdvaceSearch(true)}>Advance Search</Button>
                             }
-                            {(AdvanceSearch ? props.searchDisplay : displaySearchData) ? <Button variant="outline" colorScheme='red' size="sm" ms={2} onClick={() => handleClear()}>Clear</Button> : ""}
+                            {/* {(AdvanceSearch ? props.searchDisplay : displaySearchData) ? <Button variant="outline" colorScheme='red' size="sm" ms={2} onClick={() => handleClear()}>Clear</Button> : ""} */}
+                            {(searchDisplay || displaySearchData) ? <Button variant="outline" colorScheme='red' size="sm" ms={2} onClick={() => handleClear()}>Clear</Button> : ""}
                             {(selectedValues?.length > 0 && access?.delete && !deleteMany) && <DeleteIcon cursor={"pointer"} onClick={() => setDelete(true)} color={'red'} ms={2} />}
                         </Flex>
                     </GridItem>
