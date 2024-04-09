@@ -41,6 +41,7 @@ const AddEdit = (props) => {
         url: '',
         createBy: userId,
     });
+    console.log("initialValues--::", initialValues)
 
     const formik = useFormik({
         initialValues: initialValues,
@@ -48,10 +49,11 @@ const AddEdit = (props) => {
         enableReinitialize: true,
         onSubmit: (values, { resetForm }) => {
             AddData();
+            resetForm()
         },
     });
 
-    const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
+    const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
 
     const AddData = async () => {
         if (userAction === "add") {
@@ -104,12 +106,12 @@ const AddEdit = (props) => {
     };
     const fetchTaskData = async () => {
         if (id) {
-            console.log(id, "fetchTaskData");
             try {
                 setIsLoding(true)
                 let result = await getApi('api/task/view/', id)
                 let editData = { ...result?.data }
                 editData.allDay = result?.data?.allDay === 'Yes' ? 'Yes' : 'No';
+                // console.log("editData---::", editData);
 
                 setInitialValues(editData)
                 // setFieldValue('title', result?.data?.title)
@@ -159,8 +161,27 @@ const AddEdit = (props) => {
     useEffect(() => {
         if (userAction === "edit") {
             fetchTaskData()
+        } else {
+            setInitialValues({
+                title: '',
+                category: props.leadContect === 'contactView' ? 'Contact' : props.leadContect === 'leadView' ? 'Lead' : 'None',
+                description: '',
+                notes: '',
+                assignmentTo: props.leadContect === 'contactView' && id ? id : '',
+                assignmentToLead: props.leadContect === 'leadView' && id ? id : '',
+                reminder: '',
+                start: '',
+                end: '',
+                backgroundColor: '',
+                borderColor: '#ffffff',
+                textColor: '',
+                allDay: isChecked === true ? 'Yes' : 'No',
+                display: '',
+                url: '',
+                createBy: userId,
+            })
         }
-    }, [id])
+    }, [userAction, id])
 
     return (
         // <Modal isOpen={isOpen} size={'xl'} >
@@ -685,7 +706,7 @@ const AddEdit = (props) => {
                 </ModalBody>
                 <ModalFooter>
                     <Button size="sm" variant='brand' onClick={handleSubmit}>{userAction === "add" ? "Save" : "Update"}</Button>
-                    <Button sx={{
+                    <Button type="reset" sx={{
                         marginLeft: 2,
                         textTransform: "capitalize",
                     }} variant="outline"
