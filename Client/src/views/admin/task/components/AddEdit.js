@@ -41,7 +41,7 @@ const AddEdit = (props) => {
         url: '',
         createBy: userId,
     });
-    console.log("initialValues--::", initialValues)
+    console.log("initialValues---::", initialValues.start)
 
     const formik = useFormik({
         initialValues: initialValues,
@@ -111,7 +111,7 @@ const AddEdit = (props) => {
                 let result = await getApi('api/task/view/', id)
                 let editData = { ...result?.data }
                 editData.allDay = result?.data?.allDay === 'Yes' ? 'Yes' : 'No';
-                // console.log("editData---::", editData);
+                console.log("result?.data---::", result?.data.start)
 
                 setInitialValues(editData)
                 // setFieldValue('title', result?.data?.title)
@@ -571,12 +571,13 @@ const AddEdit = (props) => {
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                     Start Date
                                 </FormLabel>
+                                {console.log(values.start)}
                                 <Input
                                     type={isChecked === true ? 'date' : 'datetime-local'}
                                     fontSize='sm'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    min={isChecked === true ? today : todayTime}
+                                    // min={isChecked === true ? today : todayTime}
                                     value={isChecked ? moment(values.start).format('YYYY-MM-DD') || '' : moment(values.start).format('YYYY-MM-DDTHH:mm') || ''}
                                     name="start"
                                     fontWeight='500'
