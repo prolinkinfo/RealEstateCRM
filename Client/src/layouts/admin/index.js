@@ -162,8 +162,10 @@ export default function Dashboard(props) {
 	}, [route]);
 
 	useEffect(async () => {
-		await dispatch(fetchRouteData());
-		await dispatch(fetchImage());
+		if (window.location.pathname === "/default") {
+			await dispatch(fetchRouteData());
+			await dispatch(fetchImage());
+		}
 	}, []);
 
 	const largeLogo = useSelector((state) => state?.images?.image?.filter(item => item.isActive === true));
