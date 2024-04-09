@@ -66,17 +66,17 @@ const Calender = (props) => {
 
                 <MeetingView fetchData={fetchData} isOpen={meetingView} onClose={setMeetingView} info={meetingInfo} />
                 <CallView fetchData={fetchData} isOpen={callView} onClose={setCallView} info={callInfo} />
-                <EmailView fetchData={fetchData} isOpen={emailView} onClose={setEmailView} info={emailInfo}/>
+                <EmailView fetchData={fetchData} isOpen={emailView} onClose={setEmailView} info={emailInfo} />
 
-                <div style={{display:"flex",justifyContent:"end"}}>
-                    <Flex alignItems={"center"} fontSize={"12px"} marginRight={"10px"}>
-                        <GoDotFill color='green' /> Calls
+                <div style={{ display: "flex", justifyContent: "end" }}>
+                    <Flex alignItems={"center"} fontSize={"14px"} marginRight={"10px"}>
+                        <GoDotFill color='green' fontSize={"18px"} /> Calls
                     </Flex>
-                    <Flex alignItems={"center"} fontSize={"12px"} marginRight={"10px"}>
-                        <GoDotFill color='red' /> Meetings
+                    <Flex alignItems={"center"} fontSize={"14px"} marginRight={"10px"}>
+                        <GoDotFill color='red' fontSize={"18px"} /> Meetings
                     </Flex>
-                    <Flex alignItems={"center"} fontSize={"12px"}>
-                        <GoDotFill color='blue' /> Emails
+                    <Flex alignItems={"center"} fontSize={"14px"}>
+                        <GoDotFill color='blue' fontSize={"18px"} /> Emails
                     </Flex>
                 </div>
                 <FullCalendar

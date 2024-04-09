@@ -59,6 +59,8 @@ const View = () => {
     const [addDocument, setAddDocument] = useState(false);
     const [action, setAction] = useState(false)
     const [leadData, setLeadData] = useState([])
+    const [selectedTab, setSelectedTab] = useState(0);
+
     const navigate = useNavigate();
     const size = "lg";
 
@@ -89,6 +91,11 @@ const View = () => {
         { Header: "End Date", accessor: "end", },
     ];
 
+
+    const handleTabChange = (index) => {
+        setSelectedTab(index);
+    };
+
     const download = async (data) => {
         if (data) {
             let result = await getApi(`api/document/download/`, data)
@@ -101,12 +108,13 @@ const View = () => {
         }
     }
 
-    const fetchData = async () => {
+    const fetchData = async (i) => {
         setIsLoding(true)
         let response = await getApi('api/lead/view/', param.id)
         setData(response.data?.lead);
         setAllData(response.data);
         setIsLoding(false)
+        setSelectedTab(i)
     }
 
     const handleDeleteLead = async (id) => {
@@ -143,6 +151,7 @@ const View = () => {
         if (fetchCustomData) fetchCustomData()
     }, [action])
 
+
     return (
         <>
             {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} setLeadData={setLeadData} leadData={leadData[0]} setAction={setAction} />}
@@ -155,7 +164,7 @@ const View = () => {
                     <Spinner />
                 </Flex> :
                 <>
-                    <Tabs >
+                    <Tabs onChange={handleTabChange} index={selectedTab}>
                         <Grid templateColumns={'repeat(12, 1fr)'} mb={3} gap={1}>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <TabList sx={{
@@ -236,14 +245,7 @@ const View = () => {
                                                         </div>}
                                                 </Card>
                                             </GridItem>}
-                                            {/* {meetingAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
-                                                    <Card>
-                                                        {
-                                                            allData?.meeting?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
-                                                                <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showMeetings ? setShowMeetings(false) : setShowMeetings(true)}>{showMeetings ? "Show less" : "Show more"}</Button>
-                                                            </div>}
-                                                        {addMeeting && <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="lead" id={param.id} setAction={setAction} />}                                                    </Card>
-                                                </GridItem>} */}
+
                                             {meetingAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
                                                 <Card overflow={'scroll'}>
                                                     <MeetingColumnsTable fetchData={fetchData} columnsData={MeetingColumns} tableData={showMeetings ? allData?.meeting : allData?.meeting?.length > 0 ? [allData?.meeting[0]] : []} title={'Meeting '} action={action} setAction={setAction} access={meetingAccess} />
@@ -266,7 +268,7 @@ const View = () => {
                                             </Heading>
                                             <Button leftIcon={<AddIcon />} size='sm' variant='brand' onClick={() => setAddDocument(true)}>Add Document</Button>
                                         </Flex>
-                                        <AddDocumentModal addDocument={addDocument} setAddDocument={setAddDocument} linkId={param.id} from="lead" setAction={setAction} />
+                                        <AddDocumentModal addDocument={addDocument} setAddDocument={setAddDocument} linkId={param.id} from="lead" setAction={setAction} fetchData={fetchData} />
                                         <HSeparator />
                                         <VStack mt={4} alignItems="flex-start">
                                             {allData?.Document?.length > 0 ? allData?.Document?.map((item) => (

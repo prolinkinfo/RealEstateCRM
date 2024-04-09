@@ -44,8 +44,7 @@ export default function UserReports() {
   const [contactsView, taskView, leadView, proprtyView] = HasAccess(["Contacts", "Tasks", "Leads", "Properties"]);
 
   const fetchData = async () => {
-    let responseData = await getApi(`api/status/?createBy=${user?._id}`);
-
+    let responseData = await getApi(user?.role === 'superAdmin' ? `api/status/` : `api/status/?createBy=${user?._id}`);
     setAllData(responseData?.data?.data);
   };
 
