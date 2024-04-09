@@ -120,7 +120,7 @@ const view = async (req, res) => {
             { $match: { _id: result._id } },
             {
                 $lookup: {
-                    from: 'Lead', // Assuming this is the collection name for 'leads'
+                    from: 'Leads', // Assuming this is the collection name for 'leads'
                     localField: 'createByLead',
                     foreignField: '_id',
                     as: 'createByrefLead'
@@ -128,7 +128,7 @@ const view = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'Contact', // Assuming this is the collection name for 'contacts'
+                    from: 'Contacts', // Assuming this is the collection name for 'contacts'
                     localField: 'createByContact',
                     foreignField: '_id',
                     as: 'createByRef'
