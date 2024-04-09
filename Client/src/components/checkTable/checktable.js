@@ -19,6 +19,7 @@ import { getSearchData, setGetTagValues, setSearchValue } from '../../redux/adva
 
 const CommonCheckTable = (props) => {
     const { isLoding, title, columnData, size, dataColumn, setSearchedDataOut, tableData, state, allData, ManageGrid, deleteMany, tableCustomFields, access, action, setAction, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, checkBox, AdvanceSearch, searchDisplay, setSearchDisplay, BackButton, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
+    const { dataLength } = props;
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
     const [displaySearchData, setDisplaySearchData] = useState(false);
@@ -319,7 +320,7 @@ const CommonCheckTable = (props) => {
                                 lineHeight="100%"
                                 textTransform={'capitalize'}
                             >
-                                {title} (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
+                                {title} (<CountUpComponent key={data?.length} targetNumber={dataLength || data?.length} />)
                             </Text>
                             <CustomSearchInput setSearchbox={setSearchboxOutside ? setSearchboxOutside : setSearchbox} setDisplaySearchData={setSearchboxOutside ? props.setSearchDisplay : setDisplaySearchData} searchbox={searchboxOutside ? searchboxOutside : searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={props.setGetTagValuesOutside ? props.setGetTagValuesOutside : setGetTagValues} setGopageValue={setGopageValue} />
                             {
