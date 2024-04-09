@@ -11,7 +11,6 @@ const phoneCall = new mongoose.Schema({
     callNotes: { type: String },
     phoneNumber: { type: String },
     startDate: { type: String, default: Date.now },
-    endDate: { type: String },
     createByLead: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Lead",

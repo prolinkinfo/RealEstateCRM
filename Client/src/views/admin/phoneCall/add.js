@@ -25,7 +25,6 @@ const AddPhoneCall = (props) => {
         createByContact: '',
         createByLead: '',
         startDate: new Date(),
-        endDate: '',
         category: 'contact',
         assignmentTo: '',
         assignmentToLead: '',
@@ -207,24 +206,8 @@ const AddPhoneCall = (props) => {
                             />
                             <Text mb='10px' fontSize='sm' color={'red'}> {errors.startDate && touched.startDate && errors.startDate}</Text>
                         </GridItem>
-                        <GridItem colSpan={{ base: 12, md: 6 }} >
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                End Date
-                            </FormLabel>
-                            <Input
-                                type='datetime-local'
-                                fontSize='sm'
-                                min={values.startDate}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.endDate}
-                                name="endDate"
-                                fontWeight='500'
-                                borderColor={errors?.endDate && touched?.endDate ? "red.300" : null}
-                            />
-                            <Text mb='10px' color={'red'}> {errors.endDate && touched.endDate && errors.endDate}</Text>
-                        </GridItem>
-                        <GridItem colSpan={{ base: 12 }}>
+
+                        <GridItem colSpan={{ base: 12, md: 6 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Call Duration<Text color={"red"}>*</Text>
                             </FormLabel>
