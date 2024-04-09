@@ -45,6 +45,8 @@ const View = () => {
     const [propertyDocuments, setPropertyDocuments] = useState(false);
     const [isLoding, setIsLoding] = useState(false)
     const [displayPropertyPhoto, setDisplayPropertyPhoto] = useState(false)
+    const [selectedTab, setSelectedTab] = useState(0);
+
     const [type, setType] = useState(false)
     const navigate = useNavigate();
 
@@ -62,12 +64,18 @@ const View = () => {
     const [dynamicColumns, setDynamicColumns] = useState([...contactColumns]);
     const [selectedColumns, setSelectedColumns] = useState([...contactColumns]);
 
-    const fetchData = async () => {
+    const handleTabChange = (index) => {
+        setSelectedTab(index);
+    };
+
+
+    const fetchData = async (i) => {
         setIsLoding(true)
         let response = await getApi('api/property/view/', param.id)
         setData(response.data.property);
         setFilteredContacts(response?.data?.filteredContacts);
         setIsLoding(false)
+        setSelectedTab(i)
     }
 
     const fetchCustomData = async () => {
@@ -110,7 +118,7 @@ const View = () => {
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                     <Spinner />
                 </Flex> : <>
-                    <Tabs >
+                    <Tabs onChange={handleTabChange} index={selectedTab}>
                         <Grid templateColumns={'repeat(12, 1fr)'} mb={3} gap={1}>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <TabList sx={{

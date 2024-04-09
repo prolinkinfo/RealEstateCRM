@@ -59,7 +59,7 @@ const View = () => {
     const [showTasks, setShowTasks] = useState(false);
     const [showMeetings, setShowMeetings] = useState(false);
     const [addDocument, setAddDocument] = useState(false);
-
+    const [selectedTab, setSelectedTab] = useState(0);
     const size = "lg";
     const navigate = useNavigate()
 
@@ -100,6 +100,11 @@ const View = () => {
         { Header: "End Date", accessor: "end", },
     ];
 
+    const handleTabChange = (index) => {
+        setSelectedTab(index);
+    };
+
+
     const download = async (data) => {
         if (data) {
             let result = await getApi(`api/document/download/`, data)
@@ -112,12 +117,13 @@ const View = () => {
         }
     }
 
-    const fetchData = async () => {
+    const fetchData = async (i) => {
         setIsLoding(true)
         let response = await getApi('api/contact/view/', param.id)
         setData(response.data?.contact);
         setAllData(response?.data);
         setIsLoding(false)
+        setSelectedTab(i)
     }
 
     const handleDeleteContact = async (id) => {
@@ -165,7 +171,7 @@ const View = () => {
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                     <Spinner />
                 </Flex> : <>
-                    <Tabs >
+                    <Tabs onChange={handleTabChange} index={selectedTab}>
                         <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={1}>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <TabList sx={{
@@ -281,7 +287,7 @@ const View = () => {
                                                     </div>}
                                                 </Card>
                                             </GridItem>}
-                                           
+
                                         </Grid>
                                     </Grid>
                                 </GridItem>
@@ -296,7 +302,7 @@ const View = () => {
                                             </Heading>
                                             <Button leftIcon={<AddIcon />} size='sm' variant='brand' onClick={() => setAddDocument(true)}>Add Document</Button>
                                         </Flex>
-                                        <AddDocumentModal addDocument={addDocument} setAddDocument={setAddDocument} linkId={param.id} from="contact" setAction={setAction} />
+                                        <AddDocumentModal addDocument={addDocument} setAddDocument={setAddDocument} linkId={param.id} from="contact" setAction={setAction} fetchData={fetchData} />
                                         <HSeparator />
                                         <VStack mt={4} alignItems="flex-start">
                                             {allData?.Document?.length > 0 ? allData?.Document?.map((item) => (

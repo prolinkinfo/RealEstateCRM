@@ -25,7 +25,6 @@ const RoleModal = (props) => {
 
     const [gopageValue, setGopageValue] = useState();
     const data = useMemo(() => tableData, [tableData]);
-    const user = JSON.parse(localStorage.getItem("user"));
 
     const tableInstance = useTable(
         {
@@ -68,7 +67,7 @@ const RoleModal = (props) => {
         try {
             setIsLoding(true)
             let result = await putApi(`api/user/change-roles/${id}`, uniqueValues);
-            if (result && result.status == 200) {
+            if (result && result.status === 200) {
                 fetchData()
                 onClose()
             }

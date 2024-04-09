@@ -39,8 +39,8 @@ const AddEmailHistory = (props) => {
             let response = await postApi('api/email/add', values)
             if (response.status === 200) {
                 props.onClose();
-                fetchData()
-                setAction((pre) => !pre)
+                fetchData(1)
+                // setAction((pre) => !pre)
             }
         } catch (e) {
             console.log(e);
@@ -52,7 +52,7 @@ const AddEmailHistory = (props) => {
 
     const fetchRecipientData = () => {
         if (props.id && props.lead !== 'true') {
-           
+
             setFieldValue('createByContact', props.id);
         } else if (props.id && props.lead === 'true') {
             setFieldValue('createByLead', props.id);
