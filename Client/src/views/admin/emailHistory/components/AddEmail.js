@@ -90,7 +90,7 @@ const AddEmailHistory = (props) => {
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Subject
+                                Subject<Text color={"red"}>*</Text>
                             </FormLabel>
                             <Input
                                 fontSize='sm'

@@ -23,7 +23,7 @@ const AddEmailHistory = (props) => {
         callNotes: '',
         createByContact: '',
         createByLead: '',
-        startDate: new Date(),
+        startDate: '',
         category: 'contact',
         assignmentTo: '',
         assignmentToLead: '',
@@ -184,7 +184,7 @@ const AddEmailHistory = (props) => {
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Start Date
+                                Start Date<Text color={"red"}>*</Text>
                             </FormLabel>
                             <Input
                                 type="datetime-local"
