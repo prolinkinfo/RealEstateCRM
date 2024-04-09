@@ -25,7 +25,7 @@ const index = async (req, res) => {
             { $match: query },
             {
                 $lookup: {
-                    from: 'Contact',
+                    from: 'Contacts',
                     localField: 'attendes',
                     foreignField: '_id',
                     as: 'contact'
