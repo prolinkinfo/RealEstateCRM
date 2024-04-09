@@ -250,7 +250,7 @@ const View = () => {
                                                 <Card overflow={'scroll'}>
                                                     <MeetingColumnsTable fetchData={fetchData} columnsData={MeetingColumns} tableData={showMeetings ? allData?.meeting : allData?.meeting?.length > 0 ? [allData?.meeting[0]] : []} title={'Meeting '} action={action} setAction={setAction} access={meetingAccess} />
                                                     <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="contact" id={param.id} setAction={setAction} />
-                                                    {allData?.meetingHistory?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
+                                                    {allData?.meeting?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                         <Button colorScheme="brand" size='sm' variant="outline" display="flex" justifyContant="end" onClick={() => showMeetings ? setShowMeetings(false) : setShowMeetings(true)}>{showMeetings ? "Show less" : "Show more"}</Button>
                                                     </div>}
                                                 </Card>
