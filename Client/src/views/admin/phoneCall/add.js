@@ -12,7 +12,8 @@ import { getApi, postApi } from 'services/api';
 const AddPhoneCall = (props) => {
     const { onClose, isOpen, setAction } = props
     const [isLoding, setIsLoding] = useState(false)
-    const [assignmentToData, setAssignmentToData] = useState([]);
+    const [assignToLeadData, setAssignToLeadData] = useState([]);
+    const [assignToContactData, setAssignToContactData] = useState([]);
     const [contactModelOpen, setContactModel] = useState(false);
     const [leadModelOpen, setLeadModel] = useState(false);
     const user = JSON.parse(localStorage.getItem('user'))
@@ -60,37 +61,53 @@ const AddPhoneCall = (props) => {
         values.start = props?.date
         try {
             let result
-            if (values.category === "Contact") {
+            if (values.category === "Contact" && assignToContactData.length <= 0) {
                 result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
-            } else if (values.category === "Lead") {
+                setAssignToContactData(result?.data)
+            } else if (values.category === "Lead" && assignToLeadData.length <= 0) {
                 result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
+                setAssignToLeadData(result?.data)
             }
-            setAssignmentToData(result?.data)
         }
         catch (e) {
             console.log(e);
         }
     }, [props?.date, values.category])
 
+    // const fetchRecipientData = async () => {
+    //     if (values.createByContact) {
+    //         let response = await getApi('api/contact/view/', values.createByContact)
+    //         if (response?.status === 200) {
+    //             setFieldValue('recipient', response?.data?.contact?.phoneNumber);
+    //             values.recipient = response?.data?.contact?.phoneNumber
+    //         }
+    //     } else if (values.createByLead) {
+    //         let response = await getApi('api/lead/view/', values.createByLead)
+    //         if (response?.status === 200) {
+    //             setFieldValue('recipient', response?.data?.lead?.leadPhoneNumber);
+    //             values.recipient = response?.data?.lead?.leadPhoneNumber
+    //         }
+    //     } else {
+    //         setFieldValue('recipient', "");
+
+    //     }
+    // }
     const fetchRecipientData = async () => {
         if (values.createByContact) {
-            let response = await getApi('api/contact/view/', values.createByContact)
-            if (response?.status === 200) {
-                setFieldValue('recipient', response?.data?.contact?.phoneNumber);
-                values.recipient = response?.data?.contact?.phoneNumber
+            let findEmail = assignToContactData.find((item) => item._id === values.createByContact);
+            if (findEmail) {
+                setFieldValue('recipient', findEmail.email);
             }
         } else if (values.createByLead) {
-            let response = await getApi('api/lead/view/', values.createByLead)
-            if (response?.status === 200) {
-                setFieldValue('recipient', response?.data?.lead?.leadPhoneNumber);
-                values.recipient = response?.data?.lead?.leadPhoneNumber
+            let findEmail = assignToLeadData.find((item) => item._id === values.createByLead);
+            if (findEmail) {
+                setFieldValue('recipient', findEmail.leadEmail);
             }
         } else {
             setFieldValue('recipient', "");
 
         }
     }
-
     useEffect(() => {
         fetchRecipientData()
     }, [values.createByContact, values.createByLead])
@@ -104,9 +121,9 @@ const AddPhoneCall = (props) => {
                 <ModalCloseButton />
                 <ModalBody>
                     {/* Contact Model  */}
-                    <ContactModel isOpen={contactModelOpen} data={assignmentToData} onClose={setContactModel} fieldName='createByContact' setFieldValue={setFieldValue} />
+                    <ContactModel isOpen={contactModelOpen} data={assignToContactData} onClose={setContactModel} fieldName='createByContact' setFieldValue={setFieldValue} />
                     {/* Lead Model  */}
-                    <LeadModel isOpen={leadModelOpen} data={assignmentToData} onClose={setLeadModel} fieldName='createByLead' setFieldValue={setFieldValue} />
+                    <LeadModel isOpen={leadModelOpen} data={assignToLeadData} onClose={setLeadModel} fieldName='createByLead' setFieldValue={setFieldValue} />
 
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
@@ -135,10 +152,10 @@ const AddPhoneCall = (props) => {
                                                 onChange={handleChange}
                                                 mb={errors.createByContact && touched.createByContact ? undefined : '10px'}
                                                 fontWeight='500'
-                                                placeholder={'Assignment To'}
+                                                placeholder={'Assign To'}
                                                 borderColor={errors.createByContact && touched.createByContact ? "red.300" : null}
                                             >
-                                                {assignmentToData?.map((item) => {
+                                                {assignToContactData?.map((item) => {
                                                     return <option value={item._id} key={item._id}>{values.category === 'Contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
                                                 })}
                                             </Select>
@@ -161,10 +178,10 @@ const AddPhoneCall = (props) => {
                                                     onChange={handleChange}
                                                     mb={errors.createByLead && touched.createByLead ? undefined : '10px'}
                                                     fontWeight='500'
-                                                    placeholder={'Assignment To'}
+                                                    placeholder={'Assign To'}
                                                     borderColor={errors.createByLead && touched.createByLead ? "red.300" : null}
                                                 >
-                                                    {assignmentToData?.map((item) => {
+                                                    {assignToLeadData?.map((item) => {
                                                         return <option value={item._id} key={item._id}>{values.category === 'Contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
                                                     })}
                                                 </Select>
