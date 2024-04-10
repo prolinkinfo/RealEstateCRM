@@ -14,7 +14,7 @@ const index = async (req, res) => {
             {
                 $lookup: {
                     from: 'Contacts',
-                    localField: 'assignmentTo',
+                    localField: 'assignTo',
                     foreignField: '_id',
                     as: 'contact'
                 }
@@ -22,7 +22,7 @@ const index = async (req, res) => {
             {
                 $lookup: {
                     from: 'Leads', // Assuming this is the collection name for 'leads'
-                    localField: 'assignmentToLead',
+                    localField: 'assignToLead',
                     foreignField: '_id',
                     as: 'Lead'
                 }
@@ -41,7 +41,7 @@ const index = async (req, res) => {
             { $match: { 'users.deleted': false } },
             {
                 $addFields: {
-                    assignmentToName: {
+                    assignToName: {
                         $cond: {
                             if: '$contact',
                             then: { $concat: ['$contact.title', ' ', '$contact.firstName', ' ', '$contact.lastName'] },
@@ -61,21 +61,21 @@ const index = async (req, res) => {
 
 const add = async (req, res) => {
     try {
-        const { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, allDay, createBy, assignmentTo, assignmentToLead } = req.body;
-        // Check if assignmentTo is a valid ObjectId if provided and not empty
-        if (assignmentTo && !mongoose.Types.ObjectId.isValid(assignmentTo)) {
-            res.status(400).json({ error: 'Invalid assignmentTo value' });
+        const { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, allDay, createBy, assignTo, assignToLead } = req.body;
+        // Check if assignTo is a valid ObjectId if provided and not empty
+        if (assignTo && !mongoose.Types.ObjectId.isValid(assignTo)) {
+            res.status(400).json({ error: 'Invalid assignTo value' });
         }
-        if (assignmentToLead && !mongoose.Types.ObjectId.isValid(assignmentToLead)) {
-            res.status(400).json({ error: 'Invalid assignmentToLead value' });
+        if (assignToLead && !mongoose.Types.ObjectId.isValid(assignToLead)) {
+            res.status(400).json({ error: 'Invalid assignToLead value' });
         }
         const taskData = { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy, allDay, createdDate: new Date() };
 
-        if (assignmentTo) {
-            taskData.assignmentTo = assignmentTo;
+        if (assignTo) {
+            taskData.assignTo = assignTo;
         }
-        if (assignmentToLead) {
-            taskData.assignmentToLead = assignmentToLead;
+        if (assignToLead) {
+            taskData.assignToLead = assignToLead;
         }
         const result = new Task(taskData);
         await result.save();
@@ -88,15 +88,15 @@ const add = async (req, res) => {
 
 const edit = async (req, res) => {
     try {
-        const { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy, assignmentTo, status, allDay } = req.body;
+        const { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy, assignTo, status, allDay } = req.body;
 
-        if (assignmentTo && !mongoose.Types.ObjectId.isValid(assignmentTo)) {
-            res.status(400).json({ error: 'Invalid assignmentTo value' });
+        if (assignTo && !mongoose.Types.ObjectId.isValid(assignTo)) {
+            res.status(400).json({ error: 'Invalid assignTo value' });
         }
         const taskData = { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy, status, allDay };
 
-        if (assignmentTo) {
-            taskData.assignmentTo = assignmentTo;
+        if (assignTo) {
+            taskData.assignTo = assignTo;
         }
         // let result = await Task.updateOne(
         let result = await Task.findOneAndUpdate(
@@ -115,7 +115,7 @@ const changeStatus = async (req, res) => {
     try {
         const { status } = req.body;
 
-        let result = await Task.updateOne(
+        await Task.updateOne(
             { _id: req.params.id },
             { $set: { status: status } }
         );
@@ -137,7 +137,7 @@ const view = async (req, res) => {
             {
                 $lookup: {
                     from: 'Contacts',
-                    localField: 'assignmentTo',
+                    localField: 'assignTo',
                     foreignField: '_id',
                     as: 'contact'
                 }
@@ -145,7 +145,7 @@ const view = async (req, res) => {
             {
                 $lookup: {
                     from: 'Leads', // Assuming this is the collection name for 'leads'
-                    localField: 'assignmentToLead',
+                    localField: 'assignToLead',
                     foreignField: '_id',
                     as: 'Lead'
                 }
@@ -163,7 +163,7 @@ const view = async (req, res) => {
             { $unwind: { path: '$Lead', preserveNullAndEmptyArrays: true } },
             {
                 $addFields: {
-                    assignmentToName: {
+                    assignToName: {
                         $cond: {
                             if: '$contact',
                             then: { $concat: ['$contact.title', ' ', '$contact.firstName', ' ', '$contact.lastName'] },

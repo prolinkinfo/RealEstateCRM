@@ -25,8 +25,8 @@ const AddTask = (props) => {
         category: props.leadContect === 'contactView' ? 'Contact' : props.leadContect === 'leadView' ? 'Lead' : 'None',
         description: '',
         notes: '',
-        assignmentTo: props.leadContect === 'contactView' && props.id ? props.id : '',
-        assignmentToLead: props.leadContect === 'leadView' && props.id ? props.id : '',
+        assignTo: props.leadContect === 'contactView' && props.id ? props.id : '',
+        assignToLead: props.leadContect === 'leadView' && props.id ? props.id : '',
         reminder: '',
         start: '',
         end: '',
@@ -100,9 +100,9 @@ const AddTask = (props) => {
                 </ModalHeader>
                 <ModalBody overflowY={"auto"} height={"700px"}>
                     {/* Contact Model  */}
-                    <ContactModel isOpen={contactModelOpen} data={assignmentToData} onClose={setContactModel} fieldName='assignmentTo' setFieldValue={setFieldValue} />
+                    <ContactModel isOpen={contactModelOpen} data={assignmentToData} onClose={setContactModel} fieldName='assignTo' setFieldValue={setFieldValue} />
                     {/* Lead Model  */}
-                    <LeadModel isOpen={leadModelOpen} data={assignmentToData} onClose={setLeadModel} fieldName='assignmentToLead' setFieldValue={setFieldValue} />
+                    <LeadModel isOpen={leadModelOpen} data={assignmentToData} onClose={setLeadModel} fieldName='assignToLead' setFieldValue={setFieldValue} />
 
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
@@ -125,7 +125,7 @@ const AddTask = (props) => {
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Related
                             </FormLabel>
-                            <RadioGroup onChange={(e) => { setFieldValue('category', e); setFieldValue('assignmentTo', null); setFieldValue('assignmentToLead', null); }} value={values.category}>
+                            <RadioGroup onChange={(e) => { setFieldValue('category', e); setFieldValue('assignTo', null); setFieldValue('assignToLead', null); }} value={values.category}>
                                 <Stack direction='row'>
                                     <Radio value='None' >None</Radio>
                                     {props.leadContect === 'contactView' && <Radio value='Contact'>Contact</Radio>}
@@ -155,17 +155,17 @@ const AddTask = (props) => {
                             <>
                                 <GridItem colSpan={{ base: 12, md: 6 }} >
                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                        Assignment To  Contact
+                                        Assign To  Contact
                                     </FormLabel>
                                     <Flex justifyContent={'space-between'}>
                                         <Select
-                                            value={values.assignmentTo}
-                                            name="assignmentTo"
+                                            value={values.assignTo}
+                                            name="assignTo"
                                             onChange={handleChange}
-                                            mb={errors.assignmentTo && touched.assignmentTo ? undefined : '10px'}
+                                            mb={errors.assignTo && touched.assignTo ? undefined : '10px'}
                                             fontWeight='500'
-                                            placeholder={'Assignment To'}
-                                            borderColor={errors.assignmentTo && touched.assignmentTo ? "red.300" : null}
+                                            placeholder={'Assign To'}
+                                            borderColor={errors.assignTo && touched.assignTo ? "red.300" : null}
                                         >
                                             {assignmentToData?.map((item) => {
                                                 return <option value={item._id} key={item._id}>{values.category === 'Contact' && `${item.firstName} ${item.lastName}`}</option>
@@ -173,24 +173,24 @@ const AddTask = (props) => {
                                         </Select>
                                         <IconButton onClick={() => setContactModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
                                     </Flex>
-                                    <Text mb='10px' color={'red'}> {errors.assignmentTo && touched.assignmentTo && errors.assignmentTo}</Text>
+                                    <Text mb='10px' color={'red'}> {errors.assignTo && touched.assignTo && errors.assignTo}</Text>
                                 </GridItem>
                             </>
                             : values.category === "Lead" ?
                                 <>
                                     <GridItem colSpan={{ base: 12, md: 6 }} >
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                            Assignment To Lead
+                                            Assign To Lead
                                         </FormLabel>
                                         <Flex justifyContent={'space-between'}>
                                             <Select
-                                                value={values.assignmentToLead}
-                                                name="assignmentToLead"
+                                                value={values.assignToLead}
+                                                name="assignToLead"
                                                 onChange={handleChange}
-                                                mb={errors.assignmentToLead && touched.assignmentToLead ? undefined : '10px'}
+                                                mb={errors.assignToLead && touched.assignToLead ? undefined : '10px'}
                                                 fontWeight='500'
-                                                placeholder={'Assignment To'}
-                                                borderColor={errors.assignmentToLead && touched.assignmentToLead ? "red.300" : null}
+                                                placeholder={'Assign To'}
+                                                borderColor={errors.assignToLead && touched.assignToLead ? "red.300" : null}
                                             >
                                                 {assignmentToData?.map((item) => {
                                                     return <option value={item._id} key={item._id}>{values.category === 'Lead' && item.leadName}</option>
@@ -198,7 +198,7 @@ const AddTask = (props) => {
                                             </Select>
                                             <IconButton onClick={() => setLeadModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
                                         </Flex>
-                                        <Text mb='10px' color={'red'}> {errors.assignmentToLead && touched.assignmentToLead && errors.assignmentToLead}</Text>
+                                        <Text mb='10px' color={'red'}> {errors.assignToLead && touched.assignToLead && errors.assignToLead}</Text>
                                     </GridItem>
                                 </>
                                 : ''

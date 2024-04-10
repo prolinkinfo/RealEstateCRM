@@ -170,11 +170,11 @@ const view = async (req, res) => {
     ])
 
     let task = await Task.aggregate([
-        { $match: { assignmentToLead: lead._id } },
+        { $match: { assignToLead: lead._id } },
         {
             $lookup: {
                 from: 'Leads',
-                localField: 'assignmentToLead',
+                localField: 'assignToLead',
                 foreignField: '_id',
                 as: 'lead'
             }
@@ -191,8 +191,8 @@ const view = async (req, res) => {
         { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
         {
             $addFields: {
-                // assignmentToName: lead.leadName, 
-                assignmentToName: '$lead.leadName',
+                // assignToName: lead.leadName, 
+                assignToName: '$lead.leadName',
                 createByName: '$users.username',
             }
         },
@@ -212,7 +212,7 @@ const view = async (req, res) => {
         {
             $lookup: {
                 from: 'Leads',
-                localField: 'assignmentToLead',
+                localField: 'assignToLead',
                 foreignField: '_id',
                 as: 'lead'
             }

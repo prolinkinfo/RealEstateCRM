@@ -26,8 +26,8 @@ const AddEmailHistory = (props) => {
         createByLead: '',
         startDate: '',
         category: 'contact',
-        assignmentTo: '',
-        assignmentToLead: '',
+        // assignTo: '',
+        // assignToLead: '',
         createBy: user?._id,
     }
     const formik = useFormik({

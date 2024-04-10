@@ -102,7 +102,7 @@ const Task = () => {
                 </div>
             )
         },
-        { Header: "Assign To", accessor: "assignmentToName", type: 'text', formikType: '' },
+        { Header: "Assign To", accessor: "assignToName", type: 'text', formikType: '' },
         { Header: "Start Date", accessor: "start", type: 'date', formikType: '' },
         { Header: "End Date", accessor: "end", type: 'date', formikType: '' },
         ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : []),
