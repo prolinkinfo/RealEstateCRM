@@ -83,6 +83,9 @@ const AddEmailHistory = (props) => {
                 setFieldValue('recipient', response?.data?.lead?.leadEmail);
                 values.recipient = response?.data?.lead?.leadEmail
             }
+        } else {
+            setFieldValue('recipient', "");
+
         }
     }
 
@@ -93,10 +96,10 @@ const AddEmailHistory = (props) => {
     return (
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent height={"580px"}>
                 <ModalHeader>Add Email </ModalHeader>
                 <ModalCloseButton />
-                <ModalBody>
+                <ModalBody overflowY={"auto"} height={"400px"}>
                     {/* Contact Model  */}
                     <ContactModel isOpen={contactModelOpen} data={assignmentToData} onClose={setContactModel} fieldName='createByContact' setFieldValue={setFieldValue} />
                     {/* Lead Model  */}

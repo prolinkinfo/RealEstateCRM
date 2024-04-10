@@ -93,7 +93,7 @@ const AddPhoneCall = (props) => {
 
     useEffect(() => {
         fetchRecipientData()
-    }, [values.createBy, values.createByLead])
+    }, [values.createByContact, values.createByLead])
 
 
     return (
