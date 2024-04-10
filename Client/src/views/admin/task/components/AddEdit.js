@@ -16,7 +16,8 @@ const AddEdit = (props) => {
     const { onClose, isOpen, fetchData, userAction, setAction, id } = props
     const [isChecked, setIsChecked] = useState(false);
     const userId = JSON.parse(localStorage.getItem('user'))._id
-    const [assignmentToData, setAssignmentToData] = useState([]);
+    const [assignToLeadData, setAssignToLeadData] = useState([]);
+    const [assignToContactData, setAssignToContactData] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"))
     const [isLoding, setIsLoding] = useState(false)
     const [contactModelOpen, setContactModel] = useState(false);
@@ -142,12 +143,13 @@ const AddEdit = (props) => {
         values.start = props?.date
         try {
             let result
-            if (values.category === "Contact") {
+            if (values.category === "Contact" && assignToContactData.length <= 0) {
                 result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
-            } else if (values.category === "Lead") {
+                setAssignToContactData(result?.data)
+            } else if (values.category === "Lead" && assignToLeadData.length <= 0) {
                 result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
+                setAssignToLeadData(result?.data)
             }
-            setAssignmentToData(result?.data)
         }
         catch (e) {
             console.log(e);
@@ -190,9 +192,9 @@ const AddEdit = (props) => {
                 </ModalHeader>
                 <ModalBody overflowY={"auto"} height={"700px"}>
                     {/* Contact Model  */}
-                    <ContactModel isOpen={contactModelOpen} data={assignmentToData} onClose={setContactModel} values={values} fieldName='assignmentTo' setFieldValue={setFieldValue} />
+                    <ContactModel isOpen={contactModelOpen} data={assignToContactData} onClose={setContactModel} values={values} fieldName='assignmentTo' setFieldValue={setFieldValue} />
                     {/* Lead Model  */}
-                    <LeadModel isOpen={leadModelOpen} data={assignmentToData} onClose={setLeadModel} values={values} fieldName='assignmentToLead' setFieldValue={setFieldValue} />
+                    <LeadModel isOpen={leadModelOpen} data={assignToLeadData} onClose={setLeadModel} values={values} fieldName='assignmentToLead' setFieldValue={setFieldValue} />
                     {isLoding ?
                         <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                             <Spinner />
@@ -249,7 +251,7 @@ const AddEdit = (props) => {
                                 <>
                                     <GridItem colSpan={{ base: 12, md: 6 }} >
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                            Assignment To  Contact
+                                            Assign To  Contact
                                         </FormLabel>
                                         <Flex justifyContent={'space-between'}>
                                             <Select
@@ -258,10 +260,10 @@ const AddEdit = (props) => {
                                                 onChange={handleChange}
                                                 mb={errors.assignmentTo && touched.assignmentTo ? undefined : '10px'}
                                                 fontWeight='500'
-                                                placeholder={'Assignment To'}
+                                                placeholder={'Assign To'}
                                                 borderColor={errors.assignmentTo && touched.assignmentTo ? "red.300" : null}
                                             >
-                                                {assignmentToData?.map((item) => {
+                                                {assignToContactData?.map((item) => {
                                                     return <option value={item._id} key={item._id}>{values.category === 'Contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
                                                 })}
                                             </Select>
@@ -274,7 +276,7 @@ const AddEdit = (props) => {
                                     <>
                                         <GridItem colSpan={{ base: 12, md: 6 }} >
                                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                                Assignment To Lead
+                                                Assign To Lead
                                             </FormLabel>
                                             <Flex justifyContent={'space-between'}>
                                                 <Select
@@ -283,10 +285,10 @@ const AddEdit = (props) => {
                                                     onChange={handleChange}
                                                     mb={errors.assignmentToLead && touched.assignmentToLead ? undefined : '10px'}
                                                     fontWeight='500'
-                                                    placeholder={'Assignment To'}
+                                                    placeholder={'Assign To'}
                                                     borderColor={errors.assignmentToLead && touched.assignmentToLead ? "red.300" : null}
                                                 >
-                                                    {assignmentToData?.map((item) => {
+                                                    {assignToLeadData?.map((item) => {
                                                         return <option value={item._id} key={item._id}>{item.leadName}</option>
                                                     })}
                                                 </Select>
