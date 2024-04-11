@@ -107,31 +107,31 @@ const lineChart = async (req, res) => {
 
     if (mergedRoles && mergedRoles.length > 0) {
         for (const item of mergedRoles) {
-            if (item.title === "Calls" && item.create === false && item.update === false && item.delete === false && item.view === false) {
+            if (item.title === "Calls" && item.view === false) {
                 const data = result.filter((val) => val.name !== "Calls")
                 result = data
             }
-            if (item.title === "Emails" && item.create === false && item.update === false && item.delete === false && item.view === false) {
+            if (item.title === "Emails" && item.view === false) {
                 const data = result.filter((val) => val.name !== "Emails")
                 result = data
             }
-            if (item.title === "Meetings" && item.create === false && item.update === false && item.delete === false && item.view === false) {
+            if (item.title === "Meetings" && item.view === false) {
                 const data = result.filter((val) => val.name !== "Meetings")
                 result = data
             }
-            if (item.title === "Tasks" && item.create === false && item.update === false && item.delete === false && item.view === false) {
+            if (item.title === "Tasks" && item.view === false) {
                 const data = result.filter((val) => val.name !== "Tasks")
                 result = data
             }
-            if (item.title === "Leads" && item.create === false && item.update === false && item.delete === false && item.view === false) {
+            if (item.title === "Leads" && item.view === false) {
                 const data = result.filter((val) => val.name !== "Leads")
                 result = data
             }
-            if (item.title === "Contacts" && item.create === false && item.update === false && item.delete === false && item.view === false) {
+            if (item.title === "Contacts" && item.view === false) {
                 const data = result.filter((val) => val.name !== "Contacts")
                 result = data
             }
-            if (item.title === "Properties" && item.create === false && item.update === false && item.delete === false && item.view === false) {
+            if (item.title === "Properties" && item.view === false) {
                 const data = result.filter((val) => val.name !== "Properties")
                 result = data
             }

@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../../redux/localSlice";
 import CommonDeleteModel from 'components/commonDeleteModel';
 import { deleteApi } from "services/api";
+import AddEditUser from './AddEditUser';
 
 const View = () => {
 
@@ -38,14 +39,24 @@ const View = () => {
 
     const [data, setData] = useState()
     const [roleData, setRoleData] = useState([])
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    // const { isOpen, onOpen, onClose } = useDisclosure()
     const [edit, setEdit] = useState(false);
     const [deleteModel, setDelete] = useState(false);
     const [roleModal, setRoleModal] = useState(false);
     const [isLoding, setIsLoding] = useState(false)
     const [action, setAction] = useState(false)
+    const [userAction, setUserAction] = useState('')
+    const [isOpen, setIsOpen] = useState(false)
 
     const size = "lg";
+
+    const handleOpen = (type) => {
+        setUserAction(type)
+        setIsOpen(true)
+    }
+    const handleClose = () => {
+        setIsOpen(false)
+    }
 
     const fetchData = async () => {
         setIsLoding(true)
@@ -92,8 +103,7 @@ const View = () => {
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                     <Spinner />
                 </Flex> : <>
-                    <Add isOpen={isOpen} size={size} onClose={onClose} />
-                    <Edit isOpen={edit} size={size} onClose={setEdit} userData={userName} setAction={setAction} selectedId={param?.id} setEdit={setEdit} fetchData={fetchData} data={data} />
+                    <AddEditUser isOpen={isOpen} onClose={handleClose} data={data} selectedId={param?.id} userAction={userAction} setUserAction={setUserAction} fetchData={fetchData} />
                     <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='User' handleDeleteData={handleDeleteClick} ids={''} selectedValues={param.id} />
 
                     <Card >
@@ -112,8 +122,8 @@ const View = () => {
                                         </MenuButton>
                                         <MenuDivider />
                                         <MenuList minWidth={'13rem'}>
-                                            <MenuItem alignItems={"start"} onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>
-                                            <MenuItem alignItems={"start"} onClick={() => { setEdit(true); }} icon={<EditIcon />} color='green'>Edit</MenuItem>
+                                            <MenuItem alignItems={"start"} onClick={() => handleOpen('add')} icon={<AddIcon />}>Add</MenuItem>
+                                            <MenuItem alignItems={"start"} onClick={() => handleOpen('edit')} icon={<EditIcon />} color='green'>Edit</MenuItem>
                                             {data?.role !== 'superAdmin' && JSON.parse(localStorage.getItem('user'))?.role === 'superAdmin' && <>
                                                 <MenuDivider />
                                                 <MenuItem alignItems={"start"} onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
@@ -158,7 +168,7 @@ const View = () => {
                         <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                             <GridItem colStart={6} >
                                 <Flex justifyContent={"right"}>
-                                    <Button onClick={() => handleOpenModal(userData)} leftIcon={<EditIcon />} mr={2.5} variant="outline" size="sm" colorScheme="green">Edit</Button>
+                                    <Button onClick={() => { handleOpenModal(userData); handleOpen('edit') }} leftIcon={<EditIcon />} mr={2.5} variant="outline" size="sm" colorScheme="green">Edit</Button>
                                     {data?.role !== 'superAdmin' && JSON.parse(localStorage.getItem('user'))?.role === 'superAdmin' && <Button size="sm" style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>}
                                 </Flex>
                             </GridItem>

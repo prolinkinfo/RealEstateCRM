@@ -40,8 +40,6 @@ const AddMeeting = (props) => {
     });
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue } = formik
 
-
-
     const AddData = async () => {
         try {
             setIsLoding(true)
@@ -62,6 +60,7 @@ const AddMeeting = (props) => {
         finally {
             setIsLoding(false)
         }
+
     };
 
     const fetchAllData = async () => {
