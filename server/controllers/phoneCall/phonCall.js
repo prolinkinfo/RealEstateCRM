@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const add = async (req, res) => {
     try {
-        const { sender, recipient, callDuration, startDate, endDate, callNotes, createByContact, createBy, createByLead } = req.body;
+        const { sender, recipient, callDuration, startDate, callNotes, createByContact, createBy, createByLead } = req.body;
 
         if (createByContact && !mongoose.Types.ObjectId.isValid(createByContact)) {
             res.status(400).json({ error: 'Invalid createByContact value' });
@@ -12,7 +12,7 @@ const add = async (req, res) => {
         if (createByLead && !mongoose.Types.ObjectId.isValid(createByLead)) {
             res.status(400).json({ error: 'Invalid createByLead value' });
         }
-        const phoneCall = { sender, recipient, callDuration, startDate, endDate, callNotes, createBy }
+        const phoneCall = { sender, recipient, callDuration, startDate, callNotes, createBy }
 
         if (createByContact) {
             phoneCall.createByContact = createByContact;

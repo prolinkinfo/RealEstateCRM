@@ -40,7 +40,6 @@ const CommonCheckTable = (props) => {
 
     const dispatch = useDispatch();
 
-
     const tableInstance = useTable(
         {
             columns,

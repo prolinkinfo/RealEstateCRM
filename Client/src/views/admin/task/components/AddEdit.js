@@ -16,7 +16,8 @@ const AddEdit = (props) => {
     const { onClose, isOpen, fetchData, userAction, setAction, id } = props
     const [isChecked, setIsChecked] = useState(false);
     const userId = JSON.parse(localStorage.getItem('user'))._id
-    const [assignmentToData, setAssignmentToData] = useState([]);
+    const [assignToLeadData, setAssignToLeadData] = useState([]);
+    const [assignToContactData, setAssignToContactData] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"))
     const [isLoding, setIsLoding] = useState(false)
     const [contactModelOpen, setContactModel] = useState(false);
@@ -29,8 +30,8 @@ const AddEdit = (props) => {
         category: props.leadContect === 'contactView' ? 'Contact' : props.leadContect === 'leadView' ? 'Lead' : 'None',
         description: '',
         notes: '',
-        assignmentTo: props.leadContect === 'contactView' && id ? id : '',
-        assignmentToLead: props.leadContect === 'leadView' && id ? id : '',
+        assignTo: props.leadContect === 'contactView' && id ? id : '',
+        assignToLead: props.leadContect === 'leadView' && id ? id : '',
         reminder: '',
         start: '',
         end: '',
@@ -71,7 +72,7 @@ const AddEdit = (props) => {
                 if (response.status === 200) {
                     formik.resetForm()
                     onClose();
-                    fetchData()
+                    fetchData(1)
                 }
             } catch (e) {
                 console.log(e);
@@ -114,7 +115,7 @@ const AddEdit = (props) => {
                 setFieldValue('category', result?.data?.category)
                 setFieldValue('description', result?.data?.description)
                 setFieldValue('notes', result?.data?.notes)
-                setFieldValue('assignmentTo', result?.data?.assignmentTo)
+                setFieldValue('assignTo', result?.data?.assignTo)
                 setFieldValue('reminder', result?.data?.reminder)
                 setFieldValue('start', result?.data?.start)
                 setFieldValue('end', result?.data?.end)
@@ -124,7 +125,7 @@ const AddEdit = (props) => {
                 setFieldValue('display', result?.data?.display)
                 setFieldValue('url', result?.data?.url)
                 setFieldValue("status", result?.data?.status)
-                setFieldValue('assignmentToLead', result?.data?.assignmentToLead)
+                setFieldValue('assignToLead', result?.data?.assignToLead)
                 setFieldValue('allDay', result?.data?.allDay === 'Yes' ? 'Yes' : 'No')
 
                 setIsChecked(result?.data?.allDay === 'Yes' ? true : false)
@@ -142,12 +143,13 @@ const AddEdit = (props) => {
         values.start = props?.date
         try {
             let result
-            if (values.category === "Contact") {
+            if (values.category === "Contact" && assignToContactData.length <= 0) {
                 result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
-            } else if (values.category === "Lead") {
+                setAssignToContactData(result?.data)
+            } else if (values.category === "Lead" && assignToLeadData.length <= 0) {
                 result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
+                setAssignToLeadData(result?.data)
             }
-            setAssignmentToData(result?.data)
         }
         catch (e) {
             console.log(e);
@@ -162,7 +164,7 @@ const AddEdit = (props) => {
             setFieldValue('category', "")
             setFieldValue('description', "")
             setFieldValue('notes', "")
-            setFieldValue('assignmentTo', "")
+            setFieldValue('assignTo', "")
             setFieldValue('reminder', "")
             setFieldValue('start', "")
             setFieldValue('end', "")
@@ -172,7 +174,7 @@ const AddEdit = (props) => {
             setFieldValue('display', "")
             setFieldValue('url', "")
             setFieldValue("status", "")
-            setFieldValue('assignmentToLead', "")
+            setFieldValue('assignToLead', "")
             setFieldValue('allDay', "")
         }
     }, [userAction, id])
@@ -190,9 +192,9 @@ const AddEdit = (props) => {
                 </ModalHeader>
                 <ModalBody overflowY={"auto"} height={"700px"}>
                     {/* Contact Model  */}
-                    <ContactModel isOpen={contactModelOpen} data={assignmentToData} onClose={setContactModel} values={values} fieldName='assignmentTo' setFieldValue={setFieldValue} />
+                    <ContactModel isOpen={contactModelOpen} data={assignToContactData} onClose={setContactModel} values={values} fieldName='assignTo' setFieldValue={setFieldValue} />
                     {/* Lead Model  */}
-                    <LeadModel isOpen={leadModelOpen} data={assignmentToData} onClose={setLeadModel} values={values} fieldName='assignmentToLead' setFieldValue={setFieldValue} />
+                    <LeadModel isOpen={leadModelOpen} data={assignToLeadData} onClose={setLeadModel} values={values} fieldName='assignToLead' setFieldValue={setFieldValue} />
                     {isLoding ?
                         <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                             <Spinner />
@@ -219,7 +221,7 @@ const AddEdit = (props) => {
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                     Related
                                 </FormLabel>
-                                <RadioGroup onChange={(e) => { setFieldValue('category', e); setFieldValue('assignmentTo', null); setFieldValue('assignmentToLead', null); }} value={values.category}>
+                                <RadioGroup onChange={(e) => { setFieldValue('category', e); setFieldValue('assignTo', null); setFieldValue('assignToLead', null); }} value={values.category}>
                                     <Stack direction='row'>
                                         <Radio value='None' >None</Radio>
                                         {props.leadContect === 'contactView' && <Radio value='Contact'>Contact</Radio>}
@@ -249,50 +251,50 @@ const AddEdit = (props) => {
                                 <>
                                     <GridItem colSpan={{ base: 12, md: 6 }} >
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                            Assignment To  Contact
+                                            Assign To  Contact
                                         </FormLabel>
                                         <Flex justifyContent={'space-between'}>
                                             <Select
-                                                value={values.assignmentTo}
-                                                name="assignmentTo"
+                                                value={values.assignTo}
+                                                name="assignTo"
                                                 onChange={handleChange}
-                                                mb={errors.assignmentTo && touched.assignmentTo ? undefined : '10px'}
+                                                mb={errors.assignTo && touched.assignTo ? undefined : '10px'}
                                                 fontWeight='500'
-                                                placeholder={'Assignment To'}
-                                                borderColor={errors.assignmentTo && touched.assignmentTo ? "red.300" : null}
+                                                placeholder={'Assign To'}
+                                                borderColor={errors.assignTo && touched.assignTo ? "red.300" : null}
                                             >
-                                                {assignmentToData?.map((item) => {
+                                                {assignToContactData?.map((item) => {
                                                     return <option value={item._id} key={item._id}>{values.category === 'Contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
                                                 })}
                                             </Select>
                                             <IconButton onClick={() => setContactModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
                                         </Flex>
-                                        <Text mb='10px' color={'red'}> {errors.assignmentTo && touched.assignmentTo && errors.assignmentTo}</Text>
+                                        <Text mb='10px' color={'red'}> {errors.assignTo && touched.assignTo && errors.assignTo}</Text>
                                     </GridItem>
                                 </>
                                 : values.category === "Lead" ?
                                     <>
                                         <GridItem colSpan={{ base: 12, md: 6 }} >
                                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                                Assignment To Lead
+                                                Assign To Lead
                                             </FormLabel>
                                             <Flex justifyContent={'space-between'}>
                                                 <Select
-                                                    value={values.assignmentToLead}
-                                                    name="assignmentToLead"
+                                                    value={values.assignToLead}
+                                                    name="assignToLead"
                                                     onChange={handleChange}
-                                                    mb={errors.assignmentToLead && touched.assignmentToLead ? undefined : '10px'}
+                                                    mb={errors.assignToLead && touched.assignToLead ? undefined : '10px'}
                                                     fontWeight='500'
-                                                    placeholder={'Assignment To'}
-                                                    borderColor={errors.assignmentToLead && touched.assignmentToLead ? "red.300" : null}
+                                                    placeholder={'Assign To'}
+                                                    borderColor={errors.assignToLead && touched.assignToLead ? "red.300" : null}
                                                 >
-                                                    {assignmentToData?.map((item) => {
+                                                    {assignToLeadData?.map((item) => {
                                                         return <option value={item._id} key={item._id}>{item.leadName}</option>
                                                     })}
                                                 </Select>
                                                 <IconButton onClick={() => setLeadModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
                                             </Flex>
-                                            <Text mb='10px' color={'red'}> {errors.assignmentToLead && touched.assignmentToLead && errors.assignmentToLead}</Text>
+                                            <Text mb='10px' color={'red'}> {errors.assignToLead && touched.assignToLead && errors.assignToLead}</Text>
                                         </GridItem>
                                     </>
                                     : ''
@@ -309,7 +311,7 @@ const AddEdit = (props) => {
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Start Date
+                                    Start Date<Text color={"red"}>*</Text>
                                 </FormLabel>
                                 <Input
                                     type={isChecked === true ? 'date' : 'datetime-local'}

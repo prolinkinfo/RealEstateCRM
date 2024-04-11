@@ -234,11 +234,11 @@ const view = async (req, res) => {
         ]);
 
         let task = await Task.aggregate([
-            { $match: { assignmentTo: contact._id } },
+            { $match: { assignTo: contact._id } },
             {
                 $lookup: {
                     from: 'Contacts',
-                    localField: 'assignmentTo',
+                    localField: 'assignTo',
                     foreignField: '_id',
                     as: 'contact'
                 }
@@ -255,7 +255,7 @@ const view = async (req, res) => {
             { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
             {
                 $addFields: {
-                    assignmentToName: '$contact.email',
+                    assignToName: '$contact.email',
                     createByName: '$users.username',
                 }
             },
