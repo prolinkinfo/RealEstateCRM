@@ -38,7 +38,6 @@ function ChangeAccess(props) {
     fetchData,
     setAccess,
     _id,
-    setAccessRole,
     setRoleModal,
     editModal, setEditModal,
   } = props;
@@ -118,7 +117,7 @@ function ChangeAccess(props) {
       if (response.status === 200) {
         setEditModal(false)
         fetchData()
-        setAccessRole(tableData)
+        setAccess(tableData)
         setRoleModal(true)
       }
     } catch (e) {
@@ -128,7 +127,7 @@ function ChangeAccess(props) {
     }
   };
 
-  
+
   useEffect(() => {
     fetchData()
   }, [editModal])
