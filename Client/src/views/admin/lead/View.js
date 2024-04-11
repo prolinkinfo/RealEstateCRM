@@ -39,6 +39,7 @@ import MeetingColumnsTable from "../meeting/components/ColumnsTable";
 import CommonCheckTable from "components/checkTable/checktable";
 import moment from 'moment';
 import AddTask from "../task/components/addTask";
+import AddEdit from '../task/components/AddEdit'
 
 const View = () => {
 
@@ -313,7 +314,7 @@ const View = () => {
                                                         onOpen={() => setTaskModel(true)}
                                                         access={taskAccess}
                                                     />
-                                                    <AddTask fetchData={fetchData} isOpen={taskModel} leadContect={splitValue[0]} onClose={setTaskModel} from="lead" id={param.id} />
+                                                    <AddEdit isOpen={taskModel} fetchData={fetchData} leadContect={splitValue[0]} onClose={setTaskModel} id={param.id} userAction={'add'} />
                                                     {
                                                         allData?.task?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                             <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showTasks ? setShowTasks(false) : setShowTasks(true)}>{showTasks ? "Show less" : "Show more"}</Button>

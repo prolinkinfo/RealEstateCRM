@@ -34,6 +34,7 @@ import CommonDeleteModel from "components/commonDeleteModel";
 import { deleteApi } from "services/api";
 import CommonCheckTable from "components/checkTable/checktable";
 import moment from 'moment';
+import AddEdit from '../task/components/AddEdit'
 
 const View = () => {
 
@@ -341,7 +342,7 @@ const View = () => {
                                                         onOpen={() => setTaskModel(true)}
                                                         access={taskAccess}
                                                     />
-                                                    <AddTask fetchData={fetchData} leadContect={splitValue[0]} isOpen={taskModel} onClose={setTaskModel} from="contact" id={param.id} />
+                                                    <AddEdit isOpen={taskModel} fetchData={fetchData} leadContect={splitValue[0]} onClose={setTaskModel} id={param.id} userAction={'add'} />
                                                     {allData?.task?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                         <Button colorScheme="brand" variant="outline" size='sm' display="flex" justifyContant="end" onClick={() => showTasks ? setShowTasks(false) : setShowTasks(true)}>{showTasks ? "Show less" : "Show more"}</Button>
                                                     </div>}

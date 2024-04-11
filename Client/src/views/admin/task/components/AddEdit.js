@@ -72,7 +72,7 @@ const AddEdit = (props) => {
                 if (response.status === 200) {
                     formik.resetForm()
                     onClose();
-                    fetchData()
+                    fetchData(1)
                 }
             } catch (e) {
                 console.log(e);
@@ -311,7 +311,7 @@ const AddEdit = (props) => {
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Start Date
+                                    Start Date<Text color={"red"}>*</Text>
                                 </FormLabel>
                                 <Input
                                     type={isChecked === true ? 'date' : 'datetime-local'}
