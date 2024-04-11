@@ -61,6 +61,7 @@ export default function UserReports() {
     fetchProgressChart()
   }, [])
 
+
   const findModuleData = (title) => {
     const filterData = data?.find(item => item?.name === title)
     return filterData?.length || 0
@@ -223,35 +224,37 @@ export default function UserReports() {
         </GridItem>
       </Grid>
       <SimpleGrid gap="20px" columns={{
-        base: 1, md: (leadView?.create || leadView?.update || leadView?.delete || leadView?.view) && (taskView?.create || taskView?.update || taskView?.delete || taskView?.view) ? 2 : 2, lg:
-          (leadView?.create || leadView?.update || leadView?.delete || leadView?.view) && (taskView?.create || taskView?.update || taskView?.delete || taskView?.view) ? 3 : 2
+        base: 1, md: leadView?.view && taskView?.view ? 2 : 2, lg:
+          leadView?.view && taskView?.view ? 3 : 2
       }} my="20px">
 
-        <Card >
-          <Heading size="md" pb={3}>Statistics</Heading>
+        {
+          data && data.length > 0 &&
+          <Card >
+            <Heading size="md" pb={3}>Statistics</Heading>
+            {
+              !isLoding ?
+                data && data.length > 0 && data?.map((item, i) => (
+                  <>
+                    <Box border={"1px solid #e5e5e5"} p={2} m={1} cursor={'pointer'} key={i} onClick={() => navigate(navigateTo[item.name])}>
+                      <Flex justifyContent={"space-between"}>
+                        <Text fontSize="sm" fontWeight={600} pb={2}>{item?.name}</Text>
+                        <Text fontSize="sm" fontWeight={600} pb={2}><CountUpComponent targetNumber={item?.length} /></Text>
+                      </Flex>
+                      <Progress
+                        colorScheme={item?.color}
+                        size='xs' value={item?.length} width={"100%"} />
+                    </Box>
+                  </>
 
-          {
-            !isLoding ?
-              data && data.length > 0 && data?.map((item, i) => (
-                <>
-                  <Box border={"1px solid #e5e5e5"} p={2} m={1} cursor={'pointer'} key={i} onClick={() => navigate(navigateTo[item.name])}>
-                    <Flex justifyContent={"space-between"}>
-                      <Text fontSize="sm" fontWeight={600} pb={2}>{item?.name}</Text>
-                      <Text fontSize="sm" fontWeight={600} pb={2}><CountUpComponent targetNumber={item?.length} /></Text>
-                    </Flex>
-                    <Progress
-                      colorScheme={item?.color}
-                      size='xs' value={item?.length} width={"100%"} />
-                  </Box>
-                </>
+                )) : <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}><Spinner /></div>
+            }
+          </Card>
+        }
 
-              )) : <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}><Spinner /></div>
-          }
-        </Card>
-
-        {(leadView?.create || leadView?.update || leadView?.delete || leadView?.view) && <Card>
+        {leadView?.view && <Card>
           <Heading size="md" pb={2}>Lead Statistics</Heading>
-          {(leadView?.create || leadView?.update || leadView?.delete || leadView?.view) &&
+          {(leadView?.view) &&
             <Grid templateColumns="repeat(12, 1fr)" gap={2}>
               <GridItem colSpan={{ base: 12, md: 6 }}>
                 <Box backgroundColor={"#ebf5ff"}
@@ -302,7 +305,7 @@ export default function UserReports() {
 
         </Card>}
 
-        {(taskView?.create || taskView?.update || taskView?.delete || taskView?.view) && <Card >
+        {taskView?.view && <Card >
           <Heading size="md" pb={3}>Task Statistics</Heading>
           <Grid templateColumns="repeat(12, 1fr)" gap={2} mb={2}>
             <GridItem colSpan={{ base: 12 }}>

@@ -107,35 +107,10 @@ const lineChart = async (req, res) => {
 
     if (mergedRoles && mergedRoles.length > 0) {
         for (const item of mergedRoles) {
-            if (item.title === "Calls" && item.view === false) {
-                const data = result.filter((val) => val.name !== "Calls")
-                result = data
-            }
-            if (item.title === "Emails" && item.view === false) {
-                const data = result.filter((val) => val.name !== "Emails")
-                result = data
-            }
-            if (item.title === "Meetings" && item.view === false) {
-                const data = result.filter((val) => val.name !== "Meetings")
-                result = data
-            }
-            if (item.title === "Tasks" && item.view === false) {
-                const data = result.filter((val) => val.name !== "Tasks")
-                result = data
-            }
-            if (item.title === "Leads" && item.view === false) {
-                const data = result.filter((val) => val.name !== "Leads")
-                result = data
-            }
-            if (item.title === "Contacts" && item.view === false) {
-                const data = result.filter((val) => val.name !== "Contacts")
-                result = data
-            }
-            if (item.title === "Properties" && item.view === false) {
-                const data = result.filter((val) => val.name !== "Properties")
-                result = data
-            }
-            if (item.create === true || item.update === true || item.delete === true || item.view === true) {
+            if (item.view === false) {
+                const data = result.filter((val) => val.name !== item.title);
+                result = data;
+            } else {
                 if (!result.find((i) => i.name === item.title)) {
                     const ExistingModel = mongoose.model(item.title);
                     const allData = await ExistingModel.find({ deleted: false });
@@ -147,12 +122,12 @@ const lineChart = async (req, res) => {
                         length: allData.length,
                         color: color
                     };
-
                     result.push(newObj);
                 }
-
             }
         }
+    } else {
+        result = [];
     }
 
     res.send(result)
