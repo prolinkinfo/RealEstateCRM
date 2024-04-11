@@ -11,7 +11,7 @@ import { MeetingSchema } from 'schema';
 import { getApi, postApi } from 'services/api';
 
 const AddMeeting = (props) => {
-    const { onClose, isOpen, setAction, from, fetchData } = props
+    const { onClose, isOpen, setAction, from, fetchData, userAction } = props
     const [leaddata, setLeadData] = useState([])
     const [contactdata, setContactData] = useState([])
     const [isLoding, setIsLoding] = useState(false)
@@ -43,24 +43,28 @@ const AddMeeting = (props) => {
 
 
     const AddData = async () => {
-        try {
-            setIsLoding(true)
-            if (values.attendes.length > 0 || values.attendesLead.length > 0) {
-                let response = await postApi('api/meeting/add', values)
-                if (response.status === 200) {
-                    formik.resetForm();
-                    props.onClose();
-                    fetchData(1)
-                    // setAction((pre) => !pre)
+        if (userAction === "add") {
+            try {
+                setIsLoding(true)
+                if (values.attendes.length > 0 || values.attendesLead.length > 0) {
+                    let response = await postApi('api/meeting/add', values)
+                    if (response.status === 200) {
+                        formik.resetForm();
+                        props.onClose();
+                        fetchData(1)
+                        // setAction((pre) => !pre)
+                    }
+                } else {
+                    toast.error('Select Related To')
                 }
-            } else {
-                toast.error('Select Related To')
+            } catch (e) {
+                console.log(e);
             }
-        } catch (e) {
-            console.log(e);
-        }
-        finally {
-            setIsLoding(false)
+            finally {
+                setIsLoding(false)
+            }
+        } else if (userAction === "edit") {
+
         }
     };
 

@@ -12,6 +12,7 @@ import Edit from './Edit';
 import UserAdvanceSearch from './components/userAdvanceSearch';
 import { deleteManyApi } from 'services/api';
 import CommonDeleteModel from 'components/commonDeleteModel';
+import AddEditUser from './AddEditUser';
 
 
 const Index = () => {
@@ -19,7 +20,8 @@ const Index = () => {
     const [action, setAction] = useState(false);
     const [edit, setEdit] = useState(false);
     const [editData, setEditData] = useState({});
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    // const { onOpen, onClose } = useDisclosure();
+    const [isOpen, setIsOpen] = useState(false)
     const [selectedId, setSelectedId] = useState();
     const [deleteMany, setDelete] = useState(false);
     const [selectedValues, setSelectedValues] = useState([]);
@@ -31,6 +33,7 @@ const Index = () => {
     const [data, setData] = useState([]);
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
+    const [userAction, setUserAction] = useState('')
 
     const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
@@ -58,7 +61,7 @@ const Index = () => {
                     <Menu isLazy  >
                         <MenuButton><CiMenuKebab /></MenuButton>
                         <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
-                            <MenuItem py={2.5} onClick={() => { setEdit(true); setSelectedId(row?.original._id); setEditData(row?.original) }} icon={<EditIcon mb={1} fontSize={15} />}>Edit</MenuItem>
+                            <MenuItem py={2.5} onClick={() => { setEditData(row?.original); setIsOpen(true); setSelectedId(row?.original._id); setUserAction('edit') }} icon={<EditIcon mb={1} fontSize={15} />}>Edit</MenuItem>
                             <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/userView/${row?.values._id}`)} icon={<ViewIcon mb={1} fontSize={15} />}>View</MenuItem>
                             {row?.original?.role === 'superAdmin' ? '' : <MenuItem py={2.5} color={'red'} onClick={() => { setSelectedValues([row?.original._id]); setDelete(true) }} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>}
                         </MenuList>
@@ -71,6 +74,14 @@ const Index = () => {
     const [columns, setColumns] = useState([...tableColumns]);
     const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
     const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
+
+    const handleOpen = () => {
+        setUserAction('add')
+        setIsOpen(true)
+    }
+    const handleClose = () => {
+        setIsOpen(false)
+    }
 
     const fetchData = async () => {
         setIsLoding(true)
@@ -122,7 +133,7 @@ const Index = () => {
                 isOpen={isOpen}
                 onClose={onclose}
                 access={true}
-                onOpen={onOpen}
+                onOpen={handleOpen}
                 selectedValues={selectedValues}
                 setSelectedValues={setSelectedValues}
                 setDelete={setDelete}
@@ -135,11 +146,8 @@ const Index = () => {
                 setGetTagValuesOutside={setGetTagValuesOutside}
                 setSearchboxOutside={setSearchboxOutside}
             />
-            <AddUser isOpen={isOpen} size={"sm"} setAction={setAction} onClose={onClose} />
-            <Edit isOpen={edit} size={"sm"} setAction={setAction} onClose={onClose} fetchData={fetchData} data={editData} setEdit={setEdit} selectedId={selectedId} />
+            <AddEditUser isOpen={isOpen} onClose={handleClose} data={editData} selectedId={selectedId} userAction={userAction} setUserAction={setUserAction} fetchData={fetchData} />
             <CommonDeleteModel isOpen={deleteMany} onClose={() => setDelete(false)} type='User' handleDeleteData={handleDeleteClick} ids={''} selectedValues={selectedValues} />
-
-
 
             <UserAdvanceSearch
                 advanceSearch={advanceSearch}
