@@ -21,6 +21,7 @@ import { FaCalendarAlt } from 'react-icons/fa';
 const MainDashboard = React.lazy(() => import("views/admin/default"));
 const SignInCentered = React.lazy(() => import("views/auth/signIn"));
 const Calender = React.lazy(() => import("views/admin/calender"));
+const UserView = React.lazy(() => import("views/admin/users/View"));
 
 // Custom Chakra theme
 export default function User(props) {
@@ -105,6 +106,14 @@ export default function User(props) {
                 path: "/calender",
                 icon: <Icon as={FaCalendarAlt} width='20px' height='20px' color='inherit' />,
                 component: Calender,
+            },
+            {
+                name: "User View",
+                layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+                parentName: "Email",
+                under: "user",
+                path: "/userView/:id",
+                component: UserView,
             },
         ]
 
