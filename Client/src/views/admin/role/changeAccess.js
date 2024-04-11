@@ -49,7 +49,6 @@ function ChangeAccess(props) {
 
   const [gopageValue, setGopageValue] = useState();
   const data = useMemo(() => tableData, [tableData]);
-  const user = JSON.parse(localStorage.getItem("user"));
 
   const tableInstance = useTable(
     {
@@ -229,7 +228,9 @@ function ChangeAccess(props) {
                               fontSize="sm"
                               fontWeight="700"
                             >
+                              {console.log(cell)}
                               <Checkbox
+                                // disabled={values}
                                 isChecked={values?.access[i]?.create}
                                 defaultChecked={values?.access[i]?.create}
                                 onChange={handleCheckboxChange(i, 'create', "view")}
@@ -244,6 +245,7 @@ function ChangeAccess(props) {
                               fontWeight="700"
                             >
                               <Checkbox
+                                // disabled={values}
                                 isChecked={values?.access[i]?.view}
                                 defaultChecked={values?.access[i]?.view}
                                 onChange={handleCheckboxChange(i, 'view', "create")}
@@ -258,7 +260,7 @@ function ChangeAccess(props) {
                               fontWeight="700"
                             >
                               <Checkbox
-                                disabled={!values?.access[i].view}
+                                disabled={!values?.access[i]?.view}
                                 isChecked={values?.access[i]?.update}
                                 defaultChecked={values?.access[i]?.update}
                                 onChange={handleCheckboxChange(i, 'update')}
@@ -273,7 +275,7 @@ function ChangeAccess(props) {
                               fontWeight="700"
                             >
                               <Checkbox
-                                disabled={!values?.access[i].view}
+                                disabled={!values?.access[i]?.view}
                                 isChecked={values?.access[i]?.delete}
                                 defaultChecked={values?.access[i]?.delete}
                                 onChange={handleCheckboxChange(i, 'delete')}
