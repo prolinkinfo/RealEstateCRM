@@ -18,120 +18,216 @@ const index = async (req, res) => {
     res.send(result)
 }
 
+// const lineChart = async (req, res) => {
+//     const query = req.query
+//     query.deleted = false;
+//     const senderQuery = query
+//     if (query.createdBy) {
+//         query.createdBy = new mongoose.Types.ObjectId(query.createdBy);
+//     }
+//     if (query.createdBy) {
+//         senderQuery.sender = new mongoose.Types.ObjectId(query.createdBy);
+//     }
+
+//     let lead = await Lead.find(query).populate({
+//         path: 'createBy',
+//         match: { deleted: false } // Populate only if createBy.deleted is false
+//     }).exec()
+//     const leadData = lead.filter(item => item.createBy !== null);
+
+//     let contact = await Contact.find(query).populate({
+//         path: 'createBy',
+//         match: { deleted: false } // Populate only if createBy.deleted is false
+//     }).exec()
+//     const contactData = contact.filter(item => item.createBy !== null);
+
+//     let property = await Property.find(query).populate({
+//         path: 'createBy',
+//         match: { deleted: false } // Populate only if createBy.deleted is false
+//     }).exec()
+//     const propertyData = property.filter(item => item.createBy !== null);
+
+//     let task = await Task.find(query).populate({
+//         path: 'createBy',
+//         match: { deleted: false } // Populate only if createBy.deleted is false
+//     }).exec()
+//     const taskData = task.filter(item => item.createBy !== null);
+
+//     let meetingHistory = await MeetingHistory.find(query).populate({
+//         path: 'createBy',
+//         match: { deleted: false } // Populate only if createBy.deleted is false
+//     }).exec()
+//     const meetingHistoryData = meetingHistory.filter(item => item.createdBy !== null);
+
+//     let emails = await email.find(senderQuery).populate({
+//         path: 'sender',
+//         match: { deleted: false } // Populate only if createBy.deleted is false
+//     }).exec()
+//     const emailData = emails.filter(item => item.sender !== null);
+
+//     let phoneCall = await PhoneCall.find(senderQuery).populate({
+//         path: 'sender',
+//         match: { deleted: false } // Populate only if createBy.deleted is false
+//     }).exec()
+//     const phoneCallData = phoneCall.filter(item => item.sender !== null);
+
+//     const userDetails = await user.findOne({ _id: req.user.userId }).populate({
+//         path: 'roles'
+//     })
+
+//     const mergedRoles = userDetails?.roles?.reduce((acc, current) => {
+//         current?.access?.forEach(permission => {
+//             const existingPermissionIndex = acc.findIndex(item => item.title === permission.title);
+//             if (existingPermissionIndex !== -1) {
+//                 const updatedPermission = { ...acc[existingPermissionIndex] };
+//                 Object.keys(permission).forEach(key => {
+//                     if (permission[key] === true) {
+//                         updatedPermission[key] = true;
+//                     }
+//                 });
+//                 acc[existingPermissionIndex] = updatedPermission;
+//             } else {
+//                 acc.push(permission);
+//             }
+//         });
+//         return acc;
+//     }, []);
+
+//     let result = [
+//         { name: "Leads", length: leadData?.length, color: "red" },
+//         { name: "Contacts", length: contactData?.length, color: "blue" },
+//         { name: "Properties", length: propertyData?.length, color: "green" },
+//         { name: "Tasks", length: taskData?.length, color: "pink" },
+//         { name: "Meetings", length: meetingHistoryData?.length, color: "purple" },
+//         { name: "Emails", length: emailData?.length, color: "yellow" },
+//         { name: "Calls", length: phoneCallData?.length, color: "cyan" },
+//     ]
+
+//     const colors = ["whiteAlpha", "blackAlpha", "gray", "red", "orange", "yellow", "green", "teal", "blue", "cyan", "purple", "pink", "linkedin", "facebook", "messenger", "whatsapp", "twitter", "telegram"];
+
+//     if (mergedRoles && mergedRoles.length > 0) {
+//         for (const item of mergedRoles) {
+//             if (item.view === false) {
+//                 const data = result.filter((val) => val.name !== item.title);
+//                 result = data;
+//             } else {
+//                 if (!result.find((i) => i.name === item.title)) {
+//                     const ExistingModel = mongoose.model(item.title);
+//                     const allData = await ExistingModel.find({ deleted: false });
+//                     const colorIndex = result.length % colors.length;
+//                     const color = colors[colorIndex];
+
+//                     const newObj = {
+//                         name: item.title,
+//                         length: allData.length,
+//                         color: color
+//                     };
+//                     result.push(newObj);
+//                 }
+//             }
+//         }
+//     } else {
+//         result = [];
+//     }
+
+//     res.send(result)
+// }
+
 const lineChart = async (req, res) => {
-    const query = req.query
-    query.deleted = false;
-    const senderQuery = query
-    if (query.createdBy) {
-        query.createdBy = new mongoose.Types.ObjectId(query.createdBy);
-    }
-    if (query.createdBy) {
-        senderQuery.sender = new mongoose.Types.ObjectId(query.createdBy);
-    }
+    try {
+        const query = { ...req.query, deleted: false };
+        const senderQuery = { ...query };
 
-    let lead = await Lead.find(query).populate({
-        path: 'createBy',
-        match: { deleted: false } // Populate only if createBy.deleted is false
-    }).exec()
-    const leadData = lead.filter(item => item.createBy !== null);
+        if (query.createdBy) {
+            query.createdBy = new mongoose.Types.ObjectId(query.createdBy);
+            senderQuery.sender = query.createdBy;
+        }
 
-    let contact = await Contact.find(query).populate({
-        path: 'createBy',
-        match: { deleted: false } // Populate only if createBy.deleted is false
-    }).exec()
-    const contactData = contact.filter(item => item.createBy !== null);
+        const populateOptions = {
+            path: 'createBy',
+            match: { deleted: false } // Populate only if createBy.deleted is false
+        };
 
-    let property = await Property.find(query).populate({
-        path: 'createBy',
-        match: { deleted: false } // Populate only if createBy.deleted is false
-    }).exec()
-    const propertyData = property.filter(item => item.createBy !== null);
+        const populateAndFilterData = async (Model) => {
+            const data = await Model.find(query).populate(populateOptions).exec();
+            return data.filter(item => item.createBy !== null);
+        };
 
-    let task = await Task.find(query).populate({
-        path: 'createBy',
-        match: { deleted: false } // Populate only if createBy.deleted is false
-    }).exec()
-    const taskData = task.filter(item => item.createBy !== null);
+        const [leadData, contactData, propertyData, taskData, meetingHistoryData, emailData, phoneCallData] = await Promise.all([
+            populateAndFilterData(Lead),
+            populateAndFilterData(Contact),
+            populateAndFilterData(Property),
+            populateAndFilterData(Task),
+            populateAndFilterData(MeetingHistory),
+            populateAndFilterData(email),
+            populateAndFilterData(PhoneCall)
+        ]);
 
-    let meetingHistory = await MeetingHistory.find(query).populate({
-        path: 'createBy',
-        match: { deleted: false } // Populate only if createBy.deleted is false
-    }).exec()
-    const meetingHistoryData = meetingHistory.filter(item => item.createdBy !== null);
-
-    let emails = await email.find(senderQuery).populate({
-        path: 'sender',
-        match: { deleted: false } // Populate only if createBy.deleted is false
-    }).exec()
-    const emailData = emails.filter(item => item.sender !== null);
-
-    let phoneCall = await PhoneCall.find(senderQuery).populate({
-        path: 'sender',
-        match: { deleted: false } // Populate only if createBy.deleted is false
-    }).exec()
-    const phoneCallData = phoneCall.filter(item => item.sender !== null);
-
-    const userDetails = await user.findOne({ _id: req.user.userId }).populate({
-        path: 'roles'
-    })
-
-    const mergedRoles = userDetails?.roles?.reduce((acc, current) => {
-        current?.access?.forEach(permission => {
-            const existingPermissionIndex = acc.findIndex(item => item.title === permission.title);
-            if (existingPermissionIndex !== -1) {
-                const updatedPermission = { ...acc[existingPermissionIndex] };
-                Object.keys(permission).forEach(key => {
-                    if (permission[key] === true) {
-                        updatedPermission[key] = true;
-                    }
-                });
-                acc[existingPermissionIndex] = updatedPermission;
-            } else {
-                acc.push(permission);
-            }
+        const userDetails = await user.findOne({ _id: req.user.userId }).populate({
+            path: 'roles'
         });
-        return acc;
-    }, []);
 
-    let result = [
-        { name: "Leads", length: leadData?.length, color: "red" },
-        { name: "Contacts", length: contactData?.length, color: "blue" },
-        { name: "Properties", length: propertyData?.length, color: "green" },
-        { name: "Tasks", length: taskData?.length, color: "pink" },
-        { name: "Meetings", length: meetingHistoryData?.length, color: "purple" },
-        { name: "Emails", length: emailData?.length, color: "yellow" },
-        { name: "Calls", length: phoneCallData?.length, color: "cyan" },
-    ]
+        const mergedRoles = userDetails?.roles?.reduce((acc, current) => {
+            current?.access?.forEach(permission => {
+                const existingPermissionIndex = acc.findIndex(item => item.title === permission.title);
+                if (existingPermissionIndex !== -1) {
+                    const updatedPermission = { ...acc[existingPermissionIndex] };
+                    Object.keys(permission).forEach(key => {
+                        if (permission[key] === true) {
+                            updatedPermission[key] = true;
+                        }
+                    });
+                    acc[existingPermissionIndex] = updatedPermission;
+                } else {
+                    acc.push(permission);
+                }
+            });
+            return acc;
+        }, []);
 
-    const colors = ["whiteAlpha", "blackAlpha", "gray", "red", "orange", "yellow", "green", "teal", "blue", "cyan", "purple", "pink", "linkedin", "facebook", "messenger", "whatsapp", "twitter", "telegram"];
+        const colors = ["whiteAlpha", "blackAlpha", "gray", "red", "orange", "yellow", "green", "teal", "blue", "cyan", "purple", "pink", "linkedin", "facebook", "messenger", "whatsapp", "twitter", "telegram"];
 
-    if (mergedRoles && mergedRoles.length > 0) {
-        for (const item of mergedRoles) {
-            if (item.view === false) {
-                const data = result.filter((val) => val.name !== item.title);
-                result = data;
-            } else {
-                if (!result.find((i) => i.name === item.title)) {
-                    const ExistingModel = mongoose.model(item.title);
-                    const allData = await ExistingModel.find({ deleted: false });
-                    const colorIndex = result.length % colors.length;
-                    const color = colors[colorIndex];
+        let result = [
+            { name: "Leads", length: leadData.length, color: "red" },
+            { name: "Contacts", length: contactData.length, color: "blue" },
+            { name: "Properties", length: propertyData.length, color: "green" },
+            { name: "Tasks", length: taskData.length, color: "pink" },
+            { name: "Meetings", length: meetingHistoryData.length, color: "purple" },
+            { name: "Emails", length: emailData.length, color: "yellow" },
+            { name: "Calls", length: phoneCallData.length, color: "cyan" },
+        ];
 
-                    const newObj = {
-                        name: item.title,
-                        length: allData.length,
-                        color: color
-                    };
-                    result.push(newObj);
+        if (mergedRoles && mergedRoles.length > 0) {
+            for (const item of mergedRoles) {
+                if (item.view === false) {
+                    result = result.filter(val => val.name !== item.title);
+                } else {
+                    if (!result.find(i => i.name === item.title)) {
+                        const ExistingModel = mongoose.model(item.title);
+                        const allData = await ExistingModel.find({ deleted: false });
+                        const colorIndex = result.length % colors.length;
+                        const color = colors[colorIndex];
+
+                        const newObj = {
+                            name: item.title,
+                            length: allData.length,
+                            color: color
+                        };
+                        result.push(newObj);
+                    }
                 }
             }
+        } else if (userDetails.role !== "superAdmin") {
+            result = []
         }
-    } else {
-        result = [];
-    }
 
-    res.send(result)
+        res.send(result);
+    } catch (error) {
+        console.error("Error in lineChart function:", error);
+        res.status(500).send("Internal Server Error");
+    }
 }
+
 
 const data = async (req, res) => {
     try {
