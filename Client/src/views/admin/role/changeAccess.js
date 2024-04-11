@@ -92,6 +92,7 @@ function ChangeAccess(props) {
     values,
     handleSubmit,
     setFieldValue,
+    resetForm
   } = formik;
 
   const handleCheckboxChange = (index, fieldName, secondFieldName) => (event) => {
@@ -116,18 +117,17 @@ function ChangeAccess(props) {
       return item;
     });
 
-    // setFieldValue('access', updatedAccess);
-    setAccess(updatedAccess)
+    setFieldValue('access', updatedAccess);
   };
 
   const EditData = async () => {
     try {
       setIsLoding(true);
+      setAccess(values?.access)
       let response = await putApi(`api/role-access/edit/${_id}`, values);
       if (response.status === 200) {
         setEditModal(false)
         fetchData()
-        setAccess(tableData)
         setRoleModal(true)
       }
     } catch (e) {
@@ -230,7 +230,7 @@ function ChangeAccess(props) {
                               fontWeight="700"
                             >
                               <Checkbox
-                                checked={values?.access[i]?.create}
+                                isChecked={values?.access[i]?.create}
                                 defaultChecked={values?.access[i]?.create}
                                 onChange={handleCheckboxChange(i, 'create', "view")}
                               />
@@ -244,7 +244,7 @@ function ChangeAccess(props) {
                               fontWeight="700"
                             >
                               <Checkbox
-                                checked={values?.access[i]?.view}
+                                isChecked={values?.access[i]?.view}
                                 defaultChecked={values?.access[i]?.view}
                                 onChange={handleCheckboxChange(i, 'view', "create")}
                               />
@@ -258,7 +258,8 @@ function ChangeAccess(props) {
                               fontWeight="700"
                             >
                               <Checkbox
-                                checked={values?.access[i]?.update}
+                                disabled={!values?.access[i].view}
+                                isChecked={values?.access[i]?.update}
                                 defaultChecked={values?.access[i]?.update}
                                 onChange={handleCheckboxChange(i, 'update')}
                               />
@@ -272,7 +273,8 @@ function ChangeAccess(props) {
                               fontWeight="700"
                             >
                               <Checkbox
-                                checked={values?.access[i]?.delete}
+                                disabled={!values?.access[i].view}
+                                isChecked={values?.access[i]?.delete}
                                 defaultChecked={values?.access[i]?.delete}
                                 onChange={handleCheckboxChange(i, 'delete')}
                               />
@@ -306,7 +308,7 @@ function ChangeAccess(props) {
             Save
           </Button>
           <Button size="sm"
-            onClick={() => { setEditModal(false); setRoleModal(true); }}
+            onClick={() => { resetForm(); setEditModal(false); setRoleModal(true); }}
             variant="outline"
             colorScheme="red"
             sx={{
