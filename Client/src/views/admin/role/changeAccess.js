@@ -95,9 +95,19 @@ function ChangeAccess(props) {
     setFieldValue,
   } = formik;
 
-  const handleCheckboxChange = (index, fieldName) => (event) => {
+  const handleCheckboxChange = (index, fieldName, secondFieldName) => (event) => {
     const { checked } = event.target;
-    const updatedAccess = values.access.map((item, idx) => {
+
+    const updatedAccess = secondFieldName ? values.access.map((item, idx) => {
+      if (idx === index) {
+        return {
+          ...item,
+          [fieldName]: checked,
+          [secondFieldName]: checked,
+        };
+      }
+      return item;
+    }) : values.access.map((item, idx) => {
       if (idx === index) {
         return {
           ...item,
@@ -107,7 +117,7 @@ function ChangeAccess(props) {
       return item;
     });
 
-    setFieldValue('access', updatedAccess);
+    // setFieldValue('access', updatedAccess);
     setAccess(updatedAccess)
   };
 
@@ -128,7 +138,7 @@ function ChangeAccess(props) {
     }
   };
 
-  
+
   useEffect(() => {
     fetchData()
   }, [editModal])
@@ -221,9 +231,9 @@ function ChangeAccess(props) {
                               fontWeight="700"
                             >
                               <Checkbox
-                                value={cell.value ? cell.value : values?.access[i]?.create}
-                                defaultChecked={cell.value}
-                                onChange={handleCheckboxChange(i, 'create')}
+                                checked={values?.access[i]?.create}
+                                defaultChecked={values?.access[i]?.create}
+                                onChange={handleCheckboxChange(i, 'create', "view")}
                               />
                             </Text>
                           );
@@ -236,8 +246,8 @@ function ChangeAccess(props) {
                             >
                               <Checkbox
                                 checked={values?.access[i]?.view}
-                                defaultChecked={cell.value}
-                                onChange={handleCheckboxChange(i, 'view')}
+                                defaultChecked={values?.access[i]?.view}
+                                onChange={handleCheckboxChange(i, 'view', "create")}
                               />
                             </Text>
                           );
@@ -250,7 +260,7 @@ function ChangeAccess(props) {
                             >
                               <Checkbox
                                 checked={values?.access[i]?.update}
-                                defaultChecked={cell.value}
+                                defaultChecked={values?.access[i]?.update}
                                 onChange={handleCheckboxChange(i, 'update')}
                               />
                             </Text>
@@ -264,7 +274,7 @@ function ChangeAccess(props) {
                             >
                               <Checkbox
                                 checked={values?.access[i]?.delete}
-                                defaultChecked={cell.value}
+                                defaultChecked={values?.access[i]?.delete}
                                 onChange={handleCheckboxChange(i, 'delete')}
                               />
                             </Text>
