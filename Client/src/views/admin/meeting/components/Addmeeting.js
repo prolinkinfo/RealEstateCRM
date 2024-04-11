@@ -11,7 +11,7 @@ import { MeetingSchema } from 'schema';
 import { getApi, postApi } from 'services/api';
 
 const AddMeeting = (props) => {
-    const { onClose, isOpen, setAction, from, fetchData, userAction } = props
+    const { onClose, isOpen, setAction, from, fetchData } = props
     const [leaddata, setLeadData] = useState([])
     const [contactdata, setContactData] = useState([])
     const [isLoding, setIsLoding] = useState(false)
@@ -40,32 +40,27 @@ const AddMeeting = (props) => {
     });
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue } = formik
 
-
-
     const AddData = async () => {
-        if (userAction === "add") {
-            try {
-                setIsLoding(true)
-                if (values.attendes.length > 0 || values.attendesLead.length > 0) {
-                    let response = await postApi('api/meeting/add', values)
-                    if (response.status === 200) {
-                        formik.resetForm();
-                        props.onClose();
-                        fetchData(1)
-                        // setAction((pre) => !pre)
-                    }
-                } else {
-                    toast.error('Select Related To')
+        try {
+            setIsLoding(true)
+            if (values.attendes.length > 0 || values.attendesLead.length > 0) {
+                let response = await postApi('api/meeting/add', values)
+                if (response.status === 200) {
+                    formik.resetForm();
+                    props.onClose();
+                    fetchData(1)
+                    // setAction((pre) => !pre)
                 }
-            } catch (e) {
-                console.log(e);
+            } else {
+                toast.error('Select Related To')
             }
-            finally {
-                setIsLoding(false)
-            }
-        } else if (userAction === "edit") {
-
+        } catch (e) {
+            console.log(e);
         }
+        finally {
+            setIsLoding(false)
+        }
+
     };
 
     const fetchAllData = async () => {
