@@ -204,7 +204,7 @@ const View = () => {
                                                             <Heading size="md" >
                                                                 Property Photos
                                                             </Heading>
-                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setPropertyPhoto(true)} bg={buttonbg}>Add New</Button>
+                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setPropertyPhoto(true)} variant="brand">Add New</Button>
                                                             <PropertyPhoto text='Property Photos' fetchData={fetchData} isOpen={propertyPhoto} onClose={setPropertyPhoto} id={param.id} />
                                                         </Flex>
                                                         <HSeparator />
@@ -236,7 +236,7 @@ const View = () => {
                                                             <Heading size="md" >
                                                                 Virtual Tours or Videos
                                                             </Heading>
-                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setVirtualToursorVideos(true)} bg={buttonbg}>Add New</Button>
+                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setVirtualToursorVideos(true)} variant="brand">Add New</Button>
                                                             <PropertyPhoto text='Virtual Tours or Videos' fetchData={fetchData} isOpen={virtualToursorVideos} onClose={setVirtualToursorVideos} id={param.id} />
                                                         </Flex>
                                                         <HSeparator />
@@ -269,7 +269,7 @@ const View = () => {
                                                             <Heading size="md" >
                                                                 Floor Plans
                                                             </Heading>
-                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setFloorPlans(true)} bg={buttonbg}>Add New</Button>
+                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setFloorPlans(true)} variant="brand">Add New</Button>
                                                             <PropertyPhoto text='Floor Plans' fetchData={fetchData} isOpen={floorPlans} onClose={setFloorPlans} id={param.id} />
                                                         </Flex>
                                                         <HSeparator />
@@ -301,7 +301,7 @@ const View = () => {
                                                             <Heading size="md" >
                                                                 Property Documents
                                                             </Heading>
-                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setPropertyDocuments(true)} bg={buttonbg}>Add New</Button>
+                                                            <Button size="sm" variant="brand" leftIcon={<AddIcon />} onClick={() => setPropertyDocuments(true)}>Add New</Button>
                                                             <PropertyPhoto text='Property Documents' fetchData={fetchData} isOpen={propertyDocuments} onClose={setPropertyDocuments} id={param.id} />
                                                         </Flex>
                                                         <HSeparator />
