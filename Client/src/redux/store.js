@@ -28,6 +28,7 @@ export const store = configureStore({
         user: userReducer,
         route: persistReducer(routePersistConfig, routeReducer),
         advanceSearchData: advanceSearchSlice,
+
     },
 });
 

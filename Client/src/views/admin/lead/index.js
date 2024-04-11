@@ -64,6 +64,7 @@ const Index = () => {
             setAddEmailHistory(true);
         }
     }
+
     const setStatusData = async (cell, e) => {
         try {
             setIsLoding(true)
@@ -91,8 +92,6 @@ const Index = () => {
                 return 'completed';
         }
     }
-
-
 
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
@@ -165,7 +164,6 @@ const Index = () => {
             setIsLoding(false)
         }
     }
-
 
     useEffect(() => {
         fetchData();

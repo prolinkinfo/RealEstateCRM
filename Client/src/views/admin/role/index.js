@@ -28,7 +28,6 @@ const Index = () => {
       width: 10,
       display: false
     },
-
     {
       Header: "Role Name", accessor: "roleName", cell: (cell) => (
         <Text
@@ -81,7 +80,6 @@ const Index = () => {
 
   return (
     <div>
-     
       <CommonCheckTable
         title={title}
         isLoding={isLoding}

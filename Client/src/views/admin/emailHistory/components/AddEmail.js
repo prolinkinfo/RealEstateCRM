@@ -21,6 +21,7 @@ const AddEmailHistory = (props) => {
         startDate: '',
         createBy: user?._id,
     }
+
     const formik = useFormik({
         initialValues: initialValues,
         validationSchema: emailSchema,

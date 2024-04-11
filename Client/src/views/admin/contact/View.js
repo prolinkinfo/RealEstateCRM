@@ -32,6 +32,8 @@ import CustomView from "utils/customView";
 import AddDocumentModal from "utils/addDocumentModal";
 import CommonDeleteModel from "components/commonDeleteModel";
 import { deleteApi } from "services/api";
+import CommonCheckTable from "components/checkTable/checktable";
+import moment from 'moment';
 
 const View = () => {
 
@@ -68,8 +70,26 @@ const View = () => {
     const columnsDataColumns = [
         { Header: "sender", accessor: "senderName", },
         { Header: "recipient", accessor: "createByName", },
-        { Header: "time stamp", accessor: "timestamp", },
-        { Header: "Created", accessor: "createBy", },
+        {
+            Header: "time stamp", accessor: "timestamp",
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        {moment(cell?.value).fromNow()}
+                    </Text>
+                </div>
+            )
+        },
+        {
+            Header: "Created", accessor: "createBy",
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        {moment(cell?.row?.values.timestamp).format('h:mma (DD/MM)')}
+                    </Text>
+                </div>
+            )
+        },
     ];
 
     const PropertyColumn = [
@@ -79,17 +99,20 @@ const View = () => {
         { Header: "square Footage", accessor: "squareFootage", },
         { Header: "year Built", accessor: "yearBuilt", },
     ];
-    const textColumnsDataColumns = [
-        { Header: "sender", accessor: "sender", },
-        { Header: "recipient", accessor: "to", },
-        { Header: "time stamp", accessor: "timestamp", },
-        { Header: "Created", accessor: "createBy", },
-    ];
 
     const MeetingColumns = [
         { Header: 'agenda', accessor: 'agenda' },
         { Header: "date Time", accessor: "dateTime", },
-        { Header: "times tamp", accessor: "timestamp", },
+        {
+            Header: "times tamp", accessor: "timestamp",
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        {moment(cell?.value).fromNow()}
+                    </Text>
+                </div>
+            )
+        },
         { Header: "create By", accessor: "createdByName", },
     ];
     const taskColumns = [
@@ -160,12 +183,15 @@ const View = () => {
         if (fetchCustomData) fetchCustomData()
     }, [action])
 
+    const firstValue = Object?.values(param)[0];
+    const splitValue = firstValue?.split('/')
+
     return (
         <>
             {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} contactData={contactData[0]} />}
             <Edit isOpen={edit} contactData={contactData[0]} size={size} onClose={setEdit} setAction={setAction} moduleId={contactData?.[0]?._id} />
             <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Contact' handleDeleteData={handleDeleteContact} ids={param.id} />
-            <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} viewData={allData} lead="false" />
+
 
             {isLoding ?
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
@@ -250,11 +276,25 @@ const View = () => {
                             <TabPanel pt={4} p={0}>
                                 <GridItem colSpan={{ base: 12 }} >
                                     <Grid templateColumns={{ base: "1fr" }} gap={4}>
-
                                         <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
                                             {emailAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
                                                 <Card overflow={'scroll'}>
-                                                    <ColumnsTable viewData={allData} fetchData={fetchData} emailAccess={emailAccess} columnsData={columnsDataColumns} tableData={showEmail ? allData.EmailHistory : allData?.EmailHistory?.length > 0 ? [allData.EmailHistory[0]] : []} title={'Email '} />
+                                                    <CommonCheckTable
+                                                        title={"Email"}
+                                                        isLoding={isLoding}
+                                                        columnData={columnsDataColumns}
+                                                        dataColumn={columnsDataColumns}
+                                                        allData={showEmail ? allData.EmailHistory : allData?.EmailHistory?.length > 0 ? [allData.EmailHistory[0]] : []}
+                                                        tableData={showEmail ? allData.EmailHistory : allData?.EmailHistory?.length > 0 ? [allData.EmailHistory[0]] : []}
+                                                        AdvanceSearch={false}
+                                                        tableCustomFields={[]}
+                                                        checkBox={false}
+                                                        deleteMany={true}
+                                                        ManageGrid={false}
+                                                        onOpen={() => setAddEmailHistory(true)}
+                                                        access={emailAccess}
+                                                    />
+                                                    <AddEmailHistory lead="false" leadEmail={allData?.lead?.leadEmail} contactEmail={allData?.contact?.email} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} />
                                                     {allData?.EmailHistory?.length > 1 &&
                                                         <div style={{ display: "flex", justifyContent: "end" }}>
                                                             <Button colorScheme="brand" variant="outline" size='sm' display="flex" justifyContant="end" onClick={() => showEmail ? setShowEmail(false) : setShowEmail(true)}>{showEmail ? "Show less" : "Show more"}</Button>
@@ -263,7 +303,21 @@ const View = () => {
                                             </GridItem>}
                                             {callAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
                                                 <Card overflow={'scroll'}>
-                                                    <PhoneCall callAccess={callAccess} fetchData={fetchData} columnsData={columnsDataColumns} tableData={showCall ? allData?.phoneCallHistory : allData?.phoneCallHistory?.length > 0 ? [allData?.phoneCallHistory[0]] : []} title={'Call '} />
+                                                    <CommonCheckTable
+                                                        title={"Call"}
+                                                        isLoding={isLoding}
+                                                        columnData={columnsDataColumns}
+                                                        dataColumn={columnsDataColumns}
+                                                        allData={showCall ? allData?.phoneCallHistory : allData?.phoneCallHistory?.length > 0 ? [allData?.phoneCallHistory[0]] : []}
+                                                        tableData={showCall ? allData?.phoneCallHistory : allData?.phoneCallHistory?.length > 0 ? [allData?.phoneCallHistory[0]] : []}
+                                                        AdvanceSearch={false}
+                                                        tableCustomFields={[]}
+                                                        checkBox={false}
+                                                        deleteMany={true}
+                                                        ManageGrid={false}
+                                                        onOpen={() => setAddPhoneCall(true)}
+                                                        access={callAccess}
+                                                    />
                                                     <AddPhoneCall viewData={allData} fetchData={fetchData} setAction={setAction} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param.id} />
                                                     {allData?.phoneCallHistory?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                         <Button colorScheme="brand" variant="outline" size='sm' display="flex" justifyContant="end" onClick={() => showCall ? setShowCall(false) : setShowCall(true)}>{showCall ? "Show less" : "Show more"}</Button>
@@ -271,8 +325,23 @@ const View = () => {
                                                 </Card>
                                             </GridItem>}
                                             {taskAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
-                                                <Card overflow={'scroll'}><TaskColumnsTable fetchData={fetchData} columnsData={taskColumns} tableData={showTasks ? allData?.task : allData?.task?.length > 0 ? [allData?.task[0]] : []} title={'Task '} action={action} setAction={setAction} access={taskAccess} />
-                                                    <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="contact" id={param.id} />
+                                                <Card overflow={'scroll'}>
+                                                    <CommonCheckTable
+                                                        title={"Task"}
+                                                        isLoding={isLoding}
+                                                        columnData={taskColumns}
+                                                        dataColumn={taskColumns}
+                                                        allData={showTasks ? allData?.task : allData?.task?.length > 0 ? [allData?.task[0]] : []}
+                                                        tableData={showTasks ? allData?.task : allData?.task?.length > 0 ? [allData?.task[0]] : []}
+                                                        AdvanceSearch={false}
+                                                        tableCustomFields={[]}
+                                                        checkBox={false}
+                                                        deleteMany={true}
+                                                        ManageGrid={false}
+                                                        onOpen={() => setTaskModel(true)}
+                                                        access={taskAccess}
+                                                    />
+                                                    <AddTask fetchData={fetchData} leadContect={splitValue[0]} isOpen={taskModel} onClose={setTaskModel} from="contact" id={param.id} />
                                                     {allData?.task?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                         <Button colorScheme="brand" variant="outline" size='sm' display="flex" justifyContant="end" onClick={() => showTasks ? setShowTasks(false) : setShowTasks(true)}>{showTasks ? "Show less" : "Show more"}</Button>
                                                     </div>}
@@ -280,8 +349,22 @@ const View = () => {
                                             </GridItem>}
                                             {meetingAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
                                                 <Card overflow={'scroll'}>
-                                                    <MeetingColumnsTable fetchData={fetchData} columnsData={MeetingColumns} tableData={showMeetings ? allData?.meetingHistory : allData?.meetingHistory?.length > 0 ? [allData?.meetingHistory[0]] : []} title={'Meeting '} action={action} setAction={setAction} access={meetingAccess} />
-                                                    <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="contact" id={param.id} setAction={setAction} />
+                                                    <CommonCheckTable
+                                                        title={"Meeting"}
+                                                        isLoding={isLoding}
+                                                        columnData={MeetingColumns}
+                                                        dataColumn={MeetingColumns}
+                                                        allData={showMeetings ? allData?.meetingHistory : allData?.meetingHistory?.length > 0 ? [allData?.meetingHistory[0]] : []}
+                                                        tableData={showMeetings ? allData?.meetingHistory : allData?.meetingHistory?.length > 0 ? [allData?.meetingHistory[0]] : []}
+                                                        AdvanceSearch={false}
+                                                        tableCustomFields={[]}
+                                                        checkBox={false}
+                                                        deleteMany={true}
+                                                        ManageGrid={false}
+                                                        onOpen={() => setMeeting(true)}
+                                                        access={meetingAccess}
+                                                    />
+                                                    <AddMeeting fetchData={fetchData} leadContect={splitValue[0]} isOpen={addMeeting} onClose={setMeeting} from="contact" id={param.id} setAction={setAction} />
                                                     {allData?.meetingHistory?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                         <Button colorScheme="brand" size='sm' variant="outline" display="flex" justifyContant="end" onClick={() => showMeetings ? setShowMeetings(false) : setShowMeetings(true)}>{showMeetings ? "Show less" : "Show more"}</Button>
                                                     </div>}
