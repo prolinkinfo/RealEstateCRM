@@ -55,7 +55,7 @@ export default function User(props) {
 
     const filterAccess = (rolesData) => {
         return rolesData?.map(role => {
-            role.access = role?.access?.filter(access => (access.create || access.update || access.delete || access.view));
+            role.access = role?.access?.filter(access => access.view);
             return role;
         });
     };
@@ -124,10 +124,6 @@ export default function User(props) {
     const accessRoute = newRoute?.filter(item => Object.keys(mergedPermissions)?.find(data => (data?.toLowerCase() === item?.name?.toLowerCase()) || (data?.toLowerCase() === item.parentName?.toLowerCase())))
 
     routes.push(...accessRoute)
-
-
-
-
 
     const getActiveRoute = (routes) => {
         let activeRoute = 'Prolink';

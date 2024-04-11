@@ -38,10 +38,10 @@ const index = async (req, res) => {
         if (mergedRoles && mergedRoles.length > 0) {
             for (const item of mergedRoles) {
 
-                if (item.title === "Tasks" && item.create === false && item.update === false && item.delete === false && item.view === false) {
+                if (item.title === "Tasks" && item.view === false) {
                     delete response.taskData
                 }
-                if (item.title === "Leads" && item.create === false && item.update === false && item.delete === false && item.view === false) {
+                if (item.title === "Leads" && item.view === false) {
                     delete response.leadData
 
                 }
