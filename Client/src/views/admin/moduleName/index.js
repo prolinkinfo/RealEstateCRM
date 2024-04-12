@@ -144,7 +144,7 @@ const Index = () => {
                                             <Tooltip hasArrow label={item?.moduleName} bg='gray.200' color='gray' textTransform={"capitalize"} fontSize='sm'>
                                                 <Heading size="md" fontWeight={"500"} sx={{
                                                     textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '6rem',
-                                                    overflow: 'hidden'
+                                                    overflow: 'hidden', textTransform: 'capitalize'
                                                 }}
                                                 >
                                                     {item?.moduleName}

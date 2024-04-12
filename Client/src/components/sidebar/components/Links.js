@@ -92,6 +92,7 @@ export function SidebarLinks(props) {
                           me='auto'
                           pb={"3px"}
                           textOverflow={"ellipsis"}
+                          textTransform={'capitalize'}
                           overflowX="hidden"
                           whiteSpace='nowrap'
                           width="190px"
