@@ -11,15 +11,15 @@ const CustomForm = ({ moduleData, values, handleChange, handleBlur, errors, touc
                     {
                         moduleData?.headings?.map((item, ind) => (
                             <>
-                                <GridItem colSpan={{ base: 12 }}>
+                                <GridItem colSpan={{ base: 12 }} key={ind}>
                                     {ind !== 0 && <HSeparator />}
                                     <Heading as="h1" size="md" mt='10px'>
                                         {ind + 1}. {item?.heading}
                                     </Heading>
                                 </GridItem>
                                 {
-                                    moduleData?.fields?.filter((itm) => itm?.belongsTo === item?._id)?.map((field) => (
-                                        <GridItem colSpan={{ base: 12, sm: 6 }}>
+                                    moduleData?.fields?.filter((itm) => itm?.belongsTo === item?._id)?.map((field, index) => (
+                                        <GridItem colSpan={{ base: 12, sm: 6 }} key={index}>
                                             {field.type === 'check' ? '' : <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px' htmlFor={field.name}>{field.label} {field.validation && field.validation.find((validation) => validation.require) && (
                                                 <span style={{ color: 'red' }}>*</span>
                                             )}</FormLabel>}
@@ -104,8 +104,8 @@ const CustomForm = ({ moduleData, values, handleChange, handleBlur, errors, touc
                         ))
                     }
                     <>
-                        {moduleData?.fields?.filter((itm) => !itm?.belongsTo)?.map((field) => (
-                            <GridItem colSpan={{ base: 12, sm: 6 }}>
+                        {moduleData?.fields?.filter((itm) => !itm?.belongsTo)?.map((field, i) => (
+                            <GridItem colSpan={{ base: 12, sm: 6 }} key={i}>
                                 {field.type === 'check' ? '' : <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px' htmlFor={field.name}>{field.label} {field.validation && field.validation.find((validation) => validation.require) && (
                                     <span style={{ color: 'red' }}>*</span>
                                 )}</FormLabel>}
@@ -186,8 +186,8 @@ const CustomForm = ({ moduleData, values, handleChange, handleBlur, errors, touc
                 </>
                 :
                 <>
-                    {moduleData?.fields?.filter((itm) => !itm?.belongsTo)?.map((field) => (
-                        <GridItem colSpan={{ base: 12, sm: 6 }}>
+                    {moduleData?.fields?.filter((itm) => !itm?.belongsTo)?.map((field, index) => (
+                        <GridItem colSpan={{ base: 12, sm: 6 }} key={index}>
                             {field.type === 'check' ? '' : <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px' htmlFor={field.name}>{field.label} {field.validation && field.validation.find((validation) => validation.require) && (
                                 <span style={{ color: 'red' }}>*</span>
                             )}</FormLabel>}

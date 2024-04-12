@@ -41,7 +41,7 @@ const index = async (req, res) => {
             for (const item of mergedRoles) {
                 switch (item.title) {
                     case "Calls":
-                        if (item.create && item.update && item.delete && item.view) {
+                        if (item.view) {
                             callDetails = callData.map(item => ({
                                 id: item._id,
                                 title: item.senderName,
@@ -53,7 +53,7 @@ const index = async (req, res) => {
                         break;
 
                     case "Emails":
-                        if (item.create && item.update && item.delete && item.view) {
+                        if (item.view) {
                             emailDetails = emailData.map(item => ({
                                 id: item._id,
                                 title: item.subject,
@@ -66,7 +66,7 @@ const index = async (req, res) => {
                         break;
 
                     case "Meetings":
-                        if (item.create && item.update && item.delete && item.view) {
+                        if (item.view) {
                             meetingDetails = meetingData.map(item => ({
                                 id: item._id,
                                 title: item.agenda,
@@ -78,7 +78,7 @@ const index = async (req, res) => {
                         break;
 
                     case "Tasks":
-                        if (item.create && item.update && item.delete && item.view) {
+                        if (item.view) {
                             taskDetails = taskData.map(item => ({
                                 id: item._id,
                                 title: item.title,

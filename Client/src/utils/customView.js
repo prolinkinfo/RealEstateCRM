@@ -33,7 +33,7 @@ const CustomView = ({ data, toCamelCase, fieldData }) => {
                     <>
                         <GridItem colSpan={{
                             base: 12, md: getColSpanMd(ind, lastLengthMd, headingLengthMd), lg: getColSpanLg(ind, lastLength, headingLength)
-                        }}>
+                        }} key={ind}>
                             <Card>
                                 <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                                     <GridItem colSpan={12}>

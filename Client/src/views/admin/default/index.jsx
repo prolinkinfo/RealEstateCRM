@@ -318,8 +318,8 @@ export default function UserReports() {
               </Box>
             </GridItem>
           </Grid>
-          {taskStatus && taskStatus.length > 0 && taskStatus?.map((item) => (
-            <Box my={1.5}>
+          {taskStatus && taskStatus.length > 0 && taskStatus?.map((item, i) => (
+            <Box my={1.5} key={i}>
               {/* <Flex justifyContent={"space-between"} cursor={'pointer'} onClick={() => navigate('/task', { state: item.status })} alignItems={"center"} padding={4} backgroundColor={"#0b0b0b17"} borderRadius={"10px"}> */}
               <Flex justifyContent={"space-between"} cursor={'pointer'} alignItems={"center"} padding={4} backgroundColor={"#0b0b0b17"} borderRadius={"10px"}>
                 <Flex alignItems={"center"}>
