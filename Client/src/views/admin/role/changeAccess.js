@@ -170,8 +170,6 @@ function ChangeAccess(props) {
     setFieldValue('access', finalUpdatedAccessWith);
   };
 
-
-
   const EditData = async () => {
     try {
       setIsLoding(true);
