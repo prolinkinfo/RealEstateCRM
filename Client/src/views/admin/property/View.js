@@ -23,6 +23,7 @@ import CustomView from "utils/customView";
 import CommonCheckTable from "components/checkTable/checktable";
 import CommonDeleteModel from "components/commonDeleteModel";
 import { deleteApi } from "services/api";
+import { useSelector } from "react-redux";
 
 const View = () => {
 
@@ -38,7 +39,6 @@ const View = () => {
     const [deleteModel, setDelete] = useState(false);
     const [action, setAction] = useState(false)
     const [propertyPhoto, setPropertyPhoto] = useState(false);
-    const [propertyData, setPropertyData] = useState([]);
     const [showProperty, setShowProperty] = useState(false);
     const [virtualToursorVideos, setVirtualToursorVideos] = useState(false);
     const [floorPlans, setFloorPlans] = useState(false);
@@ -46,6 +46,8 @@ const View = () => {
     const [isLoding, setIsLoding] = useState(false)
     const [displayPropertyPhoto, setDisplayPropertyPhoto] = useState(false)
     const [selectedTab, setSelectedTab] = useState(0);
+
+    const propertyData = useSelector((state) => state?.propertyCustomFiled?.data)
 
     const [type, setType] = useState(false)
     const navigate = useNavigate();
@@ -68,7 +70,6 @@ const View = () => {
         setSelectedTab(index);
     };
 
-
     const fetchData = async (i) => {
         setIsLoding(true)
         let response = await getApi('api/property/view/', param.id)
@@ -76,11 +77,6 @@ const View = () => {
         setFilteredContacts(response?.data?.filteredContacts);
         setIsLoding(false)
         setSelectedTab(i)
-    }
-
-    const fetchCustomData = async () => {
-        const response = await getApi('api/custom-field?moduleName=Properties')
-        setPropertyData(response.data)
     }
 
     const handleDeleteProperties = async (id) => {
@@ -102,7 +98,6 @@ const View = () => {
 
     useEffect(() => {
         fetchData()
-        if (fetchCustomData) fetchCustomData()
     }, [action])
 
 
@@ -110,8 +105,8 @@ const View = () => {
 
     return (
         <>
-            <Add isOpen={isOpen} size={size} onClose={onClose} setPropertyData={setPropertyData} propertyData={propertyData[0]} />
-            <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} setPropertyData={setPropertyData} propertyData={propertyData[0]} />
+            <Add isOpen={isOpen} size={size} onClose={onClose} propertyData={propertyData[0]} />
+            <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} propertyData={propertyData[0]} />
             <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Property' handleDeleteData={handleDeleteProperties} ids={param.id} />
 
             {isLoding ?

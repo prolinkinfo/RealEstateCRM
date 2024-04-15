@@ -16,6 +16,7 @@ import CommonDeleteModel from 'components/commonDeleteModel';
 import { deleteManyApi } from 'services/api';
 import { getSearchData, setGetTagValues } from '../../../redux/advanceSearchSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { fetchLeadData } from '../../../redux/leadSlice';
 
 const Index = () => {
     const title = "Leads";
@@ -28,7 +29,7 @@ const Index = () => {
     const [permission, emailAccess, callAccess] = HasAccess(['Leads', 'Emails', 'Calls']);
     const [isLoding, setIsLoding] = useState(false);
     const [searchDisplay, setSearchDisplay] = useState(false);
-    const [data, setData] = useState([]);
+    // const [data, setData] = useState([]);
     const [tableColumns, setTableColumns] = useState([]);
     const [columns, setColumns] = useState([]);
     const [dataColumn, setDataColumn] = useState([]);
@@ -46,6 +47,8 @@ const Index = () => {
     const [isImport, setIsImport] = useState(false);
     const [emailRec, setEmailRec] = useState('');
 
+    const data = useSelector((state) => state?.leadData?.data);
+
     const searchedDataOut = useSelector((state) => state?.advanceSearchData?.searchResult)
     const payload = {
         leadStatus: location?.state
@@ -54,7 +57,7 @@ const Index = () => {
     const fetchData = async () => {
         setIsLoding(true);
         let result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
-        setData(result?.data);
+        // setData(result?.data);
         setIsLoding(false);
     };
 
@@ -115,7 +118,7 @@ const Index = () => {
                                     handleOpenEmail(row?.values?._id, row?.original); setSelectedId(row?.values?._id)
                                 }} icon={<EmailIcon fontSize={15} mb={1} />}>EmailSend </MenuItem>}
                             {permission?.view &&
-                                <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { navigate(`/leadView/${row?.values?._id}`) }}>View</MenuItem>}
+                                <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { navigate(`/leadView/${row?.values?._id}`, { state: { leadList: data } }) }}>View</MenuItem>}
                             {permission?.delete &&
                                 <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} mb={1} />} onClick={() => { setDelete(true); setSelectedValues([row?.values?._id]); }}>Delete</MenuItem>}
                         </MenuList>
@@ -166,7 +169,10 @@ const Index = () => {
     }
 
     useEffect(() => {
-        fetchData();
+        if (window.location.pathname === "/lead") {
+            // fetchData();
+            dispatch(fetchLeadData())
+        }
         fetchCustomDataFields();
     }, [action])
 

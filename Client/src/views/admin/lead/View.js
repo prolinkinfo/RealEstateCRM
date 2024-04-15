@@ -18,7 +18,7 @@ import Spinner from "components/spinner/Spinner";
 import { constant } from "constant";
 import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getApi } from "services/api";
 import ColumnsTable from "../contact/components/ColumnsTable";
@@ -42,9 +42,7 @@ import AddTask from "../task/components/addTask";
 import AddEdit from '../task/components/AddEdit'
 
 const View = () => {
-
     const param = useParams()
-
     const user = JSON.parse(localStorage.getItem("user"));
 
     const textColor = useColorModeValue("gray.500", "white");
@@ -314,7 +312,7 @@ const View = () => {
                                                         onOpen={() => setTaskModel(true)}
                                                         access={taskAccess}
                                                     />
-                                                    <AddEdit isOpen={taskModel} fetchData={fetchData} leadContect={splitValue[0]} onClose={setTaskModel} id={param.id} userAction={'add'} />
+                                                    <AddEdit isOpen={taskModel} fetchData={fetchData} leadContect={splitValue[0]} onClose={setTaskModel} id={param.id} userAction={'add'} view={true} />
                                                     {
                                                         allData?.task?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                             <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showTasks ? setShowTasks(false) : setShowTasks(true)}>{showTasks ? "Show less" : "Show more"}</Button>
@@ -340,7 +338,7 @@ const View = () => {
                                                         access={meetingAccess}
                                                     />
 
-                                                    <AddMeeting fetchData={fetchData} isOpen={addMeeting} leadContect={splitValue[0]} onClose={setMeeting} from="contact" id={param.id} setAction={setAction} />
+                                                    <AddMeeting fetchData={fetchData} isOpen={addMeeting} leadContect={splitValue[0]} onClose={setMeeting} from="contact" id={param.id} setAction={setAction} view={true} />
                                                     {allData?.meeting?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                         <Button colorScheme="brand" size='sm' variant="outline" display="flex" justifyContant="end" onClick={() => showMeetings ? setShowMeetings(false) : setShowMeetings(true)}>{showMeetings ? "Show less" : "Show more"}</Button>
                                                     </div>}

@@ -6,6 +6,9 @@ import imageReducer from './imageSlice';
 import userReducer from './localSlice';
 import routeReducer from './routeSlice';
 import advanceSearchSlice from './advanceSearchSlice';
+import leadSlice from './leadSlice'
+import propertyCustomFiledSlice from './propertyCustomFiledSlice';
+import propertySlice from './propertySlice';
 
 const middleware = (getDefaultMiddleware) => {
   return getDefaultMiddleware({
@@ -33,6 +36,9 @@ export const store = configureStore({
     user: userReducer,
     route: persistReducer(routePersistConfig, routeReducer),
     advanceSearchData: advanceSearchSlice,
+    leadData: leadSlice,
+    propertyCustomFiled: propertyCustomFiledSlice,
+    propertyData: propertySlice,
   },
   middleware,
 });

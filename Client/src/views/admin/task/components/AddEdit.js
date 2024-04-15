@@ -11,9 +11,10 @@ import { getApi, postApi } from 'services/api';
 import moment from 'moment';
 import { putApi } from 'services/api';
 import dayjs from 'dayjs';
+import { useSelector } from 'react-redux';
 
 const AddEdit = (props) => {
-    const { onClose, isOpen, fetchData, userAction, setAction, id } = props
+    const { onClose, isOpen, fetchData, userAction, setAction, id, view } = props
     const [isChecked, setIsChecked] = useState(false);
     const userId = JSON.parse(localStorage.getItem('user'))._id
     const [assignToLeadData, setAssignToLeadData] = useState([]);
@@ -22,9 +23,12 @@ const AddEdit = (props) => {
     const [isLoding, setIsLoding] = useState(false)
     const [contactModelOpen, setContactModel] = useState(false);
     const [leadModelOpen, setLeadModel] = useState(false);
+
+    const leadData = useSelector((state) => state?.leadData?.data);
+
+
     const today = new Date().toISOString().split('T')[0];
     const todayTime = new Date().toISOString().split('.')[0];
-
     const initialValues = {
         title: '',
         category: props.leadContect === 'contactView' ? 'Contact' : props.leadContect === 'leadView' ? 'Lead' : 'None',
@@ -141,18 +145,26 @@ const AddEdit = (props) => {
 
     useEffect(async () => {
         values.start = props?.date
-        try {
-            let result
+        if (view === true) {
             if (values.category === "Contact" && assignToContactData.length <= 0) {
-                result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
-                setAssignToContactData(result?.data)
+                // setAssignToContactData(allData)
             } else if (values.category === "Lead" && assignToLeadData.length <= 0) {
-                result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
-                setAssignToLeadData(result?.data)
+                setAssignToLeadData(leadData)
             }
-        }
-        catch (e) {
-            console.log(e);
+        } else {
+            try {
+                let result
+                if (values.category === "Contact" && assignToContactData.length <= 0) {
+                    result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
+                    setAssignToContactData(result?.data)
+                } else if (values.category === "Lead" && assignToLeadData.length <= 0) {
+                    result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
+                    setAssignToLeadData(result?.data)
+                }
+            }
+            catch (e) {
+                console.log(e);
+            }
         }
     }, [props, values.category])
 

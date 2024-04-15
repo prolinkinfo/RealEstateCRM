@@ -6,17 +6,21 @@ import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { LiaMousePointerSolid } from 'react-icons/lia';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { MeetingSchema } from 'schema';
 import { getApi, postApi } from 'services/api';
 
 const AddMeeting = (props) => {
-    const { onClose, isOpen, setAction, from, fetchData } = props
+    const { onClose, isOpen, setAction, from, fetchData, view } = props
     const [leaddata, setLeadData] = useState([])
     const [contactdata, setContactData] = useState([])
     const [isLoding, setIsLoding] = useState(false)
     const [contactModelOpen, setContactModel] = useState(false);
     const [leadModelOpen, setLeadModel] = useState(false);
+
+    const leadData = useSelector((state) => state?.leadData?.data);
+
 
     const user = JSON.parse(localStorage.getItem('user'))
 
@@ -64,13 +68,21 @@ const AddMeeting = (props) => {
     };
 
     const fetchAllData = async () => {
-        let result
-        if (values.related === "Contact" && contactdata.length <= 0) {
-            result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
-            setContactData(result?.data);
-        } else if (values.related === "Lead" && leaddata.length <= 0) {
-            result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
-            setLeadData(result?.data);
+        if (view === true) {
+            if (values.related === "Contact" && contactdata.length <= 0) {
+                // setContactData();
+            } else if (values.related === "Lead" && leaddata.length <= 0) {
+                setLeadData(leadData);
+            }
+        } else {
+            let result
+            if (values.related === "Contact" && contactdata.length <= 0) {
+                result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
+                setContactData(result?.data);
+            } else if (values.related === "Lead" && leaddata.length <= 0) {
+                result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
+                setLeadData(result?.data);
+            }
         }
     }
 
