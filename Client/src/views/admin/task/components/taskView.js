@@ -13,6 +13,7 @@ import AddTask from './addTask'
 import EditTask from './editTask'
 import { HasAccess } from '../../../../redux/accessUtils';
 import { HSeparator } from 'components/separator/Separator';
+import AddEdit from './AddEdit';
 
 const TaskView = (props) => {
     const params = useParams()
@@ -130,16 +131,17 @@ const TaskView = (props) => {
                 <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                     <GridItem colStart={6} >
                         <Flex justifyContent={"right"}>
-                            {permission?.update && <Button size="sm" onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button>}
-                            {permission?.delete && <Button size="sm" style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>}
+                            {(permission?.update || user?.role === 'superAdmin') && <Button size="sm" onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button>}
+                            {(permission?.delete || user?.role === 'superAdmin') && <Button size="sm" style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>}
                         </Flex>
                     </GridItem>
                 </Grid>
             </Card>}
             {/* Addtask modal */}
-            <AddTask isOpen={isOpen} onClose={onClose} />
+            {/* <AddTask isOpen={isOpen} onClose={onClose} /> */}
+            <AddEdit isOpen={isOpen} onClose={onClose} viewClose={onClose} id={id?.event ? id?.event?._def?.extendedProps?._id : id} />
             {/* Edittask modal */}
-            <EditTask isOpen={edit} onClose={setEdit} viewClose={onClose} id={id?.event ? id?.event?._def?.extendedProps?._id : id} />
+            {/* <EditTask isOpen={edit} onClose={setEdit} viewClose={onClose} id={id?.event ? id?.event?._def?.extendedProps?._id : id} /> */}
             {/* Deletetask modal */}
             {/* <DeleteTask isOpen={deleteModel} onClose={setDelete} viewClose={onClose} url='api/task/delete/' method='one' id={id?.event ? id?.event?._def?.extendedProps?._id : id} redirectPage={"/task"} /> */}
         </div>

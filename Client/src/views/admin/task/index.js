@@ -16,6 +16,7 @@ import { useLocation } from 'react-router-dom';
 import CommonDeleteModel from 'components/commonDeleteModel';
 import { deleteManyApi } from 'services/api';
 import AddEdit from './components/AddEdit';
+import { useNavigate } from 'react-router-dom';
 
 const Task = () => {
     const title = "Tasks";
@@ -40,6 +41,7 @@ const Task = () => {
     const [permission, leadAccess, contactAccess] = HasAccess(["Tasks", 'Leads', 'Contacts']);
     const location = useLocation();
     const state = location.state;
+    const navigate = useNavigate()
 
     const handleEditOpen = (row) => {
         onOpen();
@@ -57,7 +59,8 @@ const Task = () => {
                             <MenuItem py={2.5} icon={<EditIcon fontSize={15} mb={1} />} onClick={() => handleEditOpen(row)}>Edit</MenuItem>}
                         {/* <MenuItem py={2.5} icon={<EditIcon fontSize={15} mb={1} />} onClick={() => { setEdit(true); setSelectedId(row?.values?._id); }}>Edit</MenuItem>} */}
                         {permission?.view &&
-                            <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { setEventView(true); setId(row?.original._id) }}>View</MenuItem>}
+                            <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => handleViewOpen(row?.values?._id)}>View</MenuItem>}
+                        {/* <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { setEventView(true); setId(row?.original._id) }}>View</MenuItem> */}
                         {permission?.delete &&
                             <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} mb={1} />} onClick={() => { setDeleteMany(true); setSelectedValues([row?.values?._id]); }}>Delete</MenuItem>}
                     </MenuList>
@@ -172,6 +175,10 @@ const Task = () => {
     const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
     const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 
+    const handleViewOpen = (id) => {
+        navigate(`/view/${id}`)
+    }
+
     const addBtn = () => {
         onOpen();
         setUserAction("add");
@@ -193,15 +200,12 @@ const Task = () => {
                 columnData={columns}
                 dataColumn={dataColumn}
                 allData={data}
-                tableData={data}
                 searchDisplay={displaySearchData}
                 setSearchDisplay={setDisplaySearchData}
                 searchedDataOut={searchedData}
                 setSearchedDataOut={setSearchedData}
                 tableCustomFields={[]}
                 access={permission}
-                action={action}
-                setAction={setAction}
                 selectedColumns={selectedColumns}
                 setSelectedColumns={setSelectedColumns}
                 state={state}
@@ -233,7 +237,7 @@ const Task = () => {
             <AddEdit isOpen={isOpen} fetchData={fetchData} onClose={handleClose} userAction={userAction} id={selectedId} setAction={setAction} />
             {/* <AddTask isOpen={isOpen} fetchData={fetchData} onClose={onClose} /> */}
             <EditTask isOpen={edit} onClose={setEdit} viewClose={onClose} id={selectedId} setAction={setAction} />
-            <EventView fetchData={fetchData} isOpen={eventView} access={permission} contactAccess={contactAccess} leadAccess={leadAccess} onClose={setEventView} info={id} setAction={setAction} action={action} />
+            <EventView fetchData={fetchData} isOpen={eventView} access={permission} contactAccess={contactAccess} leadAccess={leadAccess} onClose={setEventView} id={id} setAction={setAction} action={action} />
             <CommonDeleteModel isOpen={deleteMany} onClose={() => setDeleteMany(false)} type='Tasks' handleDeleteData={handleDeleteTask} ids={selectedValues} />
             <ImportModal text='Lead file' fetchData={fetchData} isOpen={isImportLead} onClose={setIsImportLead} />
         </div>
