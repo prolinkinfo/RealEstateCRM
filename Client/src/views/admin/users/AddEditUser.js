@@ -147,6 +147,7 @@ const AddEditUser = (props) => {
                                 onChange={handleChange} onBlur={handleBlur}
                                 value={values.username}
                                 name="username"
+                                disabled={userAction === 'edit'}
                                 placeholder='Email Address'
                                 fontWeight='500'
                                 borderColor={errors.username && touched.username ? "red.300" : null}

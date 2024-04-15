@@ -49,7 +49,6 @@ function ChangeAccess(props) {
 
   const [gopageValue, setGopageValue] = useState();
   const data = useMemo(() => tableData, [tableData]);
-  const user = JSON.parse(localStorage.getItem("user"));
 
   const tableInstance = useTable(
     {
@@ -95,29 +94,80 @@ function ChangeAccess(props) {
     resetForm
   } = formik;
 
+  // const handleCheckboxChange = (index, fieldName, secondFieldName) => (event) => {
+  //   const { checked } = event.target;
+
+  //   let updatedAccess = values.access.map((item, idx) => {
+  //     if (idx === index) {
+  //       const updatedItem = { ...item, [fieldName]: checked };
+  //       if (secondFieldName && checked === false) {
+  //         updatedItem[secondFieldName] = checked;
+  //         updatedItem.update = checked;
+  //         updatedItem.delete = checked;
+  //       } else if (secondFieldName) {
+  //         updatedItem[secondFieldName] = checked;
+  //       }
+
+  //       return updatedItem;
+  //     }
+  //     return item;
+  //   });
+  //   const leadsIndex = values.access.findIndex(accessItem => accessItem.title === "Leads");
+  //   const contactsIndex = values.access.findIndex(accessItem => accessItem.title === "Contacts");
+
+  //   const lc = ((updatedAccess[index]?.title === "Leads" || updatedAccess[index]?.title === "Contacts") && (!updatedAccess[contactsIndex]?.view && !updatedAccess[leadsIndex]?.view))
+
+  //   const mm = updatedAccess?.map((i, idx) => {
+  //     let newItem = { ...i };
+  //     if (secondFieldName && checked === false && lc) {
+  //       if (i.title === "Emails" || i.title === "Calls" || i.title === "Meetings") {
+  //         newItem.create = false;
+  //         newItem.delete = false;
+  //         newItem.update = false;
+  //         newItem.view = false;
+  //       }
+  //     }
+  //     return newItem;
+  //   })
+
+  //   // setFieldValue('access', updatedAccess);
+  //   setFieldValue('access', mm);
+  // };
+
   const handleCheckboxChange = (index, fieldName, secondFieldName) => (event) => {
     const { checked } = event.target;
+    const leadsIndex = values.access.findIndex(accessItem => accessItem.title === "Leads");
+    const contactsIndex = values.access.findIndex(accessItem => accessItem.title === "Contacts");
 
-    const updatedAccess = secondFieldName ? values.access.map((item, idx) => {
+    const updatedAccess = values.access.map((item, idx) => {
       if (idx === index) {
-        return {
-          ...item,
-          [fieldName]: checked,
-          [secondFieldName]: checked,
-        };
-      }
-      return item;
-    }) : values.access.map((item, idx) => {
-      if (idx === index) {
-        return {
-          ...item,
-          [fieldName]: checked,
-        };
+        const updatedItem = { ...item, [fieldName]: checked };
+        if (secondFieldName && !checked) {
+          updatedItem[secondFieldName] = updatedItem.update = updatedItem.delete = checked;
+        } else if (secondFieldName) {
+          updatedItem[secondFieldName] = checked;
+        }
+        return updatedItem;
       }
       return item;
     });
 
-    setFieldValue('access', updatedAccess);
+    const finalUpdatedAccessWith = updatedAccess.map((item, idx) => {
+      if (secondFieldName && checked === false && (!updatedAccess[contactsIndex]?.view && !updatedAccess[leadsIndex]?.view)) {
+        if (["Emails", "Calls", "Meetings"].includes(item.title)) {
+          return {
+            ...item,
+            create: false,
+            delete: false,
+            update: false,
+            view: false
+          };
+        }
+      }
+      return item;
+    });
+
+    setFieldValue('access', finalUpdatedAccessWith);
   };
 
   const EditData = async () => {
@@ -137,6 +187,12 @@ function ChangeAccess(props) {
     }
   };
 
+  const disable = (cell) => {
+    if (["Emails", "Calls", "Meetings"].includes(cell.title)) {
+      return !values?.access?.some((i => (i.title === "Contacts" || i.title === "Leads") && i.view));
+    }
+    return false;
+  }
 
   useEffect(() => {
     fetchData()
@@ -230,6 +286,7 @@ function ChangeAccess(props) {
                               fontWeight="700"
                             >
                               <Checkbox
+                                disabled={disable(cell?.row?.original)}
                                 isChecked={values?.access[i]?.create}
                                 defaultChecked={values?.access[i]?.create}
                                 onChange={handleCheckboxChange(i, 'create', "view")}
@@ -244,6 +301,7 @@ function ChangeAccess(props) {
                               fontWeight="700"
                             >
                               <Checkbox
+                                disabled={disable(cell?.row?.original)}
                                 isChecked={values?.access[i]?.view}
                                 defaultChecked={values?.access[i]?.view}
                                 onChange={handleCheckboxChange(i, 'view', "create")}
@@ -258,7 +316,7 @@ function ChangeAccess(props) {
                               fontWeight="700"
                             >
                               <Checkbox
-                                disabled={!values?.access[i].view}
+                                disabled={!values?.access[i]?.view}
                                 isChecked={values?.access[i]?.update}
                                 defaultChecked={values?.access[i]?.update}
                                 onChange={handleCheckboxChange(i, 'update')}
@@ -273,7 +331,7 @@ function ChangeAccess(props) {
                               fontWeight="700"
                             >
                               <Checkbox
-                                disabled={!values?.access[i].view}
+                                disabled={!values?.access[i]?.view}
                                 isChecked={values?.access[i]?.delete}
                                 defaultChecked={values?.access[i]?.delete}
                                 onChange={handleCheckboxChange(i, 'delete')}
