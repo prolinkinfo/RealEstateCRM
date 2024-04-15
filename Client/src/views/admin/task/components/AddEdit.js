@@ -114,7 +114,6 @@ const AddEdit = (props) => {
             try {
                 setIsLoding(true)
                 let result = await getApi('api/task/view/', id)
-
                 setFieldValue('title', result?.data?.title)
                 setFieldValue('category', result?.data?.category)
                 setFieldValue('description', result?.data?.description)

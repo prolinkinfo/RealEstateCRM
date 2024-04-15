@@ -78,6 +78,7 @@ option {
   max-height: 63vh;
   overflow-y: auto;
 }
+
 .small-table-fix-container {
   min-height: 15vh;
   max-height: 63vh;
@@ -181,4 +182,8 @@ option {
   background-color: #eee7fc !important;
   color: #7038db !important;
   border: 1px solid #7038db !important;
+}
+
+.chakra-checkbox[disabled] .chakra-checkbox__control {
+  background-color: #dcdee0 !important;
 }
