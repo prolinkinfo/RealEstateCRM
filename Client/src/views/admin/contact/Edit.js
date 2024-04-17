@@ -113,7 +113,7 @@ const Edit = (props) => {
     }
     useEffect(() => {
         fetchData()
-    }, [props?.selectedId])
+    }, [props?.selectedId, data])
 
     return (
         <div>
