@@ -9,6 +9,9 @@ import advanceSearchSlice from './advanceSearchSlice';
 import leadSlice from './leadSlice'
 import propertyCustomFiledSlice from './propertyCustomFiledSlice';
 import propertySlice from './propertySlice';
+import contactSlice from './contactSlice';
+import contactCustomFiledSlice from './contactCustomFiledSlice';
+import leadCustomFiledSlice from './leadCustomFiledSlice';
 
 const middleware = (getDefaultMiddleware) => {
   return getDefaultMiddleware({
@@ -38,7 +41,10 @@ export const store = configureStore({
     advanceSearchData: advanceSearchSlice,
     leadData: leadSlice,
     propertyCustomFiled: propertyCustomFiledSlice,
+    contactCustomFiled: contactCustomFiledSlice,
+    leadCustomFiled: leadCustomFiledSlice,
     propertyData: propertySlice,
+    contactData: contactSlice,
   },
   middleware,
 });

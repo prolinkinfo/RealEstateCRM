@@ -23,7 +23,8 @@ import CustomView from "utils/customView";
 import CommonCheckTable from "components/checkTable/checktable";
 import CommonDeleteModel from "components/commonDeleteModel";
 import { deleteApi } from "services/api";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPropertyCustomFiled } from "../../../redux/propertyCustomFiledSlice";
 
 const View = () => {
 
@@ -46,7 +47,7 @@ const View = () => {
     const [isLoding, setIsLoding] = useState(false)
     const [displayPropertyPhoto, setDisplayPropertyPhoto] = useState(false)
     const [selectedTab, setSelectedTab] = useState(0);
-
+    const dispatch = useDispatch();
     const propertyData = useSelector((state) => state?.propertyCustomFiled?.data)
 
     const [type, setType] = useState(false)
@@ -97,8 +98,9 @@ const View = () => {
     }
 
     useEffect(() => {
+        dispatch(fetchPropertyCustomFiled())
         fetchData()
-    }, [action])
+    }, [])
 
 
     const [permission, contactAccess, emailAccess, callAccess] = HasAccess(['Properties', 'Contacts', 'Emails', 'Calls']);
@@ -106,7 +108,7 @@ const View = () => {
     return (
         <>
             <Add isOpen={isOpen} size={size} onClose={onClose} propertyData={propertyData[0]} />
-            <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} propertyData={propertyData[0]} />
+            <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} propertyData={propertyData[0]} data={data} />
             <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Property' handleDeleteData={handleDeleteProperties} ids={param.id} />
 
             {isLoding ?

@@ -40,6 +40,8 @@ import CommonCheckTable from "components/checkTable/checktable";
 import moment from 'moment';
 import AddTask from "../task/components/addTask";
 import AddEdit from '../task/components/AddEdit'
+import { useDispatch, useSelector } from "react-redux";
+import { fetchLeadCustomFiled } from "../../../redux/leadCustomFiledSlice";
 
 const View = () => {
     const param = useParams()
@@ -60,19 +62,22 @@ const View = () => {
     const [showMeetings, setShowMeetings] = useState(false);
     const [addDocument, setAddDocument] = useState(false);
     const [action, setAction] = useState(false)
-    const [leadData, setLeadData] = useState([])
+    // const [leadData, setLeadData] = useState([])
     const [selectedTab, setSelectedTab] = useState(0);
     const [taskModel, setTaskModel] = useState(false);
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const size = "lg";
 
     const [addEmailHistory, setAddEmailHistory] = useState(false);
     const [addPhoneCall, setAddPhoneCall] = useState(false);
 
+    const leadData = useSelector((state) => state?.leadCustomFiled?.data)
+
     const [permission, taskPermission, meetingPermission, callAccess, emailAccess, taskAccess, meetingAccess] = HasAccess(['Leads', 'Tasks', 'Meetings', 'Calls', 'Emails', 'Tasks', 'Meetings']);
 
-
+    console.log(allData?.lead?.leadEmail, "allData")
     const columnsDataColumns = [
         { Header: "sender", accessor: "senderName", },
         { Header: "recipient", accessor: "createByName", },
@@ -166,28 +171,21 @@ const View = () => {
 
     useEffect(() => {
         fetchData()
+        dispatch(fetchLeadCustomFiled());
     }, [action])
+
 
     function toCamelCase(text) {
         return text?.replace(/([a-z])([A-Z])/g, '$1 $2');
     }
-
-    const fetchCustomData = async () => {
-        const response = await getApi('api/custom-field?moduleName=Leads')
-        setLeadData(response.data)
-    }
-
-    useEffect(() => {
-        if (fetchCustomData) fetchCustomData()
-    }, [action])
 
     const firstValue = Object?.values(param)[0];
     const splitValue = firstValue?.split('/')
 
     return (
         <>
-            {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} setLeadData={setLeadData} leadData={leadData[0]} setAction={setAction} />}
-            <Edit isOpen={edit} size={size} onClose={setEdit} setLeadData={setLeadData} leadData={leadData[0]} setAction={setAction} moduleId={leadData?.[0]?._id} />
+            {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} leadData={leadData[0]} setAction={setAction} />}
+            <Edit isOpen={edit} size={size} onClose={setEdit} leadData={leadData[0]} setAction={setAction} moduleId={leadData?.[0]?._id} />
 
             <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Lead' handleDeleteData={handleDeleteLead} ids={param.id} />
 

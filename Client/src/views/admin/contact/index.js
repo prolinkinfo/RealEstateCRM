@@ -14,16 +14,18 @@ import CommonCheckTable from "../../../components/checkTable/checktable";
 import ImportModal from "./components/ImportModel";
 import CommonDeleteModel from 'components/commonDeleteModel';
 import { deleteManyApi } from 'services/api';
+import { fetchContactData } from '../../../redux/contactSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchContactCustomFiled } from '../../../redux//contactCustomFiledSlice';
 
 const Index = () => {
-
     const title = "Contacts";
     const size = "lg";
     const user = JSON.parse(localStorage.getItem("user"));
     const navigate = useNavigate();
     const [permission, emailAccess, callAccess] = HasAccess(['Contacts', 'Emails', 'Calls']);
     const [isLoding, setIsLoding] = useState(false);
-    const [data, setData] = useState([]);
+    // const [data, setData] = useState([]);
     const [tableColumns, setTableColumns] = useState([]);
     const [columns, setColumns] = useState([]);
     const [dataColumn, setDataColumn] = useState([]);
@@ -40,13 +42,16 @@ const Index = () => {
     const [selectedValues, setSelectedValues] = useState([]);
     const [isImportContact, setIsImport] = useState(false);
     const [emailRec, setEmailRec] = useState('');
+    const dispatch = useDispatch();
 
-    const fetchData = async () => {
-        setIsLoding(true)
-        let result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`);
-        setData(result.data);
-        setIsLoding(false)
-    };
+    const data = useSelector((state) => state?.contactData?.data)
+
+    // const fetchData = async () => {
+    //     setIsLoding(true)
+    //     let result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`);
+    //     setData(result.data);
+    //     setIsLoding(false)
+    // };
 
     const handleOpenEmail = (id, dataContact) => {
         if (id) {
@@ -57,8 +62,9 @@ const Index = () => {
 
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
-        const result = await getApi(`api/custom-field/?moduleName=Contacts`);
-        setContactData(result?.data);
+        // const result = await getApi(`api/custom-field/?moduleName=Contacts`);
+        const result = await dispatch(fetchContactCustomFiled());
+        setContactData(result?.payload);
         const actionHeader = {
             Header: "Action", accessor: "action", isSortable: false, center: true,
             cell: ({ row }) => (
@@ -85,7 +91,7 @@ const Index = () => {
         };
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-            ...result?.data?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => ({ Header: field?.label, accessor: field?.name })),
+            ...result?.payload?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => ({ Header: field?.label, accessor: field?.name })),
             ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : [])
         ];
 
@@ -113,8 +119,9 @@ const Index = () => {
         }
     }
 
-    useEffect(() => {
-        fetchData();
+    useEffect(async () => {
+        // fetchData();
+        await dispatch(fetchContactData())
         fetchCustomDataFields();
     }, [action]);
 
@@ -154,8 +161,8 @@ const Index = () => {
             {isOpen && <Add isOpen={isOpen} size={size} contactData={contactData[0]} onClose={onClose} setAction={setAction} action={action} />}
             {edit && <Edit isOpen={edit} size={size} contactData={contactData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={contactData?.[0]?._id} />}
             {deleteModel && <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Contacts' handleDeleteData={handleDeleteContact} ids={selectedValues} />}
-            {addEmailHistory && <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={selectedId} contactEmail={emailRec} />}
-            {addPhoneCall && <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} id={callSelectedId} />}
+            {addEmailHistory && <AddEmailHistory fetchData={fetchContactData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={selectedId} contactEmail={emailRec} />}
+            {addPhoneCall && <AddPhoneCall fetchData={fetchContactData} isOpen={addPhoneCall} onClose={setAddPhoneCall} id={callSelectedId} />}
             {isImportContact && <ImportModal text='Contact file' isOpen={isImportContact} onClose={setIsImport} customFields={contactData?.[0]?.fields || []} />}
 
         </div>

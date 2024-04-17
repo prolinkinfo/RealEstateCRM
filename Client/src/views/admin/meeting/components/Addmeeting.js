@@ -24,6 +24,9 @@ const AddMeeting = (props) => {
 
     const user = JSON.parse(localStorage.getItem('user'))
 
+    const contactList = useSelector((state) => state?.contactData?.data)
+
+
     const initialValues = {
         agenda: '',
         attendes: props.leadContect === 'contactView' && props.id ? [props.id] : [],
@@ -70,7 +73,7 @@ const AddMeeting = (props) => {
     const fetchAllData = async () => {
         if (view === true) {
             if (values.related === "Contact" && contactdata.length <= 0) {
-                // setContactData();
+                setContactData(contactList);
             } else if (values.related === "Lead" && leaddata.length <= 0) {
                 setLeadData(leadData);
             }

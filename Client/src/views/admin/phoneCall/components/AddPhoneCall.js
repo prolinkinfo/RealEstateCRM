@@ -6,8 +6,9 @@ import { phoneCallSchema } from 'schema';
 import { getApi, postApi } from 'services/api';
 
 const AddPhoneCall = (props) => {
-    const { onClose, isOpen, fetchData, setAction } = props
+    const { onClose, isOpen, fetchData, setAction, cData } = props
     const [isLoding, setIsLoding] = useState(false)
+    console.log('recipient22222222222:>> ', cData)
 
     const user = JSON.parse(localStorage.getItem('user'))
 
@@ -66,12 +67,17 @@ const AddPhoneCall = (props) => {
             }
         } else {
             if (props.id && props.lead !== 'true') {
-                let response = await getApi('api/contact/view/', props.id)
-                if (response?.status === 200) {
-                    setFieldValue('recipient', response?.data?.contact?.phoneNumber);
-                    setFieldValue('createByContact', props?.id);
-                    values.recipient = response?.data?.contact?.phoneNumber
-                }
+                console.log('recipient :>> ', props?.viewData?.contact)
+                setFieldValue('recipient', props?.viewData?.contact?.phoneNumber);
+                setFieldValue('createByContact', props?.id);
+                values.recipient = props?.viewData?.contact?.phoneNumber
+
+                // let response = await getApi('api/contact/view/', props.id)
+                // if (response?.status === 200) {
+                //     setFieldValue('recipient', response?.data?.contact?.phoneNumber);
+                //     setFieldValue('createByContact', props?.id);
+                //     values.recipient = response?.data?.contact?.phoneNumber
+                // }
             } else if (props.id && props.lead === 'true') {
                 let response = await getApi('api/lead/view/', props.id)
                 if (response?.status === 200) {

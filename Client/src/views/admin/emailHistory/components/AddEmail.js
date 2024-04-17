@@ -52,7 +52,6 @@ const AddEmailHistory = (props) => {
 
     const fetchRecipientData = () => {
         if (props.id && props.lead !== 'true') {
-
             setFieldValue('createByContact', props.id);
         } else if (props.id && props.lead === 'true') {
             setFieldValue('createByLead', props.id);

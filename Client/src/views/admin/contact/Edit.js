@@ -10,6 +10,7 @@ import * as yup from 'yup'
 import CustomForm from 'utils/customForm';
 
 const Edit = (props) => {
+    const { data } = props;
     const [isLoding, setIsLoding] = useState(false)
     const initialFieldValues = Object.fromEntries(
         (props?.contactData?.fields || []).map(field => [field?.name, ''])
@@ -96,56 +97,13 @@ const Edit = (props) => {
     }
     let response
     const fetchData = async () => {
-        if (props?.selectedId || param.id) {
+        if (data) {
+            setInitialValues((prev) => ({ ...prev, ...data }))
+        } else if (props?.selectedId || param.id) {
             try {
                 setIsLoding(true)
                 response = await getApi('api/contact/view/', props?.selectedId ? props?.selectedId : param.id)
                 setInitialValues((prev) => ({ ...prev, ...response?.data?.contact }))
-
-                // values.lastName = response?.data?.contact?.lastName;
-                // values.title = response?.data?.contact?.title;
-                // values.email = response?.data?.contact?.email;
-                // values.phoneNumber = response?.data?.contact?.phoneNumber;
-                // values.mobileNumber = response?.data?.contact?.mobileNumber;
-                // values.physicalAddress = response?.data?.contact?.physicalAddress;
-                // values.mailingAddress = response?.data?.contact?.mailingAddress;
-                // values.preferredContactMethod = response?.data?.contact?.preferredContactMethod;
-                // // 2.Lead Source Information
-                // values.leadSource = response?.data?.contact?.leadSource;
-                // values.referralSource = response?.data?.contact?.referralSource;
-                // values.campaignSource = response?.data?.contact?.campaignSource;
-                // // 3. Status and Classifications
-                // values.leadStatus = response?.data?.contact?.leadStatus;
-                // values.leadRating = response?.data?.contact?.leadRating;
-                // values.leadConversionProbability = response?.data?.contact?.leadConversionProbability;
-                // // 5. History:
-                // values.emailHistory = response?.data?.contact?.emailHistory;
-                // values.phoneCallHistory = response?.data?.contact?.phoneCallHistory;
-                // values.meetingHistory = response?.data?.contact?.meetingHistory;
-                // values.notesandComments = response?.data?.contact?.notesandComments;
-                // // 6. Tags or Categories
-                // values.tagsOrLabelsForcategorizingcontacts = response?.data?.contact?.tagsOrLabelsForcategorizingcontacts;
-                // // 7. Important Dates::
-                // values.birthday = moment(response?.data?.contact?.birthday).format('YYYY-MM-DD')
-                // values.anniversary = moment(response?.data?.contact?.anniversary).format('YYYY-MM-DD')
-                // values.keyMilestones = response?.data?.contact?.keyMilestones;
-                // // 8. Additional Personal Information
-                // values.dob = moment(response?.data?.contact?.dob).format('YYYY-MM-DD')
-                // values.gender = response?.data?.contact?.gender;
-                // values.occupation = response?.data?.contact?.occupation;
-                // values.interestsOrHobbies = response?.data?.contact?.interestsOrHobbies;
-                // // 9. Preferred  Communication Preferences:
-                // values.communicationFrequency = response?.data?.contact?.communicationFrequency;
-                // values.preferences = response?.data?.contact?.preferences;
-                // // 10. Social Media Profiles:
-                // values.linkedInProfile = response?.data?.contact?.linkedInProfile;
-                // values.facebookProfile = response?.data?.contact?.facebookProfile;
-                // values.twitterHandle = response?.data?.contact?.twitterHandle;
-                // values.otherProfiles = response?.data?.contact?.otherProfiles;
-                // // 11. Lead Assignment and Team Collaboration:
-                // values.agentOrTeamMember = response?.data?.contact?.agentOrTeamMember;
-                // values.internalNotesOrComments = response?.data?.contact?.internalNotesOrComments;
-
             } catch (e) {
                 console.error(e)
             } finally {
@@ -177,7 +135,7 @@ const Edit = (props) => {
 
                         }
                     </DrawerBody>
-                  
+
                     <DrawerFooter>
                         <Button
                             sx={{ textTransform: "capitalize" }}

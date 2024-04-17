@@ -29,6 +29,9 @@ const AddEdit = (props) => {
 
     const today = new Date().toISOString().split('T')[0];
     const todayTime = new Date().toISOString().split('.')[0];
+
+    const contactData = useSelector((state) => state?.contactData?.data)
+
     const initialValues = {
         title: '',
         category: props.leadContect === 'contactView' ? 'Contact' : props.leadContect === 'leadView' ? 'Lead' : 'None',
@@ -146,7 +149,9 @@ const AddEdit = (props) => {
         values.start = props?.date
         if (view === true) {
             if (values.category === "Contact" && assignToContactData.length <= 0) {
-                // setAssignToContactData(allData)
+                setAssignToContactData(contactData)
+                // result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
+                // setAssignToContactData(result?.data)
             } else if (values.category === "Lead" && assignToLeadData.length <= 0) {
                 setAssignToLeadData(leadData)
             }
@@ -314,7 +319,7 @@ const AddEdit = (props) => {
                                 <Checkbox isChecked={isChecked} name='allDay'
                                     onChange={(e) => {
                                         const target = e.target.checked;
-                                        setFieldValue('allDay', e.target.checked === true ? 'Yes' : 'No');
+                                        // setFieldValue('allDay', e.target.checked === true ? 'Yes' : 'No');
                                         setIsChecked(target);
                                     }}>
                                     All Day Task ?

@@ -17,6 +17,7 @@ import { deleteManyApi } from 'services/api';
 import { getSearchData, setGetTagValues } from '../../../redux/advanceSearchSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchLeadData } from '../../../redux/leadSlice';
+import { fetchLeadCustomFiled } from '../../../redux/leadCustomFiledSlice';
 
 const Index = () => {
     const title = "Leads";
@@ -99,8 +100,9 @@ const Index = () => {
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
 
-        const result = await getApi(`api/custom-field/?moduleName=Leads`);
-        setLeadData(result?.data);
+        // const result = await getApi(`api/custom-field/?moduleName=Leads`);
+        const result = await dispatch(fetchLeadCustomFiled());
+        setLeadData(result?.payload);
 
         const actionHeader = {
             Header: "Action", accessor: "action", isSortable: false, center: true,
@@ -140,7 +142,7 @@ const Index = () => {
                     </div>
                 )
             },
-            ...(result?.data?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => (field?.name !== "leadStatus" && { Header: field?.label, accessor: field?.name })) || []),
+            ...(result?.payload?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => (field?.name !== "leadStatus" && { Header: field?.label, accessor: field?.name })) || []),
             ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : []),
 
         ];
@@ -170,7 +172,6 @@ const Index = () => {
 
     useEffect(() => {
         if (window.location.pathname === "/lead") {
-            // fetchData();
             dispatch(fetchLeadData())
         }
         fetchCustomDataFields();

@@ -10,6 +10,7 @@ import CustomForm from 'utils/customForm';
 import * as yup from 'yup'
 
 const Edit = (props) => {
+    const { data } = props
     const initialFieldValues = Object.fromEntries(
         (props?.leadData?.fields || []).map(field => [field?.name, ''])
     );
@@ -56,7 +57,9 @@ const Edit = (props) => {
 
     let response
     const fetchData = async () => {
-        if (props?.selectedId || param.id) {
+        if (data) {
+            setInitialValues((prev) => ({ ...prev, ...data }))
+        } else if (props?.selectedId || param.id) {
             try {
                 setIsLoding(true)
                 response = await getApi('api/property/view/', props?.selectedId ? props?.selectedId : param.id)
