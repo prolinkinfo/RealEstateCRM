@@ -10,7 +10,7 @@ export const HasAccess = (actions) => {
 
     useEffect(() => {
         // Dispatch the fetchRoles action on component mount
-        if (window.location.pathname == "/default") {
+        if (window.location.pathname === "/default") {
             dispatch(fetchRoles(user?._id));
         }
     }, [dispatch]);

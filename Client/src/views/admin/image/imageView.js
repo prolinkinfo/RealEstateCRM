@@ -22,18 +22,18 @@ const ImageView = (props) => {
             setIsLoding(true);
             const formData = new FormData();
 
-            if (type == authimg) {
+            if (type === authimg) {
                 formData?.append('authImg', file?.[0]);
             }
 
-            if (type == logoimg) {
+            if (type === logoimg) {
                 formData?.append('logoSmImg', file?.[0]);
             }
 
-            if (type == largelogoimg) {
+            if (type === largelogoimg) {
                 formData?.append('logoLgImg', file?.[0]);
             }
-            if (type == authimg || type == logoimg || type == largelogoimg) {
+            if (type === authimg || type === logoimg || type === largelogoimg) {
                 const response = await putApi(`api/images/change-auth-logo-img/${data?._id}`, formData);
                 if (response.status === 200) {
                     fetchData(data?._id);

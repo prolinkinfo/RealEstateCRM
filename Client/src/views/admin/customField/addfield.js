@@ -221,8 +221,8 @@ const Addfield = (props) => {
                                         name="type"
                                         onChange={(e) => {
                                             setFieldValue('type', e.target.value)
-                                            setFieldValue(`validation[${4}].formikType`, e.target.value == 'date' ? 'date' : '')
-                                            setFieldValue(`validation[${4}].types`, e.target.value == 'date' ? true : false)
+                                            setFieldValue(`validation[${4}].formikType`, e.target.value === 'date' ? 'date' : '')
+                                            setFieldValue(`validation[${4}].types`, e.target.value === 'date' ? true : false)
                                         }}
                                         fontWeight='500'
                                         // placeholder={'Select Type'}
