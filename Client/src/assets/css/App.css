@@ -186,4 +186,5 @@ option {
 
 .chakra-checkbox[disabled] .chakra-checkbox__control {
   background-color: #dcdee0 !important;
+  border: 2px solid #d1d1d1;
 }
