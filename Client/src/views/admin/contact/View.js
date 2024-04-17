@@ -36,7 +36,7 @@ import CommonCheckTable from "components/checkTable/checktable";
 import moment from 'moment';
 import AddEdit from '../task/components/AddEdit'
 import { useDispatch, useSelector } from "react-redux";
-import { fetchContactCustomFiled } from '../../../redux//contactCustomFiledSlice';
+import { fetchContactCustomFiled } from '../../../redux/contactCustomFiledSlice';
 
 const View = () => {
 
@@ -473,7 +473,7 @@ const View = () => {
             <AddEdit isOpen={taskModel} fetchData={fetchData} leadContect={splitValue[0]} onClose={setTaskModel} id={param.id} userAction={'add'} view={true} />
             <AddPhoneCall viewData={allData} fetchData={fetchData} setAction={setAction} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param.id} cData={data} />
 
-            {/* <PropertyModel fetchData={fetchData} isOpen={propertyModel} onClose={setPropertyModel} id={param.id} interestProperty={data?.interestProperty} /> */}
+            <PropertyModel fetchData={fetchData} isOpen={propertyModel} onClose={setPropertyModel} id={param.id} interestProperty={data?.interestProperty} />
 
         </>
     );

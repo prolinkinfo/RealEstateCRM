@@ -3,11 +3,17 @@ import Spinner from 'components/spinner/Spinner'
 import { useEffect, useState } from 'react'
 import { getApi, postApi } from 'services/api'
 import CheckTable from './propertyTable'
+import { fetchPropertyData } from '../../../../redux/propertySlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 const PropertyModel = (props) => {
     const { onClose, isOpen, fetchData, id, interestProperty } = props
     const [selectedValues, setSelectedValues] = useState([]);
     const [isLoding, setIsLoding] = useState(false)
+    // const [data, setData] = useState([])
+
+    const dispatch = useDispatch()
+    const data = useSelector((state) => state.propertyData.data)
 
 
     const columns = [
@@ -18,16 +24,15 @@ const PropertyModel = (props) => {
         { Header: "square Footage", accessor: "squareFootage", },
         { Header: "year Built", accessor: "yearBuilt", },
     ];
-    const [data, setData] = useState([])
     const user = JSON.parse(localStorage.getItem("user"))
-    const fetchPropertyData = async () => {
-        setIsLoding(true)
-        let result = await getApi(user.role === 'superAdmin' ? 'api/property/' : `api/property/?createBy=${user._id}`);
-        if (result && result.status == 200) {
-            setData(result?.data);
-        }
-        setIsLoding(false)
-    }
+    // const fetchPropertyData = async () => {
+    //     setIsLoding(true)
+    //     let result = await getApi(user.role === 'superAdmin' ? 'api/property/' : `api/property/?createBy=${user._id}`);
+    //     if (result && result.status == 200) {
+    //         setData(result?.data);
+    //     }
+    //     setIsLoding(false)
+    // }
     const uniqueValues = [...new Set(selectedValues)];
 
     const handleSubmit = async () => {
@@ -46,11 +51,13 @@ const PropertyModel = (props) => {
             setIsLoding(false)
         }
     }
+    useEffect(() => {
+        dispatch(fetchPropertyData())
 
+    }, [])
 
     useEffect(() => {
         interestProperty?.map((item) => setSelectedValues((prevSelectedValues) => [...prevSelectedValues, item]))
-        fetchPropertyData()
     }, [interestProperty])
 
     return (
