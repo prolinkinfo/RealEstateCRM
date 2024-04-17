@@ -170,7 +170,7 @@ const Index = (props) => {
                 selectedValues={selectedValues}
                 setSelectedValues={setSelectedValues}
                 setDelete={setDelete}
-                deleteMany={'true'}
+                deleteMany={true}
                 AdvanceSearch={
                     <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} mt={{ sm: "5px", md: "0" }} size="sm" onClick={() => setAdvanceSearch(true)}>Advance Search</Button>
                 }

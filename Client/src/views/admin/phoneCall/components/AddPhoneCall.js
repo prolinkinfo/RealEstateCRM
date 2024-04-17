@@ -51,44 +51,55 @@ const AddPhoneCall = (props) => {
         }
     };
 
+    // const fetchDataR = async () => {
+    //     if (props?.viewData?.lead?.leadPhoneNumber) {
+    //         if (props.id && props.lead !== true) {
+    //             setFieldValue('recipient', props?.viewData?.contact?.phoneNumber);
+    //             setFieldValue('createByContact', props?.id);
+    //             values.recipient = props?.viewData?.contact?.phoneNumber
+    //         } else if (props.id && props.lead === true) {
+    //             let response = await getApi('api/lead/view/', props.id)
+    //             if (response?.status === 200) {
+    //                 setFieldValue('recipient', response?.data?.lead?.leadPhoneNumber);
+    //                 setFieldValue('createByLead', props.id);
+    //                 values.recipient = response?.data?.lead?.leadPhoneNumber
+    //             }
+    //         }
+    //     } else {
+    //         if (props.id && props.lead !== true) {
+    //             if (cData) {
+    //                 setFieldValue('recipient', cData?.phoneNumber);
+    //                 setFieldValue('createByContact', props?.id);
+    //                 values.recipient = cData?.phoneNumber
+    //             }
+    //             // let response = await getApi('api/contact/view/', props.id)
+    //             // if (response?.status === 200) {
+    //             //     setFieldValue('recipient', response?.data?.contact?.phoneNumber);
+    //             //     setFieldValue('createByContact', props?.id);
+    //             //     values.recipient = response?.data?.contact?.phoneNumber
+    //             // }
+    //         } else if (props.id && props.lead === true) {
+    //             let response = await getApi('api/lead/view/', props.id)
+    //             if (response?.status === 200) {
+    //                 setFieldValue('recipient', response?.data?.lead?.leadPhoneNumber);
+    //                 setFieldValue('createByLead', props.id);
+    //                 values.recipient = response?.data?.lead?.leadPhoneNumber
+    //             }
+    //         }
+    //     }
+    // }
     const fetchDataR = async () => {
         if (props?.viewData?.lead?.leadPhoneNumber) {
-            if (props.id && props.lead !== 'true') {
+            if (props.id && props.lead !== true) {
                 setFieldValue('recipient', props?.viewData?.contact?.phoneNumber);
                 setFieldValue('createByContact', props?.id);
                 values.recipient = props?.viewData?.contact?.phoneNumber
-            } else if (props.id && props.lead === 'true') {
-                let response = await getApi('api/lead/view/', props.id)
-                if (response?.status === 200) {
-                    setFieldValue('recipient', response?.data?.lead?.leadPhoneNumber);
-                    setFieldValue('createByLead', props.id);
-                    values.recipient = response?.data?.lead?.leadPhoneNumber
-                }
             }
-        } else {
-            if (props.id && props.lead !== 'true') {
-                if (cData) {
-                    setFieldValue('recipient', cData?.phoneNumber);
-                    setFieldValue('createByContact', props?.id);
-                    values.recipient = cData?.phoneNumber
-                } else {
-                    console.log(':>> ', values)
-
-                }
-
-                // let response = await getApi('api/contact/view/', props.id)
-                // if (response?.status === 200) {
-                //     setFieldValue('recipient', response?.data?.contact?.phoneNumber);
-                //     setFieldValue('createByContact', props?.id);
-                //     values.recipient = response?.data?.contact?.phoneNumber
-                // }
-            } else if (props.id && props.lead === 'true') {
-                let response = await getApi('api/lead/view/', props.id)
-                if (response?.status === 200) {
-                    setFieldValue('recipient', response?.data?.lead?.leadPhoneNumber);
-                    setFieldValue('createByLead', props.id);
-                    values.recipient = response?.data?.lead?.leadPhoneNumber
-                }
+        } else if (cData) {
+            if (props.id && props.lead !== true) {
+                setFieldValue('recipient', cData?.phoneNumber);
+                setFieldValue('createByContact', props?.id);
+                values.recipient = cData?.phoneNumber
             }
         }
     }
