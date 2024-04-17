@@ -56,13 +56,16 @@ const Edit = (props) => {
     }
 
     let response
+
+    console.log(data, "datataat")
+
     const fetchData = async () => {
         if (data) {
             setInitialValues((prev) => ({ ...prev, ...data }))
-        } else if (props?.selectedId || param.id) {
+        } else if (props?.selectedId) {
             try {
                 setIsLoding(true)
-                response = await getApi('api/property/view/', props?.selectedId ? props?.selectedId : param.id)
+                response = await getApi('api/property/view/', props?.selectedId)
                 setInitialValues((prev) => ({ ...prev, ...response?.data?.property }))
             } catch (e) {
                 console.error(e)
@@ -74,7 +77,7 @@ const Edit = (props) => {
 
     useEffect(() => {
         fetchData()
-    }, [props?.selectedId])
+    }, [props?.selectedId, data])
 
     return (
         <div>
