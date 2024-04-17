@@ -201,7 +201,7 @@ const AddEdit = (props) => {
             <ModalContent overflowY={"auto"} height={"600px"}>
                 <ModalHeader justifyContent='space-between' display='flex' >
                     {
-                        userAction == "add" ? "Create Task" : "Edit Task"
+                        userAction === "add" ? "Create Task" : "Edit Task"
                     }
 
                     <IconButton onClick={() => onClose(false)} icon={<CloseIcon />} />
