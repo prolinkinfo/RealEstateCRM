@@ -144,7 +144,6 @@ const Index = () => {
             },
             ...(result?.payload?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => (field?.name !== "leadStatus" && { Header: field?.label, accessor: field?.name })) || []),
             ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : []),
-
         ];
 
         setSelectedColumns(JSON.parse(JSON.stringify(tempTableColumns)));
