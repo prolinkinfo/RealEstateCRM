@@ -33,7 +33,7 @@ const TaskView = (props) => {
             setIsLoding(true)
             let result = await getApi('api/task/view/', id?.event ? id?.event?._def?.extendedProps?._id : id);
             setData(result?.data);
-            setIsLoding(false)
+            // setIsLoding(false)
         }
     }
 
@@ -138,9 +138,8 @@ const TaskView = (props) => {
                     </GridItem>
                 </Grid>
             </Card>}
-            {/* Addtask modal */}
             {/* <AddTask isOpen={isOpen} onClose={onClose} /> */}
-            <AddEdit isOpen={edit} onClose={() => setEdit(false)} viewClose={onClose} data={data} />
+            <AddEdit isOpen={edit} onClose={() => setEdit(false)} viewClose={onClose} data={data} id={id} />
             {/* <AddEdit isOpen={edit} onClose={() => setEdit(false)} viewClose={onClose} id={id?.event ? id?.event?._def?.extendedProps?._id : id} /> */}
             {/* Edittask modal */}
             {/* <EditTask isOpen={edit} onClose={setEdit} viewClose={onClose} id={id?.event ? id?.event?._def?.extendedProps?._id : id} /> */}
