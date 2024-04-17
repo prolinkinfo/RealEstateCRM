@@ -7,7 +7,7 @@ import { phoneCallSchema } from 'schema';
 import { getApi, postApi } from 'services/api';
 
 const AddPhoneCall = (props) => {
-    const { onClose, isOpen, fetchData, setAction, cData } = props
+    const { onClose, isOpen, fetchData, setAction, cData, LData } = props
     const [isLoding, setIsLoding] = useState(false)
     const todayTime = new Date().toISOString().split('.')[0];
     const user = JSON.parse(localStorage.getItem('user'))
@@ -89,24 +89,20 @@ const AddPhoneCall = (props) => {
     //     }
     // }
     const fetchDataR = async () => {
-        if (props?.viewData?.lead?.leadPhoneNumber) {
-            if (props.id && props.lead !== true) {
-                setFieldValue('recipient', props?.viewData?.contact?.phoneNumber);
-                setFieldValue('createByContact', props?.id);
-                values.recipient = props?.viewData?.contact?.phoneNumber
-            }
-        } else if (cData) {
-            if (props.id && props.lead !== true) {
-                setFieldValue('recipient', cData?.phoneNumber);
-                setFieldValue('createByContact', props?.id);
-                values.recipient = cData?.phoneNumber
-            }
+        if (LData && LData._id && props.lead === true) {
+            console.log(LData, "LDataLDataLData");
+            setFieldValue('recipient', LData.leadPhoneNumber);
+            setFieldValue('createByContact', props?.id);
+            values.recipient = LData.leadPhoneNumber
+        } else if (cData && cData._id && props.lead !== true) {
+            setFieldValue('recipient', cData?.phoneNumber);
+            setFieldValue('createByContact', props?.id);
+            values.recipient = cData?.phoneNumber
         }
     }
-
     useEffect(() => {
         fetchDataR()
-    }, [props.id, cData])
+    }, [props.id, cData, LData])
 
 
     return (

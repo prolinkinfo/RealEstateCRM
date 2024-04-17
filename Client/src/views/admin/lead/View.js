@@ -77,7 +77,7 @@ const View = () => {
 
     const [permission, taskPermission, meetingPermission, callAccess, emailAccess, taskAccess, meetingAccess] = HasAccess(['Leads', 'Tasks', 'Meetings', 'Calls', 'Emails', 'Tasks', 'Meetings']);
 
-    console.log(allData?.lead?.leadEmail, "allData")
+
     const columnsDataColumns = [
         { Header: "sender", accessor: "senderName", },
         { Header: "recipient", accessor: "createByName", },
@@ -102,7 +102,6 @@ const View = () => {
             )
         },
     ];
-
     const MeetingColumns = [
         { Header: 'agenda', accessor: 'agenda' },
         { Header: "date Time", accessor: "dateTime", },
@@ -184,10 +183,6 @@ const View = () => {
 
     return (
         <>
-            {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} leadData={leadData[0]} setAction={setAction} />}
-            <Edit isOpen={edit} size={size} onClose={setEdit} leadData={leadData[0]} setAction={setAction} moduleId={leadData?.[0]?._id} />
-
-            <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Lead' handleDeleteData={handleDeleteLead} ids={param.id} />
 
             {isLoding ?
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
@@ -263,7 +258,6 @@ const View = () => {
                                                         onOpen={() => setAddEmailHistory(true)}
                                                         access={emailAccess}
                                                     />
-                                                    <AddEmailHistory lead={true} leadEmail={allData?.lead?.leadEmail} contactEmail={allData?.contact?.email} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} />
                                                     {allData.Email?.length > 1 &&
                                                         <div style={{ display: "flex", justifyContent: "end" }}>
                                                             <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showEmail ? setShowEmail(false) : setShowEmail(true)}>{showEmail ? "Show less" : "Show more"}</Button>
@@ -287,7 +281,6 @@ const View = () => {
                                                         onOpen={() => setAddPhoneCall(true)}
                                                         access={callAccess}
                                                     />
-                                                    <AddPhoneCall viewData={allData} fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} setAction={setAction} data={data?.contact} id={param.id} lead={true} />
                                                     {allData?.phoneCall?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                         <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showCall ? setShowCall(false) : setShowCall(true)}>{showCall ? "Show less" : "Show more"}</Button>
                                                     </div>}
@@ -310,7 +303,6 @@ const View = () => {
                                                         onOpen={() => setTaskModel(true)}
                                                         access={taskAccess}
                                                     />
-                                                    <AddEdit isOpen={taskModel} fetchData={fetchData} leadContect={splitValue[0]} onClose={setTaskModel} id={param.id} userAction={'add'} view={true} />
                                                     {
                                                         allData?.task?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                             <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showTasks ? setShowTasks(false) : setShowTasks(true)}>{showTasks ? "Show less" : "Show more"}</Button>
@@ -336,7 +328,6 @@ const View = () => {
                                                         access={meetingAccess}
                                                     />
 
-                                                    <AddMeeting fetchData={fetchData} isOpen={addMeeting} leadContect={splitValue[0]} onClose={setMeeting} from="contact" id={param.id} setAction={setAction} view={true} />
                                                     {allData?.meeting?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                         <Button colorScheme="brand" size='sm' variant="outline" display="flex" justifyContant="end" onClick={() => showMeetings ? setShowMeetings(false) : setShowMeetings(true)}>{showMeetings ? "Show less" : "Show more"}</Button>
                                                     </div>}
@@ -355,7 +346,6 @@ const View = () => {
                                             </Heading>
                                             <Button leftIcon={<AddIcon />} size='sm' variant='brand' onClick={() => setAddDocument(true)}>Add Document</Button>
                                         </Flex>
-                                        <AddDocumentModal addDocument={addDocument} setAddDocument={setAddDocument} linkId={param.id} from="lead" setAction={setAction} fetchData={fetchData} />
                                         <HSeparator />
                                         <VStack mt={4} alignItems="flex-start">
                                             {allData?.Document?.length > 0 ? allData?.Document?.map((item) => (
@@ -387,6 +377,14 @@ const View = () => {
                     }
                 </>
             }
+            {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} leadData={leadData[0]} setAction={setAction} />}
+            <Edit isOpen={edit} size={size} onClose={setEdit} leadData={leadData[0]} setAction={setAction} moduleId={leadData?.[0]?._id} data={data} />
+            <AddMeeting fetchData={fetchData} isOpen={addMeeting} leadContect={splitValue[0]} onClose={setMeeting} from="contact" id={param.id} setAction={setAction} view={true} />
+            <AddEdit isOpen={taskModel} fetchData={fetchData} leadContect={splitValue[0]} onClose={setTaskModel} id={param.id} userAction={'add'} view={true} />
+            <AddPhoneCall viewData={allData} fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} setAction={setAction} data={data?.contact} id={param.id} lead={true} LData={data} />
+            <AddEmailHistory lead={true} leadEmail={allData?.lead?.leadEmail} contactEmail={allData?.contact?.email} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} />
+            <AddDocumentModal addDocument={addDocument} setAddDocument={setAddDocument} linkId={param.id} from="lead" setAction={setAction} fetchData={fetchData} />
+            <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Lead' handleDeleteData={handleDeleteLead} ids={param.id} />
         </>
     );
 };
