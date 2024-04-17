@@ -8,7 +8,6 @@ import { getApi, postApi } from 'services/api';
 const AddPhoneCall = (props) => {
     const { onClose, isOpen, fetchData, setAction, cData } = props
     const [isLoding, setIsLoding] = useState(false)
-    console.log('recipient22222222222:>> ', cData)
 
     const user = JSON.parse(localStorage.getItem('user'))
 
