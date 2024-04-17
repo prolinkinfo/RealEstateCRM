@@ -1,5 +1,6 @@
 import { Button, FormLabel, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, Textarea } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
+import dayjs from 'dayjs';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { phoneCallSchema } from 'schema';
@@ -8,7 +9,7 @@ import { getApi, postApi } from 'services/api';
 const AddPhoneCall = (props) => {
     const { onClose, isOpen, fetchData, setAction, cData } = props
     const [isLoding, setIsLoding] = useState(false)
-
+    const todayTime = new Date().toISOString().split('.')[0];
     const user = JSON.parse(localStorage.getItem('user'))
 
     const initialValues = {
@@ -132,6 +133,7 @@ const AddPhoneCall = (props) => {
                                 fontSize='sm'
                                 onChange={handleChange}
                                 onBlur={handleBlur}
+                                min={dayjs(todayTime).format('YYYY-MM-DD HH:mm')}
                                 value={values.startDate}
                                 name="startDate"
                                 fontWeight='500'

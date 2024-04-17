@@ -3,6 +3,7 @@ import { CUIAutoComplete } from 'chakra-ui-autocomplete';
 import MultiContactModel from 'components/commonTableModel/MultiContactModel';
 import MultiLeadModel from 'components/commonTableModel/MultiLeadModel';
 import Spinner from 'components/spinner/Spinner';
+import dayjs from 'dayjs';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { LiaMousePointerSolid } from 'react-icons/lia';
@@ -18,7 +19,7 @@ const AddMeeting = (props) => {
     const [isLoding, setIsLoding] = useState(false)
     const [contactModelOpen, setContactModel] = useState(false);
     const [leadModelOpen, setLeadModel] = useState(false);
-
+    const todayTime = new Date().toISOString().split('.')[0];
     const leadData = useSelector((state) => state?.leadData?.data);
 
 
@@ -189,6 +190,7 @@ const AddMeeting = (props) => {
                                 fontSize='sm'
                                 type='datetime-local'
                                 onChange={handleChange} onBlur={handleBlur}
+                                min={dayjs(todayTime).format('YYYY-MM-DD HH:mm')}
                                 value={values.dateTime}
                                 name="dateTime"
                                 placeholder='Date Time'

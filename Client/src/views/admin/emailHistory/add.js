@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { LiaMousePointerSolid } from 'react-icons/lia';
 import { emailSchema } from 'schema';
 import { getApi, postApi } from 'services/api';
+import dayjs from 'dayjs';
 
 const AddEmailHistory = (props) => {
     const { onClose, isOpen } = props
@@ -16,6 +17,7 @@ const AddEmailHistory = (props) => {
     const [contactModelOpen, setContactModel] = useState(false);
     const [leadModelOpen, setLeadModel] = useState(false);
     const user = JSON.parse(localStorage.getItem('user'))
+    const todayTime = new Date().toISOString().split('.')[0];
 
     const initialValues = {
         sender: user?._id,
@@ -195,6 +197,7 @@ const AddEmailHistory = (props) => {
                                 fontSize='sm'
                                 onChange={handleChange}
                                 onBlur={handleBlur}
+                                min={dayjs(todayTime).format('YYYY-MM-DD HH:mm')}
                                 value={values.startDate}
                                 name="startDate"
                                 fontWeight='500'

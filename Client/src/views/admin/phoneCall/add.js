@@ -2,6 +2,7 @@ import { Button, Flex, FormLabel, Grid, GridItem, IconButton, Input, Modal, Moda
 import ContactModel from "components/commonTableModel/ContactModel";
 import LeadModel from "components/commonTableModel/LeadModel";
 import Spinner from 'components/spinner/Spinner';
+import dayjs from 'dayjs';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { LiaMousePointerSolid } from 'react-icons/lia';
@@ -17,7 +18,7 @@ const AddPhoneCall = (props) => {
     const [contactModelOpen, setContactModel] = useState(false);
     const [leadModelOpen, setLeadModel] = useState(false);
     const user = JSON.parse(localStorage.getItem('user'))
-
+    const todayTime = new Date().toISOString().split('.')[0];
     const initialValues = {
         sender: user?._id,
         recipient: '',
@@ -216,6 +217,7 @@ const AddPhoneCall = (props) => {
                                 fontSize='sm'
                                 onChange={handleChange}
                                 onBlur={handleBlur}
+                                min={dayjs(todayTime).format('YYYY-MM-DD HH:mm')}
                                 value={values.startDate}
                                 name="startDate"
                                 fontWeight='500'
