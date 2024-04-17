@@ -28,7 +28,7 @@ const PropertyModel = (props) => {
     // const fetchPropertyData = async () => {
     //     setIsLoding(true)
     //     let result = await getApi(user.role === 'superAdmin' ? 'api/property/' : `api/property/?createBy=${user._id}`);
-    //     if (result && result.status == 200) {
+    //     if (result && result.status === 200) {
     //         setData(result?.data);
     //     }
     //     setIsLoding(false)
@@ -39,7 +39,7 @@ const PropertyModel = (props) => {
         try {
             setIsLoding(true)
             let result = await postApi(`api/contact/add-property-interest/${id}`, uniqueValues);
-            if (result && result.status == 200) {
+            if (result && result.status === 200) {
                 fetchData()
                 onClose()
             }

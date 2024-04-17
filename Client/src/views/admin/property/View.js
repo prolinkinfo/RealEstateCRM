@@ -358,23 +358,23 @@ const View = () => {
             <Modal onClose={() => setDisplayPropertyPhoto(false)} isOpen={displayPropertyPhoto} >
                 <ModalOverlay />
                 <ModalContent maxWidth={"6xl"} height={"750px"}>
-                    <ModalHeader>{type == "photo" ? "Property All Photos" : type == "video" ? "Virtual Tours or Videos" : type == "floor" ? "Floors plans" : ""}</ModalHeader>
+                    <ModalHeader>{type === "photo" ? "Property All Photos" : type === "video" ? "Virtual Tours or Videos" : type === "floor" ? "Floors plans" : ""}</ModalHeader>
                     <ModalCloseButton onClick={() => setDisplayPropertyPhoto(false)} />
                     <ModalBody overflowY={"auto"} height={"700px"}>
                         <div style={{ columns: 3 }}  >
                             {
-                                type == "photo" ?
+                                type === "photo" ?
                                     data && data?.propertyPhotos?.length > 0 && data?.propertyPhotos?.map((item) => (
                                         <a href={item.img} target="_blank"> <Image width={"100%"} m={1} mb={4} src={item.img} alt="Your Image" /></a>
                                     )) :
-                                    type == "video" ? data && data?.virtualToursOrVideos?.length > 0 && data?.virtualToursOrVideos?.map((item) => (
+                                    type === "video" ? data && data?.virtualToursOrVideos?.length > 0 && data?.virtualToursOrVideos?.map((item) => (
                                         <a href={item.img} target="_blank">
                                             <video width="380" controls autoplay loop style={{ margin: " 5px" }}>
                                                 <source src={item.img} type="video/mp4" />
                                                 <source src={item.img} type="video/ogg" />
                                             </video>
                                         </a>
-                                    )) : type == "floor" ?
+                                    )) : type === "floor" ?
                                         data && data?.floorPlans?.length > 0 && data?.floorPlans?.map((item) => (
                                             <a href={item.img} target="_blank">
                                                 <Image width={"100%"} m={1} mb={4} src={item.img} alt="Your Image" />
