@@ -334,7 +334,7 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    min={isChecked === true ? today : todayTime}
+                                    min={isChecked === true ? dayjs(today).format('YYYY-MM-DD') : dayjs(todayTime).format('YYYY-MM-DD HH:mm')}
                                     value={isChecked ? values?.start && dayjs(values?.start).format('YYYY-MM-DD') || null : values?.start && dayjs(values?.start).format('YYYY-MM-DD HH:mm') || null}
                                     name="start"
                                     fontWeight='500'
