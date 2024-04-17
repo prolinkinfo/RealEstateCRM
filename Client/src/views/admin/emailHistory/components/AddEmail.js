@@ -13,7 +13,7 @@ const AddEmailHistory = (props) => {
 
     const initialValues = {
         sender: user?._id,
-        recipient: props.lead !== 'true' ? props?.contactEmail : props?.leadEmail,
+        recipient: props.lead !== true ? props?.contactEmail : props?.leadEmail,
         subject: '',
         message: '',
         createByContact: '',
@@ -51,9 +51,9 @@ const AddEmailHistory = (props) => {
     };
 
     const fetchRecipientData = () => {
-        if (props.id && props.lead !== 'true') {
+        if (props.id && props.lead !== true) {
             setFieldValue('createByContact', props.id);
-        } else if (props.id && props.lead === 'true') {
+        } else if (props.id && props.lead === true) {
             setFieldValue('createByLead', props.id);
         }
     }
