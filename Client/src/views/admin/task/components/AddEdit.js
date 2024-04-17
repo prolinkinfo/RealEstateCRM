@@ -14,7 +14,7 @@ import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 
 const AddEdit = (props) => {
-    const { onClose, isOpen, fetchData, userAction, setAction, id, view } = props
+    const { onClose, isOpen, fetchData, userAction, setAction, id, view, data } = props
     const [isChecked, setIsChecked] = useState(false);
     const userId = JSON.parse(localStorage.getItem('user'))._id
     const [assignToLeadData, setAssignToLeadData] = useState([]);
@@ -142,6 +142,25 @@ const AddEdit = (props) => {
             finally {
                 setIsLoding(false)
             }
+        } else if (data) {
+            setFieldValue('title', data?.title)
+            setFieldValue('category', data?.category)
+            setFieldValue('description', data?.description)
+            setFieldValue('notes', data?.notes)
+            setFieldValue('assignTo', data?.assignTo)
+            setFieldValue('reminder', data?.reminder)
+            setFieldValue('start', data?.start)
+            setFieldValue('end', data?.end)
+            setFieldValue('backgroundColor', data?.backgroundColor)
+            setFieldValue('borderColor', data?.borderColor)
+            setFieldValue('textColor', data?.textColor)
+            setFieldValue('display', data?.display)
+            setFieldValue('url', data?.url)
+            setFieldValue("status", data?.status)
+            setFieldValue('assignToLead', data?.assignToLead)
+            setFieldValue('allDay', data?.allDay === 'Yes' ? 'Yes' : 'No')
+
+            setIsChecked(data?.allDay === 'Yes' ? true : false)
         }
     }
 
@@ -173,27 +192,28 @@ const AddEdit = (props) => {
     }, [props, values.category])
 
     useEffect(() => {
-        if (userAction === "edit") {
+        if (userAction === "edit" || data) {
             fetchTaskData()
-        } else {
-            setFieldValue('title', "")
-            setFieldValue('category', "")
-            setFieldValue('description', "")
-            setFieldValue('notes', "")
-            setFieldValue('assignTo', "")
-            setFieldValue('reminder', "")
-            setFieldValue('start', "")
-            setFieldValue('end', "")
-            setFieldValue('backgroundColor', "")
-            setFieldValue('borderColor', "")
-            setFieldValue('textColor', "")
-            setFieldValue('display', "")
-            setFieldValue('url', "")
-            setFieldValue("status", "")
-            setFieldValue('assignToLead', "")
-            setFieldValue('allDay', "")
         }
-    }, [userAction, id])
+        //  else {
+        //     setFieldValue('title', "")
+        //     setFieldValue('category', "")
+        //     setFieldValue('description', "")
+        //     setFieldValue('notes', "")
+        //     setFieldValue('assignTo', "")
+        //     setFieldValue('reminder', "")
+        //     setFieldValue('start', "")
+        //     setFieldValue('end', "")
+        //     setFieldValue('backgroundColor', "")
+        //     setFieldValue('borderColor', "")
+        //     setFieldValue('textColor', "")
+        //     setFieldValue('display', "")
+        //     setFieldValue('url', "")
+        //     setFieldValue("status", "")
+        //     setFieldValue('assignToLead', "")
+        //     setFieldValue('allDay', "")
+        // }
+    }, [userAction, id, data])
 
     return (
         <Modal isOpen={isOpen} size={'xl'} >
