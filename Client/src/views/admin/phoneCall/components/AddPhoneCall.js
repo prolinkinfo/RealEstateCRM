@@ -67,10 +67,14 @@ const AddPhoneCall = (props) => {
             }
         } else {
             if (props.id && props.lead !== 'true') {
-                console.log('recipient :>> ', props?.viewData?.contact)
-                setFieldValue('recipient', props?.viewData?.contact?.phoneNumber);
-                setFieldValue('createByContact', props?.id);
-                values.recipient = props?.viewData?.contact?.phoneNumber
+                if (cData) {
+                    setFieldValue('recipient', cData?.phoneNumber);
+                    setFieldValue('createByContact', props?.id);
+                    values.recipient = cData?.phoneNumber
+                } else {
+                    console.log(':>> ', values)
+
+                }
 
                 // let response = await getApi('api/contact/view/', props.id)
                 // if (response?.status === 200) {
@@ -91,7 +95,7 @@ const AddPhoneCall = (props) => {
 
     useEffect(() => {
         fetchDataR()
-    }, [props.id])
+    }, [props.id, cData])
 
 
     return (
