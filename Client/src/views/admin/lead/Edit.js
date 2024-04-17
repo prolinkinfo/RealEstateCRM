@@ -11,43 +11,12 @@ import CustomForm from '../../../utils/customForm';
 import * as yup from 'yup'
 
 const Edit = (props) => {
+    const { data } = props;
     const [isLoding, setIsLoding] = useState(false);
     const initialFieldValues = Object.fromEntries(
         (props?.leadData?.fields || []).map(field => [field?.name, ''])
     );
 
-    //     // Lead Information:
-    //     leadName: '',
-    //     leadEmail: '',
-    //     leadPhoneNumber: '',
-    //     leadAddress: '',
-    //     // Lead Source and Details:
-    //     leadSource: '',
-    //     leadStatus: '',
-    //     leadSourceDetails: '',
-    //     leadCampaign: '',
-    //     leadSourceChannel: '',
-    //     leadSourceMedium: '',
-    //     leadSourceCampaign: '',
-    //     leadSourceReferral: '',
-    //     // Lead Assignment and Ownership:
-    //     leadAssignedAgent: '',
-    //     leadOwner: '',
-    //     leadCommunicationPreferences: '',
-    //     // Lead Dates and Follow-up:
-    //     leadCreationDate: '',
-    //     leadConversionDate: '',
-    //     leadFollowUpDate: '',
-    //     leadFollowUpStatus: '',
-    //     // Lead Scoring and Nurturing:
-    //     leadScore: '',
-    //     leadNurturingWorkflow: '',
-    //     leadEngagementLevel: '',
-    //     leadConversionRate: '',
-    //     leadNurturingStage: '',
-    //     leadNextAction: '',
-    //     createBy: JSON.parse(localStorage.getItem('user'))._id,
-    // });
     const [initialValues, setInitialValues] = useState({
         ...initialFieldValues,
         createBy: JSON.parse(localStorage.getItem('user'))._id
@@ -89,10 +58,13 @@ const Edit = (props) => {
 
     let response
     const fetchData = async () => {
-        if (props?.selectedId || param.id) {
+        if (data) {
+            setInitialValues((prev) => ({ ...prev, ...data }))
+        } else if (props?.selectedId) {
+            // } else if (props?.selectedId || param.id) {
             try {
                 setIsLoding(true)
-                response = await getApi('api/lead/view/', props?.selectedId ? props?.selectedId : param.id)
+                response = await getApi('api/lead/view/', props?.selectedId)
                 let editData = response?.data?.lead;
                 setInitialValues((prev) => ({ ...prev, ...editData }));
             } catch (e) {
@@ -105,7 +77,7 @@ const Edit = (props) => {
 
     useEffect(() => {
         fetchData()
-    }, [props?.selectedId])
+    }, [props?.selectedId, data])
 
     return (
         <div>
