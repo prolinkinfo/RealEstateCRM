@@ -9,8 +9,6 @@ import { useState } from 'react'
 import { getApi } from 'services/api'
 import Card from 'components/card/Card'
 import { IoIosArrowBack } from "react-icons/io";
-import AddTask from './addTask'
-import EditTask from './editTask'
 import { HasAccess } from '../../../../redux/accessUtils';
 import { HSeparator } from 'components/separator/Separator';
 import AddEdit from './AddEdit';
@@ -152,7 +150,6 @@ const TaskView = (props) => {
                     </GridItem>
                 </Grid>
             </Card>}
-            {/* <AddTask isOpen={isOpen} onClose={onClose} /> */}
             <AddEdit isOpen={edit} onClose={() => setEdit(false)} viewClose={onClose} id={id?.event ? id?.event?._def?.extendedProps?._id : id} />
             <CommonDeleteModel isOpen={deleteManyModel} onClose={() => setDeleteManyModel(false)} type='Task' handleDeleteData={handleDeleteTask} ids={[id]} />
             {/* Edittask modal */}

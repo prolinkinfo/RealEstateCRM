@@ -7,7 +7,6 @@ import listPlugin from '@fullcalendar/list';
 import multiMonthPlugin from '@fullcalendar/multimonth';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { Flex, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
-import AddTask from 'views/admin/task/components/addTask';
 import EventView from 'views/admin/task/eventView';
 import MeetingView from 'views/admin/meeting/meetingView';
 import CallView from 'views/admin/phoneCall/callView';
@@ -66,7 +65,6 @@ const Calender = (props) => {
     return (
         <div>
             <Card >
-                {/* {(taskAccess?.view || user?.role === "superAdmin") && <AddTask isOpen={isOpen} fetchData={fetchData} onClose={onClose} date={date} />} */}
                 {(taskAccess?.view || user?.role === "superAdmin") && <AddEdit isOpen={taskModel} onClose={setTaskModel} fetchData={fetchData} userAction={'add'} />}
                 <EventView fetchData={fetchData} isOpen={eventView} onClose={setEventView} info={taskInfo} />
                 <MeetingView fetchData={fetchData} isOpen={meetingView} onClose={setMeetingView} info={meetingInfo} />

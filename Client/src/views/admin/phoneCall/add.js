@@ -41,7 +41,6 @@ const AddPhoneCall = (props) => {
         },
     });
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue } = formik
-    console.log(errors)
     const AddData = async () => {
         try {
             setIsLoding(true)

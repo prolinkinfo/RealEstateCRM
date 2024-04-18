@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react'
 import { BiLink } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 import { getApi } from 'services/api'
-import EditTask from './components/editTask'
 import { useNavigate } from 'react-router-dom';
 import AddEdit from './components/AddEdit'
 
