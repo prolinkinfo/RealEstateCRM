@@ -88,9 +88,9 @@ const AddPhoneCall = (props) => {
     //         }
     //     }
     // }
+
     const fetchDataR = async () => {
         if (LData && LData._id && props.lead === true) {
-            console.log(LData, "LDataLDataLData");
             setFieldValue('recipient', LData.leadPhoneNumber);
             setFieldValue('createByLead', props?.id);
             values.recipient = LData.leadPhoneNumber

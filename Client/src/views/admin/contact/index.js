@@ -42,6 +42,7 @@ const Index = () => {
     const [selectedValues, setSelectedValues] = useState([]);
     const [isImportContact, setIsImport] = useState(false);
     const [emailRec, setEmailRec] = useState('');
+    const [phoneRec, setPhoneRec] = useState({});
     const dispatch = useDispatch();
 
     const data = useSelector((state) => state?.contactData?.data)
@@ -75,7 +76,7 @@ const Index = () => {
                             {permission?.update &&
                                 <MenuItem py={2.5} icon={<EditIcon fontSize={15} mb={1} />} onClick={() => { setEdit(true); setSelectedId(row?.values?._id); }}>Edit</MenuItem>}
                             {callAccess?.create &&
-                                <MenuItem py={2.5} width={"165px"} onClick={() => { setAddPhoneCall(true); setCallSelectedId(row?.values?._id) }} icon={<PhoneIcon fontSize={15} mb={1} />}>Create Call</MenuItem>}
+                                <MenuItem py={2.5} width={"165px"} onClick={() => { setPhoneRec(row?.original); setAddPhoneCall(true); setCallSelectedId(row?.values?._id); }} icon={<PhoneIcon fontSize={15} mb={1} />}>Create Call</MenuItem>}
                             {emailAccess?.create &&
                                 <MenuItem py={2.5} width={"165px"} onClick={() => {
                                     handleOpenEmail(row?.values?._id, row?.original); setSelectedId(row?.values?._id)
@@ -162,7 +163,7 @@ const Index = () => {
             {edit && <Edit isOpen={edit} size={size} contactData={contactData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={contactData?.[0]?._id} />}
             {deleteModel && <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Contacts' handleDeleteData={handleDeleteContact} ids={selectedValues} />}
             {addEmailHistory && <AddEmailHistory fetchData={fetchContactData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={selectedId} contactEmail={emailRec} />}
-            {addPhoneCall && <AddPhoneCall fetchData={fetchContactData} isOpen={addPhoneCall} onClose={setAddPhoneCall} id={callSelectedId} />}
+            {addPhoneCall && <AddPhoneCall fetchData={fetchContactData} isOpen={addPhoneCall} onClose={setAddPhoneCall} id={callSelectedId} cData={phoneRec} />}
             {isImportContact && <ImportModal text='Contact file' isOpen={isImportContact} onClose={setIsImport} customFields={contactData?.[0]?.fields || []} />}
 
         </div>
