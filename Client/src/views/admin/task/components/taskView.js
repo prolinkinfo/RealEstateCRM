@@ -2,7 +2,7 @@ import { Button, Grid, GridItem, Flex, IconButton, Text, Menu, MenuButton, MenuD
 import { AddIcon, ChevronDownIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import React from 'react'
 import moment from 'moment'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { BiLink } from 'react-icons/bi'
 import { useEffect } from 'react'
 import { useState } from 'react'
@@ -14,6 +14,8 @@ import EditTask from './editTask'
 import { HasAccess } from '../../../../redux/accessUtils';
 import { HSeparator } from 'components/separator/Separator';
 import AddEdit from './AddEdit';
+import CommonDeleteModel from 'components/commonDeleteModel';
+import { deleteManyApi } from 'services/api';
 
 const TaskView = (props) => {
     const params = useParams()
@@ -23,23 +25,36 @@ const TaskView = (props) => {
     const [permission, contactAccess, leadAccess] = HasAccess(['Tasks', 'Contacts', 'Leads'])
 
     const [data, setData] = useState()
-    const [isLoding, setIsLoding] = useState(false)
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const { onOpen, onClose } = useDisclosure()
     const [edit, setEdit] = useState(false);
     const [deleteModel, setDelete] = useState(false);
+    const [deleteManyModel, setDeleteManyModel] = useState(false);
+    const navigate = useNavigate()
 
     const fetchViewData = async () => {
         if (id) {
-            setIsLoding(true)
             let result = await getApi('api/task/view/', id?.event ? id?.event?._def?.extendedProps?._id : id);
             setData(result?.data);
-            setIsLoding(false)
         }
     }
+
+    const handleDeleteTask = async (ids) => {
+        try {
+            let response = await deleteManyApi('api/task/deleteMany', ids)
+            if (response.status === 200) {
+                navigate('/task')
+                setDeleteManyModel(false)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
+
     useEffect(() => {
         fetchViewData()
     }, [id, edit])
-
 
     const handleClick = () => {
         onOpen()
@@ -64,7 +79,7 @@ const TaskView = (props) => {
                                     {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => setEdit(true)} alignItems={'start'} icon={<EditIcon />}>Edit</MenuItem>}
                                     {(user.role === 'superAdmin' || permission?.deleteModel) && <>
                                         <MenuDivider />
-                                        <MenuItem alignItems={'start'} onClick={() => setDelete(true)} color={'red'} icon={<DeleteIcon />}>Delete</MenuItem>
+                                        <MenuItem alignItems={'start'} onClick={() => setDeleteManyModel(true)} color={'red'} icon={<DeleteIcon />}>Delete</MenuItem>
                                     </>}
                                 </MenuList>
                             </Menu>
@@ -132,7 +147,7 @@ const TaskView = (props) => {
                     <GridItem colStart={6} >
                         <Flex justifyContent={"right"}>
                             {(permission?.update || user?.role === 'superAdmin') && <Button size="sm" onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button>}
-                            {(permission?.delete || user?.role === 'superAdmin') && <Button size="sm" style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>}
+                            {(permission?.delete || user?.role === 'superAdmin') && <Button size="sm" style={{ background: 'red.800' }} onClick={() => setDeleteManyModel(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>}
                         </Flex>
                     </GridItem>
                 </Grid>
@@ -140,6 +155,7 @@ const TaskView = (props) => {
             {/* Addtask modal */}
             {/* <AddTask isOpen={isOpen} onClose={onClose} /> */}
             <AddEdit isOpen={edit} onClose={() => setEdit(false)} viewClose={onClose} id={id?.event ? id?.event?._def?.extendedProps?._id : id} />
+            <CommonDeleteModel isOpen={deleteManyModel} onClose={() => setDeleteManyModel(false)} type='Task' handleDeleteData={handleDeleteTask} ids={[id]} />
             {/* Edittask modal */}
             {/* <EditTask isOpen={edit} onClose={setEdit} viewClose={onClose} id={id?.event ? id?.event?._def?.extendedProps?._id : id} /> */}
             {/* Deletetask modal */}
