@@ -283,6 +283,7 @@ const View = () => {
                                                         allData={showEmail ? allData.EmailHistory : allData?.EmailHistory?.length > 0 ? [allData.EmailHistory[0]] : []}
                                                         tableData={showEmail ? allData.EmailHistory : allData?.EmailHistory?.length > 0 ? [allData.EmailHistory[0]] : []}
                                                         AdvanceSearch={false}
+                                                        dataLength={allData?.EmailHistory?.length}
                                                         tableCustomFields={[]}
                                                         checkBox={false}
                                                         deleteMany={true}
@@ -307,6 +308,7 @@ const View = () => {
                                                         tableData={showCall ? allData?.phoneCallHistory : allData?.phoneCallHistory?.length > 0 ? [allData?.phoneCallHistory[0]] : []}
                                                         AdvanceSearch={false}
                                                         tableCustomFields={[]}
+                                                        dataLength={allData?.phoneCallHistory?.length}
                                                         checkBox={false}
                                                         deleteMany={true}
                                                         ManageGrid={false}
@@ -328,6 +330,7 @@ const View = () => {
                                                         allData={showTasks ? allData?.task : allData?.task?.length > 0 ? [allData?.task[0]] : []}
                                                         tableData={showTasks ? allData?.task : allData?.task?.length > 0 ? [allData?.task[0]] : []}
                                                         AdvanceSearch={false}
+                                                        dataLength={allData?.task?.length}
                                                         tableCustomFields={[]}
                                                         checkBox={false}
                                                         deleteMany={true}
@@ -347,6 +350,7 @@ const View = () => {
                                                         isLoding={isLoding}
                                                         columnData={MeetingColumns}
                                                         dataColumn={MeetingColumns}
+                                                        dataLength={allData?.meetingHistory?.length}
                                                         allData={showMeetings ? allData?.meetingHistory : allData?.meetingHistory?.length > 0 ? [allData?.meetingHistory[0]] : []}
                                                         tableData={showMeetings ? allData?.meetingHistory : allData?.meetingHistory?.length > 0 ? [allData?.meetingHistory[0]] : []}
                                                         AdvanceSearch={false}
