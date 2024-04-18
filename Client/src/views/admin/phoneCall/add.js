@@ -41,7 +41,7 @@ const AddPhoneCall = (props) => {
         },
     });
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue } = formik
-
+    console.log(errors)
     const AddData = async () => {
         try {
             setIsLoding(true)
@@ -97,12 +97,12 @@ const AddPhoneCall = (props) => {
         if (values.createByContact) {
             let findEmail = assignToContactData.find((item) => item._id === values.createByContact);
             if (findEmail) {
-                setFieldValue('recipient', findEmail.email);
+                setFieldValue('recipient', findEmail.phoneNumber);
             }
         } else if (values.createByLead) {
             let findEmail = assignToLeadData.find((item) => item._id === values.createByLead);
             if (findEmail) {
-                setFieldValue('recipient', findEmail.leadEmail);
+                setFieldValue('recipient', findEmail.leadPhoneNumber);
             }
         } else {
             setFieldValue('recipient', "");
