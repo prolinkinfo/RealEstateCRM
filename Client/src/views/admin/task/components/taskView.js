@@ -152,7 +152,6 @@ const TaskView = (props) => {
                     </GridItem>
                 </Grid>
             </Card>}
-            {/* Addtask modal */}
             {/* <AddTask isOpen={isOpen} onClose={onClose} /> */}
             <AddEdit isOpen={edit} onClose={() => setEdit(false)} viewClose={onClose} id={id?.event ? id?.event?._def?.extendedProps?._id : id} />
             <CommonDeleteModel isOpen={deleteManyModel} onClose={() => setDeleteManyModel(false)} type='Task' handleDeleteData={handleDeleteTask} ids={[id]} />

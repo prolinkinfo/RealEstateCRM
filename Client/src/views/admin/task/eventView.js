@@ -53,7 +53,6 @@ const EventView = (props) => {
                         <Flex justifyContent={'center'} alignItems={'center'} mb={30} width="100%" >
                             <Spinner />
                         </Flex> : <>
-
                             <ModalBody>
                                 <Grid templateColumns="repeat(12, 1fr)" gap={3} >
 
