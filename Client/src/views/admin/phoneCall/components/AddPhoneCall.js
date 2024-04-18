@@ -92,7 +92,7 @@ const AddPhoneCall = (props) => {
         if (LData && LData._id && props.lead === true) {
             console.log(LData, "LDataLDataLData");
             setFieldValue('recipient', LData.leadPhoneNumber);
-            setFieldValue('createByContact', props?.id);
+            setFieldValue('createByLead', props?.id);
             values.recipient = LData.leadPhoneNumber
         } else if (cData && cData._id && props.lead !== true) {
             setFieldValue('recipient', cData?.phoneNumber);

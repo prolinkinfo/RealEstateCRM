@@ -8,7 +8,7 @@ export const TaskSchema = yup.object({
     // assignTo: yup.string(),
     // assignToLead: yup.string(),
     reminder: yup.string(),
-    start: yup.string().required("Start Is required"),
+    start: yup.string().required("Start Date Is required"),
     end: yup.string(),
     backgroundColor: yup.string(),
     borderColor: yup.string(),
