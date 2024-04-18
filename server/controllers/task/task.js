@@ -88,17 +88,16 @@ const add = async (req, res) => {
 
 const edit = async (req, res) => {
     try {
-        const { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy, assignTo, status, allDay } = req.body;
+        const { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, assignToLead, textColor, display, url, createBy, assignTo, status, allDay } = req.body;
 
         if (assignTo && !mongoose.Types.ObjectId.isValid(assignTo)) {
-            res.status(400).json({ error: 'Invalid assignTo value' });
+            res.status(400).json({ error: 'Invalid Assign To value' });
         }
-        const taskData = { title, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy, status, allDay };
+        if (assignToLead && !mongoose.Types.ObjectId.isValid(assignToLead)) {
+            res.status(400).json({ error: 'Invalid Assign To Lead value' });
+        }
+        const taskData = { title, assignTo, assignToLead, category, description, notes, reminder, start, end, backgroundColor, borderColor, textColor, display, url, createBy, status, allDay };
 
-        if (assignTo) {
-            taskData.assignTo = assignTo;
-        }
-        // let result = await Task.updateOne(
         let result = await Task.findOneAndUpdate(
             { _id: req.params.id },
             { $set: taskData },
