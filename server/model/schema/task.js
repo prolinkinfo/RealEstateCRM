@@ -21,7 +21,7 @@ const Task = new mongoose.Schema({
     textColor: String,
     display: String,
     url: String,
-    allDay:String,
+    allDay: Boolean,
     createBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

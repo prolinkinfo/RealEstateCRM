@@ -49,7 +49,6 @@ const TaskView = (props) => {
 
     }
 
-
     useEffect(() => {
         fetchViewData()
     }, [id, edit])
@@ -91,7 +90,6 @@ const TaskView = (props) => {
                 </Grid>
                 <HSeparator />
                 <Grid templateColumns="repeat(12, 1fr)" gap={3} pt={3}>
-
                     <GridItem colSpan={{ base: 12, md: 6 }} >
                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Title </Text>
                         <Text>{data?.title ? data?.title : ' - '}</Text>
@@ -102,11 +100,19 @@ const TaskView = (props) => {
                     </GridItem>
                     <GridItem colSpan={{ base: 12, md: 6 }} >
                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task start </Text>
-                        <Text>{data?.start ? moment(data?.start).format('L LT') : ' - '}</Text>
+                        <Text>
+                            {data && data?.start ? (
+                                data.allDay === true
+                                    ? moment(data.start).format('DD-MM-YYYY')
+                                    : moment(data.start).format('DD-MM-YYYY HH:mm A')
+                            ) : (
+                                "-"
+                            )}
+                        </Text>
                     </GridItem>
                     <GridItem colSpan={{ base: 12, md: 6 }} >
                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task end  </Text>
-                        <Text>{data?.end ? moment(data?.end).format('L LT') : moment(data?.start).format('L')}</Text>
+                        <Text>{data?.allDay === true ? moment(data?.end).format('DD-MM-YYYY') : moment(data?.end).format('DD-MM-YYYY HH:mm A')}</Text>
                     </GridItem>
                     <GridItem colSpan={{ base: 12, md: 6 }} >
                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Link </Text>

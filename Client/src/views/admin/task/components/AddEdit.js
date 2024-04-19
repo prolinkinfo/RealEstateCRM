@@ -45,7 +45,7 @@ const AddEdit = (props) => {
         backgroundColor: '',
         borderColor: '#ffffff',
         textColor: '',
-        allDay: isChecked === true ? 'Yes' : 'No',
+        allDay: '',
         display: '',
         url: '',
         createBy: userId,
@@ -64,15 +64,16 @@ const AddEdit = (props) => {
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
 
     const AddData = async () => {
+        console.log("values::--", values)
         if (userAction === "add") {
             try {
                 setIsLoding(true)
 
                 if (values?.start) {
-                    values.start = isChecked ? moment(values.start).format('YYYY-MM-DD') || '' : moment(values.start).format('YYYY-MM-DD HH:mm') || '';
+                    values.start = moment(values.start).format('YYYY-MM-DD HH:mm') || '';
                 }
                 if (values?.end) {
-                    values.end = isChecked ? moment(values.end).format('YYY-MM-DD') || '' : moment(values.end).format('YYYY-MM-DD HH:mm') || '';
+                    values.end = moment(values.end).format('YYYY-MM-DD HH:mm') || '';
                 }
 
                 let response = await postApi('api/task/add', values)
@@ -92,10 +93,10 @@ const AddEdit = (props) => {
                 setIsLoding(true)
 
                 if (values?.start) {
-                    values.start = isChecked ? moment(values.start).format('YYYY-MM-DD') || '' : moment(values.start).format('YYYY-MM-DD HH:mm') || '';
+                    values.start = moment(values.start).format('YYYY-MM-DD HH:mm') || '';
                 }
                 if (values?.end) {
-                    values.end = isChecked ? moment(values.end).format('YYYY-MM-DD') || '' : moment(values.end).format('YYYY-MM-DD HH:mm') || '';
+                    values.end = moment(values.end).format('YYYY-MM-DD HH:mm') || '';
                 }
 
                 let response = await putApi(`api/task/edit/${id}`, values)
@@ -132,9 +133,10 @@ const AddEdit = (props) => {
                 setFieldValue('url', result?.data?.url)
                 setFieldValue("status", result?.data?.status)
                 setFieldValue('assignToLead', result?.data?.assignToLead)
-                setFieldValue('allDay', result?.data?.allDay === 'Yes' ? 'Yes' : 'No')
+                // setFieldValue('allDay', result?.data?.allDay === 'Yes' ? 'Yes' : 'No')
+                setFieldValue('allDay', result?.data?.allDay)
 
-                setIsChecked(result?.data?.allDay === 'Yes' ? true : false)
+                // setIsChecked(result?.data?.allDay === 'Yes' ? true : false)
             }
             catch (e) {
                 console.log(e);
@@ -159,8 +161,9 @@ const AddEdit = (props) => {
             setFieldValue("status", data?.status)
             setFieldValue('assignToLead', data?.assignToLead)
             setFieldValue('allDay', data?.allDay === 'Yes' ? 'Yes' : 'No')
+            setFieldValue('allDay', data?.allDay)
 
-            setIsChecked(data?.allDay === 'Yes' ? true : false)
+            // setIsChecked(data?.allDay === 'Yes' ? true : false)
         }
     }
 
@@ -336,12 +339,14 @@ const AddEdit = (props) => {
                                     : ''
                             }
                             <GridItem colSpan={{ base: 12 }} >
-                                <Checkbox isChecked={isChecked} name='allDay'
-                                    onChange={(e) => {
-                                        const target = e.target.checked;
-                                        // setFieldValue('allDay', e.target.checked === true ? 'Yes' : 'No');
-                                        setIsChecked(target);
-                                    }}>
+                                <Checkbox isChecked={values?.allDay} name='allDay'
+                                    onChange={handleChange}
+                                // onChange={(e) => {
+                                //     const target = e.target.checked;
+                                //     // setFieldValue('allDay', e.target.checked === true ? 'Yes' : 'No');
+                                //     setIsChecked(target);
+                                // }}
+                                >
                                     All Day Task ?
                                 </Checkbox>
                             </GridItem>
@@ -350,12 +355,12 @@ const AddEdit = (props) => {
                                     Start Date<Text color={"red"}>*</Text>
                                 </FormLabel>
                                 <Input
-                                    type={isChecked === true ? 'date' : 'datetime-local'}
+                                    type={'datetime-local'}
                                     fontSize='sm'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    min={isChecked === true ? dayjs(today).format('YYYY-MM-DD') : dayjs(todayTime).format('YYYY-MM-DD HH:mm')}
-                                    value={isChecked ? values?.start && dayjs(values?.start).format('YYYY-MM-DD') || null : values?.start && dayjs(values?.start).format('YYYY-MM-DD HH:mm') || null}
+                                    min={dayjs(todayTime).format('YYYY-MM-DD HH:mm')}
+                                    value={values?.start && dayjs(values?.start).format('YYYY-MM-DD HH:mm') || null}
                                     name="start"
                                     fontWeight='500'
                                     borderColor={errors?.start && touched?.start ? "red.300" : null}
@@ -367,12 +372,12 @@ const AddEdit = (props) => {
                                     End Date
                                 </FormLabel>
                                 <Input
-                                    type={isChecked === true ? 'date' : 'datetime-local'}
+                                    type={'datetime-local'}
                                     min={values.start}
                                     fontSize='sm'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={isChecked ? dayjs(values.end).format('YYYY-MM-DD') || '' : dayjs(values.end).format('YYYY-MM-DD HH:mm') || ''}
+                                    value={dayjs(values.end).format('YYYY-MM-DD HH:mm') || ''}
                                     name="end"
                                     fontWeight='500'
                                     borderColor={errors?.end && touched?.end ? "red.300" : null}
