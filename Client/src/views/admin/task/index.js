@@ -57,7 +57,7 @@ const Task = () => {
                             <MenuItem py={2.5} icon={<EditIcon fontSize={15} mb={1} />} onClick={() => handleEditOpen(row)}>Edit</MenuItem>}
                         {/* <MenuItem py={2.5} icon={<EditIcon fontSize={15} mb={1} />} onClick={() => { setEdit(true); setSelectedId(row?.values?._id); }}>Edit</MenuItem>} */}
                         {permission?.view &&
-                            <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { setId(row?.original._id); handleViewOpen(row?.values?._id) }}>View</MenuItem>}
+                            <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { setId(row?.original._id); handleViewOpen(row?.values?._id); }}>View</MenuItem>}
                         {/* <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { setEventView(true); setId(row?.original._id) }}>View</MenuItem> */}
                         {permission?.delete &&
                             <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} mb={1} />} onClick={() => { setDeleteMany(true); setSelectedValues([row?.values?._id]); }}>Delete</MenuItem>}
@@ -77,7 +77,7 @@ const Task = () => {
             Header: 'Title', accessor: 'title', type: 'text', formikType: '', cell: (cell) => (
                 <div className="selectOpt">
                     <Text
-                        onClick={() => handleDateClick(cell)}
+                        onClick={() => handleViewOpen(cell?.row?.original._id)}
                         me="10px"
                         sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
                         color='brand.600'
@@ -174,6 +174,8 @@ const Task = () => {
     const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 
     const handleViewOpen = (id) => {
+
+        console.log(id);
         navigate(`/view/${id}`)
     }
 
