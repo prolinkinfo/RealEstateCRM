@@ -18,8 +18,8 @@ const AddEmailHistory = (props) => {
         recipient: props.lead !== true ? props?.contactEmail : props?.leadEmail,
         subject: '',
         message: '',
-        createByContact: '',
-        createByLead: '',
+        createByContact: props?.id && props?.lead !== true ? props?.id : '',
+        createByLead: props?.id && props?.lead === true ? props?.id : '',
         startDate: '',
         createBy: user?._id,
     }
@@ -52,18 +52,15 @@ const AddEmailHistory = (props) => {
         }
     };
 
-    const fetchRecipientData = () => {
-        if (props.id && props.lead !== true) {
-            setFieldValue('createByContact', props.id);
-        } else if (props.id && props.lead === true) {
-            setFieldValue('createByLead', props.id);
-        }
-    }
-    useEffect(() => {
-        fetchRecipientData()
-    }, [props.id, props.lead])
+    // useEffect(() => {
+    //    if (props.id && props.lead !== true) {
+    //         setFieldValue('createByContact', props.id);
+    //     } else if (props.id && props.lead === true) {
+    //         setFieldValue('createByLead', props.id);
+    //     }
+    // }, [props.id, props.lead])
 
-
+    console.log(props.id, "props.idprops.idprops.idprops.id")
     return (
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
             <ModalOverlay />
