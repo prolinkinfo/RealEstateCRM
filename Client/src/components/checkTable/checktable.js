@@ -368,7 +368,7 @@ const CommonCheckTable = (props) => {
                         {BackButton && BackButton}
                     </GridItem>
                     <HStack spacing={4} mb={2}>
-                        {(getTagValues || []).map((item, i) => (
+                        {(getTagValues || []).map((item) => (
                             <Tag
                                 size={"md"}
                                 p={2}
