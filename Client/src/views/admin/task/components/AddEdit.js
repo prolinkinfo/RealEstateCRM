@@ -12,6 +12,7 @@ import moment from 'moment';
 import { putApi } from 'services/api';
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
+import { HasAccess } from "../../../../redux/accessUtils";
 
 const AddEdit = (props) => {
     const { onClose, isOpen, fetchData, userAction, setAction, id, view, data } = props
@@ -29,6 +30,8 @@ const AddEdit = (props) => {
 
     const today = new Date().toISOString().split('T')[0];
     const todayTime = new Date().toISOString().split('.')[0];
+
+    const [leadAccess, contactAccess] = HasAccess(['Leads', 'Contacts']);
 
     const contactData = useSelector((state) => state?.contactData?.data)
 
@@ -261,10 +264,18 @@ const AddEdit = (props) => {
                                 </FormLabel>
                                 <RadioGroup onChange={(e) => { setFieldValue('category', e); setFieldValue('assignTo', null); setFieldValue('assignToLead', null); }} value={values.category}>
                                     <Stack direction='row'>
-                                        <Radio value='None' >None</Radio>
-                                        {props.leadContect === 'contactView' && <Radio value='Contact'>Contact</Radio>}
-                                        {props.leadContect === 'leadView' && <Radio value='Lead'>Lead</Radio>}
-                                        {!props.leadContect && <> <Radio value='Contact'>Contact</Radio><Radio value='Lead'>Lead</Radio></>}
+                                        <Stack direction='row'>
+                                            <Radio value='None'>None</Radio>
+                                            {props.leadContect === 'contactView' && <Radio value='Contact'>Contact</Radio>}
+                                            {props.leadContect === 'leadView' && <Radio value='Lead'>Lead</Radio>}
+                                            {!props.leadContect &&
+                                                <>
+                                                    {(user?.role === "superAdmin" || contactAccess?.create) && <Radio value='Contact'>Contact</Radio>}
+                                                    {(user?.role === "superAdmin" || leadAccess?.create) && <Radio value='Lead'>Lead</Radio>}
+                                                </>
+                                            }
+                                        </Stack>
+
                                     </Stack>
                                 </RadioGroup>
                                 <Text mb='10px' color={'red'}> {errors.category && touched.category && errors.category}</Text>
@@ -495,7 +506,7 @@ const AddEdit = (props) => {
                         colorScheme="red" size="sm" ml={2} onClick={() => onClose(false)}>Close</Button>
                 </ModalFooter>
             </ModalContent>
-        </Modal>
+        </Modal >
     )
 }
 
