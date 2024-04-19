@@ -18,7 +18,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getSearchData, setGetTagValues, setSearchValue } from '../../redux/advanceSearchSlice'
 
 const CommonCheckTable = (props) => {
-    const { isLoding, title, columnData, size, dataColumn, setSearchedDataOut,  state, allData, ManageGrid, deleteMany, tableCustomFields, access, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, checkBox, AdvanceSearch, searchDisplay, setSearchDisplay, BackButton, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
+    const { isLoding, title, columnData, size, dataColumn, setSearchedDataOut, state, allData, ManageGrid, deleteMany, tableCustomFields, access, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, checkBox, AdvanceSearch, searchDisplay, setSearchDisplay, BackButton, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside } = props;
     const { dataLength } = props;
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -319,7 +319,7 @@ const CommonCheckTable = (props) => {
                                 lineHeight="100%"
                                 textTransform={'capitalize'}
                             >
-                                {title} (<CountUpComponent key={data?.length} targetNumber={dataLength || data?.length} />)
+                                {title} (<CountUpComponent key={dataLength} targetNumber={dataLength} />)
                             </Text>
                             <CustomSearchInput setSearchbox={setSearchboxOutside ? setSearchboxOutside : setSearchbox} setDisplaySearchData={setSearchboxOutside ? props.setSearchDisplay : setDisplaySearchData} searchbox={searchboxOutside ? searchboxOutside : searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={props.setGetTagValuesOutside ? props.setGetTagValuesOutside : setGetTagValues} setGopageValue={setGopageValue} />
                             {
