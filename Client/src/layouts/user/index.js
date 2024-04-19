@@ -250,7 +250,7 @@ export default function User(props) {
         dispatch(fetchImage());
     }, [dispatch]);
 
-    const largeLogo = useSelector((state) => state?.images?.image.filter(item => item.isActive === true));
+    const largeLogo = useSelector((state) => state?.images?.images?.filter(item => item?.isActive === true));
 
 
     return (
@@ -261,7 +261,7 @@ export default function User(props) {
                         toggleSidebar,
                         setToggleSidebar
                     }}>
-                    <Sidebar routes={routes} display='none' {...rest} openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
+                    <Sidebar routes={routes} display='none' {...rest} openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} largeLogo={largeLogo} />
                     <Box
                         float='right'
                         minHeight='100vh'

@@ -25,9 +25,7 @@ const ChangeImage = () => {
     const [isLoding, setIsLoding] = useState(false)
     const navigate = useNavigate()
 
-    useEffect(() => {
-        dispatch(fetchImage());
-    }, [dispatch]);
+
 
     const fetchData = async (selectedId) => {
         setIsLoding(true)
@@ -35,7 +33,7 @@ const ChangeImage = () => {
         setData(result.data)
         setIsLoding(false)
     }
-    const image = useSelector((state) => state?.images?.image);
+    const image = useSelector((state) => state?.images?.images);
     const load = useSelector((state) => state?.images);
     const handleViewOpen = (item) => {
         fetchData(item._id)
@@ -82,6 +80,15 @@ const ChangeImage = () => {
             setIsLoding(false)
         }
     }
+    useEffect(() => {
+        dispatch(fetchImage());
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (image?.length === 0) {
+            localStorage.removeItem('persist:image')
+        }
+    }, [image])
 
     return (
         <>

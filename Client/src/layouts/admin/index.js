@@ -168,7 +168,7 @@ export default function Dashboard(props) {
 		}
 	}, []);
 
-	const largeLogo = useSelector((state) => state?.images?.image?.filter(item => item.isActive === true));
+	const largeLogo = useSelector((state) => state?.images?.images?.filter(item => item?.isActive === true));
 
 	const under = (routes) => {
 		let activeRoute = false
