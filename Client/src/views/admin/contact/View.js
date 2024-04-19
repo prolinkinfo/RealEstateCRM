@@ -218,7 +218,7 @@ const View = () => {
                                             Actions
                                         </MenuButton>}
                                         <MenuDivider />
-                                        <MenuList minWidth={2}>
+                                        <MenuList minWidth={2} zIndex={"99"}>
                                             {(user.role === 'superAdmin' || permission?.create) && <MenuItem alignItems={'start'} onClick={() => onOpen()} color={'blue'} icon={<AddIcon />}>Add</MenuItem>}
                                             {(user.role === 'superAdmin' || permission?.update) && <MenuItem alignItems={'start'} onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
                                             {(user.role === 'superAdmin' || permission?.delete) &&
