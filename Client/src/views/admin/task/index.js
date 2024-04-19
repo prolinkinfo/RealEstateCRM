@@ -174,8 +174,6 @@ const Task = () => {
     const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 
     const handleViewOpen = (id) => {
-
-        console.log(id);
         navigate(`/view/${id}`)
     }
 
@@ -233,10 +231,9 @@ const Task = () => {
                 setGetTagValues={setGetTagValuesOutside}
                 setSearchbox={setSearchboxOutside}
             />
-            {console.log("selectedId", selectedId, id)}
             <AddEdit isOpen={isOpen} fetchData={fetchData} onClose={handleClose} userAction={userAction} id={selectedId} setAction={setAction} />
             {/* <EditTask isOpen={edit} onClose={setEdit} viewClose={onClose} id={selectedId} setAction={setAction} /> */}
-            <EventView fetchData={fetchData} isOpen={eventView} access={permission} contactAccess={contactAccess} leadAccess={leadAccess} onClose={setEventView} id={id} setAction={setAction} action={action} />
+            {/* <EventView fetchData={fetchData} isOpen={eventView} access={permission} contactAccess={contactAccess} leadAccess={leadAccess} onClose={setEventView} id={id} setAction={setAction} action={action} /> */}
             <CommonDeleteModel isOpen={deleteMany} onClose={() => setDeleteMany(false)} type='Tasks' handleDeleteData={handleDeleteTask} ids={selectedValues} />
             <ImportModal text='Lead file' fetchData={fetchData} isOpen={isImportLead} onClose={setIsImportLead} />
         </div>
