@@ -45,7 +45,7 @@ const AddEdit = (props) => {
         backgroundColor: '',
         borderColor: '#ffffff',
         textColor: '',
-        allDay: '',
+        allDay: false,
         display: '',
         url: '',
         createBy: userId,
@@ -193,7 +193,6 @@ const AddEdit = (props) => {
             }
         }
     }, [props, values.category])
-
     useEffect(() => {
         if (userAction === "edit" || data) {
             fetchTaskData()

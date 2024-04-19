@@ -57,7 +57,7 @@ const Task = () => {
                             <MenuItem py={2.5} icon={<EditIcon fontSize={15} mb={1} />} onClick={() => handleEditOpen(row)}>Edit</MenuItem>}
                         {/* <MenuItem py={2.5} icon={<EditIcon fontSize={15} mb={1} />} onClick={() => { setEdit(true); setSelectedId(row?.values?._id); }}>Edit</MenuItem>} */}
                         {permission?.view &&
-                            <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => handleViewOpen(row?.values?._id)}>View</MenuItem>}
+                            <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { setId(row?.original._id); handleViewOpen(row?.values?._id) }}>View</MenuItem>}
                         {/* <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { setEventView(true); setId(row?.original._id) }}>View</MenuItem> */}
                         {permission?.delete &&
                             <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} mb={1} />} onClick={() => { setDeleteMany(true); setSelectedValues([row?.values?._id]); }}>Delete</MenuItem>}
@@ -231,7 +231,7 @@ const Task = () => {
                 setGetTagValues={setGetTagValuesOutside}
                 setSearchbox={setSearchboxOutside}
             />
-
+            {console.log("selectedId", selectedId, id)}
             <AddEdit isOpen={isOpen} fetchData={fetchData} onClose={handleClose} userAction={userAction} id={selectedId} setAction={setAction} />
             {/* <EditTask isOpen={edit} onClose={setEdit} viewClose={onClose} id={selectedId} setAction={setAction} /> */}
             <EventView fetchData={fetchData} isOpen={eventView} access={permission} contactAccess={contactAccess} leadAccess={leadAccess} onClose={setEventView} id={id} setAction={setAction} action={action} />

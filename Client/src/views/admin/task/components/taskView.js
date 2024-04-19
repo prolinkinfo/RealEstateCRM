@@ -156,7 +156,7 @@ const TaskView = (props) => {
                     </GridItem>
                 </Grid>
             </Card>}
-            <AddEdit isOpen={edit} onClose={() => setEdit(false)} viewClose={onClose} id={id?.event ? id?.event?._def?.extendedProps?._id : id} />
+            <AddEdit isOpen={edit} onClose={() => setEdit(false)} viewClose={onClose} id={id?.event ? id?.event?._def?.extendedProps?._id : id} userAction={"edit"} />
             <CommonDeleteModel isOpen={deleteManyModel} onClose={() => setDeleteManyModel(false)} type='Task' handleDeleteData={handleDeleteTask} ids={[id]} />
             {/* Edittask modal */}
             {/* <EditTask isOpen={edit} onClose={setEdit} viewClose={onClose} id={id?.event ? id?.event?._def?.extendedProps?._id : id} /> */}
