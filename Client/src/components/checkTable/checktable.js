@@ -319,7 +319,7 @@ const CommonCheckTable = (props) => {
                                 lineHeight="100%"
                                 textTransform={'capitalize'}
                             >
-                                {title} (<CountUpComponent key={dataLength} targetNumber={dataLength} />)
+                                {title} (<CountUpComponent key={data?.length} targetNumber={dataLength || data?.length} />)
                             </Text>
                             <CustomSearchInput setSearchbox={setSearchboxOutside ? setSearchboxOutside : setSearchbox} setDisplaySearchData={setSearchboxOutside ? props.setSearchDisplay : setDisplaySearchData} searchbox={searchboxOutside ? searchboxOutside : searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={props.setGetTagValuesOutside ? props.setGetTagValuesOutside : setGetTagValues} setGopageValue={setGopageValue} />
                             {
