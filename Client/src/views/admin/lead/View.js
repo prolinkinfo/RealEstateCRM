@@ -99,7 +99,18 @@ const View = () => {
         },
     ];
     const MeetingColumns = [
-        { Header: 'agenda', accessor: 'agenda' },
+        {
+            Header: 'Agenda', accessor: 'agenda', cell: (cell) => (
+                <Link to={`/metting/${cell?.row?.values?._id}`}> <Text
+                    me="10px"
+                    sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                    color='brand.600'
+                    fontSize="sm"
+                    fontWeight="700"
+                >
+                    {cell?.value || ' - '}
+                </Text></Link>)
+        },
         { Header: "date Time", accessor: "dateTime", },
         {
             Header: "times tamp", accessor: "timestamp",
@@ -114,7 +125,22 @@ const View = () => {
         { Header: "create By", accessor: "createdByName", },
     ];
     const taskColumns = [
-        { Header: 'Title', accessor: 'title' },
+        {
+            Header: 'Title', accessor: 'title', type: 'text', formikType: '', cell: (cell) => (
+                <div className="selectOpt">
+                    <Text
+                        onClick={() => navigate(`/view/${cell?.row?.original._id}`)}
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.value}
+                    </Text>
+                </div>
+            )
+        },
         { Header: "Category", accessor: "category", },
         { Header: "Assign To", accessor: "assignToName", },
         { Header: "Start Date", accessor: "start", },

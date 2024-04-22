@@ -503,7 +503,7 @@ const AddEdit = (props) => {
                         marginLeft: 2,
                         textTransform: "capitalize",
                     }} variant="outline"
-                        colorScheme="red" size="sm" ml={2} onClick={() => onClose(false)}>Close</Button>
+                        colorScheme="red" size="sm" ml={2} onClick={() => { onClose(false); resetForm(); }}>Close</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal >
