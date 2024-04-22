@@ -57,7 +57,6 @@ const Edit = (props) => {
 
     let response
 
-    console.log(data, "datataat")
 
     const fetchData = async () => {
         if (data) {
