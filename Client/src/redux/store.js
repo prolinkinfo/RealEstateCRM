@@ -31,6 +31,14 @@ const imagesPersistConfig = {
   key: 'image',
   storage,
 };
+const leadPersistConfig = {
+  key: 'lead',
+  storage,
+};
+const contactPersistConfig = {
+  key: 'contact',
+  storage,
+};
 
 export const store = configureStore({
   reducer: {
@@ -39,12 +47,12 @@ export const store = configureStore({
     user: userReducer,
     route: persistReducer(routePersistConfig, routeReducer),
     advanceSearchData: advanceSearchSlice,
-    leadData: leadSlice,
+    leadData: persistReducer(leadPersistConfig, leadSlice),
+    contactData: persistReducer(contactPersistConfig, contactSlice),
     propertyCustomFiled: propertyCustomFiledSlice,
     contactCustomFiled: contactCustomFiledSlice,
     leadCustomFiled: leadCustomFiledSlice,
     propertyData: propertySlice,
-    contactData: contactSlice,
   },
   middleware,
 });

@@ -67,7 +67,6 @@ const AddEdit = (props) => {
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
 
     const AddData = async () => {
-        console.log("values::--", values)
         if (userAction === "add") {
             try {
                 setIsLoding(true)
