@@ -125,14 +125,14 @@ export default function AdminNavbar(props) {
 					*/}
 					<Flex me={openSidebar ? "" : "5"} mx={openSidebar ? "14" : "1"} display={{ sm: "none", xl: "flex" }}>
 						{largeLogo && largeLogo[0]?.logoLgImg || largeLogo && largeLogo[0]?.logoSmImg ? <Image
-							style={{ width: openSidebar ? "165px" : "60px", height: '52px' }}
+							style={{ width: openSidebar ? "165px" : "60px", height: '52px', objectFit: "contain" }}
 							src={openSidebar === true ? largeLogo[0]?.logoLgImg : largeLogo[0]?.logoSmImg} // Set the source path of your image
 							alt="Logo" // Set the alt text for accessibility
 							cursor="pointer"
 							onClick={() => !props.from && setOpenSidebar(!openSidebar)}
 							userSelect="none"
 							my={2}
-						/> : <Heading my={4} style={{ width: openSidebar ? "165px" : "60px", height: '52px' }}
+						/> : <Heading my={4} style={{ width: openSidebar ? "165px" : "60px", height: '52px', objectFit: "contain" }}
 							cursor={"pointer"} onClick={() => !props.from && setOpenSidebar(!openSidebar)} userSelect={"none"}>{openSidebar === true ? "Prolink" : "Pr"}</Heading>}
 					</Flex>
 					<Box display={{ sm: "none", xl: "flex" }} ms={openSidebar ? "" : "3"} onClick={() => setOpenSidebar(!openSidebar)} style={{ fontSize: "25px" }}>{openSidebar ? <AiOutlineMenuFold /> : <AiOutlineMenuUnfold />}</Box>
