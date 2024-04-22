@@ -33,6 +33,7 @@ import moment from 'moment';
 import AddEdit from '../task/components/AddEdit'
 import { useDispatch, useSelector } from "react-redux";
 import { fetchContactCustomFiled } from '../../../redux/contactCustomFiledSlice';
+import { fetchPropertyCustomFiled } from "../../../redux/propertyCustomFiledSlice";
 
 const View = () => {
 
@@ -65,7 +66,8 @@ const View = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const contactData = useSelector((state) => state?.contactCustomFiled?.data)
-
+    const [propertyData, setPropertyData] = useState([]);
+    const [columns, setColumns] = useState([]);
     const [permission, callAccess, emailAccess, taskAccess, meetingAccess] = HasAccess(['Contacts', 'Calls', 'Emails', 'Tasks', 'Meetings']);
 
     const columnsDataColumns = [
@@ -150,7 +152,19 @@ const View = () => {
         { Header: "square Footage", accessor: "squareFootage", },
         { Header: "year Built", accessor: "yearBuilt", },
     ];
+    const fetchCustomDataFields = async () => {
+        setIsLoding(true);
+        const result = await dispatch(fetchPropertyCustomFiled())
+        setPropertyData(result?.payload);
 
+        const tempTableColumns = [
+            { Header: "#", accessor: "_id", isSortable: false, width: 10 },
+            ...result?.payload?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => ({ Header: field?.label, accessor: field?.name })),
+        ];
+
+        setColumns(tempTableColumns);
+        setIsLoding(false);
+    }
     const MeetingColumns = [
         // { Header: 'agenda', accessor: 'agenda' },
         {
@@ -250,6 +264,10 @@ const View = () => {
         fetchData()
     }, [action])
 
+    useEffect(() => {
+        fetchCustomDataFields()
+    }, [])
+
     function toCamelCase(text) {
         return text?.replace(/([a-z])([A-Z])/g, '$1 $2');
     }
@@ -326,7 +344,7 @@ const View = () => {
                                                 <Box>
                                                     <Flex alignItems={'center'} mb={2} justifyContent={'space-between'}>
                                                         <Heading size="md">
-                                                            Property of Interest({allData?.interestProperty?.interestProperty?.length})
+                                                            Property of Interest ({allData?.interestProperty?.interestProperty?.length})
                                                         </Heading>
                                                         <Button onClick={() => setPropertyModel(true)} leftIcon={<LuBuilding2 />} size="sm" colorScheme="gray" bg={buttonbg}>Select Interested Property  </Button>
                                                     </Flex>
@@ -334,11 +352,24 @@ const View = () => {
 
                                                 <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                                     <GridItem colSpan={{ base: 2 }}>
-                                                        <PropertyTable fetchData={fetchData} columnsData={PropertyColumn} tableData={allData?.interestProperty?.interestProperty?.length > 0 ? allData?.interestProperty?.interestProperty : []} title={'Interested Property'} />
+                                                        {/* <PropertyTable fetchData={fetchData} columnsData={PropertyColumn} tableData={allData?.interestProperty?.interestProperty?.length > 0 ? allData?.interestProperty?.interestProperty : []} title={'Interested Property'} /> */}
+                                                        <CommonCheckTable
+                                                            isLoding={isLoding}
+                                                            columnData={columns}
+                                                            dataColumn={columns}
+                                                            allData={allData?.interestProperty?.interestProperty || []}
+                                                            tableData={allData?.interestProperty?.interestProperty || []}
+                                                            tableCustomFields={propertyData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
+                                                            AdvanceSearch={() => ""}
+                                                            ManageGrid={false}
+                                                            deleteMany={false}
+                                                            selectType="multiple"
+                                                            customSearch={false}
+                                                            checkBox={false}
+                                                        />
                                                     </GridItem>
                                                 </Grid>
                                             </GridItem>
-
                                         </Grid>
                                     </Card>
                                 </GridItem>
