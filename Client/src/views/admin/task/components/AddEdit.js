@@ -72,10 +72,10 @@ const AddEdit = (props) => {
                 setIsLoding(true)
 
                 if (values?.start) {
-                    values.start = moment(values.start).format('YYYY-MM-DD HH:mm') || '';
+                    values.start = values?.allDay ? moment(values?.start).format('YYYY-MM-DD') : moment(values?.start).format('YYYY-MM-DD HH:mm');
                 }
                 if (values?.end) {
-                    values.end = moment(values.end).format('YYYY-MM-DD HH:mm') || '';
+                    values.end = values?.allDay ? moment(values?.end).format('YYYY-MM-DD') : moment(values?.end).format('YYYY-MM-DD HH:mm');
                 }
 
                 let response = await postApi('api/task/add', values)
@@ -95,10 +95,10 @@ const AddEdit = (props) => {
                 setIsLoding(true)
 
                 if (values?.start) {
-                    values.start = moment(values.start).format('YYYY-MM-DD HH:mm') || '';
+                    values.start = values?.allDay ? moment(values?.start).format('YYYY-MM-DD') : moment(values?.start).format('YYYY-MM-DD HH:mm');
                 }
                 if (values?.end) {
-                    values.end = moment(values.end).format('YYYY-MM-DD HH:mm') || '';
+                    values.end = values?.allDay ? moment(values?.end).format('YYYY-MM-DD') : moment(values?.end).format('YYYY-MM-DD HH:mm');
                 }
 
                 let response = await putApi(`api/task/edit/${id}`, values)
@@ -364,12 +364,12 @@ const AddEdit = (props) => {
                                     Start Date<Text color={"red"}>*</Text>
                                 </FormLabel>
                                 <Input
-                                    type={'datetime-local'}
+                                    type={values?.allDay ? 'date' : 'datetime-local'}
                                     fontSize='sm'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    min={dayjs(todayTime).format('YYYY-MM-DD HH:mm')}
-                                    value={values?.start && dayjs(values?.start).format('YYYY-MM-DD HH:mm') || null}
+                                    min={values?.allDay ? dayjs(today).format('YYYY-MM-DD') : dayjs(todayTime).format('YYYY-MM-DD HH:mm')}
+                                    value={values?.allDay ? values?.start && dayjs(values?.start).format('YYYY-MM-DD') || null : values?.start && dayjs(values?.start).format('YYYY-MM-DD HH:mm') || null}
                                     name="start"
                                     fontWeight='500'
                                     borderColor={errors?.start && touched?.start ? "red.300" : null}
@@ -381,12 +381,12 @@ const AddEdit = (props) => {
                                     End Date
                                 </FormLabel>
                                 <Input
-                                    type={'datetime-local'}
+                                    type={values?.allDay ? 'date' : 'datetime-local'}
                                     min={values.start}
                                     fontSize='sm'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={dayjs(values.end).format('YYYY-MM-DD HH:mm') || ''}
+                                    value={values?.allDay ? values?.end && dayjs(values?.end).format('YYYY-MM-DD') || null : values?.end && dayjs(values?.end).format('YYYY-MM-DD HH:mm') || null}
                                     name="end"
                                     fontWeight='500'
                                     borderColor={errors?.end && touched?.end ? "red.300" : null}
