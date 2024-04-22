@@ -469,11 +469,11 @@ const AddEdit = (props) => {
                                     onChange={(e) => setFieldValue("status", e.target.value)}
                                     value={values?.status}
                                     style={{ fontSize: "14px" }}>
-                                    <option value='completed'>Completed</option>
                                     <option value='todo'>Todo</option>
                                     <option value='onHold'>On Hold</option>
-                                    <option value='inProgress'>In Progress</option>
                                     <option value='pending'>Pending</option>
+                                    <option value='inProgress'>In Progress</option>
+                                    <option value='completed'>Completed</option>
                                 </Select>
                             </GridItem>
                             <GridItem colSpan={{ base: 12 }} >
