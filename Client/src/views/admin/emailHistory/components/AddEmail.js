@@ -60,7 +60,6 @@ const AddEmailHistory = (props) => {
     //     }
     // }, [props.id, props.lead])
 
-    console.log(props.id, "props.idprops.idprops.idprops.id")
     return (
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
             <ModalOverlay />
