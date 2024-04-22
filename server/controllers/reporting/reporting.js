@@ -74,6 +74,7 @@ const lineChart = async (req, res) => {
     const userDetails = await user.findOne({ _id: req.user.userId }).populate({
         path: 'roles'
     })
+    const fields = await customField.find({ deleted: false })
 
     const mergedRoles = userDetails?.roles?.reduce((acc, current) => {
         current?.access?.forEach(permission => {
@@ -107,35 +108,35 @@ const lineChart = async (req, res) => {
 
     if (mergedRoles && mergedRoles.length > 0) {
         for (const item of mergedRoles) {
-            if (item.title === "Calls" && item.create === false && item.update === false && item.delete === false && item.view === false) {
+            if (item.title === "Calls" && item.view === false) {
                 const data = result.filter((val) => val.name !== "Calls")
                 result = data
             }
-            if (item.title === "Emails" && item.create === false && item.update === false && item.delete === false && item.view === false) {
+            if (item.title === "Emails" && item.view === false) {
                 const data = result.filter((val) => val.name !== "Emails")
                 result = data
             }
-            if (item.title === "Meetings" && item.create === false && item.update === false && item.delete === false && item.view === false) {
+            if (item.title === "Meetings" && item.view === false) {
                 const data = result.filter((val) => val.name !== "Meetings")
                 result = data
             }
-            if (item.title === "Tasks" && item.create === false && item.update === false && item.delete === false && item.view === false) {
+            if (item.title === "Tasks" && item.view === false) {
                 const data = result.filter((val) => val.name !== "Tasks")
                 result = data
             }
-            if (item.title === "Leads" && item.create === false && item.update === false && item.delete === false && item.view === false) {
+            if (item.title === "Leads" && item.view === false) {
                 const data = result.filter((val) => val.name !== "Leads")
                 result = data
             }
-            if (item.title === "Contacts" && item.create === false && item.update === false && item.delete === false && item.view === false) {
+            if (item.title === "Contacts" && item.view === false) {
                 const data = result.filter((val) => val.name !== "Contacts")
                 result = data
             }
-            if (item.title === "Properties" && item.create === false && item.update === false && item.delete === false && item.view === false) {
+            if (item.title === "Properties" && item.view === false) {
                 const data = result.filter((val) => val.name !== "Properties")
                 result = data
             }
-            if (item.create === true || item.update === true || item.delete === true || item.view === true) {
+            if (item.view === true) {
                 if (!result.find((i) => i.name === item.title)) {
                     const ExistingModel = mongoose.model(item.title);
                     const allData = await ExistingModel.find({ deleted: false });
@@ -153,6 +154,25 @@ const lineChart = async (req, res) => {
 
             }
         }
+    } else if (userDetails.role === "superAdmin") {
+        for (const item of fields) {
+            if (!result.find((i) => i.name === item.moduleName)) {
+                const ExistingModel = mongoose.model(item.moduleName);
+                const allData = await ExistingModel.find({ deleted: false });
+                const colorIndex = result.length % colors.length;
+                const color = colors[colorIndex];
+
+                const newObj = {
+                    name: item.moduleName,
+                    length: allData.length,
+                    color: color
+                };
+
+                result.push(newObj);
+            }
+        }
+    } else {
+        result = [];
     }
 
     res.send(result)

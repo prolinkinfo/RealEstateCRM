@@ -37,11 +37,9 @@ function RoleModal(props) {
     fetchData,
     columnsData,
     isOpen,
-    accessRole,
     setAction,
     setAccess,
     _id,
-    setAccessRole,
     onOpen,
     setRoleModal,
   } = props;
@@ -67,7 +65,7 @@ function RoleModal(props) {
   const [editModal, setEditModal] = useState(false);
   const [openUser, setOpenUser] = useState();
   const [gopageValue, setGopageValue] = useState();
-  const data = useMemo(() => accessRole, [accessRole]);
+  const data = useMemo(() => tableData, [tableData]);
   const user = JSON.parse(localStorage.getItem("user"));
   const [userdata, setUserData] = useState([]);
 
@@ -101,6 +99,7 @@ function RoleModal(props) {
       setUserData(result?.data);
     }
   }
+
 
   useEffect(() => {
     userFetchData()
@@ -138,7 +137,7 @@ function RoleModal(props) {
                         borderColor={borderColor}
                         display={column.display === false && "none"}
                       >
-                      
+
                         {column.display !== false && column.render("Header")}
                       </Th>
                     ))}
@@ -275,7 +274,7 @@ function RoleModal(props) {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <ChangeAccess tableData={tableData} accessRole={accessRole} setAccessRole={setAccessRole} setAccess={setAccess} setRoleModal={setRoleModal} columnsData={columnsData} _id={_id} fetchData={fetchData} name={name} setEditModal={setEditModal} setAction={setAction} editModal={editModal} />
+      <ChangeAccess tableData={tableData} accessRole={tableData} setAccess={setAccess} setRoleModal={setRoleModal} columnsData={columnsData} _id={_id} fetchData={fetchData} name={name} setEditModal={setEditModal} setAction={setAction} editModal={editModal} />
       <UserModal isOpen={openUser}
         setRoleModal={setRoleModal}
         setOpenUser={setOpenUser}

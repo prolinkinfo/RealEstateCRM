@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getApi } from 'services/api';
 
 const initialState = {
-    image: [],
+    images: [],
     status: 'idle',
     error: null,
 };
@@ -19,7 +19,6 @@ export const fetchImage = createAsyncThunk('images/fetchImage', async (active, {
         throw error;
     }
 });
-
 const imageSlice = createSlice({
     name: 'images',
     initialState,
@@ -31,7 +30,8 @@ const imageSlice = createSlice({
             })
             .addCase(fetchImage.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.image = action.payload;
+                state.images = action.payload;
+                state.error = null; // Reset error on successful fetch
             })
             .addCase(fetchImage.rejected, (state, action) => {
                 state.status = 'failed';
@@ -39,4 +39,6 @@ const imageSlice = createSlice({
             });
     },
 });
+
 export default imageSlice.reducer;
+

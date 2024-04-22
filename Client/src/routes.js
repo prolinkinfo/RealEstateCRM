@@ -65,14 +65,12 @@ const PhoneCallView = React.lazy(() => import("views/admin/phoneCall/View"));
 
 const Report = React.lazy(() => import("views/admin/reports"));
 
-
 // Auth Imports
 const SignInCentered = React.lazy(() => import("views/auth/signIn"));
 // admin setting 
 const AdminSetting = React.lazy(() => import("views/admin/adminSetting"));
 const validation = React.lazy(() => import("views/admin/validation"));
 const module = React.lazy(() => import("views/admin/moduleName"));
-
 
 const routes = [
   // ========================== Dashboard ==========================

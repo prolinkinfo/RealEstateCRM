@@ -16,6 +16,8 @@ import CommonDeleteModel from 'components/commonDeleteModel';
 import { deleteManyApi } from 'services/api';
 import { getSearchData, setGetTagValues } from '../../../redux/advanceSearchSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { fetchLeadData } from '../../../redux/leadSlice';
+import { fetchLeadCustomFiled } from '../../../redux/leadCustomFiledSlice';
 
 const Index = () => {
     const title = "Leads";
@@ -28,7 +30,7 @@ const Index = () => {
     const [permission, emailAccess, callAccess] = HasAccess(['Leads', 'Emails', 'Calls']);
     const [isLoding, setIsLoding] = useState(false);
     const [searchDisplay, setSearchDisplay] = useState(false);
-    const [data, setData] = useState([]);
+    // const [data, setData] = useState([]);
     const [tableColumns, setTableColumns] = useState([]);
     const [columns, setColumns] = useState([]);
     const [dataColumn, setDataColumn] = useState([]);
@@ -45,6 +47,9 @@ const Index = () => {
     const [selectedValues, setSelectedValues] = useState([]);
     const [isImport, setIsImport] = useState(false);
     const [emailRec, setEmailRec] = useState('');
+    const [phoneRec, setPhoneRec] = useState({});
+
+    const data = useSelector((state) => state?.leadData?.data);
 
     const searchedDataOut = useSelector((state) => state?.advanceSearchData?.searchResult)
     const payload = {
@@ -54,7 +59,7 @@ const Index = () => {
     const fetchData = async () => {
         setIsLoding(true);
         let result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
-        setData(result?.data);
+        // setData(result?.data);
         setIsLoding(false);
     };
 
@@ -64,6 +69,7 @@ const Index = () => {
             setAddEmailHistory(true);
         }
     }
+
     const setStatusData = async (cell, e) => {
         try {
             setIsLoding(true)
@@ -92,13 +98,12 @@ const Index = () => {
         }
     }
 
-
-
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
 
-        const result = await getApi(`api/custom-field/?moduleName=Leads`);
-        setLeadData(result?.data);
+        // const result = await getApi(`api/custom-field/?moduleName=Leads`);
+        const result = await dispatch(fetchLeadCustomFiled());
+        setLeadData(result?.payload);
 
         const actionHeader = {
             Header: "Action", accessor: "action", isSortable: false, center: true,
@@ -110,13 +115,13 @@ const Index = () => {
                             {permission?.update &&
                                 <MenuItem py={2.5} icon={<EditIcon fontSize={15} mb={1} />} onClick={() => { setEdit(true); setSelectedId(row?.values?._id); }}>Edit</MenuItem>}
                             {callAccess?.create &&
-                                <MenuItem py={2.5} width={"165px"} onClick={() => { setAddPhoneCall(true); setCallSelectedId(row?.values?._id) }} icon={<PhoneIcon fontSize={15} mb={1} />}>Create Call</MenuItem>}
+                                <MenuItem py={2.5} width={"165px"} onClick={() => { setPhoneRec(row?.original); setAddPhoneCall(true); setCallSelectedId(row?.values?._id) }} icon={<PhoneIcon fontSize={15} mb={1} />}>Create Call</MenuItem>}
                             {emailAccess?.create &&
                                 <MenuItem py={2.5} width={"165px"} onClick={() => {
                                     handleOpenEmail(row?.values?._id, row?.original); setSelectedId(row?.values?._id)
                                 }} icon={<EmailIcon fontSize={15} mb={1} />}>EmailSend </MenuItem>}
                             {permission?.view &&
-                                <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { navigate(`/leadView/${row?.values?._id}`) }}>View</MenuItem>}
+                                <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { navigate(`/leadView/${row?.values?._id}`, { state: { leadList: data } }) }}>View</MenuItem>}
                             {permission?.delete &&
                                 <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} mb={1} />} onClick={() => { setDelete(true); setSelectedValues([row?.values?._id]); }}>Delete</MenuItem>}
                         </MenuList>
@@ -138,9 +143,8 @@ const Index = () => {
                     </div>
                 )
             },
-            ...(result?.data?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => (field?.name !== "leadStatus" && { Header: field?.label, accessor: field?.name })) || []),
+            ...(result?.payload?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => (field?.name !== "leadStatus" && { Header: field?.label, accessor: field?.name })) || []),
             ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : []),
-
         ];
 
         setSelectedColumns(JSON.parse(JSON.stringify(tempTableColumns)));
@@ -166,9 +170,10 @@ const Index = () => {
         }
     }
 
-
     useEffect(() => {
-        fetchData();
+        if (window.location.pathname === "/lead") {
+            dispatch(fetchLeadData())
+        }
         fetchCustomDataFields();
     }, [action])
 
@@ -225,8 +230,8 @@ const Index = () => {
             {isOpen && <Add isOpen={isOpen} size={size} leadData={leadData[0]} onClose={onClose} setAction={setAction} action={action} />}
             {edit && <Edit isOpen={edit} size={size} leadData={leadData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={leadData?.[0]?._id} />}
             {deleteModel && <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Leads' handleDeleteData={handleDeleteLead} ids={selectedValues} />}
-            {addEmailHistory && <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} lead='true' id={selectedId} leadEmail={emailRec} />}
-            {addPhoneCall && <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} lead='true' id={callSelectedId} />}
+            {addEmailHistory && <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} lead={true} id={selectedId} leadEmail={emailRec} />}
+            {addPhoneCall && <AddPhoneCall fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} lead={true} id={callSelectedId} LData={phoneRec} />}
             {isImport && <ImportModal text='Lead file' isOpen={isImport} onClose={setIsImport} customFields={leadData?.[0]?.fields || []} />}
 
         </div>

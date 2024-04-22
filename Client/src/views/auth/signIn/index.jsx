@@ -48,7 +48,7 @@ function SignIn() {
     dispatch(fetchImage("?isActive=true"));
   }, [dispatch]);
 
-  const image = useSelector((state) => state?.images?.image);
+  const image = useSelector((state) => state?.images?.images);
 
   const [show, setShow] = React.useState(false);
   const showPass = () => setShow(!show);

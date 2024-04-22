@@ -33,7 +33,7 @@ const CustomView = ({ data, toCamelCase, fieldData }) => {
                     <>
                         <GridItem colSpan={{
                             base: 12, md: getColSpanMd(ind, lastLengthMd, headingLengthMd), lg: getColSpanLg(ind, lastLength, headingLength)
-                        }}>
+                        }} key={ind}>
                             <Card>
                                 <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                                     <GridItem colSpan={12}>
@@ -46,7 +46,7 @@ const CustomView = ({ data, toCamelCase, fieldData }) => {
                                         data?.fields?.filter((itm) => itm?.belongsTo === item?._id)?.map((field) => (
                                             <GridItem colSpan={{ base: 12, md: 6 }} key={field?.name}>
                                                 <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> {field?.label}</Text>
-                                                <Text color={'blackAlpha.900'} fontSize="sm" > {fieldData && fieldData[field?.name] !== undefined ? fieldData[field?.name] : "N/A"}</Text>
+                                                <Text color={'blackAlpha.900'} fontSize="sm" > {(fieldData && (fieldData[field?.name] !== undefined ? fieldData[field?.name] : "N/A")) || "N/A"}</Text>
                                             </GridItem>
                                         ))
                                     }
@@ -59,6 +59,7 @@ const CustomView = ({ data, toCamelCase, fieldData }) => {
                 <GridItem colSpan={{
                     base: 12,
                 }}>
+
                     <Card>
                         <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                             <GridItem colSpan={12}>
@@ -71,7 +72,7 @@ const CustomView = ({ data, toCamelCase, fieldData }) => {
                                 data?.fields?.map((field) => (
                                     <GridItem colSpan={{ base: 12, md: 6 }} key={field?.name}>
                                         <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold"> {field?.label}</Text>
-                                        <Text color={'blackAlpha.900'} fontSize="sm" > {fieldData && fieldData[field?.name] !== undefined ? fieldData[field?.name] : "N/A"}</Text>
+                                        <Text color={'blackAlpha.900'} fontSize="sm" > {(fieldData && (fieldData[field?.name] !== undefined ? fieldData[field?.name] : "N/A")) || "N/A"}</Text>
                                     </GridItem>
                                 ))
                             }

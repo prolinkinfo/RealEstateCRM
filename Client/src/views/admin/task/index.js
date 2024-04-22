@@ -2,19 +2,19 @@ import { useEffect, useState } from 'react';
 import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList, Select, Text, useDisclosure } from '@chakra-ui/react';
 import { getApi } from 'services/api';
-import AddTask from './components/addTask';
 import { HasAccess } from '../../../redux/accessUtils';
 import CommonCheckTable from '../../../components/checkTable/checktable';
 import TaskAdvanceSearch from './components/TaskAdvanceSearch';
 import { SearchIcon } from "@chakra-ui/icons";
 import { CiMenuKebab } from 'react-icons/ci';
-import EditTask from './components/editTask';
 import EventView from './eventView';
 import ImportModal from '../lead/components/ImportModal';
 import { putApi } from 'services/api';
 import { useLocation } from 'react-router-dom';
 import CommonDeleteModel from 'components/commonDeleteModel';
 import { deleteManyApi } from 'services/api';
+import AddEdit from './components/AddEdit';
+import { useNavigate } from 'react-router-dom';
 
 const Task = () => {
     const title = "Tasks";
@@ -35,9 +35,17 @@ const Task = () => {
     const [data, setData] = useState([]);
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
+    const [userAction, setUserAction] = useState("");
     const [permission, leadAccess, contactAccess] = HasAccess(["Tasks", 'Leads', 'Contacts']);
     const location = useLocation();
     const state = location.state;
+    const navigate = useNavigate()
+
+    const handleEditOpen = (row) => {
+        onOpen();
+        setUserAction("edit")
+        setSelectedId(row?.values?._id);
+    }
     const actionHeader = {
         Header: "Action", isSortable: false, center: true,
         cell: ({ row }) => (
@@ -46,9 +54,11 @@ const Task = () => {
                     <MenuButton ><CiMenuKebab /></MenuButton>
                     <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
                         {permission?.update &&
-                            <MenuItem py={2.5} icon={<EditIcon fontSize={15} mb={1} />} onClick={() => { setEdit(true); setSelectedId(row?.values?._id); }}>Edit</MenuItem>}
+                            <MenuItem py={2.5} icon={<EditIcon fontSize={15} mb={1} />} onClick={() => handleEditOpen(row)}>Edit</MenuItem>}
+                        {/* <MenuItem py={2.5} icon={<EditIcon fontSize={15} mb={1} />} onClick={() => { setEdit(true); setSelectedId(row?.values?._id); }}>Edit</MenuItem>} */}
                         {permission?.view &&
-                            <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { setEventView(true); setId(row?.original._id) }}>View</MenuItem>}
+                            <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { setId(row?.original._id); handleViewOpen(row?.values?._id); }}>View</MenuItem>}
+                        {/* <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { setEventView(true); setId(row?.original._id) }}>View</MenuItem> */}
                         {permission?.delete &&
                             <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} mb={1} />} onClick={() => { setDeleteMany(true); setSelectedValues([row?.values?._id]); }}>Delete</MenuItem>}
                     </MenuList>
@@ -67,7 +77,7 @@ const Task = () => {
             Header: 'Title', accessor: 'title', type: 'text', formikType: '', cell: (cell) => (
                 <div className="selectOpt">
                     <Text
-                        onClick={() => handleDateClick(cell)}
+                        onClick={() => handleViewOpen(cell?.row?.original._id)}
                         me="10px"
                         sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
                         color='brand.600'
@@ -93,7 +103,7 @@ const Task = () => {
                 </div>
             )
         },
-        { Header: "Assign To", accessor: "assignmentToName", type: 'text', formikType: '' },
+        { Header: "Assign To", accessor: "assignToName", type: 'text', formikType: '' },
         { Header: "Start Date", accessor: "start", type: 'date', formikType: '' },
         { Header: "End Date", accessor: "end", type: 'date', formikType: '' },
         ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : []),
@@ -163,7 +173,19 @@ const Task = () => {
     const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
     const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 
+    const handleViewOpen = (id) => {
+        navigate(`/view/${id}`)
+    }
 
+    const addBtn = () => {
+        onOpen();
+        setUserAction("add");
+    }
+
+    const handleClose = () => {
+        onClose();
+        setSelectedId("")
+    }
     useEffect(() => {
         fetchData();
     }, [action])
@@ -176,21 +198,16 @@ const Task = () => {
                 columnData={columns}
                 dataColumn={dataColumn}
                 allData={data}
-                tableData={data}
                 searchDisplay={displaySearchData}
                 setSearchDisplay={setDisplaySearchData}
                 searchedDataOut={searchedData}
                 setSearchedDataOut={setSearchedData}
                 tableCustomFields={[]}
                 access={permission}
-                action={action}
-                setAction={setAction}
                 selectedColumns={selectedColumns}
                 setSelectedColumns={setSelectedColumns}
-                isOpen={isOpen}
-                onClose={onclose}
                 state={state}
-                onOpen={onOpen}
+                onOpen={addBtn}
                 selectedValues={selectedValues}
                 setSelectedValues={setSelectedValues}
                 setDelete={setDeleteMany}
@@ -214,10 +231,9 @@ const Task = () => {
                 setGetTagValues={setGetTagValuesOutside}
                 setSearchbox={setSearchboxOutside}
             />
-
-            <AddTask isOpen={isOpen} fetchData={fetchData} onClose={onClose} />
-            <EditTask isOpen={edit} onClose={setEdit} viewClose={onClose} id={selectedId} setAction={setAction} />
-            <EventView fetchData={fetchData} isOpen={eventView} access={permission} contactAccess={contactAccess} leadAccess={leadAccess} onClose={setEventView} info={id} setAction={setAction} action={action} />
+            <AddEdit isOpen={isOpen} fetchData={fetchData} onClose={handleClose} userAction={userAction} id={selectedId} setAction={setAction} />
+            {/* <EditTask isOpen={edit} onClose={setEdit} viewClose={onClose} id={selectedId} setAction={setAction} /> */}
+            {/* <EventView fetchData={fetchData} isOpen={eventView} access={permission} contactAccess={contactAccess} leadAccess={leadAccess} onClose={setEventView} id={id} setAction={setAction} action={action} /> */}
             <CommonDeleteModel isOpen={deleteMany} onClose={() => setDeleteMany(false)} type='Tasks' handleDeleteData={handleDeleteTask} ids={selectedValues} />
             <ImportModal text='Lead file' fetchData={fetchData} isOpen={isImportLead} onClose={setIsImportLead} />
         </div>

@@ -38,8 +38,8 @@ const Index = (props) => {
                     <MenuButton><CiMenuKebab /></MenuButton>
                     <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
                         {permission?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/Email/${row?.values._id}`)} icon={<ViewIcon mb={'2px'} fontSize={15} />}>View</MenuItem>}
-                        {row?.original?.createBy && contactAccess?.view ?
-                            <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(row?.original?.createBy && `/contactView/${row?.original.createBy}`)} icon={row?.original.createBy && <IoIosContact fontSize={15} />}>  {(row?.original.createBy && contactAccess?.view) && "contact"}
+                        {row?.original?.createByContact && contactAccess?.view ?
+                            <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(row?.original?.createByContact && `/contactView/${row?.original.createByContact}`)} icon={row?.original.createByContact && <IoIosContact fontSize={15} />}>  {(row?.original.createByContact && contactAccess?.view) && "contact"}
                             </MenuItem>
                             : ''}
                         {row?.original.createByLead && leadAccess?.view ? <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(`/leadView/${row?.original.createByLead}`)} icon={row?.original.createByLead && leadAccess?.view && <MdLeaderboard style={{ marginBottom: '4px' }} fontSize={15} />}>{row?.original.createByLead && leadAccess?.view && 'lead'}</MenuItem> : ''}
@@ -68,7 +68,7 @@ const Index = (props) => {
         {
             Header: "Realeted To", accessor: 'realeted', cell: ({ row }) => (
                 <Text  >
-                    {row?.original.createBy && contactAccess?.view ? <Link to={`/contactView/${row?.original.createBy}`}>
+                    {row?.original.createByContact && contactAccess?.view ? <Link to={`/contactView/${row?.original.createByContact}`}>
                         <Text
                             me="10px"
                             sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
@@ -76,7 +76,7 @@ const Index = (props) => {
                             fontSize="sm"
                             fontWeight="700"
                         >
-                            {row?.original.createBy && "Contact"}
+                            {row?.original.createByContact && "Contact"}
                         </Text>
                     </Link> :
                         <Text
@@ -84,7 +84,7 @@ const Index = (props) => {
                             fontSize="sm"
                             fontWeight="700"
                         >
-                            {row?.original.createBy && "Contact"}
+                            {row?.original.createByContact && "Contact"}
                         </Text>}
 
                     {leadAccess?.view && row?.original.createByLead ? <Link to={`/leadView/${row?.original.createByLead}`}>
@@ -170,7 +170,7 @@ const Index = (props) => {
                 selectedValues={selectedValues}
                 setSelectedValues={setSelectedValues}
                 setDelete={setDelete}
-                deleteMany={'true'}
+                deleteMany={true}
                 AdvanceSearch={
                     <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} mt={{ sm: "5px", md: "0" }} size="sm" onClick={() => setAdvanceSearch(true)}>Advance Search</Button>
                 }

@@ -17,21 +17,22 @@ import { getApi } from "services/api";
 import AddEmailHistory from "../emailHistory/components/AddEmail";
 import AddMeeting from "../meeting/components/Addmeeting";
 import AddPhoneCall from "../phoneCall/components/AddPhoneCall";
-import AddTask from "../task/components/addTask";
 import Add from "./Add";
 import Edit from "./Edit";
-import ColumnsTable from "./components/ColumnsTable";
 import PhoneCall from "./components/phonCall";
 import PropertyModel from "./components/propertyModel";
 import PropertyTable from "./components/propertyTable";
 import { HasAccess } from "../../../redux/accessUtils";
-import MeetingColumnsTable from "../meeting/components/ColumnsTable";
-import TaskColumnsTable from "../task/components/ColumnsTable";
 import DataNotFound from "components/notFoundData";
 import CustomView from "utils/customView";
 import AddDocumentModal from "utils/addDocumentModal";
 import CommonDeleteModel from "components/commonDeleteModel";
 import { deleteApi } from "services/api";
+import CommonCheckTable from "components/checkTable/checktable";
+import moment from 'moment';
+import AddEdit from '../task/components/AddEdit'
+import { useDispatch, useSelector } from "react-redux";
+import { fetchContactCustomFiled } from '../../../redux/contactCustomFiledSlice';
 
 const View = () => {
 
@@ -42,7 +43,7 @@ const View = () => {
     const buttonbg = useColorModeValue("gray.200", "white");
     const [data, setData] = useState([])
     const [allData, setAllData] = useState([]);
-    const [contactData, setContactData] = useState([]);
+    // const [contactData, setContactData] = useState([]);
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [edit, setEdit] = useState(false);
     const [deleteModel, setDelete] = useState(false);
@@ -59,17 +60,87 @@ const View = () => {
     const [showTasks, setShowTasks] = useState(false);
     const [showMeetings, setShowMeetings] = useState(false);
     const [addDocument, setAddDocument] = useState(false);
-
+    const [selectedTab, setSelectedTab] = useState(0);
     const size = "lg";
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const contactData = useSelector((state) => state?.contactCustomFiled?.data)
 
     const [permission, callAccess, emailAccess, taskAccess, meetingAccess] = HasAccess(['Contacts', 'Calls', 'Emails', 'Tasks', 'Meetings']);
 
     const columnsDataColumns = [
         { Header: "sender", accessor: "senderName", },
-        { Header: "recipient", accessor: "createByName", },
-        { Header: "time stamp", accessor: "timestamp", },
-        { Header: "Created", accessor: "createBy", },
+        {
+            Header: "recipient", accessor: "createByName", cell: (cell) => (
+                <Link to={`/Email/${cell?.row?.original?._id}`}>
+                    <Text
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.value || '-'}
+                    </Text>
+                </Link>)
+        },
+        {
+            Header: "time stamp", accessor: "timestamp",
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        {moment(cell?.value).fromNow()}
+                    </Text>
+                </div>
+            )
+        },
+        {
+            Header: "Created", accessor: "createBy",
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        {moment(cell?.row?.values.timestamp).format('h:mma (DD/MM)')}
+                    </Text>
+                </div>
+            )
+        },
+    ];
+    const callColumns = [
+        { Header: "sender", accessor: "senderName", },
+        {
+            Header: "recipient", accessor: "createByName", cell: (cell) => (
+                <Link to={`/phone-call/${cell?.row?.original?._id}`}>
+                    <Text
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.value || '-'}
+                    </Text>
+                </Link>)
+        },
+        {
+            Header: "time stamp", accessor: "timestamp",
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        {moment(cell?.value).fromNow()}
+                    </Text>
+                </div>
+            )
+        },
+        {
+            Header: "Created", accessor: "createBy",
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        {moment(cell?.row?.values.timestamp).format('h:mma (DD/MM)')}
+                    </Text>
+                </div>
+            )
+        },
     ];
 
     const PropertyColumn = [
@@ -79,26 +150,63 @@ const View = () => {
         { Header: "square Footage", accessor: "squareFootage", },
         { Header: "year Built", accessor: "yearBuilt", },
     ];
-    const textColumnsDataColumns = [
-        { Header: "sender", accessor: "sender", },
-        { Header: "recipient", accessor: "to", },
-        { Header: "time stamp", accessor: "timestamp", },
-        { Header: "Created", accessor: "createBy", },
-    ];
 
     const MeetingColumns = [
-        { Header: 'agenda', accessor: 'agenda' },
+        // { Header: 'agenda', accessor: 'agenda' },
+        {
+            Header: 'agenda', accessor: 'agenda', cell: (cell) => (
+                <Link to={`/metting/${cell?.row?.original?._id}`}>
+                    <Text
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.value || '-'}
+                    </Text>
+                </Link>)
+        },
         { Header: "date Time", accessor: "dateTime", },
-        { Header: "times tamp", accessor: "timestamp", },
+        {
+            Header: "times tamp", accessor: "timestamp",
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        {moment(cell?.value).fromNow()}
+                    </Text>
+                </div>
+            )
+        },
         { Header: "create By", accessor: "createdByName", },
     ];
     const taskColumns = [
-        { Header: 'Title', accessor: 'title' },
+        // { Header: 'Title', accessor: 'title' },
+        {
+            Header: "Title", accessor: "title", cell: (cell) => (
+                <Link to={`/view/${cell?.row?.original?._id}`}>
+                    {console.log(`/view/${cell?.row?.original?._id}`)}
+                    <Text
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.value || '-'}
+                    </Text>
+                </Link>)
+        },
         { Header: "Category", accessor: "category", },
-        { Header: "Assignment To", accessor: "assignmentToName", },
+        { Header: "Assign To", accessor: "assignToName", },
         { Header: "Start Date", accessor: "start", },
         { Header: "End Date", accessor: "end", },
     ];
+
+    const handleTabChange = (index) => {
+        setSelectedTab(index);
+    };
+
 
     const download = async (data) => {
         if (data) {
@@ -112,12 +220,13 @@ const View = () => {
         }
     }
 
-    const fetchData = async () => {
+    const fetchData = async (i) => {
         setIsLoding(true)
         let response = await getApi('api/contact/view/', param.id)
         setData(response.data?.contact);
         setAllData(response?.data);
         setIsLoding(false)
+        setSelectedTab(i)
     }
 
     const handleDeleteContact = async (id) => {
@@ -145,27 +254,22 @@ const View = () => {
         return text?.replace(/([a-z])([A-Z])/g, '$1 $2');
     }
 
-    const fetchCustomData = async () => {
-        const response = await getApi('api/custom-field?moduleName=Contacts')
-        setContactData(response.data)
-    }
-
     useEffect(() => {
-        if (fetchCustomData) fetchCustomData()
-    }, [action])
+        dispatch(fetchContactCustomFiled())
+    }, [])
+
+    const firstValue = Object?.values(param)[0];
+    const splitValue = firstValue?.split('/')
 
     return (
         <>
-            {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} contactData={contactData[0]} />}
-            <Edit isOpen={edit} contactData={contactData[0]} size={size} onClose={setEdit} setAction={setAction} moduleId={contactData?.[0]?._id} />
-            <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Contact' handleDeleteData={handleDeleteContact} ids={param.id} />
-            <AddEmailHistory fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} viewData={allData} lead="false" />
+
 
             {isLoding ?
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                     <Spinner />
                 </Flex> : <>
-                    <Tabs >
+                    <Tabs onChange={handleTabChange} index={selectedTab}>
                         <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={1}>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <TabList sx={{
@@ -193,7 +297,7 @@ const View = () => {
                                             Actions
                                         </MenuButton>}
                                         <MenuDivider />
-                                        <MenuList minWidth={2}>
+                                        <MenuList minWidth={2} zIndex={"99"}>
                                             {(user.role === 'superAdmin' || permission?.create) && <MenuItem alignItems={'start'} onClick={() => onOpen()} color={'blue'} icon={<AddIcon />}>Add</MenuItem>}
                                             {(user.role === 'superAdmin' || permission?.update) && <MenuItem alignItems={'start'} onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
                                             {(user.role === 'superAdmin' || permission?.delete) &&
@@ -225,7 +329,6 @@ const View = () => {
                                                             Property of Interest({allData?.interestProperty?.interestProperty?.length})
                                                         </Heading>
                                                         <Button onClick={() => setPropertyModel(true)} leftIcon={<LuBuilding2 />} size="sm" colorScheme="gray" bg={buttonbg}>Select Interested Property  </Button>
-                                                        <PropertyModel fetchData={fetchData} isOpen={propertyModel} onClose={setPropertyModel} id={param.id} interestProperty={data?.interestProperty} />
                                                     </Flex>
                                                 </Box>
 
@@ -244,11 +347,25 @@ const View = () => {
                             <TabPanel pt={4} p={0}>
                                 <GridItem colSpan={{ base: 12 }} >
                                     <Grid templateColumns={{ base: "1fr" }} gap={4}>
-
                                         <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
                                             {emailAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
                                                 <Card overflow={'scroll'}>
-                                                    <ColumnsTable viewData={allData} fetchData={fetchData} emailAccess={emailAccess} columnsData={columnsDataColumns} tableData={showEmail ? allData.EmailHistory : allData?.EmailHistory?.length > 0 ? [allData.EmailHistory[0]] : []} title={'Email '} />
+                                                    <CommonCheckTable
+                                                        title={"Email"}
+                                                        isLoding={isLoding}
+                                                        columnData={columnsDataColumns}
+                                                        dataColumn={columnsDataColumns}
+                                                        allData={showEmail ? allData.EmailHistory : allData?.EmailHistory?.length > 0 ? [allData.EmailHistory[0]] : []}
+                                                        tableData={showEmail ? allData.EmailHistory : allData?.EmailHistory?.length > 0 ? [allData.EmailHistory[0]] : []}
+                                                        AdvanceSearch={false}
+                                                        dataLength={allData?.EmailHistory?.length}
+                                                        tableCustomFields={[]}
+                                                        checkBox={false}
+                                                        deleteMany={true}
+                                                        ManageGrid={false}
+                                                        onOpen={() => setAddEmailHistory(true)}
+                                                        access={emailAccess}
+                                                    />
                                                     {allData?.EmailHistory?.length > 1 &&
                                                         <div style={{ display: "flex", justifyContent: "end" }}>
                                                             <Button colorScheme="brand" variant="outline" size='sm' display="flex" justifyContant="end" onClick={() => showEmail ? setShowEmail(false) : setShowEmail(true)}>{showEmail ? "Show less" : "Show more"}</Button>
@@ -257,16 +374,45 @@ const View = () => {
                                             </GridItem>}
                                             {callAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
                                                 <Card overflow={'scroll'}>
-                                                    <PhoneCall callAccess={callAccess} fetchData={fetchData} columnsData={columnsDataColumns} tableData={showCall ? allData?.phoneCallHistory : allData?.phoneCallHistory?.length > 0 ? [allData?.phoneCallHistory[0]] : []} title={'Call '} />
-                                                    <AddPhoneCall viewData={allData} fetchData={fetchData} setAction={setAction} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param.id} />
+                                                    <CommonCheckTable
+                                                        title={"Call"}
+                                                        isLoding={isLoding}
+                                                        columnData={callColumns}
+                                                        dataColumn={callColumns}
+                                                        allData={showCall ? allData?.phoneCallHistory : allData?.phoneCallHistory?.length > 0 ? [allData?.phoneCallHistory[0]] : []}
+                                                        tableData={showCall ? allData?.phoneCallHistory : allData?.phoneCallHistory?.length > 0 ? [allData?.phoneCallHistory[0]] : []}
+                                                        AdvanceSearch={false}
+                                                        tableCustomFields={[]}
+                                                        dataLength={allData?.phoneCallHistory?.length}
+                                                        checkBox={false}
+                                                        deleteMany={true}
+                                                        ManageGrid={false}
+                                                        onOpen={() => setAddPhoneCall(true)}
+                                                        access={callAccess}
+                                                    />
                                                     {allData?.phoneCallHistory?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                         <Button colorScheme="brand" variant="outline" size='sm' display="flex" justifyContant="end" onClick={() => showCall ? setShowCall(false) : setShowCall(true)}>{showCall ? "Show less" : "Show more"}</Button>
                                                     </div>}
                                                 </Card>
                                             </GridItem>}
                                             {taskAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
-                                                <Card overflow={'scroll'}><TaskColumnsTable fetchData={fetchData} columnsData={taskColumns} tableData={showTasks ? allData?.task : allData?.task?.length > 0 ? [allData?.task[0]] : []} title={'Task '} action={action} setAction={setAction} access={taskAccess} />
-                                                    <AddTask fetchData={fetchData} isOpen={taskModel} onClose={setTaskModel} from="contact" id={param.id} />
+                                                <Card overflow={'scroll'}>
+                                                    <CommonCheckTable
+                                                        title={"Task"}
+                                                        isLoding={isLoding}
+                                                        columnData={taskColumns}
+                                                        dataColumn={taskColumns}
+                                                        allData={showTasks ? allData?.task : allData?.task?.length > 0 ? [allData?.task[0]] : []}
+                                                        tableData={showTasks ? allData?.task : allData?.task?.length > 0 ? [allData?.task[0]] : []}
+                                                        AdvanceSearch={false}
+                                                        dataLength={allData?.task?.length}
+                                                        tableCustomFields={[]}
+                                                        checkBox={false}
+                                                        deleteMany={true}
+                                                        ManageGrid={false}
+                                                        onOpen={() => setTaskModel(true)}
+                                                        access={taskAccess}
+                                                    />
                                                     {allData?.task?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                         <Button colorScheme="brand" variant="outline" size='sm' display="flex" justifyContant="end" onClick={() => showTasks ? setShowTasks(false) : setShowTasks(true)}>{showTasks ? "Show less" : "Show more"}</Button>
                                                     </div>}
@@ -274,14 +420,28 @@ const View = () => {
                                             </GridItem>}
                                             {meetingAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
                                                 <Card overflow={'scroll'}>
-                                                    <MeetingColumnsTable fetchData={fetchData} columnsData={MeetingColumns} tableData={showMeetings ? allData?.meetingHistory : allData?.meetingHistory?.length > 0 ? [allData?.meetingHistory[0]] : []} title={'Meeting '} action={action} setAction={setAction} access={meetingAccess} />
-                                                    <AddMeeting fetchData={fetchData} isOpen={addMeeting} onClose={setMeeting} from="contact" id={param.id} setAction={setAction} />
+                                                    <CommonCheckTable
+                                                        title={"Meeting"}
+                                                        isLoding={isLoding}
+                                                        columnData={MeetingColumns}
+                                                        dataColumn={MeetingColumns}
+                                                        dataLength={allData?.meetingHistory?.length}
+                                                        allData={showMeetings ? allData?.meetingHistory : allData?.meetingHistory?.length > 0 ? [allData?.meetingHistory[0]] : []}
+                                                        tableData={showMeetings ? allData?.meetingHistory : allData?.meetingHistory?.length > 0 ? [allData?.meetingHistory[0]] : []}
+                                                        AdvanceSearch={false}
+                                                        tableCustomFields={[]}
+                                                        checkBox={false}
+                                                        deleteMany={true}
+                                                        ManageGrid={false}
+                                                        onOpen={() => setMeeting(true)}
+                                                        access={meetingAccess}
+                                                    />
                                                     {allData?.meetingHistory?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                         <Button colorScheme="brand" size='sm' variant="outline" display="flex" justifyContant="end" onClick={() => showMeetings ? setShowMeetings(false) : setShowMeetings(true)}>{showMeetings ? "Show less" : "Show more"}</Button>
                                                     </div>}
                                                 </Card>
                                             </GridItem>}
-                                           
+
                                         </Grid>
                                     </Grid>
                                 </GridItem>
@@ -296,7 +456,6 @@ const View = () => {
                                             </Heading>
                                             <Button leftIcon={<AddIcon />} size='sm' variant='brand' onClick={() => setAddDocument(true)}>Add Document</Button>
                                         </Flex>
-                                        <AddDocumentModal addDocument={addDocument} setAddDocument={setAddDocument} linkId={param.id} from="contact" setAction={setAction} />
                                         <HSeparator />
                                         <VStack mt={4} alignItems="flex-start">
                                             {allData?.Document?.length > 0 ? allData?.Document?.map((item) => (
@@ -384,6 +543,17 @@ const View = () => {
                         </Grid>
                     </Card>}
                 </>}
+            {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} contactData={contactData[0]} />}
+            <Edit isOpen={edit} contactData={contactData[0]} size={size} onClose={setEdit} setAction={setAction} moduleId={contactData?.[0]?._id} data={data} />
+            <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Contact' handleDeleteData={handleDeleteContact} ids={param.id} />
+            <AddEmailHistory lead="false" contactEmail={allData?.contact?.email} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} />
+            <AddDocumentModal addDocument={addDocument} setAddDocument={setAddDocument} linkId={param.id} from="contact" setAction={setAction} fetchData={fetchData} />
+            <AddMeeting fetchData={fetchData} leadContect={splitValue[0]} isOpen={addMeeting} onClose={setMeeting} from="contact" id={param.id} setAction={setAction} view={true} />
+            <AddEdit isOpen={taskModel} fetchData={fetchData} leadContect={splitValue[0]} onClose={setTaskModel} id={param.id} userAction={'add'} view={true} />
+            <AddPhoneCall viewData={allData} fetchData={fetchData} setAction={setAction} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param.id} cData={data} />
+
+            <PropertyModel fetchData={fetchData} isOpen={propertyModel} onClose={setPropertyModel} id={param.id} interestProperty={data?.interestProperty} />
+
         </>
     );
 };

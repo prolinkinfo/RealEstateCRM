@@ -7,26 +7,28 @@ import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { RiEyeCloseLine } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 import { userSchema } from 'schema';
+import { putApi } from 'services/api';
 import { postApi } from 'services/api';
 
-const AddUser = (props) => {
-    const { onClose, isOpen, setAction } = props
+const AddEditUser = (props) => {
+    const { onClose, isOpen, setAction, data, userAction, userData, selectedId, fetchData, setUserAction } = props
     const [isLoding, setIsLoding] = useState(false)
-
     const [show, setShow] = React.useState(false);
     const showPass = () => setShow(!show);
 
     const initialValues = {
-        firstName: '',
-        lastName: '',
-        username: '',
-        phoneNumber: '',
-        password: '',
+        firstName: userAction === "add" ? '' : data?.firstName,
+        lastName: userAction === "add" ? '' : data?.lastName,
+        username: userAction === "add" ? '' : data?.username,
+        phoneNumber: userAction === "add" ? '' : data?.phoneNumber,
+        password: userAction === "add" ? '' : data?.password,
     }
+    const user = JSON.parse(window.localStorage.getItem('user'))
 
     const formik = useFormik({
         initialValues: initialValues,
         validationSchema: userSchema,
+        enableReinitialize: true,
         onSubmit: (values) => {
             AddData();
         },
@@ -34,21 +36,62 @@ const AddUser = (props) => {
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
 
     const AddData = async () => {
-        try {
-            setIsLoding(true)
-            let response = await postApi('api/user/register', values)
-            if (response && response.status === 200) {
-                props.onClose();
-                resetForm();
-                setAction((pre) => !pre)
-            } else {
-                toast.error(response.response.data?.message)
+        if (userAction === "add") {
+
+            try {
+                setIsLoding(true)
+                let response = await postApi('api/user/register', values)
+                if (response && response.status === 200) {
+                    onClose();
+                    resetForm();
+                    setAction((pre) => !pre)
+                    setUserAction('')
+                } else {
+                    toast.error(response.response.data?.message)
+                }
+            } catch (e) {
+                console.log(e);
             }
-        } catch (e) {
-            console.log(e);
-        }
-        finally {
-            setIsLoding(false)
+            finally {
+                setIsLoding(false)
+            }
+        } else if (userAction === "edit") {
+            try {
+                setIsLoding(true)
+                let response = await putApi(`api/user/edit/${selectedId}`, values)
+                if (response && response.status === 200) {
+                    // setEdit(false)
+                    fetchData()
+                    let updatedUserData = userData; // Create a copy of userData
+                    if (user?._id === selectedId) {
+                        if (updatedUserData && typeof updatedUserData === 'object') {
+                            // Create a new object with the updated firstName
+                            updatedUserData = {
+                                ...updatedUserData,
+                                firstName: values?.firstName,
+                                lastName: values?.lastName
+                            };
+                        }
+
+                        const updatedDataString = JSON.stringify(updatedUserData);
+                        localStorage.setItem('user', updatedDataString);
+                        // dispatch(setUser(updatedDataString));
+                    }
+
+
+                    // dispatch(fetchRoles(user?._id))
+                    onClose();
+                    setUserAction('')
+                    setAction((pre) => !pre)
+                } else {
+                    toast.error(response.response.data?.message)
+                }
+            } catch (e) {
+                console.log(e);
+            }
+            finally {
+                setIsLoding(false)
+            }
         }
     };
 
@@ -57,7 +100,7 @@ const AddUser = (props) => {
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader justifyContent='space-between' display='flex' >
-                    Add User
+                    {userAction === "add" ? "Add" : "Edit"} User
                     <IconButton onClick={onClose} icon={<CloseIcon />} />
                 </ModalHeader>
                 <ModalBody>
@@ -104,6 +147,7 @@ const AddUser = (props) => {
                                 onChange={handleChange} onBlur={handleBlur}
                                 value={values.username}
                                 name="username"
+                                disabled={userAction === 'edit'}
                                 placeholder='Email Address'
                                 fontWeight='500'
                                 borderColor={errors.username && touched.username ? "red.300" : null}
@@ -130,35 +174,38 @@ const AddUser = (props) => {
                             </InputGroup>
                             <Text mb='10px' color={'red'}>{errors.phoneNumber && touched.phoneNumber && errors.phoneNumber}</Text>
                         </GridItem>
-                        <GridItem colSpan={{ base: 12 }}>
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Password
-                            </FormLabel>
-                            <InputGroup size='md'>
-                                <Input
-                                    isRequired={true}
-                                    fontSize='sm'
-                                    placeholder='Enter Your Password'
-                                    name='password'
-                                    size='lg'
-                                    variant='auth'
-                                    type={show ? "text" : "password"}
-                                    value={values.password} onChange={handleChange} onBlur={handleBlur}
-                                    borderColor={errors.password && touched.password ? "red.300" : null}
-                                    className={errors.password && touched.password ? "isInvalid" : null}
-                                />
-                                <InputRightElement display='flex' alignItems='center' mt='4px'>
-                                    <Icon
-                                        color={'gray.400'}
-                                        _hover={{ cursor: "pointer" }}
-                                        as={show ? RiEyeCloseLine : MdOutlineRemoveRedEye}
-                                        onClick={showPass}
+                        {
+                            userAction !== "edit" &&
+                            <GridItem colSpan={{ base: 12 }}>
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                    Password
+                                </FormLabel>
+                                <InputGroup size='md'>
+                                    <Input
+                                        isRequired={true}
+                                        fontSize='sm'
+                                        placeholder='Enter Your Password'
+                                        name='password'
+                                        size='lg'
+                                        variant='auth'
+                                        type={show ? "text" : "password"}
+                                        value={values.password} onChange={handleChange} onBlur={handleBlur}
+                                        borderColor={errors.password && touched.password ? "red.300" : null}
+                                        className={errors.password && touched.password ? "isInvalid" : null}
                                     />
-                                </InputRightElement>
-                            </InputGroup>
-                            <Text mb='10px' color={'red'}> {errors.password && touched.password && errors.password}</Text>
-                        </GridItem>
+                                    <InputRightElement display='flex' alignItems='center' mt='4px'>
+                                        <Icon
+                                            color={'gray.400'}
+                                            _hover={{ cursor: "pointer" }}
+                                            as={show ? RiEyeCloseLine : MdOutlineRemoveRedEye}
+                                            onClick={showPass}
+                                        />
+                                    </InputRightElement>
+                                </InputGroup>
+                                <Text mb='10px' color={'red'}> {errors.password && touched.password && errors.password}</Text>
+                            </GridItem>
 
+                        }
                     </Grid>
 
 
@@ -179,4 +226,4 @@ const AddUser = (props) => {
     )
 }
 
-export default AddUser
+export default AddEditUser

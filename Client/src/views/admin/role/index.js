@@ -16,7 +16,6 @@ const Index = () => {
   const [searchboxOutside, setSearchboxOutside] = useState('');
   const [getTagValuesOutSide, setGetTagValuesOutside] = useState([]);
   const [displaySearchData, setDisplaySearchData] = useState(false);
-  const [accessRole, setAccessRole] = useState([])
   const [roleName, setRoleName] = useState('')
   const [searchedData, setSearchedData] = useState([]);
 
@@ -28,12 +27,11 @@ const Index = () => {
       width: 10,
       display: false
     },
-
     {
       Header: "Role Name", accessor: "roleName", cell: (cell) => (
         <Text
           me="10px"
-          onClick={() => { setRoleModal(true); setRoleName(cell?.value); setRoleId(cell?.row?.original?._id); setAccess(cell?.row?.original?.access); setAccessRole(cell?.row?.original?.access) }}
+          onClick={() => { setRoleModal(true); setRoleName(cell?.value); setRoleId(cell?.row?.original?._id); setAccess(cell?.row?.original?.access); }}
           color='brand.600'
           sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline', cursor: 'pointer' } }}
           fontSize="sm"
@@ -81,7 +79,6 @@ const Index = () => {
 
   return (
     <div>
-     
       <CommonCheckTable
         title={title}
         isLoding={isLoding}
@@ -110,7 +107,7 @@ const Index = () => {
       {access && <RoleModal isOpen={roleModal}
         setRoleModal={setRoleModal}
         onOpen={onOpen}
-        isLoding={isLoding} columnsData={rowColumns} name={roleName} _id={roleId} tableData={access} accessRole={accessRole} setAccessRole={setAccessRole} setAccess={setAccess} fetchData={fetchData} setAction={setAction} />}
+        isLoding={isLoding} columnsData={rowColumns} name={roleName} _id={roleId} tableData={access} setAccess={setAccess} fetchData={fetchData} setAction={setAction} />}
     </div>
   );
 };

@@ -3,21 +3,30 @@ import { CUIAutoComplete } from 'chakra-ui-autocomplete';
 import MultiContactModel from 'components/commonTableModel/MultiContactModel';
 import MultiLeadModel from 'components/commonTableModel/MultiLeadModel';
 import Spinner from 'components/spinner/Spinner';
+import dayjs from 'dayjs';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { LiaMousePointerSolid } from 'react-icons/lia';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { MeetingSchema } from 'schema';
 import { getApi, postApi } from 'services/api';
 
 const AddMeeting = (props) => {
-    const { onClose, isOpen, setAction, from } = props
-    const [data, setData] = useState([])
+    const { onClose, isOpen, setAction, from, fetchData, view } = props
+    const [leaddata, setLeadData] = useState([])
+    const [contactdata, setContactData] = useState([])
     const [isLoding, setIsLoding] = useState(false)
     const [contactModelOpen, setContactModel] = useState(false);
     const [leadModelOpen, setLeadModel] = useState(false);
+    const todayTime = new Date().toISOString().split('.')[0];
+    const leadData = useSelector((state) => state?.leadData?.data);
+
 
     const user = JSON.parse(localStorage.getItem('user'))
+
+    const contactList = useSelector((state) => state?.contactData?.data)
+
 
     const initialValues = {
         agenda: '',
@@ -39,8 +48,6 @@ const AddMeeting = (props) => {
     });
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue } = formik
 
-
-
     const AddData = async () => {
         try {
             setIsLoding(true)
@@ -49,7 +56,8 @@ const AddMeeting = (props) => {
                 if (response.status === 200) {
                     formik.resetForm();
                     props.onClose();
-                    setAction((pre) => !pre)
+                    fetchData(1)
+                    // setAction((pre) => !pre)
                 }
             } else {
                 toast.error('Select Related To')
@@ -60,16 +68,26 @@ const AddMeeting = (props) => {
         finally {
             setIsLoding(false)
         }
+
     };
 
     const fetchAllData = async () => {
-        let result
-        if (values.related === "Contact") {
-            result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
-        } else if (values.related === "Lead") {
-            result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
+        if (view === true) {
+            if (values.related === "Contact" && contactdata.length <= 0) {
+                setContactData(contactList);
+            } else if (values.related === "Lead" && leaddata.length <= 0) {
+                setLeadData(leadData);
+            }
+        } else {
+            let result
+            if (values.related === "Contact" && contactdata.length <= 0) {
+                result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
+                setContactData(result?.data);
+            } else if (values.related === "Lead" && leaddata.length <= 0) {
+                result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
+                setLeadData(result?.data);
+            }
         }
-        setData(result?.data);
     }
 
     useEffect(() => {
@@ -80,7 +98,7 @@ const AddMeeting = (props) => {
         return selectedItems.map((item) => item._id);
     };
 
-    const countriesWithEmailAsLabel = data?.map((item) => ({
+    const countriesWithEmailAsLabel = (values.related === "Contact" ? contactdata : leaddata)?.map((item) => ({
         ...item,
         value: item._id,
         label: values.related === "Contact" ? `${item.firstName} ${item.lastName}` : item.leadName,
@@ -94,9 +112,9 @@ const AddMeeting = (props) => {
                 <ModalCloseButton />
                 <ModalBody overflowY={"auto"} height={"400px"}>
                     {/* Contact Model  */}
-                    <MultiContactModel data={data} isOpen={contactModelOpen} onClose={setContactModel} fieldName='attendes' setFieldValue={setFieldValue} />
+                    <MultiContactModel data={contactdata} isOpen={contactModelOpen} onClose={setContactModel} fieldName='attendes' setFieldValue={setFieldValue} />
                     {/* Lead Model  */}
-                    <MultiLeadModel data={data} isOpen={leadModelOpen} onClose={setLeadModel} fieldName='attendesLead' setFieldValue={setFieldValue} />
+                    <MultiLeadModel data={leaddata} isOpen={leadModelOpen} onClose={setLeadModel} fieldName='attendesLead' setFieldValue={setFieldValue} />
 
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12 }}>
@@ -127,7 +145,7 @@ const AddMeeting = (props) => {
                             </RadioGroup>
                             <Text mb='10px' color={'red'} fontSize='sm'> {errors.related && touched.related && errors.related}</Text>
                         </GridItem>
-                        {data?.length > 0 && values.related &&
+                        {(values.related === "Contact" ? contactdata?.length > 0 : leaddata.length > 0) && values.related &&
                             <GridItem colSpan={{ base: 12 }}>
                                 <Flex alignItems={'end'} justifyContent={'space-between'} >
                                     <Text w={'100%'} >
@@ -172,6 +190,7 @@ const AddMeeting = (props) => {
                                 fontSize='sm'
                                 type='datetime-local'
                                 onChange={handleChange} onBlur={handleBlur}
+                                min={dayjs(todayTime).format('YYYY-MM-DD HH:mm')}
                                 value={values.dateTime}
                                 name="dateTime"
                                 placeholder='Date Time'
