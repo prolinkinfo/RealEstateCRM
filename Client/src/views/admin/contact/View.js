@@ -152,7 +152,6 @@ const View = () => {
     ];
 
     const MeetingColumns = [
-        // { Header: 'agenda', accessor: 'agenda' },
         {
             Header: 'agenda', accessor: 'agenda', cell: (cell) => (
                 <Link to={`/metting/${cell?.row?.original?._id}`}>
@@ -181,11 +180,9 @@ const View = () => {
         { Header: "create By", accessor: "createdByName", },
     ];
     const taskColumns = [
-        // { Header: 'Title', accessor: 'title' },
         {
             Header: "Title", accessor: "title", cell: (cell) => (
                 <Link to={`/view/${cell?.row?.original?._id}`}>
-                    {console.log(`/view/${cell?.row?.original?._id}`)}
                     <Text
                         me="10px"
                         sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
