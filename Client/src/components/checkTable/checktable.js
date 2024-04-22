@@ -319,15 +319,18 @@ const CommonCheckTable = (props) => {
                 <Grid templateColumns="repeat(12, 1fr)" gap={2}>
                     <GridItem colSpan={{ base: 12, md: 8 }} display={"flex"} alignItems={"center"}>
                         <Flex alignItems={"center"} flexWrap={"wrap"}>
-                            <Text
-                                color={'secondaryGray.900'}
-                                fontSize="22px"
-                                fontWeight="700"
-                                lineHeight="100%"
-                                textTransform={'capitalize'}
-                            >
-                                {title} {title && (<CountUpComponent key={data?.length} targetNumber={dataLength || data?.length} />)}
-                            </Text>
+                            {
+                                title &&
+                                <Text
+                                    color={'secondaryGray.900'}
+                                    fontSize="22px"
+                                    fontWeight="700"
+                                    lineHeight="100%"
+                                    textTransform={'capitalize'}
+                                >
+                                    {title} (<CountUpComponent key={data?.length} targetNumber={dataLength || data?.length} />)
+                                </Text>
+                            }
                             {customSearch !== false && <CustomSearchInput setSearchbox={setSearchboxOutside ? setSearchboxOutside : setSearchbox} setDisplaySearchData={setSearchboxOutside ? props.setSearchDisplay : setDisplaySearchData} searchbox={searchboxOutside ? searchboxOutside : searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={props.setGetTagValuesOutside ? props.setGetTagValuesOutside : setGetTagValues} setGopageValue={setGopageValue} />}
                             {
                                 AdvanceSearch ? AdvanceSearch : AdvanceSearch !== false &&
