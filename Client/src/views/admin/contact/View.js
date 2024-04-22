@@ -70,7 +70,57 @@ const View = () => {
 
     const columnsDataColumns = [
         { Header: "sender", accessor: "senderName", },
-        { Header: "recipient", accessor: "createByName", },
+        {
+            Header: "recipient", accessor: "createByName", cell: (cell) => (
+                <Link to={`/Email/${cell?.row?.original?._id}`}>
+                    <Text
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.value || '-'}
+                    </Text>
+                </Link>)
+        },
+        {
+            Header: "time stamp", accessor: "timestamp",
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        {moment(cell?.value).fromNow()}
+                    </Text>
+                </div>
+            )
+        },
+        {
+            Header: "Created", accessor: "createBy",
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text color={textColor} fontSize='sm' fontWeight='700'>
+                        {moment(cell?.row?.values.timestamp).format('h:mma (DD/MM)')}
+                    </Text>
+                </div>
+            )
+        },
+    ];
+    const callColumns = [
+        { Header: "sender", accessor: "senderName", },
+        {
+            Header: "recipient", accessor: "createByName", cell: (cell) => (
+                <Link to={`/phone-call/${cell?.row?.original?._id}`}>
+                    <Text
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.value || '-'}
+                    </Text>
+                </Link>)
+        },
         {
             Header: "time stamp", accessor: "timestamp",
             cell: (cell) => (
@@ -102,7 +152,21 @@ const View = () => {
     ];
 
     const MeetingColumns = [
-        { Header: 'agenda', accessor: 'agenda' },
+        // { Header: 'agenda', accessor: 'agenda' },
+        {
+            Header: 'agenda', accessor: 'agenda', cell: (cell) => (
+                <Link to={`/metting/${cell?.row?.original?._id}`}>
+                    <Text
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.value || '-'}
+                    </Text>
+                </Link>)
+        },
         { Header: "date Time", accessor: "dateTime", },
         {
             Header: "times tamp", accessor: "timestamp",
@@ -117,7 +181,22 @@ const View = () => {
         { Header: "create By", accessor: "createdByName", },
     ];
     const taskColumns = [
-        { Header: 'Title', accessor: 'title' },
+        // { Header: 'Title', accessor: 'title' },
+        {
+            Header: "Title", accessor: "title", cell: (cell) => (
+                <Link to={`/view/${cell?.row?.original?._id}`}>
+                    {console.log(`/view/${cell?.row?.original?._id}`)}
+                    <Text
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.value || '-'}
+                    </Text>
+                </Link>)
+        },
         { Header: "Category", accessor: "category", },
         { Header: "Assign To", accessor: "assignToName", },
         { Header: "Start Date", accessor: "start", },
@@ -298,8 +377,8 @@ const View = () => {
                                                     <CommonCheckTable
                                                         title={"Call"}
                                                         isLoding={isLoding}
-                                                        columnData={columnsDataColumns}
-                                                        dataColumn={columnsDataColumns}
+                                                        columnData={callColumns}
+                                                        dataColumn={callColumns}
                                                         allData={showCall ? allData?.phoneCallHistory : allData?.phoneCallHistory?.length > 0 ? [allData?.phoneCallHistory[0]] : []}
                                                         tableData={showCall ? allData?.phoneCallHistory : allData?.phoneCallHistory?.length > 0 ? [allData?.phoneCallHistory[0]] : []}
                                                         AdvanceSearch={false}
