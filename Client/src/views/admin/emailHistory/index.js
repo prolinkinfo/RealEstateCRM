@@ -123,7 +123,7 @@ const Index = (props) => {
         setIsLoding(true)
         let result = await getApi(user.role === 'superAdmin' ? 'api/email/' : `api/email/?sender=${user._id}`);
         let response = result.data
-      response &&  response.forEach(element => {
+        response && response.forEach(element => {
 
             if (element.createByLead) {
                 element.realeted = 'Lead'
@@ -185,7 +185,7 @@ const Index = (props) => {
                 setAdvanceSearch={setAdvanceSearch}
                 setSearchedData={setSearchedData}
                 setDisplaySearchData={setDisplaySearchData}
-                allData={data}
+                allData={data ?? []}
                 setAction={setAction}
                 setGetTagValues={setGetTagValuesOutside}
                 setSearchbox={setSearchboxOutside}

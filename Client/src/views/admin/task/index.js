@@ -226,7 +226,7 @@ const Task = () => {
                 state={state}
                 setSearchedData={setSearchedData}
                 setDisplaySearchData={setDisplaySearchData}
-                allData={data}
+                allData={data ?? []}
                 setAction={setAction}
                 setGetTagValues={setGetTagValuesOutside}
                 setSearchbox={setSearchboxOutside}

@@ -274,13 +274,13 @@ function RoleModal(props) {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <ChangeAccess tableData={tableData} accessRole={tableData} setAccess={setAccess} setRoleModal={setRoleModal} columnsData={columnsData} _id={_id} fetchData={fetchData} name={name} setEditModal={setEditModal} setAction={setAction} editModal={editModal} />
+      <ChangeAccess tableData={tableData ?? []} accessRole={tableData ?? []} setAccess={setAccess} setRoleModal={setRoleModal} columnsData={columnsData ?? []} _id={_id} fetchData={fetchData} name={name} setEditModal={setEditModal} setAction={setAction} editModal={editModal} />
       <UserModal isOpen={openUser}
         setRoleModal={setRoleModal}
         setOpenUser={setOpenUser}
         onOpen={onOpen}
-        columnsData={tableColumns}
-        tableData={userdata}
+        columnsData={tableColumns ?? []}
+        tableData={userdata ?? []}
         setAction={setAction}
         _id={_id}
         fetchData={userFetchData}
