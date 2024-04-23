@@ -43,7 +43,9 @@ const Index = () => {
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
         const result = await dispatch(fetchPropertyCustomFiled())
-        setPropertyData(result?.payload);
+        if (result.status === 200) {
+            setPropertyData(result?.payload);
+        }
         const actionHeader = {
             Header: "Action",
             accessor: "action",

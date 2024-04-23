@@ -36,7 +36,9 @@ const ContactModel = (props) => {
 
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-            ...result?.payload?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => ({ Header: field?.label, accessor: field?.name })),
+            ...(result?.payload?.[0]?.fields || [])
+                .filter(field => field?.isTableField === true)
+                .map(field => ({ Header: field?.label, accessor: field?.name }))
         ];
 
         setColumns(tempTableColumns);

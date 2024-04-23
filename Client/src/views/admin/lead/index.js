@@ -103,7 +103,9 @@ const Index = () => {
 
         // const result = await getApi(`api/custom-field/?moduleName=Leads`);
         const result = await dispatch(fetchLeadCustomFiled());
-        setLeadData(result?.payload);
+        if (result.status === 200) {
+            setLeadData(result?.payload);
+        }
 
         const actionHeader = {
             Header: "Action", accessor: "action", isSortable: false, center: true,
