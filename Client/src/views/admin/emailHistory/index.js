@@ -123,7 +123,7 @@ const Index = (props) => {
         setIsLoding(true)
         let result = await getApi(user.role === 'superAdmin' ? 'api/email/' : `api/email/?sender=${user._id}`);
         let response = result.data
-        response.forEach(element => {
+      response &&  response.forEach(element => {
 
             if (element.createByLead) {
                 element.realeted = 'Lead'
@@ -150,9 +150,9 @@ const Index = (props) => {
             <CommonCheckTable
                 title={title}
                 isLoding={isLoding}
-                columnData={columns}
-                dataColumn={dataColumn}
-                allData={data}
+                columnData={columns ?? []}
+                dataColumn={dataColumn ?? []}
+                allData={data ?? []}
                 tableData={data}
                 searchDisplay={displaySearchData}
                 setSearchDisplay={setDisplaySearchData}

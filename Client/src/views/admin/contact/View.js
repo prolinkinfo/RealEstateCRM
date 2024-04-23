@@ -352,8 +352,8 @@ const View = () => {
                                                         {/* <PropertyTable fetchData={fetchData} columnsData={PropertyColumn} tableData={allData?.interestProperty?.interestProperty?.length > 0 ? allData?.interestProperty?.interestProperty : []} title={'Interested Property'} /> */}
                                                         <CommonCheckTable
                                                             isLoding={isLoding}
-                                                            columnData={columns}
-                                                            dataColumn={columns}
+                                                            columnData={columns ?? []}
+                                                            dataColumn={columns ?? []}
                                                             allData={allData?.interestProperty?.interestProperty || []}
                                                             tableData={allData?.interestProperty?.interestProperty || []}
                                                             tableCustomFields={propertyData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
@@ -381,8 +381,8 @@ const View = () => {
                                                     <CommonCheckTable
                                                         title={"Email"}
                                                         isLoding={isLoding}
-                                                        columnData={columnsDataColumns}
-                                                        dataColumn={columnsDataColumns}
+                                                        columnData={columnsDataColumns ?? []}
+                                                        dataColumn={columnsDataColumns ?? []}
                                                         allData={showEmail ? allData.EmailHistory : allData?.EmailHistory?.length > 0 ? [allData.EmailHistory[0]] : []}
                                                         tableData={showEmail ? allData.EmailHistory : allData?.EmailHistory?.length > 0 ? [allData.EmailHistory[0]] : []}
                                                         AdvanceSearch={false}
@@ -405,8 +405,8 @@ const View = () => {
                                                     <CommonCheckTable
                                                         title={"Call"}
                                                         isLoding={isLoding}
-                                                        columnData={callColumns}
-                                                        dataColumn={callColumns}
+                                                        columnData={callColumns ?? []}
+                                                        dataColumn={callColumns ?? []}
                                                         allData={showCall ? allData?.phoneCallHistory : allData?.phoneCallHistory?.length > 0 ? [allData?.phoneCallHistory[0]] : []}
                                                         tableData={showCall ? allData?.phoneCallHistory : allData?.phoneCallHistory?.length > 0 ? [allData?.phoneCallHistory[0]] : []}
                                                         AdvanceSearch={false}
@@ -428,8 +428,8 @@ const View = () => {
                                                     <CommonCheckTable
                                                         title={"Task"}
                                                         isLoding={isLoding}
-                                                        columnData={taskColumns}
-                                                        dataColumn={taskColumns}
+                                                        columnData={taskColumns ?? []}
+                                                        dataColumn={taskColumns ?? []}
                                                         allData={showTasks ? allData?.task : allData?.task?.length > 0 ? [allData?.task[0]] : []}
                                                         tableData={showTasks ? allData?.task : allData?.task?.length > 0 ? [allData?.task[0]] : []}
                                                         AdvanceSearch={false}
@@ -451,8 +451,8 @@ const View = () => {
                                                     <CommonCheckTable
                                                         title={"Meeting"}
                                                         isLoding={isLoding}
-                                                        columnData={MeetingColumns}
-                                                        dataColumn={MeetingColumns}
+                                                        columnData={MeetingColumns ?? []}
+                                                        dataColumn={MeetingColumns ?? []}
                                                         dataLength={allData?.meetingHistory?.length}
                                                         allData={showMeetings ? allData?.meetingHistory : allData?.meetingHistory?.length > 0 ? [allData?.meetingHistory[0]] : []}
                                                         tableData={showMeetings ? allData?.meetingHistory : allData?.meetingHistory?.length > 0 ? [allData?.meetingHistory[0]] : []}

@@ -171,10 +171,10 @@ const View = () => {
                                                             AdvanceSearch={false}
                                                             ManageGrid={false}
                                                             access={false}
-                                                            columnData={contactColumns}
-                                                            dataColumn={contactColumns}
+                                                            columnData={contactColumns ?? []}
+                                                            dataColumn={contactColumns ?? []}
                                                             title={"Interested Contact"}
-                                                            allData={filteredContacts}
+                                                            allData={filteredContacts ?? []}
                                                             tableData={filteredContacts}
                                                             dynamicColumns={dynamicColumns}
                                                             setDynamicColumns={setDynamicColumns}

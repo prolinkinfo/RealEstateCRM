@@ -82,9 +82,9 @@ const Index = () => {
       <CommonCheckTable
         title={title}
         isLoding={isLoding}
-        columnData={columns}
-        dataColumn={columns}
-        allData={data}
+        columnData={columns ?? []}
+        dataColumn={columns ?? []}
+        allData={data ?? []}
         tableData={data}
         AdvanceSearch={() => ""}
         tableCustomFields={[]}

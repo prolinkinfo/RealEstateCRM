@@ -69,9 +69,9 @@ const Report = () => {
                 <CommonCheckTable
                     title={title}
                     isLoding={isLoding}
-                    columnData={tableColumns}
-                    dataColumn={dataColumn}
-                    allData={data}
+                    columnData={tableColumns ?? []}
+                    dataColumn={dataColumn ?? []}
+                    allData={data ?? []}
                     tableData={data}
                     AdvanceSearch={false}
                     tableCustomFields={[]}

@@ -195,9 +195,9 @@ const Task = () => {
             <CommonCheckTable
                 title={title}
                 isLoding={isLoding}
-                columnData={columns}
-                dataColumn={dataColumn}
-                allData={data}
+                columnData={columns ?? []}
+                dataColumn={dataColumn ?? []}
+                allData={data ?? []}
                 searchDisplay={displaySearchData}
                 setSearchDisplay={setDisplaySearchData}
                 searchedDataOut={searchedData}

@@ -71,9 +71,9 @@ const ContactModel = (props) => {
                         <CommonCheckTable
                             title={title}
                             isLoding={isLoding}
-                            columnData={columns}
-                            dataColumn={columns}
-                            allData={data}
+                            columnData={columns ?? []}
+                            dataColumn={columns ?? []}
+                            allData={data ?? []}
                             tableData={data}
                             tableCustomFields={leadData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
                             AdvanceSearch={() => ""}

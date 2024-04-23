@@ -73,9 +73,9 @@ const PropertyModel = (props) => {
                         <CommonCheckTable
                             title={'Properties'}
                             isLoding={isLoding}
-                            columnData={columns}
-                            dataColumn={columns}
-                            allData={data}
+                            columnData={columns ?? []}
+                            dataColumn={columns ?? []}
+                            allData={data ?? []}
                             tableData={data}
                             tableCustomFields={propertyData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
                             AdvanceSearch={() => ""}

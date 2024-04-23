@@ -205,9 +205,9 @@ const Index = () => {
                             isLoding={isLoding}
                             searchDisplay={searchDisplay}
                             setSearchDisplay={setSearchDisplay}
-                            columnData={columns}
-                            dataColumn={dataColumn}
-                            allData={data}
+                            columnData={columns ?? []}
+                            dataColumn={dataColumn ?? []}
+                            allData={data ?? []}
                             tableData={searchDisplay ? searchedDataOut : data}
                             tableCustomFields={leadData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
                             access={permission}

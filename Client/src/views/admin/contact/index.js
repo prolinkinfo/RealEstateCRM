@@ -92,9 +92,12 @@ const Index = () => {
         };
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-            ...result?.payload?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => ({ Header: field?.label, accessor: field?.name })),
+            ...(result?.payload?.[0]?.fields || []) // Check if fields is defined, if not, use empty array
+                .filter(field => field?.isTableField === true) // Filter out fields where isTableField is true
+                .map(field => ({ Header: field?.label, accessor: field?.name })),
             ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : [])
         ];
+
 
         setSelectedColumns(JSON.parse(JSON.stringify(tempTableColumns)));
         setColumns(JSON.parse(JSON.stringify(tempTableColumns)));
@@ -138,9 +141,9 @@ const Index = () => {
                         <CommonCheckTable
                             title={title}
                             isLoding={isLoding}
-                            columnData={columns}
-                            dataColumn={dataColumn}
-                            allData={data}
+                            columnData={columns ?? []}
+                            dataColumn={dataColumn ?? []}
+                            allData={data ?? []}
                             tableData={data}
                             tableCustomFields={contactData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
                             access={permission}
