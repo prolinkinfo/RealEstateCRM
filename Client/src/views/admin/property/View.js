@@ -50,7 +50,6 @@ const View = () => {
     const dispatch = useDispatch();
     const propertyData = useSelector((state) => state?.propertyCustomFiled?.data?.data)
 
-    console.log(propertyData);
     const [type, setType] = useState(false)
     const navigate = useNavigate();
 
