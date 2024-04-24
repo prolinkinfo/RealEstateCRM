@@ -50,7 +50,6 @@ const Index = () => {
     const [phoneRec, setPhoneRec] = useState({});
 
     const data = useSelector((state) => state?.leadData?.data);
-
     const searchedDataOut = useSelector((state) => state?.advanceSearchData?.searchResult)
     const payload = {
         leadStatus: location?.state
@@ -103,8 +102,8 @@ const Index = () => {
 
         // const result = await getApi(`api/custom-field/?moduleName=Leads`);
         const result = await dispatch(fetchLeadCustomFiled());
-        if (result.status === 200) {
-            setLeadData(result?.payload);
+        if (result.payload.status === 200) {
+            setLeadData(result?.payload.data);
         }
 
         const actionHeader = {
@@ -145,7 +144,7 @@ const Index = () => {
                     </div>
                 )
             },
-            ...(result?.payload?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => (field?.name !== "leadStatus" && { Header: field?.label, accessor: field?.name })) || []),
+            ...(result?.payload?.data[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => (field?.name !== "leadStatus" && { Header: field?.label, accessor: field?.name })) || []),
             ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : []),
         ];
 

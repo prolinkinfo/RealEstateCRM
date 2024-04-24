@@ -65,7 +65,7 @@ const Index = () => {
         setIsLoding(true);
         // const result = await getApi(`api/custom-field/?moduleName=Contacts`);
         const result = await dispatch(fetchContactCustomFiled());
-        if (result.status === 200) {
+        if (result?.response?.status === 200) {
             setContactData(result?.payload);
         }
         const actionHeader = {

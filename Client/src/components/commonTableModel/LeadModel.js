@@ -35,7 +35,7 @@ const ContactModel = (props) => {
         setIsLoding(true);
 
         const result = await dispatch(fetchLeadCustomFiled());
-        setLeadData(result?.payload);
+        setLeadData(result?.payload?.data);
 
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },

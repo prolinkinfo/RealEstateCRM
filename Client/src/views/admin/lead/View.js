@@ -69,7 +69,7 @@ const View = () => {
     const [addEmailHistory, setAddEmailHistory] = useState(false);
     const [addPhoneCall, setAddPhoneCall] = useState(false);
 
-    const leadData = useSelector((state) => state?.leadCustomFiled?.data)
+    const leadData = useSelector((state) => state?.leadCustomFiled?.data.data)
 
     const [permission, taskPermission, meetingPermission, callAccess, emailAccess, taskAccess, meetingAccess] = HasAccess(['Leads', 'Tasks', 'Meetings', 'Calls', 'Emails', 'Tasks', 'Meetings']);
 
