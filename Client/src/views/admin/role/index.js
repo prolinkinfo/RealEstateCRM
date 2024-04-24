@@ -107,7 +107,15 @@ const Index = () => {
       {access && <RoleModal isOpen={roleModal}
         setRoleModal={setRoleModal}
         onOpen={onOpen}
-        isLoding={isLoding} columnsData={rowColumns ?? []} name={roleName} _id={roleId} tableData={access} setAccess={setAccess} fetchData={fetchData} setAction={setAction} />}
+        isLoding={isLoding}
+        columnsData={rowColumns ?? []}
+        name={roleName}
+        _id={roleId}
+        tableData={access ?? []}
+        setAccess={setAccess}
+        fetchData={fetchData}
+        setAction={setAction}
+      />}
     </div>
   );
 };
