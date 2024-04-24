@@ -560,6 +560,8 @@ const View = () => {
                         </TabPanels>
                     </Tabs>
 
+
+
                     {(user.role === 'superAdmin' || (permission?.update || permission?.delete)) && <Card mt={3}>
                         <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                             <GridItem colStart={6} >
