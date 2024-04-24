@@ -77,10 +77,10 @@ const connectDB = async (DATABASE_URL, DATABASE) => {
         let adminExisting = await User.find({ role: 'superAdmin' });
         if (adminExisting.length <= 0) {
             const phoneNumber = 7874263694
-            const firstName = 'Prolink'
-            const lastName = 'Infotech'
-            const username = 'admin@gmail.com'
-            const password = 'admin123'
+            const firstName = 'Anziano'
+            const lastName = 'Insurance-agency'
+            const username = 'anzianoinsuranceagency@gmail.com'
+            const password = 'April24@2024'
             // Hash the password
             const hashedPassword = await bcrypt.hash(password, 10);
             // Create a new user
@@ -91,8 +91,8 @@ const connectDB = async (DATABASE_URL, DATABASE) => {
         } else if (adminExisting[0].deleted === true) {
             await User.findByIdAndUpdate(adminExisting[0]._id, { deleted: false });
             console.log("Admin Update successfully..");
-        } else if (adminExisting[0].username !== "admin@gmail.com") {
-            await User.findByIdAndUpdate(adminExisting[0]._id, { username: 'admin@gmail.com' });
+        } else if (adminExisting[0].username !== "anzianoinsuranceagency@gmail.com") {
+            await User.findByIdAndUpdate(adminExisting[0]._id, { username: 'anzianoinsuranceagency@gmail.com' });
             console.log("Admin Update successfully..");
         }
 
