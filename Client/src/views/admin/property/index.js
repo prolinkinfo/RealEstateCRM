@@ -43,8 +43,8 @@ const Index = () => {
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
         const result = await dispatch(fetchPropertyCustomFiled())
-        if (result.status === 200) {
-            setPropertyData(result?.payload);
+        if (result.payload.status === 200) {
+            setPropertyData(result?.payload?.data);
         }
         const actionHeader = {
             Header: "Action",
@@ -69,7 +69,7 @@ const Index = () => {
         };
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-            ...(result?.payload?.[0]?.fields || []) // Ensure result.payload[0].fields is an array
+            ...(result?.payload?.data?.[0]?.fields || []) // Ensure result.payload[0].fields is an array
                 .filter(field => field?.isTableField === true) // Filter out fields where isTableField is true
                 .map(field => ({ Header: field?.label, accessor: field?.name })),
             ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : [])

@@ -45,7 +45,7 @@ const ContactModel = (props) => {
                     row.original.leadStatus
                 )
             },
-            ...(result?.payload?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => (field?.name !== "leadStatus" && { Header: field?.label, accessor: field?.name })) || []),
+            ...(result?.payload?.data?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => (field?.name !== "leadStatus" && { Header: field?.label, accessor: field?.name })) || []),
         ];
 
         setColumns(tempTableColumns);

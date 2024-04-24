@@ -103,7 +103,7 @@ const Index = () => {
         // const result = await getApi(`api/custom-field/?moduleName=Leads`);
         const result = await dispatch(fetchLeadCustomFiled());
         if (result.payload.status === 200) {
-            setLeadData(result?.payload.data);
+            setLeadData(result?.payload?.data);
         }
 
         const actionHeader = {

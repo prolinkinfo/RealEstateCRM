@@ -157,11 +157,11 @@ const View = () => {
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
         const result = await dispatch(fetchPropertyCustomFiled())
-        setPropertyData(result?.payload);
+        setPropertyData(result?.payload?.data);
 
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-            ...result?.payload?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => ({ Header: field?.label, accessor: field?.name })),
+            ...result?.payload?.data?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => ({ Header: field?.label, accessor: field?.name })),
         ];
 
         setColumns(tempTableColumns);

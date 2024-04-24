@@ -32,11 +32,11 @@ const ContactModel = (props) => {
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
         const result = await dispatch(fetchContactCustomFiled());
-        setContactData(result?.payload);
+        setContactData(result?.payload?.data);
 
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-            ...(result?.payload?.[0]?.fields || [])
+            ...(result?.payload?.data?.[0]?.fields || [])
                 .filter(field => field?.isTableField === true)
                 .map(field => ({ Header: field?.label, accessor: field?.name }))
         ];

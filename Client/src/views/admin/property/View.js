@@ -48,8 +48,9 @@ const View = () => {
     const [displayPropertyPhoto, setDisplayPropertyPhoto] = useState(false)
     const [selectedTab, setSelectedTab] = useState(0);
     const dispatch = useDispatch();
-    const propertyData = useSelector((state) => state?.propertyCustomFiled?.data)
+    const propertyData = useSelector((state) => state?.propertyCustomFiled?.data?.data)
 
+    console.log(propertyData);
     const [type, setType] = useState(false)
     const navigate = useNavigate();
 
