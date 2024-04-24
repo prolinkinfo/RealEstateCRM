@@ -199,24 +199,8 @@ const AddEdit = (props) => {
         if (userAction === "edit" || data) {
             fetchTaskData()
         }
-        //  else {
-        //     setFieldValue('title', "")
-        //     setFieldValue('category', "")
-        //     setFieldValue('description', "")
-        //     setFieldValue('notes', "")
-        //     setFieldValue('assignTo', "")
-        //     setFieldValue('reminder', "")
-        //     setFieldValue('start', "")
-        //     setFieldValue('end', "")
-        //     setFieldValue('backgroundColor', "")
-        //     setFieldValue('borderColor', "")
-        //     setFieldValue('textColor', "")
-        //     setFieldValue('display', "")
-        //     setFieldValue('url', "")
-        //     setFieldValue("status", "")
-        //     setFieldValue('assignToLead', "")
-        //     setFieldValue('allDay', "")
-        // }
+        fetchTaskData()
+
     }, [userAction, id, data])
 
     return (
