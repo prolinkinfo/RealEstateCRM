@@ -5,7 +5,7 @@ export const fetchContactCustomFiled = createAsyncThunk('fetchContactCustomFiled
     const user = JSON.parse(localStorage.getItem("user"));
     try {
         const response = await getApi(`api/custom-field/?moduleName=Contacts`);
-        return response.data;
+        return response;
     } catch (error) {
         throw error;
     }

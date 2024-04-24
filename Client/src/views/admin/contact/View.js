@@ -65,7 +65,9 @@ const View = () => {
     const size = "lg";
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const contactData = useSelector((state) => state?.contactCustomFiled?.data)
+
+    const contactData = useSelector((state) => state?.contactCustomFiled?.data?.data)
+
     const [propertyData, setPropertyData] = useState([]);
     const [columns, setColumns] = useState([]);
     const [permission, callAccess, emailAccess, taskAccess, meetingAccess] = HasAccess(['Contacts', 'Calls', 'Emails', 'Tasks', 'Meetings']);

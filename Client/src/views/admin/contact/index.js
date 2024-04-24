@@ -65,8 +65,8 @@ const Index = () => {
         setIsLoding(true);
         // const result = await getApi(`api/custom-field/?moduleName=Contacts`);
         const result = await dispatch(fetchContactCustomFiled());
-        if (result?.response?.status === 200) {
-            setContactData(result?.payload);
+        if (result.payload.status === 200) {
+            setContactData(result?.payload?.data);
         }
         const actionHeader = {
             Header: "Action", accessor: "action", isSortable: false, center: true,
@@ -94,7 +94,7 @@ const Index = () => {
         };
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-            ...(result?.payload?.[0]?.fields || []) // Check if fields is defined, if not, use empty array
+            ...(result?.payload?.data?.[0]?.fields || []) // Check if fields is defined, if not, use empty array
                 .filter(field => field?.isTableField === true) // Filter out fields where isTableField is true
                 .map(field => ({ Header: field?.label, accessor: field?.name })),
             ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : [])
