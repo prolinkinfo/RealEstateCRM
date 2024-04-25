@@ -13,6 +13,9 @@ import Add from './add';
 import { MdLeaderboard } from 'react-icons/md';
 import { IoIosContact } from 'react-icons/io';
 import CallAdvanceSearch from './components/callAdvanceSearch';
+import { fetchPhoneCallData } from '../../../redux/phoneCallSlice';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 const Index = (props) => {
     const title = "Calls";
@@ -29,6 +32,9 @@ const Index = (props) => {
     const [data, setData] = useState([]);
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
+    const dispatch = useDispatch()
+
+
     const [permission, leadAccess, contactAccess] = HasAccess(["Calls", 'Leads', 'Contacts']);
     const actionHeader = {
         Header: "Action", accessor: 'action', isSortable: false, center: true,
@@ -120,8 +126,12 @@ const Index = (props) => {
 
     const fetchData = async () => {
         setIsLoding(true)
-        let result = await getApi(user.role === 'superAdmin' ? 'api/phoneCall' : `api/phoneCall?sender=${user._id}`);
-        setData(result.data);
+        const result = await dispatch(fetchPhoneCallData())
+        if (result.payload.status === 200) {
+            setData(result?.payload?.data);
+        } else {
+            toast.error("Failed to fetch data", "error");
+        }
         setIsLoding(false)
     }
 

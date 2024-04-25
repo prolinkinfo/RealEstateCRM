@@ -13,6 +13,9 @@ import moment from 'moment';
 import { MdLeaderboard } from 'react-icons/md';
 import { IoIosContact } from 'react-icons/io';
 import AddEmailHistory from './add';
+import { useDispatch } from 'react-redux';
+import { fetchEmailsData } from '../../../redux/emailsSlice';
+import { toast } from 'react-toastify';
 
 const Index = (props) => {
     const title = "Email";
@@ -25,6 +28,7 @@ const Index = (props) => {
     const [searchboxOutside, setSearchboxOutside] = useState('');
     const user = JSON.parse(localStorage.getItem("user"));
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [isLoding, setIsLoding] = useState(false);
     const [data, setData] = useState([]);
     const [displaySearchData, setDisplaySearchData] = useState(false);
@@ -121,8 +125,16 @@ const Index = (props) => {
 
     const fetchData = async () => {
         setIsLoding(true)
-        let result = await getApi(user.role === 'superAdmin' ? 'api/email/' : `api/email/?sender=${user._id}`);
-        let response = result.data
+        // let result = await getApi(user.role === 'superAdmin' ? 'api/email/' : `api/email/?sender=${user._id}`);
+        const result = await dispatch(fetchEmailsData())
+        let response = result?.payload?.data
+        if (result.payload.status === 200) {
+            setData(response);
+        } else {
+            toast.error("Failed to fetch data", "error");
+        }
+        console.log(response);
+        
         response && response.forEach(element => {
 
             if (element.createByLead) {
@@ -132,7 +144,7 @@ const Index = (props) => {
                 element.realeted = 'Contact'
             }
         });
-        setData(response);
+        // setData(response);
         setIsLoding(false)
     }
 
