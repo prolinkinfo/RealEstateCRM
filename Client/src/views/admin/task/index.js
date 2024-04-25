@@ -15,6 +15,9 @@ import CommonDeleteModel from 'components/commonDeleteModel';
 import { deleteManyApi } from 'services/api';
 import AddEdit from './components/AddEdit';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { fetchTaskData } from '../../../redux/taskSlice';
+import { toast } from 'react-toastify';
 
 const Task = () => {
     const title = "Tasks";
@@ -40,6 +43,7 @@ const Task = () => {
     const location = useLocation();
     const state = location.state;
     const navigate = useNavigate()
+    const dispatch = useDispatch();
 
     const handleEditOpen = (row) => {
         onOpen();
@@ -109,8 +113,12 @@ const Task = () => {
 
     const fetchData = async () => {
         setIsLoding(true)
-        let result = await getApi(user.role === 'superAdmin' ? `api/task` : `api/task/?createBy=${user._id}`);
-        setData(result.data);
+        const result = await dispatch(fetchTaskData())
+        if (result.payload.status === 200) {
+            setData(result?.payload?.data);
+        } else {
+            toast.error("Failed to fetch data", "error");
+        }
         setIsLoding(false)
     }
     const setStatusData = async (cell, e) => {
