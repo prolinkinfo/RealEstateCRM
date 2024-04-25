@@ -125,11 +125,8 @@ const Index = (props) => {
 
     const fetchData = async () => {
         setIsLoding(true)
-        // let result = await getApi(user.role === 'superAdmin' ? 'api/email/' : `api/email/?sender=${user._id}`);
         const result = await dispatch(fetchEmailsData())
         let response = [...result?.payload?.data]
-
-        console.log(response);
 
         response && response?.length > 0 && response?.forEach(element => {
 
