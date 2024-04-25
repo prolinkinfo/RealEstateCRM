@@ -13,6 +13,7 @@ import contactSlice from './contactSlice';
 import contactCustomFiledSlice from './contactCustomFiledSlice';
 import leadCustomFiledSlice from './leadCustomFiledSlice';
 import taskSlice from './taskSlice';
+import meetingSlice from './meetingSlice';
 
 const middleware = (getDefaultMiddleware) => {
   return getDefaultMiddleware({
@@ -55,6 +56,7 @@ export const store = configureStore({
     leadCustomFiled: leadCustomFiledSlice,
     propertyData: propertySlice,
     taskData: taskSlice,
+    meetingData: meetingSlice,
   },
   middleware,
 });

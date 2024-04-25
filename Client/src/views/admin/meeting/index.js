@@ -11,6 +11,9 @@ import MeetingAdvanceSearch from './components/MeetingAdvanceSearch';
 import AddMeeting from './components/Addmeeting';
 import CommonDeleteModel from 'components/commonDeleteModel';
 import { deleteManyApi } from 'services/api';
+import { toast } from 'react-toastify';
+import { fetchMeetingData } from '../../../redux/meetingSlice';
+import { useDispatch } from 'react-redux';
 
 const Index = () => {
     const title = "Meeting";
@@ -28,6 +31,9 @@ const Index = () => {
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
     const [permission] = HasAccess(['Meetings'])
+    const dispatch = useDispatch()
+
+
     const actionHeader = {
         Header: "Action", isSortable: false, center: true,
         cell: ({ row }) => (
@@ -73,8 +79,12 @@ const Index = () => {
 
     const fetchData = async () => {
         setIsLoding(true)
-        let result = await getApi(user.role === 'superAdmin' ? 'api/meeting' : `api/meeting/?createBy=${user._id}`);
-        setData(result.data);
+        const result = await dispatch(fetchMeetingData())
+        if (result.payload.status === 200) {
+            setData(result?.payload?.data);
+        } else {
+            toast.error("Failed to fetch data", "error");
+        }
         setIsLoding(false)
     }
 
