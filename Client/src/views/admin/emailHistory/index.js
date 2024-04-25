@@ -127,24 +127,35 @@ const Index = (props) => {
         setIsLoding(true)
         // let result = await getApi(user.role === 'superAdmin' ? 'api/email/' : `api/email/?sender=${user._id}`);
         const result = await dispatch(fetchEmailsData())
-        let response = result?.payload?.data
+        let response = [...result?.payload?.data]
+
+        console.log(response);
+
+        response && response?.length > 0 && response?.forEach(element => {
+
+            if (Object.isExtensible(element)) {
+                if (element.createByLead) {
+                    element.realeted = 'Lead';
+                }
+                if (element.createBy) {
+                    element.realeted = 'Contact';
+                }
+            } else {
+                const modifiedElement = { ...element };
+                if (element.createByLead) {
+                    modifiedElement.realeted = 'Lead';
+                }
+                if (element.createBy) {
+                    modifiedElement.realeted = 'Contact';
+                }
+                element = modifiedElement;
+            }
+        });
         if (result.payload.status === 200) {
             setData(response);
         } else {
             toast.error("Failed to fetch data", "error");
         }
-        console.log(response);
-        
-        response && response.forEach(element => {
-
-            if (element.createByLead) {
-                element.realeted = 'Lead'
-            }
-            if (element.createBy) {
-                element.realeted = 'Contact'
-            }
-        });
-        // setData(response);
         setIsLoding(false)
     }
 
