@@ -17,6 +17,7 @@ import { deleteManyApi } from 'services/api';
 import { fetchContactData } from '../../../redux/contactSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchContactCustomFiled } from '../../../redux//contactCustomFiledSlice';
+import { toast } from 'react-toastify';
 
 const Index = () => {
     const title = "Contacts";
@@ -67,6 +68,8 @@ const Index = () => {
         const result = await dispatch(fetchContactCustomFiled());
         if (result.payload.status === 200) {
             setContactData(result?.payload?.data);
+        } else {
+            toast.error("Failed to fetch data", "error");
         }
         const actionHeader = {
             Header: "Action", accessor: "action", isSortable: false, center: true,

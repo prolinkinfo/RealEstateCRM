@@ -15,6 +15,7 @@ import { deleteManyApi } from 'services/api';
 import { fetchPropertyCustomFiled } from '../../../redux/propertyCustomFiledSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPropertyData } from '../../../redux/propertySlice'
+import { toast } from 'react-toastify';
 
 const Index = () => {
     const title = "Properties";
@@ -45,6 +46,8 @@ const Index = () => {
         const result = await dispatch(fetchPropertyCustomFiled())
         if (result.payload.status === 200) {
             setPropertyData(result?.payload?.data);
+        } else {
+            toast.error("Failed to fetch data", "error");
         }
         const actionHeader = {
             Header: "Action",
