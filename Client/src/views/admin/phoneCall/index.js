@@ -135,7 +135,6 @@ const Index = (props) => {
         setIsLoding(false)
     }
 
-    const [columns, setColumns] = useState([...tableColumns]);
     const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
     const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 
@@ -149,7 +148,7 @@ const Index = (props) => {
             <CommonCheckTable
                 title={title}
                 isLoding={isLoding}
-                columnData={columns ?? []}
+                columnData={tableColumns ?? []}
                 dataColumn={dataColumn ?? []}
                 allData={data ?? []}
                 tableData={data}

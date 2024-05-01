@@ -175,7 +175,6 @@ const Task = () => {
         setId(cell?.row?.values?._id)
         setEventView(true)
     }
-    const [columns, setColumns] = useState([...tableColumns]);
     const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
     const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 
@@ -201,7 +200,7 @@ const Task = () => {
             <CommonCheckTable
                 title={title}
                 isLoding={isLoding}
-                columnData={columns ?? []}
+                columnData={tableColumns ?? []}
                 dataColumn={dataColumn ?? []}
                 allData={data ?? []}
                 searchDisplay={displaySearchData}
