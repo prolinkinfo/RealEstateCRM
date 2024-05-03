@@ -25,6 +25,7 @@ import CommonDeleteModel from "components/commonDeleteModel";
 import { deleteApi } from "services/api";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPropertyCustomFiled } from "../../../redux/propertyCustomFiledSlice";
+import { fetchContactCustomFiled } from '../../../redux/contactCustomFiledSlice';
 
 const View = () => {
 
@@ -50,6 +51,8 @@ const View = () => {
     const dispatch = useDispatch();
     const propertyData = useSelector((state) => state?.propertyCustomFiled?.data?.data)
 
+    const [contactData, setContactData] = useState([]);
+    const [columns, setColumns] = useState([]);
     const [type, setType] = useState(false)
     const navigate = useNavigate();
 
@@ -64,8 +67,20 @@ const View = () => {
         { Header: "Contact Method", accessor: "preferredContactMethod" },
     ];
 
-    const [dynamicColumns, setDynamicColumns] = useState([...contactColumns]);
-    const [selectedColumns, setSelectedColumns] = useState([...contactColumns]);
+    const fetchCustomDataFields = async () => {
+        setIsLoding(true);
+        const result = await dispatch(fetchContactCustomFiled())
+        setContactData(result?.payload?.data);
+
+        const tempTableColumns = [
+            { Header: "#", accessor: "_id", isSortable: false, width: 10 },
+            ...result?.payload?.data?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => ({ Header: field?.label, accessor: field?.name })),
+        ];
+        setColumns(tempTableColumns);
+        setIsLoding(false);
+    };
+
+    const [selectedColumns, setSelectedColumns] = useState([...columns]);
 
     const handleTabChange = (index) => {
         setSelectedTab(index);
@@ -100,6 +115,7 @@ const View = () => {
     useEffect(() => {
         dispatch(fetchPropertyCustomFiled())
         fetchData()
+        fetchCustomDataFields()
     }, [])
 
 
@@ -171,16 +187,18 @@ const View = () => {
                                                             AdvanceSearch={false}
                                                             ManageGrid={false}
                                                             access={false}
-                                                            columnData={contactColumns ?? []}
-                                                            dataColumn={contactColumns ?? []}
+                                                            columnData={columns ?? []}
+                                                            dataColumn={columns ?? []}
                                                             title={"Interested Contact"}
                                                             allData={filteredContacts ?? []}
                                                             tableData={filteredContacts}
-                                                            dynamicColumns={dynamicColumns}
-                                                            setDynamicColumns={setDynamicColumns}
                                                             selectedColumns={selectedColumns}
                                                             setSelectedColumns={setSelectedColumns}
-                                                            size={"md"} />
+                                                            size={"md"}
+                                                            tableCustomFields={contactData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
+                                                            customSearch={true}
+                                                            checkBox={false}
+                                                        />
                                                     </GridItem>
                                                 </Grid>
                                             </GridItem>

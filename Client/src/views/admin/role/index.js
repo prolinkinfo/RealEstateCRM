@@ -86,14 +86,15 @@ const Index = () => {
         dataColumn={columns ?? []}
         allData={data || []}
         tableData={data}
-        AdvanceSearch={() => ""}
+        // AdvanceSearch={() => ""}
+        AdvanceSearch={false}
         tableCustomFields={[]}
         searchedDataOut={searchedData}
         searchDisplay={displaySearchData}
         setSearchDisplay={setDisplaySearchData}
         setSearchedDataOut={setSearchedData}
         searchboxOutside={searchboxOutside}
-        setSearchboxOutside={setSearchboxOutside}
+        // setSearchboxOutside={setSearchboxOutside}
         BackButton={<Button onClick={() => navigate('/admin-setting')} variant="brand" size="sm" leftIcon={<IoIosArrowBack />} ml={2}>Back</Button>}
         deleteMany={true}
         access={true}
@@ -102,6 +103,7 @@ const Index = () => {
         setGetTagValuesOutside={setGetTagValuesOutside}
         ManageGrid={false}
         onOpen={onOpen}
+        customSearch={true}
       />
       <AddRole isOpen={isOpen} size={"sm"} setAction={setAction} onClose={onClose} />
       {access && <RoleModal isOpen={roleModal}
