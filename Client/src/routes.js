@@ -11,20 +11,18 @@ import {
 // icon
 import React from "react";
 import { AiFillFolderOpen, AiOutlineMail } from "react-icons/ai";
-import { FaCalendarAlt, FaRupeeSign, FaTasks, FaWpforms } from "react-icons/fa";
+import { FaCalendarAlt, FaCreativeCommonsBy, FaRupeeSign, FaTasks, FaWpforms, FaYoutube } from "react-icons/fa";
+import { GrValidate } from "react-icons/gr";
 import { LuBuilding2 } from "react-icons/lu";
 import { PiPhoneCallBold } from "react-icons/pi";
-import { FaCreativeCommonsBy } from "react-icons/fa";
 import { SiGooglemeet } from "react-icons/si";
-import { ROLE_PATH } from "./roles";
-import ChangeImage from "views/admin/image";
-import Validation from "views/admin/validation";
-import CustomField from "views/admin/customField";
-import TableField from "views/admin/tableField";
 import { TbExchange, TbTableColumn } from "react-icons/tb";
-import { GrValidate } from "react-icons/gr";
 import { VscFileSubmodule } from "react-icons/vsc";
-
+import CustomField from "views/admin/customField";
+import ChangeImage from "views/admin/image";
+import TableField from "views/admin/tableField";
+import Validation from "views/admin/validation";
+import { ROLE_PATH } from "./roles";
 // Admin Imports
 const MainDashboard = React.lazy(() => import("views/admin/default"));
 
@@ -71,6 +69,7 @@ const SignInCentered = React.lazy(() => import("views/auth/signIn"));
 const AdminSetting = React.lazy(() => import("views/admin/adminSetting"));
 const validation = React.lazy(() => import("views/admin/validation"));
 const module = React.lazy(() => import("views/admin/moduleName"));
+const Tutorial = React.lazy(() => import("views/admin/tutorial"));
 
 const routes = [
   // ========================== Dashboard ==========================
@@ -81,6 +80,7 @@ const routes = [
     icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
     component: MainDashboard,
   },
+
   // ========================== Admin Layout ==========================
   // ------------- lead Routes ------------------------
   {
@@ -365,6 +365,13 @@ const routes = [
     path: "/sign-in",
     icon: <Icon as={MdLock} width='20px' height='20px' color='inherit' />,
     component: SignInCentered,
+  },
+  {
+    name: "Tutorial",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/tutorial",
+    icon: <Icon as={FaYoutube} width='20px' height='20px' color='inherit' />,
+    component: Tutorial,
   },
 ];
 

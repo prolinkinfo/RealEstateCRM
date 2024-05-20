@@ -17,11 +17,13 @@ import { getApi } from 'services/api';
 import DynamicPage from 'views/admin/dynamicPage';
 import { LuChevronRightCircle } from 'react-icons/lu';
 import { FaCalendarAlt } from 'react-icons/fa';
+import { FaYoutube } from "react-icons/fa";
 
 const MainDashboard = React.lazy(() => import("views/admin/default"));
 const SignInCentered = React.lazy(() => import("views/auth/signIn"));
 const Calender = React.lazy(() => import("views/admin/calender"));
 const UserView = React.lazy(() => import("views/admin/users/View"));
+const Tutorial = React.lazy(() => import("views/admin/tutorial"));
 
 // Custom Chakra theme
 export default function User(props) {
@@ -114,6 +116,13 @@ export default function User(props) {
                 under: "user",
                 path: "/userView/:id",
                 component: UserView,
+            },
+            {
+                name: "Tutorial",
+                layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+                path: "/tutorial",
+                icon: <Icon as={FaYoutube} width='20px' height='20px' color='inherit' />,
+                component: Tutorial,
             },
         ]
 
