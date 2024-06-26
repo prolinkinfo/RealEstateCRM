@@ -240,12 +240,30 @@ function UserModal(props) {
                   })}
               </Tbody>
             </Table>
-            {data?.length > 5 && <Pagination gotoPage={gotoPage} gopageValue={gopageValue} setGopageValue={setGopageValue} pageCount={pageCount} canPreviousPage={canPreviousPage} previousPage={previousPage} canNextPage={canNextPage} pageOptions={pageOptions} setPageSize={setPageSize} nextPage={nextPage} pageSize={pageSize} pageIndex={pageIndex} />}
-
+            {data?.length > 5 && (
+              <Pagination
+                gotoPage={gotoPage}
+                gopageValue={gopageValue}
+                setGopageValue={setGopageValue}
+                pageCount={pageCount}
+                canPreviousPage={canPreviousPage}
+                previousPage={previousPage}
+                canNextPage={canNextPage}
+                pageOptions={pageOptions}
+                setPageSize={setPageSize}
+                nextPage={nextPage}
+                pageSize={pageSize}
+                pageIndex={pageIndex}
+              />
+            )}
           </ModalBody>
           <ModalFooter>
-            <Button size="sm"
-              onClick={() => { setOpenUser(false); setRoleModal(true) }}
+            <Button
+              size="sm"
+              onClick={() => {
+                setOpenUser(false);
+                setRoleModal(true);
+              }}
               variant="outline"
               colorScheme="red"
               sx={{
@@ -258,7 +276,17 @@ function UserModal(props) {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <RoleUser fetchData={fetchData} userModal={userModal} setOpenUser={setOpenUser} _id={_id} setUserModal={setUserModal} userFetchData={userFetchData} userRole={tableData} tableData={userData} columnsData={columnsData} />
+      <RoleUser
+        fetchData={fetchData}
+        userModal={userModal}
+        setOpenUser={setOpenUser}
+        _id={_id}
+        setUserModal={setUserModal}
+        userFetchData={userFetchData}
+        userRole={tableData}
+        tableData={userData || []}
+        columnsData={columnsData || []}
+      />
     </>
   );
 }

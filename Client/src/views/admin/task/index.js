@@ -15,6 +15,9 @@ import CommonDeleteModel from 'components/commonDeleteModel';
 import { deleteManyApi } from 'services/api';
 import AddEdit from './components/AddEdit';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { fetchTaskData } from '../../../redux/taskSlice';
+import { toast } from 'react-toastify';
 
 const Task = () => {
     const title = "Tasks";
@@ -40,6 +43,7 @@ const Task = () => {
     const location = useLocation();
     const state = location.state;
     const navigate = useNavigate()
+    const dispatch = useDispatch();
 
     const handleEditOpen = (row) => {
         onOpen();
@@ -55,10 +59,8 @@ const Task = () => {
                     <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
                         {permission?.update &&
                             <MenuItem py={2.5} icon={<EditIcon fontSize={15} mb={1} />} onClick={() => handleEditOpen(row)}>Edit</MenuItem>}
-                        {/* <MenuItem py={2.5} icon={<EditIcon fontSize={15} mb={1} />} onClick={() => { setEdit(true); setSelectedId(row?.values?._id); }}>Edit</MenuItem>} */}
                         {permission?.view &&
                             <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { setId(row?.original._id); handleViewOpen(row?.values?._id); }}>View</MenuItem>}
-                        {/* <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { setEventView(true); setId(row?.original._id) }}>View</MenuItem> */}
                         {permission?.delete &&
                             <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} mb={1} />} onClick={() => { setDeleteMany(true); setSelectedValues([row?.values?._id]); }}>Delete</MenuItem>}
                     </MenuList>
@@ -111,8 +113,12 @@ const Task = () => {
 
     const fetchData = async () => {
         setIsLoding(true)
-        let result = await getApi(user.role === 'superAdmin' ? `api/task` : `api/task/?createBy=${user._id}`);
-        setData(result.data);
+        const result = await dispatch(fetchTaskData())
+        if (result.payload.status === 200) {
+            setData(result?.payload?.data);
+        } else {
+            toast.error("Failed to fetch data", "error");
+        }
         setIsLoding(false)
     }
     const setStatusData = async (cell, e) => {
@@ -169,7 +175,6 @@ const Task = () => {
         setId(cell?.row?.values?._id)
         setEventView(true)
     }
-    const [columns, setColumns] = useState([...tableColumns]);
     const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
     const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 
@@ -195,9 +200,9 @@ const Task = () => {
             <CommonCheckTable
                 title={title}
                 isLoding={isLoding}
-                columnData={columns}
-                dataColumn={dataColumn}
-                allData={data}
+                columnData={tableColumns ?? []}
+                dataColumn={dataColumn ?? []}
+                allData={data ?? []}
                 searchDisplay={displaySearchData}
                 setSearchDisplay={setDisplaySearchData}
                 searchedDataOut={searchedData}
@@ -226,7 +231,7 @@ const Task = () => {
                 state={state}
                 setSearchedData={setSearchedData}
                 setDisplaySearchData={setDisplaySearchData}
-                allData={data}
+                allData={data ?? []}
                 setAction={setAction}
                 setGetTagValues={setGetTagValuesOutside}
                 setSearchbox={setSearchboxOutside}

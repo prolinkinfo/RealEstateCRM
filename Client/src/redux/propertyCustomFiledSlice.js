@@ -5,7 +5,7 @@ export const fetchPropertyCustomFiled = createAsyncThunk('fetchLeadData', async 
     const user = JSON.parse(localStorage.getItem("user"));
     try {
         const response = await getApi(`api/custom-field/?moduleName=Properties`);
-        return response.data;
+        return response;
     } catch (error) {
         throw error;
     }

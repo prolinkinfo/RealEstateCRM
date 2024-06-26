@@ -13,6 +13,9 @@ import moment from 'moment';
 import { MdLeaderboard } from 'react-icons/md';
 import { IoIosContact } from 'react-icons/io';
 import AddEmailHistory from './add';
+import { useDispatch } from 'react-redux';
+import { fetchEmailsData } from '../../../redux/emailsSlice';
+import { toast } from 'react-toastify';
 
 const Index = (props) => {
     const title = "Email";
@@ -25,6 +28,7 @@ const Index = (props) => {
     const [searchboxOutside, setSearchboxOutside] = useState('');
     const user = JSON.parse(localStorage.getItem("user"));
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [isLoding, setIsLoding] = useState(false);
     const [data, setData] = useState([]);
     const [displaySearchData, setDisplaySearchData] = useState(false);
@@ -121,18 +125,34 @@ const Index = (props) => {
 
     const fetchData = async () => {
         setIsLoding(true)
-        let result = await getApi(user.role === 'superAdmin' ? 'api/email/' : `api/email/?sender=${user._id}`);
-        let response = result.data
-        response.forEach(element => {
+        const result = await dispatch(fetchEmailsData())
+        let response = [...result?.payload?.data]
 
-            if (element.createByLead) {
-                element.realeted = 'Lead'
-            }
-            if (element.createBy) {
-                element.realeted = 'Contact'
+        response && response?.length > 0 && response?.forEach(element => {
+
+            if (Object.isExtensible(element)) {
+                if (element.createByLead) {
+                    element.realeted = 'Lead';
+                }
+                if (element.createBy) {
+                    element.realeted = 'Contact';
+                }
+            } else {
+                const modifiedElement = { ...element };
+                if (element.createByLead) {
+                    modifiedElement.realeted = 'Lead';
+                }
+                if (element.createBy) {
+                    modifiedElement.realeted = 'Contact';
+                }
+                element = modifiedElement;
             }
         });
-        setData(response);
+        if (result.payload.status === 200) {
+            setData(response);
+        } else {
+            toast.error("Failed to fetch data", "error");
+        }
         setIsLoding(false)
     }
 
@@ -150,9 +170,9 @@ const Index = (props) => {
             <CommonCheckTable
                 title={title}
                 isLoding={isLoding}
-                columnData={columns}
-                dataColumn={dataColumn}
-                allData={data}
+                columnData={columns ?? []}
+                dataColumn={dataColumn ?? []}
+                allData={data ?? []}
                 tableData={data}
                 searchDisplay={displaySearchData}
                 setSearchDisplay={setDisplaySearchData}
@@ -185,7 +205,7 @@ const Index = (props) => {
                 setAdvanceSearch={setAdvanceSearch}
                 setSearchedData={setSearchedData}
                 setDisplaySearchData={setDisplaySearchData}
-                allData={data}
+                allData={data ?? []}
                 setAction={setAction}
                 setGetTagValues={setGetTagValuesOutside}
                 setSearchbox={setSearchboxOutside}

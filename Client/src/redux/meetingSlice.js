@@ -1,19 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getApi } from '../services/api'
 
-export const fetchContactCustomFiled = createAsyncThunk('fetchContactCustomFiled', async () => {
+export const fetchMeetingData = createAsyncThunk('fetchMeetingData', async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     try {
-        const response = await getApi(`api/custom-field/?moduleName=Contacts`);
+        const response = await getApi(user.role === 'superAdmin' ? 'api/meeting' : `api/meeting/?createBy=${user._id}`);
         return response;
     } catch (error) {
         throw error;
     }
 });
 
-
-const contactCustomFiledSlice = createSlice({
-    name: 'contactCustomFiledData',
+const meetingSlice = createSlice({
+    name: 'meetingData',
     initialState: {
         data: [],
         isLoading: false,
@@ -21,15 +20,15 @@ const contactCustomFiledSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchContactCustomFiled.pending, (state) => {
+            .addCase(fetchMeetingData.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(fetchContactCustomFiled.fulfilled, (state, action) => {
+            .addCase(fetchMeetingData.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.data = action.payload;
                 state.error = "";
             })
-            .addCase(fetchContactCustomFiled.rejected, (state, action) => {
+            .addCase(fetchMeetingData.rejected, (state, action) => {
                 state.isLoading = false;
                 state.data = [];
                 state.error = action.error.message;
@@ -37,4 +36,4 @@ const contactCustomFiledSlice = createSlice({
     },
 });
 
-export default contactCustomFiledSlice.reducer;
+export default meetingSlice.reducer;

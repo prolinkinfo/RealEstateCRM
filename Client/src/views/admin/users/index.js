@@ -117,9 +117,9 @@ const Index = () => {
             <CommonCheckTable
                 title={title}
                 isLoding={isLoding}
-                columnData={columns}
-                dataColumn={dataColumn}
-                allData={data}
+                columnData={columns ?? []}
+                dataColumn={dataColumn ?? []}
+                allData={data ?? []}
                 tableData={displaySearchData ? searchedData : data}
                 searchDisplay={displaySearchData}
                 setSearchDisplay={setDisplaySearchData}
@@ -154,7 +154,7 @@ const Index = () => {
                 setAdvanceSearch={setAdvanceSearch}
                 setSearchedData={setSearchedData}
                 setDisplaySearchData={setDisplaySearchData}
-                allData={data}
+                allData={data ?? []}
                 setAction={setAction}
                 setGetTagValues={setGetTagValuesOutside}
                 setSearchbox={setSearchboxOutside}

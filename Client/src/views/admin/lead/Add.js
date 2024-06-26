@@ -15,7 +15,6 @@ const Add = (props) => {
     const initialFieldValues = Object.fromEntries(
         (props?.leadData?.fields || []).map(field => [field?.name, ''])
     );
-
     const initialValues = {
         ...initialFieldValues,
         createBy: JSON.parse(localStorage.getItem('user'))._id

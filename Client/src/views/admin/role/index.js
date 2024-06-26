@@ -82,18 +82,19 @@ const Index = () => {
       <CommonCheckTable
         title={title}
         isLoding={isLoding}
-        columnData={columns}
-        dataColumn={columns}
-        allData={data}
+        columnData={columns ?? []}
+        dataColumn={columns ?? []}
+        allData={data || []}
         tableData={data}
-        AdvanceSearch={() => ""}
+        // AdvanceSearch={() => ""}
+        AdvanceSearch={false}
         tableCustomFields={[]}
         searchedDataOut={searchedData}
         searchDisplay={displaySearchData}
         setSearchDisplay={setDisplaySearchData}
         setSearchedDataOut={setSearchedData}
         searchboxOutside={searchboxOutside}
-        setSearchboxOutside={setSearchboxOutside}
+        // setSearchboxOutside={setSearchboxOutside}
         BackButton={<Button onClick={() => navigate('/admin-setting')} variant="brand" size="sm" leftIcon={<IoIosArrowBack />} ml={2}>Back</Button>}
         deleteMany={true}
         access={true}
@@ -102,12 +103,21 @@ const Index = () => {
         setGetTagValuesOutside={setGetTagValuesOutside}
         ManageGrid={false}
         onOpen={onOpen}
+        customSearch={true}
       />
       <AddRole isOpen={isOpen} size={"sm"} setAction={setAction} onClose={onClose} />
       {access && <RoleModal isOpen={roleModal}
         setRoleModal={setRoleModal}
         onOpen={onOpen}
-        isLoding={isLoding} columnsData={rowColumns} name={roleName} _id={roleId} tableData={access} setAccess={setAccess} fetchData={fetchData} setAction={setAction} />}
+        isLoding={isLoding}
+        columnsData={rowColumns ?? []}
+        name={roleName}
+        _id={roleId}
+        tableData={access ?? []}
+        setAccess={setAccess}
+        fetchData={fetchData}
+        setAction={setAction}
+      />}
     </div>
   );
 };

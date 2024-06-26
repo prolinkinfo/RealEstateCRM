@@ -33,6 +33,7 @@ import moment from 'moment';
 import AddEdit from '../task/components/AddEdit'
 import { useDispatch, useSelector } from "react-redux";
 import { fetchContactCustomFiled } from '../../../redux/contactCustomFiledSlice';
+import { fetchPropertyCustomFiled } from "../../../redux/propertyCustomFiledSlice";
 
 const View = () => {
 
@@ -64,8 +65,11 @@ const View = () => {
     const size = "lg";
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const contactData = useSelector((state) => state?.contactCustomFiled?.data)
 
+    const contactData = useSelector((state) => state?.contactCustomFiled?.data?.data)
+
+    const [propertyData, setPropertyData] = useState([]);
+    const [columns, setColumns] = useState([]);
     const [permission, callAccess, emailAccess, taskAccess, meetingAccess] = HasAccess(['Contacts', 'Calls', 'Emails', 'Tasks', 'Meetings']);
 
     const columnsDataColumns = [
@@ -150,9 +154,20 @@ const View = () => {
         { Header: "square Footage", accessor: "squareFootage", },
         { Header: "year Built", accessor: "yearBuilt", },
     ];
+    const fetchCustomDataFields = async () => {
+        setIsLoding(true);
+        const result = await dispatch(fetchPropertyCustomFiled())
+        setPropertyData(result?.payload?.data);
 
+        const tempTableColumns = [
+            { Header: "#", accessor: "_id", isSortable: false, width: 10 },
+            ...result?.payload?.data?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => ({ Header: field?.label, accessor: field?.name })),
+        ];
+
+        setColumns(tempTableColumns);
+        setIsLoding(false);
+    }
     const MeetingColumns = [
-        // { Header: 'agenda', accessor: 'agenda' },
         {
             Header: 'agenda', accessor: 'agenda', cell: (cell) => (
                 <Link to={`/metting/${cell?.row?.original?._id}`}>
@@ -181,11 +196,9 @@ const View = () => {
         { Header: "create By", accessor: "createdByName", },
     ];
     const taskColumns = [
-        // { Header: 'Title', accessor: 'title' },
         {
             Header: "Title", accessor: "title", cell: (cell) => (
                 <Link to={`/view/${cell?.row?.original?._id}`}>
-                    {console.log(`/view/${cell?.row?.original?._id}`)}
                     <Text
                         me="10px"
                         sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
@@ -249,6 +262,10 @@ const View = () => {
     useEffect(() => {
         fetchData()
     }, [action])
+
+    useEffect(() => {
+        fetchCustomDataFields()
+    }, [])
 
     function toCamelCase(text) {
         return text?.replace(/([a-z])([A-Z])/g, '$1 $2');
@@ -326,7 +343,7 @@ const View = () => {
                                                 <Box>
                                                     <Flex alignItems={'center'} mb={2} justifyContent={'space-between'}>
                                                         <Heading size="md">
-                                                            Property of Interest({allData?.interestProperty?.interestProperty?.length})
+                                                            Property of Interest ({allData?.interestProperty?.interestProperty?.length})
                                                         </Heading>
                                                         <Button onClick={() => setPropertyModel(true)} leftIcon={<LuBuilding2 />} size="sm" colorScheme="gray" bg={buttonbg}>Select Interested Property  </Button>
                                                     </Flex>
@@ -334,11 +351,24 @@ const View = () => {
 
                                                 <Grid templateColumns={'repeat(2, 1fr)'} gap={4}>
                                                     <GridItem colSpan={{ base: 2 }}>
-                                                        <PropertyTable fetchData={fetchData} columnsData={PropertyColumn} tableData={allData?.interestProperty?.interestProperty?.length > 0 ? allData?.interestProperty?.interestProperty : []} title={'Interested Property'} />
+                                                        {/* <PropertyTable fetchData={fetchData} columnsData={PropertyColumn} tableData={allData?.interestProperty?.interestProperty?.length > 0 ? allData?.interestProperty?.interestProperty : []} title={'Interested Property'} /> */}
+                                                        <CommonCheckTable
+                                                            isLoding={isLoding}
+                                                            columnData={columns ?? []}
+                                                            dataColumn={columns ?? []}
+                                                            allData={allData?.interestProperty?.interestProperty || []}
+                                                            tableData={allData?.interestProperty?.interestProperty || []}
+                                                            tableCustomFields={propertyData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
+                                                            AdvanceSearch={() => ""}
+                                                            ManageGrid={false}
+                                                            deleteMany={false}
+                                                            selectType="multiple"
+                                                            customSearch={false}
+                                                            checkBox={false}
+                                                        />
                                                     </GridItem>
                                                 </Grid>
                                             </GridItem>
-
                                         </Grid>
                                     </Card>
                                 </GridItem>
@@ -353,8 +383,8 @@ const View = () => {
                                                     <CommonCheckTable
                                                         title={"Email"}
                                                         isLoding={isLoding}
-                                                        columnData={columnsDataColumns}
-                                                        dataColumn={columnsDataColumns}
+                                                        columnData={columnsDataColumns ?? []}
+                                                        dataColumn={columnsDataColumns ?? []}
                                                         allData={showEmail ? allData.EmailHistory : allData?.EmailHistory?.length > 0 ? [allData.EmailHistory[0]] : []}
                                                         tableData={showEmail ? allData.EmailHistory : allData?.EmailHistory?.length > 0 ? [allData.EmailHistory[0]] : []}
                                                         AdvanceSearch={false}
@@ -377,8 +407,8 @@ const View = () => {
                                                     <CommonCheckTable
                                                         title={"Call"}
                                                         isLoding={isLoding}
-                                                        columnData={callColumns}
-                                                        dataColumn={callColumns}
+                                                        columnData={callColumns ?? []}
+                                                        dataColumn={callColumns ?? []}
                                                         allData={showCall ? allData?.phoneCallHistory : allData?.phoneCallHistory?.length > 0 ? [allData?.phoneCallHistory[0]] : []}
                                                         tableData={showCall ? allData?.phoneCallHistory : allData?.phoneCallHistory?.length > 0 ? [allData?.phoneCallHistory[0]] : []}
                                                         AdvanceSearch={false}
@@ -400,8 +430,8 @@ const View = () => {
                                                     <CommonCheckTable
                                                         title={"Task"}
                                                         isLoding={isLoding}
-                                                        columnData={taskColumns}
-                                                        dataColumn={taskColumns}
+                                                        columnData={taskColumns ?? []}
+                                                        dataColumn={taskColumns ?? []}
                                                         allData={showTasks ? allData?.task : allData?.task?.length > 0 ? [allData?.task[0]] : []}
                                                         tableData={showTasks ? allData?.task : allData?.task?.length > 0 ? [allData?.task[0]] : []}
                                                         AdvanceSearch={false}
@@ -423,8 +453,8 @@ const View = () => {
                                                     <CommonCheckTable
                                                         title={"Meeting"}
                                                         isLoding={isLoding}
-                                                        columnData={MeetingColumns}
-                                                        dataColumn={MeetingColumns}
+                                                        columnData={MeetingColumns ?? []}
+                                                        dataColumn={MeetingColumns ?? []}
                                                         dataLength={allData?.meetingHistory?.length}
                                                         allData={showMeetings ? allData?.meetingHistory : allData?.meetingHistory?.length > 0 ? [allData?.meetingHistory[0]] : []}
                                                         tableData={showMeetings ? allData?.meetingHistory : allData?.meetingHistory?.length > 0 ? [allData?.meetingHistory[0]] : []}
@@ -531,6 +561,8 @@ const View = () => {
                             </TabPanel>
                         </TabPanels>
                     </Tabs>
+
+
 
                     {(user.role === 'superAdmin' || (permission?.update || permission?.delete)) && <Card mt={3}>
                         <Grid templateColumns="repeat(6, 1fr)" gap={1}>

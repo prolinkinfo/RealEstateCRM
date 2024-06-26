@@ -17,6 +17,7 @@ import { deleteManyApi } from 'services/api';
 import { fetchContactData } from '../../../redux/contactSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchContactCustomFiled } from '../../../redux//contactCustomFiledSlice';
+import { toast } from 'react-toastify';
 
 const Index = () => {
     const title = "Contacts";
@@ -65,7 +66,11 @@ const Index = () => {
         setIsLoding(true);
         // const result = await getApi(`api/custom-field/?moduleName=Contacts`);
         const result = await dispatch(fetchContactCustomFiled());
-        setContactData(result?.payload);
+        if (result.payload.status === 200) {
+            setContactData(result?.payload?.data);
+        } else {
+            toast.error("Failed to fetch data", "error");
+        }
         const actionHeader = {
             Header: "Action", accessor: "action", isSortable: false, center: true,
             cell: ({ row }) => (
@@ -92,9 +97,12 @@ const Index = () => {
         };
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-            ...result?.payload?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => ({ Header: field?.label, accessor: field?.name })),
+            ...(result?.payload?.data?.[0]?.fields || []) // Check if fields is defined, if not, use empty array
+                .filter(field => field?.isTableField === true) // Filter out fields where isTableField is true
+                .map(field => ({ Header: field?.label, accessor: field?.name })),
             ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : [])
         ];
+
 
         setSelectedColumns(JSON.parse(JSON.stringify(tempTableColumns)));
         setColumns(JSON.parse(JSON.stringify(tempTableColumns)));
@@ -138,9 +146,9 @@ const Index = () => {
                         <CommonCheckTable
                             title={title}
                             isLoding={isLoding}
-                            columnData={columns}
-                            dataColumn={dataColumn}
-                            allData={data}
+                            columnData={columns ?? []}
+                            dataColumn={dataColumn ?? []}
+                            allData={data ?? []}
                             tableData={data}
                             tableCustomFields={contactData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
                             access={permission}
