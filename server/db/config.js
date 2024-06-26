@@ -30,7 +30,7 @@ const initializedSchemas = async () => {
                 const moduleSchema = new mongoose.Schema(schemaFields);
                 // Create Mongoose model
                 mongoose.model(moduleName, moduleSchema, moduleName);
-                console.log(`Schema created for module: ${moduleName}`);
+                // console.log(`Schema created for module: ${moduleName}`);
             }
         }
     };

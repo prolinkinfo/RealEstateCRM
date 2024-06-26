@@ -1,7 +1,6 @@
 import axios from "axios"
 import { constant } from "constant"
 
-
 export const postApi = async (path, data, login) => {
     try {
         let result = await axios.post(constant.baseUrl + path, data, {

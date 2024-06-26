@@ -7,6 +7,12 @@ const port = 5001
 require('dotenv').config()
 const fs = require('fs');
 const path = require('path');
+const Grid = require("gridfs-stream")
+const mongoose = require("mongoose")
+
+const { MongoClient, ObjectId, GridFSBucket } = require('mongodb');
+
+
 
 //Setup Express App
 const app = express();
@@ -16,6 +22,69 @@ app.use(bodyParser.json());
 app.use(cors())
 //API Routes
 app.use('/api', route);
+
+
+// let gfs;
+// const conn = mongoose.connection;
+// conn.once('open', () => {
+//     gfs = Grid(conn.db, mongoose.mongo);
+//     gfs.collection("outSales")
+// })
+let gfsBucket;
+const conn = mongoose.connection;
+conn.once('open', () => {
+    gfsBucket = new GridFSBucket(conn.db, {
+        bucketName: 'outSales'
+    });
+    console.log('GridFSBucket connected');
+});
+
+
+app.get("/file/:fileName", async (req, res) => {
+    try {
+        // const file = await gfs.files.findOne({ filename: req.params.fileName });
+        // console.log("file--::", file)
+        // const readStrean = gfs.createReadStream(file.filename)
+        // console.log("readStrean--::", readStrean)
+        // readStrean.pipe(res)
+
+        const files = await conn.db.collection('outSales.files').find().toArray();
+
+        if (!files || files.length === 0) {
+            return res.status(404).send('No files found');
+        }
+
+        res.setHeader('Content-Type', 'application/octet-stream');
+
+        files.forEach(async (file) => {
+            const readStream = gfsBucket.openDownloadStream(file._id);
+            readStream.pipe(res, { end: false });
+        });
+
+        res.end();
+
+
+        // const fileName = req.params.fileName;
+        // const file = await conn.db.collection('outSales.files').findOne({ filename: fileName });
+
+        // if (!file) {
+        //     return res.status(404).send('File not found');
+        // }
+
+        // const readStream = gfsBucket.openDownloadStreamByName(fileName);
+        // readStream.on('error', (err) => {
+        //     console.error('Error in readStream:', err);
+        //     res.status(500).send('Error retrieving file');
+        // });
+
+        // res.setHeader('Content-Type', file.contentType);
+        // readStream.pipe(res);
+
+    } catch (e) {
+        res.send("not found")
+        console.log("Error : ", e)
+    }
+})
 
 app.get('/', async (req, res) => {
     res.send('Welcome to my world...')

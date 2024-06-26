@@ -2,6 +2,9 @@ const multer = require('multer');
 const DocumentSchema = require('../../model/schema/document')
 const fs = require('fs');
 const mongoose = require('mongoose');
+// const GridFsStorage = require('multer-gridfs-storage')
+const { GridFsStorage } = require('multer-gridfs-storage');
+
 
 
 const index = async (req, res) => {
@@ -44,6 +47,31 @@ const index = async (req, res) => {
     }
 }
 
+const mongoStorage = new GridFsStorage({
+    url: `mongodb+srv://denishprolink:ZEa2nKjB3oShKeni@res.nq8twxu.mongodb.net/outSales`,
+    options: { useNewUrlParser: true, useUnifiedTopology: true },
+    file: (req, file) => {
+        const timestamp = Date.now() + Math.floor(Math.random() * 90);
+        const fileName = file.originalname.split('.')[0] + '-' + timestamp + '.' + file.originalname.split('.')[1];
+        // return fileName;
+        console.log("Generated fileName:", fileName);
+
+        return {
+            bucketName: 'outSales',
+            filename: fileName
+        }
+
+    }
+})
+
+mongoStorage.on('file', (file) => {
+    console.log('File stored:', file);
+});
+
+mongoStorage.on('error', (err) => {
+    console.error('Storage error:', err);
+});
+
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -69,13 +97,18 @@ const storage = multer.diskStorage({
 
 
 
-const upload = multer({ storage: storage });
+// const upload = multer({ storage: storage });
+const upload = multer({ storage: mongoStorage });
 
 const file = async (req, res) => {
     try {
         const { filename, folderName, createBy } = req.body;
 
         const url = req.protocol + '://' + req.get('host');
+        console.log("Request files:", req.files); // Debug log
+        console.log("Filename:", filename); // Debug log
+        console.log("FolderName:", folderName); // Debug log
+        console.log("CreateBy:", createBy); // Debug log
 
         const files = req.files.map((file) => ({
             fileName: filename || file.filename,
