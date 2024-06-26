@@ -132,7 +132,12 @@ const Index = () => {
                 setSelectedColumns={setSelectedColumns}
                 isOpen={isOpen}
                 onClose={onclose}
-                access={true}
+                access={{
+                    create : true,
+                    edit : true,
+                    delete : true,
+                    view : true,
+                }}
                 onOpen={handleOpen}
                 selectedValues={selectedValues}
                 setSelectedValues={setSelectedValues}
