@@ -176,7 +176,7 @@ const View = () => {
 
                         <TabPanels>
                             <TabPanel pt={4} p={0}>
-                                <CustomView data={propertyData[0]} fieldData={data} />
+                                <CustomView data={propertyData[0]} fieldData={data} fetchData={fetchData} editUrl={`api/property/edit/${param.id}`} moduleId={propertyData?.[0]?._id} />
                                 {filteredContacts?.length > 0 &&
                                     <GridItem colSpan={{ base: 12 }} mt={4}>
                                         <Grid templateColumns={{ base: "1fr" }} >

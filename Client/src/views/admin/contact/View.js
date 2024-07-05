@@ -335,7 +335,7 @@ const View = () => {
                         </Grid>
                         <TabPanels>
                             <TabPanel pt={4} p={0}>
-                                <CustomView data={contactData[0]} fieldData={data} toCamelCase={toCamelCase} />
+                                <CustomView data={contactData?.[0]} fieldData={data} toCamelCase={toCamelCase} moduleId={contactData?.[0]?._id} fetchData={fetchData} />
                                 <GridItem colSpan={{ base: 12 }} mt={4}>
                                     <Card >
                                         <Grid templateColumns={{ base: "1fr" }} gap={4}>
@@ -575,8 +575,8 @@ const View = () => {
                         </Grid>
                     </Card>}
                 </>}
-            {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} contactData={contactData[0]} />}
-            <Edit isOpen={edit} contactData={contactData[0]} size={size} onClose={setEdit} setAction={setAction} moduleId={contactData?.[0]?._id} data={data} />
+            {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} contactData={contactData?.[0]} />}
+            <Edit isOpen={edit} contactData={contactData?.[0]} size={size} onClose={setEdit} setAction={setAction} moduleId={contactData?.[0]?._id} data={data} />
             <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Contact' handleDeleteData={handleDeleteContact} ids={param.id} />
             <AddEmailHistory lead="false" contactEmail={allData?.contact?.email} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} />
             <AddDocumentModal addDocument={addDocument} setAddDocument={setAddDocument} linkId={param.id} from="contact" setAction={setAction} fetchData={fetchData} />

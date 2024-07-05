@@ -306,7 +306,7 @@ const View = () => {
 
                         <TabPanels>
                             <TabPanel pt={4} p={0}>
-                                <CustomView data={leadData[0]} fieldData={data} toCamelCase={toCamelCase} />
+                                <CustomView data={leadData?.[0]} fieldData={data} toCamelCase={toCamelCase} moduleId={leadData?.[0]?._id} fetchData={fetchData} />
                             </TabPanel>
                             <TabPanel pt={4} p={0}>
                                 <GridItem colSpan={{ base: 4 }} >
