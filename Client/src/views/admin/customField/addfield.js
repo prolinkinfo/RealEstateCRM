@@ -238,7 +238,7 @@ const Addfield = (props) => {
                                         <option value='color'>Color</option>
                                         <option value='email'>Email</option>
                                         <option value='url'>Url</option>
-                                        <option value='select'>Select</option>
+                                        <option value='select'>Dropdown</option>
                                     </Select>
                                     <Text mb='10px' color={'red'}> {errors.type && touched.type && errors.type}</Text>
                                 </GridItem>
