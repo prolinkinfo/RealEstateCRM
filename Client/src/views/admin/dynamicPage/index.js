@@ -123,9 +123,9 @@ const Index = () => {
                         <CommonCheckTable
                             title={moduleData?.moduleName}
                             isLoding={isLoding}
-                            columnData={columns}
-                            dataColumn={dataColumn}
-                            allData={data}
+                            columnData={columns ?? []}
+                            dataColumn={dataColumn ?? []}
+                            allData={data ?? []}
                             tableData={data}
                             tableCustomFields={moduleData?.fields?.filter((field) => field?.isTableField === true) || []}
                             access={permission}

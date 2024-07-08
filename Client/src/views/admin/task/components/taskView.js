@@ -2,17 +2,18 @@ import { Button, Grid, GridItem, Flex, IconButton, Text, Menu, MenuButton, MenuD
 import { AddIcon, ChevronDownIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import React from 'react'
 import moment from 'moment'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { BiLink } from 'react-icons/bi'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { getApi } from 'services/api'
 import Card from 'components/card/Card'
 import { IoIosArrowBack } from "react-icons/io";
-import AddTask from './addTask'
-import EditTask from './editTask'
 import { HasAccess } from '../../../../redux/accessUtils';
 import { HSeparator } from 'components/separator/Separator';
+import AddEdit from './AddEdit';
+import CommonDeleteModel from 'components/commonDeleteModel';
+import { deleteManyApi } from 'services/api';
 
 const TaskView = (props) => {
     const params = useParams()
@@ -22,23 +23,35 @@ const TaskView = (props) => {
     const [permission, contactAccess, leadAccess] = HasAccess(['Tasks', 'Contacts', 'Leads'])
 
     const [data, setData] = useState()
-    const [isLoding, setIsLoding] = useState(false)
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const { onOpen, onClose } = useDisclosure()
     const [edit, setEdit] = useState(false);
     const [deleteModel, setDelete] = useState(false);
+    const [deleteManyModel, setDeleteManyModel] = useState(false);
+    const navigate = useNavigate()
 
     const fetchViewData = async () => {
         if (id) {
-            setIsLoding(true)
             let result = await getApi('api/task/view/', id?.event ? id?.event?._def?.extendedProps?._id : id);
             setData(result?.data);
-            setIsLoding(false)
         }
     }
+
+    const handleDeleteTask = async (ids) => {
+        try {
+            let response = await deleteManyApi('api/task/deleteMany', ids)
+            if (response.status === 200) {
+                navigate('/task')
+                setDeleteManyModel(false)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
     useEffect(() => {
         fetchViewData()
     }, [id, edit])
-
 
     const handleClick = () => {
         onOpen()
@@ -63,7 +76,7 @@ const TaskView = (props) => {
                                     {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => setEdit(true)} alignItems={'start'} icon={<EditIcon />}>Edit</MenuItem>}
                                     {(user.role === 'superAdmin' || permission?.deleteModel) && <>
                                         <MenuDivider />
-                                        <MenuItem alignItems={'start'} onClick={() => setDelete(true)} color={'red'} icon={<DeleteIcon />}>Delete</MenuItem>
+                                        <MenuItem alignItems={'start'} onClick={() => setDeleteManyModel(true)} color={'red'} icon={<DeleteIcon />}>Delete</MenuItem>
                                     </>}
                                 </MenuList>
                             </Menu>
@@ -77,7 +90,6 @@ const TaskView = (props) => {
                 </Grid>
                 <HSeparator />
                 <Grid templateColumns="repeat(12, 1fr)" gap={3} pt={3}>
-
                     <GridItem colSpan={{ base: 12, md: 6 }} >
                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Title </Text>
                         <Text>{data?.title ? data?.title : ' - '}</Text>
@@ -88,11 +100,19 @@ const TaskView = (props) => {
                     </GridItem>
                     <GridItem colSpan={{ base: 12, md: 6 }} >
                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task start </Text>
-                        <Text>{data?.start ? moment(data?.start).format('L LT') : ' - '}</Text>
+                        <Text>
+                            {data && data?.start ? (
+                                data.allDay === true
+                                    ? moment(data.start).format('DD-MM-YYYY')
+                                    : moment(data.start).format('DD-MM-YYYY HH:mm A')
+                            ) : (
+                                "-"
+                            )}
+                        </Text>
                     </GridItem>
                     <GridItem colSpan={{ base: 12, md: 6 }} >
                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task end  </Text>
-                        <Text>{data?.end ? moment(data?.end).format('L LT') : moment(data?.start).format('L')}</Text>
+                        <Text>{data?.allDay === true ? moment(data?.end).format('DD-MM-YYYY') : moment(data?.end).format('DD-MM-YYYY HH:mm A')}</Text>
                     </GridItem>
                     <GridItem colSpan={{ base: 12, md: 6 }} >
                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Link </Text>
@@ -107,9 +127,9 @@ const TaskView = (props) => {
                         <Text>{data?.reminder ? data?.reminder : ' - '}</Text>
                     </GridItem>
                     <GridItem colSpan={{ base: 12, md: 6 }} >
-                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Assignment To  </Text>
-                        <Link to={data?.assignmentTo ? contactAccess?.view && `/contactView/${data?.assignmentTo}` : leadAccess?.view && `/leadView/${data?.assignmentToLead}`}>
-                            <Text color={(data?.category === 'contact' && (contactAccess?.view || user?.role === 'superAdmin')) ? 'brand.600' : (leadAccess?.view || user?.role === 'superAdmin' && data?.category === 'lead') ? 'brand.600' : 'blackAlpha.900'} sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.assignmentToName ? data?.assignmentToName : ' - '}</Text>
+                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Assign To  </Text>
+                        <Link to={data?.assignTo ? contactAccess?.view && `/contactView/${data?.assignTo}` : leadAccess?.view && `/leadView/${data?.assignToLead}`}>
+                            <Text color={(data?.category === 'contact' && (contactAccess?.view || user?.role === 'superAdmin')) ? 'brand.600' : (leadAccess?.view || user?.role === 'superAdmin' && data?.category === 'lead') ? 'brand.600' : 'blackAlpha.900'} sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.assignToName ? data?.assignToName : ' - '}</Text>
                         </Link>
                     </GridItem>
                     <GridItem colSpan={{ base: 12, md: 6 }} >
@@ -130,16 +150,16 @@ const TaskView = (props) => {
                 <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                     <GridItem colStart={6} >
                         <Flex justifyContent={"right"}>
-                            {permission?.update && <Button size="sm" onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button>}
-                            {permission?.delete && <Button size="sm" style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>}
+                            {(permission?.update || user?.role === 'superAdmin') && <Button size="sm" onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button>}
+                            {(permission?.delete || user?.role === 'superAdmin') && <Button size="sm" style={{ background: 'red.800' }} onClick={() => setDeleteManyModel(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>}
                         </Flex>
                     </GridItem>
                 </Grid>
             </Card>}
-            {/* Addtask modal */}
-            <AddTask isOpen={isOpen} onClose={onClose} />
+            <AddEdit isOpen={edit} onClose={() => setEdit(false)} viewClose={onClose} id={id?.event ? id?.event?._def?.extendedProps?._id : id} userAction={"edit"} />
+            <CommonDeleteModel isOpen={deleteManyModel} onClose={() => setDeleteManyModel(false)} type='Task' handleDeleteData={handleDeleteTask} ids={[id]} />
             {/* Edittask modal */}
-            <EditTask isOpen={edit} onClose={setEdit} viewClose={onClose} id={id?.event ? id?.event?._def?.extendedProps?._id : id} />
+            {/* <EditTask isOpen={edit} onClose={setEdit} viewClose={onClose} id={id?.event ? id?.event?._def?.extendedProps?._id : id} /> */}
             {/* Deletetask modal */}
             {/* <DeleteTask isOpen={deleteModel} onClose={setDelete} viewClose={onClose} url='api/task/delete/' method='one' id={id?.event ? id?.event?._def?.extendedProps?._id : id} redirectPage={"/task"} /> */}
         </div>

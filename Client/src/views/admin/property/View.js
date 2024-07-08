@@ -23,6 +23,9 @@ import CustomView from "utils/customView";
 import CommonCheckTable from "components/checkTable/checktable";
 import CommonDeleteModel from "components/commonDeleteModel";
 import { deleteApi } from "services/api";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPropertyCustomFiled } from "../../../redux/propertyCustomFiledSlice";
+import { fetchContactCustomFiled } from '../../../redux/contactCustomFiledSlice';
 
 const View = () => {
 
@@ -38,13 +41,18 @@ const View = () => {
     const [deleteModel, setDelete] = useState(false);
     const [action, setAction] = useState(false)
     const [propertyPhoto, setPropertyPhoto] = useState(false);
-    const [propertyData, setPropertyData] = useState([]);
     const [showProperty, setShowProperty] = useState(false);
     const [virtualToursorVideos, setVirtualToursorVideos] = useState(false);
     const [floorPlans, setFloorPlans] = useState(false);
     const [propertyDocuments, setPropertyDocuments] = useState(false);
     const [isLoding, setIsLoding] = useState(false)
     const [displayPropertyPhoto, setDisplayPropertyPhoto] = useState(false)
+    const [selectedTab, setSelectedTab] = useState(0);
+    const dispatch = useDispatch();
+    const propertyData = useSelector((state) => state?.propertyCustomFiled?.data?.data)
+
+    const [contactData, setContactData] = useState([]);
+    const [columns, setColumns] = useState([]);
     const [type, setType] = useState(false)
     const navigate = useNavigate();
 
@@ -59,20 +67,32 @@ const View = () => {
         { Header: "Contact Method", accessor: "preferredContactMethod" },
     ];
 
-    const [dynamicColumns, setDynamicColumns] = useState([...contactColumns]);
-    const [selectedColumns, setSelectedColumns] = useState([...contactColumns]);
+    const fetchCustomDataFields = async () => {
+        setIsLoding(true);
+        const result = await dispatch(fetchContactCustomFiled())
+        setContactData(result?.payload?.data);
 
-    const fetchData = async () => {
+        const tempTableColumns = [
+            { Header: "#", accessor: "_id", isSortable: false, width: 10 },
+            ...result?.payload?.data?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => ({ Header: field?.label, accessor: field?.name })),
+        ];
+        setColumns(tempTableColumns);
+        setIsLoding(false);
+    };
+
+    const [selectedColumns, setSelectedColumns] = useState([...columns]);
+
+    const handleTabChange = (index) => {
+        setSelectedTab(index);
+    };
+
+    const fetchData = async (i) => {
         setIsLoding(true)
         let response = await getApi('api/property/view/', param.id)
         setData(response.data.property);
         setFilteredContacts(response?.data?.filteredContacts);
         setIsLoding(false)
-    }
-
-    const fetchCustomData = async () => {
-        const response = await getApi('api/custom-field?moduleName=Properties')
-        setPropertyData(response.data)
+        setSelectedTab(i)
     }
 
     const handleDeleteProperties = async (id) => {
@@ -93,24 +113,25 @@ const View = () => {
     }
 
     useEffect(() => {
+        dispatch(fetchPropertyCustomFiled())
         fetchData()
-        if (fetchCustomData) fetchCustomData()
-    }, [action])
+        fetchCustomDataFields()
+    }, [])
 
 
     const [permission, contactAccess, emailAccess, callAccess] = HasAccess(['Properties', 'Contacts', 'Emails', 'Calls']);
 
     return (
         <>
-            <Add isOpen={isOpen} size={size} onClose={onClose} setPropertyData={setPropertyData} propertyData={propertyData[0]} />
-            <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} setPropertyData={setPropertyData} propertyData={propertyData[0]} />
+            <Add isOpen={isOpen} size={size} onClose={onClose} propertyData={propertyData[0]} />
+            <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} propertyData={propertyData[0]} data={data} />
             <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Property' handleDeleteData={handleDeleteProperties} ids={param.id} />
 
             {isLoding ?
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                     <Spinner />
                 </Flex> : <>
-                    <Tabs >
+                    <Tabs onChange={handleTabChange} index={selectedTab}>
                         <Grid templateColumns={'repeat(12, 1fr)'} mb={3} gap={1}>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <TabList sx={{
@@ -166,16 +187,18 @@ const View = () => {
                                                             AdvanceSearch={false}
                                                             ManageGrid={false}
                                                             access={false}
-                                                            columnData={contactColumns}
-                                                            dataColumn={contactColumns}
+                                                            columnData={columns ?? []}
+                                                            dataColumn={columns ?? []}
                                                             title={"Interested Contact"}
-                                                            allData={filteredContacts}
+                                                            allData={filteredContacts ?? []}
                                                             tableData={filteredContacts}
-                                                            dynamicColumns={dynamicColumns}
-                                                            setDynamicColumns={setDynamicColumns}
                                                             selectedColumns={selectedColumns}
                                                             setSelectedColumns={setSelectedColumns}
-                                                            size={"md"} />
+                                                            size={"md"}
+                                                            tableCustomFields={contactData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
+                                                            customSearch={true}
+                                                            checkBox={false}
+                                                        />
                                                     </GridItem>
                                                 </Grid>
                                             </GridItem>
@@ -196,7 +219,7 @@ const View = () => {
                                                             <Heading size="md" >
                                                                 Property Photos
                                                             </Heading>
-                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setPropertyPhoto(true)} bg={buttonbg}>Add New</Button>
+                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setPropertyPhoto(true)} variant="brand">Add New</Button>
                                                             <PropertyPhoto text='Property Photos' fetchData={fetchData} isOpen={propertyPhoto} onClose={setPropertyPhoto} id={param.id} />
                                                         </Flex>
                                                         <HSeparator />
@@ -228,7 +251,7 @@ const View = () => {
                                                             <Heading size="md" >
                                                                 Virtual Tours or Videos
                                                             </Heading>
-                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setVirtualToursorVideos(true)} bg={buttonbg}>Add New</Button>
+                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setVirtualToursorVideos(true)} variant="brand">Add New</Button>
                                                             <PropertyPhoto text='Virtual Tours or Videos' fetchData={fetchData} isOpen={virtualToursorVideos} onClose={setVirtualToursorVideos} id={param.id} />
                                                         </Flex>
                                                         <HSeparator />
@@ -261,7 +284,7 @@ const View = () => {
                                                             <Heading size="md" >
                                                                 Floor Plans
                                                             </Heading>
-                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setFloorPlans(true)} bg={buttonbg}>Add New</Button>
+                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setFloorPlans(true)} variant="brand">Add New</Button>
                                                             <PropertyPhoto text='Floor Plans' fetchData={fetchData} isOpen={floorPlans} onClose={setFloorPlans} id={param.id} />
                                                         </Flex>
                                                         <HSeparator />
@@ -293,7 +316,7 @@ const View = () => {
                                                             <Heading size="md" >
                                                                 Property Documents
                                                             </Heading>
-                                                            <Button size="sm" leftIcon={<AddIcon />} onClick={() => setPropertyDocuments(true)} bg={buttonbg}>Add New</Button>
+                                                            <Button size="sm" variant="brand" leftIcon={<AddIcon />} onClick={() => setPropertyDocuments(true)}>Add New</Button>
                                                             <PropertyPhoto text='Property Documents' fetchData={fetchData} isOpen={propertyDocuments} onClose={setPropertyDocuments} id={param.id} />
                                                         </Flex>
                                                         <HSeparator />
@@ -353,23 +376,23 @@ const View = () => {
             <Modal onClose={() => setDisplayPropertyPhoto(false)} isOpen={displayPropertyPhoto} >
                 <ModalOverlay />
                 <ModalContent maxWidth={"6xl"} height={"750px"}>
-                    <ModalHeader>{type == "photo" ? "Property All Photos" : type == "video" ? "Virtual Tours or Videos" : type == "floor" ? "Floors plans" : ""}</ModalHeader>
+                    <ModalHeader>{type === "photo" ? "Property All Photos" : type === "video" ? "Virtual Tours or Videos" : type === "floor" ? "Floors plans" : ""}</ModalHeader>
                     <ModalCloseButton onClick={() => setDisplayPropertyPhoto(false)} />
                     <ModalBody overflowY={"auto"} height={"700px"}>
                         <div style={{ columns: 3 }}  >
                             {
-                                type == "photo" ?
+                                type === "photo" ?
                                     data && data?.propertyPhotos?.length > 0 && data?.propertyPhotos?.map((item) => (
                                         <a href={item.img} target="_blank"> <Image width={"100%"} m={1} mb={4} src={item.img} alt="Your Image" /></a>
                                     )) :
-                                    type == "video" ? data && data?.virtualToursOrVideos?.length > 0 && data?.virtualToursOrVideos?.map((item) => (
+                                    type === "video" ? data && data?.virtualToursOrVideos?.length > 0 && data?.virtualToursOrVideos?.map((item) => (
                                         <a href={item.img} target="_blank">
                                             <video width="380" controls autoplay loop style={{ margin: " 5px" }}>
                                                 <source src={item.img} type="video/mp4" />
                                                 <source src={item.img} type="video/ogg" />
                                             </video>
                                         </a>
-                                    )) : type == "floor" ?
+                                    )) : type === "floor" ?
                                         data && data?.floorPlans?.length > 0 && data?.floorPlans?.map((item) => (
                                             <a href={item.img} target="_blank">
                                                 <Image width={"100%"} m={1} mb={4} src={item.img} alt="Your Image" />

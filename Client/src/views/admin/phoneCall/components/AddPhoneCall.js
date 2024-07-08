@@ -1,14 +1,15 @@
 import { Button, FormLabel, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, Textarea } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
+import dayjs from 'dayjs';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { phoneCallSchema } from 'schema';
 import { getApi, postApi } from 'services/api';
 
 const AddPhoneCall = (props) => {
-    const { onClose, isOpen, fetchData, setAction } = props
+    const { onClose, isOpen, fetchData, setAction, cData, LData } = props
     const [isLoding, setIsLoding] = useState(false)
-
+    const todayTime = new Date().toISOString().split('.')[0];
     const user = JSON.parse(localStorage.getItem('user'))
 
     const initialValues = {
@@ -19,7 +20,6 @@ const AddPhoneCall = (props) => {
         createByContact: '',
         createByLead: '',
         startDate: '',
-        endDate: '',
         createBy: user?._id,
     }
 
@@ -40,8 +40,8 @@ const AddPhoneCall = (props) => {
             let response = await postApi('api/phoneCall/add', values)
             if (response.status === 200) {
                 props.onClose();
-                fetchData()
-                setAction((pre) => !pre)
+                fetchData(1)
+                // setAction((pre) => !pre)
             }
         } catch (e) {
             console.log(e);
@@ -51,42 +51,58 @@ const AddPhoneCall = (props) => {
         }
     };
 
+    // const fetchDataR = async () => {
+    //     if (props?.viewData?.lead?.leadPhoneNumber) {
+    //         if (props.id && props.lead !== true) {
+    //             setFieldValue('recipient', props?.viewData?.contact?.phoneNumber);
+    //             setFieldValue('createByContact', props?.id);
+    //             values.recipient = props?.viewData?.contact?.phoneNumber
+    //         } else if (props.id && props.lead === true) {
+    //             let response = await getApi('api/lead/view/', props.id)
+    //             if (response?.status === 200) {
+    //                 setFieldValue('recipient', response?.data?.lead?.leadPhoneNumber);
+    //                 setFieldValue('createByLead', props.id);
+    //                 values.recipient = response?.data?.lead?.leadPhoneNumber
+    //             }
+    //         }
+    //     } else {
+    //         if (props.id && props.lead !== true) {
+    //             if (cData) {
+    //                 setFieldValue('recipient', cData?.phoneNumber);
+    //                 setFieldValue('createByContact', props?.id);
+    //                 values.recipient = cData?.phoneNumber
+    //             }
+    //             // let response = await getApi('api/contact/view/', props.id)
+    //             // if (response?.status === 200) {
+    //             //     setFieldValue('recipient', response?.data?.contact?.phoneNumber);
+    //             //     setFieldValue('createByContact', props?.id);
+    //             //     values.recipient = response?.data?.contact?.phoneNumber
+    //             // }
+    //         } else if (props.id && props.lead === true) {
+    //             let response = await getApi('api/lead/view/', props.id)
+    //             if (response?.status === 200) {
+    //                 setFieldValue('recipient', response?.data?.lead?.leadPhoneNumber);
+    //                 setFieldValue('createByLead', props.id);
+    //                 values.recipient = response?.data?.lead?.leadPhoneNumber
+    //             }
+    //         }
+    //     }
+    // }
+
     const fetchDataR = async () => {
-        if (props?.viewData?.lead?.leadPhoneNumber) {
-            if (props.id && props.lead !== 'true') {
-                setFieldValue('recipient', props?.viewData?.contact?.phoneNumber);
-                setFieldValue('createByContact', props?.id);
-                values.recipient = props?.viewData?.contact?.phoneNumber
-            } else if (props.id && props.lead === 'true') {
-                let response = await getApi('api/lead/view/', props.id)
-                if (response?.status === 200) {
-                    setFieldValue('recipient', response?.data?.lead?.leadPhoneNumber);
-                    setFieldValue('createByLead', props.id);
-                    values.recipient = response?.data?.lead?.leadPhoneNumber
-                }
-            }
-        } else {
-            if (props.id && props.lead !== 'true') {
-                let response = await getApi('api/contact/view/', props.id)
-                if (response?.status === 200) {
-                    setFieldValue('recipient', response?.data?.contact?.phoneNumber);
-                    setFieldValue('createByContact', props?.id);
-                    values.recipient = response?.data?.contact?.phoneNumber
-                }
-            } else if (props.id && props.lead === 'true') {
-                let response = await getApi('api/lead/view/', props.id)
-                if (response?.status === 200) {
-                    setFieldValue('recipient', response?.data?.lead?.leadPhoneNumber);
-                    setFieldValue('createByLead', props.id);
-                    values.recipient = response?.data?.lead?.leadPhoneNumber
-                }
-            }
+        if (LData && LData._id && props.lead === true) {
+            setFieldValue('recipient', LData.leadPhoneNumber);
+            setFieldValue('createByLead', props?.id);
+            values.recipient = LData.leadPhoneNumber
+        } else if (cData && cData._id && props.lead !== true) {
+            setFieldValue('recipient', cData?.phoneNumber);
+            setFieldValue('createByContact', props?.id);
+            values.recipient = cData?.phoneNumber
         }
     }
-
     useEffect(() => {
         fetchDataR()
-    }, [props.id])
+    }, [props.id, cData, LData])
 
 
     return (
@@ -124,6 +140,7 @@ const AddPhoneCall = (props) => {
                                 fontSize='sm'
                                 onChange={handleChange}
                                 onBlur={handleBlur}
+                                min={dayjs(todayTime).format('YYYY-MM-DD HH:mm')}
                                 value={values.startDate}
                                 name="startDate"
                                 fontWeight='500'
@@ -131,24 +148,8 @@ const AddPhoneCall = (props) => {
                             />
                             <Text mb='10px' fontSize='sm' color={'red'}> {errors.startDate && touched.startDate && errors.startDate}</Text>
                         </GridItem>
-                        <GridItem colSpan={{ base: 12, md: 6 }} >
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                End Date
-                            </FormLabel>
-                            <Input
-                                type='datetime-local'
-                                fontSize='sm'
-                                min={values.startDate}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.endDate}
-                                name="endDate"
-                                fontWeight='500'
-                                borderColor={errors?.endDate && touched?.endDate ? "red.300" : null}
-                            />
-                            <Text mb='10px' fontSize='sm' color={'red'}> {errors.endDate && touched.endDate && errors.endDate}</Text>
-                        </GridItem>
-                        <GridItem colSpan={{ base: 12 }}>
+
+                        <GridItem colSpan={{ base: 12, md: 6 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Call Duration<Text color={"red"}>*</Text>
                             </FormLabel>

@@ -128,13 +128,14 @@ const Index = () => {
                 <Button size='sm' variant='brand' me={1} onClick={() => handleAddOpen()} leftIcon={<AddIcon />}>Add New</Button>
                 <Button size='sm' variant='brand' onClick={() => navigate(-1)} leftIcon={<IoIosArrowBack />}> Back</Button>
             </Flex>
-            {isLoding ?
+            {isLoding ? (
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
                     <Spinner />
                 </Flex>
-                : moduleData.length > 0 ?
+            ) : (
+                moduleData && moduleData.length > 0 ? (
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
-                        {moduleData?.map((item, i) => (
+                        {moduleData && moduleData?.map((item, i) => (
 
                             <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }} key={i}>
                                 <Card>
@@ -144,7 +145,7 @@ const Index = () => {
                                             <Tooltip hasArrow label={item?.moduleName} bg='gray.200' color='gray' textTransform={"capitalize"} fontSize='sm'>
                                                 <Heading size="md" fontWeight={"500"} sx={{
                                                     textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '6rem',
-                                                    overflow: 'hidden'
+                                                    overflow: 'hidden', textTransform: 'capitalize'
                                                 }}
                                                 >
                                                     {item?.moduleName}
@@ -160,13 +161,14 @@ const Index = () => {
                                 </Card>
                             </GridItem>
                         ))}
-                    </Grid> :
+                    </Grid>) : (
                     <Card mt='5'>
                         <Text textAlign={'center'} width="100%" color={'gray.500'} fontSize="sm" fontWeight="700">
                             <DataNotFound />
                         </Text>
                     </Card>
-            }
+                )
+            )}
             <Add isOpen={addModal} onClose={handleAddClose} fetchData={fetchData} setAction={setAction} />
             <Edit isOpen={editModal} onClose={handleEditClose} selectedId={selectedId} editdata={editdata} setAction={setAction} fetchData={fetchData} />
             <CommonDeleteModel isOpen={deleteModal} onClose={() => setDeleteModal(false)} type={'Module'} handleDeleteData={handleDeleteModule} ids={selectedId} selectedValues={selectedValues} />

@@ -42,7 +42,7 @@ const PropertyPhoto = (props) => {
             }
 
             if (response?.status === 200) {
-                fetchData();
+                fetchData(1);
                 formik.resetForm()
                 onClose();
             }

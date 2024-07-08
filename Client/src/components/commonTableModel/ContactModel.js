@@ -1,28 +1,21 @@
 import { Button, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ContactTable from './Contact.js'
 import Spinner from 'components/spinner/Spinner'
 import { GiClick } from "react-icons/gi";
+import CommonCheckTable from 'components/checkTable/checktable.js';
+import { fetchContactCustomFiled } from '../../redux/contactCustomFiledSlice.js';
+import { fetchContactData } from '../../redux/contactSlice.js';
+import { useDispatch } from 'react-redux';
 
 const ContactModel = (props) => {
     const { onClose, isOpen, fieldName, setFieldValue, data } = props
     const [selectedValues, setSelectedValues] = useState();
+    const [contactData, setContactData] = useState([]);
     const [isLoding, setIsLoding] = useState(false)
+    const [columns, setColumns] = useState([]);
+    const dispatch = useDispatch();
 
-    const columns = [
-        { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-        { Header: 'title', accessor: 'title' },
-        { Header: "first Name", accessor: "firstName", },
-        { Header: "last Name", accessor: "lastName", },
-        { Header: "phone Number", accessor: "phoneNumber", },
-        { Header: "Email Address", accessor: "email", },
-        { Header: "physical Address", accessor: "physicalAddress", },
-        { Header: "mailing Address", accessor: "mailingAddress", },
-        { Header: "Contact Method", accessor: "preferredContactMethod", },
-    ];
-
-    const user = JSON.parse(localStorage.getItem("user"))
-   
     const handleSubmit = async () => {
         try {
             setIsLoding(true)
@@ -36,7 +29,25 @@ const ContactModel = (props) => {
             setIsLoding(false)
         }
     }
+    const fetchCustomDataFields = async () => {
+        setIsLoding(true);
+        const result = await dispatch(fetchContactCustomFiled());
+        setContactData(result?.payload?.data);
 
+        const tempTableColumns = [
+            { Header: "#", accessor: "_id", isSortable: false, width: 10 },
+            ...(result?.payload?.data?.[0]?.fields || [])
+                .filter(field => field?.isTableField === true)
+                .map(field => ({ Header: field?.label, accessor: field?.name }))
+        ];
+
+        setColumns(tempTableColumns);
+        setIsLoding(false);
+    };
+    useEffect(async () => {
+        await dispatch(fetchContactData())
+        fetchCustomDataFields();
+    }, []);
     return (
         <Modal onClose={onClose} size='full' isOpen={isOpen} >
             <ModalOverlay />
@@ -47,7 +58,25 @@ const ContactModel = (props) => {
                     {isLoding ?
                         <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                             <Spinner />
-                        </Flex> : <ContactTable tableData={data} selectedValues={selectedValues} setSelectedValues={setSelectedValues} columnsData={columns} title="Contact" />}
+                        </Flex>
+                        :
+                        <CommonCheckTable
+                            title={'Contacts'}
+                            isLoding={isLoding}
+                            columnData={columns ?? []}
+                            dataColumn={columns ?? []}
+                            allData={data ?? []}
+                            tableData={data}
+                            tableCustomFields={contactData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
+                            AdvanceSearch={() => ""}
+                            ManageGrid={false}
+                            deleteMany={false}
+                            selectedValues={selectedValues}
+                            setSelectedValues={setSelectedValues}
+                            selectType="single"
+                            customSearch={false}
+                        />
+                    }
                 </ModalBody>
                 <ModalFooter>
                     <Button variant='brand' size='sm' me={2} onClick={handleSubmit} disabled={isLoding ? true : false} leftIcon={<GiClick />}> {isLoding ? <Spinner /> : 'Select'}</Button>

@@ -7,14 +7,17 @@ import { useEffect, useState } from 'react';
 import { LiaMousePointerSolid } from 'react-icons/lia';
 import { emailSchema } from 'schema';
 import { getApi, postApi } from 'services/api';
+import dayjs from 'dayjs';
 
 const AddEmailHistory = (props) => {
     const { onClose, isOpen } = props
     const [isLoding, setIsLoding] = useState(false)
-    const [assignmentToData, setAssignmentToData] = useState([]);
+    const [assignToLeadData, setAssignToLeadData] = useState([]);
+    const [assignToContactData, setAssignToContactData] = useState([]);
     const [contactModelOpen, setContactModel] = useState(false);
     const [leadModelOpen, setLeadModel] = useState(false);
     const user = JSON.parse(localStorage.getItem('user'))
+    const todayTime = new Date().toISOString().split('.')[0];
 
     const initialValues = {
         sender: user?._id,
@@ -23,11 +26,10 @@ const AddEmailHistory = (props) => {
         callNotes: '',
         createByContact: '',
         createByLead: '',
-        startDate: new Date(),
-        endDate: '',
+        startDate: '',
         category: 'contact',
-        assignmentTo: '',
-        assignmentToLead: '',
+        // assignTo: '',
+        // assignToLead: '',
         createBy: user?._id,
     }
     const formik = useFormik({
@@ -59,12 +61,14 @@ const AddEmailHistory = (props) => {
         values.start = props?.date
         try {
             let result
-            if (values.category === "Contact") {
+            if (values.category === "Contact" && assignToContactData.length <= 0) {
                 result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
-            } else if (values.category === "Lead") {
+                setAssignToContactData(result?.data)
+
+            } else if (values.category === "Lead" && assignToLeadData <= 0) {
                 result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
+                setAssignToLeadData(result?.data)
             }
-            setAssignmentToData(result?.data)
         }
         catch (e) {
             console.log(e);
@@ -73,17 +77,18 @@ const AddEmailHistory = (props) => {
 
     const fetchRecipientData = async () => {
         if (values.createByContact) {
-            let response = await getApi('api/contact/view/', values.createByContact)
-            if (response?.status === 200) {
-                setFieldValue('recipient', response?.data?.contact?.email);
-                values.recipient = response?.data?.contact?.email
+            let findEmail = assignToContactData.find((item) => item._id === values.createByContact);
+            if (findEmail) {
+                setFieldValue('recipient', findEmail.email);
             }
         } else if (values.createByLead) {
-            let response = await getApi('api/lead/view/', values.createByLead)
-            if (response?.status === 200) {
-                setFieldValue('recipient', response?.data?.lead?.leadEmail);
-                values.recipient = response?.data?.lead?.leadEmail
+            let findEmail = assignToLeadData.find((item) => item._id === values.createByLead);
+            if (findEmail) {
+                setFieldValue('recipient', findEmail.leadEmail);
             }
+        } else {
+            setFieldValue('recipient', "");
+
         }
     }
 
@@ -94,14 +99,14 @@ const AddEmailHistory = (props) => {
     return (
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent height={"580px"}>
                 <ModalHeader>Add Email </ModalHeader>
                 <ModalCloseButton />
-                <ModalBody>
+                <ModalBody overflowY={"auto"} height={"400px"}>
                     {/* Contact Model  */}
-                    <ContactModel isOpen={contactModelOpen} data={assignmentToData} onClose={setContactModel} fieldName='createByContact' setFieldValue={setFieldValue} />
+                    <ContactModel isOpen={contactModelOpen} data={assignToContactData} onClose={setContactModel} fieldName='createByContact' setFieldValue={setFieldValue} />
                     {/* Lead Model  */}
-                    <LeadModel isOpen={leadModelOpen} data={assignmentToData} onClose={setLeadModel} fieldName='createByLead' setFieldValue={setFieldValue} />
+                    <LeadModel isOpen={leadModelOpen} data={assignToLeadData} onClose={setLeadModel} fieldName='createByLead' setFieldValue={setFieldValue} />
 
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
@@ -130,10 +135,10 @@ const AddEmailHistory = (props) => {
                                                 onChange={handleChange}
                                                 mb={errors.createByContact && touched.createByContact ? undefined : '10px'}
                                                 fontWeight='500'
-                                                placeholder={'Assignment To'}
+                                                placeholder={'Assign To'}
                                                 borderColor={errors.createByContact && touched.createByContact ? "red.300" : null}
                                             >
-                                                {assignmentToData?.map((item) => {
+                                                {assignToContactData?.map((item) => {
                                                     return <option value={item._id} key={item._id}>{values.category === 'Contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
                                                 })}
                                             </Select>
@@ -154,10 +159,10 @@ const AddEmailHistory = (props) => {
                                                     onChange={handleChange}
                                                     mb={errors.createByLead && touched.createByLead ? undefined : '10px'}
                                                     fontWeight='500'
-                                                    placeholder={'Assignment To'}
+                                                    placeholder={'Assign To'}
                                                     borderColor={errors.createByLead && touched.createByLead ? "red.300" : null}
                                                 >
-                                                    {assignmentToData?.map((item) => {
+                                                    {assignToLeadData?.map((item) => {
                                                         return <option value={item._id} key={item._id}>{values.category === 'Contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
                                                     })}
                                                 </Select>
@@ -183,15 +188,16 @@ const AddEmailHistory = (props) => {
                             />
                             <Text mb='10px' fontSize='sm' color={'red'}> {errors.recipient && touched.recipient && errors.recipient}</Text>
                         </GridItem>
-                        <GridItem colSpan={{ base: 12, md: 6 }} >
+                        <GridItem colSpan={{ base: 12 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Start Date
+                                Start Date<Text color={"red"}>*</Text>
                             </FormLabel>
                             <Input
                                 type="datetime-local"
                                 fontSize='sm'
                                 onChange={handleChange}
                                 onBlur={handleBlur}
+                                min={dayjs(todayTime).format('YYYY-MM-DD HH:mm')}
                                 value={values.startDate}
                                 name="startDate"
                                 fontWeight='500'
@@ -199,23 +205,7 @@ const AddEmailHistory = (props) => {
                             />
                             <Text fontSize='sm' mb='10px' color={'red'}> {errors.startDate && touched.startDate && errors.startDate}</Text>
                         </GridItem>
-                        <GridItem colSpan={{ base: 12, md: 6 }} >
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                End Date
-                            </FormLabel>
-                            <Input
-                                type='datetime-local'
-                                fontSize='sm'
-                                min={values.startDate}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.endDate}
-                                name="endDate"
-                                fontWeight='500'
-                                borderColor={errors?.endDate && touched?.endDate ? "red.300" : null}
-                            />
-                            <Text fontSize='sm' mb='10px' color={'red'}> {errors.endDate && touched.endDate && errors.endDate}</Text>
-                        </GridItem>
+
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Subject<Text color={"red"}>*</Text>

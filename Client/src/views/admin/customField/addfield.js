@@ -221,8 +221,8 @@ const Addfield = (props) => {
                                         name="type"
                                         onChange={(e) => {
                                             setFieldValue('type', e.target.value)
-                                            setFieldValue(`validation[${4}].formikType`, e.target.value == 'date' ? 'date' : '')
-                                            setFieldValue(`validation[${4}].types`, e.target.value == 'date' ? true : false)
+                                            setFieldValue(`validation[${4}].formikType`, e.target.value === 'date' ? 'date' : '')
+                                            setFieldValue(`validation[${4}].types`, e.target.value === 'date' ? true : false)
                                         }}
                                         fontWeight='500'
                                         // placeholder={'Select Type'}
@@ -238,7 +238,7 @@ const Addfield = (props) => {
                                         <option value='color'>Color</option>
                                         <option value='email'>Email</option>
                                         <option value='url'>Url</option>
-                                        <option value='select'>Select</option>
+                                        <option value='select'>Dropdown</option>
                                     </Select>
                                     <Text mb='10px' color={'red'}> {errors.type && touched.type && errors.type}</Text>
                                 </GridItem>

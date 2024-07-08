@@ -128,7 +128,6 @@ const Link = (props) => {
                                 </GridItem>
                                 : values.linkWith === 'lead' &&
                                 <GridItem colSpan={{ base: 12 }}>
-                                    {console.log(data)}
                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                         Link Lead
                                     </FormLabel>

@@ -115,12 +115,12 @@ const Index = () => {
     return (
         <div>
             <Flex justifyContent={"end"} mb={3}>
-                {selectedValues.length > 0 && <Button variant='outline' colorScheme='brand' color={"red"} mr={2} leftIcon={<DeleteIcon />} onClick={() => handleOpenDeleteMany('',"many")} size='sm' >Delete</Button>}
+                {selectedValues.length > 0 && <Button variant='outline' colorScheme='brand' color={"red"} mr={2} leftIcon={<DeleteIcon />} onClick={() => handleOpenDeleteMany('', "many")} size='sm' >Delete</Button>}
                 <Button size='sm' variant='brand' me={1} onClick={() => handleAddOpen()} leftIcon={<AddIcon />}>Add New</Button>
                 <Button size='sm' variant='brand' onClick={() => navigate(-1)} leftIcon={<IoIosArrowBack />}> Back</Button>
             </Flex>
             <Grid templateColumns="repeat(12, 1fr)" gap={3}>
-                {validationData?.map((item, i) => (
+                {validationData && validationData?.map((item, i) => (
                     <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }} key={i}>
                         <Card>
                             <Flex alignItems={"center"} justifyContent={"space-between"}>
@@ -134,7 +134,7 @@ const Index = () => {
                                     <MenuList minW={'fit-content'} transform={"translate(-71px, 0px) !important;"}>
                                         <MenuItem py={2.5} alignItems={'start'} onClick={() => handleEditOpen(item)} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>
                                         <MenuItem py={2.5} alignItems={'start'} color={'green'} onClick={() => handleViewOpen(item)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>
-                                        <MenuItem py={2.5} alignItems={'start'} color={'red'} icon={<DeleteIcon fontSize={15} />} onClick={() =>handleOpenDeleteMany(item._id,"one")}>Delete</MenuItem>
+                                        <MenuItem py={2.5} alignItems={'start'} color={'red'} icon={<DeleteIcon fontSize={15} />} onClick={() => handleOpenDeleteMany(item._id, "one")}>Delete</MenuItem>
                                     </MenuList>
                                 </Menu>
                             </Flex>
@@ -169,7 +169,7 @@ const Index = () => {
                     </GridItem>
                 ))}
             </Grid>
-            {!validationData.length > 0 &&
+            {!validationData || validationData.length === 0 && 
                 <Card mt='5'>
                     <Text textAlign={'center'} width="100%" color={'gray.500'} fontSize="sm" fontWeight="700">
                         <DataNotFound />
@@ -180,7 +180,7 @@ const Index = () => {
             <Add isOpen={addModal} onClose={handleAddClose} fetchData={fetchData} setAction={setAction} />
             <Edit isOpen={editModal} onClose={handleEditClose} selectedId={selectedId} editdata={editdata} setAction={setAction} fetchData={fetchData} />
             <View isOpen={viewModal} onClose={handleViewClose} selectedId={selectedId} setAction={setAction} fetchData={fetchData} />
-       
+
             <CommonDeleteModel isOpen={deleteMany} onClose={() => setDeleteMany(false)} type={method === "one" ? 'Validation' : 'Validations'} handleDeleteData={handleDeleteValidation} ids={selectedId} selectedValues={selectedValues} />
         </div>
     )

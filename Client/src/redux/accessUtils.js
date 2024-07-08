@@ -10,10 +10,13 @@ export const HasAccess = (actions) => {
 
     useEffect(() => {
         // Dispatch the fetchRoles action on component mount
-        dispatch(fetchRoles(user?._id));
+        if (window.location.pathname === "/default") {
+            dispatch(fetchRoles(user?._id));
+        }
     }, [dispatch]);
 
     const roles = useSelector((state) => state?.roles?.roles);
+
     const rolesToCheck = roles?.map(item => item.roleName)
     const mergedPermissions = {};
     const superAdminPermission = {

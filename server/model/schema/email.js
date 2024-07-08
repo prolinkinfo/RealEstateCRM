@@ -11,7 +11,6 @@ const email = new mongoose.Schema({
     // bcc: { type: String },
     subject: { type: String },
     startDate: { type: String, default: Date.now },
-    endDate: { type: String },
     message: { type: String },
     createByLead: {
         type: mongoose.Schema.Types.ObjectId,

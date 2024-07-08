@@ -18,7 +18,7 @@ const TaskAdvanceSearch = (props) => {
         end: '',
         status: '',
         leadAddress: '',
-        assignmentToName: '',
+        assignToName: '',
         fromLeadScore: '',
         toLeadScore: ''
     }
@@ -28,7 +28,7 @@ const TaskAdvanceSearch = (props) => {
         start: yup.date(),
         end: yup.date(),
         leadAddress: yup.string(),
-        assignmentToName: yup.string(),
+        assignToName: yup.string(),
         fromLeadScore: yup.number().min(0, "From Lead Score is invalid"),
         toLeadScore: yup.number().min(yup.ref('fromLeadScore'), "To Lead Score must be greater than or equal to From Lead Score")
     });
@@ -53,8 +53,8 @@ const TaskAdvanceSearch = (props) => {
                     value: values.category
                 },
                 {
-                    name: ["assignmentToName"],
-                    value: values.assignmentToName
+                    name: ["assignToName"],
+                    value: values.assignToName
                 },
                 {
                     name: ["start"],
@@ -145,17 +145,17 @@ const TaskAdvanceSearch = (props) => {
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
-                                    Assignment To
+                                    Assign To
                                 </FormLabel>
                                 <Input
                                     fontSize='sm'
                                     onChange={handleChange} onBlur={handleBlur}
-                                    value={values?.assignmentToName}
-                                    name="assignmentToName"
-                                    placeholder='Enter Assignment To'
+                                    value={values?.assignToName}
+                                    name="assignToName"
+                                    placeholder='Enter Assign To'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.assignmentToName && touched.assignmentToName && errors.assignmentToName}</Text>
+                                <Text mb='10px' color={'red'}> {errors.assignToName && touched.assignToName && errors.assignToName}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2} >

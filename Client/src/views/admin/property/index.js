@@ -12,15 +12,20 @@ import Edit from "./Edit";
 import ImportModal from './components/ImportModal';
 import CommonDeleteModel from 'components/commonDeleteModel';
 import { deleteManyApi } from 'services/api';
+import { fetchPropertyCustomFiled } from '../../../redux/propertyCustomFiledSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPropertyData } from '../../../redux/propertySlice'
+import { toast } from 'react-toastify';
 
 const Index = () => {
     const title = "Properties";
     const size = "lg";
     const user = JSON.parse(localStorage.getItem("user"));
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [permission] = HasAccess(['Properties']);
     const [isLoding, setIsLoding] = useState(false);
-    const [data, setData] = useState([]);
+    // const [data, setData] = useState([]);
     const [tableColumns, setTableColumns] = useState([]);
     const [columns, setColumns] = useState([]);
     const [dataColumn, setDataColumn] = useState([]);
@@ -34,17 +39,16 @@ const Index = () => {
     const [selectedValues, setSelectedValues] = useState([]);
     const [isImportProperty, setIsImportProperty] = useState(false);
 
-    const fetchData = async () => {
-        setIsLoding(true);
-        let result = await getApi(user.role === 'superAdmin' ? 'api/property/' : `api/property/?createBy=${user._id}`);
-        setData(result?.data);
-        setIsLoding(false);
-    };
+    const data = useSelector((state) => state?.propertyData?.data)
 
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
-        const result = await getApi(`api/custom-field/?moduleName=Properties`);
-        setPropertyData(result?.data);
+        const result = await dispatch(fetchPropertyCustomFiled())
+        if (result.payload.status === 200) {
+            setPropertyData(result?.payload?.data);
+        } else {
+            toast.error("Failed to fetch data", "error");
+        }
         const actionHeader = {
             Header: "Action",
             accessor: "action",
@@ -68,9 +72,12 @@ const Index = () => {
         };
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-            ...result?.data?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => ({ Header: field?.label, accessor: field?.name })),
+            ...(result?.payload?.data?.[0]?.fields || []) // Ensure result.payload[0].fields is an array
+                .filter(field => field?.isTableField === true) // Filter out fields where isTableField is true
+                .map(field => ({ Header: field?.label, accessor: field?.name })),
             ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : [])
         ];
+
 
         setSelectedColumns(JSON.parse(JSON.stringify(tempTableColumns)));
         setColumns(JSON.parse(JSON.stringify(tempTableColumns)));
@@ -97,7 +104,7 @@ const Index = () => {
     }
 
     useEffect(() => {
-        fetchData();
+        dispatch(fetchPropertyData());
         fetchCustomDataFields();
     }, [action])
 
@@ -113,9 +120,9 @@ const Index = () => {
                         <CommonCheckTable
                             title={title}
                             isLoding={isLoding}
-                            columnData={columns}
-                            dataColumn={dataColumn}
-                            allData={data}
+                            columnData={columns ?? []}
+                            dataColumn={dataColumn ?? []}
+                            allData={data ?? []}
                             tableData={data}
                             tableCustomFields={propertyData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
                             access={permission}

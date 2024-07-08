@@ -7,12 +7,13 @@ import listPlugin from '@fullcalendar/list';
 import multiMonthPlugin from '@fullcalendar/multimonth';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { Flex, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
-import AddTask from 'views/admin/task/components/addTask';
 import EventView from 'views/admin/task/eventView';
 import MeetingView from 'views/admin/meeting/meetingView';
 import CallView from 'views/admin/phoneCall/callView';
 import { GoDotFill } from "react-icons/go";
 import EmailView from 'views/admin/emailHistory/emailView';
+import { HasAccess } from '../../../../redux/accessUtils';
+import AddEdit from 'views/admin/task/components/AddEdit'
 
 const Calender = (props) => {
     const { data, fetchData } = props
@@ -25,11 +26,14 @@ const Calender = (props) => {
     const [callInfo, setCallInfo] = useState()
     const [emailInfo, setEmailInfo] = useState()
     const [date, setDate] = useState()
+    const [taskAccess, meetingAccess, callAccess, emailAccess] = HasAccess(['Tasks', 'Meetings', 'Calls', 'Emails']);
+    // const { isOpen, onOpen, onClose } = useDisclosure()
+    const [taskModel, setTaskModel] = useState(false);
 
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const user = JSON.parse(localStorage.getItem("user"))
 
     const handleDateClick = (arg) => {
-        onOpen()
+        setTaskModel(true)
         setDate(arg.dateStr)
     }
 
@@ -61,23 +65,31 @@ const Calender = (props) => {
     return (
         <div>
             <Card >
-                <AddTask isOpen={isOpen} fetchData={fetchData} onClose={onClose} date={date} />
+                {(taskAccess?.view || user?.role === "superAdmin") && <AddEdit isOpen={taskModel} onClose={setTaskModel} fetchData={fetchData} userAction={'add'} />}
                 <EventView fetchData={fetchData} isOpen={eventView} onClose={setEventView} info={taskInfo} />
-
                 <MeetingView fetchData={fetchData} isOpen={meetingView} onClose={setMeetingView} info={meetingInfo} />
                 <CallView fetchData={fetchData} isOpen={callView} onClose={setCallView} info={callInfo} />
-                <EmailView fetchData={fetchData} isOpen={emailView} onClose={setEmailView} info={emailInfo}/>
+                <EmailView fetchData={fetchData} isOpen={emailView} onClose={setEmailView} info={emailInfo} />
 
-                <div style={{display:"flex",justifyContent:"end"}}>
-                    <Flex alignItems={"center"} fontSize={"12px"} marginRight={"10px"}>
-                        <GoDotFill color='green' /> Calls
-                    </Flex>
-                    <Flex alignItems={"center"} fontSize={"12px"} marginRight={"10px"}>
-                        <GoDotFill color='red' /> Meetings
-                    </Flex>
-                    <Flex alignItems={"center"} fontSize={"12px"}>
-                        <GoDotFill color='blue' /> Emails
-                    </Flex>
+                <div style={{ display: "flex", justifyContent: "end" }}>
+                    {
+                        (callAccess?.create || user?.role === "superAdmin") &&
+                        <Flex alignItems={"center"} fontSize={"14px"} marginRight={"10px"}>
+                            <GoDotFill color='green' fontSize={"18px"} /> Calls
+                        </Flex>
+                    }
+                    {
+                        (meetingAccess?.create || user?.role === "superAdmin") &&
+                        <Flex alignItems={"center"} fontSize={"14px"} marginRight={"10px"}>
+                            <GoDotFill color='red' fontSize={"18px"} /> Meetings
+                        </Flex>
+                    }
+                    {
+                        (emailAccess?.create || user?.role === "superAdmin") &&
+                        <Flex alignItems={"center"} fontSize={"14px"}>
+                            <GoDotFill color='blue' fontSize={"18px"} /> Emails
+                        </Flex>
+                    }
                 </div>
                 <FullCalendar
                     plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin, multiMonthPlugin]}

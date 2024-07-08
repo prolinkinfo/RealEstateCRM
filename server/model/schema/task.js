@@ -5,11 +5,11 @@ const Task = new mongoose.Schema({
     category: String,
     description: String,
     notes: String,
-    assignmentTo: {
+    assignTo: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Contact",
     },
-    assignmentToLead: {
+    assignToLead: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Lead",
     },
@@ -21,7 +21,7 @@ const Task = new mongoose.Schema({
     textColor: String,
     display: String,
     url: String,
-    allDay:String,
+    allDay: Boolean,
     createBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

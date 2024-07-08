@@ -1,5 +1,6 @@
 import { Button, FormLabel, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, Textarea } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
+import dayjs from 'dayjs';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { emailSchema } from 'schema';
@@ -10,18 +11,19 @@ const AddEmailHistory = (props) => {
     const { onClose, isOpen, fetchData, setAction } = props
     const user = JSON.parse(localStorage.getItem('user'))
     const [isLoding, setIsLoding] = useState(false)
+    const todayTime = new Date().toISOString().split('.')[0];
 
     const initialValues = {
         sender: user?._id,
-        recipient: props.lead !== 'true' ? props?.contactEmail : props?.leadEmail,
+        recipient: props.lead !== true ? props?.contactEmail : props?.leadEmail,
         subject: '',
         message: '',
-        createByContact: '',
-        createByLead: '',
+        createByContact: props?.id && props?.lead !== true ? props?.id : '',
+        createByLead: props?.id && props?.lead === true ? props?.id : '',
         startDate: '',
-        endDate: '',
         createBy: user?._id,
     }
+
     const formik = useFormik({
         initialValues: initialValues,
         validationSchema: emailSchema,
@@ -39,8 +41,8 @@ const AddEmailHistory = (props) => {
             let response = await postApi('api/email/add', values)
             if (response.status === 200) {
                 props.onClose();
-                fetchData()
-                setAction((pre) => !pre)
+                fetchData(1)
+                // setAction((pre) => !pre)
             }
         } catch (e) {
             console.log(e);
@@ -50,18 +52,13 @@ const AddEmailHistory = (props) => {
         }
     };
 
-    const fetchRecipientData = () => {
-        if (props.id && props.lead !== 'true') {
-           
-            setFieldValue('createByContact', props.id);
-        } else if (props.id && props.lead === 'true') {
-            setFieldValue('createByLead', props.id);
-        }
-    }
-    useEffect(() => {
-        fetchRecipientData()
-    }, [props.id, props.lead])
-
+    // useEffect(() => {
+    //    if (props.id && props.lead !== true) {
+    //         setFieldValue('createByContact', props.id);
+    //     } else if (props.id && props.lead === true) {
+    //         setFieldValue('createByLead', props.id);
+    //     }
+    // }, [props.id, props.lead])
 
     return (
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
@@ -91,7 +88,7 @@ const AddEmailHistory = (props) => {
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Subject
+                                Subject<Text color={"red"}>*</Text>
                             </FormLabel>
                             <Input
                                 fontSize='sm'
@@ -104,7 +101,7 @@ const AddEmailHistory = (props) => {
                             />
                             <Text fontSize='sm' mb='10px' color={'red'}> {errors.subject && touched.subject && errors.subject}</Text>
                         </GridItem>
-                        <GridItem colSpan={{ base: 12, md: 6 }} >
+                        <GridItem colSpan={{ base: 12 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Start Date<Text color={"red"}>*</Text>
                             </FormLabel>
@@ -113,6 +110,7 @@ const AddEmailHistory = (props) => {
                                 fontSize='sm'
                                 onChange={handleChange}
                                 onBlur={handleBlur}
+                                min={dayjs(todayTime).format('YYYY-MM-DD HH:mm')}
                                 value={values.startDate}
                                 name="startDate"
                                 fontWeight='500'
@@ -120,23 +118,7 @@ const AddEmailHistory = (props) => {
                             />
                             <Text fontSize='sm' mb='10px' color={'red'}> {errors.startDate && touched.startDate && errors.startDate}</Text>
                         </GridItem>
-                        <GridItem colSpan={{ base: 12, md: 6 }} >
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                End Date
-                            </FormLabel>
-                            <Input
-                                type='datetime-local'
-                                fontSize='sm'
-                                min={values.startDate}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.endDate}
-                                name="endDate"
-                                fontWeight='500'
-                                borderColor={errors?.endDate && touched?.endDate ? "red.300" : null}
-                            />
-                            <Text fontSize='sm' mb='10px' color={'red'}> {errors.endDate && touched.endDate && errors.endDate}</Text>
-                        </GridItem>
+
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Message

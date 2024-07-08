@@ -21,6 +21,7 @@ import { FaCalendarAlt } from 'react-icons/fa';
 const MainDashboard = React.lazy(() => import("views/admin/default"));
 const SignInCentered = React.lazy(() => import("views/auth/signIn"));
 const Calender = React.lazy(() => import("views/admin/calender"));
+const UserView = React.lazy(() => import("views/admin/users/View"));
 
 // Custom Chakra theme
 export default function User(props) {
@@ -55,7 +56,7 @@ export default function User(props) {
 
     const filterAccess = (rolesData) => {
         return rolesData?.map(role => {
-            role.access = role?.access?.filter(access => (access.create || access.update || access.delete || access.view));
+            role.access = role?.access?.filter(access => access.view);
             return role;
         });
     };
@@ -106,6 +107,14 @@ export default function User(props) {
                 icon: <Icon as={FaCalendarAlt} width='20px' height='20px' color='inherit' />,
                 component: Calender,
             },
+            {
+                name: "User View",
+                layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+                parentName: "Email",
+                under: "user",
+                path: "/userView/:id",
+                component: UserView,
+            },
         ]
 
     route?.map((item, i) => {
@@ -124,10 +133,6 @@ export default function User(props) {
     const accessRoute = newRoute?.filter(item => Object.keys(mergedPermissions)?.find(data => (data?.toLowerCase() === item?.name?.toLowerCase()) || (data?.toLowerCase() === item.parentName?.toLowerCase())))
 
     routes.push(...accessRoute)
-
-
-
-
 
     const getActiveRoute = (routes) => {
         let activeRoute = 'Prolink';
@@ -245,7 +250,7 @@ export default function User(props) {
         dispatch(fetchImage());
     }, [dispatch]);
 
-    const largeLogo = useSelector((state) => state?.images?.image.filter(item => item.isActive === true));
+    const largeLogo = useSelector((state) => state?.images?.images?.filter(item => item?.isActive === true));
 
 
     return (
@@ -256,7 +261,7 @@ export default function User(props) {
                         toggleSidebar,
                         setToggleSidebar
                     }}>
-                    <Sidebar routes={routes} display='none' {...rest} openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
+                    <Sidebar routes={routes} display='none' {...rest} openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} largeLogo={largeLogo} />
                     <Box
                         float='right'
                         minHeight='100vh'

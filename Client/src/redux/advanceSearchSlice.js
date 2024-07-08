@@ -26,7 +26,7 @@ const advanceSearchSlice = createSlice({
                             (!action.payload.values?.category || (item?.category && item?.category.toLowerCase().includes(action.payload.values?.category?.toLowerCase()))) &&
                             (!action.payload.values?.start || (item?.start && item?.start.toLowerCase().includes(action.payload.values?.start?.toLowerCase()))) &&
                             (!action.payload.values?.end || (item?.end && item?.end.toString().includes(action.payload.values?.end))) &&
-                            (!action.payload.values?.assignmentToName || (item?.assignmentToName && item?.assignmentToName.toLowerCase().includes(action.payload.values?.assignmentToName?.toLowerCase()))) &&
+                            (!action.payload.values?.assignToName || (item?.assignToName && item?.assignToName.toLowerCase().includes(action.payload.values?.assignToName?.toLowerCase()))) &&
                             ([null, undefined, ''].includes(action.payload.values?.fromLeadScore) || [null, undefined, ''].includes(action.payload.values?.toLeadScore) ||
                                 ((item?.leadScore || item?.leadScore === 0) &&
                                     (parseInt(item?.leadScore, 10) >= parseInt(action.payload.values.fromLeadScore, 10) || 0) &&

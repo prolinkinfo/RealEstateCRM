@@ -1,28 +1,22 @@
 import { Button, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react'
-import React, { useState } from 'react'
-import LeadTable from './Lead'
+import React, { useEffect, useState } from 'react'
 import Spinner from 'components/spinner/Spinner'
 import { GiClick } from "react-icons/gi";
+import CommonCheckTable from 'components/checkTable/checktable';
+import { fetchLeadCustomFiled } from '../../redux/leadCustomFiledSlice';
+import { useDispatch } from 'react-redux';
+import { fetchLeadData } from '../../redux/leadSlice';
 
 const ContactModel = (props) => {
-    const { onClose, isOpen, fieldName, setFieldValue,data } = props
-    const [selectedValues, setSelectedValues] = useState();
-    const [isLoding, setIsLoding] = useState(false)
-    // const [data, setData] = useState([])
+    const { onClose, isOpen, fieldName, setFieldValue, data } = props
+    const title = "Leads";
+    const dispatch = useDispatch();
 
-    const columns = [
-        { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-        { Header: 'Lead Name', accessor: 'leadName', width: 20 },
-        { Header: "Lead Email", accessor: "leadEmail", },
-        { Header: "Lead PhoneNumber", accessor: "leadPhoneNumber", },
-        { Header: "Lead Address", accessor: "leadAddress", },
-        { Header: "Lead Status", accessor: "leadStatus", },
-        { Header: "Lead Owner", accessor: "leadOwner", },
-        { Header: "Lead Score", accessor: "leadScore", },
-    ];
+    const [isLoding, setIsLoding] = useState(false);
+    const [columns, setColumns] = useState([]);
+    const [leadData, setLeadData] = useState([]);
+    const [selectedValues, setSelectedValues] = useState([]);
 
-    const user = JSON.parse(localStorage.getItem("user"))
-   
     const handleSubmit = async () => {
         try {
             setIsLoding(true)
@@ -37,6 +31,32 @@ const ContactModel = (props) => {
         }
     }
 
+    const fetchCustomDataFields = async () => {
+        setIsLoding(true);
+
+        const result = await dispatch(fetchLeadCustomFiled());
+        setLeadData(result?.payload?.data);
+
+        const tempTableColumns = [
+            { Header: "#", accessor: "_id", isSortable: false, width: 10 },
+            {
+                Header: "Status", accessor: "leadStatus", isSortable: true, center: true,
+                cell: ({ row }) => (
+                    row.original.leadStatus
+                )
+            },
+            ...(result?.payload?.data?.[0]?.fields?.filter((field) => field?.isTableField === true)?.map((field) => (field?.name !== "leadStatus" && { Header: field?.label, accessor: field?.name })) || []),
+        ];
+
+        setColumns(tempTableColumns);
+        setIsLoding(false);
+    }
+
+    useEffect(() => {
+        dispatch(fetchLeadData())
+        fetchCustomDataFields();
+    }, [])
+
     return (
         <Modal onClose={onClose} size='full' isOpen={isOpen} >
             <ModalOverlay />
@@ -47,10 +67,27 @@ const ContactModel = (props) => {
                     {isLoding ?
                         <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                             <Spinner />
-                        </Flex> : <LeadTable tableData={data} selectedValues={selectedValues} setSelectedValues={setSelectedValues} columnsData={columns} title="Lead" />}
+                        </Flex> :
+                        <CommonCheckTable
+                            title={title}
+                            isLoding={isLoding}
+                            columnData={columns ?? []}
+                            dataColumn={columns ?? []}
+                            allData={data ?? []}
+                            tableData={data}
+                            tableCustomFields={leadData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
+                            AdvanceSearch={() => ""}
+                            ManageGrid={false}
+                            deleteMany={false}
+                            selectedValues={selectedValues}
+                            setSelectedValues={setSelectedValues}
+                            selectType="single"
+                            customSearch={false}
+                        />
+                    }
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant='brand' size='sm' me={2} onClick={handleSubmit} disabled={isLoding ? true : false} leftIcon={<GiClick />}> {isLoding ? <Spinner /> : 'Select'}</Button>
+                    <Button variant='brand' size='sm' me={2} disabled={isLoding ? true : false} leftIcon={<GiClick />} onClick={handleSubmit}> {isLoding ? <Spinner /> : 'Select'}</Button>
                     <Button variant='outline' size='sm' colorScheme='red' onClick={() => onClose()}>Close</Button>
                 </ModalFooter>
             </ModalContent>

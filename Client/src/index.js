@@ -11,7 +11,8 @@ import { ThemeEditorProvider } from '@hypertheme-editor/chakra-ui';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Provider } from 'react-redux';
-import store from './redux/store';
+import { store, persistor } from './redux/store';
+import { PersistGate } from 'redux-persist/integration/react';
 
 function App() {
 	const token = localStorage.getItem("token") || sessionStorage.getItem("token");
@@ -24,7 +25,7 @@ function App() {
 			<ToastContainer />
 			<Routes>
 				{token && user?.role ? (
-					user?.role == 'user' ?
+					user?.role === 'user' ?
 						<Route path="/*" element={<UserLayout />} />
 						: user?.role === 'superAdmin' ?
 							<Route path="/*" element={<AdminLayout />} />
@@ -39,15 +40,17 @@ function App() {
 
 ReactDOM.render(
 	<Provider store={store}>
-		<ChakraProvider theme={theme}>
-			<React.StrictMode>
-				<ThemeEditorProvider>
-					<Router>
-						<App />
-					</Router>
-				</ThemeEditorProvider>
-			</React.StrictMode>
-		</ChakraProvider>
+		<PersistGate loading={null} persistor={persistor}>
+			<ChakraProvider theme={theme}>
+				<React.StrictMode>
+					<ThemeEditorProvider>
+						<Router>
+							<App />
+						</Router>
+					</ThemeEditorProvider>
+				</React.StrictMode>
+			</ChakraProvider>
+		</PersistGate>
 	</Provider>
 	, document.getElementById('root')
 );
