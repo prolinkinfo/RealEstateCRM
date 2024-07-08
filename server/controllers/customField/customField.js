@@ -788,6 +788,47 @@ const changeIsTableFields = async (req, res) => {
         return res.status(400).json({ success: false, message: 'Failed to change ', error: err.toString() });
     }
 };
+
+const changeIsViewFields = async (req, res) => {
+    try {
+        const moduleId = new mongoose.Types.ObjectId(req.body?.moduleId);
+        const updates = req.body?.values;
+
+        if (!updates || !Array.isArray(updates)) {
+            return res.status(400).json({ success: false, message: `Invalid 'updates' format` });
+        }
+
+        // Create an array of update operations for each field
+        const updateOperations = updates.map(({ fieldId, isView }) => ({
+            updateOne: {
+                filter: { _id: moduleId, 'fields._id': new mongoose.Types.ObjectId(fieldId) },
+                update: { $set: { 'fields.$[field].isView': isView } },
+                arrayFilters: [{ 'field._id': new mongoose.Types.ObjectId(fieldId) }],
+            },
+        }));
+
+        // Update all fields in a single bulk operation
+        let updateResult = await CustomField.bulkWrite(updateOperations);
+
+        if (!updateResult) {
+            return res.status(404).json({ success: false, message: 'Fields not found' });
+        }
+
+        if (updateResult.matchedCount > 0 && updateResult.modifiedCount > 0) {
+            return res.status(200).json({ success: true, message: 'Updated successfully', updateResult });
+        }
+        else if (updateResult?.matchedCount > 0 && updateResult?.modifiedCount === 0) {
+            return res.status(200).json({ success: true, message: "No changes made, already up-to-date" });
+        } else {
+            return res.status(400).json({ success: true, message: 'Failed to update', updateResult });
+        }
+
+    } catch (err) {
+        console.error('Failed to change table fields :', err);
+        return res.status(400).json({ success: false, message: 'Failed to change ', error: err.toString() });
+    }
+};
+
 const deletmodule = async (req, res) => {
     try {
         const module = await CustomField.findByIdAndUpdate(req.params.id, { deleted: true });
@@ -845,4 +886,27 @@ const changeFieldsBelongsTo = async (req, res) => {
     }
 };
 
-module.exports = { index, add, editWholeFieldsArray, editSingleField, view, changeModuleName, deleteField, deleteManyFields, deletmodule, deleteManyModule, createNewModule, changeIcon, addHeading, editSingleHeading, editWholeHeadingsArray, deleteHeading, deleteManyHeadings, changeIsTableField, changeIsTableFields, changeFieldsBelongsTo };
+
+module.exports = {
+    index,
+    add,
+    editWholeFieldsArray,
+    editSingleField,
+    view,
+    changeModuleName,
+    deleteField,
+    deleteManyFields,
+    deletmodule,
+    deleteManyModule,
+    createNewModule,
+    changeIcon,
+    addHeading,
+    editSingleHeading,
+    editWholeHeadingsArray,
+    deleteHeading,
+    deleteManyHeadings,
+    changeIsTableField,
+    changeIsTableFields,
+    changeIsViewFields,
+    changeFieldsBelongsTo,
+};

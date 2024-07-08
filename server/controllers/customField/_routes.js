@@ -6,8 +6,8 @@ const img = require('../../controllers/images/imagesController');
 const router = express.Router();
 
 router.get('/', auth, customField.index);
-router.post("/add-module", auth,img.upload.single('icon'), customField.createNewModule);
-router.put("/change-icon/:id", auth,img.upload.single('icon'), customField.changeIcon);
+router.post("/add-module", auth, img.upload.single('icon'), customField.createNewModule);
+router.put("/change-icon/:id", auth, img.upload.single('icon'), customField.changeIcon);
 router.put("/change-module-name/:id", auth, customField.changeModuleName);
 router.delete("/module/:id", auth, customField.deletmodule);
 router.post("/deleteMany-Module", auth, customField.deleteManyModule);
@@ -29,6 +29,7 @@ router.put('/change-belongsTo/:id', auth, customField.changeFieldsBelongsTo);
 
 router.put('/change-table-field/:id', auth, customField.changeIsTableField);
 router.put('/change-table-fields', auth, customField.changeIsTableFields);
+router.put('/change-view-fields', auth, customField.changeIsViewFields);
 
 router.use("/icon", express.static('uploads/images'));
 
