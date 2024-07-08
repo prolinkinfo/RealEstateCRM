@@ -78,6 +78,10 @@ const fieldsSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    isView: {
+        type: Boolean,
+        default: false
+    },
     // options: [radioSelctboxSchema],
     options: {
         type: [radioSelctboxSchema],
@@ -99,8 +103,8 @@ const customFieldSchema = new mongoose.Schema({
         unique: true,
         trim: true
     },
-    icon:{
-        type : String,
+    icon: {
+        type: String,
     },
     no: {
         type: Number
