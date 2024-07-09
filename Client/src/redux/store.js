@@ -15,6 +15,7 @@ import leadCustomFiledSlice from './leadCustomFiledSlice';
 import taskSlice from './taskSlice';
 import meetingSlice from './meetingSlice';
 import emailsSlice from './emailsSlice';
+import emailTempSlice from './emailTempSlice';
 
 const middleware = (getDefaultMiddleware) => {
   return getDefaultMiddleware({
@@ -59,6 +60,7 @@ export const store = configureStore({
     taskData: taskSlice,
     meetingData: meetingSlice,
     emailsData: emailsSlice,
+    emailTempData: emailTempSlice,
   },
   middleware,
 });

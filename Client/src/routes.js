@@ -64,6 +64,8 @@ const PhoneCall = React.lazy(() => import("views/admin/phoneCall"));
 const PhoneCallView = React.lazy(() => import("views/admin/phoneCall/View"));
 
 const Report = React.lazy(() => import("views/admin/reports"));
+const EmailTemplate = React.lazy(() => import("views/admin/emailTemplate"));
+const AddEdit = React.lazy(() => import("views/admin/emailTemplate/AddEdit"));
 
 // Auth Imports
 const SignInCentered = React.lazy(() => import("views/auth/signIn"));
@@ -156,6 +158,24 @@ const routes = [
     path: "/propertyImport",
     component: PropertyImport,
   },
+
+  // -----------------------------Email Template-------------------------------------
+  {
+    name: "Email Template",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/email-template",
+    icon: <Icon as={LuBuilding2} width='20px' height='20px' color='inherit' />,
+    component: EmailTemplate,
+  },
+  {
+    name: "Add Email Template",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    under: "email-template",
+    path: "/email-template/email-template-add",
+    icon: <Icon as={LuBuilding2} width='20px' height='20px' color='inherit' />,
+    component: AddEdit,
+  },
+
   // -----------------------------Admin setting-------------------------------------
   {
     name: "Admin Setting",

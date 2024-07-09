@@ -22,6 +22,7 @@ const validationRoute = require("./validation/_routes");
 const formRoute = require("./form/_routes");
 const statusRoute = require("./status/_routes");
 const calendarRoute = require("./calendar/_routes")
+const emailTempRoute = require("./emailTemplate/_routes")
 
 //Api`s
 router.use('/contact', contactRoute);
@@ -47,5 +48,6 @@ router.use("/validation", validationRoute);
 router.use("/form", formRoute);
 router.use("/status", statusRoute);
 router.use("/calendar", calendarRoute);
+router.use("/email-temp", emailTempRoute);
 
 module.exports = router;
