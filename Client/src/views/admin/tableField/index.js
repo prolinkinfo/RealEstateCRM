@@ -147,21 +147,12 @@ const Index = () => {
     const handleUpdateTableViewField = async (values) => {
         try {
             setIsLoading(true);
-            console.log(values)
-            // const updates = Object.entries(selectedFields)?.map(
-            //     ([fieldId, isTableField]) => ({
-            //         fieldId: fieldId,
-            //         isTableField,
-            //     })
-            // );
-
             await putApi("api/custom-field/change-view-fields/", {
                 moduleId,
                 values,
             });
 
-            // setSelectedFields({});
-            // setAction((pre) => !pre);
+            setAction((pre) => !pre);
         } catch (error) {
             console.error(error);
         } finally {
