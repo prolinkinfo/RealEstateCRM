@@ -789,38 +789,100 @@ const changeIsTableFields = async (req, res) => {
     }
 };
 
+/* For future refrence */
+// const changeIsViewFields = async (req, res) => {
+//     try {
+//         const moduleId = new mongoose.Types.ObjectId(req.body?.moduleId);
+//         const update = req.body?.values;
+
+//         if (!update || typeof update !== 'object') {
+//             return res.status(400).json({ success: false, message: `Invalid 'update' format` });
+//         }
+
+//         const fieldIdToUpdate = new mongoose.Types.ObjectId(update.fieldId);
+//         const isChecked = update.isChecked;
+
+//         // Set isView: false for all fields in the module
+//         const setFalseOperation = {
+//             updateMany: {
+//                 filter: { _id: moduleId },
+//                 update: { $set: { 'fields.$[].isView': false } },
+//             },
+//         };
+
+//         // If isChecked is true, set isView: true for the specified field
+//         const setTrueOperation = isChecked ? {
+//             updateOne: {
+//                 filter: { _id: moduleId, 'fields._id': fieldIdToUpdate },
+//                 update: { $set: { 'fields.$[field].isView': true } },
+//                 arrayFilters: [{ 'field._id': fieldIdToUpdate }],
+//             },
+//         } : null;
+
+//         // Combine operations
+//         const bulkOperations = [setFalseOperation];
+//         if (setTrueOperation) {
+//             bulkOperations.push(setTrueOperation);
+//         }
+
+//         // Execute bulkWrite
+//         let updateResult = await CustomField.bulkWrite(bulkOperations);
+
+//         if (!updateResult) {
+//             return res.status(404).json({ success: false, message: 'Fields not found' });
+//         }
+
+//         if (updateResult.matchedCount > 0 && updateResult.modifiedCount > 0) {
+//             return res.status(200).json({ success: true, message: 'Updated successfully', updateResult });
+//         } else if (updateResult?.matchedCount > 0 && updateResult?.modifiedCount === 0) {
+//             return res.status(200).json({ success: true, message: "No changes made, already up-to-date" });
+//         } else {
+//             return res.status(400).json({ success: true, message: 'Failed to update', updateResult });
+//         }
+
+//     } catch (err) {
+//         console.error('Failed to change table fields :', err);
+//         return res.status(400).json({ success: false, message: 'Failed to change ', error: err.toString() });
+//     }
+// };
 const changeIsViewFields = async (req, res) => {
     try {
         const moduleId = new mongoose.Types.ObjectId(req.body?.moduleId);
-        const updates = req.body?.values;
+        const update = req.body?.values;
 
-        if (!updates || !Array.isArray(updates)) {
-            return res.status(400).json({ success: false, message: `Invalid 'updates' format` });
+        if (!update || typeof update !== 'object') {
+            return res.status(400).json({ success: false, message: `Invalid 'update' format` });
         }
 
-        // Create an array of update operations for each field
-        const updateOperations = updates.map(({ fieldId, isView }) => ({
-            updateOne: {
-                filter: { _id: moduleId, 'fields._id': new mongoose.Types.ObjectId(fieldId) },
-                update: { $set: { 'fields.$[field].isView': isView } },
-                arrayFilters: [{ 'field._id': new mongoose.Types.ObjectId(fieldId) }],
+        const fieldIdToUpdate = new mongoose.Types.ObjectId(update.fieldId);
+        const isChecked = update.isChecked;
+
+        // Set isView: false for all fields and isView: true for the specified field if isChecked is true
+        const bulkOperations = [
+            {
+                updateMany: {
+                    filter: { _id: moduleId },
+                    update: { $set: { 'fields.$[].isView': false } }
+                }
             },
-        }));
+            isChecked && {
+                updateOne: {
+                    filter: { _id: moduleId, 'fields._id': fieldIdToUpdate },
+                    update: { $set: { 'fields.$[field].isView': true } },
+                    arrayFilters: [{ 'field._id': fieldIdToUpdate }]
+                }
+            }
+        ].filter(Boolean);  // Filter out null values if isChecked is false
 
-        // Update all fields in a single bulk operation
-        let updateResult = await CustomField.bulkWrite(updateOperations);
-
-        if (!updateResult) {
-            return res.status(404).json({ success: false, message: 'Fields not found' });
-        }
+        // Execute bulkWrite
+        const updateResult = await CustomField.bulkWrite(bulkOperations);
 
         if (updateResult.matchedCount > 0 && updateResult.modifiedCount > 0) {
             return res.status(200).json({ success: true, message: 'Updated successfully', updateResult });
-        }
-        else if (updateResult?.matchedCount > 0 && updateResult?.modifiedCount === 0) {
+        } else if (updateResult.matchedCount > 0 && updateResult.modifiedCount === 0) {
             return res.status(200).json({ success: true, message: "No changes made, already up-to-date" });
         } else {
-            return res.status(400).json({ success: true, message: 'Failed to update', updateResult });
+            return res.status(400).json({ success: false, message: 'Failed to update', updateResult });
         }
 
     } catch (err) {

@@ -155,10 +155,10 @@ const Index = () => {
             //     })
             // );
 
-            // await putApi("api/custom-field/change-view-fields/", {
-            //     moduleId,
-            //     values,
-            // });
+            await putApi("api/custom-field/change-view-fields/", {
+                moduleId,
+                values,
+            });
 
             // setSelectedFields({});
             // setAction((pre) => !pre);
