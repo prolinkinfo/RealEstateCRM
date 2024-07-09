@@ -338,7 +338,7 @@ const CustomView = ({ data, toCamelCase, fieldData, moduleId, fetchData, editUrl
                                                 <FormControl isInvalid={formik.errors[field?.name] && formik.touched[field?.name]}>
                                                     <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">{field?.label}</Text>
                                                     {editableField === field?.name || formik.errors[field?.name] ? (
-                                                        field?.type === "select" ?
+                                                        field?.type === "select" || field?.type === "radio" ?
                                                             <Select
                                                                 fontSize='sm'
                                                                 id={field?.name}
@@ -354,15 +354,70 @@ const CustomView = ({ data, toCamelCase, fieldData, moduleId, fetchData, editUrl
                                                                         {option.name}
                                                                     </option>))}
                                                             </Select>
-                                                            :
-                                                            < Input
-                                                                value={formik.values[field?.name] || ''}
-                                                                onChange={formik.handleChange}
-                                                                onBlur={handleBlur}
-                                                                autoFocus
-                                                                borderColor={formik.errors[field?.name] && formik.touched[field?.name] ? "red.300" : null}
-                                                                name={field?.name}
-                                                            />
+                                                            : field?.type === "text" ?
+                                                                <Input
+                                                                    value={formik.values[field?.name] || ''}
+                                                                    onChange={formik.handleChange}
+                                                                    onBlur={handleBlur}
+                                                                    autoFocus
+                                                                    borderColor={formik.errors[field?.name] && formik.touched[field?.name] ? "red.300" : null}
+                                                                    name={field?.name}
+                                                                />
+                                                                : field?.type === "tel" ?
+                                                                    <Input
+                                                                        value={formik.values[field?.name] || ''}
+                                                                        onChange={formik.handleChange}
+                                                                        onBlur={handleBlur}
+                                                                        autoFocus
+                                                                        borderColor={formik.errors[field?.name] && formik.touched[field?.name] ? "red.300" : null}
+                                                                        name={field?.name}
+                                                                    />
+                                                                    : field?.type === "email" ?
+                                                                        <Input
+                                                                            value={formik.values[field?.name] || ''}
+                                                                            onChange={formik.handleChange}
+                                                                            onBlur={handleBlur}
+                                                                            autoFocus
+                                                                            borderColor={formik.errors[field?.name] && formik.touched[field?.name] ? "red.300" : null}
+                                                                            name={field?.name}
+                                                                        /> : field?.type === "date" ?
+                                                                            <Input
+                                                                                value={formik.values[field?.name] || ''}
+                                                                                onChange={formik.handleChange}
+                                                                                onBlur={handleBlur}
+                                                                                autoFocus
+                                                                                type='date'
+                                                                                borderColor={formik.errors[field?.name] && formik.touched[field?.name] ? "red.300" : null}
+                                                                                name={field?.name}
+                                                                            /> : field?.type === "url" ?
+                                                                                <Input
+                                                                                    value={formik.values[field?.name] || ''}
+                                                                                    onChange={formik.handleChange}
+                                                                                    onBlur={handleBlur}
+                                                                                    autoFocus
+                                                                                    type='url'
+                                                                                    borderColor={formik.errors[field?.name] && formik.touched[field?.name] ? "red.300" : null}
+                                                                                    name={field?.name}
+                                                                                />
+                                                                                : field?.type === "range" ?
+                                                                                    <Input
+                                                                                        value={formik.values[field?.name] || ''}
+                                                                                        onChange={formik.handleChange}
+                                                                                        onBlur={handleBlur}
+                                                                                        autoFocus
+                                                                                        type='range'
+                                                                                        borderColor={formik.errors[field?.name] && formik.touched[field?.name] ? "red.300" : null}
+                                                                                        name={field?.name}
+                                                                                    />
+                                                                                    :
+                                                                                    <Input
+                                                                                        value={formik.values[field?.name] || ''}
+                                                                                        onChange={formik.handleChange}
+                                                                                        onBlur={handleBlur}
+                                                                                        autoFocus
+                                                                                        borderColor={formik.errors[field?.name] && formik.touched[field?.name] ? "red.300" : null}
+                                                                                        name={field?.name}
+                                                                                    />
 
                                                     ) : (
                                                         <Text
@@ -398,7 +453,7 @@ const CustomView = ({ data, toCamelCase, fieldData, moduleId, fetchData, editUrl
                                     <FormControl isInvalid={formik.errors[field?.name] && formik.touched[field?.name]}>
                                         <Text color={'blackAlpha.900'} fontSize="sm" fontWeight="bold">{field?.label}</Text>
                                         {editableField === field?.name || formik.errors[field?.name] ? (
-                                            field?.type === "select" ?
+                                            field?.type === "select" || field?.type === "radio" ?
                                                 <Select
                                                     fontSize='sm'
                                                     id={field?.name}
@@ -414,15 +469,71 @@ const CustomView = ({ data, toCamelCase, fieldData, moduleId, fetchData, editUrl
                                                             {option.name}
                                                         </option>))}
                                                 </Select>
-                                                :
-                                                < Input
-                                                    value={formik.values[field?.name] || ''}
-                                                    onChange={formik.handleChange}
-                                                    onBlur={handleBlur}
-                                                    autoFocus
-                                                    borderColor={formik.errors[field?.name] && formik.touched[field?.name] ? "red.300" : null}
-                                                    name={field?.name}
-                                                />
+                                                : field?.type === "text" ?
+                                                    <Input
+                                                        value={formik.values[field?.name] || ''}
+                                                        onChange={formik.handleChange}
+                                                        onBlur={handleBlur}
+                                                        autoFocus
+                                                        borderColor={formik.errors[field?.name] && formik.touched[field?.name] ? "red.300" : null}
+                                                        name={field?.name}
+                                                    />
+                                                    : field?.type === "tel" ?
+                                                        <Input
+                                                            value={formik.values[field?.name] || ''}
+                                                            onChange={formik.handleChange}
+                                                            onBlur={handleBlur}
+                                                            autoFocus
+                                                            borderColor={formik.errors[field?.name] && formik.touched[field?.name] ? "red.300" : null}
+                                                            name={field?.name}
+                                                        />
+                                                        : field?.type === "email" ?
+                                                            <Input
+                                                                value={formik.values[field?.name] || ''}
+                                                                onChange={formik.handleChange}
+                                                                onBlur={handleBlur}
+                                                                autoFocus
+                                                                borderColor={formik.errors[field?.name] && formik.touched[field?.name] ? "red.300" : null}
+                                                                name={field?.name}
+                                                            /> : field?.type === "date" ?
+                                                                <Input
+                                                                    value={formik.values[field?.name] || ''}
+                                                                    onChange={formik.handleChange}
+                                                                    onBlur={handleBlur}
+                                                                    autoFocus
+                                                                    type='date'
+                                                                    borderColor={formik.errors[field?.name] && formik.touched[field?.name] ? "red.300" : null}
+                                                                    name={field?.name}
+                                                                /> : field?.type === "url" ?
+                                                                    <Input
+                                                                        value={formik.values[field?.name] || ''}
+                                                                        onChange={formik.handleChange}
+                                                                        onBlur={handleBlur}
+                                                                        autoFocus
+                                                                        type='url'
+                                                                        borderColor={formik.errors[field?.name] && formik.touched[field?.name] ? "red.300" : null}
+                                                                        name={field?.name}
+                                                                    />
+                                                                    : field?.type === "range" ?
+                                                                        <Input
+                                                                            value={formik.values[field?.name] || ''}
+                                                                            onChange={formik.handleChange}
+                                                                            onBlur={handleBlur}
+                                                                            autoFocus
+                                                                            type='range'
+                                                                            borderColor={formik.errors[field?.name] && formik.touched[field?.name] ? "red.300" : null}
+                                                                            name={field?.name}
+                                                                        />
+                                                                        :
+                                                                        <Input
+                                                                            value={formik.values[field?.name] || ''}
+                                                                            onChange={formik.handleChange}
+                                                                            onBlur={handleBlur}
+                                                                            autoFocus
+                                                                            borderColor={formik.errors[field?.name] && formik.touched[field?.name] ? "red.300" : null}
+                                                                            name={field?.name}
+                                                                        />
+
 
                                         ) : (
                                             <Text
