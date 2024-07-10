@@ -129,10 +129,6 @@ const Index = () => {
         }
     };
 
-    const handleViewOpen = (id) => {
-        navigate(`/leadView/${id}`)
-    }
-
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
 
@@ -266,7 +262,9 @@ const Index = () => {
                                     cell: (cell) => (
                                         <div className="selectOpt">
                                             <Text
-                                                onClick={() => handleViewOpen(cell?.row?.original._id)}
+                                                onClick={() => {
+                                                    navigate(`/leadView/${cell?.row?.original?._id}`);
+                                                }}
                                                 me="10px"
                                                 sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
                                                 color='brand.600'
