@@ -148,7 +148,6 @@ const CommonCheckTable = (props) => {
 
 
     const handleClear = () => {
-        // AdvanceSearch ? props?.setSearchDisplay(false) : setDisplaySearchData(false)
         setSearchDisplay && setSearchDisplay(false)
         setDisplaySearchData && setDisplaySearchData(false)
         if (searchboxOutside) {
@@ -180,10 +179,10 @@ const CommonCheckTable = (props) => {
         setDisplaySearchData(true)
         setAdvaceSearch(false)
     }
+    
     useEffect(() => {
         state && findStatus()
     }, [state, allData]);
-
 
     let isColumnSelected;
     const toggleColumnVisibility = (columnKey) => {
@@ -220,6 +219,7 @@ const CommonCheckTable = (props) => {
         setTempSelectedColumns(columnData);
         setManageColumns(!manageColumns ? !manageColumns : false)
     };
+
 
     const handleExportLeads = (extension) => {
         selectedValues && selectedValues?.length > 0

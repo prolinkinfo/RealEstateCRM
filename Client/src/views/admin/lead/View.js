@@ -38,6 +38,8 @@ import moment from 'moment';
 import AddEdit from '../task/components/AddEdit'
 import { useDispatch, useSelector } from "react-redux";
 import { fetchLeadCustomFiled } from "../../../redux/leadCustomFiledSlice";
+import { FaFilePdf } from "react-icons/fa";
+import html2pdf from "html2pdf.js";
 
 const View = () => {
     const param = useParams()
@@ -200,6 +202,30 @@ const View = () => {
     const handleTabChange = (index) => {
         setSelectedTab(index);
     };
+    const generatePDF = () => {
+        const element = document.getElementById("reports");
+        if (element) {
+            element.style.display = 'block';
+            element.style.width = '100%'; // Adjust width for mobile
+            element.style.height = 'auto';
+            // setTimeout(() => {
+            html2pdf()
+                .from(element)
+                .set({
+                    margin: [0, 0, 0, 0],
+                    filename: `Lead_Details_${moment().format("DD-MM-YYYY")}.pdf`,
+                    image: { type: "jpeg", quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true, allowTaint: true },
+                    jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+                })
+                .save().then(() => {
+                    element.style.display = '';
+                })
+            // }, 500);
+        } else {
+            console.error("Element with ID 'reports' not found.");
+        }
+    };
 
     const download = async (data) => {
         if (data) {
@@ -287,8 +313,9 @@ const View = () => {
                                         </MenuButton>}
                                         <MenuDivider />
                                         <MenuList minWidth={2}>
-                                            {(user.role === 'superAdmin' || permission?.create) && <MenuItem color={'blue'} onClick={() => onOpen()} alignItems={"start"} icon={<AddIcon />}>Add</MenuItem>}
+                                            {(user.role === 'superAdmin' || permission?.create) && <MenuItem color={'blue'} onClick={() => onOpen()} alignItems={"start"} icon={<AddIcon />}  >Add</MenuItem>}
                                             {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => setEdit(true)} alignItems={"start"} icon={<EditIcon />}>Edit</MenuItem>}
+                                            <MenuItem onClick={generatePDF} alignItems={"start"} icon={<FaFilePdf />} display={"flex"} style={{ alignItems: "center" }}>Print as PDF</MenuItem >
                                             {(user.role === 'superAdmin' || permission?.delete) && <>
                                                 <MenuDivider />
                                                 <MenuItem alignItems={"start"} color={'red'} onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
@@ -306,7 +333,7 @@ const View = () => {
 
                         <TabPanels>
                             <TabPanel pt={4} p={0}>
-                                <CustomView data={leadData?.[0]} fieldData={data} toCamelCase={toCamelCase} moduleId={leadData?.[0]?._id} fetchData={fetchData} />
+                                <CustomView data={leadData?.[0]} fieldData={data} toCamelCase={toCamelCase} moduleId={leadData?.[0]?._id} fetchData={fetchData} id="reports" />
                             </TabPanel>
                             <TabPanel pt={4} p={0}>
                                 <GridItem colSpan={{ base: 4 }} >
@@ -330,7 +357,7 @@ const View = () => {
                                                         onOpen={() => setAddEmailHistory(true)}
                                                         access={emailAccess}
                                                     />
-                                                    {allData.Email?.length > 1 &&
+                                                    {allData?.Email?.length > 1 &&
                                                         <div style={{ display: "flex", justifyContent: "end" }}>
                                                             <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showEmail ? setShowEmail(false) : setShowEmail(true)}>{showEmail ? "Show less" : "Show more"}</Button>
                                                         </div>}

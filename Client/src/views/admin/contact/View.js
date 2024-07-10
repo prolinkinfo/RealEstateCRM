@@ -34,6 +34,8 @@ import AddEdit from '../task/components/AddEdit'
 import { useDispatch, useSelector } from "react-redux";
 import { fetchContactCustomFiled } from '../../../redux/contactCustomFiledSlice';
 import { fetchPropertyCustomFiled } from "../../../redux/propertyCustomFiledSlice";
+import html2pdf from "html2pdf.js";
+import { FaFilePdf } from "react-icons/fa";
 
 const View = () => {
 
@@ -220,6 +222,30 @@ const View = () => {
         setSelectedTab(index);
     };
 
+    const generatePDF = () => {
+        const element = document.getElementById("reports");
+        if (element) {
+            element.style.display = 'block';
+            element.style.width = '100%'; // Adjust width for mobile
+            element.style.height = 'auto';
+            // setTimeout(() => {
+            html2pdf()
+                .from(element)
+                .set({
+                    margin: [0, 0, 0, 0],
+                    filename: `Contact_Details_${moment().format("DD-MM-YYYY")}.pdf`,
+                    image: { type: "jpeg", quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true, allowTaint: true },
+                    jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+                })
+                .save().then(() => {
+                    element.style.display = '';
+                })
+            // }, 500);
+        } else {
+            console.error("Element with ID 'reports' not found.");
+        }
+    };
 
     const download = async (data) => {
         if (data) {
@@ -317,6 +343,8 @@ const View = () => {
                                         <MenuList minWidth={2} zIndex={"99"}>
                                             {(user.role === 'superAdmin' || permission?.create) && <MenuItem alignItems={'start'} onClick={() => onOpen()} color={'blue'} icon={<AddIcon />}>Add</MenuItem>}
                                             {(user.role === 'superAdmin' || permission?.update) && <MenuItem alignItems={'start'} onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
+                                            <MenuItem onClick={generatePDF} alignItems={"start"} icon={<FaFilePdf />} display={"flex"} style={{ alignItems: "center" }}>Print as PDF</MenuItem >
+
                                             {(user.role === 'superAdmin' || permission?.delete) &&
                                                 <>
                                                     <MenuDivider />
@@ -335,7 +363,7 @@ const View = () => {
                         </Grid>
                         <TabPanels>
                             <TabPanel pt={4} p={0}>
-                                <CustomView data={contactData?.[0]} fieldData={data} toCamelCase={toCamelCase} moduleId={contactData?.[0]?._id} fetchData={fetchData} />
+                                <CustomView data={contactData?.[0]} fieldData={data} toCamelCase={toCamelCase} moduleId={contactData?.[0]?._id} fetchData={fetchData} id="reports" />
                                 <GridItem colSpan={{ base: 12 }} mt={4}>
                                     <Card >
                                         <Grid templateColumns={{ base: "1fr" }} gap={4}>

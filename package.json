@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "html2pdf.js": "^0.9.0"
+  }
+}

@@ -261,7 +261,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { generateValidationSchema } from 'utils';
 
-const CustomView = ({ data, toCamelCase, fieldData, moduleId, fetchData, editUrl }) => {
+const CustomView = ({ data, toCamelCase, fieldData, moduleId, fetchData, editUrl, id }) => {
     const param = useParams();
     const [editableField, setEditableField] = useState(null);
 
@@ -318,7 +318,7 @@ const CustomView = ({ data, toCamelCase, fieldData, moduleId, fetchData, editUrl
     };
 
     return (
-        <Grid templateColumns="repeat(12, 1fr)" gap={3}>
+        <Grid templateColumns="repeat(12, 1fr)" gap={3} id={id}>
             {data?.headings?.length > 0 ? (
                 <>
                     {data?.headings?.map((item, ind) => (

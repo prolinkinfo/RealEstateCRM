@@ -16,6 +16,7 @@
     "@fullcalendar/resource-timeline": "^6.1.8",
     "@fullcalendar/scrollgrid": "^6.1.8",
     "@hypertheme-editor/chakra-ui": "^0.1.5",
+    "@react-pdf/renderer": "^3.4.4",
     "@reduxjs/toolkit": "^2.0.1",
     "@stripe/react-stripe-js": "^2.3.0",
     "@stripe/stripe-js": "^2.1.6",

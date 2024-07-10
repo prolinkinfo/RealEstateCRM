@@ -14,6 +14,8 @@ import { HSeparator } from 'components/separator/Separator';
 import AddEdit from './AddEdit';
 import CommonDeleteModel from 'components/commonDeleteModel';
 import { deleteManyApi } from 'services/api';
+import { FaFilePdf } from "react-icons/fa";
+import html2pdf from "html2pdf.js";
 
 const TaskView = (props) => {
     const params = useParams()
@@ -35,7 +37,24 @@ const TaskView = (props) => {
             setData(result?.data);
         }
     }
-
+    const generatePDF = () => {
+        const element = document.getElementById("reports");
+        if (element) {
+            html2pdf()
+                .from(element)
+                .set({
+                    margin: [0, 0, 0, 0],
+                    filename: `Task_Details_${moment().format("DD-MM-YYYY")}.pdf`,
+                    image: { type: "jpeg", quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true, allowTaint: true },
+                    jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+                })
+                .save()
+            // }, 500);
+        } else {
+            console.error("Element with ID 'reports' not found.");
+        }
+    };
     const handleDeleteTask = async (ids) => {
         try {
             let response = await deleteManyApi('api/task/deleteMany', ids)
@@ -59,7 +78,7 @@ const TaskView = (props) => {
     return (
         <div>
             <Card>
-                <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={1} justifyContent={"space-between"} alignItem={"center"}>
+                <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={1} justifyContent={"space-between"} alignItem={"center"} >
                     <GridItem colSpan={{ base: 12, md: 6 }}>
                         <Text fontSize="xl" fontWeight="bold" color={'blackAlpha.900'}> Task View </Text>
 
@@ -74,6 +93,8 @@ const TaskView = (props) => {
                                 <MenuList minWidth={2}>
                                     {(user.role === 'superAdmin' || permission?.create) && <MenuItem onClick={() => handleClick()} alignItems={'start'} color={'blue'} icon={<AddIcon />}>Add</MenuItem>}
                                     {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => setEdit(true)} alignItems={'start'} icon={<EditIcon />}>Edit</MenuItem>}
+                                    <MenuItem onClick={generatePDF} alignItems={"start"} icon={<FaFilePdf />} display={"flex"} style={{ alignItems: "center" }}>Print as PDF</MenuItem >
+
                                     {(user.role === 'superAdmin' || permission?.deleteModel) && <>
                                         <MenuDivider />
                                         <MenuItem alignItems={'start'} onClick={() => setDeleteManyModel(true)} color={'red'} icon={<DeleteIcon />}>Delete</MenuItem>
@@ -89,62 +110,64 @@ const TaskView = (props) => {
                     </GridItem>
                 </Grid>
                 <HSeparator />
-                <Grid templateColumns="repeat(12, 1fr)" gap={3} pt={3}>
-                    <GridItem colSpan={{ base: 12, md: 6 }} >
-                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Title </Text>
-                        <Text>{data?.title ? data?.title : ' - '}</Text>
-                    </GridItem>
-                    <GridItem colSpan={{ base: 12, md: 6 }} >
-                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Related To </Text>
-                        <Text>{data?.category ? data?.category : ' - '}</Text>
-                    </GridItem>
-                    <GridItem colSpan={{ base: 12, md: 6 }} >
-                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task start </Text>
-                        <Text>
-                            {data && data?.start ? (
-                                data.allDay === true
-                                    ? moment(data.start).format('DD-MM-YYYY')
-                                    : moment(data.start).format('DD-MM-YYYY HH:mm A')
-                            ) : (
-                                "-"
-                            )}
-                        </Text>
-                    </GridItem>
-                    <GridItem colSpan={{ base: 12, md: 6 }} >
-                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task end  </Text>
-                        <Text>{data?.allDay === true ? moment(data?.end).format('DD-MM-YYYY') : moment(data?.end).format('DD-MM-YYYY HH:mm A')}</Text>
-                    </GridItem>
-                    <GridItem colSpan={{ base: 12, md: 6 }} >
-                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Link </Text>
-                        {data?.url ?
-                            <a target='_blank' href={data?.url}>
-                                <IconButton borderRadius="10px" size="md" icon={<BiLink />} />
-                            </a> : '-'
-                        }
-                    </GridItem>
-                    <GridItem colSpan={{ base: 12, md: 6 }} >
-                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task reminder </Text>
-                        <Text>{data?.reminder ? data?.reminder : ' - '}</Text>
-                    </GridItem>
-                    <GridItem colSpan={{ base: 12, md: 6 }} >
-                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Assign To  </Text>
-                        <Link to={data?.assignTo ? contactAccess?.view && `/contactView/${data?.assignTo}` : leadAccess?.view && `/leadView/${data?.assignToLead}`}>
-                            <Text color={(data?.category === 'contact' && (contactAccess?.view || user?.role === 'superAdmin')) ? 'brand.600' : (leadAccess?.view || user?.role === 'superAdmin' && data?.category === 'lead') ? 'brand.600' : 'blackAlpha.900'} sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.assignToName ? data?.assignToName : ' - '}</Text>
-                        </Link>
-                    </GridItem>
-                    <GridItem colSpan={{ base: 12, md: 6 }} >
-                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task createBy </Text>
-                        <Text>{data?.createByName ? data?.createByName : ' - '}</Text>
-                    </GridItem>
-                    <GridItem colSpan={{ base: 12 }} >
-                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Description</Text>
-                        <Text>{data?.description ? data?.description : ' - '}</Text>
-                    </GridItem>
-                    <GridItem colSpan={{ base: 12 }} >
-                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task notes </Text>
-                        <Text>{data?.notes ? data?.notes : ' - '}</Text>
-                    </GridItem>
-                </Grid>
+                <div id="reports">
+                    <Grid templateColumns="repeat(12, 1fr)" gap={3} pt={3} >
+                        <GridItem colSpan={{ base: 12, md: 6 }} >
+                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Title </Text>
+                            <Text>{data?.title ? data?.title : ' - '}</Text>
+                        </GridItem>
+                        <GridItem colSpan={{ base: 12, md: 6 }} >
+                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Related To </Text>
+                            <Text>{data?.category ? data?.category : ' - '}</Text>
+                        </GridItem>
+                        <GridItem colSpan={{ base: 12, md: 6 }} >
+                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task start </Text>
+                            <Text>
+                                {data && data?.start ? (
+                                    data.allDay === true
+                                        ? moment(data.start).format('DD-MM-YYYY')
+                                        : moment(data.start).format('DD-MM-YYYY HH:mm A')
+                                ) : (
+                                    "-"
+                                )}
+                            </Text>
+                        </GridItem>
+                        <GridItem colSpan={{ base: 12, md: 6 }} >
+                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task end  </Text>
+                            <Text>{data?.allDay === true ? moment(data?.end).format('DD-MM-YYYY') : moment(data?.end).format('DD-MM-YYYY HH:mm A')}</Text>
+                        </GridItem>
+                        <GridItem colSpan={{ base: 12, md: 6 }} >
+                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Link </Text>
+                            {data?.url ?
+                                <a target='_blank' href={data?.url}>
+                                    <IconButton borderRadius="10px" size="md" icon={<BiLink />} />
+                                </a> : '-'
+                            }
+                        </GridItem>
+                        <GridItem colSpan={{ base: 12, md: 6 }} >
+                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task reminder </Text>
+                            <Text>{data?.reminder ? data?.reminder : ' - '}</Text>
+                        </GridItem>
+                        <GridItem colSpan={{ base: 12, md: 6 }} >
+                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Assign To  </Text>
+                            <Link to={data?.assignTo ? contactAccess?.view && `/contactView/${data?.assignTo}` : leadAccess?.view && `/leadView/${data?.assignToLead}`}>
+                                <Text color={(data?.category === 'contact' && (contactAccess?.view || user?.role === 'superAdmin')) ? 'brand.600' : (leadAccess?.view || user?.role === 'superAdmin' && data?.category === 'lead') ? 'brand.600' : 'blackAlpha.900'} sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.assignToName ? data?.assignToName : ' - '}</Text>
+                            </Link>
+                        </GridItem>
+                        <GridItem colSpan={{ base: 12, md: 6 }} >
+                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task createBy </Text>
+                            <Text>{data?.createByName ? data?.createByName : ' - '}</Text>
+                        </GridItem>
+                        <GridItem colSpan={{ base: 12 }} >
+                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Description</Text>
+                            <Text>{data?.description ? data?.description : ' - '}</Text>
+                        </GridItem>
+                        <GridItem colSpan={{ base: 12 }} >
+                            <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task notes </Text>
+                            <Text>{data?.notes ? data?.notes : ' - '}</Text>
+                        </GridItem>
+                    </Grid>
+                </div>
             </Card>
             {(permission?.update || permission?.delete || user?.role === 'superAdmin') && <Card mt={3}>
                 <Grid templateColumns="repeat(6, 1fr)" gap={1}>
