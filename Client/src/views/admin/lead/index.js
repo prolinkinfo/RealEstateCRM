@@ -271,7 +271,7 @@ const Index = () => {
                                                 fontSize="sm"
                                                 fontWeight="700"
                                             >
-                                                {cell?.value}
+                                                {cell?.value || "-"}
                                             </Text>
                                         </div>
                                     ),

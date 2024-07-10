@@ -95,14 +95,40 @@ const Index = () => {
                 </Text>
             )
         };
+
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
+            ...(result?.payload?.data && result.payload.data.length > 0
+                ? result.payload.data[0]?.fields
+                    ?.filter((field) => field?.isTableField === true && field?.isView)
+                    ?.map(
+                        (field) => ({
+                            Header: field?.label,
+                            accessor: field?.name,
+                            cell: (cell) => (
+                                <div className="selectOpt">
+                                    <Text
+                                        onClick={() => {
+                                            navigate(`/contactView/${cell?.row?.original?._id}`);
+                                        }}
+                                        me="10px"
+                                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                                        color='brand.600'
+                                        fontSize="sm"
+                                        fontWeight="700"
+                                    >
+                                        {cell?.value || "-"}
+                                    </Text>
+                                </div>
+                            ),
+                        })
+                    ) || []
+                : []),
             ...(result?.payload?.data?.[0]?.fields || []) // Check if fields is defined, if not, use empty array
-                .filter(field => field?.isTableField === true) // Filter out fields where isTableField is true
+                .filter(field => field?.isTableField === true && !field?.isView) // Filter out fields where isTableField is true
                 .map(field => ({ Header: field?.label, accessor: field?.name })),
             ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : [])
         ];
-
 
         setSelectedColumns(JSON.parse(JSON.stringify(tempTableColumns)));
         setColumns(JSON.parse(JSON.stringify(tempTableColumns)));
