@@ -451,10 +451,10 @@ const View = () => {
                     }
                 </>
             }
-            {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} leadData={leadData[0]} setAction={setAction} />}
-            <Edit isOpen={edit} size={size} onClose={setEdit} leadData={leadData[0]} setAction={setAction} moduleId={leadData?.[0]?._id} data={data} />
-            <AddMeeting fetchData={fetchData} isOpen={addMeeting} leadContect={splitValue[0]} onClose={setMeeting} from="contact" id={param.id} setAction={setAction} view={true} />
-            <AddEdit isOpen={taskModel} fetchData={fetchData} leadContect={splitValue[0]} onClose={setTaskModel} id={param.id} userAction={'add'} view={true} />
+            {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} leadData={leadData?.[0]} setAction={setAction} />}
+            <Edit isOpen={edit} size={size} onClose={setEdit} leadData={leadData?.[0]} setAction={setAction} moduleId={leadData?.[0]?._id} data={data} />
+            <AddMeeting fetchData={fetchData} isOpen={addMeeting} leadContect={splitValue?.[0]} onClose={setMeeting} from="contact" id={param.id} setAction={setAction} view={true} />
+            <AddEdit isOpen={taskModel} fetchData={fetchData} leadContect={splitValue?.[0]} onClose={setTaskModel} id={param.id} userAction={'add'} view={true} />
             <AddPhoneCall viewData={allData} fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} setAction={setAction} data={data?.contact} id={param.id} lead={true} LData={data} />
             <AddEmailHistory lead={true} leadEmail={allData?.lead?.leadEmail} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} />
             <AddDocumentModal addDocument={addDocument} setAddDocument={setAddDocument} linkId={param.id} from="lead" setAction={setAction} fetchData={fetchData} />

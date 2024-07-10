@@ -277,6 +277,8 @@ const CustomView = ({ data, toCamelCase, fieldData, moduleId, fetchData, editUrl
             try {
                 let response = await putApi(editUrl ? editUrl : `api/form/edit/${param.id}`, payload);
                 if (response.status === 200) {
+                    setEditableField(null)
+
                     fetchData();
                 }
             } catch (e) {
@@ -291,7 +293,6 @@ const CustomView = ({ data, toCamelCase, fieldData, moduleId, fetchData, editUrl
     };
 
     const handleBlur = (e) => {
-        setEditableField(null)
         formik.handleSubmit();
     };
 
