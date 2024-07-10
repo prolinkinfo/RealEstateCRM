@@ -76,7 +76,27 @@ const Index = () => {
 
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-            ...(singaleData?.fields?.filter((field) => field?.isTableField === true)?.map((field) => ({ Header: field?.label, accessor: field?.name })) || []),
+            ...(singaleData?.fields?.filter((field) => field?.isTableField === true && field?.isView)?.map((field) => ({
+                Header: field?.label,
+                accessor: field?.name,
+                cell: (cell) => (
+                    <div className="selectOpt">
+                        <Text
+                            onClick={() => {
+                                navigate(`/${title}/${cell?.row?.original?._id}`, { state: { module: singaleData } });
+                            }}
+                            me="10px"
+                            sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                            color='brand.600'
+                            fontSize="sm"
+                            fontWeight="700"
+                        >
+                            {cell?.value || "-"}
+                        </Text>
+                    </div>
+                ),
+            })) || []),
+            ...(singaleData?.fields?.filter((field) => field?.isTableField === true && !field?.isView)?.map((field) => ({ Header: field?.label, accessor: field?.name })) || []),
             ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : []),
         ];
         setSelectedColumns(JSON.parse(JSON.stringify(tempTableColumns)));
@@ -146,7 +166,7 @@ const Index = () => {
             }
             {isOpen && <Add isOpen={isOpen} title={title} size={size} moduleData={moduleData} onClose={onClose} setAction={setAction} action={action} />}
             {deleteModel && <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type={title} handleDeleteData={handleDelete} ids={selectedValues} selectedValues={moduleData?._id} />}
-           
+
             {edit && <Edit isOpen={edit} title={title} size={size} moduleData={moduleData} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={moduleData?._id} />}
 
         </div>

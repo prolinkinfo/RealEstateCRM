@@ -72,8 +72,33 @@ const Index = () => {
         };
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
+            ...(result?.payload?.data && result.payload.data.length > 0
+                ? result.payload.data[0]?.fields
+                    ?.filter((field) => field?.isTableField === true && field?.isView)
+                    ?.map(
+                        (field) => ({
+                            Header: field?.label,
+                            accessor: field?.name,
+                            cell: (cell) => (
+                                <div className="selectOpt">
+                                    <Text
+                                        onClick={() => {
+                                            navigate(`/propertyView/${cell?.row?.original?._id}`);
+                                        }}
+                                        me="10px"
+                                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                                        color='brand.600'
+                                        fontSize="sm"
+                                        fontWeight="700"
+                                    >
+                                        {cell?.value || "-"}
+                                    </Text>
+                                </div>
+                            ),
+                        })) || []
+                : []),
             ...(result?.payload?.data?.[0]?.fields || []) // Ensure result.payload[0].fields is an array
-                .filter(field => field?.isTableField === true) // Filter out fields where isTableField is true
+                .filter(field => field?.isTableField === true && !field?.isView) // Filter out fields where isTableField is true
                 .map(field => ({ Header: field?.label, accessor: field?.name })),
             ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : [])
         ];
