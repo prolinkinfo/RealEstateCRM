@@ -16,7 +16,7 @@ const index = async (req, res) => {
             updatedDate: item.updatedDate,
             deleted: item.deleted,
             moduleName: item.moduleName,
-            icon:item.icon,
+            icon: item.icon,
             createdDate: item.createdDate
         }));
 

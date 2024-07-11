@@ -39,11 +39,9 @@ export default function Dashboard(props) {
 	const dispatch = useDispatch();
 
 	const pathName = (name) => {
-		return `/${name.toLowerCase().replace(/ /g, '-')}`;
+		return `/${name?.toLowerCase()?.replace(/ /g, '-')}`;
 	}
 
-
-	// functions for changing the states from components
 	const getRoute = () => {
 		return window.location.pathname !== '/admin/full-screen-maps';
 	};
