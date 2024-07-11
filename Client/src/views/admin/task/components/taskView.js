@@ -1,4 +1,4 @@
-import { Button, Grid, GridItem, Flex, IconButton, Text, Menu, MenuButton, MenuDivider, MenuItem, MenuList, useDisclosure, Box, Heading } from '@chakra-ui/react'
+import { Button, Grid, GridItem, Flex, IconButton, Text, Menu, MenuButton, MenuDivider, MenuItem, MenuList, useDisclosure, Box, Heading, Input } from '@chakra-ui/react'
 import { AddIcon, ChevronDownIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import React from 'react'
 import moment from 'moment'
@@ -16,6 +16,10 @@ import CommonDeleteModel from 'components/commonDeleteModel';
 import { deleteManyApi } from 'services/api';
 import { FaFilePdf } from "react-icons/fa";
 import html2pdf from "html2pdf.js";
+import { TaskSchema } from 'schema';
+import { useFormik } from 'formik';
+import { putApi } from 'services/api';
+import dayjs from 'dayjs';
 
 const TaskView = (props) => {
     const params = useParams()
@@ -31,7 +35,9 @@ const TaskView = (props) => {
     const [deleteManyModel, setDeleteManyModel] = useState(false);
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
-
+    const [editableField, setEditableField] = useState(null);
+    const today = new Date().toISOString().split('T')[0];
+    const todayTime = new Date().toISOString().split('.')[0];
     const fetchViewData = async () => {
         if (id) {
             let result = await getApi('api/task/view/', id?.event ? id?.event?._def?.extendedProps?._id : id);
@@ -77,6 +83,34 @@ const TaskView = (props) => {
 
     }
 
+    const initialValues = {
+        title: data?.title,
+        description: data?.description,
+        notes: data?.notes,
+        start: data?.start,
+        end: data?.end,
+    }
+
+    const formik = useFormik({
+        initialValues: initialValues,
+        validationSchema: TaskSchema,
+        enableReinitialize: true,
+        onSubmit: async (values, { resetForm }) => {
+            let response = await putApi(`api/task/edit/${id}`, values)
+            if (response.status === 200) {
+                setEditableField(null);
+                fetchViewData()
+            }
+        },
+    });
+    const handleDoubleClick = (fieldName, value) => {
+        formik.setFieldValue(fieldName, value);
+        setEditableField(fieldName)
+    };
+
+    const handleBlur = (e) => {
+        formik.handleSubmit();
+    };
     useEffect(() => {
         fetchViewData()
     }, [id, edit])
@@ -86,93 +120,6 @@ const TaskView = (props) => {
     }
     return (
         <div>
-            {/* <Card>
-                <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={1} justifyContent={"space-between"} alignItem={"center"} >
-                    <GridItem colSpan={{ base: 12, md: 6 }}>
-                        <Text fontSize="xl" fontWeight="bold" color={'blackAlpha.900'}> Task View </Text>
-                    </GridItem>
-                    <GridItem colSpan={{ base: 12, md: 6 }}>
-                        <Flex justifyContent={"right"}>
-                            <Menu>
-                                {(user.role === 'superAdmin' || permission?.create || permission?.update || permission?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' size="sm" va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
-                                    Actions
-                                </MenuButton>}
-                                <MenuDivider />
-                                <MenuList minWidth={2}>
-                                    {(user.role === 'superAdmin' || permission?.create) && <MenuItem onClick={() => handleClick()} alignItems={'start'} color={'blue'} icon={<AddIcon />}>Add</MenuItem>}
-                                    {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => setEdit(true)} alignItems={'start'} icon={<EditIcon />}>Edit</MenuItem>}
-                                    <MenuItem onClick={generatePDF} alignItems={"start"} icon={<FaFilePdf />} display={"flex"} style={{ alignItems: "center" }}>Print as PDF</MenuItem >
-
-                                    {(user.role === 'superAdmin' || permission?.deleteModel) && <>
-                                        <MenuDivider />
-                                        <MenuItem alignItems={'start'} onClick={() => setDeleteManyModel(true)} color={'red'} icon={<DeleteIcon />}>Delete</MenuItem>
-                                    </>}
-                                </MenuList>
-                            </Menu>
-                            <Link to="/task">
-                                <Button size="sm" leftIcon={<IoIosArrowBack />} variant="brand">
-                                    Back
-                                </Button>
-                            </Link>
-                        </Flex>
-                        <HSeparator />
-                    </GridItem>
-                    <GridItem colSpan={{ base: 12, md: 6 }} >
-                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Title </Text>
-                        <Text>{data?.title ? data?.title : ' - '}</Text>
-                    </GridItem>
-                    <GridItem colSpan={{ base: 12, md: 6 }} >
-                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Related To </Text>
-                        <Text>{data?.category ? data?.category : ' - '}</Text>
-                    </GridItem>
-                    <GridItem colSpan={{ base: 12, md: 6 }} >
-                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task start </Text>
-                        <Text>
-                            {data && data?.start ? (
-                                data.allDay === true
-                                    ? moment(data.start).format('DD-MM-YYYY')
-                                    : moment(data.start).format('DD-MM-YYYY HH:mm A')
-                            ) : (
-                                "-"
-                            )}
-                        </Text>
-                    </GridItem>
-                    <GridItem colSpan={{ base: 12, md: 6 }} >
-                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task end  </Text>
-                        <Text>{data?.allDay === true ? moment(data?.end).format('DD-MM-YYYY') : moment(data?.end).format('DD-MM-YYYY HH:mm A')}</Text>
-                    </GridItem>
-                    <GridItem colSpan={{ base: 12, md: 6 }} >
-                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Link </Text>
-                        {data?.url ?
-                            <a target='_blank' href={data?.url}>
-                                <IconButton borderRadius="10px" size="md" icon={<BiLink />} />
-                            </a> : '-'
-                        }
-                    </GridItem>
-                    <GridItem colSpan={{ base: 12, md: 6 }} >
-                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task reminder </Text>
-                        <Text>{data?.reminder ? data?.reminder : ' - '}</Text>
-                    </GridItem>
-                    <GridItem colSpan={{ base: 12, md: 6 }} >
-                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Assign To  </Text>
-                        <Link to={data?.assignTo ? contactAccess?.view && `/contactView/${data?.assignTo}` : leadAccess?.view && `/leadView/${data?.assignToLead}`}>
-                            <Text color={(data?.category === 'contact' && (contactAccess?.view || user?.role === 'superAdmin')) ? 'brand.600' : (leadAccess?.view || user?.role === 'superAdmin' && data?.category === 'lead') ? 'brand.600' : 'blackAlpha.900'} sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.assignToName ? data?.assignToName : ' - '}</Text>
-                        </Link>
-                    </GridItem>
-                    <GridItem colSpan={{ base: 12, md: 6 }} >
-                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task createBy </Text>
-                        <Text>{data?.createByName ? data?.createByName : ' - '}</Text>
-                    </GridItem>
-                    <GridItem colSpan={{ base: 12 }} >
-                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Description</Text>
-                        <Text>{data?.description ? data?.description : ' - '}</Text>
-                    </GridItem>
-                    <GridItem colSpan={{ base: 12 }} >
-                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task notes </Text>
-                        <Text>{data?.notes ? data?.notes : ' - '}</Text>
-                    </GridItem>
-                </Grid>
-            </Card > */}
             <Grid templateColumns="repeat(4, 1fr)" gap={3} id="reports">
                 <GridItem colSpan={{ base: 4 }}>
                     <Card >
@@ -210,7 +157,24 @@ const TaskView = (props) => {
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Title </Text>
-                                <Text>{data?.title ? data?.title : ' - '}</Text>
+                                {
+                                    editableField === "title" ?
+                                        <>
+                                            <Input
+                                                id="text"
+                                                name="title"
+                                                type="text"
+                                                onChange={formik.handleChange}
+                                                onBlur={handleBlur}
+                                                value={formik.values.title}
+                                                borderColor={formik?.errors?.title && formik?.touched?.title ? "red.300" : null}
+                                                autoFocus
+                                            />
+                                            <Text mb='10px' color={'red'}> {formik?.errors.title && formik?.touched.title && formik?.errors.title}</Text>
+                                        </>
+                                        :
+                                        <Text onDoubleClick={() => handleDoubleClick("title", data?.title)}>{data?.title ? data?.title : ' - '}</Text>
+                                }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Related To </Text>
@@ -218,19 +182,62 @@ const TaskView = (props) => {
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task start </Text>
-                                <Text>
-                                    {data && data?.start ? (
-                                        data.allDay === true
-                                            ? moment(data.start).format('DD-MM-YYYY')
-                                            : moment(data.start).format('DD-MM-YYYY HH:mm A')
-                                    ) : (
-                                        "-"
-                                    )}
-                                </Text>
+                                {
+                                    editableField === "start" ?
+                                        <>
+                                            <Input
+                                                name="start"
+                                                type={data?.allDay ? 'date' : 'datetime-local'}
+                                                onChange={formik.handleChange}
+                                                onBlur={handleBlur}
+                                                value={data.allDay === true
+                                                    ? moment(formik.values.start).format('YYYY-MM-DD')
+                                                    : moment(formik.values.start).format('YYYY-MM-DD HH:mm A')}
+                                                autoFocus
+                                                borderColor={formik?.errors?.start && formik?.touched?.start ? "red.300" : null}
+                                                min={data?.allDay ? dayjs(today).format('YYYY-MM-DD') : dayjs(todayTime).format('YYYY-MM-DD HH:mm')}
+                                            />
+                                            <Text mb='10px' color={'red'}> {formik?.errors.start && formik?.touched.start && formik?.errors.start}</Text>
+
+                                        </>
+                                        :
+                                        <Text onDoubleClick={() => handleDoubleClick("start", data?.start)}>
+                                            {data && data?.start ? (
+                                                data.allDay === true
+                                                    ? moment(data.start).format('DD-MM-YYYY')
+                                                    : moment(data.start).format('DD-MM-YYYY HH:mm A')
+                                            ) : (
+                                                "-"
+                                            )}
+                                        </Text>
+                                }
+
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task end  </Text>
-                                <Text>{data?.allDay === true ? moment(data?.end).format('DD-MM-YYYY') : moment(data?.end).format('DD-MM-YYYY HH:mm A')}</Text>
+                                {
+                                    editableField === "end" ?
+                                        <>
+                                            <Input
+                                                name="end"
+                                                type={data?.allDay ? 'date' : 'datetime-local'}
+                                                onChange={formik.handleChange}
+                                                onBlur={handleBlur}
+                                                min={formik.values.start}
+                                                value={data.allDay === true
+                                                    ? moment(formik.values.end).format('YYYY-MM-DD')
+                                                    : moment(formik.values.end).format('YYYY-MM-DD HH:mm A')}
+                                                autoFocus
+                                                borderColor={formik.errors?.end && formik.touched?.end ? "red.300" : null}
+
+                                            />
+                                            <Text mb='10px' color={'red'}> {formik.errors.end && formik.touched.end && formik.errors.end}</Text>
+                                        </>
+
+                                        :
+                                        <Text onDoubleClick={() => handleDoubleClick("end", data?.end)}>{data?.allDay === true ? moment(data?.end).format('DD-MM-YYYY') : moment(data?.end).format('DD-MM-YYYY HH:mm A')}</Text>
+
+                                }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Link </Text>
@@ -256,11 +263,46 @@ const TaskView = (props) => {
                             </GridItem>
                             <GridItem colSpan={{ base: 2 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task Description</Text>
-                                <Text>{data?.description ? data?.description : ' - '}</Text>
+                                {
+                                    editableField === "description" ?
+                                        <>
+                                            <Input
+                                                id="text"
+                                                name="description"
+                                                type="text"
+                                                onChange={formik.handleChange}
+                                                onBlur={handleBlur}
+                                                value={formik.values.description}
+                                                autoFocus
+                                                borderColor={formik?.errors?.description && formik?.touched?.description ? "red.300" : null}
+                                            />
+                                            <Text mb='10px' color={'red'}> {formik?.errors.description && formik?.touched.description && formik?.errors.description}</Text>
+                                        </>
+                                        :
+                                        <Text onDoubleClick={() => handleDoubleClick("description", data?.description)}>{data?.description ? data?.description : ' - '}</Text>
+                                }
                             </GridItem>
                             <GridItem colSpan={{ base: 2 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task notes </Text>
-                                <Text>{data?.notes ? data?.notes : ' - '}</Text>
+                                {
+                                    editableField === "notes" ?
+                                        <>
+                                            <Input
+                                                id="text"
+                                                name="notes"
+                                                type="text"
+                                                onChange={formik.handleChange}
+                                                onBlur={handleBlur}
+                                                value={formik.values.notes}
+                                                autoFocus
+                                                borderColor={formik?.errors?.notes && formik?.touched?.notes ? "red.300" : null}
+                                            />
+                                            <Text mb='10px' color={'red'}> {formik?.errors.notes && formik?.touched.notes && formik?.errors.notes}</Text>
+
+                                        </>
+                                        :
+                                        <Text onDoubleClick={() => handleDoubleClick("notes", data?.notes)}>{data?.notes ? data?.notes : ' - '}</Text>
+                                }
                             </GridItem>
                         </Grid>
                     </Card>
@@ -279,10 +321,6 @@ const TaskView = (props) => {
             </Card>}
             <AddEdit isOpen={edit} onClose={() => setEdit(false)} viewClose={onClose} id={id?.event ? id?.event?._def?.extendedProps?._id : id} userAction={"edit"} />
             <CommonDeleteModel isOpen={deleteManyModel} onClose={() => setDeleteManyModel(false)} type='Task' handleDeleteData={handleDeleteTask} ids={[id]} />
-            {/* Edittask modal */}
-            {/* <EditTask isOpen={edit} onClose={setEdit} viewClose={onClose} id={id?.event ? id?.event?._def?.extendedProps?._id : id} /> */}
-            {/* Deletetask modal */}
-            {/* <DeleteTask isOpen={deleteModel} onClose={setDelete} viewClose={onClose} url='api/task/delete/' method='one' id={id?.event ? id?.event?._def?.extendedProps?._id : id} redirectPage={"/task"} /> */}
         </div >
     )
 }
