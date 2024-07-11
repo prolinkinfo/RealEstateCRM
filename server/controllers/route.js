@@ -24,6 +24,7 @@ const statusRoute = require("./status/_routes");
 const calendarRoute = require("./calendar/_routes")
 const emailTempRoute = require("./emailTemplate/_routes")
 const opportunityRoute = require("./opportunities/_routes")
+const moduleActiveDiactiveRoute = require("./moduleActiveDiactive/_routes")
 
 //Api`s
 router.use('/contact', contactRoute);
@@ -44,6 +45,7 @@ router.use("/images", imagesRoute);
 router.use('/role-access', roleAccessRoute);
 router.use('/route', route);
 
+router.use('/modules', moduleActiveDiactiveRoute);
 router.use("/custom-field", customFieldRoute);
 router.use("/validation", validationRoute);
 router.use("/form", formRoute);

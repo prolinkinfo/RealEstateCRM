@@ -43,7 +43,7 @@ const Index = () => {
     const handleEditOpen = (row) => {
         onOpen();
         setUserAction("edit")
-        navigate(`/email-template/email-template-add`, { state: { type: 'edit', id: row?.values?._id } })
+        navigate(`/email-template/email-template-addEdit`, { state: { type: 'edit', id: row?.values?._id } })
         setSelectedId(row?.values?._id);
     }
 
@@ -110,7 +110,7 @@ const Index = () => {
     const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 
     const addBtn = () => {
-        navigate(`/email-template/email-template-add`, { state: { type: 'add' } })
+        navigate(`/email-template/email-template-addEdit`, { state: { type: 'add' } })
         setUserAction("add");
     }
 
