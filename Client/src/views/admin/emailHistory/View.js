@@ -132,9 +132,14 @@ const View = () => {
                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Subject </Text>
                                         <Text>{data?.subject ? data?.subject : ' - '}</Text>
                                     </GridItem>
-                                    <GridItem colSpan={{ base: 2 }}>
+                                    <GridItem colSpan={{ base: 2 }} >
                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Message </Text>
-                                        <Text>{data?.message ? data?.message : ' - '}</Text>
+                                        {
+                                            data?.type === "message" ?
+                                                <Text>{data?.message ? data?.message : '-'}</Text>
+                                                :
+                                                <div dangerouslySetInnerHTML={{ __html: data?.html }} />
+                                        }
                                     </GridItem>
                                 </Grid>
                             </Card>
