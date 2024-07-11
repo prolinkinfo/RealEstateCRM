@@ -24,6 +24,7 @@ import TableField from "views/admin/tableField";
 import { TbExchange, TbTableColumn } from "react-icons/tb";
 import { GrValidate } from "react-icons/gr";
 import { VscFileSubmodule } from "react-icons/vsc";
+import { HiTemplate } from "react-icons/hi";
 
 // Admin Imports
 const MainDashboard = React.lazy(() => import("views/admin/default"));
@@ -164,7 +165,7 @@ const routes = [
     name: "Email Template",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/email-template",
-    icon: <Icon as={LuBuilding2} width='20px' height='20px' color='inherit' />,
+    icon: <Icon as={HiTemplate} width='20px' height='20px' color='inherit' />,
     component: EmailTemplate,
   },
   {
@@ -172,7 +173,7 @@ const routes = [
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     under: "email-template",
     path: "/email-template/email-template-add",
-    icon: <Icon as={LuBuilding2} width='20px' height='20px' color='inherit' />,
+    icon: <Icon as={HiTemplate} width='20px' height='20px' color='inherit' />,
     component: AddEdit,
   },
 

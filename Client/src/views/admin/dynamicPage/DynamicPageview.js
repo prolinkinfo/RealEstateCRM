@@ -16,6 +16,9 @@ import { getApi } from "services/api";
 import { HasAccess } from "../../../redux/accessUtils";
 import CustomView from "utils/customView";
 import { useLocation } from 'react-router-dom';
+import { FaFilePdf } from "react-icons/fa";
+import html2pdf from "html2pdf.js";
+import moment from "moment";
 
 const View = () => {
 
@@ -55,7 +58,7 @@ const View = () => {
             }
         }
     }
-    
+
     const fetchData = async () => {
         if (param.id) {
             try {
@@ -77,7 +80,29 @@ const View = () => {
     function toCamelCase(text) {
         return text?.replace(/([a-z])([A-Z])/g, '$1 $2');
     }
-
+    const generatePDF = () => {
+        const element = document.getElementById("reports");
+        if (element) {
+            element.style.display = 'block';
+            element.style.width = '100%'; // Adjust width for mobile
+            element.style.height = 'auto';
+            html2pdf()
+                .from(element)
+                .set({
+                    margin: [0, 0, 0, 0],
+                    filename: `${module.moduleName}_Details_${moment().format("DD-MM-YYYY")}.pdf`,
+                    image: { type: "jpeg", quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true, allowTaint: true },
+                    jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+                })
+                .save().then(() => {
+                    element.style.display = '';
+                })
+            // }, 500);
+        } else {
+            console.error("Element with ID 'reports' not found.");
+        }
+    };
     const fetchCustomData = async () => {
         const response = await getApi('api/custom-field?moduleName=Leads')
         setLeadData(response.data)
@@ -104,6 +129,7 @@ const View = () => {
                                 <MenuList minWidth={2}>
                                     <MenuItem color={'blue'} onClick={() => onOpen()} alignItems={"start"} icon={<AddIcon />}>Add</MenuItem>
                                     <MenuItem onClick={() => setEdit(true)} alignItems={"start"} icon={<EditIcon />}>Edit</MenuItem>
+                                    <MenuItem onClick={generatePDF} alignItems={"start"} icon={<FaFilePdf />} display={"flex"} style={{ alignItems: "center" }}>Print as PDF</MenuItem >
                                     <>
                                         <MenuDivider />
                                         <MenuItem alignItems={"start"} color={'red'} onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
@@ -118,7 +144,7 @@ const View = () => {
                         </Flex>
                     </GridItem>
                     <Box style={{ margin: "10px 0" }}>
-                        <CustomView data={module} fieldData={data} />
+                        <CustomView data={module} fieldData={data} id="reports" />
                     </Box>
                     <Card mt={3}>
                         <Grid templateColumns="repeat(6, 1fr)" gap={1}>
