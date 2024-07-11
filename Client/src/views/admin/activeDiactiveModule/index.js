@@ -1,131 +1,60 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import {
     Box,
     Button,
-    Flex,
-    Menu,
-    MenuButton,
-    Checkbox,
-    GridItem,
-    Text,
-    MenuItem,
-    Grid,
-    MenuList,
-    useColorModeValue,
-    Switch,
+    Flex, GridItem,
+    Text, Grid, useColorModeValue,
+    Switch
 } from "@chakra-ui/react";
-import { ChevronDownIcon } from "@chakra-ui/icons";
-import { IoIosArrowBack } from "react-icons/io";
 import Card from "components/card/Card";
 import { getApi, putApi } from "services/api";
 import Spinner from "components/spinner/Spinner";
-import { BsThreeDots } from "react-icons/bs";
+import { useFormik } from "formik";
+import { HSeparator } from "components/separator/Separator";
 
 const Index = () => {
-    const [isLoading, setIsLoading] = useState(false);
-
-    const navigate = useNavigate();
-    const [allModulesData, setAllModulesData] = useState([]);
-    const [moduleName, setModuleName] = useState("");
-    const [moduleId, setModuleId] = useState("");
-    const [fields, setFields] = useState([]);
-    const [initialFields, setInitialFields] = useState([]);
-    const [action, setAction] = useState(false);
     const textColor = useColorModeValue("gray.500", "white");
-    const [selectedFields, setSelectedFields] = useState({});
 
-    const handleCheckboxChange = (event, fieldId, fieldProperty) => {
-        // let updatedFields = [...fields];
-        // let index = fields.findIndex((field) => field._id === fieldId);
-        // const isChecked = event.target.checked;
+    const [isLoading, setIsLoading] = useState(false);
+    const [initialValues, setInitialValues] = useState([])
+    const [action, setAction] = useState(false);
 
-        // // If updating 'isView' and the checkbox is checked, ensure only one item can have 'isView' set to true
-        // if (fieldProperty === "isView") {
-        //     handleUpdateTableViewField({
-        //         fieldId,
-        //         isChecked,
-        //     });
-        // }
+    const formik = useFormik({
+        initialValues: initialValues,
+        enableReinitialize: true,
+        onSubmit: (_values, { resetForm }) => {
+            updateData();
+            resetForm()
+        },
+    });
+    const { values, dirty, handleSubmit, setFieldValue } = formik
 
-        // if (fieldProperty === "isView" && isChecked) {
-        //     updatedFields = updatedFields.map((field, i) => {
-        //         if (i !== index) {
-        //             return { ...field, isView: false };
-        //         }
-        //         return field;
-        //     });
-        // }
-
-        // updatedFields[index][fieldProperty] = isChecked;
-        // setFields([...updatedFields]);
-
-        // const valueChanged = initialFields[index][fieldProperty] !== isChecked;
-
-        // if (valueChanged && fieldProperty !== "isView") {
-        //     setSelectedFields((prevSelectedFields) => ({
-        //         ...prevSelectedFields,
-        //         [fieldId]: isChecked,
-        //     }));
-        // } else {
-        //     setSelectedFields((prevSelectedFields) => {
-        //         const { [fieldId]: omit, ...rest } = prevSelectedFields;
-        //         return rest;
-        //     });
-        // }
-    };
-
-    const handleUpdateModule = async () => {
-        setIsLoading(true);
-        try {
-
-            // const updates = Object.entries(selectedFields)?.map(
-            //     ([fieldId, isTableField]) => ({
-            //         fieldId: fieldId,
-            //         isTableField,
-            //     })
-            // );
-
-            // await putApi("api/custom-field/change-table-fields/", {
-            //     moduleId,
-            //     updates,
-            // });
-
-            // setSelectedFields({});
-            // setAction((pre) => !pre);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const handleUpdateTableViewField = async (values) => {
+    const updateData = async () => {
         try {
             setIsLoading(true);
-            // await putApi("api/custom-field/change-view-fields/", {
-            //     moduleId,
-            //     values,
-            // });
+            await putApi("api/modules/edit", values);
 
-            // setAction((pre) => !pre);
+            setAction((pre) => !pre);
         } catch (error) {
             console.error(error);
         } finally {
             setIsLoading(false);
         }
     };
-
     const fetchData = async () => {
         setIsLoading(true);
-
-        let responseAllData = await getApi(`api/custom-field`);
-
-        setIsLoading(false);
+        try {
+            let responseAllData = await getApi(`api/modules`);
+            setInitialValues(responseAllData?.data)
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     useEffect(() => {
-         fetchData();
+        fetchData();
     }, [action]);
 
     return (
@@ -138,8 +67,9 @@ const Index = () => {
                         </Text>
                     </Box>
                 </Flex>
+                <HSeparator />
                 <Flex
-                    justifyContent={"center"}
+                    mt={5}
                     alignItems={"center"}
                     fontSize="sm"
                 >
@@ -156,35 +86,29 @@ const Index = () => {
                         </Flex>
                     ) : (
                         <Grid templateColumns="repeat(12, 1fr)" p={3} gap={3} >
-                            <GridItem colSpan={{ md: 6 }} >
-                                <Text fontSize="15px" fontWeight="700"> left </Text>
-                            </GridItem>
-                            <GridItem colSpan={{ md: 6 }} >
-                                <Switch isChecked />
-                            </GridItem>
-                            <GridItem colSpan={{ md: 6 }} >
-                                <Text fontSize="15px" fontWeight="700"> left </Text>
-                            </GridItem>
-                            <GridItem colSpan={{ md: 6 }} >
-                                <Switch isChecked />
-                            </GridItem>
-                            <GridItem colSpan={{ md: 6 }} >
-                                <Text fontSize="15px" fontWeight="700"> left </Text>
-                            </GridItem>
-                            <GridItem colSpan={{ md: 6 }} >
-                                <Switch isChecked />
-                            </GridItem>
+                            {values?.length > 0 && values?.map((item, index) => (
+                                <>
+                                    <GridItem colSpan={6} >
+                                        <Text fontSize="15px" fontWeight="700"> {item?.moduleName} </Text>
+                                    </GridItem>
+                                    <GridItem colSpan={6} >
+                                        <Switch
+                                            onChange={(e) => setFieldValue(`[${index}].isActive`, e.target.checked)}
+                                            isChecked={item?.isActive} />
+                                    </GridItem>
+                                </>
+                            ))}
 
-                            <GridItem colSpan={{ md: 12 }} mt={3} display={"flex"} justifyContent={"flex-end"}>
+                            <GridItem colSpan={12} mt={3} >
                                 <Button
                                     colorScheme="brand"
-                                    onClick={() => handleUpdateModule()}
+                                    onClick={handleSubmit}
+                                    disabled={!dirty}
                                     size="sm"
                                 >
                                     Update
                                 </Button>
                             </GridItem>
-
                         </Grid>
                     )}
                 </Flex>

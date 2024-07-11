@@ -173,11 +173,11 @@ const routes = [
     name: "Add Email Template",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     under: "email-template",
-    path: "/email-template/email-template-add",
+    parentName: "Email Template",
+    path: "/email-template/email-template-addEdit",
     icon: <Icon as={HiTemplate} width='20px' height='20px' color='inherit' />,
     component: AddEdit,
   },
-
   // -----------------------------Admin setting-------------------------------------
   {
     name: "Admin Setting",
