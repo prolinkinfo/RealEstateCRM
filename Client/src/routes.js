@@ -74,6 +74,8 @@ const SignInCentered = React.lazy(() => import("views/auth/signIn"));
 const AdminSetting = React.lazy(() => import("views/admin/adminSetting"));
 const validation = React.lazy(() => import("views/admin/validation"));
 const module = React.lazy(() => import("views/admin/moduleName"));
+const Opportunities = React.lazy(() => import("views/admin/opportunities"));
+const OpportunitiesView = React.lazy(() => import("views/admin/opportunities/View"));
 
 const routes = [
   // ========================== Dashboard ==========================
@@ -160,6 +162,22 @@ const routes = [
     component: PropertyImport,
   },
 
+  // -----------------------------Opportunities-------------------------------------
+  {
+    name: "Opportunities",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/opportunities",
+    icon: <Icon as={LuBuilding2} width='20px' height='20px' color='inherit' />,
+    component: Opportunities,
+  },
+  {
+    name: "Opportunities",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/opportunitiesView/:id",
+    under: "opportunities",
+    icon: <Icon as={LuBuilding2} width='20px' height='20px' color='inherit' />,
+    component: OpportunitiesView,
+  },
   // -----------------------------Email Template-------------------------------------
   {
     name: "Email Template",

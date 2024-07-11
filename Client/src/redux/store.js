@@ -16,6 +16,7 @@ import taskSlice from './taskSlice';
 import meetingSlice from './meetingSlice';
 import emailsSlice from './emailsSlice';
 import emailTempSlice from './emailTempSlice';
+import opportunitySlice from './opportunitySlice';
 
 const middleware = (getDefaultMiddleware) => {
   return getDefaultMiddleware({
@@ -61,6 +62,7 @@ export const store = configureStore({
     meetingData: meetingSlice,
     emailsData: emailsSlice,
     emailTempData: emailTempSlice,
+    opportunityData: opportunitySlice,
   },
   middleware,
 });

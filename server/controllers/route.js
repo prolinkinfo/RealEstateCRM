@@ -23,6 +23,7 @@ const formRoute = require("./form/_routes");
 const statusRoute = require("./status/_routes");
 const calendarRoute = require("./calendar/_routes")
 const emailTempRoute = require("./emailTemplate/_routes")
+const opportunityRoute = require("./opportunities/_routes")
 
 //Api`s
 router.use('/contact', contactRoute);
@@ -49,5 +50,6 @@ router.use("/form", formRoute);
 router.use("/status", statusRoute);
 router.use("/calendar", calendarRoute);
 router.use("/email-temp", emailTempRoute);
+router.use("/opportunity", opportunityRoute);
 
 module.exports = router;
