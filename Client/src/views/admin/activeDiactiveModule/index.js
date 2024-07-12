@@ -27,7 +27,6 @@ const Index = () => {
     const [initialValues, setInitialValues] = useState([])
     const [action, setAction] = useState(false);
 
-
     const formik = useFormik({
         initialValues: initialValues,
         enableReinitialize: true,
@@ -73,7 +72,7 @@ const Index = () => {
     return (
         <>
             <Card>
-                <Flex justifyContent={"space-between"} alignItems={"center"}>
+                <Flex justifyContent={"space-between"} alignItems={"center"} mb={5}>
                     <Box>
                         <Text color={"secondaryGray.900"} fontSize="22px" fontWeight="700">
                             Active Diactive Module

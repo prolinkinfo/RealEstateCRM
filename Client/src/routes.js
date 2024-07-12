@@ -36,6 +36,10 @@ const Contact = React.lazy(() => import('views/admin/contact'));
 const ContactView = React.lazy(() => import('views/admin/contact/View'));
 const ContactImport = React.lazy(() => import("views/admin/contact/components/ContactImport"));
 
+const Quotes = React.lazy(() => import('views/admin/quotes'));
+// const ContactView = React.lazy(() => import('views/admin/contact/View'));
+// const ContactImport = React.lazy(() => import("views/admin/contact/components/ContactImport"));
+
 const User = React.lazy(() => import("views/admin/users"));
 const UserView = React.lazy(() => import("views/admin/users/View"));
 
@@ -137,6 +141,31 @@ const routes = [
     under: "contacts",
     parentName: "Contacts",
     path: "/contactImport",
+    component: ContactImport,
+  },
+  // --------------- contact Routes --------------------
+  {
+    name: "Quotes",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/quotes",
+    icon: <Icon as={MdContacts} width='20px' height='20px' color='inherit' />,
+    component: Quotes,
+  },
+  {
+    name: "Quotes",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    under: "quotes",
+    parentName: "Quotes",
+    path: "/quotes/:id",
+    component: ContactView,
+  },
+  {
+    name: "Quotes Import",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    both: true,
+    under: "quotes",
+    parentName: "Quotes",
+    path: "/quotesImport",
     component: ContactImport,
   },
   // ------------- Property Routes ------------------------
