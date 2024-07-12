@@ -65,7 +65,7 @@ const AddEdit = (props) => {
                 onClose();
                 toast.success(`Opprtunities Update successfully`)
                 formik.resetForm();
-                setAction((pre) => !pre)
+                // setAction((pre) => !pre)
             }
         } catch (e) {
             console.log(e);
@@ -82,8 +82,9 @@ const AddEdit = (props) => {
     }
 
     const formik = useFormik({
-        initialValues: initialValues,
+        initialValues: opprtunityDetails,
         validationSchema: opprtunitiesSchema,
+        enableReinitialize: true,
         onSubmit: (values, { resetForm }) => {
             if (type === "add") {
                 addData(values)
@@ -109,9 +110,32 @@ const AddEdit = (props) => {
             try {
                 setIsLoding(true)
                 let result = await getApi('api/opportunity/view/', selectedId)
-                if (result?.status === 200) {
-                    setOpportunityDetails(result?.data)
+                if (result?.status === 200 && type === "edit") {
+                    const initialValues = {
+                        ...result?.data,
+                        modifiedBy: JSON.parse(localStorage.getItem('user'))._id
+                    };
+                    setOpportunityDetails(initialValues)
+                } else {
+                    setOpportunityDetails({
+                        opportunityName: "",
+                        accountName: "",
+                        assignUser: "",
+                        type: "",
+                        leadSource: "",
+                        currency: "",
+                        opportunityAmount: "",
+                        amount: "",
+                        expectedCloseDate: "",
+                        nextStep: "",
+                        salesStage: "",
+                        probability: "",
+                        description: "",
+                        createBy: JSON.parse(localStorage.getItem('user'))._id,
+                        modifiedBy: JSON.parse(localStorage.getItem('user'))._id
+                    })
                 }
+
                 // setFieldValue('opportunityName', result?.data?.opportunityName)
                 // setFieldValue('accountName', result?.data?.accountName)
                 // setFieldValue('assignUser', result?.data?.assignUser)
@@ -132,6 +156,24 @@ const AddEdit = (props) => {
             finally {
                 setIsLoding(false)
             }
+        } else {
+            setOpportunityDetails({
+                opportunityName: "",
+                accountName: "",
+                assignUser: "",
+                type: "",
+                leadSource: "",
+                currency: "",
+                opportunityAmount: "",
+                amount: "",
+                expectedCloseDate: "",
+                nextStep: "",
+                salesStage: "",
+                probability: "",
+                description: "",
+                createBy: JSON.parse(localStorage.getItem('user'))._id,
+                modifiedBy: JSON.parse(localStorage.getItem('user'))._id
+            })
         }
     }
 
