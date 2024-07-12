@@ -17,7 +17,7 @@ import moment from 'moment';
 import ExcelJS from 'exceljs';
 import Card from 'components/card/Card';
 
-function ContactImport() {
+function OpprtunityImport() {
 
     const location = useLocation();
     const { fileData, customFields } = location.state || {};
@@ -49,11 +49,12 @@ function ContactImport() {
         initialValues: initialValues,
         onSubmit: (values, { resetForm }) => {
 
-            const contactsData = importedFileData?.map((item, ind) => {
-                const contact = {
+            const opportunityData = importedFileData?.map((item, ind) => {
+                const opportunity = {
                     createdDate: new Date(),
                     deleted: item[values.deleted || "deleted"] || false,
                     createBy: JSON.parse(localStorage.getItem('user'))._id,
+                    modifiedBy: JSON.parse(localStorage.getItem('user'))._id,
                 };
 
                 fieldsInCrm?.forEach(field => {
@@ -61,39 +62,39 @@ function ContactImport() {
                     const fieldValue = item[selectedField] || '';
 
                     if (field?.type?.toLowerCase() === "date") {
-                        contact[field?.accessor] = moment(fieldValue).isValid() ? fieldValue : '';
+                        opportunity[field?.accessor] = moment(fieldValue).isValid() ? fieldValue : '';
                     } else if (field?.type?.toLowerCase() === "number" && ['positive', 'negative'].includes(field?.formikType?.toLowerCase())) {
-                        contact[field?.accessor] = parseFloat(fieldValue) || '';
+                        opportunity[field?.accessor] = parseFloat(fieldValue) || '';
                     } else if (field?.type?.toLowerCase() === "number") {
-                        contact[field?.accessor] = parseInt(fieldValue, 10) || '';
+                        opportunity[field?.accessor] = parseInt(fieldValue, 10) || '';
                     } else {
-                        contact[field?.accessor] = fieldValue;
+                        opportunity[field?.accessor] = fieldValue;
                     }
                 });
 
-                return contact;
+                return opportunity;
             });
 
-            AddData(contactsData);
+            AddData(opportunityData);
         }
     });
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
 
-    const AddData = async (contacts) => {
+    const AddData = async (opportunity) => {
         try {
             setIsLoding(true);
-            let response = await postApi('api/contact/addMany', contacts)
+            let response = await postApi('api/opportunity/addMany', opportunity)
             if (response.status === 200) {
-                toast.success(`Contacts imported successfully`)
+                toast.success(`Opprtunities imported successfully`)
                 resetForm();
-                navigate('/contacts');
+                navigate('/opportunities');
             }
         } catch (e) {
             console.error(e);
-            toast.error(`Contacts import failed`)
+            toast.error(`Opprtunities import failed`)
             resetForm();
-            navigate('/contacts');
+            navigate('/opportunities');
         }
         finally {
             setIsLoding(false)
@@ -186,7 +187,7 @@ function ContactImport() {
                     fontSize="22px"
                     fontWeight="700"
                     mb='20px'
-                >Import Contacts</Text>
+                >Import Opprtunities</Text>
                 <Grid templateColumns="repeat(12, 1fr)" mb={3} pb={2} gap={1} borderBottom={'1px solid #e2e8f0'}>
                     {
                         columns.map((column, index) => (
@@ -233,4 +234,4 @@ function ContactImport() {
     )
 }
 
-export default ContactImport
+export default OpprtunityImport

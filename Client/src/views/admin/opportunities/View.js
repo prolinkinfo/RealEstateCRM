@@ -1,4 +1,4 @@
-import { Button, Grid, GridItem, Flex, IconButton, Text, Menu, MenuButton, MenuDivider, MenuItem, MenuList, useDisclosure, Box, Heading, Input } from '@chakra-ui/react'
+import { Button, Grid, GridItem, Flex, IconButton, Text, Menu, MenuButton, MenuDivider, MenuItem, MenuList, useDisclosure, Box, Heading, Input, Select } from '@chakra-ui/react'
 import { AddIcon, ChevronDownIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import React from 'react'
 import moment from 'moment'
@@ -18,6 +18,7 @@ import html2pdf from "html2pdf.js";
 import { opprtunitiesSchema } from '../../../schema/opprtunitiesSchema';
 import { useFormik } from 'formik';
 import dayjs from 'dayjs';
+import { toast } from 'react-toastify';
 
 const View = (props) => {
     const params = useParams()
@@ -54,7 +55,7 @@ const View = (props) => {
                 .from(element)
                 .set({
                     margin: [0, 0, 0, 0],
-                    filename: `Task_Details_${moment().format("DD-MM-YYYY")}.pdf`,
+                    filename: `Opportunities_Details_${moment().format("DD-MM-YYYY")}.pdf`,
                     image: { type: "jpeg", quality: 0.98 },
                     html2canvas: { scale: 2, useCORS: true, allowTaint: true },
                     jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
@@ -69,25 +70,37 @@ const View = (props) => {
             setLoading(false)
         }
     };
-    const handleDeleteTask = async (ids) => {
+    const handleDeleteOpportunities = async (ids) => {
         try {
             let response = await deleteManyApi('api/opportunities/deleteMany', ids)
             if (response.status === 200) {
                 navigate('/opportunities')
+                toast.success(`Opprtunities Update successfully`)
                 setDeleteManyModel(false)
             }
         } catch (error) {
             console.log(error)
+            toast.error(`server error`)
+
         }
 
     }
 
     const initialValues = {
-        title: data?.title,
+        opportunityName: data?.opportunityName,
+        accountName: data?.accountName,
+        assignUser: data?.assignUser,
+        type: data?.type,
+        leadSource: data?.leadSource,
+        currency: data?.currency,
+        opportunityAmount: data?.opportunityAmount,
+        amount: data?.amount,
+        expectedCloseDate: data?.expectedCloseDate,
+        nextStep: data?.nextStep,
+        salesStage: data?.salesStage,
+        probability: data?.probability,
         description: data?.description,
-        notes: data?.notes,
-        start: data?.start,
-        end: data?.end,
+        modifiedBy: JSON.parse(localStorage.getItem('user'))._id
     }
 
     const formik = useFormik({
@@ -95,9 +108,13 @@ const View = (props) => {
         validationSchema: opprtunitiesSchema,
         enableReinitialize: true,
         onSubmit: async (values, { resetForm }) => {
-            let response = await putApi(`api/opportunities/edit/${id}`, values)
+            setEditableField(null);
+            const payload = {
+                ...values,
+                modifiedDate: new Date()
+            }
+            let response = await putApi(`api/opportunity/edit/${id}`, payload)
             if (response.status === 200) {
-                setEditableField(null);
                 fetchViewData()
             }
         },
@@ -115,7 +132,7 @@ const View = (props) => {
     }, [id, edit])
 
     const handleClick = () => {
-        onOpen()
+
     }
     return (
         <div>
@@ -136,7 +153,7 @@ const View = (props) => {
                                                 </MenuButton>}
                                                 <MenuDivider />
                                                 <MenuList minWidth={2}>
-                                                    {(user.role === 'superAdmin' || permission?.create) && <MenuItem onClick={() => { handleClick(); setType("add") }
+                                                    {(user.role === 'superAdmin' || permission?.create) && <MenuItem onClick={() => { setEdit(true); setType("add"); formik.resetForm() }
                                                     } alignItems={'start'} color={'blue'} icon={<AddIcon />}>Add</MenuItem>}
                                                     {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => { setEdit(true); setType("edit") }} alignItems={'start'} icon={<EditIcon />}>Edit</MenuItem>}
                                                     <MenuItem onClick={generatePDF} alignItems={"start"} icon={<FaFilePdf />} display={"flex"} style={{ alignItems: "center" }}>Print as PDF</MenuItem >
@@ -178,24 +195,7 @@ const View = (props) => {
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Account Name </Text>
-                                {
-                                    editableField === "accountName" ?
-                                        <>
-                                            <Input
-                                                id="text"
-                                                name="accountName"
-                                                type="text"
-                                                onChange={formik.handleChange}
-                                                onBlur={handleBlur}
-                                                value={formik.values.accountName}
-                                                borderColor={formik?.errors?.accountName && formik?.touched?.accountName ? "red.300" : null}
-                                                autoFocus
-                                            />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.accountName && formik?.touched.accountName && formik?.errors.accountName}</Text>
-                                        </>
-                                        :
-                                        <Text onDoubleClick={() => handleDoubleClick("accountName", data?.accountName)}>{data?.accountName ? data?.accountName : ' - '}</Text>
-                                }
+                                <Text >{data?.accountName ? data?.accountName : ' - '}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Assigned User </Text>
@@ -204,25 +204,26 @@ const View = (props) => {
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Type</Text>
                                 {
-                                    editableField === "Type" ?
+                                    editableField === "type" ?
                                         <>
-                                            <Input
-                                                name="Type"
-                                                type={data?.allDay ? 'date' : 'datetime-local'}
+                                            <Select
+                                                value={formik?.values.type}
+                                                name="type"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={data.allDay === true
-                                                    ? moment(formik.values.Type).format('YYYY-MM-DD')
-                                                    : moment(formik.values.Type).format('YYYY-MM-DD HH:mm A')}
-                                                autoFocus
-                                                borderColor={formik?.errors?.Type && formik?.touched?.Type ? "red.300" : null}
-                                                min={data?.allDay ? dayjs(today).format('YYYY-MM-DD') : dayjs(todayTime).format('YYYY-MM-DD HH:mm')}
-                                            />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.Type && formik?.touched.Type && formik?.errors.Type}</Text>
+                                                mb={formik?.errors.type && formik?.touched.type ? undefined : '10px'}
+                                                fontWeight='500'
+                                                placeholder={'Type'}
+                                                borderColor={formik?.errors.type && formik?.touched.type ? "red.300" : null}
+                                            >
+                                                <option value={"Existing Bussiness"} >Existing Bussiness</option>
+                                                <option value={"New Bussiness"} >New Bussiness</option>
+                                            </Select>
+                                            <Text mb='10px' color={'red'}> {formik?.errors.type && formik?.touched.type && formik?.errors.type}</Text>
 
                                         </>
                                         :
-                                        <Text>{data?.type ? data?.type : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("type", data?.type)}>{data?.type ? data?.type : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
@@ -230,24 +231,35 @@ const View = (props) => {
                                 {
                                     editableField === "leadSource" ?
                                         <>
-                                            <Input
+                                            <Select
+                                                value={formik?.values.leadSource}
                                                 name="leadSource"
-                                                type={data?.allDay ? 'date' : 'datetime-local'}
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                min={formik.values.start}
-                                                value={data.allDay === true
-                                                    ? moment(formik.values.leadSource).format('YYYY-MM-DD')
-                                                    : moment(formik.values.leadSource).format('YYYY-MM-DD HH:mm A')}
-                                                autoFocus
-                                                borderColor={formik.errors?.leadSource && formik.touched?.leadSource ? "red.300" : null}
-
-                                            />
+                                                mb={formik?.errors.leadSource && formik?.touched.leadSource ? undefined : '10px'}
+                                                fontWeight='500'
+                                                placeholder={'Lead Source'}
+                                                borderColor={formik?.errors.leadSource && formik?.touched.leadSource ? "red.300" : null}
+                                            >
+                                                <option value={"Cold Call"}>Cold Call</option>
+                                                <option value={"Existing Customer"}>Existing Customer</option>
+                                                <option value={"Self Generated"}>Self Generated</option>
+                                                <option value={"Employee"}>Employee</option>
+                                                <option value={"Partner"}>Partner</option>
+                                                <option value={"Public Relation"}>Public Relation</option>
+                                                <option value={"Direct Mail"}>Direct Mail</option>
+                                                <option value={"Conference"}>Conference</option>
+                                                <option value={"Trade Show"}>Trade Show</option>
+                                                <option value={"Web Site"}>Web Site</option>
+                                                <option value={"Word Of Mouth"}>Word Of Mouth</option>
+                                                <option value={"Email"}>Email</option>
+                                                <option value={"Other"}>Other</option>
+                                            </Select>
                                             <Text mb='10px' color={'red'}> {formik.errors.leadSource && formik.touched.leadSource && formik.errors.leadSource}</Text>
                                         </>
 
                                         :
-                                        <Text>{data?.leadSource ? data?.leadSource : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("leadSource", data?.leadSource)}>{data?.leadSource ? data?.leadSource : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
@@ -255,16 +267,18 @@ const View = (props) => {
                                 {
                                     editableField === "currency" ?
                                         <>
-                                            <Input
-                                                id="text"
+                                            <Select
+                                                value={formik?.values.currency}
                                                 name="currency"
-                                                type="text"
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.currency}
-                                                autoFocus
-                                                borderColor={formik?.errors?.currency && formik?.touched?.currency ? "red.300" : null}
-                                            />
+                                                mb={formik?.errors.currency && formik?.touched.currency ? undefined : '10px'}
+                                                fontWeight='500'
+                                                placeholder={'Select Currency'}
+                                                borderColor={formik?.errors.currency && formik?.touched.currency ? "red.300" : null}
+                                            >
+                                                <option value={"$"}>USD</option>
+                                            </Select>
                                             <Text mb='10px' color={'red'}> {formik?.errors.currency && formik?.touched.currency && formik?.errors.currency}</Text>
                                         </>
                                         :
@@ -279,7 +293,7 @@ const View = (props) => {
                                             <Input
                                                 id="text"
                                                 name="opportunityAmount"
-                                                type="text"
+                                                type="number"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
                                                 value={formik.values.opportunityAmount}
@@ -300,7 +314,7 @@ const View = (props) => {
                                             <Input
                                                 id="text"
                                                 name="amount"
-                                                type="text"
+                                                type="number"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
                                                 value={formik.values.amount}
@@ -321,17 +335,17 @@ const View = (props) => {
                                             <Input
                                                 id="text"
                                                 name="expectedCloseDate"
-                                                type="text"
+                                                type="date"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.expectedCloseDate}
+                                                value={dayjs(formik.values.expectedCloseDate).format("YYYY-MM-DD")}
                                                 autoFocus
                                                 borderColor={formik?.errors?.expectedCloseDate && formik?.touched?.expectedCloseDate ? "red.300" : null}
                                             />
                                             <Text mb='10px' color={'red'}> {formik?.errors.expectedCloseDate && formik?.touched.expectedCloseDate && formik?.errors.expectedCloseDate}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("expectedCloseDate", data?.expectedCloseDate)}>{data?.expectedCloseDate ? data?.expectedCloseDate : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("expectedCloseDate", data?.expectedCloseDate)}>{data?.expectedCloseDate ? dayjs(data?.expectedCloseDate).format("YYYY-MM-DD") : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
@@ -360,16 +374,27 @@ const View = (props) => {
                                 {
                                     editableField === "salesStage" ?
                                         <>
-                                            <Input
-                                                id="text"
+                                            <Select
+                                                value={formik?.values.salesStage}
                                                 name="salesStage"
-                                                type="text"
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.salesStage}
-                                                autoFocus
-                                                borderColor={formik?.errors?.salesStage && formik?.touched?.salesStage ? "red.300" : null}
-                                            />
+                                                mb={formik?.errors.salesStage && formik?.touched.salesStage ? undefined : '10px'}
+                                                fontWeight='500'
+                                                placeholder={'Sales Stage'}
+                                                borderColor={formik?.errors.salesStage && formik?.touched.salesStage ? "red.300" : null}
+                                            >
+                                                <option value={"Prospecting"}>Prospecting</option>
+                                                <option value={"Qualification"}>Qualification</option>
+                                                <option value={"Needs Analysis"}>Needs Analysis</option>
+                                                <option value={"Value Propositon"}>Value Propositon</option>
+                                                <option value={"Identifying Decision Makers"}>Identifying Decision Makers</option>
+                                                <option value={"Perception Analysis"}>Perception Analysis</option>
+                                                <option value={"Proposal/Price Quote"}>Proposal/Price Quote</option>
+                                                <option value={"Negotiation/Review"}>Negotiation/Review</option>
+                                                <option value={"Closed/Won"}>Closed/Won</option>
+                                                <option value={"Closed/Lost"}>Closed/Lost</option>
+                                            </Select>
                                             <Text mb='10px' color={'red'}> {formik?.errors.salesStage && formik?.touched.salesStage && formik?.errors.salesStage}</Text>
                                         </>
                                         :
@@ -384,7 +409,7 @@ const View = (props) => {
                                             <Input
                                                 id="text"
                                                 name="probability"
-                                                type="text"
+                                                type="number"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
                                                 value={formik.values.probability}
@@ -418,7 +443,7 @@ const View = (props) => {
                                         <Text onDoubleClick={() => handleDoubleClick("description", data?.description)}>{data?.description ? data?.description : ' - '}</Text>
                                 }
                             </GridItem>
-                           
+
 
                             {/* <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task reminder </Text>
@@ -487,15 +512,15 @@ const View = (props) => {
                     <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                         <GridItem colStart={6} >
                             <Flex justifyContent={"right"}>
-                                {(permission?.update || user?.role === 'superAdmin') && <Button size="sm" onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button>}
+                                {(permission?.update || user?.role === 'superAdmin') && <Button size="sm" onClick={() => { setEdit(true); setType("edit") }} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button>}
                                 {(permission?.delete || user?.role === 'superAdmin') && <Button size="sm" style={{ background: 'red.800' }} onClick={() => setDeleteManyModel(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>}
                             </Flex>
                         </GridItem>
                     </Grid>
                 </Card>
             }
-            <AddEdit isOpen={edit} size="lg" onClose={() => setEdit(false)} viewClose={onClose} selectedId={id?.event ? id?.event?._def?.extendedProps?._id : id} userAction={"edit"} type={type} />
-            <CommonDeleteModel isOpen={deleteManyModel} onClose={() => setDeleteManyModel(false)} type='Opportunities' handleDeleteData={handleDeleteTask} ids={[id]} />
+            <AddEdit isOpen={edit} size="lg" onClose={() => setEdit(false)} viewClose={onClose} selectedId={id?.event ? id?.event?._def?.extendedProps?._id : id} type={type} />
+            <CommonDeleteModel isOpen={deleteManyModel} onClose={() => setDeleteManyModel(false)} type='Opportunities' handleDeleteData={handleDeleteOpportunities} ids={[id]} />
         </div >
     )
 }

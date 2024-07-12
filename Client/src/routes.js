@@ -77,6 +77,7 @@ const validation = React.lazy(() => import("views/admin/validation"));
 const module = React.lazy(() => import("views/admin/moduleName"));
 const Opportunities = React.lazy(() => import("views/admin/opportunities"));
 const OpportunitiesView = React.lazy(() => import("views/admin/opportunities/View"));
+const OpportunitiesImport = React.lazy(() => import("views/admin/opportunities/components/OpprtunityImport"));
 
 const routes = [
   // ========================== Dashboard ==========================
@@ -176,8 +177,18 @@ const routes = [
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/opportunitiesView/:id",
     under: "opportunities",
+    parentName: "Opportunities",
     icon: <Icon as={LuBuilding2} width='20px' height='20px' color='inherit' />,
     component: OpportunitiesView,
+  },
+  {
+    name: "Opportunities",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/opprotunitiesImport",
+    under: "opportunities",
+    parentName: "Opportunities",
+    icon: <Icon as={LuBuilding2} width='20px' height='20px' color='inherit' />,
+    component: OpportunitiesImport,
   },
   // -----------------------------Email Template-------------------------------------
   {

@@ -6,7 +6,6 @@ const Opportunity = new mongoose.Schema({
     assignUser: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
     },
     type: String,
     leadSource: String,
@@ -26,7 +25,6 @@ const Opportunity = new mongoose.Schema({
     modifiedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
     },
     createdDate: {
         type: Date,

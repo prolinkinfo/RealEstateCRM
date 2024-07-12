@@ -11,7 +11,17 @@ const add = async (req, res) => {
         res.status(400).json({ err, error: 'Failed to create' });
     }
 }
+const addMany = async (req, res) => {
+    try {
+        const data = req.body;
+        const insertedOppotunity = await Opprtunities.insertMany(data);
 
+        res.status(200).json(insertedOppotunity);
+    } catch (err) {
+        console.error('Failed to create Opprtunities :', err);
+        res.status(400).json({ error: 'Failed to create Opprtunities' });
+    }
+};
 const index = async (req, res) => {
     try {
         const query = req.query
@@ -164,4 +174,4 @@ const deleteMany = async (req, res) => {
     }
 }
 
-module.exports = { add, index, view, deleteData, edit, deleteMany }
+module.exports = { add, index, view, deleteData, edit, deleteMany, addMany }

@@ -350,7 +350,6 @@ const Index = () => {
             dispatch(setGetTagValues(getValue.filter((item) => item.value)));
         }
     }, [data, location?.state]);
-
     return (
         <div>
             <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={4}>

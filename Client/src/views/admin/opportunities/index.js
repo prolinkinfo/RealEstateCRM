@@ -1,9 +1,8 @@
-
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList, Text, useDisclosure } from '@chakra-ui/react';
-import { getApi } from 'services/api';
+import { getApi, deleteManyApi } from 'services/api';
 import { HasAccess } from '../../../redux/accessUtils';
 import CommonCheckTable from '../../../components/checkTable/checktable';
 import { SearchIcon } from "@chakra-ui/icons";
@@ -15,8 +14,10 @@ import AddEdit from './AddEdit';
 import { useDispatch } from 'react-redux';
 import { fetchEmailsData } from '../../../redux/emailsSlice';
 import { toast } from 'react-toastify';
-import EmailAdvanceSearch from '../emailHistory/components/EmailAdvanceSearch';
+import OpprtunityAdvanceSearch from './components/OpprtunityAdvanceSearch';
 import { fetchOpportunityData } from '../../../redux/opportunitySlice';
+import CommonDeleteModel from '../../../components/commonDeleteModel'
+import ImportModal from './components/ImportModel';
 
 const Index = (props) => {
     const title = "Opprtunities";
@@ -37,6 +38,7 @@ const Index = (props) => {
     const [deleteModel, setDelete] = useState(false);
     const [edit, setEdit] = useState(false);
     const [type, setType] = useState("")
+    const [isImport, setIsImport] = useState(false);
 
     const [permission, leadAccess, contactAccess] = HasAccess(["Emails", 'Leads', 'Contacts']);
 
@@ -121,10 +123,347 @@ const Index = (props) => {
 
     ];
 
+    const customFields = [
+        {
+            "name": "opportunityName",
+            "label": "Opportunity Name",
+            "type": "text",
+            "fixed": false,
+            "isDefault": false,
+            "delete": false,
+            "belongsTo": null,
+            "backendType": "Mixed",
+            "isTableField": false,
+            "isView": false,
+            "options": [
+                {
+                    "name": "",
+                    "value": "",
+                    "_id": "6690be4a4e0f5916f4313f13"
+                },
+                {
+                    "name": "",
+                    "value": "",
+                    "_id": "6690be4a4e0f5916f4313f14"
+                }
+            ],
+            "validation": [
+                {
+                    "require": true,
+                    "message": "Opportunity Name is required ",
+                    "_id": "6690be4a4e0f5916f4313f15"
+                },
+                {
+                    "min": false,
+                    "value": "",
+                    "message": "",
+                    "_id": "6690be4a4e0f5916f4313f16"
+                },
+                {
+                    "max": false,
+                    "value": "",
+                    "message": "",
+                    "_id": "6690be4a4e0f5916f4313f17"
+                },
+                {
+                    "value": "",
+                    "message": "",
+                    "match": false,
+                    "_id": "6690be4a4e0f5916f4313f18"
+                },
+                {
+                    "message": "",
+                    "formikType": "",
+                    "_id": "6690be4a4e0f5916f4313f19"
+                }
+            ],
+            "_id": "6690be4a4e0f5916f4313f12"
+        },
+        {
+            "name": "accountName",
+            "label": "Account Name",
+            "type": "text",
+            "fixed": false,
+            "isDefault": false,
+            "delete": false,
+            "belongsTo": null,
+            "backendType": "Mixed",
+            "isTableField": false,
+            "isView": false,
+            "options": [
+                {
+                    "name": "",
+                    "value": "",
+                    "_id": "6690be854e0f5916f4314260"
+                },
+                {
+                    "name": "",
+                    "value": "",
+                    "_id": "6690be854e0f5916f4314261"
+                }
+            ],
+            "validation": [
+                {
+                    "require": true,
+                    "message": "Account Name is required ",
+                    "_id": "6690be854e0f5916f4314262"
+                },
+                {
+                    "min": false,
+                    "value": "",
+                    "message": "",
+                    "_id": "6690be854e0f5916f4314263"
+                },
+                {
+                    "max": false,
+                    "value": "",
+                    "message": "",
+                    "_id": "6690be854e0f5916f4314264"
+                },
+                {
+                    "value": "",
+                    "message": "",
+                    "match": false,
+                    "_id": "6690be854e0f5916f4314265"
+                },
+                {
+                    "message": "",
+                    "formikType": "",
+                    "_id": "6690be854e0f5916f4314266"
+                }
+            ],
+            "_id": "6690be854e0f5916f431425f"
+        },
+        {
+            "name": "opportunityAmount",
+            "label": "Opportunity Amount",
+            "type": "number",
+            "fixed": false,
+            "isDefault": false,
+            "delete": false,
+            "belongsTo": null,
+            "backendType": "Mixed",
+            "isTableField": false,
+            "isView": false,
+            "options": [
+                {
+                    "name": "",
+                    "value": "",
+                    "_id": "6690bea44e0f5916f43145c5"
+                },
+                {
+                    "name": "",
+                    "value": "",
+                    "_id": "6690bea44e0f5916f43145c6"
+                }
+            ],
+            "validation": [
+                {
+                    "require": true,
+                    "message": "Opportunity Amount is required ",
+                    "_id": "6690bea44e0f5916f43145c7"
+                },
+                {
+                    "min": false,
+                    "value": "",
+                    "message": "",
+                    "_id": "6690bea44e0f5916f43145c8"
+                },
+                {
+                    "max": false,
+                    "value": "",
+                    "message": "",
+                    "_id": "6690bea44e0f5916f43145c9"
+                },
+                {
+                    "value": "",
+                    "message": "",
+                    "match": false,
+                    "_id": "6690bea44e0f5916f43145ca"
+                },
+                {
+                    "message": "",
+                    "formikType": "",
+                    "_id": "6690bea44e0f5916f43145cb"
+                }
+            ],
+            "_id": "6690bea44e0f5916f43145c4"
+        },
+        {
+            "name": "expectedCloseDate",
+            "label": "Expected Close Date",
+            "type": "date",
+            "fixed": false,
+            "isDefault": false,
+            "delete": false,
+            "belongsTo": null,
+            "backendType": "Mixed",
+            "isTableField": false,
+            "isView": false,
+            "options": [
+                {
+                    "name": "",
+                    "value": "",
+                    "_id": "6690bec04e0f5916f4314942"
+                },
+                {
+                    "name": "",
+                    "value": "",
+                    "_id": "6690bec04e0f5916f4314943"
+                }
+            ],
+            "validation": [
+                {
+                    "require": true,
+                    "message": "Expected Close Date is required ",
+                    "_id": "6690bec04e0f5916f4314944"
+                },
+                {
+                    "min": false,
+                    "value": "",
+                    "message": "",
+                    "_id": "6690bec04e0f5916f4314945"
+                },
+                {
+                    "max": false,
+                    "value": "",
+                    "message": "",
+                    "_id": "6690bec04e0f5916f4314946"
+                },
+                {
+                    "value": "",
+                    "message": "",
+                    "match": false,
+                    "_id": "6690bec04e0f5916f4314947"
+                },
+                {
+                    "message": "",
+                    "formikType": "date",
+                    "_id": "6690bec04e0f5916f4314948"
+                }
+            ],
+            "_id": "6690bec04e0f5916f4314941"
+        },
+        {
+            "name": "salesStage",
+            "label": "Sales Stage",
+            "type": "select",
+            "fixed": false,
+            "isDefault": false,
+            "delete": false,
+            "belongsTo": null,
+            "backendType": "Mixed",
+            "isTableField": false,
+            "isView": false,
+            "options": [
+                {
+                    "name": "Prospecting",
+                    "value": "Prospecting",
+                    "_id": "6690bf4a4e0f5916f4314cd7"
+                },
+                {
+                    "name": "Qualification",
+                    "value": "Qualification",
+                    "_id": "6690bf4a4e0f5916f4314cd8"
+                },
+                {
+                    "name": "Needs Analysis",
+                    "value": "Needs Analysis",
+                    "_id": "6690bf4a4e0f5916f4314cd9"
+                },
+                {
+                    "name": "Value Propositon",
+                    "value": "Value Propositon",
+                    "_id": "6690bf4a4e0f5916f4314cda"
+                },
+                {
+                    "name": "Identifying Decision Makers",
+                    "value": "Identifying Decision Makers",
+                    "_id": "6690bf4a4e0f5916f4314cdb"
+                },
+                {
+                    "name": "Perception Analysis",
+                    "value": "Perception Analysis",
+                    "_id": "6690bf4a4e0f5916f4314cdc"
+                },
+                {
+                    "name": "Proposal/Price Quote",
+                    "value": "Proposal/Price Quote",
+                    "_id": "6690bf4a4e0f5916f4314cdd"
+                },
+                {
+                    "name": "Negotiation/Review",
+                    "value": "Negotiation/Review",
+                    "_id": "6690bf4a4e0f5916f4314cde"
+                },
+                {
+                    "name": "Closed/Won",
+                    "value": "Closed/Won",
+                    "_id": "6690bf4a4e0f5916f4314cdf"
+                },
+                {
+                    "name": "Closed/Lost",
+                    "value": "Closed/Lost",
+                    "_id": "6690bf4a4e0f5916f4314ce0"
+                }
+            ],
+            "validation": [
+                {
+                    "require": true,
+                    "message": "Sales Stage is required",
+                    "_id": "6690bf4a4e0f5916f4314ce1"
+                },
+                {
+                    "min": false,
+                    "value": "",
+                    "message": "",
+                    "_id": "6690bf4a4e0f5916f4314ce2"
+                },
+                {
+                    "max": false,
+                    "value": "",
+                    "message": "",
+                    "_id": "6690bf4a4e0f5916f4314ce3"
+                },
+                {
+                    "value": "",
+                    "message": "",
+                    "match": false,
+                    "_id": "6690bf4a4e0f5916f4314ce4"
+                },
+                {
+                    "message": "",
+                    "formikType": "",
+                    "_id": "6690bf4a4e0f5916f4314ce5"
+                }
+            ],
+            "_id": "6690bf4a4e0f5916f4314cd6"
+        }
+    ]
+
     const handleOpenAdd = () => {
         onOpen();
         setType("add")
     }
+
+    const handleDelete = async (ids) => {
+        try {
+            setIsLoding(true);
+            let response = await deleteManyApi("api/opportunity/deleteMany", ids);
+            if (response.status === 200) {
+                toast.success(`Opprtunities Delete successfully`)
+                setSelectedValues([]);
+                setDelete(false);
+                setAction((pre) => !pre);
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error(`server error`)
+
+        } finally {
+            setIsLoding(false);
+        }
+    };
 
     const fetchData = async () => {
         setIsLoding(true)
@@ -168,11 +507,12 @@ const Index = (props) => {
                 setSelectedColumns={setSelectedColumns}
                 isOpen={isOpen}
                 onClose={onclose}
+                setIsImport={setIsImport}
                 onOpen={handleOpenAdd}
                 selectedValues={selectedValues}
                 setSelectedValues={setSelectedValues}
                 setDelete={setDelete}
-                deleteMany={true}
+                deleteMany={false}
                 AdvanceSearch={
                     <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} mt={{ sm: "5px", md: "0" }} size="sm" onClick={() => setAdvanceSearch(true)}>Advance Search</Button>
                 }
@@ -182,7 +522,7 @@ const Index = (props) => {
                 setSearchboxOutside={setSearchboxOutside}
             />
 
-            <EmailAdvanceSearch
+            <OpprtunityAdvanceSearch
                 advanceSearch={advanceSearch}
                 setAdvanceSearch={setAdvanceSearch}
                 setSearchedData={setSearchedData}
@@ -194,6 +534,20 @@ const Index = (props) => {
             />
 
             <AddEdit isOpen={isOpen} size={"lg"} onClose={onClose} setAction={setAction} type={type} selectedId={selectedId} />
+            <CommonDeleteModel
+                isOpen={deleteModel}
+                onClose={() => setDelete(false)}
+                type="Opportunities"
+                handleDeleteData={handleDelete}
+                ids={selectedValues}
+            />
+
+            <ImportModal
+                text="Opprotunities file"
+                isOpen={isImport}
+                onClose={setIsImport}
+                customFields={customFields}
+            />
         </div>
     )
 }

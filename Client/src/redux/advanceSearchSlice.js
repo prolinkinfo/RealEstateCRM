@@ -81,6 +81,16 @@ const advanceSearchSlice = createSlice({
                             (!action.payload?.values?.lastName || (item?.lastName && item?.lastName.toLowerCase().includes(action.payload?.values?.lastName?.toLowerCase())))
                     )
                     break;
+                case 'Opprtunity':
+                    state.searchResult = action?.payload?.allData?.filter(
+                        (item) =>
+                            (!action.payload?.values?.opportunityName || (item?.opportunityName && item?.opportunityName.toLowerCase().includes(action.payload?.values?.opportunityName?.toLowerCase()))) &&
+                            (!action.payload?.values?.accountName || (item?.accountName && item?.accountName.toLowerCase().includes(action.payload?.values?.accountName?.toLowerCase()))) &&
+                            (!action.payload?.values?.opportunityAmount || (item?.opportunityAmount && item?.opportunityAmount.toLowerCase().includes(action.payload?.values?.opportunityAmount?.toLowerCase()))) &&
+                            (!action.payload?.values?.expectedCloseDate || (item?.expectedCloseDate && item?.expectedCloseDate.toLowerCase().includes(action.payload?.values?.expectedCloseDate?.toLowerCase()))) &&
+                            (!action.payload?.values?.salesStage || (item?.salesStage && item?.salesStage.toLowerCase().includes(action.payload?.values?.salesStage?.toLowerCase())))
+                    )
+                    break;
                 default:
                 // state.count += 3;
             }

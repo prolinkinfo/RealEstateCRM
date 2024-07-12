@@ -11,27 +11,29 @@ import CustomForm from 'utils/customForm';
 import * as yup from 'yup'
 import { opprtunitiesSchema } from '../../../schema/opprtunitiesSchema';
 import OpportunityModel from 'components/commonTableModel/OpportunityModel';
+import { toast } from 'react-toastify';
 
 const AddEdit = (props) => {
     const { isOpen, size, onClose, type, setAction, selectedId } = props;
     const [isLoding, setIsLoding] = useState(false)
     const [userModel, setUserModel] = useState(false)
     const [userData, setUserData] = useState([]);
+    const [opprtunityDetails, setOpportunityDetails] = useState({});
 
     const initialValues = {
-        opportunityName: "",
-        accountName: "",
-        assignUser: "",
-        type: "",
-        leadSource: "",
-        currency: "",
-        opportunityAmount: "",
-        amount: "",
-        expectedCloseDate: "",
-        nextStep: "",
-        salesStage: "",
-        probability: "",
-        description: "",
+        opportunityName: type === "edit" ? opprtunityDetails?.opportunityName : "",
+        accountName: type === "edit" ? opprtunityDetails?.accountName : "",
+        assignUser: type === "edit" ? opprtunityDetails?.assignUser : "",
+        type: type === "edit" ? opprtunityDetails?.type : "",
+        leadSource: type === "edit" ? opprtunityDetails?.leadSource : "",
+        currency: type === "edit" ? opprtunityDetails?.currency : "",
+        opportunityAmount: type === "edit" ? opprtunityDetails?.opportunityAmount : "",
+        amount: type === "edit" ? opprtunityDetails?.amount : "",
+        expectedCloseDate: type === "edit" ? opprtunityDetails?.expectedCloseDate : "",
+        nextStep: type === "edit" ? opprtunityDetails?.nextStep : "",
+        salesStage: type === "edit" ? opprtunityDetails?.salesStage : "",
+        probability: type === "edit" ? opprtunityDetails?.probability : "",
+        description: type === "edit" ? opprtunityDetails?.description : "",
         createBy: JSON.parse(localStorage.getItem('user'))._id,
         modifiedBy: JSON.parse(localStorage.getItem('user'))._id
     };
@@ -43,11 +45,13 @@ const AddEdit = (props) => {
             let response = await postApi('api/opportunity/add', values)
             if (response.status === 200) {
                 onClose();
+                toast.success(`Opprtunities Save successfully`)
                 formik.resetForm();
                 setAction((pre) => !pre)
             }
         } catch (e) {
             console.log(e);
+            toast.error(`server error`)
         }
         finally {
             setIsLoding(false)
@@ -59,11 +63,13 @@ const AddEdit = (props) => {
             let response = await putApi(`api/opportunity/edit/${selectedId}`, values)
             if (response.status === 200) {
                 onClose();
+                toast.success(`Opprtunities Update successfully`)
                 formik.resetForm();
                 setAction((pre) => !pre)
             }
         } catch (e) {
             console.log(e);
+            toast.error(`server error`)
         }
         finally {
             setIsLoding(false)
@@ -103,20 +109,22 @@ const AddEdit = (props) => {
             try {
                 setIsLoding(true)
                 let result = await getApi('api/opportunity/view/', selectedId)
-                setFieldValue('opportunityName', result?.data?.opportunityName)
-                setFieldValue('accountName', result?.data?.accountName)
-                setFieldValue('assignUser', result?.data?.assignUser)
-                setFieldValue('type', result?.data?.type)
-                setFieldValue('leadSource', result?.data?.leadSource)
-                setFieldValue('currency', result?.data?.currency)
-                setFieldValue('opportunityAmount', result?.data?.opportunityAmount)
-                setFieldValue('amount', result?.data?.amount)
-                setFieldValue('expectedCloseDate', result?.data?.expectedCloseDate)
-                setFieldValue('nextStep', result?.data?.nextStep)
-                setFieldValue('salesStage', result?.data?.salesStage)
-                setFieldValue('probability', result?.data?.probability)
-                setFieldValue('description', result?.data?.description)
-                setFieldValue('allDay', result?.data?.allDay)
+                if (result?.status === 200) {
+                    setOpportunityDetails(result?.data)
+                }
+                // setFieldValue('opportunityName', result?.data?.opportunityName)
+                // setFieldValue('accountName', result?.data?.accountName)
+                // setFieldValue('assignUser', result?.data?.assignUser)
+                // setFieldValue('type', result?.data?.type)
+                // setFieldValue('leadSource', result?.data?.leadSource)
+                // setFieldValue('currency', result?.data?.currency)
+                // setFieldValue('opportunityAmount', result?.data?.opportunityAmount)
+                // setFieldValue('amount', result?.data?.amount)
+                // setFieldValue('expectedCloseDate', result?.data?.expectedCloseDate)
+                // setFieldValue('nextStep', result?.data?.nextStep)
+                // setFieldValue('salesStage', result?.data?.salesStage)
+                // setFieldValue('probability', result?.data?.probability)
+                // setFieldValue('description', result?.data?.description)
             }
             catch (e) {
                 console.log(e);
@@ -145,7 +153,7 @@ const AddEdit = (props) => {
                 <DrawerContent>
                     <DrawerHeader alignItems={"center"} justifyContent='space-between' display='flex'  >
                         {type === "add" ? "Add" : "Edit"} Opportunities
-                        <IconButton onClick={onClose} icon={<CloseIcon />} />
+                        <IconButton onClick={() => handleCancel()} icon={<CloseIcon />} />
                     </DrawerHeader>
                     <DrawerBody>
                         <Grid templateColumns="repeat(12, 1fr)" gap={3}>
@@ -210,7 +218,7 @@ const AddEdit = (props) => {
                                     onChange={handleChange}
                                     mb={errors.type && touched.type ? undefined : '10px'}
                                     fontWeight='500'
-                                    placeholder={'Type'}
+                                    placeholder={'Select Type'}
                                     borderColor={errors.type && touched.type ? "red.300" : null}
                                 >
                                     <option value={"Existing Bussiness"} >Existing Bussiness</option>
@@ -228,7 +236,7 @@ const AddEdit = (props) => {
                                     onChange={handleChange}
                                     mb={errors.leadSource && touched.leadSource ? undefined : '10px'}
                                     fontWeight='500'
-                                    placeholder={'Lead Source'}
+                                    placeholder={'Select Lead Source'}
                                     borderColor={errors.leadSource && touched.leadSource ? "red.300" : null}
                                 >
                                     <option value={"Cold Call"}>Cold Call</option>
@@ -257,7 +265,7 @@ const AddEdit = (props) => {
                                     onChange={handleChange}
                                     mb={errors.currency && touched.currency ? undefined : '10px'}
                                     fontWeight='500'
-                                    placeholder={'currency'}
+                                    placeholder={'Select Currency'}
                                     borderColor={errors.currency && touched.currency ? "red.300" : null}
                                 >
                                     <option value={"$"}>USD</option>
@@ -340,7 +348,7 @@ const AddEdit = (props) => {
                                     onChange={handleChange}
                                     mb={errors.salesStage && touched.salesStage ? undefined : '10px'}
                                     fontWeight='500'
-                                    placeholder={'Sales Stage'}
+                                    placeholder={'Select Sales Stage'}
                                     borderColor={errors.salesStage && touched.salesStage ? "red.300" : null}
                                 >
                                     <option value={"Prospecting"}>Prospecting</option>
