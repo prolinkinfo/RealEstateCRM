@@ -31,7 +31,6 @@ const index = async (req, res) => {
             "Opportunities",
             "Documents",
             "Reporting and Analytics",
-            "Users",
         ];
 
         filteredCustomFields?.map(item => item?.moduleName)?.forEach((item) => {

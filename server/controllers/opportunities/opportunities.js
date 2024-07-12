@@ -61,12 +61,19 @@ const index = async (req, res) => {
             { $unwind: { path: '$assignUsers', preserveNullAndEmptyArrays: true } },
             { $unwind: { path: '$modifiedByUser', preserveNullAndEmptyArrays: true } },
             { $match: { 'users.deleted': false } },
-            { $match: { 'assignUsers.deleted': false } },
+            // { $match: { 'assignUsers.deleted': false } },
             { $match: { 'modifiedByUser.deleted': false } },
             {
                 $addFields: {
                     createdByName: { $concat: ['$users.firstName', ' ', '$users.lastName'] },
-                    assignUserName: { $concat: ['$assignUsers.firstName', ' ', '$assignUsers.lastName'] },
+                    // assignUserName: { $concat: ['$assignUsers.firstName', ' ', '$assignUsers.lastName'] },
+                    assignUserName: {
+                        $cond: {
+                            if: '$assignUsers',
+                            then: { $concat: ['$assignUsers.firstName', ' ', '$assignUsers.lastName'] },
+                            else: { $concat: [''] }
+                        }
+                    },
                     modifiedUserName: { $concat: ['$modifiedByUser.firstName', ' ', '$modifiedByUser.lastName'] }
                 }
             },
@@ -119,12 +126,19 @@ const view = async (req, res) => {
             { $unwind: { path: '$assignUsers', preserveNullAndEmptyArrays: true } },
             { $unwind: { path: '$modifiedByUser', preserveNullAndEmptyArrays: true } },
             { $match: { 'users.deleted': false } },
-            { $match: { 'assignUsers.deleted': false } },
+            // { $match: { 'assignUsers.deleted': false } },
             { $match: { 'modifiedByUser.deleted': false } },
             {
                 $addFields: {
                     createdByName: { $concat: ['$users.firstName', ' ', '$users.lastName'] },
-                    assignUserName: { $concat: ['$assignUsers.firstName', ' ', '$assignUsers.lastName'] },
+                    // assignUserName: { $concat: ['$assignUsers.firstName', ' ', '$assignUsers.lastName'] },
+                    assignUserName: {
+                        $cond: {
+                            if: '$assignUsers',
+                            then: { $concat: ['$assignUsers.firstName', ' ', '$assignUsers.lastName'] },
+                            else: { $concat: [''] }
+                        }
+                    },
                     modifiedUserName: { $concat: ['$modifiedByUser.firstName', ' ', '$modifiedByUser.lastName'] }
                 }
             },
