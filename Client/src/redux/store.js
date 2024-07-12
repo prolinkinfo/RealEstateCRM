@@ -17,6 +17,7 @@ import meetingSlice from './slices/meetingSlice';
 import emailsSlice from './slices/emailsSlice';
 import emailTempSlice from './slices/emailTempSlice';
 import opportunitySlice from './slices/opportunitySlice';
+import moduleSlice from './slices/moduleSlice';
 
 const middleware = (getDefaultMiddleware) => {
   return getDefaultMiddleware({
@@ -48,6 +49,7 @@ const contactPersistConfig = {
 export const store = configureStore({
   reducer: {
     roles: persistReducer(userPersistConfig, roleReducer),
+    modules: moduleSlice,
     images: persistReducer(imagesPersistConfig, imageReducer),
     user: userReducer,
     route: persistReducer(routePersistConfig, routeReducer),
