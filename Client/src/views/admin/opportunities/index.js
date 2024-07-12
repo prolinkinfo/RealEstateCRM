@@ -15,7 +15,7 @@ import { useDispatch } from 'react-redux';
 import { fetchEmailsData } from '../../../redux/slices/emailsSlice';
 import { toast } from 'react-toastify';
 import OpprtunityAdvanceSearch from './components/OpprtunityAdvanceSearch';
-import { fetchOpportunityData } from '../../../redux/opportunitySlice';
+import { fetchOpportunityData } from '../../../redux/slices/opportunitySlice';
 import CommonDeleteModel from '../../../components/commonDeleteModel'
 import ImportModal from './components/ImportModel';
 
