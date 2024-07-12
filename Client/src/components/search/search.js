@@ -6,6 +6,9 @@ const CustomSearchInput = ({ allData, setSearchbox, setDisplaySearchData, search
 
     const handleInputChange = (e) => {
         const searchTerm = e.target.value?.toLowerCase();
+        console.log(allData, "allData")
+        console.log(dataColumn, "dataColumn")
+        console.log(searchTerm, "searchTerm")
 
         const results = allData.filter((item) => {
             // Check if any of the specified columns contains the search term
