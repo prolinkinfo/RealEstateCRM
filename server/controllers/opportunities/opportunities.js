@@ -144,7 +144,9 @@ const view = async (req, res) => {
             },
             {
                 $project: {
-                    users: 0
+                    users: 0,
+                    assignUsers: 0,
+                    modifiedByUser: 0,
                 }
             },
         ])
