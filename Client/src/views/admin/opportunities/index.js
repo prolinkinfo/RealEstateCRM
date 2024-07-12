@@ -103,7 +103,20 @@ const Index = (props) => {
     const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
         {
-            Header: 'Opportunity Name', accessor: 'opportunityName',
+            Header: 'Opportunity Name', accessor: 'opportunityName', cell: (cell) => (
+                <div className="selectOpt">
+                    <Text
+                        onClick={() => handleViewOpen(cell?.row?.original._id)}
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.value}
+                    </Text>
+                </div>
+            )
         },
         {
             Header: 'Account Name', accessor: 'accountName',
@@ -122,7 +135,9 @@ const Index = (props) => {
         ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : [])
 
     ];
-
+    const handleViewOpen = (id) => {
+        navigate(`/opportunitiesView/${id}`)
+    }
     const customFields = [
         {
             "name": "opportunityName",

@@ -38,9 +38,11 @@ export default function Footer() {
         <Text as='span' fontWeight='500' ms='4px'>
           <Link
             fontWeight='500'
-            target="_blank"
             color={textColor}
-            href='https://prolinkinfotech.com/'> Prolink Infotech.</Link> All Rights Reserved.
+            target="_blank"
+            href='https://prolinkinfotech.com/'> Prolink Infotech.</Link> Need help, facing issues, or looking for a new feature? Contact us for paid support and services at <Link href='mailto:alternatecrm@gmail.com' fontWeight='500'
+              color={textColor}
+              target="_blank">alternatecrm@gmail.com</Link>
         </Text>
       </Text>
       {/* <List display='flex'>
