@@ -9,6 +9,7 @@ import Dropzone from "components/Dropzone";
 import { MdUpload } from "react-icons/md";
 import { fetchRouteData } from '../../../redux/slices/routeSlice'
 import { useDispatch } from 'react-redux'
+import { fetchModules } from '../../../redux/slices/moduleSlice'
 
 
 
@@ -46,6 +47,7 @@ const Add = (props) => {
             if (response.status === 200) {
                 fetchData()
                 await dispatch(fetchRouteData());
+                await dispatch(fetchModules())
                 onClose()
                 resetForm()
                 setAction((pre) => !pre)
