@@ -40,7 +40,7 @@ const View = (props) => {
     const todayTime = new Date().toISOString().split('.')[0];
     const fetchViewData = async () => {
         if (id) {
-            let result = await getApi('api/opportunity/view/', id?.event ? id?.event?._def?.extendedProps?._id : id);
+            let result = await getApi('api/opportunity/view/', id);
             setData(result?.data);
         }
     }
@@ -131,9 +131,6 @@ const View = (props) => {
         fetchViewData()
     }, [id, edit])
 
-    const handleClick = () => {
-
-    }
     return (
         <div>
             <Grid templateColumns="repeat(4, 1fr)" gap={3} id="reports">
@@ -199,7 +196,18 @@ const View = (props) => {
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Assigned User </Text>
-                                <Text>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
+                                {/* <Text>{data?.assignUserName ? data?.assignUserName : ' - '}</Text> */}
+                                {
+                                    data?.assignUsers ?
+                                        <Link to={`/contactView/${data?.assignUsers}`}>
+                                            <Text color={contactAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }} style={{ cursor: "pointer" }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
+                                        </Link>
+                                        :
+                                        <Text color={contactAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
+
+                                }
+
+
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Type</Text>
