@@ -25,6 +25,7 @@ const calendarRoute = require("./calendar/_routes")
 const emailTempRoute = require("./emailTemplate/_routes")
 const opportunityRoute = require("./opportunities/_routes")
 const moduleActiveDiactiveRoute = require("./moduleActiveDiactive/_routes")
+const accountRoute = require("./account/_routes")
 
 //Api`s
 router.use('/contact', contactRoute);
@@ -53,5 +54,6 @@ router.use("/status", statusRoute);
 router.use("/calendar", calendarRoute);
 router.use("/email-temp", emailTempRoute);
 router.use("/opportunity", opportunityRoute);
+router.use("/account", accountRoute);
 
 module.exports = router;
