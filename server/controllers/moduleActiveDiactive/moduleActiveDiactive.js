@@ -7,6 +7,8 @@ const index = async (req, res) => {
 
         // Fetch custom fields data and filter non-default and non-deleted fields
         const customFieldsData = await CustomField?.find({ deleted: false });
+        const customFieldsDeletedData = await CustomField?.find({ deleted: true });
+
         const filteredCustomFields = customFieldsData?.map((item) => ({
             ...item?.toObject(),
             fields: item?.fields?.filter(field => !field?.isDefault && !field?.delete),
@@ -47,6 +49,10 @@ const index = async (req, res) => {
                 missingRoutes?.map(route => ({ moduleName: route }))
             );
         }
+
+        customFieldsDeletedData?.forEach(async (item) => {
+            await ModuleActiveDiactive.deleteOne({ moduleName: item?.moduleName })
+        })
 
         // Fetch updated modules
         data = await ModuleActiveDiactive?.find(query);
