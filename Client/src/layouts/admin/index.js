@@ -12,14 +12,14 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { ROLE_PATH } from '../../roles';
 import newRoutes from 'routes.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchImage } from '../../redux/imageSlice';
+import { fetchImage } from '../../redux/slices/imageSlice';
 import { getApi } from 'services/api';
 import { MdHome, MdLock } from 'react-icons/md';
 import DynamicPage from 'views/admin/dynamicPage';
 import DynamicPageview from 'views/admin/dynamicPage/DynamicPageview';
-import { fetchRouteData } from '../../redux/routeSlice';
+import { fetchRouteData } from '../../redux/slices/routeSlice';
 import { LuChevronRightCircle } from 'react-icons/lu';
-import { fetchRoles } from '../../redux/roleSlice';
+import { fetchRoles } from '../../redux/slices/roleSlice';
 
 const MainDashboard = React.lazy(() => import("views/admin/default"));
 

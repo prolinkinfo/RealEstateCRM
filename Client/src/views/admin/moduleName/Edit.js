@@ -7,7 +7,7 @@ import { putApi } from 'services/api'
 import { moduleAddSchema } from 'schema/moduleAddSchema'
 import Dropzone from "components/Dropzone";
 import { toast } from 'react-toastify'
-import { fetchRouteData } from '../../../redux/routeSlice'
+import { fetchRouteData } from '../../../redux/slices/routeSlice'
 import { useDispatch } from 'react-redux'
 
 const Edit = (props) => {

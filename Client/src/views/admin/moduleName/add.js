@@ -7,7 +7,7 @@ import { moduleAddSchema } from 'schema/moduleAddSchema'
 import { toast } from 'react-toastify'
 import Dropzone from "components/Dropzone";
 import { MdUpload } from "react-icons/md";
-import { fetchRouteData } from '../../../redux/routeSlice'
+import { fetchRouteData } from '../../../redux/slices/routeSlice'
 import { useDispatch } from 'react-redux'
 
 

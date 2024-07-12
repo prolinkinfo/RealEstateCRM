@@ -15,7 +15,7 @@ import AdvanceSearchUsingCustomFields from "../search/advanceSearch";
 import DataNotFound from "../notFoundData";
 import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
-import { getSearchData, setGetTagValues, setSearchValue } from '../../redux/advanceSearchSlice'
+import { getSearchData, setGetTagValues, setSearchValue } from '../../redux/slices/advanceSearchSlice'
 
 const CommonCheckTable = (props) => {
     const { isLoding, title, columnData, size, dataColumn, setSearchedDataOut, state, allData, ManageGrid, deleteMany, tableCustomFields, access, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, checkBox, AdvanceSearch, searchDisplay, setSearchDisplay, BackButton, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside, selectType, customSearch } = props;

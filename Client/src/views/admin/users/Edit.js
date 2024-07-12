@@ -4,11 +4,11 @@ import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { fetchRoles } from '../../../redux/roleSlice';
+import { fetchRoles } from '../../../redux/slices/roleSlice';
 import { userSchema } from 'schema';
 import { putApi } from 'services/api';
 import { useDispatch } from 'react-redux';
-import { setUser } from '../../../redux/localSlice';
+import { setUser } from '../../../redux/slices/localSlice';
 
 
 const Edit = (props) => {

@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Grid, GridItem, Input, FormLabel, Select, Text, Button, } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
-import { setSearchValue, setGetTagValues, getSearchData } from '../../../../redux/advanceSearchSlice';
+import { setSearchValue, setGetTagValues, getSearchData } from '../../../../redux/slices/advanceSearchSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 

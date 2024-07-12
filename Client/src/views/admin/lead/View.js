@@ -37,7 +37,7 @@ import CommonCheckTable from "components/checkTable/checktable";
 import moment from 'moment';
 import AddEdit from '../task/components/AddEdit'
 import { useDispatch, useSelector } from "react-redux";
-import { fetchLeadCustomFiled } from "../../../redux/leadCustomFiledSlice";
+import { fetchLeadCustomFiled } from "../../../redux/slices/leadCustomFiledSlice";
 import { FaFilePdf } from "react-icons/fa";
 import html2pdf from "html2pdf.js";
 

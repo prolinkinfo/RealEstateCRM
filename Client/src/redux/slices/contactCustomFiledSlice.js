@@ -1,18 +1,19 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getApi } from '../services/api'
+import { getApi } from '../../services/api'
 
-export const fetchTaskData = createAsyncThunk('fetchTaskData', async () => {
+export const fetchContactCustomFiled = createAsyncThunk('fetchContactCustomFiled', async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     try {
-        const response = await getApi(user.role === 'superAdmin' ? `api/task` : `api/task/?createBy=${user._id}`);
+        const response = await getApi(`api/custom-field/?moduleName=Contacts`);
         return response;
     } catch (error) {
         throw error;
     }
 });
 
-const taskSlice = createSlice({
-    name: 'taskData',
+
+const contactCustomFiledSlice = createSlice({
+    name: 'contactCustomFiledData',
     initialState: {
         data: [],
         isLoading: false,
@@ -20,15 +21,15 @@ const taskSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchTaskData.pending, (state) => {
+            .addCase(fetchContactCustomFiled.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(fetchTaskData.fulfilled, (state, action) => {
+            .addCase(fetchContactCustomFiled.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.data = action.payload;
                 state.error = "";
             })
-            .addCase(fetchTaskData.rejected, (state, action) => {
+            .addCase(fetchContactCustomFiled.rejected, (state, action) => {
                 state.isLoading = false;
                 state.data = [];
                 state.error = action.error.message;
@@ -36,4 +37,4 @@ const taskSlice = createSlice({
     },
 });
 
-export default taskSlice.reducer;
+export default contactCustomFiledSlice.reducer;

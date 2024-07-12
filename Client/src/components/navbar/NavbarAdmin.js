@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { AiOutlineMenuUnfold } from "react-icons/ai";
 import { AiOutlineMenuFold } from "react-icons/ai";
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchImage } from '../../redux/imageSlice';
+import { fetchImage } from '../../redux/slices/imageSlice';
 
 export default function AdminNavbar(props) {
 	const [scrolled, setScrolled] = useState(false);

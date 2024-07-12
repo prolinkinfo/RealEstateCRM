@@ -1,22 +1,22 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import roleReducer from './roleSlice';
-import imageReducer from './imageSlice';
-import userReducer from './localSlice';
-import routeReducer from './routeSlice';
-import advanceSearchSlice from './advanceSearchSlice';
-import leadSlice from './leadSlice'
-import propertyCustomFiledSlice from './propertyCustomFiledSlice';
-import propertySlice from './propertySlice';
-import contactSlice from './contactSlice';
-import contactCustomFiledSlice from './contactCustomFiledSlice';
-import leadCustomFiledSlice from './leadCustomFiledSlice';
-import taskSlice from './taskSlice';
-import meetingSlice from './meetingSlice';
-import emailsSlice from './emailsSlice';
-import emailTempSlice from './emailTempSlice';
-import opportunitySlice from './opportunitySlice';
+import roleReducer from './slices/roleSlice';
+import imageReducer from './slices/imageSlice';
+import userReducer from './slices/localSlice';
+import routeReducer from './slices/routeSlice';
+import advanceSearchSlice from './slices/advanceSearchSlice';
+import leadSlice from './slices/leadSlice'
+import propertyCustomFiledSlice from './slices/propertyCustomFiledSlice';
+import propertySlice from './slices/propertySlice';
+import contactSlice from './slices/contactSlice';
+import contactCustomFiledSlice from './slices/contactCustomFiledSlice';
+import leadCustomFiledSlice from './slices/leadCustomFiledSlice';
+import taskSlice from './slices/taskSlice';
+import meetingSlice from './slices/meetingSlice';
+import emailsSlice from './slices/emailsSlice';
+import emailTempSlice from './slices/emailTempSlice';
+import opportunitySlice from './slices/opportunitySlice';
 
 const middleware = (getDefaultMiddleware) => {
   return getDefaultMiddleware({

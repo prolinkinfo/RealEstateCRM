@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getApi } from '../services/api'
+import { getApi } from '../../services/api'
 
-export const fetchLeadCustomFiled = createAsyncThunk('fetchLeadCustomFiled', async () => {
+export const fetchPropertyCustomFiled = createAsyncThunk('fetchLeadData', async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     try {
-        const response = await getApi(`api/custom-field/?moduleName=Leads`);
+        const response = await getApi(`api/custom-field/?moduleName=Properties`);
         return response;
     } catch (error) {
         throw error;
@@ -12,8 +12,8 @@ export const fetchLeadCustomFiled = createAsyncThunk('fetchLeadCustomFiled', asy
 });
 
 
-const leadCustomFiledSlice = createSlice({
-    name: 'leadCustomFiledData',
+const propertyCustomFiledSlice = createSlice({
+    name: 'propertyCustomFiledData',
     initialState: {
         data: [],
         isLoading: false,
@@ -21,15 +21,15 @@ const leadCustomFiledSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchLeadCustomFiled.pending, (state) => {
+            .addCase(fetchPropertyCustomFiled.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(fetchLeadCustomFiled.fulfilled, (state, action) => {
+            .addCase(fetchPropertyCustomFiled.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.data = action.payload;
                 state.error = "";
             })
-            .addCase(fetchLeadCustomFiled.rejected, (state, action) => {
+            .addCase(fetchPropertyCustomFiled.rejected, (state, action) => {
                 state.isLoading = false;
                 state.data = [];
                 state.error = action.error.message;
@@ -37,4 +37,4 @@ const leadCustomFiledSlice = createSlice({
     },
 });
 
-export default leadCustomFiledSlice.reducer;
+export default propertyCustomFiledSlice.reducer;

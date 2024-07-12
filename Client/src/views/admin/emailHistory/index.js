@@ -14,7 +14,7 @@ import { MdLeaderboard } from 'react-icons/md';
 import { IoIosContact } from 'react-icons/io';
 import AddEmailHistory from './add';
 import { useDispatch } from 'react-redux';
-import { fetchEmailsData } from '../../../redux/emailsSlice';
+import { fetchEmailsData } from '../../../redux/slices/emailsSlice';
 import { toast } from 'react-toastify';
 
 const Index = (props) => {

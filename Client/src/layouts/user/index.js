@@ -12,7 +12,7 @@ import newRoute from 'routes.js';
 import { MdHome, MdLock } from 'react-icons/md';
 import Spinner from 'components/spinner/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchImage } from '../../redux/imageSlice';
+import { fetchImage } from '../../redux/slices/imageSlice';
 import { getApi } from 'services/api';
 import DynamicPage from 'views/admin/dynamicPage';
 import { LuChevronRightCircle } from 'react-icons/lu';
