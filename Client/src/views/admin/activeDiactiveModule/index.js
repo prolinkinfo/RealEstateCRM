@@ -11,13 +11,22 @@ import { getApi, putApi } from "services/api";
 import Spinner from "components/spinner/Spinner";
 import { useFormik } from "formik";
 import { HSeparator } from "components/separator/Separator";
+import { useNavigate } from "react-router-dom";
+import { IoIosArrowBack } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchModules } from "../../../redux/slices/moduleSlice";
 
 const Index = () => {
     const textColor = useColorModeValue("gray.500", "white");
 
+    const navigate = useNavigate();
+    const dispatch = useDispatch()
+    const modules = useSelector((state) => state?.modules?.data)
+
     const [isLoading, setIsLoading] = useState(false);
     const [initialValues, setInitialValues] = useState([])
     const [action, setAction] = useState(false);
+
 
     const formik = useFormik({
         initialValues: initialValues,
@@ -41,11 +50,11 @@ const Index = () => {
             setIsLoading(false);
         }
     };
+
     const fetchData = async () => {
         setIsLoading(true);
         try {
-            let responseAllData = await getApi(`api/modules`);
-            setInitialValues(responseAllData?.data)
+            dispatch(fetchModules())
         } catch (error) {
             console.error(error);
         } finally {
@@ -57,6 +66,10 @@ const Index = () => {
         fetchData();
     }, [action]);
 
+    useEffect(() => {
+        setInitialValues(modules);
+    }, [modules]);
+
     return (
         <>
             <Card>
@@ -66,6 +79,15 @@ const Index = () => {
                             Active Diactive Module
                         </Text>
                     </Box>
+                    <Button
+                        onClick={() => navigate("/admin-setting")}
+                        variant="brand"
+                        size="sm"
+                        leftIcon={<IoIosArrowBack />}
+                        ml={2}
+                    >
+                        Back
+                    </Button>
                 </Flex>
                 <HSeparator />
                 <Flex

@@ -12,14 +12,15 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { ROLE_PATH } from '../../roles';
 import newRoutes from 'routes.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchImage } from '../../redux/imageSlice';
+import { fetchImage } from '../../redux/slices/imageSlice';
 import { getApi } from 'services/api';
 import { MdHome, MdLock } from 'react-icons/md';
 import DynamicPage from 'views/admin/dynamicPage';
 import DynamicPageview from 'views/admin/dynamicPage/DynamicPageview';
-import { fetchRouteData } from '../../redux/routeSlice';
+import { fetchRouteData } from '../../redux/slices/routeSlice';
 import { LuChevronRightCircle } from 'react-icons/lu';
-import { fetchRoles } from '../../redux/roleSlice';
+import { fetchRoles } from '../../redux/slices/roleSlice';
+import { fetchModules } from '../../redux/slices/moduleSlice';
 
 const MainDashboard = React.lazy(() => import("views/admin/default"));
 
@@ -36,6 +37,7 @@ export default function Dashboard(props) {
 	// let routes = newRoutes;
 	const [routes, setRoutes] = useState(newRoutes)
 	const route = useSelector((state) => state?.route?.data)
+	const modules = useSelector((state) => state?.modules?.data)
 	const dispatch = useDispatch();
 
 	const pathName = (name) => {
@@ -128,7 +130,12 @@ export default function Dashboard(props) {
 			});
 
 		let filterData = [...newRoutes, ...apiData]
-		setRoutes(filterData)
+
+		const activeModel = modules?.filter(module => module?.isActive)?.map(module => module?.moduleName);
+
+		const activeRoutes = filterData?.filter(data => (activeModel?.includes(data?.name || data?.parentName) || !modules?.some(module => (module?.moduleName === data?.name || module?.moduleName === data?.parentName))));
+
+		setRoutes(activeRoutes)
 
 	};
 
@@ -157,13 +164,14 @@ export default function Dashboard(props) {
 
 	useEffect(() => {
 		dynamicRoute();
-	}, [route]);
+	}, [route, modules]);
 
 	useEffect(async () => {
 		if (window.location.pathname === "/default") {
 			await dispatch(fetchRouteData());
 			await dispatch(fetchImage());
 		}
+		await dispatch(fetchModules())
 	}, []);
 
 	const largeLogo = useSelector((state) => state?.images?.images?.filter(item => item?.isActive === true));

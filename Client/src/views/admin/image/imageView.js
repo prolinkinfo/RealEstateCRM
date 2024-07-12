@@ -6,7 +6,7 @@ import { putApi } from 'services/api';
 import Dropzone from "components/Dropzone";
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
-import { fetchImage } from '../../../redux/imageSlice'
+import { fetchImage } from '../../../redux/slices/imageSlice'
 
 const ImageView = (props) => {
     const { data, fetchData, setImageData, handleDeleteOpen, imageviewData } = props;

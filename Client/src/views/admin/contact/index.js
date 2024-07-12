@@ -14,9 +14,9 @@ import CommonCheckTable from "../../../components/checkTable/checktable";
 import ImportModal from "./components/ImportModel";
 import CommonDeleteModel from 'components/commonDeleteModel';
 import { deleteManyApi } from 'services/api';
-import { fetchContactData } from '../../../redux/contactSlice';
+import { fetchContactData } from '../../../redux/slices/contactSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchContactCustomFiled } from '../../../redux//contactCustomFiledSlice';
+import { fetchContactCustomFiled } from '../../../redux/slices/contactCustomFiledSlice';
 import { toast } from 'react-toastify';
 
 const Index = () => {

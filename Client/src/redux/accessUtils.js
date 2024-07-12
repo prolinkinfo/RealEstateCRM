@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchRoles } from "./roleSlice";
+import { fetchRoles } from "./slices/roleSlice";
 
 export const HasAccess = (actions) => {
 

@@ -12,9 +12,9 @@ import Edit from "./Edit";
 import ImportModal from './components/ImportModal';
 import CommonDeleteModel from 'components/commonDeleteModel';
 import { deleteManyApi } from 'services/api';
-import { fetchPropertyCustomFiled } from '../../../redux/propertyCustomFiledSlice';
+import { fetchPropertyCustomFiled } from '../../../redux/slices/propertyCustomFiledSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchPropertyData } from '../../../redux/propertySlice'
+import { fetchPropertyData } from '../../../redux/slices/propertySlice'
 import { toast } from 'react-toastify';
 
 const Index = () => {

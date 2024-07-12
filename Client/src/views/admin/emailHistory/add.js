@@ -8,7 +8,7 @@ import { LiaMousePointerSolid } from 'react-icons/lia';
 import { emailSchema } from 'schema';
 import { getApi, postApi } from 'services/api';
 import dayjs from 'dayjs';
-import { fetchEmailTempData } from '../../../redux/emailTempSlice';
+import { fetchEmailTempData } from '../../../redux/slices/emailTempSlice';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 

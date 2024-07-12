@@ -33,10 +33,10 @@ import { deleteManyApi } from "services/api";
 import {
     getSearchData,
     setGetTagValues,
-} from "../../../redux/advanceSearchSlice";
+} from "../../../redux/slices/advanceSearchSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchLeadData } from "../../../redux/leadSlice";
-import { fetchLeadCustomFiled } from "../../../redux/leadCustomFiledSlice";
+import { fetchLeadData } from "../../../redux/slices/leadSlice";
+import { fetchLeadCustomFiled } from "../../../redux/slices/leadCustomFiledSlice";
 import { toast } from "react-toastify";
 
 const Index = () => {

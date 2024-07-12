@@ -4,8 +4,8 @@ import ContactTable from './Contact.js'
 import Spinner from 'components/spinner/Spinner'
 import { GiClick } from "react-icons/gi";
 import CommonCheckTable from 'components/checkTable/checktable.js';
-import { fetchContactCustomFiled } from '../../redux/contactCustomFiledSlice.js';
-import { fetchContactData } from '../../redux/contactSlice.js';
+import { fetchContactCustomFiled } from '../../redux/slices/contactCustomFiledSlice.js';
+import { fetchContactData } from '../../redux/slices/contactSlice.js';
 import { useDispatch } from 'react-redux';
 
 const ContactModel = (props) => {

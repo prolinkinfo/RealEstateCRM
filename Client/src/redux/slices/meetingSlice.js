@@ -1,19 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getApi } from '../services/api'
+import { getApi } from '../../services/api'
 
-export const fetchLeadData = createAsyncThunk('fetchLeadData', async () => {
+export const fetchMeetingData = createAsyncThunk('fetchMeetingData', async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     try {
-        const response = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
-        return response.data;
+        const response = await getApi(user.role === 'superAdmin' ? 'api/meeting' : `api/meeting/?createBy=${user._id}`);
+        return response;
     } catch (error) {
         throw error;
     }
 });
 
-
-const leadSlice = createSlice({
-    name: 'leadData',
+const meetingSlice = createSlice({
+    name: 'meetingData',
     initialState: {
         data: [],
         isLoading: false,
@@ -21,15 +20,15 @@ const leadSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchLeadData.pending, (state) => {
+            .addCase(fetchMeetingData.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(fetchLeadData.fulfilled, (state, action) => {
+            .addCase(fetchMeetingData.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.data = action.payload;
                 state.error = "";
             })
-            .addCase(fetchLeadData.rejected, (state, action) => {
+            .addCase(fetchMeetingData.rejected, (state, action) => {
                 state.isLoading = false;
                 state.data = [];
                 state.error = action.error.message;
@@ -37,4 +36,4 @@ const leadSlice = createSlice({
     },
 });
 
-export default leadSlice.reducer;
+export default meetingSlice.reducer;

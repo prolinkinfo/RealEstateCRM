@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import CommonDeleteModel from 'components/commonDeleteModel';
-import { fetchEmailTempData } from '../../../redux/emailTempSlice';
+import { fetchEmailTempData } from '../../../redux/slices/emailTempSlice';
 
 const Index = () => {
     const title = "Email Template";

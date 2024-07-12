@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { postApi } from 'services/api'
 import UploadImg from './components/Upload';
 import { toast } from 'react-toastify'
-import { fetchImage } from '../../../redux/imageSlice'
+import { fetchImage } from '../../../redux/slices/imageSlice'
 import { useDispatch } from 'react-redux'
 
 const AddImage = (props) => {

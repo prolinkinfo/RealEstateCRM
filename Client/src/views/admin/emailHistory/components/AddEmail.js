@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { emailSchema } from 'schema';
 import { postApi } from 'services/api';
-import { fetchEmailTempData } from '../../../../redux/emailTempSlice';
+import { fetchEmailTempData } from '../../../../redux/slices/emailTempSlice';
 
 
 const AddEmailHistory = (props) => {

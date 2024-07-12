@@ -12,7 +12,7 @@ import Edit from "./Edit";
 import RoleTable from "./components/roleTable";
 import RoleModal from "./components/roleModal";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../../../redux/localSlice";
+import { setUser } from "../../../redux/slices/localSlice";
 import CommonDeleteModel from 'components/commonDeleteModel';
 import { deleteApi } from "services/api";
 import AddEditUser from './AddEditUser';

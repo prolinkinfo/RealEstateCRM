@@ -6,7 +6,7 @@ import { Flex, Heading, Image, useColorModeValue } from "@chakra-ui/react";
 import { HSeparator } from "components/separator/Separator";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchImage } from "../../../redux/imageSlice";
+import { fetchImage } from "../../../redux/slices/imageSlice";
 
 export function SidebarBrand(props) {
   const { setOpenSidebar, openSidebar, from, largeLogo } = props;

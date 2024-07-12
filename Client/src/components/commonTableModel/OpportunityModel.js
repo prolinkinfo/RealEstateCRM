@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react'
 import Spinner from 'components/spinner/Spinner'
 import { GiClick } from "react-icons/gi";
 import CommonCheckTable from 'components/checkTable/checktable';
-import { fetchLeadCustomFiled } from '../../redux/leadCustomFiledSlice';
+import { fetchLeadCustomFiled } from '../../redux/slices/leadCustomFiledSlice';
 import { useDispatch } from 'react-redux';
-import { fetchLeadData } from '../../redux/leadSlice';
+import { fetchLeadData } from '../../redux/slices/leadSlice';
 import { getApi } from 'services/api';
 
 const OpportunityModel = (props) => {

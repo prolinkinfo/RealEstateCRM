@@ -13,7 +13,7 @@ import Add from './add';
 import { MdLeaderboard } from 'react-icons/md';
 import { IoIosContact } from 'react-icons/io';
 import CallAdvanceSearch from './components/callAdvanceSearch';
-import { fetchPhoneCallData } from '../../../redux/phoneCallSlice';
+import { fetchPhoneCallData } from '../../../redux/slices/phoneCallSlice';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 

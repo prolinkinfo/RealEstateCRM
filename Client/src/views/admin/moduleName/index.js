@@ -11,7 +11,7 @@ import { IoIosArrowBack } from 'react-icons/io'
 import DataNotFound from 'components/notFoundData'
 import Spinner from '../../../components/spinner/Spinner'
 import { deleteManyApi } from 'services/api'
-import { fetchRouteData } from '../../../redux/routeSlice';
+import { fetchRouteData } from '../../../redux/slices/routeSlice';
 import CommonDeleteModel from 'components/commonDeleteModel';
 import { useDispatch } from 'react-redux'
 import { deleteApi } from 'services/api'

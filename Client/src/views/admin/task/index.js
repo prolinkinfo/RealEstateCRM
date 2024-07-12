@@ -16,7 +16,7 @@ import { deleteManyApi } from 'services/api';
 import AddEdit from './components/AddEdit';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { fetchTaskData } from '../../../redux/taskSlice';
+import { fetchTaskData } from '../../../redux/slices/taskSlice';
 import { toast } from 'react-toastify';
 
 const Task = () => {

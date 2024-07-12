@@ -30,8 +30,8 @@ import { loginSchema } from "schema";
 import { toast } from "react-toastify";
 import Spinner from "components/spinner/Spinner";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchImage } from "../../../redux/imageSlice";
-import { setUser } from "../../../redux/localSlice";
+import { fetchImage } from "../../../redux/slices/imageSlice";
+import { setUser } from "../../../redux/slices/localSlice";
 
 function SignIn() {
   // Chakra color mode

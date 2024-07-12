@@ -1,18 +1,19 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getApi } from '../services/api'
+import { getApi } from '../../services/api'
 
-export const fetchPropertyData = createAsyncThunk('fetchPropertyData', async () => {
+export const fetchEmailTempData = createAsyncThunk('fetchEmailTempData', async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     try {
-        const response = await getApi(user.role === 'superAdmin' ? 'api/property/' : `api/property/?createBy=${user._id}`);
-        return response.data;
+        const response = await getApi(user.role === 'superAdmin' ? 'api/email-temp/' : `api/email-temp/?createBy=${user._id}`);
+        return response;
     } catch (error) {
         throw error;
     }
 });
 
-const propertySlice = createSlice({
-    name: 'propertyData',
+
+const emailTempSlice = createSlice({
+    name: 'emailTempData',
     initialState: {
         data: [],
         isLoading: false,
@@ -20,15 +21,15 @@ const propertySlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchPropertyData.pending, (state) => {
+            .addCase(fetchEmailTempData.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(fetchPropertyData.fulfilled, (state, action) => {
+            .addCase(fetchEmailTempData.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.data = action.payload;
                 state.error = "";
             })
-            .addCase(fetchPropertyData.rejected, (state, action) => {
+            .addCase(fetchEmailTempData.rejected, (state, action) => {
                 state.isLoading = false;
                 state.data = [];
                 state.error = action.error.message;
@@ -36,4 +37,4 @@ const propertySlice = createSlice({
     },
 });
 
-export default propertySlice.reducer;
+export default emailTempSlice.reducer;

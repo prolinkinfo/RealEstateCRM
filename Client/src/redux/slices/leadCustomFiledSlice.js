@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getApi } from '../services/api'
+import { getApi } from '../../services/api'
 
-export const fetchContactCustomFiled = createAsyncThunk('fetchContactCustomFiled', async () => {
+export const fetchLeadCustomFiled = createAsyncThunk('fetchLeadCustomFiled', async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     try {
-        const response = await getApi(`api/custom-field/?moduleName=Contacts`);
+        const response = await getApi(`api/custom-field/?moduleName=Leads`);
         return response;
     } catch (error) {
         throw error;
@@ -12,8 +12,8 @@ export const fetchContactCustomFiled = createAsyncThunk('fetchContactCustomFiled
 });
 
 
-const contactCustomFiledSlice = createSlice({
-    name: 'contactCustomFiledData',
+const leadCustomFiledSlice = createSlice({
+    name: 'leadCustomFiledData',
     initialState: {
         data: [],
         isLoading: false,
@@ -21,15 +21,15 @@ const contactCustomFiledSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchContactCustomFiled.pending, (state) => {
+            .addCase(fetchLeadCustomFiled.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(fetchContactCustomFiled.fulfilled, (state, action) => {
+            .addCase(fetchLeadCustomFiled.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.data = action.payload;
                 state.error = "";
             })
-            .addCase(fetchContactCustomFiled.rejected, (state, action) => {
+            .addCase(fetchLeadCustomFiled.rejected, (state, action) => {
                 state.isLoading = false;
                 state.data = [];
                 state.error = action.error.message;
@@ -37,4 +37,4 @@ const contactCustomFiledSlice = createSlice({
     },
 });
 
-export default contactCustomFiledSlice.reducer;
+export default leadCustomFiledSlice.reducer;

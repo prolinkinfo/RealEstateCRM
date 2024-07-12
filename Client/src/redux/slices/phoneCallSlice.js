@@ -1,19 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getApi } from '../services/api'
+import { getApi } from '../../services/api'
 
-export const fetchOpportunityData = createAsyncThunk('fetchOpportunityData', async () => {
+export const fetchPhoneCallData = createAsyncThunk('fetchPhoneCallData', async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     try {
-        const response = await getApi(user.role === 'superAdmin' ? 'api/opportunity/' : `api/opportunity/?createBy=${user._id}`);
+        const response = await getApi(user.role === 'superAdmin' ? 'api/phoneCall' : `api/phoneCall?sender=${user._id}`);
         return response;
     } catch (error) {
         throw error;
     }
 });
 
-
-const opportunitySlice = createSlice({
-    name: 'opportunityData',
+const phoneCallSlice = createSlice({
+    name: 'phoneCallData',
     initialState: {
         data: [],
         isLoading: false,
@@ -21,15 +20,15 @@ const opportunitySlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchOpportunityData.pending, (state) => {
+            .addCase(fetchPhoneCallData.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(fetchOpportunityData.fulfilled, (state, action) => {
+            .addCase(fetchPhoneCallData.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.data = action.payload;
                 state.error = "";
             })
-            .addCase(fetchOpportunityData.rejected, (state, action) => {
+            .addCase(fetchPhoneCallData.rejected, (state, action) => {
                 state.isLoading = false;
                 state.data = [];
                 state.error = action.error.message;
@@ -37,4 +36,4 @@ const opportunitySlice = createSlice({
     },
 });
 
-export default opportunitySlice.reducer;
+export default phoneCallSlice.reducer;
