@@ -22,20 +22,13 @@ const index = async (req, res) => {
             "Contacts",
             "Properties",
             "Email Template",
-            "Admin Setting",
             "Tasks",
             "Meetings",
             "Calls",
             "Emails",
             "Calender",
             "Payments",
-            "Roles",
-            "Custom Fields",
-            "Change Images",
-            "Validation",
-            "Table Fields",
-            "Active Diactive Module",
-            "Module",
+            "Opportunities",
             "Documents",
             "Reporting and Analytics",
             "Users",
@@ -69,16 +62,16 @@ const Edit = async (req, res) => {
     try {
         const updates = req.body;
 
-          const updatePromises = updates.map(update => {
+        const updatePromises = updates.map(update => {
             return ModuleActiveDiactive.updateOne(
-              { _id: update._id },
-              { $set: { isActive: update.isActive } }
+                { _id: update._id },
+                { $set: { isActive: update.isActive } }
             );
-          });
-      
-          await Promise.all(updatePromises);
-          
-          res.status(200).send('update successful');
+        });
+
+        await Promise.all(updatePromises);
+
+        res.status(200).send('update successful');
     } catch (err) {
         console.error("Error :", err);
         return res.status(400).json({ err, error: "Something wents wrong" });

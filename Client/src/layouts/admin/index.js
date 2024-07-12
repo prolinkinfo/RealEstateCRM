@@ -20,6 +20,7 @@ import DynamicPageview from 'views/admin/dynamicPage/DynamicPageview';
 import { fetchRouteData } from '../../redux/slices/routeSlice';
 import { LuChevronRightCircle } from 'react-icons/lu';
 import { fetchRoles } from '../../redux/slices/roleSlice';
+import { fetchModules } from '../../redux/slices/moduleSlice';
 
 const MainDashboard = React.lazy(() => import("views/admin/default"));
 
@@ -36,6 +37,7 @@ export default function Dashboard(props) {
 	// let routes = newRoutes;
 	const [routes, setRoutes] = useState(newRoutes)
 	const route = useSelector((state) => state?.route?.data)
+	const modules = useSelector((state) => state?.modules?.data)
 	const dispatch = useDispatch();
 
 	const pathName = (name) => {
@@ -128,7 +130,14 @@ export default function Dashboard(props) {
 			});
 
 		let filterData = [...newRoutes, ...apiData]
-		setRoutes(filterData)
+		// let activeModel = modules?.filter((item) => item?.isActive)?.map((item) => item?.moduleName)
+
+		// let newFilterData = filterData?.filter((item) => activeModel?.includes(item?.name || item?.parentName))
+		const activeModel = modules?.filter(module => module?.isActive)?.map(module => module?.moduleName);
+
+		const activeRoutes = filterData?.filter(data => (activeModel?.includes(data?.name || data?.parentName) || !modules?.some(module => (module?.moduleName === data?.name || module?.moduleName === data?.parentName))));
+
+		setRoutes(activeRoutes)
 
 	};
 
@@ -157,13 +166,14 @@ export default function Dashboard(props) {
 
 	useEffect(() => {
 		dynamicRoute();
-	}, [route]);
+	}, [route, modules]);
 
 	useEffect(async () => {
 		if (window.location.pathname === "/default") {
 			await dispatch(fetchRouteData());
 			await dispatch(fetchImage());
 		}
+		await dispatch(fetchModules())
 	}, []);
 
 	const largeLogo = useSelector((state) => state?.images?.images?.filter(item => item?.isActive === true));
