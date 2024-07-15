@@ -106,6 +106,9 @@ const advanceSearchSlice = createSlice({
                             (!action.payload?.values?.salesStage || (item?.salesStage && item?.salesStage.toLowerCase().includes(action.payload?.values?.salesStage?.toLowerCase())))
                     )
                     break;
+                case 'OpprtunitySearch':
+                    state.searchResult = action.payload.searchData;
+                    break;
                 case 'Account':
                     state.searchResult = action?.payload?.allData?.filter(
                         (item) =>
@@ -114,9 +117,8 @@ const advanceSearchSlice = createSlice({
                             (!action.payload?.values?.fax || (item?.fax && item?.fax.toString().toLowerCase().includes(action.payload?.values?.fax?.toString().toLowerCase()))) &&
                             (!action.payload?.values?.emailAddress || (item?.emailAddress && item?.emailAddress.toLowerCase().includes(action.payload?.values?.emailAddress?.toLowerCase())))
                     )
-                case 'OpprtunitySearch':
+                case 'AccountSearch':
                     state.searchResult = action.payload.searchData;
-                    break;
                 default:
                 // state.count += 3;
             }

@@ -20,7 +20,6 @@ import CommonDeleteModel from '../../../components/commonDeleteModel'
 import ImportModal from './components/ImportModel';
 
 const Index = (props) => {
-    const title = "Account";
     const [action, setAction] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [selectedValues, setSelectedValues] = useState([]);
@@ -404,7 +403,7 @@ const Index = (props) => {
     return (
         <div>
             <CommonCheckTable
-                title={title}
+                title={"Account"}
                 isLoding={isLoding}
                 columnData={columns ?? []}
                 dataColumn={dataColumn ?? []}
@@ -435,6 +434,7 @@ const Index = (props) => {
                 searchboxOutside={searchboxOutside}
                 setGetTagValuesOutside={setGetTagValuesOutside}
                 setSearchboxOutside={setSearchboxOutside}
+                handleSearchType="AccountSearch"
             />
 
             <AccountAdvanceSearch
