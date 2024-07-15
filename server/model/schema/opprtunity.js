@@ -2,7 +2,10 @@ const mongoose = require('mongoose');
 
 const Opportunity = new mongoose.Schema({
     opportunityName: String,
-    accountName: String,
+    accountId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Accounts',
+    },
     assignUser: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

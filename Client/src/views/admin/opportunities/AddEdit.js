@@ -10,19 +10,23 @@ import { generateValidationSchema } from 'utils';
 import CustomForm from 'utils/customForm';
 import * as yup from 'yup'
 import { opprtunitiesSchema } from '../../../schema/opprtunitiesSchema';
-import OpportunityModel from 'components/commonTableModel/OpportunityModel';
+import UserModel from '../../../components/commonTableModel/UserModel';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import AccountModel from '../../../components/commonTableModel/AccountModel';
 
 const AddEdit = (props) => {
     const { isOpen, size, onClose, type, setAction, selectedId } = props;
     const [isLoding, setIsLoding] = useState(false)
     const [userModel, setUserModel] = useState(false)
+    const [accountModel, setAccountModel] = useState(false)
     const [userData, setUserData] = useState([]);
     const [opprtunityDetails, setOpportunityDetails] = useState({});
+    const accountList = useSelector((state) => state?.accountData?.data?.data)
 
     const initialValues = {
         opportunityName: type === "edit" ? opprtunityDetails?.opportunityName : "",
-        accountName: type === "edit" ? opprtunityDetails?.accountName : "",
+        accountId: type === "edit" ? opprtunityDetails?.accountId : "",
         assignUser: type === "edit" ? opprtunityDetails?.assignUser : "",
         type: type === "edit" ? opprtunityDetails?.type : "",
         leadSource: type === "edit" ? opprtunityDetails?.leadSource : "",
@@ -136,7 +140,9 @@ const AddEdit = (props) => {
 
     return (
         <div>
-            <OpportunityModel onClose={() => setUserModel(false)} isOpen={userModel} fieldName={"assignUser"} setFieldValue={setFieldValue} />
+            {userModel && <UserModel onClose={() => setUserModel(false)} isOpen={userModel} fieldName={"assignUser"} setFieldValue={setFieldValue} data={userData} isLoding={isLoding} setIsLoding={setIsLoding} />}
+            {accountModel && <AccountModel onClose={() => setAccountModel(false)} isOpen={accountModel} fieldName={"accountId"} setFieldValue={setFieldValue} />}
+
             <Drawer isOpen={isOpen} size={size}>
                 <DrawerOverlay />
                 <DrawerContent>
@@ -165,16 +171,23 @@ const AddEdit = (props) => {
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                     Account Name<Text color={"red"}>*</Text>
                                 </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    value={values.accountName}
-                                    name="accountName"
-                                    onChange={handleChange}
-                                    placeholder='Account Name'
-                                    fontWeight='500'
-                                    borderColor={errors.accountName && touched.accountName ? "red.300" : null}
-                                />
-                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.accountName && touched.accountName && errors.accountName}</Text>
+                                <Flex justifyContent={'space-between'}>
+                                    <Select
+                                        value={values.accountId}
+                                        name="accountId"
+                                        onChange={handleChange}
+                                        mb={errors.accountId && touched.accountId ? undefined : '10px'}
+                                        fontWeight='500'
+                                        placeholder={'Account Name'}
+                                        borderColor={errors.accountId && touched.accountId ? "red.300" : null}
+                                    >
+                                        {accountList?.length > 0 && accountList?.map((item) => {
+                                            return <option value={item._id} key={item._id}>{`${item?.name}`}</option>
+                                        })}
+                                    </Select>
+                                    <IconButton onClick={() => setAccountModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
+                                </Flex>
+                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.accountId && touched.accountId && errors.accountId}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>

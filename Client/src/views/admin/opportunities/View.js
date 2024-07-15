@@ -203,8 +203,8 @@ const View = (props) => {
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Assigned User </Text>
                                 {/* <Text>{data?.assignUserName ? data?.assignUserName : ' - '}</Text> */}
                                 {
-                                    data?.assignUsers ?
-                                        <Link to={`/contactView/${data?.assignUsers}`}>
+                                    data?.assignUser ?
+                                        <Link to={`/userView/${data?.assignUser}`}>
                                             <Text color={contactAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }} style={{ cursor: "pointer" }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
                                         </Link>
                                         :

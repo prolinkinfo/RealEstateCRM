@@ -7,13 +7,13 @@ import { fetchLeadCustomFiled } from '../../redux/slices/leadCustomFiledSlice';
 import { useDispatch } from 'react-redux';
 import { getApi } from 'services/api';
 
-const OpportunityModel = (props) => {
-    const { onClose, isOpen, fieldName, setFieldValue } = props
+const UserModel = (props) => {
+    const { onClose, isOpen, fieldName, setFieldValue, data, isLoding, setIsLoding } = props
     const title = "Users";
     const dispatch = useDispatch();
-    const [data, setData] = useState([]);
+    // const [data, setData] = useState([]);
 
-    const [isLoding, setIsLoding] = useState(false);
+    // const [isLoding, setIsLoding] = useState(false);
     const [leadData, setLeadData] = useState([]);
     const [selectedValues, setSelectedValues] = useState([]);
 
@@ -44,15 +44,15 @@ const OpportunityModel = (props) => {
     const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
     const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 
-    const fetchData = async () => {
-        setIsLoding(true)
-        let result = await getApi('api/user/');
-        setData(result?.data?.user);
-        setIsLoding(false)
-    }
-    useEffect(() => {
-        fetchData()
-    }, [])
+    // const fetchData = async () => {
+    //     setIsLoding(true)
+    //     let result = await getApi('api/user/');
+    //     setData(result?.data?.user);
+    //     setIsLoding(false)
+    // }
+    // useEffect(() => {
+    //     fetchData()
+    // }, [])
 
     return (
         <Modal onClose={onClose} size='full' isOpen={isOpen} >
@@ -92,4 +92,4 @@ const OpportunityModel = (props) => {
     )
 }
 
-export default OpportunityModel
+export default UserModel
