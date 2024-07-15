@@ -18,6 +18,7 @@ import emailsSlice from './slices/emailsSlice';
 import emailTempSlice from './slices/emailTempSlice';
 import opportunitySlice from './slices/opportunitySlice';
 import moduleSlice from './slices/moduleSlice';
+import accountSlice from './slices/accountSlice';
 
 const middleware = (getDefaultMiddleware) => {
   return getDefaultMiddleware({
@@ -65,6 +66,7 @@ export const store = configureStore({
     emailsData: emailsSlice,
     emailTempData: emailTempSlice,
     opportunityData: opportunitySlice,
+    accountData: accountSlice,
   },
   middleware,
 });

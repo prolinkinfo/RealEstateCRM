@@ -32,6 +32,7 @@ const index = async (req, res) => {
             "Payments",
             "Opportunities",
             "Documents",
+            "Account",
             "Reporting and Analytics",
         ];
 
