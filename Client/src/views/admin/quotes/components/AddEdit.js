@@ -1,5 +1,5 @@
 import { CloseIcon } from '@chakra-ui/icons';
-import { Button, Checkbox, Flex, FormLabel, Grid, GridItem, IconButton, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Radio, RadioGroup, Select, Stack, Text, Textarea } from '@chakra-ui/react';
+import { Button, Checkbox, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, FormLabel, Grid, GridItem, IconButton, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Radio, RadioGroup, Select, Stack, Text, Textarea } from '@chakra-ui/react';
 import ContactModel from "components/commonTableModel/ContactModel";
 import LeadModel from "components/commonTableModel/LeadModel";
 import Spinner from 'components/spinner/Spinner';
@@ -204,21 +204,18 @@ const AddEdit = (props) => {
     }, [userAction, id, data])
 
     return (
-        <Modal isOpen={isOpen} size={'xl'} >
-            {!props.from && <ModalOverlay />}
-            <ModalContent overflowY={"auto"} height={"600px"}>
-                <ModalHeader justifyContent='space-between' display='flex' >
-                    {
-                        userAction === "add" ? "Create Task" : "Edit Task"
-                    }
-
+        <Drawer isOpen={isOpen} size={'lg'} >
+            <DrawerOverlay />
+            <DrawerContent >
+                <DrawerHeader justifyContent='space-between' display='flex' >
+                    {userAction === "add" ? "Create Quotes" : "Edit Quotes"}
                     <IconButton onClick={() => onClose(false)} icon={<CloseIcon />} />
-                </ModalHeader>
-                <ModalBody overflowY={"auto"} height={"700px"}>
-                    {/* Contact Model  */}
-                    <ContactModel isOpen={contactModelOpen} data={assignToContactData} onClose={setContactModel} values={values} fieldName='assignTo' setFieldValue={setFieldValue} />
-                    {/* Lead Model  */}
-                    <LeadModel isOpen={leadModelOpen} data={assignToLeadData} onClose={setLeadModel} values={values} fieldName='assignToLead' setFieldValue={setFieldValue} />
+                </DrawerHeader>
+                {/* Contact Model  */}
+                <ContactModel isOpen={contactModelOpen} data={assignToContactData} onClose={setContactModel} values={values} fieldName='assignTo' setFieldValue={setFieldValue} />
+                {/* Lead Model  */}
+                <LeadModel isOpen={leadModelOpen} data={assignToLeadData} onClose={setLeadModel} values={values} fieldName='assignToLead' setFieldValue={setFieldValue} />
+                <DrawerBody>
                     {isLoding ?
                         <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                             <Spinner />
@@ -479,17 +476,17 @@ const AddEdit = (props) => {
                             </GridItem>
                         </Grid>
                     }
-                </ModalBody>
-                <ModalFooter>
+                </DrawerBody>
+                <DrawerFooter>
                     <Button size="sm" variant='brand' onClick={handleSubmit}>{userAction === "add" ? "Save" : "Update"}</Button>
                     <Button type="reset" sx={{
                         marginLeft: 2,
                         textTransform: "capitalize",
                     }} variant="outline"
                         colorScheme="red" size="sm" ml={2} onClick={() => { onClose(false); resetForm(); }}>Close</Button>
-                </ModalFooter>
-            </ModalContent>
-        </Modal >
+                </DrawerFooter>
+            </DrawerContent>
+        </Drawer>
     )
 }
 
