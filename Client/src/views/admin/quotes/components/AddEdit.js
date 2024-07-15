@@ -16,7 +16,6 @@ import { HasAccess } from "../../../../redux/accessUtils";
 
 const AddEdit = (props) => {
     const { onClose, isOpen, fetchData, userAction, setAction, id, view, data } = props
-    const [isChecked, setIsChecked] = useState(false);
     const userId = JSON.parse(localStorage.getItem('user'))._id
     const [assignToLeadData, setAssignToLeadData] = useState([]);
     const [assignToContactData, setAssignToContactData] = useState([]);
@@ -56,7 +55,7 @@ const AddEdit = (props) => {
 
     const formik = useFormik({
         initialValues: initialValues,
-        validationSchema: TaskSchema,
+        // validationSchema: TaskSchema,
         enableReinitialize: true,
         onSubmit: (values, { resetForm }) => {
             AddData();
@@ -115,6 +114,7 @@ const AddEdit = (props) => {
             }
         }
     };
+
     const fetchTaskData = async () => {
         if (id) {
             try {
