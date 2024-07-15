@@ -48,7 +48,7 @@ function ChangeAccess(props) {
   const [isLoding, setIsLoding] = useState(false);
 
   const [gopageValue, setGopageValue] = useState();
-  const data = useMemo(() => tableData, [tableData]);
+  const data = useMemo(() => tableData || [], [tableData]);
 
   const tableInstance = useTable(
     {
@@ -67,6 +67,7 @@ function ChangeAccess(props) {
     prepareRow,
     page,
     pageOptions,
+    setPageSize,
     state: { pageIndex, pageSize },
   } = tableInstance;
 
@@ -197,6 +198,12 @@ function ChangeAccess(props) {
   useEffect(() => {
     fetchData()
   }, [editModal])
+
+  useEffect(() => {
+    if (Array.isArray(data) && data?.length > 0) {
+      setPageSize(data?.length); // Ensure the pageSize is set to the length of the data
+    }
+  }, [data, setPageSize]);
 
   return (
     <Modal onClose={() => setEditModal(false)} isOpen={editModal} isCentered size={"xl"}>

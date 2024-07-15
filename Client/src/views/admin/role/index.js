@@ -64,8 +64,6 @@ const Index = () => {
   const size = "lg";
   const navigate = useNavigate()
 
-
-
   const fetchData = async () => {
     setIsLoding(true);
     let result = await getApi("api/role-access");

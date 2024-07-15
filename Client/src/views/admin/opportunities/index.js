@@ -40,7 +40,7 @@ const Index = (props) => {
     const [type, setType] = useState("")
     const [isImport, setIsImport] = useState(false);
 
-    const [permission, leadAccess, contactAccess] = HasAccess(["Emails", 'Leads', 'Contacts']);
+    const [permission] = HasAccess(["Opportunities"]);
 
     const actionHeader = {
         Header: "Action",

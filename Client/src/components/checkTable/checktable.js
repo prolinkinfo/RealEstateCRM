@@ -453,8 +453,7 @@ const CommonCheckTable = (props) => {
                                                     if (cell?.column.Header === item.Header) {
                                                         if (item.cell && typeof item.cell === 'function') {
                                                             data = (
-                                                                <Flex Flex align="center" justifyContent={item?.Header === 'Action' && 'center'
-                                                                }>
+                                                                <Flex Flex align="center" justifyContent={item?.Header === 'Action' && 'center'}>
                                                                     <Text color={textColor} fontSize="sm" fontWeight="700" >
                                                                         {item.cell(cell) === ' ' ? '-' : item.cell(cell)}
                                                                     </Text>
