@@ -7,10 +7,11 @@ import { useDispatch } from 'react-redux';
 import { getApi } from 'services/api';
 import { fetchAccountData } from '../../redux/slices/accountSlice';
 import { toast } from 'react-toastify';
+import moment from 'moment';
 
-const AccountModel = (props) => {
+const OpprtunityModel = (props) => {
     const { onClose, isOpen, fieldName, setFieldValue, data } = props
-    const title = "Account";
+    const title = "Opprtunities";
     const dispatch = useDispatch();
     // const [data, setData] = useState([]);
 
@@ -34,16 +35,21 @@ const AccountModel = (props) => {
     const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
         {
-            Header: 'Account Name', accessor: 'name'
+            Header: 'Opportunity Name', accessor: 'opportunityName',
         },
         {
-            Header: 'Office Phone', accessor: 'officePhone',
+            Header: 'Account Name', accessor: 'accountName'
         },
         {
-            Header: 'Fax', accessor: 'fax',
+            Header: 'Opportunity Amount', accessor: 'opportunityAmount',
         },
         {
-            Header: 'Email Address', accessor: 'emailAddress',
+            Header: 'Expected Close Date', accessor: 'expectedCloseDate', cell: (cell) => (
+                <div>{moment(cell?.value).format("YYYY-MM-DD")}</div>
+            )
+        },
+        {
+            Header: 'Sales Stage', accessor: 'salesStage',
         },
 
     ];
@@ -72,7 +78,7 @@ const AccountModel = (props) => {
         <Modal onClose={onClose} size='full' isOpen={isOpen} >
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Select Account</ModalHeader>
+                <ModalHeader>Select Opportunity</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     {isLoding ?
@@ -106,4 +112,4 @@ const AccountModel = (props) => {
     )
 }
 
-export default AccountModel
+export default OpprtunityModel

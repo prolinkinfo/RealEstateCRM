@@ -3,78 +3,77 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Grid, GridItem, Input, FormLabel, Select, Text, Button, } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
-import { setSearchValue, setGetTagValues, getSearchData } from '../../../../redux/slices/advanceSearchSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { setSearchValue, getSearchData, setGetTagValues } from '../../../../redux/slices/advanceSearchSlice';
+import { useDispatch } from 'react-redux';
 
 
-const TaskAdvanceSearch = (props) => {
-    const { state, allData, advanceSearch, setAdvanceSearch, isLoding, setSearchedData, setDisplaySearchData, setSearchbox } = props;
-    const dispatch = useDispatch()
-    const searchResult = useSelector((state) => state?.advanceSearchData?.searchResult)
+
+const QuotesAdvanceSearch = (props) => {
+    const { state, allData, advanceSearch, setAdvanceSearch, isLoding, setSearchedData, setDisplaySearchData, setSearchClear, setSearchbox } = props;
+
+    const dispatch = useDispatch();
     const initialValues = {
+        quoteNumber: '',
         title: '',
-        category: '',
-        start: '',
-        end: '',
-        status: '',
-        leadAddress: '',
-        assignToName: '',
-        fromLeadScore: '',
-        toLeadScore: ''
+        quoteStage: '',
+        contactName: '',
+        accountName: '',
+        grandTotal: '',
+        validUntil: '',
     }
     const validationSchema = yup.object({
+        quoteNumber: yup.string(),
         title: yup.string(),
-        category: yup.string(),
-        start: yup.date(),
-        end: yup.date(),
-        leadAddress: yup.string(),
-        assignToName: yup.string(),
-        fromLeadScore: yup.number().min(0, "From Lead Score is invalid"),
-        toLeadScore: yup.number().min(yup.ref('fromLeadScore'), "To Lead Score must be greater than or equal to From Lead Score")
+        quoteStage: yup.string(),
+        contactName: yup.string(),
+        accountName: yup.string(),
+        grandTotal: yup.string(),
+        validUntil: yup.string()
     });
     const formik = useFormik({
         initialValues: initialValues,
         validationSchema: validationSchema,
         onSubmit: (values, { resetForm }) => {
-
             dispatch(setSearchValue(values))
-            dispatch(getSearchData({ values: values, allData: allData, type: 'Tasks' }))
+            dispatch(getSearchData({ values: values, allData: allData, type: 'quotes' }))
+
             const getValue = [
+                {
+                    name: ["quoteNumber"],
+                    value: values.quoteNumber
+                },
                 {
                     name: ["title"],
                     value: values.title
                 },
                 {
-                    name: ["status"],
-                    value: values.status
+                    name: ["quoteStage"],
+                    value: values.quoteStage
                 },
                 {
-                    name: ["category"],
-                    value: values.category
+                    name: ["contactName"],
+                    value: values.contactName
                 },
                 {
-                    name: ["assignToName"],
-                    value: values.assignToName
+                    name: ["accountName"],
+                    value: values.accountName
                 },
                 {
-                    name: ["start"],
-                    value: values.start
+                    name: ["grandTotal"],
+                    value: values.grandTotal
                 },
                 {
-                    name: ["end"],
-                    value: values.end
-                }
+                    name: ["validUntil"],
+                    value: values.validUntil
+                },
             ]
-
             dispatch(setGetTagValues(getValue.filter(item => item.value)))
-
-            setSearchedData(searchResult);
-            setDisplaySearchData(true);
-            setAdvanceSearch(false);
+            setDisplaySearchData(true)
+            setAdvanceSearch(false)
             resetForm();
             setSearchbox('');
         }
-    });
+    })
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm, dirty } = formik;
 
@@ -89,6 +88,21 @@ const TaskAdvanceSearch = (props) => {
                         <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={2}>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
+                                    Quote Number
+                                </FormLabel>
+                                <Input
+                                    fontSize='sm'
+                                    onChange={handleChange} onBlur={handleBlur}
+                                    value={values?.quoteNumber}
+                                    name="quoteNumber"
+                                    type='number'
+                                    placeholder='Enter Quote Number'
+                                    fontWeight='500'
+                                />
+                                <Text mb='10px' color={'red'}> {errors.quoteNumber && touched.quoteNumber && errors.quoteNumber}</Text>
+                            </GridItem>
+                            <GridItem colSpan={{ base: 12, md: 6 }}>
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
                                     Title
                                 </FormLabel>
                                 <Input
@@ -100,96 +114,89 @@ const TaskAdvanceSearch = (props) => {
                                     fontWeight='500'
                                 />
                                 <Text mb='10px' color={'red'}> {errors.title && touched.title && errors.title}</Text>
-
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
-                                    Status
+                                    Quote Stage
                                 </FormLabel>
                                 <Select
-                                    value={values?.status}
-                                    fontSize='sm'
-                                    name="status"
+                                    value={values.quoteStage}
+                                    name="quoteStage"
                                     onChange={handleChange}
+                                    mb={errors.quoteStage && touched.quoteStage ? undefined : '10px'}
                                     fontWeight='500'
+                                    placeholder={'Quote Stage'}
+                                    borderColor={errors.quoteStage && touched.quoteStage ? "red.300" : null}
                                 >
-                                    {!state && <option value=''>Select Status</option>}
-                                    <option value='completed'>Completed</option>
-                                    <option value='todo'>Todo</option>
-                                    <option value='pending'>Pending</option>
-                                    <option value='inProgress'>In Progress</option>
-                                    <option value='onHold'>On Hold</option>
+                                    <option value="Draft" >Draft</option>
+                                    <option value="Negotiation" >Negotiation</option>
+                                    <option value="Delivered" >Delivered</option>
+                                    <option value="On Hold" >On Hold</option>
+                                    <option value="Confirmed" >Confirmed</option>
+                                    <option value="Closed Accepted" >Closed Accepted</option>
+                                    <option value="Closed Lost" >Closed Lost</option>
+                                    <option value="Closed Dead" >Closed Dead</option>
                                 </Select>
-                                <Text mb='10px' color={'red'}> {errors.status && touched.status && errors.status}</Text>
-
+                                <Text mb='10px' color={'red'}> {errors.quoteStage && touched.quoteStage && errors.quoteStage}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
-                                    Related
-                                </FormLabel>
-                                <Select
-                                    value={values?.category}
-                                    fontSize='sm'
-                                    name="category"
-                                    onChange={handleChange}
-                                    fontWeight='500'
-                                    placeholder={'Select Category'}
-                                >
-                                    <option value='contact'>Contact</option>
-                                    <option value='lead'>Lead</option>
-                                    <option value='none'>None</option>
-                                </Select>
-
-                                <Text mb='10px' color={'red'}> {errors.category && touched.category && errors.category}</Text>
-
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, md: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
-                                    Assign To
+                                    Contact Name
                                 </FormLabel>
                                 <Input
                                     fontSize='sm'
                                     onChange={handleChange} onBlur={handleBlur}
-                                    value={values?.assignToName}
-                                    name="assignToName"
-                                    placeholder='Enter Assign To'
+                                    value={values?.contactName}
+                                    name="contactName"
+                                    placeholder='Enter Contact Name'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.assignToName && touched.assignToName && errors.assignToName}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, md: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2} >
-                                    Start Date
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values?.start}
-                                    name="start"
-                                    type="date"
-                                    placeholder='Enter Start Date'
-                                    fontWeight='500'
-                                />
-                                <Text mb='10px' color={'red'}> {errors.start && touched.start && errors.start}</Text>
-
+                                <Text mb='10px' color={'red'}> {errors.contactName && touched.contactName && errors.contactName}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
-                                    End Date
+                                    Account Name
                                 </FormLabel>
                                 <Input
                                     fontSize='sm'
-                                    type="date"
                                     onChange={handleChange} onBlur={handleBlur}
-                                    value={values?.end}
-                                    min={values?.start}
-                                    name="end"
-                                    placeholder='Enter  End Date'
+                                    value={values?.accountName}
+                                    name="accountName"
+                                    placeholder='Enter Account Name'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.end && touched.end && errors.end}</Text>
-
+                                <Text mb='10px' color={'red'}> {errors.accountName && touched.accountName && errors.accountName}</Text>
                             </GridItem>
+                            <GridItem colSpan={{ base: 12, md: 6 }}>
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
+                                    Grand Total
+                                </FormLabel>
+                                <Input
+                                    fontSize='sm'
+                                    onChange={handleChange} onBlur={handleBlur}
+                                    value={values?.grandTotal}
+                                    name="grandTotal"
+                                    placeholder='Enter Grand Total'
+                                    fontWeight='500'
+                                />
+                                <Text mb='10px' color={'red'}> {errors.grandTotal && touched.grandTotal && errors.grandTotal}</Text>
+                            </GridItem>
+                            <GridItem colSpan={{ base: 12, md: 6 }}>
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
+                                    Valid Until
+                                </FormLabel>
+                                <Input
+                                    fontSize='sm'
+                                    onChange={handleChange} onBlur={handleBlur}
+                                    value={values?.validUntil}
+                                    name="validUntil"
+                                    type='date'
+                                    fontWeight='500'
+                                />
+                                <Text mb='10px' color={'red'}> {errors.validUntil && touched.validUntil && errors.validUntil}</Text>
+                            </GridItem>
+
+
                         </Grid>
                     </ModalBody>
                     <ModalFooter>
@@ -202,4 +209,4 @@ const TaskAdvanceSearch = (props) => {
     )
 }
 
-export default TaskAdvanceSearch
+export default QuotesAdvanceSearch

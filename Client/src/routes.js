@@ -40,7 +40,7 @@ const ContactImport = React.lazy(() => import("views/admin/contact/components/Co
 
 const Quotes = React.lazy(() => import('views/admin/quotes'));
 // const QuotesView = React.lazy(() => import('views/admin/quotes/View'));
-// const QuotesImport = React.lazy(() => import("views/admin/quotes/components/ContactImport"));
+const QuotesImport = React.lazy(() => import("views/admin/quotes/components/QuotesImport"));
 
 const User = React.lazy(() => import("views/admin/users"));
 const UserView = React.lazy(() => import("views/admin/users/View"));
@@ -171,7 +171,7 @@ const routes = [
     under: "quotes",
     parentName: "Quotes",
     path: "/quotesImport",
-    component: ContactImport,
+    component: QuotesImport,
   },
   // ------------- Property Routes ------------------------
   {

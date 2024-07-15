@@ -119,6 +119,17 @@ const advanceSearchSlice = createSlice({
                     )
                 case 'AccountSearch':
                     state.searchResult = action.payload.searchData;
+                case 'quotes':
+                    state.searchResult = action?.payload?.allData?.filter(
+                        (item) =>
+                            (!action.payload?.values?.quoteNumber || (item?.quoteNumber && item?.quoteNumber?.toString().toLowerCase().includes(action.payload?.values?.quoteNumber?.toString().toLowerCase()))) &&
+                            (!action.payload?.values?.title || (item?.title && item?.title.toString().toLowerCase().includes(action.payload?.values?.title?.toString().toLowerCase()))) &&
+                            (!action.payload?.values?.quoteStage || (item?.quoteStage && item?.quoteStage.toString().toLowerCase().includes(action.payload?.values?.quoteStage?.toString().toLowerCase()))) &&
+                            (!action.payload?.values?.contactName || (item?.contactName && item?.contactName.toLowerCase().includes(action.payload?.values?.contactName?.toLowerCase()))) &&
+                            (!action.payload?.values?.accountName || (item?.accountName && item?.accountName.toLowerCase().includes(action.payload?.values?.accountName?.toLowerCase()))) &&
+                            (!action.payload?.values?.grandTotal || (item?.grandTotal && item?.grandTotal?.toString().toLowerCase().includes(action.payload?.values?.grandTotal?.toString().toLowerCase()))) &&
+                            (!action.payload?.values?.validUntil || (item?.validUntil && item?.validUntil.toLowerCase().includes(action.payload?.values?.validUntil?.toLowerCase())))
+                    )
                 default:
                 // state.count += 3;
             }
