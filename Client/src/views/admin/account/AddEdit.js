@@ -161,7 +161,7 @@ const AddEdit = (props) => {
 
     useEffect(() => {
         if (accountList?.length === 0) dispatch(fetchAccountData())
-    }, [accountList])
+    }, [])
 
     return (
         <div>
