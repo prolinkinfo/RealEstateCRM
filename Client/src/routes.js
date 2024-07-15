@@ -28,6 +28,7 @@ import { VscFileSubmodule } from "react-icons/vsc";
 import { HiTemplate } from "react-icons/hi";
 import { TbBulb } from "react-icons/tb";
 import { BsBlockquoteRight } from "react-icons/bs";
+import { RiAccountCircleFill } from "react-icons/ri";
 
 // Admin Imports
 const MainDashboard = React.lazy(() => import("views/admin/default"));
@@ -229,7 +230,7 @@ const routes = [
     name: "Account",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/account",
-    icon: <Icon as={TbBulb} width='20px' height='20px' color='inherit' />,
+    icon: <Icon as={RiAccountCircleFill} width='20px' height='20px' color='inherit' />,
     component: Account,
   },
   {
@@ -238,7 +239,7 @@ const routes = [
     path: "/accountView/:id",
     under: "account",
     parentName: "Account",
-    icon: <Icon as={TbBulb} width='20px' height='20px' color='inherit' />,
+    icon: <Icon as={RiAccountCircleFill} width='20px' height='20px' color='inherit' />,
     component: AccountView,
   },
   {
@@ -247,7 +248,7 @@ const routes = [
     path: "/accountImport",
     under: "account",
     parentName: "Account",
-    icon: <Icon as={TbBulb} width='20px' height='20px' color='inherit' />,
+    icon: <Icon as={RiAccountCircleFill} width='20px' height='20px' color='inherit' />,
     component: AccountImport,
   },
 
