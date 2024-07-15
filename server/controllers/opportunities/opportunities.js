@@ -57,9 +57,18 @@ const index = async (req, res) => {
                     as: 'modifiedByUser'
                 }
             },
+            {
+                $lookup: {
+                    from: 'Accounts',
+                    localField: 'accountId',
+                    foreignField: '_id',
+                    as: 'accountData'
+                }
+            },
             { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
             { $unwind: { path: '$assignUsers', preserveNullAndEmptyArrays: true } },
             { $unwind: { path: '$modifiedByUser', preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: '$accountData', preserveNullAndEmptyArrays: true } },
             { $match: { 'users.deleted': false } },
             // { $match: { 'assignUsers.deleted': false } },
             { $match: { 'modifiedByUser.deleted': false } },
@@ -74,12 +83,16 @@ const index = async (req, res) => {
                             else: { $concat: [''] }
                         }
                     },
-                    modifiedUserName: { $concat: ['$modifiedByUser.firstName', ' ', '$modifiedByUser.lastName'] }
+                    modifiedUserName: { $concat: ['$modifiedByUser.firstName', ' ', '$modifiedByUser.lastName'] },
+                    accountName: '$accountData.name'
                 }
             },
             {
                 $project: {
-                    users: 0
+                    users: 0,
+                    assignUsers: 0,
+                    modifiedByUser: 0,
+                    accountData: 0,
                 }
             },
         ]);
@@ -122,9 +135,19 @@ const view = async (req, res) => {
                     as: 'modifiedByUser'
                 }
             },
+            {
+                $lookup: {
+                    from: 'Accounts',
+                    localField: 'accountId',
+                    foreignField: '_id',
+                    as: 'accountData'
+                }
+            },
             { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
             { $unwind: { path: '$assignUsers', preserveNullAndEmptyArrays: true } },
             { $unwind: { path: '$modifiedByUser', preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: '$accountData', preserveNullAndEmptyArrays: true } },
+
             { $match: { 'users.deleted': false } },
             // { $match: { 'assignUsers.deleted': false } },
             { $match: { 'modifiedByUser.deleted': false } },
@@ -139,7 +162,8 @@ const view = async (req, res) => {
                             else: { $concat: [''] }
                         }
                     },
-                    modifiedUserName: { $concat: ['$modifiedByUser.firstName', ' ', '$modifiedByUser.lastName'] }
+                    modifiedUserName: { $concat: ['$modifiedByUser.firstName', ' ', '$modifiedByUser.lastName'] },
+                    accountName: '$accountData.name'
                 }
             },
             {
@@ -147,6 +171,7 @@ const view = async (req, res) => {
                     users: 0,
                     assignUsers: 0,
                     modifiedByUser: 0,
+                    accountData: 0,
                 }
             },
         ])

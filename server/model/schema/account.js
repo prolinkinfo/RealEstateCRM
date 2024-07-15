@@ -45,7 +45,7 @@ const Account = new mongoose.Schema({
     },
     memberOf: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Account',
+        ref: 'Accounts',
     },
     createBy: {
         type: mongoose.Schema.Types.ObjectId,

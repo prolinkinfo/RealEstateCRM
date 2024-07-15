@@ -9,12 +9,12 @@ import { fetchAccountData } from '../../redux/slices/accountSlice';
 import { toast } from 'react-toastify';
 
 const AccountModel = (props) => {
-    const { onClose, isOpen, fieldName, setFieldValue } = props
+    const { onClose, isOpen, fieldName, setFieldValue, isLoding, setIsLoding, data } = props
     const title = "Account";
     const dispatch = useDispatch();
-    const [data, setData] = useState([]);
+    // const [data, setData] = useState([]);
 
-    const [isLoding, setIsLoding] = useState(false);
+    // const [isLoding, setIsLoding] = useState(false);
     const [leadData, setLeadData] = useState([]);
     const [selectedValues, setSelectedValues] = useState([]);
 
@@ -52,21 +52,21 @@ const AccountModel = (props) => {
     const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
     const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 
-    const fetchData = async () => {
-        setIsLoding(true)
-        const result = await dispatch(fetchAccountData())
+    // const fetchData = async () => {
+    //     setIsLoding(true)
+    //     const result = await dispatch(fetchAccountData())
 
-        if (result.payload.status === 200) {
-            setData(result?.payload?.data);
-        } else {
-            toast.error("Failed to fetch data", "error");
-        }
-        setIsLoding(false)
-    }
+    //     if (result.payload.status === 200) {
+    //         setData(result?.payload?.data);
+    //     } else {
+    //         toast.error("Failed to fetch data", "error");
+    //     }
+    //     setIsLoding(false)
+    // }
 
-    useEffect(() => {
-        fetchData()
-    }, [])
+    // useEffect(() => {
+    //     fetchData()
+    // }, [])
 
     return (
         <Modal onClose={onClose} size='full' isOpen={isOpen} >

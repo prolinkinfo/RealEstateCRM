@@ -59,7 +59,7 @@ const index = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'Account',
+                    from: 'Accounts',
                     localField: 'memberOf',
                     foreignField: '_id',
                     as: 'memberOfList'
@@ -142,7 +142,7 @@ const view = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'Account',
+                    from: 'Accounts',
                     localField: 'memberOf',
                     foreignField: '_id',
                     as: 'memberOfList'

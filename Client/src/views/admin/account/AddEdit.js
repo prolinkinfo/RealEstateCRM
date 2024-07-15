@@ -10,10 +10,11 @@ import { generateValidationSchema } from 'utils';
 import CustomForm from 'utils/customForm';
 import * as yup from 'yup'
 import { accountSchema } from '../../../schema/accountSchema';
-import OpportunityModel from 'components/commonTableModel/OpportunityModel';
+import UserModel from 'components/commonTableModel/UserModel';
 import AccountModel from 'components/commonTableModel/AccountModel';
 import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAccountData } from '../../../redux/slices/accountSlice';
 
 const AddEdit = (props) => {
     const { isOpen, size, onClose, type, setAction, selectedId } = props;
@@ -22,8 +23,10 @@ const AddEdit = (props) => {
     const [accountModel, setAccountModel] = useState(false)
     const [userData, setUserData] = useState([]);
     const [accountDetails, setAccountDetails] = useState({});
+    const dispatch = useDispatch();
 
     const accountList = useSelector((state) => state?.accountData?.data?.data)
+    // const { isLoding } = useSelector((state) => state?.accountData)
 
     const initialValues = {
         name: type === "edit" ? accountDetails?.name : "",
@@ -156,11 +159,15 @@ const AddEdit = (props) => {
         fetchData()
     }, [type, selectedId])
 
+    useEffect(() => {
+        if (accountList?.length === 0) dispatch(fetchAccountData())
+    }, [accountList])
 
     return (
         <div>
-            <OpportunityModel onClose={() => setUserModel(false)} isOpen={userModel} fieldName={"assignUser"} setFieldValue={setFieldValue} />
-            <AccountModel onClose={() => setAccountModel(false)} isOpen={accountModel} fieldName={"memberOf"} setFieldValue={setFieldValue} />
+            {userModel && <UserModel onClose={() => setUserModel(false)} isOpen={userModel} fieldName={"assignUser"} setFieldValue={setFieldValue} data={userData} isLoding={isLoding} setIsLoding={setIsLoding} />}
+            {accountModel && <AccountModel onClose={() => setAccountModel(false)} isOpen={accountModel} fieldName={"memberOf"} setFieldValue={setFieldValue} data={accountList} isLoding={isLoding} setIsLoding={setIsLoding} />}
+
             <Drawer isOpen={isOpen} size={size}>
                 <DrawerOverlay />
                 <DrawerContent>
