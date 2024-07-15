@@ -11,50 +11,55 @@ import CustomForm from 'utils/customForm';
 import * as yup from 'yup'
 import { accountSchema } from '../../../schema/accountSchema';
 import OpportunityModel from 'components/commonTableModel/OpportunityModel';
+import AccountModel from 'components/commonTableModel/AccountModel';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 
 const AddEdit = (props) => {
     const { isOpen, size, onClose, type, setAction, selectedId } = props;
     const [isLoding, setIsLoding] = useState(false)
     const [userModel, setUserModel] = useState(false)
+    const [accountModel, setAccountModel] = useState(false)
     const [userData, setUserData] = useState([]);
-    const [opprtunityDetails, setOpportunityDetails] = useState({});
+    const [accountDetails, setAccountDetails] = useState({});
+
+    const accountList = useSelector((state) => state?.accountData?.data?.data)
 
     const initialValues = {
-        name: type === "edit" ? opprtunityDetails?.name : "",
-        officePhone: type === "edit" ? opprtunityDetails?.officePhone : "",
-        alternatePhone: type === "edit" ? opprtunityDetails?.alternatePhone : "",
-        assignUser: type === "edit" ? opprtunityDetails?.assignUser : "",
-        website: type === "edit" ? opprtunityDetails?.website : "",
-        fax: type === "edit" ? opprtunityDetails?.fax : "",
-        ownership: type === "edit" ? opprtunityDetails?.ownership : "",
-        emailAddress: type === "edit" ? opprtunityDetails?.emailAddress : "",
-        nonPrimaryEmail: type === "edit" ? opprtunityDetails?.nonPrimaryEmail : "",
-        billingStreet: type === "edit" ? opprtunityDetails?.billingStreet : "",
-        billingStreet2: type === "edit" ? opprtunityDetails?.billingStreet2 : "",
-        billingStreet3: type === "edit" ? opprtunityDetails?.billingStreet3 : "",
-        billingStreet4: type === "edit" ? opprtunityDetails?.billingStreet4 : "",
-        billingPostalcode: type === "edit" ? opprtunityDetails?.billingPostalcode : "",
-        billingCity: type === "edit" ? opprtunityDetails?.billingCity : "",
-        billingState: type === "edit" ? opprtunityDetails?.billingState : "",
-        billingCountry: type === "edit" ? opprtunityDetails?.billingCountry : "",
-        shippingStreet: type === "edit" ? opprtunityDetails?.shippingStreet : "",
-        shippingStreet2: type === "edit" ? opprtunityDetails?.shippingStreet2 : "",
-        shippingStreet3: type === "edit" ? opprtunityDetails?.shippingStreet3 : "",
-        shippingStreet4: type === "edit" ? opprtunityDetails?.shippingStreet4 : "",
-        shippingPostalcode: type === "edit" ? opprtunityDetails?.shippingPostalcode : "",
-        shippingCity: type === "edit" ? opprtunityDetails?.shippingCity : "",
-        shippingState: type === "edit" ? opprtunityDetails?.shippingState : "",
-        shippingCountry: type === "edit" ? opprtunityDetails?.shippingCountry : "",
-        description: type === "edit" ? opprtunityDetails?.description : "",
-        type: type === "edit" ? opprtunityDetails?.type : "",
-        industry: type === "edit" ? opprtunityDetails?.industry : "",
-        annualRevenue: type === "edit" ? opprtunityDetails?.annualRevenue : "",
-        rating: type === "edit" ? opprtunityDetails?.rating : "",
-        SICCode: type === "edit" ? opprtunityDetails?.SICCode : "",
-        emailOptOut: type === "edit" ? opprtunityDetails?.emailOptOut : false,
-        invalidEmail: type === "edit" ? opprtunityDetails?.invalidEmail : false,
-        memberOf: type === "edit" ? opprtunityDetails?.memberOf : "",
+        name: type === "edit" ? accountDetails?.name : "",
+        officePhone: type === "edit" ? accountDetails?.officePhone : "",
+        alternatePhone: type === "edit" ? accountDetails?.alternatePhone : "",
+        assignUser: type === "edit" ? accountDetails?.assignUser : "",
+        website: type === "edit" ? accountDetails?.website : "",
+        fax: type === "edit" ? accountDetails?.fax : "",
+        ownership: type === "edit" ? accountDetails?.ownership : "",
+        emailAddress: type === "edit" ? accountDetails?.emailAddress : "",
+        nonPrimaryEmail: type === "edit" ? accountDetails?.nonPrimaryEmail : "",
+        billingStreet: type === "edit" ? accountDetails?.billingStreet : "",
+        billingStreet2: type === "edit" ? accountDetails?.billingStreet2 : "",
+        billingStreet3: type === "edit" ? accountDetails?.billingStreet3 : "",
+        billingStreet4: type === "edit" ? accountDetails?.billingStreet4 : "",
+        billingPostalcode: type === "edit" ? accountDetails?.billingPostalcode : "",
+        billingCity: type === "edit" ? accountDetails?.billingCity : "",
+        billingState: type === "edit" ? accountDetails?.billingState : "",
+        billingCountry: type === "edit" ? accountDetails?.billingCountry : "",
+        shippingStreet: type === "edit" ? accountDetails?.shippingStreet : "",
+        shippingStreet2: type === "edit" ? accountDetails?.shippingStreet2 : "",
+        shippingStreet3: type === "edit" ? accountDetails?.shippingStreet3 : "",
+        shippingStreet4: type === "edit" ? accountDetails?.shippingStreet4 : "",
+        shippingPostalcode: type === "edit" ? accountDetails?.shippingPostalcode : "",
+        shippingCity: type === "edit" ? accountDetails?.shippingCity : "",
+        shippingState: type === "edit" ? accountDetails?.shippingState : "",
+        shippingCountry: type === "edit" ? accountDetails?.shippingCountry : "",
+        description: type === "edit" ? accountDetails?.description : "",
+        type: type === "edit" ? accountDetails?.type : "",
+        industry: type === "edit" ? accountDetails?.industry : "",
+        annualRevenue: type === "edit" ? accountDetails?.annualRevenue : "",
+        rating: type === "edit" ? accountDetails?.rating : "",
+        SICCode: type === "edit" ? accountDetails?.SICCode : "",
+        emailOptOut: type === "edit" ? accountDetails?.emailOptOut : false,
+        invalidEmail: type === "edit" ? accountDetails?.invalidEmail : false,
+        memberOf: type === "edit" ? accountDetails?.memberOf : "",
         createBy: JSON.parse(localStorage.getItem('user'))._id,
         modifiedBy: JSON.parse(localStorage.getItem('user'))._id
     };
@@ -126,13 +131,13 @@ const AddEdit = (props) => {
     }
 
 
-    const fetchTaskData = async () => {
+    const fetchAccountDetails = async () => {
         if (type === "edit") {
             try {
                 setIsLoding(true)
                 let result = await getApi('api/account/view/', selectedId)
                 if (result?.status === 200) {
-                    setOpportunityDetails(result?.data)
+                    setAccountDetails(result?.data)
                 }
 
             }
@@ -145,19 +150,17 @@ const AddEdit = (props) => {
         }
     }
 
-    useEffect(() => {
-        fetchData();
-    }, [])
-
 
     useEffect(() => {
-        if (type === "edit") fetchTaskData();
+        if (type === "edit") fetchAccountDetails();
+        fetchData()
     }, [type, selectedId])
 
 
     return (
         <div>
             <OpportunityModel onClose={() => setUserModel(false)} isOpen={userModel} fieldName={"assignUser"} setFieldValue={setFieldValue} />
+            <AccountModel onClose={() => setAccountModel(false)} isOpen={accountModel} fieldName={"memberOf"} setFieldValue={setFieldValue} />
             <Drawer isOpen={isOpen} size={size}>
                 <DrawerOverlay />
                 <DrawerContent>
@@ -690,15 +693,22 @@ const AddEdit = (props) => {
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                     Member Of
                                 </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    value={values.memberOf}
-                                    name="memberOf"
-                                    onChange={handleChange}
-                                    placeholder='Member Of'
-                                    fontWeight='500'
-                                    borderColor={errors.memberOf && touched.memberOf ? "red.300" : null}
-                                />
+                                <Flex justifyContent={'space-between'}>
+                                    <Select
+                                        value={values.memberOf}
+                                        name="memberOf"
+                                        onChange={handleChange}
+                                        mb={errors.memberOf && touched.memberOf ? undefined : '10px'}
+                                        fontWeight='500'
+                                        placeholder={'Member Of'}
+                                        borderColor={errors.memberOf && touched.memberOf ? "red.300" : null}
+                                    >
+                                        {accountList?.length > 0 && accountList?.map((item) => {
+                                            return <option value={item._id} key={item._id}>{`${item?.name}`}</option>
+                                        })}
+                                    </Select>
+                                    <IconButton onClick={() => setAccountModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
+                                </Flex>
                                 <Text mb='10px' fontSize='sm' color={'red'}> {errors.memberOf && touched.memberOf && errors.memberOf}</Text>
                             </GridItem>
 

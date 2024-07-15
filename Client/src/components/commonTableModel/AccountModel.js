@@ -3,13 +3,14 @@ import React, { useEffect, useState } from 'react'
 import Spinner from 'components/spinner/Spinner'
 import { GiClick } from "react-icons/gi";
 import CommonCheckTable from 'components/checkTable/checktable';
-import { fetchLeadCustomFiled } from '../../redux/slices/leadCustomFiledSlice';
 import { useDispatch } from 'react-redux';
 import { getApi } from 'services/api';
+import { fetchAccountData } from '../../redux/slices/accountSlice';
+import { toast } from 'react-toastify';
 
-const OpportunityModel = (props) => {
+const AccountModel = (props) => {
     const { onClose, isOpen, fieldName, setFieldValue } = props
-    const title = "Users";
+    const title = "Account";
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
 
@@ -33,11 +34,18 @@ const OpportunityModel = (props) => {
     const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
         {
-            Header: 'email Id', accessor: 'username',
+            Header: 'Account Name', accessor: 'name'
         },
-        { Header: "first Name", accessor: "firstName", },
-        { Header: "last Name", accessor: "lastName", },
-        { Header: "role", accessor: "role", },
+        {
+            Header: 'Office Phone', accessor: 'officePhone',
+        },
+        {
+            Header: 'Fax', accessor: 'fax',
+        },
+        {
+            Header: 'Email Address', accessor: 'emailAddress',
+        },
+
     ];
 
     const [columns, setColumns] = useState([...tableColumns]);
@@ -46,10 +54,16 @@ const OpportunityModel = (props) => {
 
     const fetchData = async () => {
         setIsLoding(true)
-        let result = await getApi('api/user/');
-        setData(result?.data?.user);
+        const result = await dispatch(fetchAccountData())
+
+        if (result.payload.status === 200) {
+            setData(result?.payload?.data);
+        } else {
+            toast.error("Failed to fetch data", "error");
+        }
         setIsLoding(false)
     }
+
     useEffect(() => {
         fetchData()
     }, [])
@@ -58,7 +72,7 @@ const OpportunityModel = (props) => {
         <Modal onClose={onClose} size='full' isOpen={isOpen} >
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Select User</ModalHeader>
+                <ModalHeader>Select Account</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     {isLoding ?
@@ -92,4 +106,4 @@ const OpportunityModel = (props) => {
     )
 }
 
-export default OpportunityModel
+export default AccountModel

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const add = async (req, res) => {
     try {
-        const result = new Account({ ...req.body, assignUser: req.body.assignUser ? req.body.assignUser : "" });
+        const result = new Account({ ...req.body, assignUser: req.body.assignUser ? req.body.assignUser : "", memberOf: req.body.memberOf ? req.body.memberOf : "" });
         await result.save();
         res.status(200).json(result);
     } catch (err) {
@@ -14,9 +14,9 @@ const add = async (req, res) => {
 const addMany = async (req, res) => {
     try {
         const data = req.body;
-        const insertedOppotunity = await Account.insertMany(data);
+        const insertedAccount = await Account.insertMany(data);
 
-        res.status(200).json(insertedOppotunity);
+        res.status(200).json(insertedAccount);
     } catch (err) {
         console.error('Failed to create Account :', err);
         res.status(400).json({ error: 'Failed to create Account' });
@@ -57,16 +57,24 @@ const index = async (req, res) => {
                     as: 'modifiedByUser'
                 }
             },
+            {
+                $lookup: {
+                    from: 'Account',
+                    localField: 'memberOf',
+                    foreignField: '_id',
+                    as: 'memberOfList'
+                }
+            },
             { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
             { $unwind: { path: '$assignUsers', preserveNullAndEmptyArrays: true } },
             { $unwind: { path: '$modifiedByUser', preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: '$memberOfList', preserveNullAndEmptyArrays: true } },
             { $match: { 'users.deleted': false } },
             // { $match: { 'assignUsers.deleted': false } },
             { $match: { 'modifiedByUser.deleted': false } },
             {
                 $addFields: {
                     createdByName: { $concat: ['$users.firstName', ' ', '$users.lastName'] },
-                    // assignUserName: { $concat: ['$assignUsers.firstName', ' ', '$assignUsers.lastName'] },
                     assignUserName: {
                         $cond: {
                             if: '$assignUsers',
@@ -74,12 +82,22 @@ const index = async (req, res) => {
                             else: { $concat: [''] }
                         }
                     },
-                    modifiedUserName: { $concat: ['$modifiedByUser.firstName', ' ', '$modifiedByUser.lastName'] }
+                    modifiedUserName: { $concat: ['$modifiedByUser.firstName', ' ', '$modifiedByUser.lastName'] },
+                    memberOfName: {
+                        $cond: {
+                            if: '$memberOfList',
+                            then: '$memberOfList.name',
+                            else: ''
+                        }
+                    },
                 }
             },
             {
                 $project: {
-                    users: 0
+                    users: 0,
+                    assignUsers: 0,
+                    modifiedByUser: 0,
+                    memberOfList: 0,
                 }
             },
         ]);
@@ -122,9 +140,18 @@ const view = async (req, res) => {
                     as: 'modifiedByUser'
                 }
             },
+            {
+                $lookup: {
+                    from: 'Account',
+                    localField: 'memberOf',
+                    foreignField: '_id',
+                    as: 'memberOfList'
+                }
+            },
             { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
             { $unwind: { path: '$assignUsers', preserveNullAndEmptyArrays: true } },
             { $unwind: { path: '$modifiedByUser', preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: '$memberOfList', preserveNullAndEmptyArrays: true } },
             { $match: { 'users.deleted': false } },
             // { $match: { 'assignUsers.deleted': false } },
             { $match: { 'modifiedByUser.deleted': false } },
@@ -139,7 +166,14 @@ const view = async (req, res) => {
                             else: { $concat: [''] }
                         }
                     },
-                    modifiedUserName: { $concat: ['$modifiedByUser.firstName', ' ', '$modifiedByUser.lastName'] }
+                    modifiedUserName: { $concat: ['$modifiedByUser.firstName', ' ', '$modifiedByUser.lastName'] },
+                    memberOfName: {
+                        $cond: {
+                            if: '$memberOfList',
+                            then: { $concat: ['$memberOfList.name'] },
+                            else: { $concat: [''] }
+                        }
+                    },
                 }
             },
             {
@@ -147,6 +181,7 @@ const view = async (req, res) => {
                     users: 0,
                     assignUsers: 0,
                     modifiedByUser: 0,
+                    memberOfList: 0,
                 }
             },
         ])
@@ -157,6 +192,7 @@ const view = async (req, res) => {
         res.status(400).json({ err, error: 'Failed ' });
     }
 }
+
 const edit = async (req, res) => {
     try {
 

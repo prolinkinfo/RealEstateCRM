@@ -36,6 +36,7 @@ const View = (props) => {
     const navigate = useNavigate()
     const [type, setType] = useState("")
     const [editableField, setEditableField] = useState(null);
+    const [editableFieldName, setEditableFieldName] = useState(null);
     const today = new Date().toISOString().split('T')[0];
     const todayTime = new Date().toISOString().split('.')[0];
     const fetchViewData = async () => {
@@ -75,7 +76,7 @@ const View = (props) => {
             let response = await deleteManyApi('api/opportunities/deleteMany', ids)
             if (response.status === 200) {
                 navigate('/opportunities')
-                toast.success(`Opprtunities Update successfully`)
+                toast.success(`Opprtunities Delete successfully`)
                 setDeleteManyModel(false)
             }
         } catch (error) {
@@ -116,12 +117,16 @@ const View = (props) => {
             let response = await putApi(`api/opportunity/edit/${id}`, payload)
             if (response.status === 200) {
                 fetchViewData()
+                toast.success(`${editableFieldName} Update successfully`)
+            } else {
+                toast.error(`${editableFieldName} not Update`)
             }
         },
     });
-    const handleDoubleClick = (fieldName, value) => {
+    const handleDoubleClick = (fieldName, value, name) => {
         formik.setFieldValue(fieldName, value);
         setEditableField(fieldName)
+        setEditableFieldName(name)
     };
 
     const handleBlur = (e) => {
@@ -187,7 +192,7 @@ const View = (props) => {
                                             <Text mb='10px' color={'red'}> {formik?.errors.opportunityName && formik?.touched.opportunityName && formik?.errors.opportunityName}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("opportunityName", data?.opportunityName)}>{data?.opportunityName ? data?.opportunityName : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("opportunityName", data?.opportunityName, "Opportunity Name")}>{data?.opportunityName ? data?.opportunityName : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
@@ -231,7 +236,7 @@ const View = (props) => {
 
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("type", data?.type)}>{data?.type ? data?.type : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("type", data?.type, "Type")}>{data?.type ? data?.type : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
@@ -267,7 +272,7 @@ const View = (props) => {
                                         </>
 
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("leadSource", data?.leadSource)}>{data?.leadSource ? data?.leadSource : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("leadSource", data?.leadSource, "Lead Source")}>{data?.leadSource ? data?.leadSource : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
@@ -290,7 +295,7 @@ const View = (props) => {
                                             <Text mb='10px' color={'red'}> {formik?.errors.currency && formik?.touched.currency && formik?.errors.currency}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("currency", data?.currency)}>{data?.currency ? data?.currency : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("currency", data?.currency, "Currency")}>{data?.currency ? data?.currency : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
@@ -311,7 +316,7 @@ const View = (props) => {
                                             <Text mb='10px' color={'red'}> {formik?.errors.opportunityAmount && formik?.touched.opportunityAmount && formik?.errors.opportunityAmount}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("opportunityAmount", data?.opportunityAmount)}>{data?.opportunityAmount ? data?.opportunityAmount : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("opportunityAmount", data?.opportunityAmount, "Opportunity Amount")}>{data?.opportunityAmount ? data?.opportunityAmount : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
@@ -332,7 +337,7 @@ const View = (props) => {
                                             <Text mb='10px' color={'red'}> {formik?.errors.amount && formik?.touched.amount && formik?.errors.amount}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("amount", data?.amount)}>{data?.amount ? data?.amount : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("amount", data?.amount, "Amount")}>{data?.amount ? data?.amount : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
@@ -353,7 +358,7 @@ const View = (props) => {
                                             <Text mb='10px' color={'red'}> {formik?.errors.expectedCloseDate && formik?.touched.expectedCloseDate && formik?.errors.expectedCloseDate}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("expectedCloseDate", data?.expectedCloseDate)}>{data?.expectedCloseDate ? dayjs(data?.expectedCloseDate).format("YYYY-MM-DD") : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("expectedCloseDate", data?.expectedCloseDate, "Expected Close Date")}>{data?.expectedCloseDate ? dayjs(data?.expectedCloseDate).format("YYYY-MM-DD") : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
@@ -374,7 +379,7 @@ const View = (props) => {
                                             <Text mb='10px' color={'red'}> {formik?.errors.nextStep && formik?.touched.nextStep && formik?.errors.nextStep}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("nextStep", data?.nextStep)}>{data?.nextStep ? data?.nextStep : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("nextStep", data?.nextStep, "Next Step")}>{data?.nextStep ? data?.nextStep : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
@@ -406,7 +411,7 @@ const View = (props) => {
                                             <Text mb='10px' color={'red'}> {formik?.errors.salesStage && formik?.touched.salesStage && formik?.errors.salesStage}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("salesStage", data?.salesStage)}>{data?.salesStage ? data?.salesStage : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("salesStage", data?.salesStage, "Sales Stage")}>{data?.salesStage ? data?.salesStage : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
@@ -427,7 +432,7 @@ const View = (props) => {
                                             <Text mb='10px' color={'red'}> {formik?.errors.probability && formik?.touched.probability && formik?.errors.probability}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("probability", data?.probability)}>{data?.probability ? data?.probability : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("probability", data?.probability, "Probability")}>{data?.probability ? data?.probability : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
@@ -448,7 +453,7 @@ const View = (props) => {
                                             <Text mb='10px' color={'red'}> {formik?.errors.description && formik?.touched.description && formik?.errors.description}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("description", data?.description)}>{data?.description ? data?.description : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("description", data?.description, "Description")}>{data?.description ? data?.description : ' - '}</Text>
                                 }
                             </GridItem>
 

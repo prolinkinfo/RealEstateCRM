@@ -91,6 +91,15 @@ const advanceSearchSlice = createSlice({
                             (!action.payload?.values?.salesStage || (item?.salesStage && item?.salesStage.toLowerCase().includes(action.payload?.values?.salesStage?.toLowerCase())))
                     )
                     break;
+                case 'Account':
+                    state.searchResult = action?.payload?.allData?.filter(
+                        (item) =>
+                            (!action.payload?.values?.name || (item?.name && item?.name.toLowerCase().includes(action.payload?.values?.name?.toLowerCase()))) &&
+                            (!action.payload?.values?.officePhone || (item?.officePhone && item?.officePhone.toString().toLowerCase().includes(action.payload?.values?.officePhone?.toString().toLowerCase()))) &&
+                            (!action.payload?.values?.fax || (item?.fax && item?.fax.toString().toLowerCase().includes(action.payload?.values?.fax?.toString().toLowerCase()))) &&
+                            (!action.payload?.values?.emailAddress || (item?.emailAddress && item?.emailAddress.toLowerCase().includes(action.payload?.values?.emailAddress?.toLowerCase())))
+                    )
+                    break;
                 default:
                 // state.count += 3;
             }

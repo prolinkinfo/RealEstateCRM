@@ -260,16 +260,19 @@ import { useParams } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { generateValidationSchema } from 'utils';
+import { toast } from 'react-toastify';
 
 const CustomView = ({ data, toCamelCase, fieldData, moduleId, fetchData, editUrl, id }) => {
     const param = useParams();
     const [editableField, setEditableField] = useState(null);
+    const [editableFieldName, setEditableFieldName] = useState(null);
 
     const formik = useFormik({
         initialValues: fieldData,
         enableReinitialize: true,
         validationSchema: yup.object().shape(generateValidationSchema(data?.fields)),
         onSubmit: async (values) => {
+            setEditableField(null)
             let payload = {
                 ...values,
                 moduleId: moduleId
@@ -277,19 +280,20 @@ const CustomView = ({ data, toCamelCase, fieldData, moduleId, fetchData, editUrl
             try {
                 let response = await putApi(editUrl ? editUrl : `api/form/edit/${param.id}`, payload);
                 if (response.status === 200) {
-                    setEditableField(null)
-
+                    toast.success(`${editableFieldName} Update successfully`)
                     fetchData();
                 }
             } catch (e) {
                 console.log(e);
+                toast.success(`server error`)
             }
         },
     });
 
-    const handleDoubleClick = (fieldName, value) => {
+    const handleDoubleClick = (fieldName, value, lable) => {
         formik.setFieldValue(fieldName, value);
         setEditableField(fieldName)
+        setEditableFieldName(lable)
     };
 
     const handleBlur = (e) => {
@@ -424,7 +428,7 @@ const CustomView = ({ data, toCamelCase, fieldData, moduleId, fetchData, editUrl
                                                         <Text
                                                             color={'blackAlpha.900'}
                                                             fontSize="sm"
-                                                            onDoubleClick={() => handleDoubleClick(field?.name, fieldData && (fieldData[field?.name] !== undefined ? fieldData[field?.name] : "N/A"))}
+                                                            onDoubleClick={() => handleDoubleClick(field?.name, fieldData && (fieldData[field?.name] !== undefined ? fieldData[field?.name] : "N/A"), field?.label)}
                                                         >
                                                             {(fieldData && (fieldData[field?.name] !== undefined ? fieldData[field?.name] : "N/A")) || "N/A"}
                                                         </Text>
@@ -540,7 +544,7 @@ const CustomView = ({ data, toCamelCase, fieldData, moduleId, fetchData, editUrl
                                             <Text
                                                 color={'blackAlpha.900'}
                                                 fontSize="sm"
-                                                onDoubleClick={() => handleDoubleClick(field?.name, fieldData && (fieldData[field?.name] !== undefined ? fieldData[field?.name] : "N/A"))}
+                                                onDoubleClick={() => handleDoubleClick(field?.name, fieldData && (fieldData[field?.name] !== undefined ? fieldData[field?.name] : "N/A"), field?.label)}
                                             >
                                                 {(fieldData && (fieldData[field?.name] !== undefined ? fieldData[field?.name] : "N/A")) || "N/A"}
                                             </Text>

@@ -85,6 +85,7 @@ const OpportunitiesView = React.lazy(() => import("views/admin/opportunities/Vie
 const OpportunitiesImport = React.lazy(() => import("views/admin/opportunities/components/OpprtunityImport"));
 const Account = React.lazy(() => import("views/admin/account"));
 const AccountView = React.lazy(() => import("views/admin/account/View"));
+const AccountImport = React.lazy(() => import("views/admin/account/components/AccountImport"));
 
 const routes = [
   // ========================== Dashboard ==========================
@@ -179,7 +180,7 @@ const routes = [
     component: Property,
   },
   {
-    name: "Properties ",
+    name: "Properties",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     parentName: "Properties",
     under: "properties",
@@ -238,6 +239,15 @@ const routes = [
     parentName: "Account",
     icon: <Icon as={TbBulb} width='20px' height='20px' color='inherit' />,
     component: AccountView,
+  },
+  {
+    name: "Account",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/accountImport",
+    under: "account",
+    parentName: "Account",
+    icon: <Icon as={TbBulb} width='20px' height='20px' color='inherit' />,
+    component: AccountImport,
   },
 
   // -----------------------------Email Template-------------------------------------

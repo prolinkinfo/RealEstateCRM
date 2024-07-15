@@ -135,62 +135,7 @@ const Index = (props) => {
     }
     const customFields = [
         {
-            "name": "opportunityName",
-            "label": "Opportunity Name",
-            "type": "text",
-            "fixed": false,
-            "isDefault": false,
-            "delete": false,
-            "belongsTo": null,
-            "backendType": "Mixed",
-            "isTableField": false,
-            "isView": false,
-            "options": [
-                {
-                    "name": "",
-                    "value": "",
-                    "_id": "6690be4a4e0f5916f4313f13"
-                },
-                {
-                    "name": "",
-                    "value": "",
-                    "_id": "6690be4a4e0f5916f4313f14"
-                }
-            ],
-            "validation": [
-                {
-                    "require": true,
-                    "message": "Opportunity Name is required ",
-                    "_id": "6690be4a4e0f5916f4313f15"
-                },
-                {
-                    "min": false,
-                    "value": "",
-                    "message": "",
-                    "_id": "6690be4a4e0f5916f4313f16"
-                },
-                {
-                    "max": false,
-                    "value": "",
-                    "message": "",
-                    "_id": "6690be4a4e0f5916f4313f17"
-                },
-                {
-                    "value": "",
-                    "message": "",
-                    "match": false,
-                    "_id": "6690be4a4e0f5916f4313f18"
-                },
-                {
-                    "message": "",
-                    "formikType": "",
-                    "_id": "6690be4a4e0f5916f4313f19"
-                }
-            ],
-            "_id": "6690be4a4e0f5916f4313f12"
-        },
-        {
-            "name": "accountName",
+            "name": "name",
             "label": "Account Name",
             "type": "text",
             "fixed": false,
@@ -204,49 +149,49 @@ const Index = (props) => {
                 {
                     "name": "",
                     "value": "",
-                    "_id": "6690be854e0f5916f4314260"
+                    "_id": "6694b8112cf3cbec6b5286c0"
                 },
                 {
                     "name": "",
                     "value": "",
-                    "_id": "6690be854e0f5916f4314261"
+                    "_id": "6694b8112cf3cbec6b5286c1"
                 }
             ],
             "validation": [
                 {
                     "require": true,
-                    "message": "Account Name is required ",
-                    "_id": "6690be854e0f5916f4314262"
+                    "message": "Account Name is required",
+                    "_id": "6694b8112cf3cbec6b5286c2"
                 },
                 {
                     "min": false,
                     "value": "",
                     "message": "",
-                    "_id": "6690be854e0f5916f4314263"
+                    "_id": "6694b8112cf3cbec6b5286c3"
                 },
                 {
                     "max": false,
                     "value": "",
                     "message": "",
-                    "_id": "6690be854e0f5916f4314264"
+                    "_id": "6694b8112cf3cbec6b5286c4"
                 },
                 {
                     "value": "",
                     "message": "",
                     "match": false,
-                    "_id": "6690be854e0f5916f4314265"
+                    "_id": "6694b8112cf3cbec6b5286c5"
                 },
                 {
                     "message": "",
                     "formikType": "",
-                    "_id": "6690be854e0f5916f4314266"
+                    "_id": "6694b8112cf3cbec6b5286c6"
                 }
             ],
-            "_id": "6690be854e0f5916f431425f"
+            "_id": "6694b8112cf3cbec6b5286bf"
         },
         {
-            "name": "opportunityAmount",
-            "label": "Opportunity Amount",
+            "name": "officePhone",
+            "label": "Office Phone",
             "type": "number",
             "fixed": false,
             "isDefault": false,
@@ -259,50 +204,50 @@ const Index = (props) => {
                 {
                     "name": "",
                     "value": "",
-                    "_id": "6690bea44e0f5916f43145c5"
+                    "_id": "6694b8662cf3cbec6b5289fd"
                 },
                 {
                     "name": "",
                     "value": "",
-                    "_id": "6690bea44e0f5916f43145c6"
+                    "_id": "6694b8662cf3cbec6b5289fe"
                 }
             ],
             "validation": [
                 {
-                    "require": true,
-                    "message": "Opportunity Amount is required ",
-                    "_id": "6690bea44e0f5916f43145c7"
+                    "require": false,
+                    "message": "",
+                    "_id": "6694b8662cf3cbec6b5289ff"
                 },
                 {
                     "min": false,
                     "value": "",
                     "message": "",
-                    "_id": "6690bea44e0f5916f43145c8"
+                    "_id": "6694b8662cf3cbec6b528a00"
                 },
                 {
                     "max": false,
                     "value": "",
                     "message": "",
-                    "_id": "6690bea44e0f5916f43145c9"
+                    "_id": "6694b8662cf3cbec6b528a01"
                 },
                 {
                     "value": "",
                     "message": "",
                     "match": false,
-                    "_id": "6690bea44e0f5916f43145ca"
+                    "_id": "6694b8662cf3cbec6b528a02"
                 },
                 {
                     "message": "",
                     "formikType": "",
-                    "_id": "6690bea44e0f5916f43145cb"
+                    "_id": "6694b8662cf3cbec6b528a03"
                 }
             ],
-            "_id": "6690bea44e0f5916f43145c4"
+            "_id": "6694b8662cf3cbec6b5289fc"
         },
         {
-            "name": "expectedCloseDate",
-            "label": "Expected Close Date",
-            "type": "date",
+            "name": "fax",
+            "label": "Fax",
+            "type": "number",
             "fixed": false,
             "isDefault": false,
             "delete": false,
@@ -314,50 +259,50 @@ const Index = (props) => {
                 {
                     "name": "",
                     "value": "",
-                    "_id": "6690bec04e0f5916f4314942"
+                    "_id": "6694b8742cf3cbec6b528d52"
                 },
                 {
                     "name": "",
                     "value": "",
-                    "_id": "6690bec04e0f5916f4314943"
+                    "_id": "6694b8742cf3cbec6b528d53"
                 }
             ],
             "validation": [
                 {
-                    "require": true,
-                    "message": "Expected Close Date is required ",
-                    "_id": "6690bec04e0f5916f4314944"
+                    "require": false,
+                    "message": "",
+                    "_id": "6694b8742cf3cbec6b528d54"
                 },
                 {
                     "min": false,
                     "value": "",
                     "message": "",
-                    "_id": "6690bec04e0f5916f4314945"
+                    "_id": "6694b8742cf3cbec6b528d55"
                 },
                 {
                     "max": false,
                     "value": "",
                     "message": "",
-                    "_id": "6690bec04e0f5916f4314946"
+                    "_id": "6694b8742cf3cbec6b528d56"
                 },
                 {
                     "value": "",
                     "message": "",
                     "match": false,
-                    "_id": "6690bec04e0f5916f4314947"
+                    "_id": "6694b8742cf3cbec6b528d57"
                 },
                 {
                     "message": "",
-                    "formikType": "date",
-                    "_id": "6690bec04e0f5916f4314948"
+                    "formikType": "",
+                    "_id": "6694b8742cf3cbec6b528d58"
                 }
             ],
-            "_id": "6690bec04e0f5916f4314941"
+            "_id": "6694b8742cf3cbec6b528d51"
         },
         {
-            "name": "salesStage",
-            "label": "Sales Stage",
-            "type": "select",
+            "name": "emailAddress",
+            "label": "Email Address",
+            "type": "text",
             "fixed": false,
             "isDefault": false,
             "delete": false,
@@ -367,87 +312,47 @@ const Index = (props) => {
             "isView": false,
             "options": [
                 {
-                    "name": "Prospecting",
-                    "value": "Prospecting",
-                    "_id": "6690bf4a4e0f5916f4314cd7"
+                    "name": "",
+                    "value": "",
+                    "_id": "6694b8942cf3cbec6b5290bf"
                 },
                 {
-                    "name": "Qualification",
-                    "value": "Qualification",
-                    "_id": "6690bf4a4e0f5916f4314cd8"
-                },
-                {
-                    "name": "Needs Analysis",
-                    "value": "Needs Analysis",
-                    "_id": "6690bf4a4e0f5916f4314cd9"
-                },
-                {
-                    "name": "Value Propositon",
-                    "value": "Value Propositon",
-                    "_id": "6690bf4a4e0f5916f4314cda"
-                },
-                {
-                    "name": "Identifying Decision Makers",
-                    "value": "Identifying Decision Makers",
-                    "_id": "6690bf4a4e0f5916f4314cdb"
-                },
-                {
-                    "name": "Perception Analysis",
-                    "value": "Perception Analysis",
-                    "_id": "6690bf4a4e0f5916f4314cdc"
-                },
-                {
-                    "name": "Proposal/Price Quote",
-                    "value": "Proposal/Price Quote",
-                    "_id": "6690bf4a4e0f5916f4314cdd"
-                },
-                {
-                    "name": "Negotiation/Review",
-                    "value": "Negotiation/Review",
-                    "_id": "6690bf4a4e0f5916f4314cde"
-                },
-                {
-                    "name": "Closed/Won",
-                    "value": "Closed/Won",
-                    "_id": "6690bf4a4e0f5916f4314cdf"
-                },
-                {
-                    "name": "Closed/Lost",
-                    "value": "Closed/Lost",
-                    "_id": "6690bf4a4e0f5916f4314ce0"
+                    "name": "",
+                    "value": "",
+                    "_id": "6694b8942cf3cbec6b5290c0"
                 }
             ],
             "validation": [
                 {
-                    "require": true,
-                    "message": "Sales Stage is required",
-                    "_id": "6690bf4a4e0f5916f4314ce1"
+                    "require": false,
+                    "message": "",
+                    "_id": "6694b8942cf3cbec6b5290c1"
                 },
                 {
                     "min": false,
                     "value": "",
                     "message": "",
-                    "_id": "6690bf4a4e0f5916f4314ce2"
+                    "_id": "6694b8942cf3cbec6b5290c2"
                 },
                 {
                     "max": false,
                     "value": "",
                     "message": "",
-                    "_id": "6690bf4a4e0f5916f4314ce3"
+                    "_id": "6694b8942cf3cbec6b5290c3"
                 },
                 {
                     "value": "",
                     "message": "",
                     "match": false,
-                    "_id": "6690bf4a4e0f5916f4314ce4"
+                    "_id": "6694b8942cf3cbec6b5290c4"
                 },
                 {
                     "message": "",
-                    "formikType": "",
-                    "_id": "6690bf4a4e0f5916f4314ce5"
+                    "formikType": "email",
+                    "_id": "6694b8942cf3cbec6b5290c5"
                 }
             ],
-            "_id": "6690bf4a4e0f5916f4314cd6"
+            "_id": "6694b8942cf3cbec6b5290be"
         }
     ]
 

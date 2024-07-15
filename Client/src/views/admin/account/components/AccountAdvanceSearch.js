@@ -8,30 +8,28 @@ import { useDispatch } from 'react-redux';
 
 
 
-const AccountAdvanceSearch = (props) => {
+const OpprtunityAdvanceSearch = (props) => {
     const { state, allData, advanceSearch, setAdvanceSearch, isLoding, setSearchedData, setDisplaySearchData, setSearchClear, setSearchbox } = props;
 
     const dispatch = useDispatch();
     const initialValues = {
-        opportunityName: '',
-        accountName: '',
-        opportunityAmount: '',
-        expectedCloseDate: '',
-        salesStage: '',
+        name: '',
+        officePhone: '',
+        fax: '',
+        emailAddress: '',
     }
     const validationSchema = yup.object({
-        opportunityName: yup.string(),
-        accountName: yup.string(),
-        opportunityAmount: yup.string(),
-        expectedCloseDate: yup.string(),
-        salesStage: yup.string()
+        name: yup.string(),
+        officePhone: yup.string(),
+        fax: yup.string(),
+        emailAddress: yup.string()
     });
     const formik = useFormik({
         initialValues: initialValues,
         validationSchema: validationSchema,
         onSubmit: (values, { resetForm }) => {
             dispatch(setSearchValue(values))
-            dispatch(getSearchData({ values: values, allData: allData, type: 'Opprtunity' }))
+            dispatch(getSearchData({ values: values, allData: allData, type: 'Account' }))
             // const searchResult = allData?.filter(
             //     (item) =>
             //         (!values?.senderName || (item?.senderName && item?.senderName.toLowerCase().includes(values?.senderName?.toLowerCase()))) &&
@@ -41,24 +39,20 @@ const AccountAdvanceSearch = (props) => {
             // let getValue = [values.senderName, values?.realetedTo, values?.createByName].filter(value => value);
             const getValue = [
                 {
-                    name: ["opportunityName"],
-                    value: values.opportunityName
+                    name: ["name"],
+                    value: values.name
                 },
                 {
-                    name: ["accountName"],
-                    value: values.accountName
+                    name: ["officePhone"],
+                    value: values.officePhone
                 },
                 {
-                    name: ["opportunityAmount"],
-                    value: values.opportunityAmount
+                    name: ["fax"],
+                    value: values.fax
                 },
                 {
-                    name: ["expectedCloseDate"],
-                    value: values.expectedCloseDate
-                },
-                {
-                    name: ["salesStage"],
-                    value: values.salesStage
+                    name: ["emailAddress"],
+                    value: values.emailAddress
                 },
             ]
             dispatch(setGetTagValues(getValue.filter(item => item.value)))
@@ -82,84 +76,64 @@ const AccountAdvanceSearch = (props) => {
                         <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={2}>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
-                                    Opportunity Name
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values?.opportunityName}
-                                    name="opportunityName"
-                                    placeholder='Enter Opportunity Name'
-                                    fontWeight='500'
-                                />
-                                <Text mb='10px' color={'red'}> {errors.opportunityName && touched.opportunityName && errors.opportunityName}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, md: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
                                     Account Name
                                 </FormLabel>
                                 <Input
                                     fontSize='sm'
                                     onChange={handleChange} onBlur={handleBlur}
-                                    value={values?.accountName}
-                                    name="accountName"
+                                    value={values?.name}
+                                    name="name"
                                     placeholder='Enter Account Name'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.accountName && touched.accountName && errors.accountName}</Text>
+                                <Text mb='10px' color={'red'}> {errors.name && touched.name && errors.name}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
-                                    Opportunity Amount
+                                    Office Phone
                                 </FormLabel>
                                 <Input
                                     fontSize='sm'
                                     onChange={handleChange} onBlur={handleBlur}
-                                    value={values?.opportunityAmount}
-                                    name="opportunityAmount"
-                                    placeholder='Enter Opportunity Amount'
+                                    value={values?.officePhone}
+                                    name="officePhone"
+                                    type="number"
+                                    placeholder='Enter Office Phone'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.opportunityAmount && touched.opportunityAmount && errors.opportunityAmount}</Text>
+                                <Text mb='10px' color={'red'}> {errors.officePhone && touched.officePhone && errors.officePhone}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
-                                    Expected Close Date
+                                    Fax
                                 </FormLabel>
                                 <Input
                                     fontSize='sm'
                                     onChange={handleChange} onBlur={handleBlur}
-                                    value={values?.expectedCloseDate}
-                                    name="expectedCloseDate"
-                                    type="date"
+                                    value={values?.fax}
+                                    name="fax"
+                                    placeholder='Enter Fax'
+                                    type="number"
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.expectedCloseDate && touched.expectedCloseDate && errors.expectedCloseDate}</Text>
+                                <Text mb='10px' color={'red'}> {errors.fax && touched.fax && errors.fax}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
-                                    Sales Stage
+                                    Email Address
                                 </FormLabel>
-                                <Select
-                                    value={values.salesStage}
-                                    name="salesStage"
-                                    onChange={handleChange}
+                                <Input
+                                    fontSize='sm'
+                                    onChange={handleChange} onBlur={handleBlur}
+                                    value={values?.emailAddress}
+                                    name="emailAddress"
+                                    placeholder='Enter Email Address'
+                                    type="email"
                                     fontWeight='500'
-                                    placeholder={'Sales Stage'}
-                                >
-                                    <option value={"Prospecting"}>Prospecting</option>
-                                    <option value={"Qualification"}>Qualification</option>
-                                    <option value={"Needs Analysis"}>Needs Analysis</option>
-                                    <option value={"Value Propositon"}>Value Propositon</option>
-                                    <option value={"Identifying Decision Makers"}>Identifying Decision Makers</option>
-                                    <option value={"Perception Analysis"}>Perception Analysis</option>
-                                    <option value={"Proposal/Price Quote"}>Proposal/Price Quote</option>
-                                    <option value={"Negotiation/Review"}>Negotiation/Review</option>
-                                    <option value={"Closed/Won"}>Closed/Won</option>
-                                    <option value={"Closed/Lost"}>Closed/Lost</option>
-                                </Select>
-                                <Text mb='10px' color={'red'}> {errors.salesStage && touched.salesStage && errors.salesStage}</Text>
+                                />
+                                <Text mb='10px' color={'red'}> {errors.emailAddress && touched.emailAddress && errors.emailAddress}</Text>
                             </GridItem>
+
 
                         </Grid>
                     </ModalBody>
@@ -173,4 +147,4 @@ const AccountAdvanceSearch = (props) => {
     )
 }
 
-export default AccountAdvanceSearch
+export default OpprtunityAdvanceSearch

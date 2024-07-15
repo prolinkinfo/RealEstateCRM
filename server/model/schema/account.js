@@ -4,10 +4,10 @@ const Account = new mongoose.Schema({
     name: String,
     officePhone: Number,
     alternatePhone: Number,
-    // assignUser: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'User',
-    // },
+    assignUser: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    },
     website: String,
     fax: String,
     ownership: String,
@@ -43,10 +43,10 @@ const Account = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    // memberOf: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Account',
-    // },
+    memberOf: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Account',
+    },
     createBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

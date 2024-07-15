@@ -84,17 +84,17 @@ function AccountImport() {
     const AddData = async (opportunity) => {
         try {
             setIsLoding(true);
-            let response = await postApi('api/opportunity/addMany', opportunity)
+            let response = await postApi('api/account/addMany', opportunity)
             if (response.status === 200) {
-                toast.success(`Opprtunities imported successfully`)
+                toast.success(`Accounts imported successfully`)
                 resetForm();
-                navigate('/opportunities');
+                navigate('/account');
             }
         } catch (e) {
             console.error(e);
-            toast.error(`Opprtunities import failed`)
+            toast.error(`Accounts import failed`)
             resetForm();
-            navigate('/opportunities');
+            navigate('/account');
         }
         finally {
             setIsLoding(false)
@@ -119,7 +119,7 @@ function AccountImport() {
                     setImportedFileFields(fileHeadingFields);
                 } else {
                     toast.error("Empty or invalid CSV file");
-                    navigate("/contacts");
+                    navigate("/account");
                 }
 
             } else if (extension === 'xlsx') {
@@ -147,7 +147,7 @@ function AccountImport() {
                     setImportedFileFields(fileHeadingFields);
                 } else {
                     toast.error("Empty or invalid XLSX file");
-                    navigate("/contacts");
+                    navigate("/account");
                 }
             }
         };

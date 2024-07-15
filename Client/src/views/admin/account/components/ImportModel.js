@@ -11,7 +11,7 @@ const ImportModal = (props) => {
     const navigate = useNavigate();
 
     const initialValues = {
-        opprotunities: ''
+        accounts: ''
     }
 
     const formik = useFormik({
@@ -28,9 +28,9 @@ const ImportModal = (props) => {
             setIsLoding(true)
             resetForm()
 
-            if (values.opprotunities) {
+            if (values.accounts) {
                 onClose();
-                navigate('/opprotunitiesImport', { state: { fileData: values.opprotunities, customFields: customFields } });
+                navigate('/accountImport', { state: { fileData: values.accounts, customFields: customFields } });
             }
 
         } catch (e) {
@@ -45,13 +45,13 @@ const ImportModal = (props) => {
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Import Opprotunities</ModalHeader>
+                <ModalHeader>Import Account</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12 }}>
-                            <CommonFileUpload count={values.opprotunities.length} onFileSelect={(file) => setFieldValue('opprotunities', file)} text={text} />
-                            <Text mb='10px' color={'red'}> {errors.opprotunities && touched.opprotunities && <>Please Select {text}</>}</Text>
+                            <CommonFileUpload count={values.accounts.length} onFileSelect={(file) => setFieldValue('accounts', file)} text={text} />
+                            <Text mb='10px' color={'red'}> {errors.accounts && touched.accounts && <>Please Select {text}</>}</Text>
                         </GridItem>
                     </Grid>
                 </ModalBody>
