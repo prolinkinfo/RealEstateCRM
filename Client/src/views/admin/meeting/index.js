@@ -145,6 +145,7 @@ const Index = () => {
                 searchboxOutside={searchboxOutside}
                 setGetTagValuesOutside={setGetTagValuesOutside}
                 setSearchboxOutside={setSearchboxOutside}
+                handleSearchType="MeetingSearch"
             />
 
             <MeetingAdvanceSearch

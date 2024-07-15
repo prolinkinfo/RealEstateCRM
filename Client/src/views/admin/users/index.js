@@ -133,10 +133,10 @@ const Index = () => {
                 isOpen={isOpen}
                 onClose={onclose}
                 access={{
-                    create : true,
-                    edit : true,
-                    delete : true,
-                    view : true,
+                    create: true,
+                    edit: true,
+                    delete: true,
+                    view: true,
                 }}
                 onOpen={handleOpen}
                 selectedValues={selectedValues}
@@ -150,6 +150,7 @@ const Index = () => {
                 searchboxOutside={searchboxOutside}
                 setGetTagValuesOutside={setGetTagValuesOutside}
                 setSearchboxOutside={setSearchboxOutside}
+                handleSearchType="UsersSearch"
             />
             <AddEditUser isOpen={isOpen} onClose={handleClose} data={editData} selectedId={selectedId} userAction={userAction} setUserAction={setUserAction} fetchData={fetchData} />
             <CommonDeleteModel isOpen={deleteMany} onClose={() => setDelete(false)} type='User' handleDeleteData={handleDeleteClick} ids={''} selectedValues={selectedValues} />

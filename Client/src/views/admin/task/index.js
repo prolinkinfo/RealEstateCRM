@@ -45,6 +45,7 @@ const Task = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch();
 
+    console.log("displaySearchData----::", displaySearchData)
     const handleEditOpen = (row) => {
         onOpen();
         setUserAction("edit")
@@ -223,6 +224,7 @@ const Task = () => {
                 searchboxOutside={searchboxOutside}
                 setGetTagValuesOutside={setGetTagValuesOutside}
                 setSearchboxOutside={setSearchboxOutside}
+                handleSearchType="TasksSearch"
             />
 
             <TaskAdvanceSearch
