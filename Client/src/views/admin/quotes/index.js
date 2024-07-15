@@ -172,6 +172,7 @@ const Task = () => {
                 searchboxOutside={searchboxOutside}
                 setGetTagValuesOutside={setGetTagValuesOutside}
                 setSearchboxOutside={setSearchboxOutside}
+                handleSearchType="QuotesSearch"
             />
 
             <TaskAdvanceSearch
