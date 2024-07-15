@@ -535,6 +535,7 @@ const Index = (props) => {
                 searchboxOutside={searchboxOutside}
                 setGetTagValuesOutside={setGetTagValuesOutside}
                 setSearchboxOutside={setSearchboxOutside}
+                handleSearchType="OpprtunitySearch"
             />
 
             <OpprtunityAdvanceSearch

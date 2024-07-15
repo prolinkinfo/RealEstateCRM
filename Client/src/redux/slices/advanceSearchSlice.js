@@ -34,6 +34,9 @@ const advanceSearchSlice = createSlice({
                         );
                     });
                     break;
+                case 'TasksSearch':
+                    state.searchResult = action.payload.searchData;
+                    break;
                 case 'Meeting':
                     state.searchResult = action.payload.allData?.filter(
                         (item) => {
@@ -51,6 +54,9 @@ const advanceSearchSlice = createSlice({
                         }
                     )
                     break;
+                case 'MeetingSearch':
+                    state.searchResult = action.payload.searchData;
+                    break;
                 case 'Calls':
                     state.searchResult = action.payload.allData?.filter(
                         (item) =>
@@ -58,6 +64,9 @@ const advanceSearchSlice = createSlice({
                             (!action.payload.values?.realetedTo || (action.payload.values.realetedTo === "contact" ? item.createBy : item.createByLead)) &&
                             (!action.payload.values?.createByName || (item?.createByName && item?.createByName.toLowerCase().includes(action.payload.values?.createByName?.toLowerCase())))
                     )
+                    break;
+                case 'CallsSearch':
+                    state.searchResult = action.payload.searchData;
                     break;
                 case 'Leads':
                     state.searchResult = action.payload.allData?.filter(
@@ -73,6 +82,9 @@ const advanceSearchSlice = createSlice({
                             (!action.payload.values?.createByName || (item?.createByName && item?.createByName.toLowerCase().includes(action.payload.values?.createByName?.toLowerCase())))
                     )
                     break;
+                case 'EmailSearch':
+                    state.searchResult = action.payload.searchData;
+                    break;
                 case 'Users':
                     state.searchResult = action?.payload?.allData?.filter(
                         (item) =>
@@ -80,6 +92,9 @@ const advanceSearchSlice = createSlice({
                             (!action.payload?.values?.username || (item?.username && item?.username.toLowerCase().includes(action.payload?.values?.username?.toLowerCase()))) &&
                             (!action.payload?.values?.lastName || (item?.lastName && item?.lastName.toLowerCase().includes(action.payload?.values?.lastName?.toLowerCase())))
                     )
+                    break;
+                case 'UsersSearch':
+                    state.searchResult = action.payload.searchData;
                     break;
                 case 'Opprtunity':
                     state.searchResult = action?.payload?.allData?.filter(
@@ -99,6 +114,8 @@ const advanceSearchSlice = createSlice({
                             (!action.payload?.values?.fax || (item?.fax && item?.fax.toString().toLowerCase().includes(action.payload?.values?.fax?.toString().toLowerCase()))) &&
                             (!action.payload?.values?.emailAddress || (item?.emailAddress && item?.emailAddress.toLowerCase().includes(action.payload?.values?.emailAddress?.toLowerCase())))
                     )
+                case 'OpprtunitySearch':
+                    state.searchResult = action.payload.searchData;
                     break;
                 default:
                 // state.count += 3;

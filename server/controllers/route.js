@@ -24,6 +24,7 @@ const statusRoute = require("./status/_routes");
 const calendarRoute = require("./calendar/_routes")
 const emailTempRoute = require("./emailTemplate/_routes")
 const opportunityRoute = require("./opportunities/_routes")
+const quotesRoute = require("./quotes/_routes")
 const moduleActiveDiactiveRoute = require("./moduleActiveDiactive/_routes")
 const accountRoute = require("./account/_routes")
 
@@ -52,8 +53,10 @@ router.use("/validation", validationRoute);
 router.use("/form", formRoute);
 router.use("/status", statusRoute);
 router.use("/calendar", calendarRoute);
+
 router.use("/email-temp", emailTempRoute);
 router.use("/opportunity", opportunityRoute);
+router.use("/quotes", quotesRoute);
 router.use("/account", accountRoute);
 
 module.exports = router;

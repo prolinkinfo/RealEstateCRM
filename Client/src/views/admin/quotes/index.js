@@ -20,7 +20,6 @@ import { fetchTaskData } from '../../../redux/slices/taskSlice';
 import { toast } from 'react-toastify';
 
 const Task = () => {
-    const title = "Tasks";
     const [action, setAction] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [edit, setEdit] = useState(false);
@@ -91,23 +90,8 @@ const Task = () => {
                 </div>
             )
         },
-        { Header: "Related", accessor: "category", type: 'text', formikType: '' },
-        {
-            Header: "Status", accessor: "status", type: 'select', formikType: '', cell: (cell) => (
-                <div className="selectOpt">
-                    <Select className={changeStatus(cell)} onChange={(e) => setStatusData(cell, e)} height={7} width={130} value={cell?.value} style={{ fontSize: "14px" }}>
-                        <option value='completed'>Completed</option>
-                        <option value='todo'>Todo</option>
-                        <option value='onHold'>On Hold</option>
-                        <option value='inProgress'>In Progress</option>
-                        <option value='pending'>Pending</option>
-                    </Select>
-                </div>
-            )
-        },
-        { Header: "Assign To", accessor: "assignToName", type: 'text', formikType: '' },
-        { Header: "Start Date", accessor: "start", type: 'date', formikType: '' },
-        { Header: "End Date", accessor: "end", type: 'date', formikType: '' },
+        { Header: "Assign To", accessor: "validUntil", type: 'text', formikType: '' },
+        { Header: "Start Date", accessor: "quoteNumber", type: 'date', formikType: '' },
         ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : []),
     ];
 
@@ -120,37 +104,6 @@ const Task = () => {
             toast.error("Failed to fetch data", "error");
         }
         setIsLoding(false)
-    }
-    const setStatusData = async (cell, e) => {
-        try {
-            setIsLoding(true)
-            let response = await putApi(`api/task/changeStatus/${cell?.row?.original?._id}`, { status: e.target.value });
-            if (response.status === 200) {
-                setAction((pre) => !pre)
-            }
-        } catch (e) {
-            console.log(e);
-        }
-        finally {
-            setIsLoding(false)
-        }
-    }
-    const changeStatus = (cell) => {
-        switch (cell.value) {
-            case 'pending':
-                return 'pending';
-            case 'completed':
-                return 'completed';
-            case 'todo':
-                return 'toDo';
-            case 'onHold':
-                return 'onHold';
-            case 'inProgress':
-                return 'inProgress';
-            default:
-                return '';
-        }
-
     }
 
     const handleDeleteTask = async (ids) => {
@@ -171,10 +124,6 @@ const Task = () => {
     }
 
 
-    const handleDateClick = (cell) => {
-        setId(cell?.row?.values?._id)
-        setEventView(true)
-    }
     const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
     const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 
@@ -198,7 +147,7 @@ const Task = () => {
     return (
         <div>
             <CommonCheckTable
-                title={title}
+                title={"Quotes"}
                 isLoding={isLoding}
                 columnData={tableColumns ?? []}
                 dataColumn={dataColumn ?? []}

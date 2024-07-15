@@ -27,6 +27,7 @@ import { GrValidate } from "react-icons/gr";
 import { VscFileSubmodule } from "react-icons/vsc";
 import { HiTemplate } from "react-icons/hi";
 import { TbBulb } from "react-icons/tb";
+import { BsBlockquoteRight } from "react-icons/bs";
 
 // Admin Imports
 const MainDashboard = React.lazy(() => import("views/admin/default"));
@@ -37,8 +38,8 @@ const ContactView = React.lazy(() => import('views/admin/contact/View'));
 const ContactImport = React.lazy(() => import("views/admin/contact/components/ContactImport"));
 
 const Quotes = React.lazy(() => import('views/admin/quotes'));
-// const ContactView = React.lazy(() => import('views/admin/contact/View'));
-// const ContactImport = React.lazy(() => import("views/admin/contact/components/ContactImport"));
+// const QuotesView = React.lazy(() => import('views/admin/quotes/View'));
+// const QuotesImport = React.lazy(() => import("views/admin/quotes/components/ContactImport"));
 
 const User = React.lazy(() => import("views/admin/users"));
 const UserView = React.lazy(() => import("views/admin/users/View"));
@@ -151,7 +152,7 @@ const routes = [
     name: "Quotes",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/quotes",
-    icon: <Icon as={MdContacts} width='20px' height='20px' color='inherit' />,
+    icon: <Icon as={BsBlockquoteRight} width='20px' height='20px' color='inherit' />,
     component: Quotes,
   },
   {

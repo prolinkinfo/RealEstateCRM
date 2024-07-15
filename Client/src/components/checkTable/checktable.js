@@ -20,6 +20,7 @@ import { getSearchData, setGetTagValues, setSearchValue } from '../../redux/slic
 const CommonCheckTable = (props) => {
     const { isLoding, title, columnData, size, dataColumn, setSearchedDataOut, state, allData, ManageGrid, deleteMany, tableCustomFields, access, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, checkBox, AdvanceSearch, searchDisplay, setSearchDisplay, BackButton, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside, selectType, customSearch } = props;
     const { dataLength } = props;
+    const { handleSearchType } = props;
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
     const [displaySearchData, setDisplaySearchData] = useState(false);
@@ -72,8 +73,8 @@ const CommonCheckTable = (props) => {
         setGopageValue(pageOptions.length)
     }
 
-
     const handleSearch = (results) => {
+        AdvanceSearch && dispatch(getSearchData({ searchData: results, type: handleSearchType }))
         AdvanceSearch ? setSearchedDataOut(results) : setSearchedData(results);
     };
 
@@ -179,7 +180,7 @@ const CommonCheckTable = (props) => {
         setDisplaySearchData(true)
         setAdvaceSearch(false)
     }
-    
+
     useEffect(() => {
         state && findStatus()
     }, [state, allData]);
