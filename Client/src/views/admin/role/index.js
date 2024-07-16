@@ -1,14 +1,13 @@
 import { Button, Text, useDisclosure } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { getApi } from "services/api";
-import CommonCheckTable from "components/checkTable/checktable";
+import CommonCheckTable from "components/reactTable/checktable";
 import { IoIosArrowBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import RoleModal from "./components/roleModal";
 import AddRole from "./Add";
 
 const Index = () => {
-  let title = 'Roles'
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [roleModal, setRoleModal] = useState(false);
   const [access, setAccess] = useState([])
@@ -78,10 +77,10 @@ const Index = () => {
   return (
     <div>
       <CommonCheckTable
-        title={title}
+        title={'Roles'}
         isLoding={isLoding}
         columnData={columns ?? []}
-        dataColumn={columns ?? []}
+        // dataColumn={columns ?? []}
         allData={data || []}
         tableData={data}
         // AdvanceSearch={() => ""}

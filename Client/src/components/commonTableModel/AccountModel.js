@@ -2,7 +2,7 @@ import { Button, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFo
 import React, { useEffect, useState } from 'react'
 import Spinner from 'components/spinner/Spinner'
 import { GiClick } from "react-icons/gi";
-import CommonCheckTable from 'components/checkTable/checktable';
+import CommonCheckTable from 'components/reactTable/checktable';
 import { useDispatch } from 'react-redux';
 import { getApi } from 'services/api';
 import { fetchAccountData } from '../../redux/slices/accountSlice';
@@ -33,24 +33,11 @@ const AccountModel = (props) => {
     }
     const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-        {
-            Header: 'Account Name', accessor: 'name'
-        },
-        {
-            Header: 'Office Phone', accessor: 'officePhone',
-        },
-        {
-            Header: 'Fax', accessor: 'fax',
-        },
-        {
-            Header: 'Email Address', accessor: 'emailAddress',
-        },
-
+        { Header: 'Account Name', accessor: 'name' },
+        { Header: 'Office Phone', accessor: 'officePhone', },
+        { Header: 'Fax', accessor: 'fax', },
+        { Header: 'Email Address', accessor: 'emailAddress', },
     ];
-
-    const [columns, setColumns] = useState([...tableColumns]);
-    const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
-    const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 
     // const fetchData = async () => {
     //     setIsLoding(true)
@@ -82,8 +69,8 @@ const AccountModel = (props) => {
                         <CommonCheckTable
                             title={title}
                             isLoding={isLoding}
-                            columnData={columns ?? []}
-                            dataColumn={columns ?? []}
+                            columnData={tableColumns ?? []}
+                            // dataColumn={columns ?? []}
                             allData={data ?? []}
                             tableData={data}
                             AdvanceSearch={() => ""}

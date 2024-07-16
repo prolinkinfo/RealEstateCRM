@@ -2,7 +2,7 @@ import { Button, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFo
 import React, { useEffect, useState } from 'react'
 import Spinner from 'components/spinner/Spinner'
 import { GiClick } from "react-icons/gi";
-import CommonCheckTable from 'components/checkTable/checktable';
+import CommonCheckTable from 'components/reactTable/checktable';
 import { fetchLeadCustomFiled } from '../../redux/slices/leadCustomFiledSlice';
 import { useDispatch } from 'react-redux';
 import { getApi } from 'services/api';
@@ -40,9 +40,9 @@ const UserModel = (props) => {
         { Header: "role", accessor: "role", },
     ];
 
-    const [columns, setColumns] = useState([...tableColumns]);
-    const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
-    const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
+    // const [columns, setColumns] = useState([...tableColumns]);
+    // const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
+    // const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 
     // const fetchData = async () => {
     //     setIsLoding(true)
@@ -68,8 +68,8 @@ const UserModel = (props) => {
                         <CommonCheckTable
                             title={title}
                             isLoding={isLoding}
-                            columnData={columns ?? []}
-                            dataColumn={columns ?? []}
+                            columnData={tableColumns ?? []}
+                            // dataColumn={columns ?? []}
                             allData={data ?? []}
                             tableData={data}
                             AdvanceSearch={() => ""}

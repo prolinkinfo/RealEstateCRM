@@ -28,7 +28,7 @@ import CustomView from "utils/customView";
 import AddDocumentModal from "utils/addDocumentModal";
 import CommonDeleteModel from "components/commonDeleteModel";
 import { deleteApi } from "services/api";
-import CommonCheckTable from "components/checkTable/checktable";
+import CommonCheckTable from "components/reactTable/checktable";
 import moment from 'moment';
 import AddEdit from '../task/components/AddEdit'
 import { useDispatch, useSelector } from "react-redux";
@@ -412,7 +412,7 @@ const View = () => {
                                                         title={"Email"}
                                                         isLoding={isLoding}
                                                         columnData={columnsDataColumns ?? []}
-                                                        dataColumn={columnsDataColumns ?? []}
+                                                        // dataColumn={columnsDataColumns ?? []}
                                                         allData={showEmail ? allData.EmailHistory : allData?.EmailHistory?.length > 0 ? [allData.EmailHistory[0]] : []}
                                                         tableData={showEmail ? allData.EmailHistory : allData?.EmailHistory?.length > 0 ? [allData.EmailHistory[0]] : []}
                                                         AdvanceSearch={false}
@@ -436,7 +436,7 @@ const View = () => {
                                                         title={"Call"}
                                                         isLoding={isLoding}
                                                         columnData={callColumns ?? []}
-                                                        dataColumn={callColumns ?? []}
+                                                        // dataColumn={callColumns ?? []}
                                                         allData={showCall ? allData?.phoneCallHistory : allData?.phoneCallHistory?.length > 0 ? [allData?.phoneCallHistory[0]] : []}
                                                         tableData={showCall ? allData?.phoneCallHistory : allData?.phoneCallHistory?.length > 0 ? [allData?.phoneCallHistory[0]] : []}
                                                         AdvanceSearch={false}
@@ -459,7 +459,7 @@ const View = () => {
                                                         title={"Task"}
                                                         isLoding={isLoding}
                                                         columnData={taskColumns ?? []}
-                                                        dataColumn={taskColumns ?? []}
+                                                        // dataColumn={taskColumns ?? []}
                                                         allData={showTasks ? allData?.task : allData?.task?.length > 0 ? [allData?.task[0]] : []}
                                                         tableData={showTasks ? allData?.task : allData?.task?.length > 0 ? [allData?.task[0]] : []}
                                                         AdvanceSearch={false}
@@ -482,7 +482,7 @@ const View = () => {
                                                         title={"Meeting"}
                                                         isLoding={isLoding}
                                                         columnData={MeetingColumns ?? []}
-                                                        dataColumn={MeetingColumns ?? []}
+                                                        // dataColumn={MeetingColumns ?? []}
                                                         dataLength={allData?.meetingHistory?.length}
                                                         allData={showMeetings ? allData?.meetingHistory : allData?.meetingHistory?.length > 0 ? [allData?.meetingHistory[0]] : []}
                                                         tableData={showMeetings ? allData?.meetingHistory : allData?.meetingHistory?.length > 0 ? [allData?.meetingHistory[0]] : []}

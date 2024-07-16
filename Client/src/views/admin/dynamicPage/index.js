@@ -5,7 +5,7 @@ import { Grid, GridItem, Text, Menu, MenuButton, MenuItem, MenuList, useDisclosu
 import { DeleteIcon, ViewIcon, EditIcon } from "@chakra-ui/icons";
 import { CiMenuKebab } from "react-icons/ci";
 import { getApi } from "services/api";
-import CommonCheckTable from '../../../components/checkTable/checktable';
+import CommonCheckTable from '../../../components/reactTable/checktable';
 import Add from './add';
 import Edit from './Edit';
 import Spinner from 'components/spinner/Spinner';
@@ -24,7 +24,7 @@ const Index = () => {
     const [data, setData] = useState([]);
     const [tableColumns, setTableColumns] = useState([]);
     const [columns, setColumns] = useState([]);
-    const [dataColumn, setDataColumn] = useState([]);
+    // const [dataColumn, setDataColumn] = useState([]);
     const [selectedColumns, setSelectedColumns] = useState([]);
     const [action, setAction] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -99,9 +99,8 @@ const Index = () => {
             ...(singaleData?.fields?.filter((field) => field?.isTableField === true && !field?.isView)?.map((field) => ({ Header: field?.label, accessor: field?.name })) || []),
             ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : []),
         ];
-        setSelectedColumns(JSON.parse(JSON.stringify(tempTableColumns)));
+
         setColumns(tempTableColumns);
-        setTableColumns(JSON.parse(JSON.stringify(tempTableColumns)));
         setIsLoding(false);
     }
     const handleDelete = async (id, moduleId) => {
@@ -129,9 +128,9 @@ const Index = () => {
         fetchCustomDataFields();
     }, [action, title])
 
-    useEffect(() => {
-        setDataColumn(tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header)));
-    }, [tableColumns, selectedColumns])
+    // useEffect(() => {
+    //     setDataColumn(tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header)));
+    // }, [tableColumns, selectedColumns])
 
     return (
         <div>
@@ -144,17 +143,17 @@ const Index = () => {
                             title={moduleData?.moduleName}
                             isLoding={isLoding}
                             columnData={columns ?? []}
-                            dataColumn={dataColumn ?? []}
+                            // dataColumn={dataColumn ?? []}
                             allData={data ?? []}
                             tableData={data}
                             tableCustomFields={moduleData?.fields?.filter((field) => field?.isTableField === true) || []}
                             access={permission}
-                            action={action}
-                            setAction={setAction}
-                            selectedColumns={selectedColumns}
-                            setSelectedColumns={setSelectedColumns}
-                            isOpen={isOpen}
-                            onClose={onclose}
+                            // action={action}
+                            // setAction={setAction}
+                            // selectedColumns={selectedColumns}
+                            // setSelectedColumns={setSelectedColumns}
+                            // isOpen={isOpen}
+                            // onClose={onclose}
                             onOpen={onOpen}
                             selectedValues={selectedValues}
                             setSelectedValues={setSelectedValues}

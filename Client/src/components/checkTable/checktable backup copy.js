@@ -5,6 +5,7 @@ import { BsColumnsGap } from "react-icons/bs";
 import { FaSort, FaSortDown, FaSortUp } from 'react-icons/fa';
 import { SearchIcon, DeleteIcon, AddIcon } from "@chakra-ui/icons";
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table';
+import * as XLSX from "xlsx";
 import Card from 'components/card/Card';
 import CountUpComponent from 'components/countUpComponent/countUpComponent';
 import Pagination from 'components/pagination/Pagination';
@@ -15,62 +16,27 @@ import DataNotFound from "../notFoundData";
 import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
 import { getSearchData, setGetTagValues, setSearchValue } from '../../redux/slices/advanceSearchSlice'
-import { commonUtils } from 'utils/utils';
 
 const CommonCheckTable = (props) => {
-    const {
-        isLoding,
-        title,
-        columnData,
-        size,
-        // dataColumn,
-        setSearchedDataOut,
-        state,
-        allData,
-        ManageGrid,
-        deleteMany,
-        tableCustomFields,
-        access,
-        // selectedColumns,
-        // setSelectedColumns,
-        onOpen,
-        setDelete,
-        selectedValues,
-        setSelectedValues,
-        setIsImport,
-        checkBox,
-        AdvanceSearch,
-        searchDisplay,
-        setSearchDisplay,
-        BackButton,
-        searchboxOutside,
-        setGetTagValuesOutside,
-        setSearchboxOutside,
-        selectType,
-        customSearch,
-    } = props;
+    const { isLoding, title, columnData, size, dataColumn, setSearchedDataOut, state, allData, ManageGrid, deleteMany, tableCustomFields, access, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, checkBox, AdvanceSearch, searchDisplay, setSearchDisplay, BackButton, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside, selectType, customSearch } = props;
     const { dataLength } = props;
     const { handleSearchType } = props;
-
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
-
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
-
-    const [columns, setColumns] = useState(columnData || []);
-    const [tempSelectedColumns, setTempSelectedColumns] = useState(columns || []);
+    const columns = useMemo(() => dataColumn, [dataColumn]);
+    const [tempSelectedColumns, setTempSelectedColumns] = useState(dataColumn); // State to track changes
 
     const searchedDataOut = useSelector((state) => state?.advanceSearchData?.searchResult)
     const searchValue = useSelector((state) => state?.advanceSearchData?.searchValue)
     const getTagValues = useSelector((state) => state?.advanceSearchData?.getTagValues)
-    const data = useMemo(() => (AdvanceSearch ? searchDisplay : displaySearchData) ? (AdvanceSearch ? searchedDataOut : searchedData) : allData, [searchDisplay, displaySearchData, AdvanceSearch, searchedDataOut, searchedData, allData]);
-
-    const [manageColumnsModel, setManageColumnsModel] = useState(false);
+    const data = useMemo(() => (AdvanceSearch ? searchDisplay : displaySearchData) ? (AdvanceSearch ? searchedDataOut : searchedData) : allData, [(AdvanceSearch ? searchDisplay : displaySearchData) ? (AdvanceSearch ? searchedDataOut : searchedData) : allData]);
+    const [manageColumns, setManageColumns] = useState(false);
     const [csvColumns, setCsvColumns] = useState([]);
     const [searchbox, setSearchbox] = useState('');
     const [advaceSearch, setAdvaceSearch] = useState(false);
-    // const [column, setColumn] = useState('');
+    const [column, setColumn] = useState('');
     const [gopageValue, setGopageValue] = useState();
 
     const dispatch = useDispatch();
@@ -219,19 +185,17 @@ const CommonCheckTable = (props) => {
         state && findStatus()
     }, [state, allData]);
 
+    let isColumnSelected;
     const toggleColumnVisibility = (columnKey) => {
-        let updatedColumns;
-
-        if (tempSelectedColumns?.some((column) => column?.accessor === columnKey)) {
-            updatedColumns = tempSelectedColumns?.filter((column) => column?.accessor !== columnKey);
+        setColumn(columnKey);
+        isColumnSelected = tempSelectedColumns?.some((column) => column?.accessor === columnKey);
+        if (isColumnSelected) {
+            const updatedColumns = tempSelectedColumns?.filter((column) => column?.accessor !== columnKey);
+            setTempSelectedColumns(updatedColumns);
         } else {
             const columnToAdd = columnData?.find((column) => column?.accessor === columnKey);
-            updatedColumns = [...tempSelectedColumns, columnToAdd];
+            setTempSelectedColumns([...tempSelectedColumns, columnToAdd]);
         }
-
-        const orderedColumns = columnData?.filter(column => updatedColumns.some(updatedColumn => updatedColumn?.accessor === column?.accessor));
-        setTempSelectedColumns(orderedColumns);
-
     };
 
     const handleCheckboxChange = (event, value) => {
@@ -251,8 +215,10 @@ const CommonCheckTable = (props) => {
 
     };
 
-    const handleColumnClose = () => {
-        setManageColumnsModel(!manageColumnsModel)
+    const handleColumnClear = () => {
+        isColumnSelected = selectedColumns?.some((selectedColumn) => selectedColumn?.accessor === column?.accessor)
+        setTempSelectedColumns(columnData);
+        setManageColumns(!manageColumns ? !manageColumns : false)
     };
 
 
@@ -272,12 +238,7 @@ const CommonCheckTable = (props) => {
                     });
                     return selectedFieldsData;
                 });
-                commonUtils.convertJsonToCsvOrExcel({
-                    jsonArray: selectedRecordsWithSpecificFileds,
-                    csvColumns: csvColumns,
-                    fileName: title || 'data',
-                    extension: extension
-                });
+                convertJsonToCsvOrExcel(selectedRecordsWithSpecificFileds, csvColumns, title || 'data', extension);
             } else {
                 const AllRecordsWithSpecificFileds = allData?.map((rec) => {
                     const selectedFieldsData = {};
@@ -286,20 +247,29 @@ const CommonCheckTable = (props) => {
                     });
                     return selectedFieldsData;
                 });
-                commonUtils.convertJsonToCsvOrExcel({
-                    jsonArray: AllRecordsWithSpecificFileds,
-                    csvColumns: csvColumns,
-                    fileName: title || 'data',
-                    extension: extension
-                });
+                convertJsonToCsvOrExcel(AllRecordsWithSpecificFileds, csvColumns, title || 'data', extension);
             }
-            setSelectedValues([])
         } catch (e) {
             console.error(e);
         }
     };
 
-    const handleRemoveFromTag = (name) => {
+    const convertJsonToCsvOrExcel = (jsonArray, csvColumns, fileName, extension) => {
+        const csvHeader = csvColumns?.map((col) => col?.Header);
+
+        const csvContent = [
+            csvHeader,
+            ...jsonArray?.map((row) => csvColumns?.map((col) => row[col?.accessor]))
+        ];
+
+        const ws = XLSX.utils.aoa_to_sheet(csvContent);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
+        XLSX.writeFile(wb, `${fileName}.${extension}`);    // .csv, .xlsx
+        setSelectedValues([])
+    };
+
+    const handleRemove = (name) => {
         const filter = (getTagValues || []).filter((item) => {
             if (Array.isArray(name?.name)) {
                 return name.name?.toString() !== item.name?.toString();
@@ -331,16 +301,15 @@ const CommonCheckTable = (props) => {
     }, []);
 
     useEffect(() => {
-        setColumns(columnData);
-    }, [columnData]);
+        setTempSelectedColumns(dataColumn);
+    }, [dataColumn]);
 
     useEffect(() => {
-        if (columns) {
-            let tempCsvColumns = columns?.filter((col) => col?.Header !== '#' && col?.Header !== 'Action')?.map((field) => ({ Header: field?.Header, accessor: field?.accessor }));
+        if (selectedColumns) {
+            let tempCsvColumns = selectedColumns?.filter((col) => col?.Header !== '#' && col?.Header !== 'Action')?.map((field) => ({ Header: field?.Header, accessor: field?.accessor }));
             setCsvColumns([...tempCsvColumns])
         }
-    }, [columns]);
-
+    }, [selectedColumns]);
     return (
         <>
             <Card
@@ -392,7 +361,7 @@ const CommonCheckTable = (props) => {
                                     <BsColumnsGap />
                                 </MenuButton>
                                 <MenuList minW={'fit-content'} transform={"translate(1670px, 60px)"} zIndex={2} >
-                                    <MenuItem onClick={() => setManageColumnsModel(true)} width={"165px"}> Manage Columns
+                                    <MenuItem onClick={() => setManageColumns(true)} width={"165px"}> Manage Columns
                                     </MenuItem>
                                     {typeof setIsImport === "function" && <MenuItem width={"165px"} onClick={() => setIsImport(true)}> Import {title}
                                     </MenuItem>}
@@ -420,7 +389,7 @@ const CommonCheckTable = (props) => {
                                 colorScheme="gray"
                             >
                                 <TagLabel>{item.value}</TagLabel>
-                                <TagCloseButton onClick={() => handleRemoveFromTag(item)} />
+                                <TagCloseButton onClick={() => handleRemove(item)} />
                             </Tag>
                         ))}
                     </HStack>
@@ -494,17 +463,7 @@ const CommonCheckTable = (props) => {
                                                         else {
                                                             data = (
                                                                 <Flex align="center" >
-                                                                    {item.Header ===
-                                                                        "#" &&
-                                                                        (checkBox || checkBox === undefined) && (
-                                                                            <Checkbox
-                                                                                colorScheme="brandScheme"
-                                                                                value={selectedValues}
-                                                                                isChecked={selectedValues?.includes(cell?.value)}
-                                                                                onChange={(event) => handleCheckboxChange(event, cell?.value)}
-                                                                                me="10px"
-                                                                            />
-                                                                        )}
+                                                                    {(item.Header === "#" && (checkBox || checkBox === undefined)) && <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues?.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />}
 
                                                                     <Text color={textColor} fontSize="sm" fontWeight="700">
                                                                         {item.Header === "#" ? cell?.row?.index + 1 : cell?.value ? cell?.value : '-'}
@@ -536,17 +495,17 @@ const CommonCheckTable = (props) => {
                     pageSize={pageSize} pageIndex={pageIndex} dataLength={15} />}
 
                 {/* Manage Columns */}
-                <Modal onClose={() => { setManageColumnsModel(false); }} isOpen={manageColumnsModel} isCentered>
+                <Modal onClose={() => { setManageColumns(false); }} isOpen={manageColumns} isCentered>
                     <ModalOverlay />
                     <ModalContent>
                         <ModalHeader>Manage Columns</ModalHeader>
-                        <ModalCloseButton onClick={() => { setManageColumnsModel(false); }} />
+                        <ModalCloseButton onClick={() => { setManageColumns(false); }} />
                         <ModalBody>
                             <div>
                                 {columnData?.map((column) => (
                                     <Text display={"flex"} key={column?.accessor} py={2}>
                                         <Checkbox
-                                            defaultChecked={columns?.some((item) => item?.accessor === column?.accessor)}
+                                            defaultChecked={selectedColumns?.some((selectedColumn) => selectedColumn?.accessor === column?.accessor)}
                                             onChange={() => toggleColumnVisibility(column?.accessor)}
                                             pe={2}
                                         />
@@ -556,26 +515,11 @@ const CommonCheckTable = (props) => {
                             </div>
                         </ModalBody>
                         <ModalFooter>
-                            <Button
-                                colorScheme='brand'
-                                mr={2}
-                                onClick={() => {
-                                    setColumns([...tempSelectedColumns]);
-                                    setManageColumnsModel(false);
-                                }}
-                                disabled={isLoding ? true : false}
-                                size='sm'
-                            >
-                                {isLoding ? <Spinner /> : 'Save'}
-                            </Button>
-                            <Button
-                                variant='outline'
-                                colorScheme="red"
-                                size='sm'
-                                onClick={() => handleColumnClose()}
-                            >
-                                Close
-                            </Button>
+                            <Button colorScheme='brand' mr={2} onClick={() => {
+                                setSelectedColumns([...tempSelectedColumns]);
+                                setManageColumns(false);
+                            }} disabled={isLoding ? true : false} size='sm'>{isLoding ? <Spinner /> : 'Save'}</Button>
+                            <Button variant='outline' colorScheme="red" size='sm' onClick={() => handleColumnClear()}>Close</Button>
                         </ModalFooter>
                     </ModalContent>
                 </Modal>

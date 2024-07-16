@@ -157,12 +157,12 @@ const Index = () => {
                             tableData={data}
                             tableCustomFields={contactData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
                             access={permission}
-                            action={action}
-                            setAction={setAction}
+                            // action={action}
+                            // setAction={setAction}
                             // selectedColumns={selectedColumns}
                             // setSelectedColumns={setSelectedColumns}
-                            isOpen={isOpen}
-                            onClose={onclose}
+                            // isOpen={isOpen}
+                            // onClose={onclose}
                             onOpen={onOpen}
                             selectedValues={selectedValues}
                             setSelectedValues={setSelectedValues}
