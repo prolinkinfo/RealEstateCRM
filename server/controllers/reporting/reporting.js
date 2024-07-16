@@ -8,8 +8,9 @@ const { Property } = require('../../model/schema/property')
 const TextMsg = require('../../model/schema/textMsg');
 const Task = require('../../model/schema/task')
 const MeetingHistory = require('../../model/schema/meeting');
-const user = require('../../model/schema/user');
+// const user = require('../../model/schema/user');
 const customField = require('../../model/schema/customField');
+const Account = require('../../model/schema/account');
 
 const index = async (req, res) => {
     const query = req.query
@@ -71,7 +72,14 @@ const lineChart = async (req, res) => {
     }).exec()
     const phoneCallData = phoneCall.filter(item => item.sender !== null);
 
-    const userDetails = await user.findOne({ _id: req.user.userId }).populate({
+    let account = await Account.find(senderQuery).populate({
+        path: 'createBy',
+        match: { deleted: false } // Populate only if createBy.deleted is false
+    }).exec()
+    const AccountData = account.filter(item => item.createBy !== null);
+
+
+    const userDetails = await User.findOne({ _id: req.user.userId }).populate({
         path: 'roles'
     })
     const fields = await customField.find({ deleted: false })
@@ -102,6 +110,7 @@ const lineChart = async (req, res) => {
         { name: "Meetings", length: meetingHistoryData?.length, color: "purple" },
         { name: "Emails", length: emailData?.length, color: "yellow" },
         { name: "Calls", length: phoneCallData?.length, color: "cyan" },
+        { name: "Account", length: AccountData?.length, color: "orange" },
     ]
 
     const colors = ["whiteAlpha", "blackAlpha", "gray", "red", "orange", "yellow", "green", "teal", "blue", "cyan", "purple", "pink", "linkedin", "facebook", "messenger", "whatsapp", "twitter", "telegram"];
@@ -134,6 +143,10 @@ const lineChart = async (req, res) => {
             }
             if (item.title === "Properties" && item.view === false) {
                 const data = result.filter((val) => val.name !== "Properties")
+                result = data
+            }
+            if (item.title === "Account" && item.view === false) {
+                const data = result.filter((val) => val.name !== "Account")
                 result = data
             }
             if (item.view === true) {

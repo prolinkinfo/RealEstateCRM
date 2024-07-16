@@ -25,7 +25,7 @@ const View = (props) => {
     const { id } = params
     const user = JSON.parse(localStorage.getItem("user"))
 
-    const [permission, contactAccess, leadAccess] = HasAccess(['Tasks', 'Contacts', 'Leads'])
+    const [permission, contactAccess, leadAccess] = HasAccess(['Opportunities', 'Contacts', 'Leads'])
 
     const [data, setData] = useState()
     const { onOpen, onClose } = useDisclosure()

@@ -4,10 +4,6 @@ const Account = new mongoose.Schema({
     name: String,
     officePhone: Number,
     alternatePhone: Number,
-    assignUser: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-    },
     website: String,
     fax: String,
     ownership: String,
@@ -35,6 +31,10 @@ const Account = new mongoose.Schema({
     annualRevenue: String,
     rating: String,
     SICCode: String,
+    assignUser: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    },
     emailOptOut: {
         type: Boolean,
         default: false
