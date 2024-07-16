@@ -141,7 +141,7 @@ const AddEdit = (props) => {
     return (
         <div>
             {userModel && <UserModel onClose={() => setUserModel(false)} isOpen={userModel} fieldName={"assignUser"} setFieldValue={setFieldValue} data={userData} isLoding={isLoding} setIsLoding={setIsLoding} />}
-            {accountModel && <AccountModel onClose={() => setAccountModel(false)} isOpen={accountModel} fieldName={"accountName"} setFieldValue={setFieldValue} />}
+            {accountModel && <AccountModel onClose={() => setAccountModel(false)} isOpen={accountModel} fieldName={"accountName"} setFieldValue={setFieldValue} data={accountList} />}
 
             <Drawer isOpen={isOpen} size={size}>
                 <DrawerOverlay />

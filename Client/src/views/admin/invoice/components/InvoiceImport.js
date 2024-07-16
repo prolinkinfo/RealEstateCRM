@@ -48,8 +48,8 @@ function InvoiceImport() {
         initialValues: initialValues,
         onSubmit: (values, { resetForm }) => {
 
-            const quotesData = importedFileData?.map((item, ind) => {
-                const quotes = {
+            const invoiceData = importedFileData?.map((item, ind) => {
+                const invoices = {
                     createdDate: new Date(),
                     deleted: item[values.deleted || "deleted"] || false,
                     createBy: JSON.parse(localStorage.getItem('user'))._id,
@@ -61,29 +61,29 @@ function InvoiceImport() {
                     const fieldValue = item[selectedField] || '';
 
                     if (field?.type?.toLowerCase() === "date") {
-                        quotes[field?.accessor] = moment(fieldValue).isValid() ? fieldValue : '';
+                        invoices[field?.accessor] = moment(fieldValue).isValid() ? fieldValue : '';
                     } else if (field?.type?.toLowerCase() === "number" && ['positive', 'negative'].includes(field?.formikType?.toLowerCase())) {
-                        quotes[field?.accessor] = parseFloat(fieldValue) || '';
+                        invoices[field?.accessor] = parseFloat(fieldValue) || '';
                     } else if (field?.type?.toLowerCase() === "number") {
-                        quotes[field?.accessor] = parseInt(fieldValue, 10) || '';
+                        invoices[field?.accessor] = parseInt(fieldValue, 10) || '';
                     } else {
-                        quotes[field?.accessor] = fieldValue;
+                        invoices[field?.accessor] = fieldValue;
                     }
                 });
 
-                return quotes;
+                return invoices;
             });
 
-            AddData(quotesData);
+            AddData(invoiceData);
         }
     });
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
 
-    const AddData = async (quotes) => {
+    const AddData = async (invoices) => {
         try {
             setIsLoding(true);
-            let response = await postApi('api/invoices/addMany', quotes)
+            let response = await postApi('api/invoices/addMany', invoices)
             if (response.status === 200) {
                 toast.success(`Invoices imported successfully`)
                 resetForm();
