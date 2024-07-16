@@ -31,8 +31,10 @@ const index = async (req, res) => {
             "Calender",
             "Payments",
             "Opportunities",
-            "Documents",
             "Account",
+            "Quotes",
+            "Invoices",
+            "Documents",
             "Reporting and Analytics",
         ];
 
