@@ -1,5 +1,6 @@
 const Account = require('../../model/schema/account')
 const mongoose = require('mongoose');
+const User = require('../../model/schema/user');
 
 const add = async (req, res) => {
     try {
@@ -27,8 +28,10 @@ const index = async (req, res) => {
         const query = req.query
         query.deleted = false;
 
-        if (query.createBy) {
-            query.createBy = new mongoose.Types.ObjectId(query.createBy);
+        const user = await User.findById(req.user.userId)
+        if (user?.role !== "superAdmin") {
+            delete query.createBy
+            query.$or = [{ createBy: new mongoose.Types.ObjectId(req.user.userId) }, { assignUser: new mongoose.Types.ObjectId(req.user.userId) }];
         }
 
         const result = await Account.aggregate([
