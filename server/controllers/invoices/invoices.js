@@ -1,10 +1,10 @@
-const Quotes = require("../../model/schema/quotes.js");
+const Invoices = require("../../model/schema/invoices.js");
 const mongoose = require("mongoose");
 
 
 
 async function getNextAutoIncrementValue() {
-    const num = await Quotes.countDocuments({});
+    const num = await Invoices.countDocuments({});
     return num + 1;
 }
 
@@ -16,7 +16,7 @@ const index = async (req, res) => {
     }
 
     try {
-        let result = await Quotes.aggregate([
+        let result = await Invoices.aggregate([
             { $match: query },
             {
                 $lookup: {
@@ -91,19 +91,19 @@ const index = async (req, res) => {
 const add = async (req, res) => {
     try {
         const nextAutoIncrementValue = await getNextAutoIncrementValue();
-        const result = new Quotes({ ...req.body, quoteNumber: nextAutoIncrementValue });
+        const result = new Invoices({ ...req.body, invoiceNumber: nextAutoIncrementValue });
         await result.save();
         res.status(200).json(result);
     } catch (err) {
-        console.error("Failed to create Quotes:", err);
-        res.status(400).json({ error: "Failed to create Quotes : ", err });
+        console.error("Failed to create Invoices:", err);
+        res.status(400).json({ error: "Failed to create Invoices : ", err });
     }
 };
 
 const edit = async (req, res) => {
     try {
 
-        let result = await Quotes.findOneAndUpdate(
+        let result = await Invoices.findOneAndUpdate(
             { _id: req.params.id },
             { $set: req.body },
             { new: true }
@@ -111,8 +111,8 @@ const edit = async (req, res) => {
 
         res.status(200).json(result);
     } catch (err) {
-        console.error("Failed to create Quotes:", err);
-        res.status(400).json({ error: "Failed to create Quotes : ", err });
+        console.error("Failed to create Invoices:", err);
+        res.status(400).json({ error: "Failed to create Invoices : ", err });
     }
 };
 const addMany = async (req, res) => {
@@ -127,19 +127,19 @@ const addMany = async (req, res) => {
         //     account: new mongoose.Types.ObjectId(item.account),
         //     contact: new mongoose.Types.ObjectId(item.contact),
         // }))
-        const inserted = await Quotes.insertMany(req.body);
+        const inserted = await Invoices.insertMany(req.body);
 
         res.status(200).json(inserted);
     } catch (err) {
-        console.error('Failed to create Quotes :', err);
-        res.status(400).json({ error: 'Failed to create Quotes' });
+        console.error('Failed to create Invoices :', err);
+        res.status(400).json({ error: 'Failed to create Invoices' });
     }
 };
 const view = async (req, res) => {
     try {
-        let response = await Quotes.findOne({ _id: req.params.id });
+        let response = await Invoices.findOne({ _id: req.params.id });
         if (!response) return res.status(404).json({ message: "no Data Found." });
-        let result = await Quotes.aggregate([
+        let result = await Invoices.aggregate([
             { $match: { _id: response._id } },
             {
                 $lookup: {
@@ -223,7 +223,7 @@ const view = async (req, res) => {
 
 const deleteData = async (req, res) => {
     try {
-        const result = await Quotes.findByIdAndUpdate(req.params.id, {
+        const result = await Invoices.findByIdAndUpdate(req.params.id, {
             deleted: true,
         });
         res.status(200).json({ message: "done", result });
@@ -234,7 +234,7 @@ const deleteData = async (req, res) => {
 
 const deleteMany = async (req, res) => {
     try {
-        const result = await Quotes.updateMany(
+        const result = await Invoices.updateMany(
             { _id: { $in: req.body } },
             { $set: { deleted: true } }
         );
@@ -242,11 +242,11 @@ const deleteMany = async (req, res) => {
         if (result?.matchedCount > 0 && result?.modifiedCount > 0) {
             return res
                 .status(200)
-                .json({ message: "Quotes Removed successfully", result });
+                .json({ message: "Invoices Removed successfully", result });
         } else {
             return res
                 .status(404)
-                .json({ success: false, message: "Failed to remove Quotes" });
+                .json({ success: false, message: "Failed to remove Invoices" });
         }
     } catch (err) {
         return res.status(404).json({ success: false, message: "error", err });

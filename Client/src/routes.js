@@ -29,7 +29,8 @@ import { HiTemplate } from "react-icons/hi";
 import { TbBulb } from "react-icons/tb";
 import { BsBlockquoteRight } from "react-icons/bs";
 import { RiAccountCircleFill } from "react-icons/ri";
-
+import { TbInvoice } from "react-icons/tb";
+import { TbFileInvoice } from "react-icons/tb";
 // Admin Imports
 const MainDashboard = React.lazy(() => import("views/admin/default"));
 
@@ -41,6 +42,10 @@ const ContactImport = React.lazy(() => import("views/admin/contact/components/Co
 const Quotes = React.lazy(() => import('views/admin/quotes'));
 const QuotesView = React.lazy(() => import('views/admin/quotes/View'));
 const QuotesImport = React.lazy(() => import("views/admin/quotes/components/QuotesImport"));
+
+const Invoices = React.lazy(() => import('views/admin/invoice'));
+const InvoicesView = React.lazy(() => import('views/admin/invoice/View'));
+const InvoicesImport = React.lazy(() => import("views/admin/invoice/components/InvoiceImport"));
 
 const User = React.lazy(() => import("views/admin/users"));
 const UserView = React.lazy(() => import("views/admin/users/View"));
@@ -148,7 +153,7 @@ const routes = [
     path: "/contactImport",
     component: ContactImport,
   },
-  // --------------- contact Routes --------------------
+  // --------------- Quotes Routes --------------------
   {
     name: "Quotes",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
@@ -172,6 +177,32 @@ const routes = [
     parentName: "Quotes",
     path: "/quotesImport",
     component: QuotesImport,
+  },
+  // --------------- Invoices Routes --------------------
+  {
+
+    name: "Invoices",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/invoices",
+    icon: <Icon as={TbFileInvoice} width='20px' height='20px' color='inherit' />,
+    component: Invoices,
+  },
+  {
+    name: "Invoices",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    under: "invoices",
+    parentName: "Invoices",
+    path: "/invoicesView/:id",
+    component: InvoicesView,
+  },
+  {
+    name: "Invoices Import",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    both: true,
+    under: "invoices",
+    parentName: "Invoices",
+    path: "/invoicesImport",
+    component: InvoicesImport,
   },
   // ------------- Property Routes ------------------------
   {

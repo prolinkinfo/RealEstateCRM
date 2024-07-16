@@ -19,7 +19,7 @@ import { opprtunitiesSchema } from '../../../schema/opprtunitiesSchema';
 import { useFormik } from 'formik';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
-import { quoteSchema } from '../../../schema/quoteSchema';
+import { invoicesSchema } from '../../../schema/invoicesSchema';
 
 const View = (props) => {
     const params = useParams()
@@ -43,7 +43,7 @@ const View = (props) => {
 
     const fetchViewData = async () => {
         if (id) {
-            let result = await getApi('api/quotes/view/', id);
+            let result = await getApi('api/invoices/view/', id);
             setData(result?.data);
         }
     }
@@ -58,7 +58,7 @@ const View = (props) => {
                 .from(element)
                 .set({
                     margin: [0, 0, 0, 0],
-                    filename: `Quotes_Details_${moment().format("DD-MM-YYYY")}.pdf`,
+                    filename: `Invoice_Details_${moment().format("DD-MM-YYYY")}.pdf`,
                     image: { type: "jpeg", quality: 0.98 },
                     html2canvas: { scale: 2, useCORS: true, allowTaint: true },
                     jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
@@ -75,10 +75,10 @@ const View = (props) => {
     };
     const handleDeleteAccount = async (ids) => {
         try {
-            let response = await deleteManyApi('api/quotes/deleteMany', ids)
+            let response = await deleteManyApi('api/invoices/deleteMany', ids)
             if (response.status === 200) {
-                navigate('/quotes')
-                toast.success(`Quotes Delete successfully`)
+                navigate('/invoices')
+                toast.success(`Invoices Delete successfully`)
                 setDeleteManyModel(false)
             }
         } catch (error) {
@@ -91,16 +91,12 @@ const View = (props) => {
 
     const initialValues = {
         title: data?.title,
-        oppotunity: data?.oppotunity,
-        quoteStage: data?.quoteStage,
-        invoiceStatus: data?.invoiceStatus,
-        validUntile: data?.validUntile,
+        quoteNumber: data?.quoteNumber,
+        quoteDate: data?.quoteDate,
+        dueDate: data?.dueDate,
+        invoiceDate: data?.invoiceDate,
+        status: data?.status,
         assignedTo: data?.assignedTo,
-        paymentTerms: data?.paymentTerms,
-        approvalStatus: data?.approvalStatus,
-        nonPrimaryEmail: data?.nonPrimaryEmail,
-        approvalIssues: data?.approvalIssues,
-        terms: data?.terms,
         description: data?.description,
         account: data?.account,
         contact: data?.contact,
@@ -124,19 +120,20 @@ const View = (props) => {
         ptax: data?.ptax,
         tax: data?.tax,
         grandTotal: data?.grandTotal,
+        grandTotal: data?.grandTotal,
         modifiedBy: JSON.parse(localStorage.getItem('user'))._id
     }
 
     const formik = useFormik({
         initialValues: initialValues,
-        validationSchema: quoteSchema,
+        validationSchema: invoicesSchema,
         enableReinitialize: true,
         onSubmit: async (values, { resetForm }) => {
             const payload = {
                 ...values,
                 modifiedDate: new Date()
             }
-            let response = await putApi(`api/quotes/edit/${id}`, payload)
+            let response = await putApi(`api/invoices/edit/${id}`, payload)
             if (response.status === 200) {
                 setEditableField(null);
                 fetchViewData()
@@ -169,7 +166,7 @@ const View = (props) => {
                                 <Box>
                                     <Box display={"flex"} justifyContent={"space-between"} >
                                         <Heading size="md" mb={3}>
-                                            Quotes Details
+                                            Invoice Details
                                         </Heading>
                                         <Flex id="hide-btn" >
                                             <Menu>
@@ -219,184 +216,104 @@ const View = (props) => {
                                         <Text onDoubleClick={() => handleDoubleClick("title", data?.title, "Title")}>{data?.title ? data?.title : ' - '}</Text>
                                 }
                             </GridItem>
-                            <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Opportunity</Text>
-                                {
-                                    data?.oppotunity ?
-                                        <Link to={`/opportunitiesView/${data?.oppotunity}`}>
-                                            <Text color={contactAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }} style={{ cursor: "pointer" }}>{data?.oppotunityName ? data?.oppotunityName : ' - '}</Text>
-                                        </Link>
-                                        :
-                                        <Text color={contactAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }}>{data?.oppotunityName ? data?.oppotunityName : ' - '}</Text>
 
-                                }
-                            </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Quote Stage </Text>
-                                {
-                                    editableField === "quoteStage" ?
-                                        <>
-                                            <Select
-                                                value={formik?.values.quoteStage}
-                                                name="quoteStage"
-                                                onChange={formik?.handleChange}
-                                                onBlur={handleBlur}
-                                                mb={formik?.errors.quoteStage && formik?.touched.quoteStage ? undefined : '10px'}
-                                                fontWeight='500'
-                                                placeholder={'Quote Stage'}
-                                                borderColor={formik?.errors.quoteStage && formik?.touched.quoteStage ? "red.300" : null}
-                                            >
-                                                <option value="Draft" >Draft</option>
-                                                <option value="Negotiation" >Negotiation</option>
-                                                <option value="Delivered" >Delivered</option>
-                                                <option value="On Hold" >On Hold</option>
-                                                <option value="Confirmed" >Confirmed</option>
-                                                <option value="Closed Accepted" >Closed Accepted</option>
-                                                <option value="Closed Lost" >Closed Lost</option>
-                                                <option value="Closed Dead" >Closed Dead</option>
-                                            </Select>
-                                            <Text mb='10px' color={'red'}> {formik?.errors.quoteStage && formik?.touched.quoteStage && formik?.errors.quoteStage}</Text>
-                                        </>
-                                        :
-                                        <Text onDoubleClick={() => handleDoubleClick("quoteStage", data?.quoteStage, "Quote Stage")}>{data?.quoteStage ? data?.quoteStage : ' - '}</Text>
-                                }
-                            </GridItem>
-                            <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Invoice Status </Text>
-                                {
-                                    editableField === "invoiceStatus" ?
-                                        <>
-                                            <Select
-                                                value={formik?.values.invoiceStatus}
-                                                name="invoiceStatus"
-                                                onChange={formik?.handleChange}
-                                                onBlur={handleBlur}
-                                                mb={formik?.errors.invoiceStatus && formik?.touched.invoiceStatus ? undefined : '10px'}
-                                                fontWeight='500'
-                                                placeholder={'Invoice Status'}
-                                                borderColor={formik?.errors.invoiceStatus && formik?.touched.invoiceStatus ? "red.300" : null}
-                                            >
-                                                <option value="Not Invoiced">Not Invoiced</option>
-                                                <option value="Invoiced">Invoiced</option>
-                                            </Select>
-                                            <Text mb='10px' color={'red'}> {formik?.errors.invoiceStatus && formik?.touched.invoiceStatus && formik?.errors.invoiceStatus}</Text>
-                                        </>
-                                        :
-                                        <Text onDoubleClick={() => handleDoubleClick("invoiceStatus", data?.invoiceStatus, "Invoice Status")}>{data?.invoiceStatus ? data?.invoiceStatus : ' - '}</Text>
-                                }
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Quote Number</Text>
+                                <Text >{data?.quoteNumber ? data?.quoteNumber : ' - '}</Text>
                             </GridItem>
 
                             <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Valid Untile</Text>
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Quote Date </Text>
                                 {
-                                    editableField === "validUntile" ?
+                                    editableField === "quoteDate" ?
                                         <>
                                             <Input
-                                                name="validUntile"
+                                                id="text"
+                                                name="quoteDate"
                                                 type="date"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={dayjs(formik.values.validUntile).format("YYYY-MM-DD")}
-                                                borderColor={formik?.errors?.validUntile && formik?.touched?.validUntile ? "red.300" : null}
+                                                value={dayjs(formik.values.quoteDate).format("YYYY-MM-DD")}
+                                                borderColor={formik?.errors?.quoteDate && formik?.touched?.quoteDate ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.validUntile && formik?.touched.validUntile && formik?.errors.validUntile}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors.quoteDate && formik?.touched.quoteDate && formik?.errors.quoteDate}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("validUntile", data?.validUntile, "Valid Untile")}>{data?.validUntile ? data?.validUntile : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("quoteDate", data?.quoteDate, "Quote Date")}>{data?.quoteDate ? dayjs(data?.quoteDate).format("YYYY-MM-DD") : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Payment Terms</Text>
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Due Date</Text>
                                 {
-                                    editableField === "paymentTerms" ?
+                                    editableField === "dueDate" ?
+                                        <>
+                                            <Input
+                                                id="text"
+                                                name="dueDate"
+                                                type="date"
+                                                onChange={formik.handleChange}
+                                                onBlur={handleBlur}
+                                                value={dayjs(formik.values.dueDate).format("YYYY-MM-DD")}
+                                                borderColor={formik?.errors?.dueDate && formik?.touched?.dueDate ? "red.300" : null}
+                                                autoFocus
+                                            />
+                                            <Text mb='10px' color={'red'}> {formik?.errors.dueDate && formik?.touched.dueDate && formik?.errors.dueDate}</Text>
+                                        </>
+                                        :
+                                        <Text onDoubleClick={() => handleDoubleClick("dueDate", data?.dueDate, "Due Date")}>{data?.dueDate ? dayjs(data?.dueDate).format("YYYY-MM-DD") : ' - '}</Text>
+                                }
+                            </GridItem>
+                            <GridItem colSpan={{ base: 2, md: 1 }} >
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Invoice Date</Text>
+                                {
+                                    editableField === "invoiceDate" ?
+                                        <>
+                                            <Input
+                                                id="text"
+                                                name="invoiceDate"
+                                                type="date"
+                                                onChange={formik.handleChange}
+                                                onBlur={handleBlur}
+                                                value={dayjs(formik.values.invoiceDate).format("YYYY-MM-DD")}
+                                                borderColor={formik?.errors?.invoiceDate && formik?.touched?.invoiceDate ? "red.300" : null}
+                                                autoFocus
+                                            />
+                                            <Text mb='10px' color={'red'}> {formik?.errors.invoiceDate && formik?.touched.invoiceDate && formik?.errors.invoiceDate}</Text>
+                                        </>
+                                        :
+                                        <Text onDoubleClick={() => handleDoubleClick("invoiceDate", data?.invoiceDate, "Invoice Date")}>{data?.invoiceDate ? dayjs(data?.invoiceDate).format("YYYY-MM-DD") : ' - '}</Text>
+                                }
+                            </GridItem>
+
+
+                            <GridItem colSpan={{ base: 2, md: 1 }} >
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Status </Text>
+                                {
+                                    editableField === "status" ?
                                         <>
                                             <Select
-                                                value={formik?.values.paymentTerms}
-                                                name="paymentTerms"
+                                                value={formik?.values.status}
+                                                name="status"
                                                 onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                mb={formik?.errors.paymentTerms && formik?.touched.paymentTerms ? undefined : '10px'}
+                                                mb={formik?.errors.status && formik?.touched.status ? undefined : '10px'}
                                                 fontWeight='500'
-                                                placeholder={'Payment Terms'}
-                                                borderColor={formik?.errors.paymentTerms && formik?.touched.paymentTerms ? "red.300" : null}
+                                                borderColor={formik?.errors.status && formik?.touched.status ? "red.300" : null}
                                             >
-                                                <option value="Nett 15" >Nett 15</option>
-                                                <option value="Nett 30" >Nett 30</option>
+                                                <option value="Paid">Paid</option>
+                                                <option value="Unpaid">Unpaid</option>
+                                                <option value="Cancelled">Cancelled</option>
                                             </Select>
-                                            <Text mb='10px' color={'red'}> {formik?.errors.paymentTerms && formik?.touched.paymentTerms && formik?.errors.paymentTerms}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors.status && formik?.touched.status && formik?.errors.status}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("paymentTerms", data?.paymentTerms, "Payment Terms")}>{data?.paymentTerms ? data?.paymentTerms : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("status", data?.status, "IStatus")}>{data?.status ? data?.status : ' - '}</Text>
                                 }
                             </GridItem>
-                            <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Approval Status</Text>
-                                {
-                                    editableField === "approvalStatus" ?
-                                        <>
-                                            <Select
-                                                value={formik?.values.approvalStatus}
-                                                name="approvalStatus"
-                                                onChange={formik?.handleChange}
-                                                onBlur={handleBlur}
-                                                mb={formik?.errors.approvalStatus && formik?.touched.approvalStatus ? undefined : '10px'}
-                                                fontWeight='500'
-                                                placeholder={'Approval Status'}
-                                                borderColor={formik?.errors.approvalStatus && formik?.touched.approvalStatus ? "red.300" : null}
-                                            >
-                                                <option value="Approved">Approved</option>
-                                            </Select>
-                                            <Text mb='10px' color={'red'}> {formik?.errors.approvalStatus && formik?.touched.approvalStatus && formik?.errors.approvalStatus}</Text>
-                                        </>
-                                        :
-                                        <Text onDoubleClick={() => handleDoubleClick("approvalStatus", data?.approvalStatus, "Approval Status")}>{data?.approvalStatus ? data?.approvalStatus : ' - '}</Text>
-                                }
-                            </GridItem>
-                            <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Approval Issues</Text>
-                                {
-                                    editableField === "approvalIssues" ?
-                                        <>
-                                            <Textarea
-                                                fontSize='sm'
-                                                value={formik?.values.approvalIssues}
-                                                name="approvalIssues"
-                                                resize={"none"}
-                                                onBlur={handleBlur}
-                                                onChange={formik?.handleChange}
-                                                placeholder='Approval Issues'
-                                                fontWeight='500'
-                                                borderColor={formik?.errors.approvalIssues && formik?.touched.approvalIssues ? "red.300" : null}
-                                            />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.approvalIssues && formik?.touched.approvalIssues && formik?.errors.approvalIssues}</Text>
-                                        </>
-                                        :
-                                        <Text onDoubleClick={() => handleDoubleClick("approvalIssues", data?.approvalIssues, "Approval Issues")} style={{ width: "300px" }}>{data?.approvalIssues ? data?.approvalIssues : ' - '}</Text>
-                                }
-                            </GridItem>
-                            <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Terms</Text>
-                                {
-                                    editableField === "terms" ?
-                                        <>
-                                            <Textarea
-                                                fontSize='sm'
-                                                value={formik?.values.terms}
-                                                name="terms"
-                                                resize={"none"}
-                                                onBlur={handleBlur}
-                                                onChange={formik?.handleChange}
-                                                placeholder='Terms'
-                                                fontWeight='500'
-                                                borderColor={formik?.errors.terms && formik?.touched.terms ? "red.300" : null}
-                                            />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.terms && formik?.touched.terms && formik?.errors.terms}</Text>
-                                        </>
-                                        :
-                                        <Text onDoubleClick={() => handleDoubleClick("terms", data?.terms, "Terms")} style={{ width: "300px" }}>{data?.terms ? data?.terms : ' - '}</Text>
-                                }
-                            </GridItem>
+
+
+
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Description</Text>
                                 {
@@ -440,6 +357,18 @@ const View = (props) => {
                                         </Link>
                                         :
                                         <Text color={contactAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }}>{data?.contactName ? data?.contactName : ' - '}</Text>
+
+                                }
+                            </GridItem>
+                            <GridItem colSpan={{ base: 2, md: 1 }} >
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Assigned To</Text>
+                                {
+                                    data?.assignedTo ?
+                                        <Link to={`/userView/${data?.assignedTo}`}>
+                                            <Text color={contactAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }} style={{ cursor: "pointer" }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
+                                        </Link>
+                                        :
+                                        <Text color={contactAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
 
                                 }
                             </GridItem>
@@ -660,18 +589,7 @@ const View = (props) => {
                                 }
                             </GridItem> */}
 
-                            <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Assigned To</Text>
-                                {
-                                    data?.assignedTo ?
-                                        <Link to={`/userView/${data?.assignedTo}`}>
-                                            <Text color={contactAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }} style={{ cursor: "pointer" }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
-                                        </Link>
-                                        :
-                                        <Text color={contactAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
 
-                                }
-                            </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Total</Text>
                                 {

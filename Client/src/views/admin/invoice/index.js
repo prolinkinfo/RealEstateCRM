@@ -14,10 +14,10 @@ import AddEdit from './AddEdit';
 import { useDispatch } from 'react-redux';
 import { fetchEmailsData } from '../../../redux/slices/emailsSlice';
 import { toast } from 'react-toastify';
-import QuotesAdvanceSearch from './components/QuotesAdvanceSearch';
+import InvoiceAdvanceSearch from './components/InvoiceAdvanceSearch';
 import CommonDeleteModel from '../../../components/commonDeleteModel'
 import ImportModal from './components/ImportModel';
-import { fetchQuotesData } from '../../../redux/slices/quotesSlice';
+import { fetchInvoicesData } from '../../../redux/slices/invoicesSlice';
 
 const Index = (props) => {
     const [action, setAction] = useState(false);
@@ -75,7 +75,7 @@ const Index = (props) => {
                                 color={"green"}
                                 icon={<ViewIcon mb={1} fontSize={15} />}
                                 onClick={() => {
-                                    navigate(`/quotesView/${row?.values?._id}`);
+                                    navigate(`/invoicesView/${row?.values?._id}`);
                                 }}
                             >
                                 View
@@ -101,7 +101,7 @@ const Index = (props) => {
     };
     const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-        { Header: "Quote Number", accessor: "quoteNumber", isSortable: false, width: 10 },
+        { Header: "Invoice Number", accessor: "invoiceNumber", isSortable: false, width: 10 },
         {
             Header: 'Title', accessor: 'title', cell: (cell) => (
                 <div className="selectOpt">
@@ -119,7 +119,7 @@ const Index = (props) => {
             )
         },
         {
-            Header: 'Quote Stage', accessor: 'quoteStage',
+            Header: 'Status', accessor: 'status',
         },
         {
             Header: 'Contact', accessor: 'contact',
@@ -160,22 +160,18 @@ const Index = (props) => {
             accessor: "grandTotal",
             cell: (cell) => (
                 <div className="selectOpt">
-                    <Text
-                    >
+                    <Text>
                         {`${cell?.row?.original?.currency}${cell?.row?.original?.grandTotal}`}
                     </Text>
                 </div>
             )
         },
-        {
-            Header: "valid Until",
-            accessor: "validUntile",
-        },
+
         ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : [])
 
     ];
     const handleViewOpen = (id) => {
-        navigate(`/quotesView/${id}`)
+        navigate(`/invoicesView/${id}`)
     }
     const customFields = [
         {
@@ -603,9 +599,9 @@ const Index = (props) => {
     const handleDelete = async (ids) => {
         try {
             setIsLoding(true);
-            let response = await deleteManyApi("api/quotes/deleteMany", ids);
+            let response = await deleteManyApi("api/invoices/deleteMany", ids);
             if (response.status === 200) {
-                toast.success(`Quotes Delete successfully`)
+                toast.success(`Invoices Delete successfully`)
                 setSelectedValues([]);
                 setDelete(false);
                 setAction((pre) => !pre);
@@ -621,7 +617,7 @@ const Index = (props) => {
 
     const fetchData = async () => {
         setIsLoding(true)
-        const result = await dispatch(fetchQuotesData())
+        const result = await dispatch(fetchInvoicesData())
 
         if (result.payload.status === 200) {
             setData(result?.payload?.data);
@@ -643,7 +639,7 @@ const Index = (props) => {
     return (
         <div>
             <CommonCheckTable
-                title={"Quotes"}
+                title={"Invoices"}
                 isLoding={isLoding}
                 columnData={columns ?? []}
                 dataColumn={dataColumn ?? []}
@@ -677,7 +673,7 @@ const Index = (props) => {
                 handleSearchType="AccountSearch"
             />
 
-            <QuotesAdvanceSearch
+            <InvoiceAdvanceSearch
                 advanceSearch={advanceSearch}
                 setAdvanceSearch={setAdvanceSearch}
                 setSearchedData={setSearchedData}
@@ -692,13 +688,13 @@ const Index = (props) => {
             <CommonDeleteModel
                 isOpen={deleteModel}
                 onClose={() => setDelete(false)}
-                type="Quotes"
+                type="Invoices"
                 handleDeleteData={handleDelete}
                 ids={selectedValues}
             />
 
             <ImportModal
-                text="Quotes file"
+                text="Invoices file"
                 isOpen={isImport}
                 onClose={setIsImport}
                 customFields={customFields}
