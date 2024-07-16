@@ -33,7 +33,6 @@ function OpprtunityImport() {
         { Header: 'Fields In File', accessor: 'fileFields' },
     ];
 
-
     const initialFieldValues = Object.fromEntries(
         (customFields || []).map(field => [field?.name, ''])
     );

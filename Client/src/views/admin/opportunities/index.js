@@ -122,14 +122,14 @@ const Index = (props) => {
             Header: 'Account Name', accessor: 'accountName', cell: (cell) => (
                 <div className="selectOpt">
                     <Text
-                        onClick={() => navigate(`/accountView/${cell?.row?.original?.accountId}`)}
+                        onClick={() => navigate(`/accountView/${cell?.row?.original?.accountName}`)}
                         me="10px"
                         sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
                         color='brand.600'
                         fontSize="sm"
                         fontWeight="700"
                     >
-                        {cell?.value}
+                        {cell?.row?.original?.accountName2}
                     </Text>
                 </div>
             )

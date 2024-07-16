@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const add = async (req, res) => {
     try {
-        const result = new Account({ ...req.body, assignUser: req.body.assignUser ? req.body.assignUser : "", memberOf: req.body.memberOf ? req.body.memberOf : "" });
+        const result = new Account(req.body);
         await result.save();
         res.status(200).json(result);
     } catch (err) {

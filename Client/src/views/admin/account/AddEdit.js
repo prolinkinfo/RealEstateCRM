@@ -32,7 +32,7 @@ const AddEdit = (props) => {
         name: type === "edit" ? accountDetails?.name : "",
         officePhone: type === "edit" ? accountDetails?.officePhone : "",
         alternatePhone: type === "edit" ? accountDetails?.alternatePhone : "",
-        assignUser: type === "edit" ? accountDetails?.assignUser : "",
+        assignUser: type === "edit" ? accountDetails?.assignUser : null,
         website: type === "edit" ? accountDetails?.website : "",
         fax: type === "edit" ? accountDetails?.fax : "",
         ownership: type === "edit" ? accountDetails?.ownership : "",
@@ -62,7 +62,7 @@ const AddEdit = (props) => {
         SICCode: type === "edit" ? accountDetails?.SICCode : "",
         emailOptOut: type === "edit" ? accountDetails?.emailOptOut : false,
         invalidEmail: type === "edit" ? accountDetails?.invalidEmail : false,
-        memberOf: type === "edit" ? accountDetails?.memberOf : "",
+        memberOf: type === "edit" ? accountDetails?.memberOf : null,
         createBy: JSON.parse(localStorage.getItem('user'))._id,
         modifiedBy: JSON.parse(localStorage.getItem('user'))._id
     };
@@ -159,9 +159,9 @@ const AddEdit = (props) => {
         fetchData()
     }, [type, selectedId])
 
-    useEffect(() => {
-        if (accountList?.length === 0) dispatch(fetchAccountData())
-    }, [accountList])
+    // useEffect(() => {
+    //     if (accountList?.length === 0) dispatch(fetchAccountData())
+    // }, [])
 
     return (
         <div>

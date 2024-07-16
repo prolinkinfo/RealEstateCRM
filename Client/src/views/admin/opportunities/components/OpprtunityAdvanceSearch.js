@@ -14,14 +14,14 @@ const OpprtunityAdvanceSearch = (props) => {
     const dispatch = useDispatch();
     const initialValues = {
         opportunityName: '',
-        accountName: '',
+        accountName2: '',
         opportunityAmount: '',
         expectedCloseDate: '',
         salesStage: '',
     }
     const validationSchema = yup.object({
         opportunityName: yup.string(),
-        accountName: yup.string(),
+        accountName2: yup.string(),
         opportunityAmount: yup.string(),
         expectedCloseDate: yup.string(),
         salesStage: yup.string()
@@ -45,8 +45,8 @@ const OpprtunityAdvanceSearch = (props) => {
                     value: values.opportunityName
                 },
                 {
-                    name: ["accountName"],
-                    value: values.accountName
+                    name: ["accountName2"],
+                    value: values.accountName2
                 },
                 {
                     name: ["opportunityAmount"],

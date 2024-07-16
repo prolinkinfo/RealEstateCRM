@@ -60,7 +60,7 @@ const index = async (req, res) => {
             {
                 $lookup: {
                     from: 'Accounts',
-                    localField: 'accountId',
+                    localField: 'accountName',
                     foreignField: '_id',
                     as: 'accountData'
                 }
@@ -84,7 +84,7 @@ const index = async (req, res) => {
                         }
                     },
                     modifiedUserName: { $concat: ['$modifiedByUser.firstName', ' ', '$modifiedByUser.lastName'] },
-                    accountName: '$accountData.name'
+                    accountName2: '$accountData.name'
                 }
             },
             {
@@ -138,7 +138,7 @@ const view = async (req, res) => {
             {
                 $lookup: {
                     from: 'Accounts',
-                    localField: 'accountId',
+                    localField: 'accountName',
                     foreignField: '_id',
                     as: 'accountData'
                 }

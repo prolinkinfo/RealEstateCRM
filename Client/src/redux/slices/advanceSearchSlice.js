@@ -100,7 +100,7 @@ const advanceSearchSlice = createSlice({
                     state.searchResult = action?.payload?.allData?.filter(
                         (item) =>
                             (!action.payload?.values?.opportunityName || (item?.opportunityName && item?.opportunityName.toLowerCase().includes(action.payload?.values?.opportunityName?.toLowerCase()))) &&
-                            (!action.payload?.values?.accountName || (item?.accountName && item?.accountName.toLowerCase().includes(action.payload?.values?.accountName?.toLowerCase()))) &&
+                            (!action.payload?.values?.accountName2 || (item?.accountName2 && item?.accountName2.toLowerCase().includes(action.payload?.values?.accountName2?.toLowerCase()))) &&
                             (!action.payload?.values?.opportunityAmount || (item?.opportunityAmount && item?.opportunityAmount.toLowerCase().includes(action.payload?.values?.opportunityAmount?.toLowerCase()))) &&
                             (!action.payload?.values?.expectedCloseDate || (item?.expectedCloseDate && item?.expectedCloseDate.toLowerCase().includes(action.payload?.values?.expectedCloseDate?.toLowerCase()))) &&
                             (!action.payload?.values?.salesStage || (item?.salesStage && item?.salesStage.toLowerCase().includes(action.payload?.values?.salesStage?.toLowerCase())))

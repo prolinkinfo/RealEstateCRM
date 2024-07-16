@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Opportunity = new mongoose.Schema({
     opportunityName: String,
-    accountId: {
+    accountName: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Accounts',
     },

@@ -26,7 +26,7 @@ const AddEdit = (props) => {
 
     const initialValues = {
         opportunityName: type === "edit" ? opprtunityDetails?.opportunityName : "",
-        accountId: type === "edit" ? opprtunityDetails?.accountId : "",
+        accountName: type === "edit" ? opprtunityDetails?.accountName : "",
         assignUser: type === "edit" ? opprtunityDetails?.assignUser : "",
         type: type === "edit" ? opprtunityDetails?.type : "",
         leadSource: type === "edit" ? opprtunityDetails?.leadSource : "",
@@ -100,7 +100,7 @@ const AddEdit = (props) => {
     });
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
-
+    console.log(errors)
     const fetchData = async () => {
         setIsLoding(true)
         let result = await getApi('api/user/');
@@ -141,7 +141,7 @@ const AddEdit = (props) => {
     return (
         <div>
             {userModel && <UserModel onClose={() => setUserModel(false)} isOpen={userModel} fieldName={"assignUser"} setFieldValue={setFieldValue} data={userData} isLoding={isLoding} setIsLoding={setIsLoding} />}
-            {accountModel && <AccountModel onClose={() => setAccountModel(false)} isOpen={accountModel} fieldName={"accountId"} setFieldValue={setFieldValue} />}
+            {accountModel && <AccountModel onClose={() => setAccountModel(false)} isOpen={accountModel} fieldName={"accountName"} setFieldValue={setFieldValue} />}
 
             <Drawer isOpen={isOpen} size={size}>
                 <DrawerOverlay />
@@ -173,13 +173,13 @@ const AddEdit = (props) => {
                                 </FormLabel>
                                 <Flex justifyContent={'space-between'}>
                                     <Select
-                                        value={values.accountId}
-                                        name="accountId"
+                                        value={values.accountName}
+                                        name="accountName"
                                         onChange={handleChange}
-                                        mb={errors.accountId && touched.accountId ? undefined : '10px'}
+                                        mb={errors.accountName && touched.accountName ? undefined : '10px'}
                                         fontWeight='500'
                                         placeholder={'Account Name'}
-                                        borderColor={errors.accountId && touched.accountId ? "red.300" : null}
+                                        borderColor={errors.accountName && touched.accountName ? "red.300" : null}
                                     >
                                         {accountList?.length > 0 && accountList?.map((item) => {
                                             return <option value={item._id} key={item._id}>{`${item?.name}`}</option>
@@ -187,7 +187,7 @@ const AddEdit = (props) => {
                                     </Select>
                                     <IconButton onClick={() => setAccountModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
                                 </Flex>
-                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.accountId && touched.accountId && errors.accountId}</Text>
+                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.accountName && touched.accountName && errors.accountName}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
