@@ -11,7 +11,7 @@ const ImportModal = (props) => {
     const navigate = useNavigate();
 
     const initialValues = {
-        quotes: ''
+        invoices: ''
     }
 
     const formik = useFormik({
@@ -28,9 +28,9 @@ const ImportModal = (props) => {
             setIsLoding(true)
             resetForm()
 
-            if (values.quotes) {
+            if (values.invoices) {
                 onClose();
-                navigate('/quotesImport', { state: { fileData: values.quotes, customFields: customFields } });
+                navigate('/invoicesImport', { state: { fileData: values.invoices, customFields: customFields } });
             }
 
         } catch (e) {
@@ -45,13 +45,13 @@ const ImportModal = (props) => {
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Import Quotes</ModalHeader>
+                <ModalHeader>Import Invoices</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12 }}>
-                            <CommonFileUpload count={values.quotes.length} onFileSelect={(file) => setFieldValue('quotes', file)} text={text} />
-                            <Text mb='10px' color={'red'}> {errors.quotes && touched.quotes && <>Please Select {text}</>}</Text>
+                            <CommonFileUpload count={values.invoices.length} onFileSelect={(file) => setFieldValue('invoices', file)} text={text} />
+                            <Text mb='10px' color={'red'}> {errors.invoices && touched.invoices && <>Please Select {text}</>}</Text>
                         </GridItem>
                     </Grid>
                 </ModalBody>

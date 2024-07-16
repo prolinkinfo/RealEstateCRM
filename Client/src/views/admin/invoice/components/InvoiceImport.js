@@ -83,17 +83,17 @@ function InvoiceImport() {
     const AddData = async (quotes) => {
         try {
             setIsLoding(true);
-            let response = await postApi('api/quotes/addMany', quotes)
+            let response = await postApi('api/invoices/addMany', quotes)
             if (response.status === 200) {
-                toast.success(`Quotes imported successfully`)
+                toast.success(`Invoices imported successfully`)
                 resetForm();
-                navigate('/quotes');
+                navigate('/invoices');
             }
         } catch (e) {
             console.error(e);
-            toast.error(`Quotes import failed`)
+            toast.error(`Invoices import failed`)
             resetForm();
-            navigate('/quotes');
+            navigate('/invoices');
         }
         finally {
             setIsLoding(false)
@@ -118,7 +118,7 @@ function InvoiceImport() {
                     setImportedFileFields(fileHeadingFields);
                 } else {
                     toast.error("Empty or invalid CSV file");
-                    navigate("/quotes");
+                    navigate("/invoices");
                 }
 
             } else if (extension === 'xlsx') {
@@ -146,7 +146,7 @@ function InvoiceImport() {
                     setImportedFileFields(fileHeadingFields);
                 } else {
                     toast.error("Empty or invalid XLSX file");
-                    navigate("/quotes");
+                    navigate("/invoices");
                 }
             }
         };

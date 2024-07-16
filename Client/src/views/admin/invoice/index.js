@@ -175,8 +175,8 @@ const Index = (props) => {
     }
     const customFields = [
         {
-            "name": "quoteNumber",
-            "label": "Quote Number",
+            "name": "invoiceNumber",
+            "label": "Invoice Number",
             "type": "number",
             "fixed": false,
             "isDefault": false,
@@ -285,8 +285,8 @@ const Index = (props) => {
             "_id": "669508f820a9be3594c8686b"
         },
         {
-            "name": "quoteStage",
-            "label": "Quote Stage",
+            "name": "status",
+            "label": "Status",
             "type": "select",
             "fixed": false,
             "isDefault": false,
@@ -296,46 +296,6 @@ const Index = (props) => {
             "isTableField": false,
             "isView": false,
             "options": [
-                {
-                    "name": "Draft",
-                    "value": "Draft",
-                    "_id": "6695095120a9be3594c86bc1"
-                },
-                {
-                    "name": "Negotiation",
-                    "value": "Negotiation",
-                    "_id": "6695095120a9be3594c86bc2"
-                },
-                {
-                    "name": "Delivered",
-                    "value": "Delivered",
-                    "_id": "6695095120a9be3594c86bc3"
-                },
-                {
-                    "name": "On Hold",
-                    "value": "On Hold",
-                    "_id": "6695095120a9be3594c86bc4"
-                },
-                {
-                    "name": "Confirmed",
-                    "value": "Confirmed",
-                    "_id": "6695095120a9be3594c86bc5"
-                },
-                {
-                    "name": "Closed Accepted",
-                    "value": "Closed Accepted",
-                    "_id": "6695095120a9be3594c86bc6"
-                },
-                {
-                    "name": "Closed Lost",
-                    "value": "Closed Lost",
-                    "_id": "6695095120a9be3594c86bc7"
-                },
-                {
-                    "name": "Closed Dead",
-                    "value": "Closed Dead",
-                    "_id": "6695095120a9be3594c86bc8"
-                }
             ],
             "validation": [
                 {
@@ -534,61 +494,6 @@ const Index = (props) => {
             ],
             "_id": "669509b120a9be3594c8768b"
         },
-        {
-            "name": "validUntile",
-            "label": "Valid Until",
-            "type": "date",
-            "fixed": false,
-            "isDefault": false,
-            "delete": false,
-            "belongsTo": null,
-            "backendType": "Mixed",
-            "isTableField": false,
-            "isView": false,
-            "options": [
-                {
-                    "name": "",
-                    "value": "",
-                    "_id": "669509d320a9be3594c87a53"
-                },
-                {
-                    "name": "",
-                    "value": "",
-                    "_id": "669509d320a9be3594c87a54"
-                }
-            ],
-            "validation": [
-                {
-                    "require": false,
-                    "message": "",
-                    "_id": "669509d320a9be3594c87a55"
-                },
-                {
-                    "min": false,
-                    "value": "",
-                    "message": "",
-                    "_id": "669509d320a9be3594c87a56"
-                },
-                {
-                    "max": false,
-                    "value": "",
-                    "message": "",
-                    "_id": "669509d320a9be3594c87a57"
-                },
-                {
-                    "value": "",
-                    "message": "",
-                    "match": false,
-                    "_id": "669509d320a9be3594c87a58"
-                },
-                {
-                    "message": "",
-                    "formikType": "date",
-                    "_id": "669509d320a9be3594c87a59"
-                }
-            ],
-            "_id": "669509d320a9be3594c87a52"
-        }
     ]
 
     const handleOpenAdd = () => {
