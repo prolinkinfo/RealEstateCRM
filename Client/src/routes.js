@@ -39,7 +39,7 @@ const ContactView = React.lazy(() => import('views/admin/contact/View'));
 const ContactImport = React.lazy(() => import("views/admin/contact/components/ContactImport"));
 
 const Quotes = React.lazy(() => import('views/admin/quotes'));
-// const QuotesView = React.lazy(() => import('views/admin/quotes/View'));
+const QuotesView = React.lazy(() => import('views/admin/quotes/View'));
 const QuotesImport = React.lazy(() => import("views/admin/quotes/components/QuotesImport"));
 
 const User = React.lazy(() => import("views/admin/users"));
@@ -161,8 +161,8 @@ const routes = [
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     under: "quotes",
     parentName: "Quotes",
-    path: "/quotes/:id",
-    component: ContactView,
+    path: "/quotesView/:id",
+    component: QuotesView,
   },
   {
     name: "Quotes Import",

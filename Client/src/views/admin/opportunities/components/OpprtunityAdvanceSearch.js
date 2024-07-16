@@ -101,12 +101,12 @@ const OpprtunityAdvanceSearch = (props) => {
                                 <Input
                                     fontSize='sm'
                                     onChange={handleChange} onBlur={handleBlur}
-                                    value={values?.accountName}
-                                    name="accountName"
+                                    value={values?.accountName2}
+                                    name="accountName2"
                                     placeholder='Enter Account Name'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.accountName && touched.accountName && errors.accountName}</Text>
+                                <Text mb='10px' color={'red'}> {errors.accountName2 && touched.accountName2 && errors.accountName2}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>

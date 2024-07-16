@@ -19,7 +19,7 @@ const QuotesAdvanceSearch = (props) => {
         contactName: '',
         accountName: '',
         grandTotal: '',
-        validUntil: '',
+        validUntile: '',
     }
     const validationSchema = yup.object({
         quoteNumber: yup.string(),
@@ -28,7 +28,7 @@ const QuotesAdvanceSearch = (props) => {
         contactName: yup.string(),
         accountName: yup.string(),
         grandTotal: yup.string(),
-        validUntil: yup.string()
+        validUntile: yup.string()
     });
     const formik = useFormik({
         initialValues: initialValues,
@@ -63,8 +63,8 @@ const QuotesAdvanceSearch = (props) => {
                     value: values.grandTotal
                 },
                 {
-                    name: ["validUntil"],
-                    value: values.validUntil
+                    name: ["validUntile"],
+                    value: values.validUntile
                 },
             ]
             dispatch(setGetTagValues(getValue.filter(item => item.value)))
@@ -183,17 +183,17 @@ const QuotesAdvanceSearch = (props) => {
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
-                                    Valid Until
+                                    Valid Untile
                                 </FormLabel>
                                 <Input
                                     fontSize='sm'
                                     onChange={handleChange} onBlur={handleBlur}
-                                    value={values?.validUntil}
-                                    name="validUntil"
+                                    value={values?.validUntile}
+                                    name="validUntile"
                                     type='date'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.validUntil && touched.validUntil && errors.validUntil}</Text>
+                                <Text mb='10px' color={'red'}> {errors.validUntile && touched.validUntile && errors.validUntile}</Text>
                             </GridItem>
 
 

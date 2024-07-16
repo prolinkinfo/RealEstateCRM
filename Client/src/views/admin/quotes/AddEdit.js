@@ -36,28 +36,30 @@ const AddEdit = (props) => {
 
     const initialValues = {
         title: type === "edit" ? quotesDetails?.title : "",
-        oppotunityId: type === "edit" ? quotesDetails?.oppotunityId : "",
+        oppotunity: type === "edit" ? quotesDetails?.oppotunity : null,
         quoteStage: type === "edit" ? quotesDetails?.quoteStage : "",
         invoiceStatus: type === "edit" ? quotesDetails?.invoiceStatus : "",
         validUntile: type === "edit" ? quotesDetails?.validUntile : "",
-        assignedTo: type === "edit" ? quotesDetails?.assignedTo : "",
+        assignedTo: type === "edit" ? quotesDetails?.assignedTo : null,
         paymentTerms: type === "edit" ? quotesDetails?.paymentTerms : "",
         approvalStatus: type === "edit" ? quotesDetails?.approvalStatus : "",
         nonPrimaryEmail: type === "edit" ? quotesDetails?.nonPrimaryEmail : "",
         approvalIssues: type === "edit" ? quotesDetails?.approvalIssues : "",
-        accountId: type === "edit" ? quotesDetails?.accountId : "",
-        contactId: type === "edit" ? quotesDetails?.contactId : "",
+        terms: type === "edit" ? quotesDetails?.terms : "",
+        description: type === "edit" ? quotesDetails?.description : "",
+        account: type === "edit" ? quotesDetails?.account : null,
+        contact: type === "edit" ? quotesDetails?.contact : null,
         billingStreet: type === "edit" ? quotesDetails?.billingStreet : "",
         shippingStreet: type === "edit" ? quotesDetails?.shippingStreet : "",
         billingCity: type === "edit" ? quotesDetails?.billingCity : "",
         shippingCity: type === "edit" ? quotesDetails?.shippingCity : "",
         billingState: type === "edit" ? quotesDetails?.billingState : "",
         shippingState: type === "edit" ? quotesDetails?.shippingState : "",
-        billingPostalcode: type === "edit" ? quotesDetails?.billingPostalcode : "",
-        shippingPostalcode: type === "edit" ? quotesDetails?.shippingPostalcode : "",
+        billingPostalCode: type === "edit" ? quotesDetails?.billingPostalCode : "",
+        shippingPostalCode: type === "edit" ? quotesDetails?.shippingPostalCode : "",
         billingCountry: type === "edit" ? quotesDetails?.billingCountry : "",
         shippingCountry: type === "edit" ? quotesDetails?.shippingCountry : "",
-        isCheck: type === "edit" ? quotesDetails?.isCheck : "",
+        isCheck: type === "edit" ? quotesDetails?.isCheck : false,
         currency: type === "edit" ? quotesDetails?.currency : "",
         total: type === "edit" ? quotesDetails?.total : "",
         discount: type === "edit" ? quotesDetails?.discount : "",
@@ -66,7 +68,6 @@ const AddEdit = (props) => {
         shippingTax: type === "edit" ? quotesDetails?.shippingTax : "",
         ptax: type === "edit" ? quotesDetails?.ptax : "",
         tax: type === "edit" ? quotesDetails?.tax : "",
-        grandTotal: type === "edit" ? quotesDetails?.grandTotal : "",
         grandTotal: type === "edit" ? quotesDetails?.grandTotal : "",
 
         createBy: JSON.parse(localStorage.getItem('user'))._id,
@@ -137,14 +138,14 @@ const AddEdit = (props) => {
         if (e.target.checked) {
             setFieldValue("shippingStreet", values?.billingStreet)
             setFieldValue("shippingCity", values?.billingCity)
-            setFieldValue("shippingState", values?.shippingState)
-            setFieldValue("shippingPostalcode", values?.billingPostalcode)
+            setFieldValue("shippingState", values?.billingState)
+            setFieldValue("shippingPostalCode", values?.billingPostalCode)
             setFieldValue("shippingCountry", values?.billingCountry)
         } else {
             setFieldValue("shippingStreet", "")
             setFieldValue("shippingCity", "")
             setFieldValue("shippingState", "")
-            setFieldValue("shippingPostalcode", "")
+            setFieldValue("shippingPostalCode", "")
             setFieldValue("shippingCountry", "")
         }
     }
@@ -189,10 +190,10 @@ const AddEdit = (props) => {
 
     return (
         <div>
-            {userModel && <UserModel onClose={() => setUserModel(false)} isOpen={userModel} fieldName={"assignUser"} setFieldValue={setFieldValue} data={userData} isLoding={isLoding} setIsLoding={setIsLoding} />}
-            {opprtunityModel && <OpprtunityModel onClose={() => setOpprtunityModel(false)} isOpen={opprtunityModel} fieldName={"assignUser"} setFieldValue={setFieldValue} data={opportunityList} isLoding={isLoding} setIsLoding={setIsLoding} />}
-            {accountModel && <AccountModel onClose={() => setAccountModel(false)} isOpen={accountModel} fieldName={"accountId"} setFieldValue={setFieldValue} data={accountList} />}
-            {contactModel && <ContactModel isOpen={contactModel} data={contactList} onClose={setContactModel} values={values} fieldName='assignTo' setFieldValue={setFieldValue} />}
+            {userModel && <UserModel onClose={() => setUserModel(false)} isOpen={userModel} fieldName={"assignedTo"} setFieldValue={setFieldValue} data={userData} isLoding={isLoding} setIsLoding={setIsLoding} />}
+            {opprtunityModel && <OpprtunityModel onClose={() => setOpprtunityModel(false)} isOpen={opprtunityModel} fieldName={"oppotunity"} setFieldValue={setFieldValue} data={opportunityList} isLoding={isLoding} setIsLoding={setIsLoding} type="quotes" billingState="billingState" billingCity="billingCity" billingPostalCode="billingPostalCode" billingCountry="billingCountry" billingStreet="billingStreet" />}
+            {accountModel && <AccountModel onClose={() => setAccountModel(false)} isOpen={accountModel} fieldName={"account"} setFieldValue={setFieldValue} data={accountList} />}
+            {contactModel && <ContactModel isOpen={contactModel} data={contactList} onClose={setContactModel} values={values} fieldName='contact' setFieldValue={setFieldValue} />}
 
             <Drawer isOpen={isOpen} size={size}>
                 <DrawerOverlay />
@@ -229,13 +230,13 @@ const AddEdit = (props) => {
                                 </FormLabel>
                                 <Flex justifyContent={'space-between'}>
                                     <Select
-                                        value={values.oppotunityId}
-                                        name="oppotunityId"
+                                        value={values.oppotunity}
+                                        name="oppotunity"
                                         onChange={handleChange}
-                                        mb={errors.oppotunityId && touched.oppotunityId ? undefined : '10px'}
+                                        mb={errors.oppotunity && touched.oppotunity ? undefined : '10px'}
                                         fontWeight='500'
                                         placeholder={'Opportunity'}
-                                        borderColor={errors.oppotunityId && touched.oppotunityId ? "red.300" : null}
+                                        borderColor={errors.oppotunity && touched.oppotunity ? "red.300" : null}
                                     >
                                         {opportunityList?.length > 0 && opportunityList?.map((item) => {
                                             return <option value={item._id} key={item._id}>{`${item?.opportunityName}`}</option>
@@ -243,7 +244,7 @@ const AddEdit = (props) => {
                                     </Select>
                                     <IconButton onClick={() => setOpprtunityModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
                                 </Flex>
-                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.oppotunityId && touched.oppotunityId && errors.oppotunityId}</Text>
+                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.oppotunity && touched.oppotunity && errors.oppotunity}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -294,7 +295,7 @@ const AddEdit = (props) => {
                                 </FormLabel>
                                 <Input
                                     fontSize='sm'
-                                    value={values.validUntile}
+                                    value={dayjs(values.validUntile).format("YYYY-MM-DD")}
                                     name="validUntile"
                                     type="date"
                                     onChange={handleChange}
@@ -378,6 +379,22 @@ const AddEdit = (props) => {
                             </GridItem>
                             <GridItem colSpan={{ base: 12 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                    Terms
+                                </FormLabel>
+                                <Textarea
+                                    fontSize='sm'
+                                    value={values.terms}
+                                    name="terms"
+                                    resize={"none"}
+                                    onChange={handleChange}
+                                    placeholder='Terms'
+                                    fontWeight='500'
+                                    borderColor={errors.terms && touched.terms ? "red.300" : null}
+                                />
+                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.terms && touched.terms && errors.terms}</Text>
+                            </GridItem>
+                            <GridItem colSpan={{ base: 12 }}>
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                     Description
                                 </FormLabel>
                                 <Textarea
@@ -399,17 +416,17 @@ const AddEdit = (props) => {
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Account Name
+                                    Account
                                 </FormLabel>
                                 <Flex justifyContent={'space-between'}>
                                     <Select
-                                        value={values.accountId}
-                                        name="accountId"
+                                        value={values.account}
+                                        name="account"
                                         onChange={handleChange}
-                                        mb={errors.accountId && touched.accountId ? undefined : '10px'}
+                                        mb={errors.account && touched.account ? undefined : '10px'}
                                         fontWeight='500'
-                                        placeholder={'Account Name'}
-                                        borderColor={errors.accountId && touched.accountId ? "red.300" : null}
+                                        placeholder={'Account'}
+                                        borderColor={errors.account && touched.account ? "red.300" : null}
                                     >
                                         {accountList?.length > 0 && accountList?.map((item) => {
                                             return <option value={item._id} key={item._id}>{`${item?.name}`}</option>
@@ -417,7 +434,7 @@ const AddEdit = (props) => {
                                     </Select>
                                     <IconButton onClick={() => setAccountModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
                                 </Flex>
-                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.accountId && touched.accountId && errors.accountId}</Text>
+                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.account && touched.account && errors.account}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -425,13 +442,13 @@ const AddEdit = (props) => {
                                 </FormLabel>
                                 <Flex justifyContent={'space-between'}>
                                     <Select
-                                        value={values.contactId}
-                                        name="contactId"
+                                        value={values.contact}
+                                        name="contact"
                                         onChange={handleChange}
-                                        mb={errors.contactId && touched.contactId ? undefined : '10px'}
+                                        mb={errors.contact && touched.contact ? undefined : '10px'}
                                         fontWeight='500'
                                         placeholder={'Contact'}
-                                        borderColor={errors.contactId && touched.contactId ? "red.300" : null}
+                                        borderColor={errors.contact && touched.contact ? "red.300" : null}
                                     >
                                         {contactList?.length > 0 && contactList?.map((item) => {
                                             return <option value={item._id} key={item._id}>{`${item.firstName} ${item.lastName}`}</option>
@@ -439,7 +456,7 @@ const AddEdit = (props) => {
                                     </Select>
                                     <IconButton onClick={() => setContactModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
                                 </Flex>
-                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.contactId && touched.contactId && errors.contactId}</Text>
+                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.contact && touched.contact && errors.contact}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <Heading as="h1" size="md" mt='10px'>
@@ -550,15 +567,15 @@ const AddEdit = (props) => {
                                 </FormLabel>
                                 <Input
                                     fontSize='sm'
-                                    value={values.billingPostalcode}
-                                    name="billingPostalcode"
+                                    value={values.billingPostalCode}
+                                    name="billingPostalCode"
                                     onChange={handleChange}
                                     type='number'
                                     placeholder='Billing Postal Code'
                                     fontWeight='500'
-                                    borderColor={errors.billingPostalcode && touched.billingPostalcode ? "red.300" : null}
+                                    borderColor={errors.billingPostalCode && touched.billingPostalCode ? "red.300" : null}
                                 />
-                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.billingPostalcode && touched.billingPostalcode && errors.billingPostalcode}</Text>
+                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.billingPostalCode && touched.billingPostalCode && errors.billingPostalCode}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -566,16 +583,16 @@ const AddEdit = (props) => {
                                 </FormLabel>
                                 <Input
                                     fontSize='sm'
-                                    value={values.shippingPostalcode}
+                                    value={values.shippingPostalCode}
                                     disabled={values?.isCheck}
-                                    name="shippingPostalcode"
+                                    name="shippingPostalCode"
                                     type='number'
                                     onChange={handleChange}
                                     placeholder='Shipping Postal Code'
                                     fontWeight='500'
-                                    borderColor={errors.shippingPostalcode && touched.shippingPostalcode ? "red.300" : null}
+                                    borderColor={errors.shippingPostalCode && touched.shippingPostalCode ? "red.300" : null}
                                 />
-                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.shippingPostalcode && touched.shippingPostalcode && errors.shippingPostalcode}</Text>
+                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.shippingPostalCode && touched.shippingPostalCode && errors.shippingPostalCode}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -607,7 +624,7 @@ const AddEdit = (props) => {
                                     borderColor={errors.shippingCountry && touched.shippingCountry ? "red.300" : null}
                                 />
                                 <Text mb='10px' fontSize='sm' color={'red'}> {errors.shippingCountry && touched.shippingCountry && errors.shippingCountry}</Text>
-                                <Checkbox value={values?.isCheck} onChange={(e) => handleCheck(e)}>
+                                <Checkbox isChecked={values?.isCheck} onChange={(e) => handleCheck(e)}>
                                     Copy address from left
                                 </Checkbox>
                             </GridItem>

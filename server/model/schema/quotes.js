@@ -14,13 +14,14 @@ const Quotes = new mongoose.Schema({
     shippingState: String,
     shippingPostalCode: String,
     shippingCountry: String,
-    validUntil: String,
+    validUntile: String,
     quoteNumber: String,
     lineItems: String,
     total: String,
     subtotal: String,
     discount: String,
     tax: String,
+    ptax: String,
     shipping: String,
     shippingTax: String,
     grandTotal: String,
@@ -28,22 +29,23 @@ const Quotes = new mongoose.Schema({
     quoteStage: String,
     paymentTerms: String,
     terms: String,
+    description: String,
     approvalStatus: String,
     invoiceStatus: String,
-    opportunity: {
+    oppotunity: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Opportunities",
     },
     account: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Account",
+        ref: "Accounts",
     },
     contact: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Contacts",
     },
 
-    assignTo: {
+    assignedTo: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     },
@@ -51,6 +53,15 @@ const Quotes = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
+    },
+    modifiedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    isCheck: {
+        type: Boolean,
+        default: false,
     },
     deleted: {
         type: Boolean,

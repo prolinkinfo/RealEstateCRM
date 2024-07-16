@@ -15,9 +15,9 @@ import { useDispatch } from 'react-redux';
 import { fetchEmailsData } from '../../../redux/slices/emailsSlice';
 import { toast } from 'react-toastify';
 import QuotesAdvanceSearch from './components/QuotesAdvanceSearch';
-import { fetchAccountData } from '../../../redux/slices/accountSlice';
 import CommonDeleteModel from '../../../components/commonDeleteModel'
 import ImportModal from './components/ImportModel';
+import { fetchQuotesData } from '../../../redux/slices/quotesSlice';
 
 const Index = (props) => {
     const [action, setAction] = useState(false);
@@ -75,7 +75,7 @@ const Index = (props) => {
                                 color={"green"}
                                 icon={<ViewIcon mb={1} fontSize={15} />}
                                 onClick={() => {
-                                    navigate(`/accountView/${row?.values?._id}`);
+                                    navigate(`/quotesView/${row?.values?._id}`);
                                 }}
                             >
                                 View
@@ -122,10 +122,38 @@ const Index = (props) => {
             Header: 'Quote Stage', accessor: 'quoteStage',
         },
         {
-            Header: 'Contact', accessor: 'contactName',
+            Header: 'Contact', accessor: 'contact',
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text
+                        onClick={() => navigate(`/contactView/${cell?.row?.original.contact}`)}
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.row?.original?.contactName}
+                    </Text>
+                </div>
+            )
         },
         {
-            Header: 'Account', accessor: 'accountName',
+            Header: 'Account', accessor: 'account',
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text
+                        onClick={() => navigate(`/accountView/${cell?.row?.original.account}`)}
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.row?.original?.accountName}
+                    </Text>
+                </div>
+            )
         },
         {
             Header: "Grand Total",
@@ -133,7 +161,7 @@ const Index = (props) => {
         },
         {
             Header: "valid Until",
-            accessor: "validUntil",
+            accessor: "validUntile",
         },
         ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : [])
 
@@ -338,8 +366,8 @@ const Index = (props) => {
             "_id": "6695095120a9be3594c86bc0"
         },
         {
-            "name": "contactId",
-            "label": "Contact Id",
+            "name": "contact",
+            "label": "Contact",
             "type": "text",
             "fixed": false,
             "isDefault": false,
@@ -393,8 +421,8 @@ const Index = (props) => {
             "_id": "6695099520a9be3594c86f45"
         },
         {
-            "name": "accountName",
-            "label": "Account Id",
+            "name": "account",
+            "label": "Account",
             "type": "text",
             "fixed": false,
             "isDefault": false,
@@ -503,7 +531,7 @@ const Index = (props) => {
             "_id": "669509b120a9be3594c8768b"
         },
         {
-            "name": "validUntil",
+            "name": "validUntile",
             "label": "Valid Until",
             "type": "date",
             "fixed": false,
@@ -567,9 +595,9 @@ const Index = (props) => {
     const handleDelete = async (ids) => {
         try {
             setIsLoding(true);
-            let response = await deleteManyApi("api/account/deleteMany", ids);
+            let response = await deleteManyApi("api/quotes/deleteMany", ids);
             if (response.status === 200) {
-                toast.success(`Account Delete successfully`)
+                toast.success(`Quotes Delete successfully`)
                 setSelectedValues([]);
                 setDelete(false);
                 setAction((pre) => !pre);
@@ -585,10 +613,10 @@ const Index = (props) => {
 
     const fetchData = async () => {
         setIsLoding(true)
-        const result = await dispatch(fetchAccountData())
+        const result = await dispatch(fetchQuotesData())
 
         if (result.payload.status === 200) {
-            // setData(result?.payload?.data);
+            setData(result?.payload?.data);
         } else {
             toast.error("Failed to fetch data", "error");
         }

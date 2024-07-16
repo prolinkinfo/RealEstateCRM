@@ -33,7 +33,6 @@ function QuotesImport() {
         { Header: 'Fields In File', accessor: 'fileFields' },
     ];
 
-
     const initialFieldValues = Object.fromEntries(
         (customFields || []).map(field => [field?.name, ''])
     );
@@ -49,8 +48,8 @@ function QuotesImport() {
         initialValues: initialValues,
         onSubmit: (values, { resetForm }) => {
 
-            const opportunityData = importedFileData?.map((item, ind) => {
-                const opportunity = {
+            const quotesData = importedFileData?.map((item, ind) => {
+                const quotes = {
                     createdDate: new Date(),
                     deleted: item[values.deleted || "deleted"] || false,
                     createBy: JSON.parse(localStorage.getItem('user'))._id,
@@ -62,29 +61,29 @@ function QuotesImport() {
                     const fieldValue = item[selectedField] || '';
 
                     if (field?.type?.toLowerCase() === "date") {
-                        opportunity[field?.accessor] = moment(fieldValue).isValid() ? fieldValue : '';
+                        quotes[field?.accessor] = moment(fieldValue).isValid() ? fieldValue : '';
                     } else if (field?.type?.toLowerCase() === "number" && ['positive', 'negative'].includes(field?.formikType?.toLowerCase())) {
-                        opportunity[field?.accessor] = parseFloat(fieldValue) || '';
+                        quotes[field?.accessor] = parseFloat(fieldValue) || '';
                     } else if (field?.type?.toLowerCase() === "number") {
-                        opportunity[field?.accessor] = parseInt(fieldValue, 10) || '';
+                        quotes[field?.accessor] = parseInt(fieldValue, 10) || '';
                     } else {
-                        opportunity[field?.accessor] = fieldValue;
+                        quotes[field?.accessor] = fieldValue;
                     }
                 });
 
-                return opportunity;
+                return quotes;
             });
 
-            AddData(opportunityData);
+            AddData(quotesData);
         }
     });
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
 
-    const AddData = async (opportunity) => {
+    const AddData = async (quotes) => {
         try {
             setIsLoding(true);
-            let response = await postApi('api/quotes/addMany', opportunity)
+            let response = await postApi('api/quotes/addMany', quotes)
             if (response.status === 200) {
                 toast.success(`Quotes imported successfully`)
                 resetForm();

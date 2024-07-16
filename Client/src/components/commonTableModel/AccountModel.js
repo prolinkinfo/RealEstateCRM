@@ -9,7 +9,7 @@ import { fetchAccountData } from '../../redux/slices/accountSlice';
 import { toast } from 'react-toastify';
 
 const AccountModel = (props) => {
-    const { onClose, isOpen, fieldName, setFieldValue, data } = props
+    const { onClose, isOpen, fieldName, setFieldValue, data, type, billingState, billingCity, billingPostalCode, billingCountry, billingStreet } = props
     const title = "Account";
     const dispatch = useDispatch();
     // const [data, setData] = useState([]);
@@ -17,11 +17,18 @@ const AccountModel = (props) => {
     const [isLoding, setIsLoding] = useState(false);
     const [leadData, setLeadData] = useState([]);
     const [selectedValues, setSelectedValues] = useState([]);
-
+    const accountData = data?.length > 0 && data?.find((item) => item?._id === selectedValues)
     const handleSubmit = async () => {
         try {
             setIsLoding(true)
             setFieldValue(fieldName, selectedValues)
+            // if (type === "quotes") {
+            //     setFieldValue(billingStreet, accountData?.billingStreet)
+            //     setFieldValue(billingState, accountData?.billingState)
+            //     setFieldValue(billingCity, selectedValues?.billingCity)
+            //     setFieldValue(billingPostalCode, selectedValues?.billingPostalcode)
+            //     setFieldValue(billingCountry, selectedValues?.billingCountry)
+            // }
             onClose()
         }
         catch (e) {

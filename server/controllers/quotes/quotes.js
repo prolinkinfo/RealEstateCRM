@@ -1,6 +1,13 @@
 const Quotes = require("../../model/schema/quotes.js");
 const mongoose = require("mongoose");
 
+
+
+async function getNextAutoIncrementValue() {
+    const num = await Quotes.countDocuments({});
+    return num + 1;
+}
+
 const index = async (req, res) => {
     query = req.query;
     query.deleted = false;
@@ -14,17 +21,17 @@ const index = async (req, res) => {
             {
                 $lookup: {
                     from: "Contacts",
-                    localField: "assignTo",
+                    localField: "contact",
                     foreignField: "_id",
-                    as: "contact",
+                    as: "contactData",
                 },
             },
             {
                 $lookup: {
-                    from: "Leads", // Assuming this is the collection name for 'leads'
-                    localField: "assignToLead",
+                    from: "Accounts",
+                    localField: "account",
                     foreignField: "_id",
-                    as: "Lead",
+                    as: "accountData",
                 },
             },
             {
@@ -35,30 +42,44 @@ const index = async (req, res) => {
                     as: "users",
                 },
             },
+            {
+                $lookup: {
+                    from: "User",
+                    localField: "modifiedBy",
+                    foreignField: "_id",
+                    as: "modifiedByUser",
+                },
+            },
+            {
+                $lookup: {
+                    from: "User",
+                    localField: "assignedTo",
+                    foreignField: "_id",
+                    as: "assignedToData",
+                },
+            },
             { $unwind: { path: "$users", preserveNullAndEmptyArrays: true } },
-            { $unwind: { path: "$contact", preserveNullAndEmptyArrays: true } },
-            { $unwind: { path: "$Lead", preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: "$contactData", preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: "$accountData", preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: '$modifiedByUser', preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: "$assignedToData", preserveNullAndEmptyArrays: true } },
             { $match: { "users.deleted": false } },
             {
                 $addFields: {
-                    assignToName: {
+                    assignUserName: {
                         $cond: {
-                            if: "$contact",
-                            then: {
-                                $concat: [
-                                    "$contact.title",
-                                    " ",
-                                    "$contact.firstName",
-                                    " ",
-                                    "$contact.lastName",
-                                ],
-                            },
-                            else: { $concat: ["$Lead.leadName"] },
-                        },
+                            if: '$assignUsers',
+                            then: { $concat: ['$assignUsers.firstName', ' ', '$assignUsers.lastName'] },
+                            else: { $concat: [''] }
+                        }
                     },
-                },
+                    createdByName: { $concat: ['$users.firstName', ' ', '$users.lastName'] },
+                    modifiedUserName: { $concat: ['$modifiedByUser.firstName', ' ', '$modifiedByUser.lastName'] },
+                    contactName: { $concat: ['$contactData.firstName', ' ', '$contactData.lastName'] },
+                    accountName: '$accountData.name'
+                }
             },
-            { $project: { users: 0, contact: 0, Lead: 0 } },
+            { $project: { users: 0, contactData: 0, accountData: 0, modifiedByUser: 0, assignedToData: 0 } },
         ]);
         res.send(result);
     } catch (error) {
@@ -69,8 +90,8 @@ const index = async (req, res) => {
 
 const add = async (req, res) => {
     try {
-
-        const result = new Quotes(req.body);
+        const nextAutoIncrementValue = await getNextAutoIncrementValue();
+        const result = new Quotes({ ...req.body, quoteNumber: nextAutoIncrementValue });
         await result.save();
         res.status(200).json(result);
     } catch (err) {
@@ -94,7 +115,17 @@ const edit = async (req, res) => {
         res.status(400).json({ error: "Failed to create Quotes : ", err });
     }
 };
+const addMany = async (req, res) => {
+    try {
+        const data = req.body;
+        const inserted = await Quotes.insertMany(data);
 
+        res.status(200).json(inserted);
+    } catch (err) {
+        console.error('Failed to create Quotes :', err);
+        res.status(400).json({ error: 'Failed to create Quotes' });
+    }
+};
 const view = async (req, res) => {
     try {
         let response = await Quotes.findOne({ _id: req.params.id });
@@ -103,18 +134,26 @@ const view = async (req, res) => {
             { $match: { _id: response._id } },
             {
                 $lookup: {
-                    from: "Contacts",
-                    localField: "assignTo",
+                    from: "Opportunities",
+                    localField: "oppotunity",
                     foreignField: "_id",
-                    as: "contact",
+                    as: "oppotunityData",
                 },
             },
             {
                 $lookup: {
-                    from: "Leads", // Assuming this is the collection name for 'leads'
-                    localField: "assignToLead",
+                    from: "Contacts",
+                    localField: "contact",
                     foreignField: "_id",
-                    as: "Lead",
+                    as: "contactData",
+                },
+            },
+            {
+                $lookup: {
+                    from: "Accounts",
+                    localField: "account",
+                    foreignField: "_id",
+                    as: "accountData",
                 },
             },
             {
@@ -125,30 +164,46 @@ const view = async (req, res) => {
                     as: "users",
                 },
             },
-            { $unwind: { path: "$contact", preserveNullAndEmptyArrays: true } },
-            { $unwind: { path: "$users", preserveNullAndEmptyArrays: true } },
-            { $unwind: { path: "$Lead", preserveNullAndEmptyArrays: true } },
             {
-                $addFields: {
-                    assignToName: {
-                        $cond: {
-                            if: "$contact",
-                            then: {
-                                $concat: [
-                                    "$contact.title",
-                                    " ",
-                                    "$contact.firstName",
-                                    " ",
-                                    "$contact.lastName",
-                                ],
-                            },
-                            else: { $concat: ["$Lead.leadName"] },
-                        },
-                    },
-                    createByName: "$users.username",
+                $lookup: {
+                    from: "User",
+                    localField: "modifiedBy",
+                    foreignField: "_id",
+                    as: "modifiedByUser",
                 },
             },
-            { $project: { contact: 0, users: 0, Lead: 0 } },
+            {
+                $lookup: {
+                    from: "User",
+                    localField: "assignedTo",
+                    foreignField: "_id",
+                    as: "assignedToData",
+                },
+            },
+            { $unwind: { path: "$users", preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: "$contactData", preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: "$accountData", preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: '$modifiedByUser', preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: "$assignedToData", preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: "$oppotunityData", preserveNullAndEmptyArrays: true } },
+            { $match: { "users.deleted": false } },
+            {
+                $addFields: {
+                    assignUserName: {
+                        $cond: {
+                            if: '$assignUsers',
+                            then: { $concat: ['$assignUsers.firstName', ' ', '$assignUsers.lastName'] },
+                            else: { $concat: [''] }
+                        }
+                    },
+                    oppotunityName: '$oppotunityData.opportunityName',
+                    createdByName: { $concat: ['$users.firstName', ' ', '$users.lastName'] },
+                    modifiedUserName: { $concat: ['$modifiedByUser.firstName', ' ', '$modifiedByUser.lastName'] },
+                    contactName: { $concat: ['$contactData.firstName', ' ', '$contactData.lastName'] },
+                    accountName: '$accountData.name'
+                }
+            },
+            { $project: { users: 0, contactData: 0, accountData: 0, modifiedByUser: 0, oppotunityData: 0, assignedToData: 0 } },
         ]);
         res.status(200).json(result[0]);
     } catch (err) {
@@ -189,4 +244,4 @@ const deleteMany = async (req, res) => {
     }
 };
 
-module.exports = { index, add, edit, view, deleteData, deleteMany };
+module.exports = { index, add, edit, addMany, view, deleteData, deleteMany };

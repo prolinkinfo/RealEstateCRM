@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const add = async (req, res) => {
     try {
-        const result = new Opprtunities({ ...req.body, assignUser: req.body.assignUser ? req.body.assignUser : "" });
+        const result = new Opprtunities(req.body);
         await result.save();
         res.status(200).json(result);
     } catch (err) {

@@ -1,4 +1,4 @@
-import { Button, Grid, GridItem, Flex, IconButton, Text, Menu, MenuButton, MenuDivider, MenuItem, MenuList, useDisclosure, Box, Heading, Input, Select } from '@chakra-ui/react'
+import { Button, Grid, GridItem, Flex, IconButton, Text, Menu, MenuButton, MenuDivider, MenuItem, MenuList, useDisclosure, Box, Heading, Input, Select, Textarea } from '@chakra-ui/react'
 import { AddIcon, ChevronDownIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import React from 'react'
 import moment from 'moment'
@@ -19,7 +19,7 @@ import { opprtunitiesSchema } from '../../../schema/opprtunitiesSchema';
 import { useFormik } from 'formik';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
-import { accountSchema } from '../../../schema/accountSchema';
+import { quoteSchema } from '../../../schema/quoteSchema';
 
 const View = (props) => {
     const params = useParams()
@@ -43,7 +43,7 @@ const View = (props) => {
 
     const fetchViewData = async () => {
         if (id) {
-            let result = await getApi('api/account/view/', id);
+            let result = await getApi('api/quotes/view/', id);
             setData(result?.data);
         }
     }
@@ -58,7 +58,7 @@ const View = (props) => {
                 .from(element)
                 .set({
                     margin: [0, 0, 0, 0],
-                    filename: `Account_Details_${moment().format("DD-MM-YYYY")}.pdf`,
+                    filename: `Quotes_Details_${moment().format("DD-MM-YYYY")}.pdf`,
                     image: { type: "jpeg", quality: 0.98 },
                     html2canvas: { scale: 2, useCORS: true, allowTaint: true },
                     jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
@@ -75,10 +75,10 @@ const View = (props) => {
     };
     const handleDeleteAccount = async (ids) => {
         try {
-            let response = await deleteManyApi('api/account/deleteMany', ids)
+            let response = await deleteManyApi('api/quotes/deleteMany', ids)
             if (response.status === 200) {
-                navigate('/account')
-                toast.success(`Account Delete successfully`)
+                navigate('/quotes')
+                toast.success(`Quotes Delete successfully`)
                 setDeleteManyModel(false)
             }
         } catch (error) {
@@ -90,51 +90,53 @@ const View = (props) => {
     }
 
     const initialValues = {
-        name: data?.name,
-        officePhone: data?.officePhone,
-        alternatePhone: data?.alternatePhone,
-        assignUser: data?.assignUser,
-        website: data?.website,
-        fax: data?.fax,
-        ownership: data?.ownership,
-        emailAddress: data?.emailAddress,
+        title: data?.title,
+        oppotunity: data?.oppotunity,
+        quoteStage: data?.quoteStage,
+        invoiceStatus: data?.invoiceStatus,
+        validUntile: data?.validUntile,
+        assignedTo: data?.assignedTo,
+        paymentTerms: data?.paymentTerms,
+        approvalStatus: data?.approvalStatus,
         nonPrimaryEmail: data?.nonPrimaryEmail,
-        billingStreet: data?.billingStreet,
-        billingStreet2: data?.billingStreet2,
-        billingStreet3: data?.billingStreet3,
-        billingStreet4: data?.billingStreet4,
-        billingPostalcode: data?.billingPostalcode,
-        billingCity: data?.billingCity,
-        billingState: data?.billingState,
-        billingCountry: data?.billingCountry,
-        shippingStreet: data?.shippingStreet,
-        shippingStreet2: data?.shippingStreet2,
-        shippingStreet3: data?.shippingStreet3,
-        shippingStreet4: data?.shippingStreet4,
-        shippingPostalcode: data?.shippingPostalcode,
-        shippingCity: data?.shippingCity,
-        shippingState: data?.shippingState,
-        shippingCountry: data?.shippingCountry,
+        approvalIssues: data?.approvalIssues,
+        terms: data?.terms,
         description: data?.description,
-        type: data?.type,
-        industry: data?.industry,
-        annualRevenue: data?.annualRevenue,
-        rating: data?.rating,
-        SICCode: data?.SICCode,
-        memberOf: data?.memberOf,
+        account: data?.account,
+        contact: data?.contact,
+        billingStreet: data?.billingStreet,
+        shippingStreet: data?.shippingStreet,
+        billingCity: data?.billingCity,
+        shippingCity: data?.shippingCity,
+        billingState: data?.billingState,
+        shippingState: data?.shippingState,
+        billingPostalCode: data?.billingPostalCode,
+        shippingPostalCode: data?.shippingPostalCode,
+        billingCountry: data?.billingCountry,
+        shippingCountry: data?.shippingCountry,
+        isCheck: data?.isCheck,
+        currency: data?.currency,
+        total: data?.total,
+        discount: data?.discount,
+        subtotal: data?.subtotal,
+        shipping: data?.shipping,
+        shippingTax: data?.shippingTax,
+        ptax: data?.ptax,
+        tax: data?.tax,
+        grandTotal: data?.grandTotal,
         modifiedBy: JSON.parse(localStorage.getItem('user'))._id
     }
 
     const formik = useFormik({
         initialValues: initialValues,
-        validationSchema: accountSchema,
+        validationSchema: quoteSchema,
         enableReinitialize: true,
         onSubmit: async (values, { resetForm }) => {
             const payload = {
                 ...values,
                 modifiedDate: new Date()
             }
-            let response = await putApi(`api/account/edit/${id}`, payload)
+            let response = await putApi(`api/quotes/edit/${id}`, payload)
             if (response.status === 200) {
                 setEditableField(null);
                 fetchViewData()
@@ -167,7 +169,7 @@ const View = (props) => {
                                 <Box>
                                     <Box display={"flex"} justifyContent={"space-between"} >
                                         <Heading size="md" mb={3}>
-                                            Account Details
+                                            Quotes Details
                                         </Heading>
                                         <Flex id="hide-btn" >
                                             <Menu>
@@ -195,181 +197,226 @@ const View = (props) => {
                                     <HSeparator />
                                 </Box>
                             </GridItem>
+
                             <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Account Name </Text>
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Title </Text>
                                 {
-                                    editableField === "name" ?
+                                    editableField === "title" ?
                                         <>
                                             <Input
                                                 id="text"
-                                                name="name"
+                                                name="title"
                                                 type="text"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.name}
-                                                borderColor={formik?.errors?.name && formik?.touched?.name ? "red.300" : null}
+                                                value={formik.values.title}
+                                                borderColor={formik?.errors?.title && formik?.touched?.title ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.name && formik?.touched.name && formik?.errors.name}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors.title && formik?.touched.title && formik?.errors.title}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("name", data?.name, "Account Name")}>{data?.name ? data?.name : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("title", data?.title, "Title")}>{data?.title ? data?.title : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Office Phone </Text>
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Opportunity</Text>
                                 {
-                                    editableField === "officePhone" ?
-                                        <>
-                                            <Input
-                                                name="officePhone"
-                                                type="number"
-                                                onChange={formik.handleChange}
-                                                onBlur={handleBlur}
-                                                value={formik.values.officePhone}
-                                                borderColor={formik?.errors?.officePhone && formik?.touched?.officePhone ? "red.300" : null}
-                                                autoFocus
-                                            />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.officePhone && formik?.touched.officePhone && formik?.errors.officePhone}</Text>
-                                        </>
+                                    data?.oppotunity ?
+                                        <Link to={`/accountView/${data?.oppotunity}`}>
+                                            <Text color={contactAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }} style={{ cursor: "pointer" }}>{data?.oppotunityName ? data?.oppotunityName : ' - '}</Text>
+                                        </Link>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("officePhone", data?.officePhone, "Office Phone")}>{data?.officePhone ? data?.officePhone : ' - '}</Text>
+                                        <Text color={contactAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }}>{data?.oppotunityName ? data?.oppotunityName : ' - '}</Text>
+
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Alternate Phone</Text>
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Quote Stage </Text>
                                 {
-                                    editableField === "alternatePhone" ?
+                                    editableField === "quoteStage" ?
                                         <>
-                                            <Input
-                                                name="alternatePhone"
-                                                type="number"
-                                                onChange={formik.handleChange}
+                                            <Select
+                                                value={formik?.values.quoteStage}
+                                                name="quoteStage"
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.alternatePhone}
-                                                borderColor={formik?.errors?.alternatePhone && formik?.touched?.alternatePhone ? "red.300" : null}
-                                                autoFocus
-                                            />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.alternatePhone && formik?.touched.alternatePhone && formik?.errors.alternatePhone}</Text>
+                                                mb={formik?.errors.quoteStage && formik?.touched.quoteStage ? undefined : '10px'}
+                                                fontWeight='500'
+                                                placeholder={'Quote Stage'}
+                                                borderColor={formik?.errors.quoteStage && formik?.touched.quoteStage ? "red.300" : null}
+                                            >
+                                                <option value="Draft" >Draft</option>
+                                                <option value="Negotiation" >Negotiation</option>
+                                                <option value="Delivered" >Delivered</option>
+                                                <option value="On Hold" >On Hold</option>
+                                                <option value="Confirmed" >Confirmed</option>
+                                                <option value="Closed Accepted" >Closed Accepted</option>
+                                                <option value="Closed Lost" >Closed Lost</option>
+                                                <option value="Closed Dead" >Closed Dead</option>
+                                            </Select>
+                                            <Text mb='10px' color={'red'}> {formik?.errors.quoteStage && formik?.touched.quoteStage && formik?.errors.quoteStage}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("alternatePhone", data?.alternatePhone, "Alternate Phone")}>{data?.alternatePhone ? data?.alternatePhone : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("quoteStage", data?.quoteStage, "Quote Stage")}>{data?.quoteStage ? data?.quoteStage : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Website</Text>
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Invoice Status </Text>
                                 {
-                                    editableField === "website" ?
+                                    editableField === "invoiceStatus" ?
                                         <>
-                                            <Input
-                                                name="website"
-                                                type="url"
-                                                onChange={formik.handleChange}
+                                            <Select
+                                                value={formik?.values.invoiceStatus}
+                                                name="invoiceStatus"
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.website}
-                                                borderColor={formik?.errors?.website && formik?.touched?.website ? "red.300" : null}
-                                                autoFocus
-                                            />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.website && formik?.touched.website && formik?.errors.website}</Text>
+                                                mb={formik?.errors.invoiceStatus && formik?.touched.invoiceStatus ? undefined : '10px'}
+                                                fontWeight='500'
+                                                placeholder={'Invoice Status'}
+                                                borderColor={formik?.errors.invoiceStatus && formik?.touched.invoiceStatus ? "red.300" : null}
+                                            >
+                                                <option value="Not Invoiced">Not Invoiced</option>
+                                                <option value="Invoiced">Invoiced</option>
+                                            </Select>
+                                            <Text mb='10px' color={'red'}> {formik?.errors.invoiceStatus && formik?.touched.invoiceStatus && formik?.errors.invoiceStatus}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("website", data?.website, "Website")}>{data?.website ? data?.website : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("invoiceStatus", data?.invoiceStatus, "Invoice Status")}>{data?.invoiceStatus ? data?.invoiceStatus : ' - '}</Text>
+                                }
+                            </GridItem>
+
+                            <GridItem colSpan={{ base: 2, md: 1 }} >
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Valid Untile</Text>
+                                {
+                                    editableField === "validUntile" ?
+                                        <>
+                                            <Input
+                                                name="validUntile"
+                                                type="date"
+                                                onChange={formik.handleChange}
+                                                onBlur={handleBlur}
+                                                value={dayjs(formik.values.validUntile).format("YYYY-MM-DD")}
+                                                borderColor={formik?.errors?.validUntile && formik?.touched?.validUntile ? "red.300" : null}
+                                                autoFocus
+                                            />
+                                            <Text mb='10px' color={'red'}> {formik?.errors.validUntile && formik?.touched.validUntile && formik?.errors.validUntile}</Text>
+                                        </>
+                                        :
+                                        <Text onDoubleClick={() => handleDoubleClick("validUntile", data?.validUntile, "Valid Untile")}>{data?.validUntile ? data?.validUntile : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Fax</Text>
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Payment Terms</Text>
                                 {
-                                    editableField === "fax" ?
+                                    editableField === "paymentTerms" ?
                                         <>
-                                            <Input
-                                                name="fax"
-                                                type="number"
-                                                onChange={formik.handleChange}
+                                            <Select
+                                                value={formik?.values.paymentTerms}
+                                                name="paymentTerms"
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.fax}
-                                                borderColor={formik?.errors?.fax && formik?.touched?.fax ? "red.300" : null}
-                                                autoFocus
-                                            />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.fax && formik?.touched.fax && formik?.errors.fax}</Text>
+                                                mb={formik?.errors.paymentTerms && formik?.touched.paymentTerms ? undefined : '10px'}
+                                                fontWeight='500'
+                                                placeholder={'Payment Terms'}
+                                                borderColor={formik?.errors.paymentTerms && formik?.touched.paymentTerms ? "red.300" : null}
+                                            >
+                                                <option value="Nett 15" >Nett 15</option>
+                                                <option value="Nett 30" >Nett 30</option>
+                                            </Select>
+                                            <Text mb='10px' color={'red'}> {formik?.errors.paymentTerms && formik?.touched.paymentTerms && formik?.errors.paymentTerms}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("fax", data?.fax, "Fax")}>{data?.fax ? data?.fax : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("paymentTerms", data?.paymentTerms, "Payment Terms")}>{data?.paymentTerms ? data?.paymentTerms : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Ownership</Text>
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Approval Status</Text>
                                 {
-                                    editableField === "ownership" ?
+                                    editableField === "approvalStatus" ?
                                         <>
-                                            <Input
-                                                name="ownership"
-                                                onChange={formik.handleChange}
+                                            <Select
+                                                value={formik?.values.approvalStatus}
+                                                name="approvalStatus"
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.ownership}
-                                                borderColor={formik?.errors?.ownership && formik?.touched?.ownership ? "red.300" : null}
-                                                autoFocus
-                                            />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.ownership && formik?.touched.ownership && formik?.errors.ownership}</Text>
+                                                mb={formik?.errors.approvalStatus && formik?.touched.approvalStatus ? undefined : '10px'}
+                                                fontWeight='500'
+                                                placeholder={'Approval Status'}
+                                                borderColor={formik?.errors.approvalStatus && formik?.touched.approvalStatus ? "red.300" : null}
+                                            >
+                                                <option value="Approved">Approved</option>
+                                            </Select>
+                                            <Text mb='10px' color={'red'}> {formik?.errors.approvalStatus && formik?.touched.approvalStatus && formik?.errors.approvalStatus}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("ownership", data?.ownership, "Ownership")}>{data?.ownership ? data?.ownership : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("approvalStatus", data?.approvalStatus, "Approval Status")}>{data?.approvalStatus ? data?.approvalStatus : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Email Address</Text>
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Approval Issues</Text>
                                 {
-                                    editableField === "emailAddress" ?
+                                    editableField === "approvalIssues" ?
                                         <>
-                                            <Input
-                                                name="emailAddress"
-                                                onChange={formik.handleChange}
+                                            <Textarea
+                                                fontSize='sm'
+                                                value={formik?.values.approvalIssues}
+                                                name="approvalIssues"
+                                                resize={"none"}
                                                 onBlur={handleBlur}
-                                                value={formik.values.emailAddress}
-                                                borderColor={formik?.errors?.emailAddress && formik?.touched?.emailAddress ? "red.300" : null}
-                                                autoFocus
+                                                onChange={formik?.handleChange}
+                                                placeholder='Approval Issues'
+                                                fontWeight='500'
+                                                borderColor={formik?.errors.approvalIssues && formik?.touched.approvalIssues ? "red.300" : null}
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.emailAddress && formik?.touched.emailAddress && formik?.errors.emailAddress}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors.approvalIssues && formik?.touched.approvalIssues && formik?.errors.approvalIssues}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("emailAddress", data?.emailAddress, "Email Address")}>{data?.emailAddress ? data?.emailAddress : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("approvalIssues", data?.approvalIssues, "Approval Issues")} style={{ width: "300px" }}>{data?.approvalIssues ? data?.approvalIssues : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Non Primary Email</Text>
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Terms</Text>
                                 {
-                                    editableField === "nonPrimaryEmail" ?
+                                    editableField === "terms" ?
                                         <>
-                                            <Input
-                                                name="nonPrimaryEmail"
-                                                onChange={formik.handleChange}
+                                            <Textarea
+                                                fontSize='sm'
+                                                value={formik?.values.terms}
+                                                name="terms"
+                                                resize={"none"}
                                                 onBlur={handleBlur}
-                                                value={formik.values.nonPrimaryEmail}
-                                                borderColor={formik?.errors?.nonPrimaryEmail && formik?.touched?.nonPrimaryEmail ? "red.300" : null}
-                                                autoFocus
+                                                onChange={formik?.handleChange}
+                                                placeholder='Terms'
+                                                fontWeight='500'
+                                                borderColor={formik?.errors.terms && formik?.touched.terms ? "red.300" : null}
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.nonPrimaryEmail && formik?.touched.nonPrimaryEmail && formik?.errors.nonPrimaryEmail}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors.terms && formik?.touched.terms && formik?.errors.terms}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("nonPrimaryEmail", data?.nonPrimaryEmail, "Non Primary Email")}>{data?.nonPrimaryEmail ? data?.nonPrimaryEmail : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("terms", data?.terms, "Terms")} style={{ width: "300px" }}>{data?.terms ? data?.terms : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Shipping Street</Text>
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Description</Text>
                                 {
-                                    editableField === "shippingStreet" ?
+                                    editableField === "description" ?
                                         <>
-                                            <Input
-                                                name="shippingStreet"
-                                                onChange={formik.handleChange}
+                                            <Textarea
+                                                fontSize='sm'
+                                                value={formik?.values.description}
+                                                name="description"
+                                                resize={"none"}
                                                 onBlur={handleBlur}
-                                                value={formik.values.shippingStreet}
-                                                borderColor={formik?.errors?.shippingStreet && formik?.touched?.shippingStreet ? "red.300" : null}
-                                                autoFocus
+                                                onChange={formik?.handleChange}
+                                                placeholder='Description'
+                                                fontWeight='500'
+                                                borderColor={formik?.errors.description && formik?.touched.description ? "red.300" : null}
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.shippingStreet && formik?.touched.shippingStreet && formik?.errors.shippingStreet}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors.description && formik?.touched.description && formik?.errors.description}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("shippingStreet", data?.shippingStreet, "Shipping Street")}>{data?.shippingStreet ? data?.shippingStreet : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("description", data?.description, "Description")} style={{ width: "300px" }}>{data?.description ? data?.description : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
@@ -392,155 +439,43 @@ const View = (props) => {
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Shipping Street2</Text>
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Shipping Street</Text>
                                 {
-                                    editableField === "shippingStreet2" ?
+                                    editableField === "shippingStreet" ?
                                         <>
                                             <Input
-                                                name="shippingStreet2"
+                                                name="shippingStreet"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.shippingStreet2}
-                                                borderColor={formik?.errors?.shippingStreet2 && formik?.touched?.shippingStreet2 ? "red.300" : null}
+                                                value={formik.values.shippingStreet}
+                                                borderColor={formik?.errors?.shippingStreet && formik?.touched?.shippingStreet ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.shippingStreet2 && formik?.touched.shippingStreet2 && formik?.errors.shippingStreet2}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors.shippingStreet && formik?.touched.shippingStreet && formik?.errors.shippingStreet}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("shippingStreet2", data?.shippingStreet2, "Shipping Street2")}>{data?.shippingStreet2 ? data?.shippingStreet2 : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("shippingStreet", data?.shippingStreet, "Shipping Street")}>{data?.shippingStreet ? data?.shippingStreet : ' - '}</Text>
                                 }
                             </GridItem>
+
                             <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Billing Street2</Text>
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Billing City
+                                </Text>
                                 {
-                                    editableField === "billingStreet2" ?
+                                    editableField === "billingCity" ?
                                         <>
                                             <Input
-                                                name="billingStreet2"
+                                                name="billingCity"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.billingStreet2}
-                                                borderColor={formik?.errors?.billingStreet2 && formik?.touched?.billingStreet2 ? "red.300" : null}
+                                                value={formik.values.billingCity}
+                                                borderColor={formik?.errors?.billingCity && formik?.touched?.billingCity ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.billingStreet2 && formik?.touched.billingStreet2 && formik?.errors.billingStreet2}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors.billingCity && formik?.touched.billingCity && formik?.errors.billingCity}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("billingStreet2", data?.billingStreet2, "Billing Street2")}>{data?.billingStreet2 ? data?.billingStreet2 : ' - '}</Text>
-                                }
-                            </GridItem>
-                            <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Shipping Street3</Text>
-                                {
-                                    editableField === "shippingStreet3" ?
-                                        <>
-                                            <Input
-                                                name="shippingStreet3"
-                                                onChange={formik.handleChange}
-                                                onBlur={handleBlur}
-                                                value={formik.values.shippingStreet3}
-                                                borderColor={formik?.errors?.shippingStreet3 && formik?.touched?.shippingStreet3 ? "red.300" : null}
-                                                autoFocus
-                                            />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.shippingStreet3 && formik?.touched.shippingStreet3 && formik?.errors.shippingStreet3}</Text>
-                                        </>
-                                        :
-                                        <Text onDoubleClick={() => handleDoubleClick("shippingStreet3", data?.shippingStreet3, "Shipping Street3")}>{data?.shippingStreet3 ? data?.shippingStreet3 : ' - '}</Text>
-                                }
-                            </GridItem>
-                            <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Billing Street3</Text>
-                                {
-                                    editableField === "billingStreet3" ?
-                                        <>
-                                            <Input
-                                                name="billingStreet3"
-                                                onChange={formik.handleChange}
-                                                onBlur={handleBlur}
-                                                value={formik.values.billingStreet3}
-                                                borderColor={formik?.errors?.billingStreet3 && formik?.touched?.billingStreet3 ? "red.300" : null}
-                                                autoFocus
-                                            />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.billingStreet3 && formik?.touched.billingStreet3 && formik?.errors.billingStreet3}</Text>
-                                        </>
-                                        :
-                                        <Text onDoubleClick={() => handleDoubleClick("billingStreet3", data?.billingStreet3, "Billing Street3")}>{data?.billingStreet3 ? data?.billingStreet3 : ' - '}</Text>
-                                }
-                            </GridItem>
-                            <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Shipping Street4</Text>
-                                {
-                                    editableField === "shippingStreet4" ?
-                                        <>
-                                            <Input
-                                                name="shippingStreet4"
-                                                onChange={formik.handleChange}
-                                                onBlur={handleBlur}
-                                                value={formik.values.shippingStreet4}
-                                                borderColor={formik?.errors?.shippingStreet4 && formik?.touched?.shippingStreet4 ? "red.300" : null}
-                                                autoFocus
-                                            />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.shippingStreet4 && formik?.touched.shippingStreet4 && formik?.errors.shippingStreet4}</Text>
-                                        </>
-                                        :
-                                        <Text onDoubleClick={() => handleDoubleClick("shippingStreet4", data?.shippingStreet4, "Shipping Street4")}>{data?.shippingStreet4 ? data?.shippingStreet4 : ' - '}</Text>
-                                }
-                            </GridItem>
-                            <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Billing Street4</Text>
-                                {
-                                    editableField === "billingStreet4" ?
-                                        <>
-                                            <Input
-                                                name="billingStreet4"
-                                                onChange={formik.handleChange}
-                                                onBlur={handleBlur}
-                                                value={formik.values.billingStreet4}
-                                                borderColor={formik?.errors?.billingStreet4 && formik?.touched?.billingStreet4 ? "red.300" : null}
-                                                autoFocus
-                                            />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.billingStreet4 && formik?.touched.billingStreet4 && formik?.errors.billingStreet4}</Text>
-                                        </>
-                                        :
-                                        <Text onDoubleClick={() => handleDoubleClick("billingStreet4", data?.billingStreet4, "Billing Street4")}>{data?.billingStreet4 ? data?.billingStreet4 : ' - '}</Text>
-                                }
-                            </GridItem>
-                            <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Shipping Postal Code</Text>
-                                {
-                                    editableField === "shippingPostalcode" ?
-                                        <>
-                                            <Input
-                                                name="shippingPostalcode"
-                                                onChange={formik.handleChange}
-                                                onBlur={handleBlur}
-                                                value={formik.values.shippingPostalcode}
-                                                borderColor={formik?.errors?.shippingPostalcode && formik?.touched?.shippingPostalcode ? "red.300" : null}
-                                                autoFocus
-                                            />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.shippingPostalcode && formik?.touched.shippingPostalcode && formik?.errors.shippingPostalcode}</Text>
-                                        </>
-                                        :
-                                        <Text onDoubleClick={() => handleDoubleClick("shippingPostalcode", data?.shippingPostalcode, "Shipping Postal Code")}>{data?.shippingPostalcode ? data?.shippingPostalcode : ' - '}</Text>
-                                }
-                            </GridItem>
-                            <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Billing Postal Code</Text>
-                                {
-                                    editableField === "billingPostalcode" ?
-                                        <>
-                                            <Input
-                                                name="billingPostalcode"
-                                                onChange={formik.handleChange}
-                                                onBlur={handleBlur}
-                                                value={formik.values.billingPostalcode}
-                                                borderColor={formik?.errors?.billingPostalcode && formik?.touched?.billingPostalcode ? "red.300" : null}
-                                                autoFocus
-                                            />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.billingPostalcode && formik?.touched.billingPostalcode && formik?.errors.billingPostalcode}</Text>
-                                        </>
-                                        :
-                                        <Text onDoubleClick={() => handleDoubleClick("billingPostalcode", data?.billingPostalcode, "Billing Postal Code")}>{data?.billingPostalcode ? data?.billingPostalcode : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("billingCity", data?.billingCity, "Billing City")}>{data?.billingCity ? data?.billingCity : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
@@ -564,23 +499,22 @@ const View = (props) => {
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Billing City
-                                </Text>
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Billing State</Text>
                                 {
-                                    editableField === "billingCity" ?
+                                    editableField === "billingState" ?
                                         <>
                                             <Input
-                                                name="billingCity"
+                                                name="billingState"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.billingCity}
-                                                borderColor={formik?.errors?.billingCity && formik?.touched?.billingCity ? "red.300" : null}
+                                                value={formik.values.billingState}
+                                                borderColor={formik?.errors?.billingState && formik?.touched?.billingState ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.billingCity && formik?.touched.billingCity && formik?.errors.billingCity}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors.billingState && formik?.touched.billingState && formik?.errors.billingState}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("billingCity", data?.billingCity, "Billing City")}>{data?.billingCity ? data?.billingCity : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("billingState", data?.billingState, "Billing State")}>{data?.billingState ? data?.billingState : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
@@ -603,41 +537,41 @@ const View = (props) => {
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Billing State</Text>
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Billing Postal Code</Text>
                                 {
-                                    editableField === "billingState" ?
+                                    editableField === "billingPostalCode" ?
                                         <>
                                             <Input
-                                                name="billingState"
+                                                name="billingPostalCode"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.billingState}
-                                                borderColor={formik?.errors?.billingState && formik?.touched?.billingState ? "red.300" : null}
+                                                value={formik.values.billingPostalCode}
+                                                borderColor={formik?.errors?.billingPostalCode && formik?.touched?.billingPostalCode ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.billingState && formik?.touched.billingState && formik?.errors.billingState}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors.billingPostalCode && formik?.touched.billingPostalCode && formik?.errors.billingPostalCode}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("billingState", data?.billingState, "Billing State")}>{data?.billingState ? data?.billingState : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("billingPostalCode", data?.billingPostalCode, "Billing Postal Code")}>{data?.billingPostalCode ? data?.billingPostalCode : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Shipping Country</Text>
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Shipping Postal Code</Text>
                                 {
-                                    editableField === "shippingCountry" ?
+                                    editableField === "shippingPostalCode" ?
                                         <>
                                             <Input
-                                                name="shippingCountry"
+                                                name="shippingPostalCode"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.shippingCountry}
-                                                borderColor={formik?.errors?.shippingCountry && formik?.touched?.shippingCountry ? "red.300" : null}
+                                                value={formik.values.shippingPostalCode}
+                                                borderColor={formik?.errors?.shippingPostalCode && formik?.touched?.shippingPostalCode ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.shippingCountry && formik?.touched.shippingCountry && formik?.errors.shippingCountry}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors.shippingPostalCode && formik?.touched.shippingPostalCode && formik?.errors.shippingPostalCode}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("shippingCountry", data?.shippingCountry, "Shipping Country")}>{data?.shippingCountry ? data?.shippingCountry : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("shippingPostalCode", data?.shippingPostalCode, "Shipping Postal Code")}>{data?.shippingPostalCode ? data?.shippingPostalCode : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
@@ -660,135 +594,183 @@ const View = (props) => {
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Type</Text>
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Shipping Country</Text>
                                 {
-                                    editableField === "type" ?
-                                        <>
-                                            <Select
-                                                value={formik?.values.type}
-                                                name="type"
-                                                onChange={formik?.handleChange}
-                                                onBlur={handleBlur}
-                                                fontWeight='500'
-                                                placeholder={'Select Type'}
-                                                borderColor={formik?.errors.type && formik?.touched.type ? "red.300" : null}
-                                            >
-                                                <option value="Analyst">Analyst</option>
-                                                <option value="Competitor">Competitor </option>
-                                                <option value="Customer">Customer</option>
-                                                <option value="Integrator">Integrator</option>
-                                                <option value="Investor">Investor </option>
-                                                <option value="Partner">Partner</option>
-                                                <option value="Press">Press</option>
-                                                <option value="Prospect">Prospect</option>
-                                                <option value="Reseller">Reseller</option>
-                                                <option value="Other">Other</option>
-                                            </Select>
-                                            <Text mb='10px' color={'red'}> {formik?.errors.type && formik?.touched.type && formik?.errors.type}</Text>
-                                        </>
-                                        :
-                                        <Text onDoubleClick={() => handleDoubleClick("type", data?.type, "Type")}>{data?.type ? data?.type : ' - '}</Text>
-                                }
-                            </GridItem>
-                            <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Industry</Text>
-                                {
-                                    editableField === "industry" ?
-                                        <>
-                                            <Select
-                                                value={formik?.values.industry}
-                                                name="industry"
-                                                onChange={formik?.handleChange}
-                                                onBlur={handleBlur}
-                                                fontWeight='500'
-                                                placeholder={'Select Industry'}
-                                                borderColor={formik?.errors.industry && formik?.touched.industry ? "red.300" : null}
-                                            >
-                                                <option value="Apparel">Apparel</option>
-                                                <option value="Banking">Banking </option>
-                                                <option value="Biotechnology">Biotechnology</option>
-                                                <option value="Chemicals">Chemicals</option>
-                                                <option value="Communications">Communications </option>
-                                                <option value="Construction">Construction</option>
-                                                <option value="Consulting">Consulting</option>
-                                                <option value="Education">Education</option>
-                                                <option value="Electronics">Electronics</option>
-                                                <option value="Energy">Energy</option>
-                                                <option value="Engineering">Engineering</option>
-                                                <option value="Entertainment">Entertainment</option>
-                                                <option value="Finance">Finance</option>
-                                                <option value="Government">Government</option>
-                                                <option value="Healthcare">Healthcare</option>
-                                                <option value="Hospitality">Hospitality</option>
-                                                <option value="Insurance">Insurance</option>
-                                                <option value="Machinery">Machinery</option>
-                                                <option value="Manufacturing">Manufacturing</option>
-                                                <option value="Media">Media</option>
-                                                <option value="Not For Profit">Not For Profit</option>
-                                                <option value="Recreation">Recreation</option>
-                                                <option value="Retail">Retail</option>
-                                                <option value="Shipping">Shipping</option>
-                                                <option value="Technology">Technology</option>
-                                                <option value="Telecommunications">Telecommunications</option>
-                                                <option value="Transportation">Transportation</option>
-                                                <option value="Utilities">Utilities</option>
-                                                <option value="Other">Other</option>
-                                            </Select>
-                                            <Text mb='10px' color={'red'}> {formik?.errors.industry && formik?.touched.industry && formik?.errors.industry}</Text>
-                                        </>
-                                        :
-                                        <Text onDoubleClick={() => handleDoubleClick("industry", data?.industry, "Industry")}>{data?.industry ? data?.industry : ' - '}</Text>
-                                }
-                            </GridItem>
-                            <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Rating </Text>
-                                <Text >{data?.rating ? data?.rating : ' - '}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>SIC Code</Text>
-                                {
-                                    editableField === "SICCode" ?
+                                    editableField === "shippingCountry" ?
                                         <>
                                             <Input
-                                                name="SICCode"
+                                                name="shippingCountry"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.SICCode}
-                                                borderColor={formik?.errors?.SICCode && formik?.touched?.SICCode ? "red.300" : null}
+                                                value={formik.values.shippingCountry}
+                                                borderColor={formik?.errors?.shippingCountry && formik?.touched?.shippingCountry ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.SICCode && formik?.touched.SICCode && formik?.errors.SICCode}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors.shippingCountry && formik?.touched.shippingCountry && formik?.errors.shippingCountry}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("SICCode", data?.SICCode, "SIC Code")}>{data?.SICCode ? data?.SICCode : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("shippingCountry", data?.shippingCountry, "Shipping Country")}>{data?.shippingCountry ? data?.shippingCountry : ' - '}</Text>
+                                }
+                            </GridItem>
+
+                            <GridItem colSpan={{ base: 2, md: 1 }} >
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Currency</Text>
+                                {
+                                    editableField === "currency" ?
+                                        <>
+                                            <Select
+                                                value={formik?.values.currency}
+                                                name="currency"
+                                                onChange={formik?.handleChange}
+                                                onBlur={handleBlur}
+                                                fontWeight='500'
+                                                placeholder={'Select Currency'}
+                                                borderColor={formik?.errors.currency && formik?.touched.currency ? "red.300" : null}
+                                            >
+                                                <option value="$">US Dollars:$</option>
+                                            </Select>
+                                            <Text mb='10px' color={'red'}> {formik?.errors.currency && formik?.touched.currency && formik?.errors.currency}</Text>
+                                        </>
+                                        :
+                                        <Text onDoubleClick={() => handleDoubleClick("currency", data?.currency, "Currency")}>{data?.currency ? data?.currency : ' - '}</Text>
+                                }
+                            </GridItem>
+
+
+                            <GridItem colSpan={{ base: 2, md: 1 }} >
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Total</Text>
+                                {
+                                    editableField === "total" ?
+                                        <>
+                                            <Input
+                                                name="total"
+                                                onChange={formik.handleChange}
+                                                onBlur={handleBlur}
+                                                value={formik.values.total}
+                                                borderColor={formik?.errors?.total && formik?.touched?.total ? "red.300" : null}
+                                                autoFocus
+                                            />
+                                            <Text mb='10px' color={'red'}> {formik?.errors.total && formik?.touched.total && formik?.errors.total}</Text>
+                                        </>
+                                        :
+                                        <Text onDoubleClick={() => handleDoubleClick("total", data?.total, "Total")}>{data?.total ? data?.total : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Assigned User </Text>
-                                {/* <Text>{data?.assignUserName ? data?.assignUserName : ' - '}</Text> */}
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Discount</Text>
                                 {
-                                    data?.assignUser ?
-                                        <Link to={`/userView/${data?.assignUser}`}>
-                                            <Text color={contactAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }} style={{ cursor: "pointer" }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
-                                        </Link>
+                                    editableField === "discount" ?
+                                        <>
+                                            <Input
+                                                name="discount"
+                                                onChange={formik.handleChange}
+                                                onBlur={handleBlur}
+                                                value={formik.values.discount}
+                                                borderColor={formik?.errors?.discount && formik?.touched?.discount ? "red.300" : null}
+                                                autoFocus
+                                            />
+                                            <Text mb='10px' color={'red'}> {formik?.errors.discount && formik?.touched.discount && formik?.errors.discount}</Text>
+                                        </>
                                         :
-                                        <Text color={contactAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
-
+                                        <Text onDoubleClick={() => handleDoubleClick("discount", data?.discount, "Discount")}>{data?.discount ? data?.discount : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Member Of </Text>
-                                {/* <Text>{data?.assignUserName ? data?.assignUserName : ' - '}</Text> */}
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Subtotal</Text>
                                 {
-                                    data?.memberOf ?
-                                        <Link to={`/accountView/${data?.memberOf}`}>
-                                            <Text color={contactAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }} style={{ cursor: "pointer" }}>{data?.memberOfName ? data?.memberOfName : ' - '}</Text>
-                                        </Link>
+                                    editableField === "subtotal" ?
+                                        <>
+                                            <Input
+                                                name="subtotal"
+                                                onChange={formik.handleChange}
+                                                onBlur={handleBlur}
+                                                value={formik.values.subtotal}
+                                                borderColor={formik?.errors?.subtotal && formik?.touched?.subtotal ? "red.300" : null}
+                                                autoFocus
+                                            />
+                                            <Text mb='10px' color={'red'}> {formik?.errors.subtotal && formik?.touched.subtotal && formik?.errors.subtotal}</Text>
+                                        </>
                                         :
-                                        <Text color={contactAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }}>{data?.memberOfName ? data?.memberOfName : ' - '}</Text>
-
+                                        <Text onDoubleClick={() => handleDoubleClick("subtotal", data?.subtotal, "Subtotal")}>{data?.subtotal ? data?.subtotal : ' - '}</Text>
                                 }
                             </GridItem>
+                            <GridItem colSpan={{ base: 2, md: 1 }} >
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Shipping</Text>
+                                {
+                                    editableField === "shipping" ?
+                                        <>
+                                            <Input
+                                                name="shipping"
+                                                onChange={formik.handleChange}
+                                                onBlur={handleBlur}
+                                                value={formik.values.shipping}
+                                                borderColor={formik?.errors?.shipping && formik?.touched?.shipping ? "red.300" : null}
+                                                autoFocus
+                                            />
+                                            <Text mb='10px' color={'red'}> {formik?.errors.shipping && formik?.touched.shipping && formik?.errors.shipping}</Text>
+                                        </>
+                                        :
+                                        <Text onDoubleClick={() => handleDoubleClick("shipping", data?.shipping, "Shipping")}>{data?.shipping ? data?.shipping : ' - '}</Text>
+                                }
+                            </GridItem>
+                            <GridItem colSpan={{ base: 2, md: 1 }} >
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Shipping Tax</Text>
+                                {
+                                    editableField === "shippingTax" ?
+                                        <>
+                                            <Input
+                                                name="shippingTax"
+                                                onChange={formik.handleChange}
+                                                onBlur={handleBlur}
+                                                value={formik.values.shippingTax}
+                                                borderColor={formik?.errors?.shippingTax && formik?.touched?.shippingTax ? "red.300" : null}
+                                                autoFocus
+                                            />
+                                            <Text mb='10px' color={'red'}> {formik?.errors.shippingTax && formik?.touched.shippingTax && formik?.errors.shippingTax}</Text>
+                                        </>
+                                        :
+                                        <Text onDoubleClick={() => handleDoubleClick("shippingTax", data?.shippingTax, "Shipping Tax")}>{data?.shippingTax ? data?.shippingTax : ' - '}</Text>
+                                }
+                            </GridItem>
+                            <GridItem colSpan={{ base: 2, md: 1 }} >
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Tax</Text>
+                                {
+                                    editableField === "tax" ?
+                                        <>
+                                            <Input
+                                                name="tax"
+                                                onChange={formik.handleChange}
+                                                onBlur={handleBlur}
+                                                value={formik.values.tax}
+                                                borderColor={formik?.errors?.tax && formik?.touched?.tax ? "red.300" : null}
+                                                autoFocus
+                                            />
+                                            <Text mb='10px' color={'red'}> {formik?.errors.tax && formik?.touched.tax && formik?.errors.tax}</Text>
+                                        </>
+                                        :
+                                        <Text onDoubleClick={() => handleDoubleClick("tax", data?.tax, "Tax")}>{data?.tax ? data?.tax : ' - '}</Text>
+                                }
+                            </GridItem>
+                            <GridItem colSpan={{ base: 2, md: 1 }} >
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Grand Total</Text>
+                                {
+                                    editableField === "grandTotal" ?
+                                        <>
+                                            <Input
+                                                name="grandTotal"
+                                                onChange={formik.handleChange}
+                                                onBlur={handleBlur}
+                                                value={formik.values.grandTotal}
+                                                borderColor={formik?.errors?.grandTotal && formik?.touched?.grandTotal ? "red.300" : null}
+                                                autoFocus
+                                            />
+                                            <Text mb='10px' color={'red'}> {formik?.errors.grandTotal && formik?.touched.grandTotal && formik?.errors.grandTotal}</Text>
+                                        </>
+                                        :
+                                        <Text onDoubleClick={() => handleDoubleClick("grandTotal", data?.grandTotal, "Grand Total")}>{data?.grandTotal ? data?.grandTotal : ' - '}</Text>
+                                }
+                            </GridItem>
+
 
                             {/* <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Task reminder </Text>

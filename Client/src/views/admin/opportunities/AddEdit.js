@@ -26,8 +26,8 @@ const AddEdit = (props) => {
 
     const initialValues = {
         opportunityName: type === "edit" ? opprtunityDetails?.opportunityName : "",
-        accountName: type === "edit" ? opprtunityDetails?.accountName : "",
-        assignUser: type === "edit" ? opprtunityDetails?.assignUser : "",
+        accountName: type === "edit" ? opprtunityDetails?.accountName : null,
+        assignUser: type === "edit" ? opprtunityDetails?.assignUser : null,
         type: type === "edit" ? opprtunityDetails?.type : "",
         leadSource: type === "edit" ? opprtunityDetails?.leadSource : "",
         currency: type === "edit" ? opprtunityDetails?.currency : "",
