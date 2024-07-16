@@ -10,7 +10,7 @@ import Edit from './Edit';
 import AddEmailHistory from "../emailHistory/components/AddEmail";
 import AddPhoneCall from "../phoneCall/components/AddPhoneCall";
 import { HasAccess } from "../../../redux/accessUtils";
-import CommonCheckTable from "../../../components/checkTable/checktable";
+import CommonCheckTable from "../../../components/reactTable/checktable";
 import ImportModal from "./components/ImportModel";
 import CommonDeleteModel from 'components/commonDeleteModel';
 import { deleteManyApi } from 'services/api';
@@ -20,19 +20,14 @@ import { fetchContactCustomFiled } from '../../../redux/slices/contactCustomFile
 import { toast } from 'react-toastify';
 
 const Index = () => {
-    const title = "Contacts";
-    const size = "lg";
-    const user = JSON.parse(localStorage.getItem("user"));
     const navigate = useNavigate();
     const [permission, emailAccess, callAccess] = HasAccess(['Contacts', 'Emails', 'Calls']);
-    const [isLoding, setIsLoding] = useState(false);
-    // const [data, setData] = useState([]);
-    const [tableColumns, setTableColumns] = useState([]);
-    const [columns, setColumns] = useState([]);
-    const [dataColumn, setDataColumn] = useState([]);
-    const [selectedColumns, setSelectedColumns] = useState([]);
-    const [action, setAction] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const dispatch = useDispatch();
+
+    const [isLoding, setIsLoding] = useState(false);
+    const [action, setAction] = useState(false);
+    const [columns, setColumns] = useState([]);
     const [contactData, setContactData] = useState([]);
     const [edit, setEdit] = useState(false);
     const [deleteModel, setDelete] = useState(false);
@@ -44,16 +39,8 @@ const Index = () => {
     const [isImportContact, setIsImport] = useState(false);
     const [emailRec, setEmailRec] = useState('');
     const [phoneRec, setPhoneRec] = useState({});
-    const dispatch = useDispatch();
 
     const data = useSelector((state) => state?.contactData?.data)
-
-    // const fetchData = async () => {
-    //     setIsLoding(true)
-    //     let result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`);
-    //     setData(result.data);
-    //     setIsLoding(false)
-    // };
 
     const handleOpenEmail = (id, dataContact) => {
         if (id) {
@@ -64,9 +51,8 @@ const Index = () => {
 
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
-        // const result = await getApi(`api/custom-field/?moduleName=Contacts`);
         const result = await dispatch(fetchContactCustomFiled());
-        if (result.payload.status === 200) {
+        if (result?.payload?.status === 200) {
             setContactData(result?.payload?.data);
         } else {
             toast.error("Failed to fetch data", "error");
@@ -130,10 +116,7 @@ const Index = () => {
             ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : [])
         ];
 
-        setSelectedColumns(JSON.parse(JSON.stringify(tempTableColumns)));
-        setColumns(JSON.parse(JSON.stringify(tempTableColumns)));
         setColumns(tempTableColumns);
-        setTableColumns(JSON.parse(JSON.stringify(tempTableColumns)));
         setIsLoding(false);
     };
 
@@ -160,30 +143,26 @@ const Index = () => {
         fetchCustomDataFields();
     }, [action]);
 
-    useEffect(() => {
-        setDataColumn(tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header)));
-    }, [tableColumns, selectedColumns]);
-
     return (
         <div>
             <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={4}>
                 {!isLoding &&
                     <GridItem colSpan={6}>
                         <CommonCheckTable
-                            title={title}
+                            title={"Contacts"}
                             isLoding={isLoding}
                             columnData={columns ?? []}
-                            dataColumn={dataColumn ?? []}
+                            // dataColumn={dataColumn ?? []}
                             allData={data ?? []}
                             tableData={data}
                             tableCustomFields={contactData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
                             access={permission}
-                            action={action}
-                            setAction={setAction}
-                            selectedColumns={selectedColumns}
-                            setSelectedColumns={setSelectedColumns}
-                            isOpen={isOpen}
-                            onClose={onclose}
+                            // action={action}
+                            // setAction={setAction}
+                            // selectedColumns={selectedColumns}
+                            // setSelectedColumns={setSelectedColumns}
+                            // isOpen={isOpen}
+                            // onClose={onclose}
                             onOpen={onOpen}
                             selectedValues={selectedValues}
                             setSelectedValues={setSelectedValues}
@@ -193,8 +172,9 @@ const Index = () => {
                     </GridItem>
                 }
             </Grid>
-            {isOpen && <Add isOpen={isOpen} size={size} contactData={contactData[0]} onClose={onClose} setAction={setAction} action={action} />}
-            {edit && <Edit isOpen={edit} size={size} contactData={contactData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={contactData?.[0]?._id} />}
+
+            {isOpen && <Add isOpen={isOpen} size={"lg"} contactData={contactData[0]} onClose={onClose} setAction={setAction} action={action} />}
+            {edit && <Edit isOpen={edit} size={"lg"} contactData={contactData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} moduleId={contactData?.[0]?._id} />}
             {deleteModel && <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Contacts' handleDeleteData={handleDeleteContact} ids={selectedValues} />}
             {addEmailHistory && <AddEmailHistory fetchData={fetchContactData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={selectedId} contactEmail={emailRec} />}
             {addPhoneCall && <AddPhoneCall fetchData={fetchContactData} isOpen={addPhoneCall} onClose={setAddPhoneCall} id={callSelectedId} cData={phoneRec} />}

@@ -21,7 +21,7 @@ import {
 } from "@chakra-ui/icons";
 import { CiMenuKebab } from "react-icons/ci";
 import { getApi } from "services/api";
-import CommonCheckTable from "../../../components/checkTable/checktable";
+import CommonCheckTable from "../../../components/reactTable/checktable";
 import Add from "./Add";
 import Edit from "./Edit";
 import AddEmailHistory from "views/admin/emailHistory/components/AddEmail";
@@ -294,9 +294,7 @@ const Index = () => {
                     : []),
             ];
 
-            setSelectedColumns(JSON.parse(JSON.stringify(tempTableColumns)));
             setColumns(tempTableColumns);
-            setTableColumns(JSON.parse(JSON.stringify(tempTableColumns)));
             setIsLoding(false);
         } catch (error) {
             console.error("Error fetching custom data fields:", error);
@@ -350,6 +348,7 @@ const Index = () => {
             dispatch(setGetTagValues(getValue.filter((item) => item.value)));
         }
     }, [data, location?.state]);
+
     return (
         <div>
             <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={4}>
@@ -361,7 +360,7 @@ const Index = () => {
                             searchDisplay={searchDisplay}
                             setSearchDisplay={setSearchDisplay}
                             columnData={columns ?? []}
-                            dataColumn={dataColumn ?? []}
+                            // dataColumn={dataColumn ?? []}
                             allData={data ?? []}
                             tableData={searchDisplay ? searchedDataOut : data}
                             tableCustomFields={
@@ -372,8 +371,8 @@ const Index = () => {
                             access={permission}
                             action={action}
                             setAction={setAction}
-                            selectedColumns={selectedColumns}
-                            setSelectedColumns={setSelectedColumns}
+                            // selectedColumns={selectedColumns}
+                            // setSelectedColumns={setSelectedColumns}
                             isOpen={isOpen}
                             onClose={onclose}
                             onOpen={onOpen}

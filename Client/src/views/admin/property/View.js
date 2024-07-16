@@ -20,7 +20,7 @@ import xls from '../../../assets/img/fileImage/xls.png'
 import csv from '../../../assets/img/fileImage/csv.png'
 import file from '../../../assets/img/fileImage/file.png'
 import CustomView from "utils/customView";
-import CommonCheckTable from "components/checkTable/checktable";
+import CommonCheckTable from "components/reactTable/checktable";
 import CommonDeleteModel from "components/commonDeleteModel";
 import { deleteApi } from "services/api";
 import { useDispatch, useSelector } from "react-redux";
@@ -149,8 +149,8 @@ const View = () => {
 
     return (
         <>
-            <Add isOpen={isOpen} size={size} onClose={onClose} propertyData={propertyData[0]} />
-            <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} propertyData={propertyData[0]} data={data} />
+            <Add isOpen={isOpen} size={size} onClose={onClose} propertyData={propertyData?.[0]} />
+            <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} propertyData={propertyData?.[0]} data={data} />
             <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Property' handleDeleteData={handleDeleteProperties} ids={param.id} />
 
             {isLoding ?
@@ -203,7 +203,7 @@ const View = () => {
 
                         <TabPanels>
                             <TabPanel pt={4} p={0}>
-                                <CustomView data={propertyData[0]} fieldData={data} fetchData={fetchData} editUrl={`api/property/edit/${param.id}`} moduleId={propertyData?.[0]?._id} id="reports" />
+                                <CustomView data={propertyData?.[0]} fieldData={data} fetchData={fetchData} editUrl={`api/property/edit/${param.id}`} moduleId={propertyData?.[0]?._id} id="reports" />
                                 {filteredContacts?.length > 0 &&
                                     <GridItem colSpan={{ base: 12 }} mt={4}>
                                         <Grid templateColumns={{ base: "1fr" }} >
@@ -215,12 +215,12 @@ const View = () => {
                                                             ManageGrid={false}
                                                             access={false}
                                                             columnData={columns ?? []}
-                                                            dataColumn={columns ?? []}
+                                                            // dataColumn={columns ?? []}
                                                             title={"Interested Contact"}
                                                             allData={filteredContacts ?? []}
                                                             tableData={filteredContacts}
-                                                            selectedColumns={selectedColumns}
-                                                            setSelectedColumns={setSelectedColumns}
+                                                            // selectedColumns={selectedColumns}
+                                                            // setSelectedColumns={setSelectedColumns}
                                                             size={"md"}
                                                             tableCustomFields={contactData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
                                                             customSearch={true}

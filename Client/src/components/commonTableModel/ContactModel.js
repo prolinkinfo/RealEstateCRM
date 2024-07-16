@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import ContactTable from './Contact.js'
 import Spinner from 'components/spinner/Spinner'
 import { GiClick } from "react-icons/gi";
-import CommonCheckTable from 'components/checkTable/checktable.js';
+import CommonCheckTable from 'components/reactTable/checktable.js';
 import { fetchContactCustomFiled } from '../../redux/slices/contactCustomFiledSlice.js';
 import { fetchContactData } from '../../redux/slices/contactSlice.js';
 import { useDispatch } from 'react-redux';
@@ -64,7 +64,7 @@ const ContactModel = (props) => {
                             title={'Contacts'}
                             isLoding={isLoding}
                             columnData={columns ?? []}
-                            dataColumn={columns ?? []}
+                            // dataColumn={columns ?? []}
                             allData={data ?? []}
                             tableData={data}
                             tableCustomFields={contactData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}

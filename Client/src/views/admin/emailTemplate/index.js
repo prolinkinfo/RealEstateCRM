@@ -3,7 +3,7 @@ import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList, Select, Text, useDisclosure } from '@chakra-ui/react';
 import { getApi } from 'services/api';
 import { HasAccess } from '../../../redux/accessUtils';
-import CommonCheckTable from '../../../components/checkTable/checktable';
+import CommonCheckTable from '../../../components/reactTable/checktable';
 import { CiMenuKebab } from 'react-icons/ci';
 import { putApi } from 'services/api';
 import { useLocation } from 'react-router-dom';
@@ -23,7 +23,7 @@ const Index = () => {
     const [id, setId] = useState('')
     const [selectedId, setSelectedId] = useState();
     const [selectedValues, setSelectedValues] = useState([]);
-    const [advanceSearch, setAdvanceSearch] = useState(false);
+    // const [advanceSearch, setAdvanceSearch] = useState(false);
     const [getTagValuesOutSide, setGetTagValuesOutside] = useState([]);
     const [searchboxOutside, setSearchboxOutside] = useState('');
     const user = JSON.parse(localStorage.getItem("user"));
@@ -36,7 +36,7 @@ const Index = () => {
     const [userAction, setUserAction] = useState("");
     const [permission, leadAccess, contactAccess] = HasAccess(["Tasks", 'Leads', 'Contacts']);
     const location = useLocation();
-    const state = location.state;
+    // const state = location.state;
     const navigate = useNavigate()
     const dispatch = useDispatch();
 
@@ -106,8 +106,8 @@ const Index = () => {
     }
 
 
-    const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
-    const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
+    // const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
+    // const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 
     const addBtn = () => {
         navigate(`/email-template/email-template-addEdit`, { state: { type: 'add' } })
@@ -124,7 +124,7 @@ const Index = () => {
                 title={title}
                 isLoding={isLoding}
                 columnData={tableColumns ?? []}
-                dataColumn={dataColumn ?? []}
+                // dataColumn={dataColumn ?? []}
                 allData={data ?? []}
                 searchDisplay={displaySearchData}
                 setSearchDisplay={setDisplaySearchData}
@@ -132,15 +132,14 @@ const Index = () => {
                 setSearchedDataOut={setSearchedData}
                 tableCustomFields={[]}
                 access={permission}
-                selectedColumns={selectedColumns}
-                setSelectedColumns={setSelectedColumns}
-                state={state}
+                // selectedColumns={selectedColumns}
+                // setSelectedColumns={setSelectedColumns}
+                // state={state}
                 onOpen={addBtn}
                 selectedValues={selectedValues}
                 setSelectedValues={setSelectedValues}
                 setDelete={setDeleteMany}
-                AdvanceSearch={false
-                }
+                AdvanceSearch={false}
                 getTagValuesOutSide={getTagValuesOutSide}
                 searchboxOutside={searchboxOutside}
                 setGetTagValuesOutside={setGetTagValuesOutside}

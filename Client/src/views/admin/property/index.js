@@ -6,7 +6,7 @@ import { Grid, GridItem, Text, Menu, MenuButton, MenuItem, MenuList, useDisclosu
 import { DeleteIcon, ViewIcon, EditIcon, } from "@chakra-ui/icons";
 import { CiMenuKebab } from "react-icons/ci";
 import { getApi } from "services/api";
-import CommonCheckTable from '../../../components/checkTable/checktable';
+import CommonCheckTable from '../../../components/reactTable/checktable';
 import Add from "./Add";
 import Edit from "./Edit";
 import ImportModal from './components/ImportModal';
@@ -18,8 +18,6 @@ import { fetchPropertyData } from '../../../redux/slices/propertySlice'
 import { toast } from 'react-toastify';
 
 const Index = () => {
-    const title = "Properties";
-    const size = "lg";
     const user = JSON.parse(localStorage.getItem("user"));
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -28,8 +26,8 @@ const Index = () => {
     // const [data, setData] = useState([]);
     const [tableColumns, setTableColumns] = useState([]);
     const [columns, setColumns] = useState([]);
-    const [dataColumn, setDataColumn] = useState([]);
-    const [selectedColumns, setSelectedColumns] = useState([]);
+    // const [dataColumn, setDataColumn] = useState([]);
+    // const [selectedColumns, setSelectedColumns] = useState([]);
     const [action, setAction] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [propertyData, setPropertyData] = useState([]);
@@ -104,10 +102,7 @@ const Index = () => {
         ];
 
 
-        setSelectedColumns(JSON.parse(JSON.stringify(tempTableColumns)));
-        setColumns(JSON.parse(JSON.stringify(tempTableColumns)));
         setColumns(tempTableColumns);
-        setTableColumns(JSON.parse(JSON.stringify(tempTableColumns)));
         setIsLoding(false);
     }
 
@@ -133,9 +128,9 @@ const Index = () => {
         fetchCustomDataFields();
     }, [action])
 
-    useEffect(() => {
-        setDataColumn(tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header)));
-    }, [tableColumns, selectedColumns])
+    // useEffect(() => {
+    //     setDataColumn(tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header)));
+    // }, [tableColumns, selectedColumns])
 
     return (
         <div>
@@ -143,20 +138,20 @@ const Index = () => {
                 {!isLoding &&
                     <GridItem colSpan={6}>
                         <CommonCheckTable
-                            title={title}
+                            title={"Properties"}
                             isLoding={isLoding}
                             columnData={columns ?? []}
-                            dataColumn={dataColumn ?? []}
+                            // dataColumn={dataColumn ?? []}
                             allData={data ?? []}
                             tableData={data}
                             tableCustomFields={propertyData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
                             access={permission}
-                            action={action}
-                            setAction={setAction}
-                            selectedColumns={selectedColumns}
-                            setSelectedColumns={setSelectedColumns}
-                            isOpen={isOpen}
-                            onClose={onclose}
+                            // action={action}
+                            // setAction={setAction}
+                            // selectedColumns={selectedColumns}
+                            // setSelectedColumns={setSelectedColumns}
+                            // isOpen={isOpen}
+                            // onClose={onclose}
                             onOpen={onOpen}
                             selectedValues={selectedValues}
                             setSelectedValues={setSelectedValues}
@@ -166,8 +161,8 @@ const Index = () => {
                     </GridItem>
                 }
             </Grid>
-            {isOpen && <Add propertyData={propertyData[0]} isOpen={isOpen} size={size} onClose={onClose} setAction={setAction} />}
-            {edit && <Edit isOpen={edit} size={size} propertyData={propertyData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} />}
+            {isOpen && <Add propertyData={propertyData[0]} isOpen={isOpen} size={"lg"} onClose={onClose} setAction={setAction} />}
+            {edit && <Edit isOpen={edit} size={"lg"} propertyData={propertyData[0]} selectedId={selectedId} setSelectedId={setSelectedId} onClose={setEdit} setAction={setAction} />}
             {deleteModel && <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Properties' handleDeleteData={handleDeleteProperties} ids={selectedValues} />}
             {isImportProperty && <ImportModal text='Property file' isOpen={isImportProperty} onClose={setIsImportProperty} customFields={propertyData?.[0]?.fields || []} />}
 

@@ -4,7 +4,7 @@ import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList, Text, useDisclosure } from '@chakra-ui/react';
 import { getApi, deleteManyApi } from 'services/api';
 import { HasAccess } from '../../../redux/accessUtils';
-import CommonCheckTable from '../../../components/checkTable/checktable';
+import CommonCheckTable from '../../../components/reactTable/checktable';
 import { SearchIcon } from "@chakra-ui/icons";
 import { CiMenuKebab } from 'react-icons/ci';
 import moment from 'moment';
@@ -391,9 +391,9 @@ const Index = (props) => {
         setIsLoding(false)
     }
 
-    const [columns, setColumns] = useState([...tableColumns]);
-    const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
-    const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
+    // const [columns, setColumns] = useState([...tableColumns]);
+    // const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
+    // const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 
 
     useEffect(() => {
@@ -405,8 +405,8 @@ const Index = (props) => {
             <CommonCheckTable
                 title={"Account"}
                 isLoding={isLoding}
-                columnData={columns ?? []}
-                dataColumn={dataColumn ?? []}
+                columnData={tableColumns ?? []}
+                // dataColumn={dataColumn ?? []}
                 allData={data ?? []}
                 tableData={data}
                 searchDisplay={displaySearchData}
@@ -415,12 +415,12 @@ const Index = (props) => {
                 setSearchedDataOut={setSearchedData}
                 tableCustomFields={[]}
                 access={permission}
-                action={action}
-                setAction={setAction}
-                selectedColumns={selectedColumns}
-                setSelectedColumns={setSelectedColumns}
-                isOpen={isOpen}
-                onClose={onclose}
+                // action={action}
+                // setAction={setAction}
+                // selectedColumns={selectedColumns}
+                // setSelectedColumns={setSelectedColumns}
+                // isOpen={isOpen}
+                // onClose={onclose}
                 setIsImport={setIsImport}
                 onOpen={handleOpenAdd}
                 selectedValues={selectedValues}
