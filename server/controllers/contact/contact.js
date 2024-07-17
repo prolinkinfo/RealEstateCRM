@@ -264,7 +264,7 @@ const view = async (req, res) => {
             { $project: { contact: 0, users: 0 } },
         ])
         let quotes = await Quotes.aggregate([
-            { $match: { contact: contact._id } },
+            { $match: { contact: contact._id, deleted: false } },
             {
                 $lookup: {
                     from: 'Contacts',
@@ -284,11 +284,8 @@ const view = async (req, res) => {
 
             { $unwind: { path: '$contactData', preserveNullAndEmptyArrays: true } },
             { $unwind: { path: '$accountData', preserveNullAndEmptyArrays: true } },
-            { $match: { 'contactData.deleted': false } },
-            { $match: { 'accountData.deleted': false } },
             {
                 $addFields: {
-                    deleted: '$contactData.deleted',
                     contactName: { $concat: ['$contactData.title', ' ', '$contactData.firstName', ' ', '$contactData.lastName'] },
                     accountName: { $concat: ['$accountData.name'] },
                 }
@@ -296,7 +293,7 @@ const view = async (req, res) => {
             { $project: { contactData: 0, accountData: 0 } },
         ])
         let invoice = await Invoices.aggregate([
-            { $match: { contact: contact._id } },
+            { $match: { contact: contact._id, deleted: false } },
             {
                 $lookup: {
                     from: 'Contacts',
@@ -316,11 +313,8 @@ const view = async (req, res) => {
 
             { $unwind: { path: '$contactData', preserveNullAndEmptyArrays: true } },
             { $unwind: { path: '$accountData', preserveNullAndEmptyArrays: true } },
-            { $match: { 'contactData.deleted': false } },
-            { $match: { 'accountData.deleted': false } },
             {
                 $addFields: {
-                    deleted: '$contactData.deleted',
                     contactName: { $concat: ['$contactData.title', ' ', '$contactData.firstName', ' ', '$contactData.lastName'] },
                     accountName: { $concat: ['$accountData.name'] },
                 }
