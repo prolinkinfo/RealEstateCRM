@@ -117,8 +117,10 @@ const advanceSearchSlice = createSlice({
                             (!action.payload?.values?.fax || (item?.fax && item?.fax.toString().toLowerCase().includes(action.payload?.values?.fax?.toString().toLowerCase()))) &&
                             (!action.payload?.values?.emailAddress || (item?.emailAddress && item?.emailAddress.toLowerCase().includes(action.payload?.values?.emailAddress?.toLowerCase())))
                     )
+                    break;
                 case 'AccountSearch':
                     state.searchResult = action.payload.searchData;
+                    break;
                 case 'quotes':
                     state.searchResult = action?.payload?.allData?.filter(
                         (item) =>
@@ -130,6 +132,7 @@ const advanceSearchSlice = createSlice({
                             (!action.payload?.values?.grandTotal || (item?.grandTotal && item?.grandTotal?.toString().toLowerCase().includes(action.payload?.values?.grandTotal?.toString().toLowerCase()))) &&
                             (!action.payload?.values?.validUntil || (item?.validUntil && item?.validUntil.toLowerCase().includes(action.payload?.values?.validUntil?.toLowerCase())))
                     )
+                    break;
                 case 'invoice':
                     state.searchResult = action?.payload?.allData?.filter(
                         (item) =>
@@ -140,6 +143,7 @@ const advanceSearchSlice = createSlice({
                             (!action.payload?.values?.accountName || (item?.accountName && item?.accountName.toLowerCase().includes(action.payload?.values?.accountName?.toLowerCase()))) &&
                             (!action.payload?.values?.grandTotal || (item?.grandTotal && item?.grandTotal?.toString().toLowerCase().includes(action.payload?.values?.grandTotal?.toString().toLowerCase())))
                     )
+                    break;
                 default:
                 // state.count += 3;
             }

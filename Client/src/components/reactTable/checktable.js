@@ -108,8 +108,8 @@ const CommonCheckTable = (props) => {
     }
 
     const handleSearch = (results) => {
-        AdvanceSearch && dispatch(getSearchData({ searchData: results, type: handleSearchType }))
-        AdvanceSearch ? setSearchedDataOut(results) : setSearchedData(results);
+        AdvanceSearch && dispatch(getSearchData({ searchData: (results || []), type: handleSearchType }))
+        AdvanceSearch ? setSearchedDataOut(results || []) : setSearchedData(results || []);
     };
 
     const handleAdvanceSearch = (values) => {
@@ -466,7 +466,7 @@ const CommonCheckTable = (props) => {
                                         </Flex>
                                     </Td>
                                 </Tr>
-                                : data?.length === 0 ? (
+                                : data && data?.length === 0 || data === undefined ? (
                                     <Tr>
                                         <Td colSpan={columns.length}>
                                             <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
