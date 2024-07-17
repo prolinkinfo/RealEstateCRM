@@ -117,17 +117,17 @@ const edit = async (req, res) => {
 };
 const addMany = async (req, res) => {
     try {
-        // const data = {
-        //     ...req.body,
-        //     account: new mongoose.Types.ObjectId(req.body.account),
-        //     contact: new mongoose.Types.ObjectId(req.body.contact),
-        // };
+        const data = {
+            ...req.body,
+            account: req.body.account ? req.body.account : null,
+            contact: req.body.contact ? req.body.contact : null,
+        };
         // const d = req.body.map((item) => ({
         //     ...item,
         //     account: new mongoose.Types.ObjectId(item.account),
         //     contact: new mongoose.Types.ObjectId(item.contact),
         // }))
-        const inserted = await Quotes.insertMany(req.body);
+        const inserted = await Quotes.insertMany(data);
 
         res.status(200).json(inserted);
     } catch (err) {

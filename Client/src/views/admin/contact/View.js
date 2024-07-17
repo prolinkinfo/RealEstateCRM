@@ -36,7 +36,8 @@ import { fetchContactCustomFiled } from '../../../redux/slices/contactCustomFile
 import { fetchPropertyCustomFiled } from "../../../redux/slices/propertyCustomFiledSlice";
 import html2pdf from "html2pdf.js";
 import { FaFilePdf } from "react-icons/fa";
-
+import AddEditQuotes from '../quotes/AddEdit'
+import AddEditInvoice from '../invoice/AddEdit'
 const View = () => {
 
     const param = useParams()
@@ -57,6 +58,8 @@ const View = () => {
     const [taskModel, setTaskModel] = useState(false);
     const [addEmailHistory, setAddEmailHistory] = useState(false);
     const [addPhoneCall, setAddPhoneCall] = useState(false);
+    const [addQuotes, setAddQuotes] = useState(false);
+    const [addInvoice, setAddInvoice] = useState(false);
     const [addMeeting, setMeeting] = useState(false);
     const [showEmail, setShowEmail] = useState(false);
     const [showCall, setShowCall] = useState(false);
@@ -65,6 +68,7 @@ const View = () => {
     const [showQuotes, setShowQuotes] = useState(false);
     const [showInvoices, setShowInvoices] = useState(false);
     const [addDocument, setAddDocument] = useState(false);
+
     const [selectedTab, setSelectedTab] = useState(0);
     const size = "lg";
     const navigate = useNavigate()
@@ -74,8 +78,8 @@ const View = () => {
 
     const [propertyData, setPropertyData] = useState([]);
     const [columns, setColumns] = useState([]);
-    const [permission, callAccess, emailAccess, taskAccess, meetingAccess] = HasAccess(['Contacts', 'Calls', 'Emails', 'Tasks', 'Meetings']);
-
+    const [permission, callAccess, emailAccess, taskAccess, meetingAccess, quotesAccess, invoicesAccess] = HasAccess(['Contacts', 'Calls', 'Emails', 'Tasks', 'Meetings', 'Quotes', 'Invoices']);
+    console.log(quotesAccess, "quotesAccess")
     const columnsDataColumns = [
         { Header: "sender", accessor: "senderName", },
         {
@@ -255,7 +259,7 @@ const View = () => {
                 <div className="selectOpt">
                     <Text
                     >
-                        {`$${cell?.row?.original?.grandTotal}`}
+                        {cell?.row?.original?.grandTotal ? `$${cell?.row?.original?.grandTotal}` : '-'}
                     </Text>
                 </div>
             )
@@ -317,7 +321,7 @@ const View = () => {
             cell: (cell) => (
                 <div className="selectOpt">
                     <Text>
-                        {`$${cell?.row?.original?.grandTotal}`}
+                        {cell?.row?.original?.grandTotal ? `$${cell?.row?.original?.grandTotal}` : '-'}
                     </Text>
                 </div>
             )
@@ -628,7 +632,7 @@ const View = () => {
                                                     </div>}
                                                 </Card>
                                             </GridItem>}
-                                            {meetingAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
+                                            {quotesAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
                                                 <Card overflow={'scroll'}>
                                                     <CommonCheckTable
                                                         title={"Quotes"}
@@ -643,15 +647,15 @@ const View = () => {
                                                         checkBox={false}
                                                         deleteMany={true}
                                                         ManageGrid={false}
-                                                        onOpen={() => setMeeting(true)}
-                                                        access={meetingAccess}
+                                                        onOpen={() => setAddQuotes(true)}
+                                                        access={quotesAccess}
                                                     />
                                                     {allData?.quotes?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                         <Button colorScheme="brand" size='sm' variant="outline" display="flex" justifyContant="end" onClick={() => showQuotes ? setShowQuotes(false) : setShowQuotes(true)}>{showQuotes ? "Show less" : "Show more"}</Button>
                                                     </div>}
                                                 </Card>
                                             </GridItem>}
-                                            {meetingAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
+                                            {invoicesAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
                                                 <Card overflow={'scroll'}>
                                                     <CommonCheckTable
                                                         title={"Invoices"}
@@ -666,8 +670,8 @@ const View = () => {
                                                         checkBox={false}
                                                         deleteMany={true}
                                                         ManageGrid={false}
-                                                        onOpen={() => setMeeting(true)}
-                                                        access={meetingAccess}
+                                                        onOpen={() => setAddInvoice(true)}
+                                                        access={invoicesAccess}
                                                     />
                                                     {allData?.invoice?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                         <Button colorScheme="brand" size='sm' variant="outline" display="flex" justifyContant="end" onClick={() => showInvoices ? setShowInvoices(false) : setShowInvoices(true)}>{showInvoices ? "Show less" : "Show more"}</Button>
@@ -786,7 +790,8 @@ const View = () => {
             <AddMeeting fetchData={fetchData} leadContect={splitValue[0]} isOpen={addMeeting} onClose={setMeeting} from="contact" id={param.id} setAction={setAction} view={true} />
             <AddEdit isOpen={taskModel} fetchData={fetchData} leadContect={splitValue[0]} onClose={setTaskModel} id={param.id} userAction={'add'} view={true} />
             <AddPhoneCall viewData={allData} fetchData={fetchData} setAction={setAction} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param.id} cData={data} />
-
+            <AddEditQuotes isOpen={addQuotes} size={"lg"} onClose={() => setAddQuotes(false)} setAction={setAction} type={"add"} contactId={param.id} />
+            <AddEditInvoice isOpen={addInvoice} size={"lg"} onClose={() => setAddInvoice(false)} setAction={setAction} type={"add"} contactId={param.id} />
             <PropertyModel fetchData={fetchData} isOpen={propertyModel} onClose={setPropertyModel} id={param.id} interestProperty={data?.interestProperty} />
 
         </>

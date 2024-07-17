@@ -20,7 +20,7 @@ import { fetchAccountData } from '../../../redux/slices/accountSlice';
 import ContactModel from 'components/commonTableModel/ContactModel';
 
 const AddEdit = (props) => {
-    const { isOpen, size, onClose, type, setAction, selectedId } = props;
+    const { isOpen, size, onClose, type, setAction, selectedId, contactId } = props;
     const [isLoding, setIsLoding] = useState(false)
     const [userModel, setUserModel] = useState(false)
     const [opprtunityModel, setOpprtunityModel] = useState(false)
@@ -48,7 +48,7 @@ const AddEdit = (props) => {
         terms: type === "edit" ? quotesDetails?.terms : "",
         description: type === "edit" ? quotesDetails?.description : "",
         account: type === "edit" ? quotesDetails?.account : null,
-        contact: type === "edit" ? quotesDetails?.contact : null,
+        contact: type === "edit" ? quotesDetails?.contact : contactId ? contactId :null,
         billingStreet: type === "edit" ? quotesDetails?.billingStreet : "",
         shippingStreet: type === "edit" ? quotesDetails?.shippingStreet : "",
         billingCity: type === "edit" ? quotesDetails?.billingCity : "",
