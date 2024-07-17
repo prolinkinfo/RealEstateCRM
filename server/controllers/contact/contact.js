@@ -5,6 +5,8 @@ const phoneCall = require('../../model/schema/phoneCall')
 const Task = require('../../model/schema/task')
 const TextMsg = require('../../model/schema/textMsg')
 const DocumentSchema = require('../../model/schema/document')
+const Quotes = require("../../model/schema/quotes.js");
+const Invoices = require("../../model/schema/invoices.js");
 
 const index = async (req, res) => {
     const query = req.query
@@ -261,6 +263,64 @@ const view = async (req, res) => {
             },
             { $project: { contact: 0, users: 0 } },
         ])
+        let quotes = await Quotes.aggregate([
+            { $match: { contact: contact._id, deleted: false } },
+            {
+                $lookup: {
+                    from: 'Contacts',
+                    localField: 'contact',
+                    foreignField: '_id',
+                    as: 'contactData'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'Accounts',
+                    localField: 'account',
+                    foreignField: '_id',
+                    as: 'accountData'
+                }
+            },
+
+            { $unwind: { path: '$contactData', preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: '$accountData', preserveNullAndEmptyArrays: true } },
+            {
+                $addFields: {
+                    contactName: { $concat: ['$contactData.title', ' ', '$contactData.firstName', ' ', '$contactData.lastName'] },
+                    accountName: { $concat: ['$accountData.name'] },
+                }
+            },
+            { $project: { contactData: 0, accountData: 0 } },
+        ])
+        let invoice = await Invoices.aggregate([
+            { $match: { contact: contact._id, deleted: false } },
+            {
+                $lookup: {
+                    from: 'Contacts',
+                    localField: 'contact',
+                    foreignField: '_id',
+                    as: 'contactData'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'Accounts',
+                    localField: 'account',
+                    foreignField: '_id',
+                    as: 'accountData'
+                }
+            },
+
+            { $unwind: { path: '$contactData', preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: '$accountData', preserveNullAndEmptyArrays: true } },
+            {
+                $addFields: {
+                    contactName: { $concat: ['$contactData.title', ' ', '$contactData.firstName', ' ', '$contactData.lastName'] },
+                    accountName: { $concat: ['$accountData.name'] },
+                }
+            },
+            { $project: { contactData: 0, accountData: 0 } },
+        ])
 
         const Document = await DocumentSchema.aggregate([
             { $unwind: '$file' },
@@ -286,7 +346,7 @@ const view = async (req, res) => {
             { $project: { creatorInfo: 0 } },
         ]);
 
-        res.status(200).json({ interestProperty, contact, EmailHistory, phoneCallHistory, meetingHistory, textMsg, task, Document });
+        res.status(200).json({ interestProperty, contact, EmailHistory, phoneCallHistory, meetingHistory, textMsg, task, Document, quotes, invoice });
     }
     catch (error) {
         console.error(error);

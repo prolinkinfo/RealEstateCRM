@@ -62,6 +62,8 @@ const View = () => {
     const [showCall, setShowCall] = useState(false);
     const [showTasks, setShowTasks] = useState(false);
     const [showMeetings, setShowMeetings] = useState(false);
+    const [showQuotes, setShowQuotes] = useState(false);
+    const [showInvoices, setShowInvoices] = useState(false);
     const [addDocument, setAddDocument] = useState(false);
     const [selectedTab, setSelectedTab] = useState(0);
     const size = "lg";
@@ -197,6 +199,133 @@ const View = () => {
         },
         { Header: "create By", accessor: "createdByName", },
     ];
+    const quotesColumns = [
+        { Header: "Quote Number", accessor: "quoteNumber", isSortable: false, width: 10 },
+        {
+            Header: 'Title', accessor: 'title', cell: (cell) => (
+                <div className="selectOpt">
+                    <Text
+                        onClick={() => navigate(`/quotesView/${cell?.row?.original._id}`)}
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.value}
+                    </Text>
+                </div>
+            )
+        },
+        { Header: 'Quote Stage', accessor: 'quoteStage' },
+        {
+            Header: 'Contact',
+            accessor: 'contact',
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text
+                    >
+                        {cell?.row?.original?.contactName ? cell?.row?.original?.contactName : "-"}
+                    </Text>
+                </div>
+            )
+        },
+        {
+            Header: 'Account',
+            accessor: 'account',
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text
+                        onClick={() => navigate(`/accountView/${cell?.row?.original?.account}`)}
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.row?.original?.accountName ? cell?.row?.original?.accountName : "-"}
+                    </Text>
+                </div>
+            )
+        },
+        {
+            Header: "Grand Total",
+            accessor: "grandTotal",
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text
+                    >
+                        {`$${cell?.row?.original?.grandTotal}`}
+                    </Text>
+                </div>
+            )
+        },
+        { Header: "valid Until", accessor: "validUntil" },
+    ];
+    const invoicesColumns = [
+        { Header: "Invoice Number", accessor: "invoiceNumber", isSortable: false, width: 10 },
+        {
+            Header: 'Title', accessor: 'title', cell: (cell) => (
+                <div className="selectOpt">
+                    <Text
+                        onClick={() => navigate(`/invoicesView/${cell?.row?.original._id}`)}
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.value}
+                    </Text>
+                </div>
+            )
+        },
+        {
+            Header: 'Status', accessor: 'status',
+        },
+        {
+            Header: 'Contact', accessor: 'contact',
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text
+                    >
+                        {cell?.row?.original?.contactName ? cell?.row?.original?.contactName : "-"}
+                    </Text>
+                </div>
+            )
+        },
+        {
+            Header: 'Account', accessor: 'account',
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text
+                        onClick={() => navigate(`/accountView/${cell?.row?.original?.account}`)}
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.row?.original?.accountName ? cell?.row?.original?.accountName : "-"}
+                    </Text>
+                </div>
+            )
+        },
+        {
+            Header: "Grand Total",
+            accessor: "grandTotal",
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text>
+                        {`$${cell?.row?.original?.grandTotal}`}
+                    </Text>
+                </div>
+            )
+        },
+    ];
+
+
+
     const taskColumns = [
         {
             Header: "Title", accessor: "title", cell: (cell) => (
@@ -496,6 +625,52 @@ const View = () => {
                                                     />
                                                     {allData?.meetingHistory?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                         <Button colorScheme="brand" size='sm' variant="outline" display="flex" justifyContant="end" onClick={() => showMeetings ? setShowMeetings(false) : setShowMeetings(true)}>{showMeetings ? "Show less" : "Show more"}</Button>
+                                                    </div>}
+                                                </Card>
+                                            </GridItem>}
+                                            {meetingAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
+                                                <Card overflow={'scroll'}>
+                                                    <CommonCheckTable
+                                                        title={"Quotes"}
+                                                        isLoding={isLoding}
+                                                        columnData={quotesColumns ?? []}
+                                                        // dataColumn={quotesColumns ?? []}
+                                                        dataLength={allData?.quotes?.length}
+                                                        allData={showQuotes ? allData?.quotes : allData?.quotes?.length > 0 ? [allData?.quotes[0]] : []}
+                                                        tableData={showQuotes ? allData?.quotes : allData?.quotes?.length > 0 ? [allData?.quotes[0]] : []}
+                                                        AdvanceSearch={false}
+                                                        tableCustomFields={[]}
+                                                        checkBox={false}
+                                                        deleteMany={true}
+                                                        ManageGrid={false}
+                                                        onOpen={() => setMeeting(true)}
+                                                        access={meetingAccess}
+                                                    />
+                                                    {allData?.quotes?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
+                                                        <Button colorScheme="brand" size='sm' variant="outline" display="flex" justifyContant="end" onClick={() => showQuotes ? setShowQuotes(false) : setShowQuotes(true)}>{showQuotes ? "Show less" : "Show more"}</Button>
+                                                    </div>}
+                                                </Card>
+                                            </GridItem>}
+                                            {meetingAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
+                                                <Card overflow={'scroll'}>
+                                                    <CommonCheckTable
+                                                        title={"Invoices"}
+                                                        isLoding={isLoding}
+                                                        columnData={invoicesColumns ?? []}
+                                                        // dataColumn={invoicesColumns ?? []}
+                                                        dataLength={allData?.invoice?.length}
+                                                        allData={showInvoices ? allData?.invoice : allData?.invoice?.length > 0 ? [allData?.invoice[0]] : []}
+                                                        tableData={showInvoices ? allData?.invoice : allData?.invoice?.length > 0 ? [allData?.invoice[0]] : []}
+                                                        AdvanceSearch={false}
+                                                        tableCustomFields={[]}
+                                                        checkBox={false}
+                                                        deleteMany={true}
+                                                        ManageGrid={false}
+                                                        onOpen={() => setMeeting(true)}
+                                                        access={meetingAccess}
+                                                    />
+                                                    {allData?.invoice?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
+                                                        <Button colorScheme="brand" size='sm' variant="outline" display="flex" justifyContant="end" onClick={() => showInvoices ? setShowInvoices(false) : setShowInvoices(true)}>{showInvoices ? "Show less" : "Show more"}</Button>
                                                     </div>}
                                                 </Card>
                                             </GridItem>}
