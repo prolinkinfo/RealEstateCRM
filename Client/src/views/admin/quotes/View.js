@@ -94,7 +94,7 @@ const View = (props) => {
         oppotunity: data?.oppotunity,
         quoteStage: data?.quoteStage,
         invoiceStatus: data?.invoiceStatus,
-        validUntile: data?.validUntile,
+        validUntil: data?.validUntil,
         assignedTo: data?.assignedTo,
         paymentTerms: data?.paymentTerms,
         approvalStatus: data?.approvalStatus,
@@ -158,7 +158,6 @@ const View = (props) => {
     useEffect(() => {
         fetchViewData()
     }, [id, edit])
-
     return (
         <div>
             <Grid templateColumns="repeat(4, 1fr)" gap={3} id="reports">
@@ -287,23 +286,23 @@ const View = (props) => {
                             </GridItem>
 
                             <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Valid Untile</Text>
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Valid Until</Text>
                                 {
-                                    editableField === "validUntile" ?
+                                    editableField === "validUntil" ?
                                         <>
                                             <Input
-                                                name="validUntile"
+                                                name="validUntil"
                                                 type="date"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={dayjs(formik.values.validUntile).format("YYYY-MM-DD")}
-                                                borderColor={formik?.errors?.validUntile && formik?.touched?.validUntile ? "red.300" : null}
+                                                value={dayjs(formik.values.validUntil).format("YYYY-MM-DD")}
+                                                borderColor={formik?.errors?.validUntil && formik?.touched?.validUntil ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.validUntile && formik?.touched.validUntile && formik?.errors.validUntile}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors.validUntil && formik?.touched.validUntil && formik?.errors.validUntil}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("validUntile", data?.validUntile, "Valid Untile")}>{data?.validUntile ? data?.validUntile : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("validUntil", data?.validUntil, "Valid Until")}>{data?.validUntil ? data?.validUntil : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >

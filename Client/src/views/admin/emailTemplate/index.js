@@ -53,10 +53,10 @@ const Index = () => {
                 <Menu isLazy >
                     <MenuButton ><CiMenuKebab /></MenuButton>
                     <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
-                        {permission?.view &&
-                            <MenuItem py={2.5} color={"green"} icon={<ViewIcon fontSize={15} mb={1} />} onClick={() => navigate(`/email-template/${row?.values?._id}`)}>View</MenuItem>}
                         {permission?.update &&
                             <MenuItem py={2.5} icon={<EditIcon fontSize={15} mb={1} />} onClick={() => handleEditOpen(row)}>Edit</MenuItem>}
+                        {permission?.view &&
+                            <MenuItem py={2.5} color={"green"} icon={<ViewIcon fontSize={15} mb={1} />} onClick={() => navigate(`/email-template/${row?.values?._id}`)}>View</MenuItem>}
                         {permission?.delete &&
                             <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} mb={1} />} onClick={() => { setDeleteMany(true); setSelectedValues([row?.values?._id]); }}>Delete</MenuItem>}
                     </MenuList>

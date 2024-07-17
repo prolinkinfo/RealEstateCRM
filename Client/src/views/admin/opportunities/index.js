@@ -129,7 +129,7 @@ const Index = (props) => {
                         fontSize="sm"
                         fontWeight="700"
                     >
-                        {cell?.row?.original?.accountName2}
+                        {cell?.row?.original?.accountName2 ? cell?.row?.original?.accountName2 : "-"}
                     </Text>
                 </div>
             )

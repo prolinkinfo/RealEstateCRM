@@ -163,6 +163,7 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     value={values.opportunityName}
                                     name="opportunityName"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     placeholder='Opportunity Name'
                                     fontWeight='500'
@@ -180,6 +181,7 @@ const AddEdit = (props) => {
                                         <Select
                                             value={values.accountName}
                                             name="accountName"
+                                            onBlur={handleBlur}
                                             onChange={handleChange}
                                             mb={errors.accountName && touched.accountName ? undefined : '10px'}
                                             fontWeight='500'
@@ -205,6 +207,7 @@ const AddEdit = (props) => {
                                         <Select
                                             value={values.assignUser}
                                             name="assignUser"
+                                            onBlur={handleBlur}
                                             onChange={handleChange}
                                             mb={errors.assignUser && touched.assignUser ? undefined : '10px'}
                                             fontWeight='500'
@@ -226,6 +229,7 @@ const AddEdit = (props) => {
                                 <Select
                                     value={values.type}
                                     name="type"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     mb={errors.type && touched.type ? undefined : '10px'}
                                     fontWeight='500'
@@ -244,6 +248,7 @@ const AddEdit = (props) => {
                                 <Select
                                     value={values.leadSource}
                                     name="leadSource"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     mb={errors.leadSource && touched.leadSource ? undefined : '10px'}
                                     fontWeight='500'
@@ -273,6 +278,7 @@ const AddEdit = (props) => {
                                 <Select
                                     value={values.currency}
                                     name="currency"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     mb={errors.currency && touched.currency ? undefined : '10px'}
                                     fontWeight='500'
@@ -292,6 +298,7 @@ const AddEdit = (props) => {
                                     value={values.opportunityAmount}
                                     name="opportunityAmount"
                                     type='number'
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     placeholder='Opportunity Amount'
                                     fontWeight='500'
@@ -308,6 +315,7 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     value={values.amount}
                                     name="amount"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     type='number'
                                     placeholder='Amount'
@@ -356,6 +364,7 @@ const AddEdit = (props) => {
                                 <Select
                                     value={values.salesStage}
                                     name="salesStage"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     mb={errors.salesStage && touched.salesStage ? undefined : '10px'}
                                     fontWeight='500'
@@ -401,6 +410,7 @@ const AddEdit = (props) => {
                                     value={values.description}
                                     name="description"
                                     resize={"none"}
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     placeholder='Description'
                                     fontWeight='500'
