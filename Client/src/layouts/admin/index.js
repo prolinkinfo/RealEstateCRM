@@ -51,11 +51,49 @@ export default function Dashboard(props) {
 	const dynamicRoute = () => {
 		let apiData = []
 
-		route &&
-			route?.length > 0 &&
-			route?.map((item, i) => {
-				let rec = routes.find(route => route?.name === item?.moduleName)
-				if (!routes.some(route => route?.name === item?.moduleName)) {
+		route && route?.length > 0 && route?.map((item, i) => {
+			let rec = routes.find(route => route?.name === item?.moduleName)
+			if (!routes.some(route => route?.name === item?.moduleName)) {
+
+				const newRoute = [{
+					name: item?.moduleName,
+					layout: [ROLE_PATH.superAdmin],
+					path: pathName(item.moduleName),
+					icon: item?.icon ? (
+						<img src={item?.icon} width="20px" height="20px" alt="icon" />
+					) : (
+						<Icon as={LuChevronRightCircle} width="20px" height="20px" color="inherit" />
+					),
+					component: DynamicPage,
+				},
+				{
+					name: item?.moduleName,
+					layout: [ROLE_PATH.superAdmin],
+					under: item?.moduleName,
+					parentName: item?.moduleName,
+					path: `${pathName(item.moduleName)}/:id`,
+					icon: item?.icon ? (
+						<img src={item?.icon} width="20px" height="20px" alt="icon" />
+					) : (
+						<Icon as={LuChevronRightCircle} width="20px" height="20px" color="inherit" />
+					),
+					component: DynamicPageview,
+				}
+				]
+				setRoutes((pre) => [...pre, ...newRoute])
+			} else if (routes.some(route => route?.name === item?.moduleName) && rec.icon?.props?.src !== item?.icon) {
+
+				const updatedData = routes?.map(i => {
+					if (i.name === item?.moduleName) {
+						return { ...i, icon: <img src={item?.icon} width="20px" height="20px" alt="icon" /> };
+					}
+					return i;
+				});
+				setRoutes(updatedData)
+			}
+			if (routes.find(route => route?.name !== item?.moduleName)) {
+
+				if (!newRoutes.find(route => route?.name?.toLowerCase() === item?.moduleName?.toLowerCase())) {
 
 					const newRoute = [{
 						name: item?.moduleName,
@@ -82,58 +120,18 @@ export default function Dashboard(props) {
 						component: DynamicPageview,
 					}
 					]
-					setRoutes((pre) => [...pre, ...newRoute])
-				} else if (routes.some(route => route?.name === item?.moduleName) && rec.icon?.props?.src !== item?.icon) {
 
-					const updatedData = routes?.map(i => {
-						if (i.name === item?.moduleName) {
-							return { ...i, icon: <img src={item?.icon} width="20px" height="20px" alt="icon" /> };
-						}
-						return i;
-					});
-					setRoutes(updatedData)
+					apiData.push(...newRoute)
 				}
-				if (routes.find(route => route?.name !== item?.moduleName)) {
+			}
 
-					if (!newRoutes.find(route => route?.name?.toLowerCase() === item?.moduleName?.toLowerCase())) {
-
-						const newRoute = [{
-							name: item?.moduleName,
-							layout: [ROLE_PATH.superAdmin],
-							path: pathName(item.moduleName),
-							icon: item?.icon ? (
-								<img src={item?.icon} width="20px" height="20px" alt="icon" />
-							) : (
-								<Icon as={LuChevronRightCircle} width="20px" height="20px" color="inherit" />
-							),
-							component: DynamicPage,
-						},
-						{
-							name: item?.moduleName,
-							layout: [ROLE_PATH.superAdmin],
-							under: item?.moduleName,
-							parentName: item?.moduleName,
-							path: `${pathName(item.moduleName)}/:id`,
-							icon: item?.icon ? (
-								<img src={item?.icon} width="20px" height="20px" alt="icon" />
-							) : (
-								<Icon as={LuChevronRightCircle} width="20px" height="20px" color="inherit" />
-							),
-							component: DynamicPageview,
-						}
-						]
-
-						apiData.push(...newRoute)
-					}
-				}
-
-			});
+		});
 
 		let filterData = [...newRoutes, ...apiData]
 
 		const activeModel = modules?.filter(module => module?.isActive)?.map(module => module?.moduleName);
 
-		const activeRoutes = filterData?.filter(data => (activeModel?.includes(data?.name || data?.parentName) || !modules?.some(module => (module?.moduleName === data?.name || module?.moduleName === data?.parentName))));
+		const activeRoutes = filterData?.filter(data => ((activeModel?.includes(data?.name) || activeModel?.includes(data?.parentName)) || !modules?.some(module => (module?.moduleName === data?.name || module?.moduleName === data?.parentName))));
 
 		setRoutes(activeRoutes)
 
