@@ -1,5 +1,6 @@
 const Invoices = require("../../model/schema/invoices.js");
 const mongoose = require("mongoose");
+const User = require('../../model/schema/user')
 
 
 
@@ -11,10 +12,11 @@ async function getNextAutoIncrementValue() {
 const index = async (req, res) => {
     query = req.query;
     query.deleted = false;
-    if (query.createBy) {
-        query.createBy = new mongoose.Types.ObjectId(query.createBy);
+    const user = await User.findById(req.user.userId)
+    if (user?.role !== "superAdmin") {
+        delete query.createBy
+        query.$or = [{ createBy: new mongoose.Types.ObjectId(req.user.userId) }, { assignUser: new mongoose.Types.ObjectId(req.user.userId) }];
     }
-
     try {
         let result = await Invoices.aggregate([
             { $match: query },
