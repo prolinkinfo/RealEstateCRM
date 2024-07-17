@@ -216,6 +216,7 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     value={values.title}
                                     name="title"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     placeholder='Title'
                                     fontWeight='500'
@@ -231,6 +232,7 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     value={values.quoteNumber}
                                     name="quoteNumber"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     placeholder='Quote Number'
                                     fontWeight='500'
@@ -246,6 +248,7 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     value={dayjs(values.quoteDate).format("YYYY-MM-DD")}
                                     name="quoteDate"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     type='date'
                                     fontWeight='500'
@@ -261,6 +264,7 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     value={dayjs(values.dueDate).format("YYYY-MM-DD")}
                                     name="dueDate"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     type='date'
                                     fontWeight='500'
@@ -276,6 +280,7 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     value={dayjs(values.invoiceDate).format("YYYY-MM-DD")}
                                     name="invoiceDate"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     type='date'
                                     fontWeight='500'
@@ -291,6 +296,7 @@ const AddEdit = (props) => {
                                     <Select
                                         value={values.oppotunity}
                                         name="oppotunity"
+                                        onBlur={handleBlur}
                                         onChange={handleChange}
                                         mb={errors.oppotunity && touched.oppotunity ? undefined : '10px'}
                                         fontWeight='500'
@@ -312,6 +318,7 @@ const AddEdit = (props) => {
                                 <Select
                                     value={values.quoteStage}
                                     name="quoteStage"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     mb={errors.quoteStage && touched.quoteStage ? undefined : '10px'}
                                     fontWeight='500'
@@ -339,6 +346,7 @@ const AddEdit = (props) => {
                                         <Select
                                             value={values.assignedTo}
                                             name="assignedTo"
+                                            onBlur={handleBlur}
                                             onChange={handleChange}
                                             mb={errors.assignedTo && touched.assignedTo ? undefined : '10px'}
                                             fontWeight='500'
@@ -360,6 +368,7 @@ const AddEdit = (props) => {
                                 <Select
                                     value={values.status}
                                     name="status"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     mb={errors.status && touched.status ? undefined : '10px'}
                                     fontWeight='500'
@@ -381,6 +390,7 @@ const AddEdit = (props) => {
                                     value={values.description}
                                     name="description"
                                     resize={"none"}
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     placeholder='Description'
                                     fontWeight='500'
@@ -403,6 +413,7 @@ const AddEdit = (props) => {
                                         <Select
                                             value={values.account}
                                             name="account"
+                                            onBlur={handleBlur}
                                             onChange={handleChange}
                                             mb={errors.account && touched.account ? undefined : '10px'}
                                             fontWeight='500'
@@ -428,6 +439,7 @@ const AddEdit = (props) => {
                                         <Select
                                             value={values.contact}
                                             name="contact"
+                                            onBlur={handleBlur}
                                             onChange={handleChange}
                                             mb={errors.contact && touched.contact ? undefined : '10px'}
                                             fontWeight='500'
@@ -462,6 +474,7 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     value={values.billingStreet}
                                     name="billingStreet"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     placeholder='Billing Street'
                                     fontWeight='500'
@@ -478,6 +491,7 @@ const AddEdit = (props) => {
                                     value={values.shippingStreet}
                                     name="shippingStreet"
                                     disabled={values?.isCheck}
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     placeholder='Shipping Street'
                                     fontWeight='500'
@@ -493,6 +507,7 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     value={values.billingCity}
                                     name="billingCity"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     placeholder='Billing City'
                                     fontWeight='500'
@@ -509,6 +524,7 @@ const AddEdit = (props) => {
                                     value={values.shippingCity}
                                     name="shippingCity"
                                     disabled={values?.isCheck}
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     placeholder='Shipping City'
                                     fontWeight='500'
@@ -524,6 +540,7 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     value={values.billingState}
                                     name="billingState"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     placeholder='Billing State'
                                     fontWeight='500'
@@ -540,6 +557,7 @@ const AddEdit = (props) => {
                                     value={values.shippingState}
                                     disabled={values?.isCheck}
                                     name="shippingState"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     placeholder='Shipping State'
                                     fontWeight='500'
@@ -555,6 +573,7 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     value={values.billingPostalCode}
                                     name="billingPostalCode"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     type='number'
                                     placeholder='Billing Postal Code'
@@ -573,6 +592,7 @@ const AddEdit = (props) => {
                                     disabled={values?.isCheck}
                                     name="shippingPostalCode"
                                     type='number'
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     placeholder='Shipping Postal Code'
                                     fontWeight='500'
@@ -588,6 +608,7 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     value={values.billingCountry}
                                     name="billingCountry"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     placeholder='Billing Country'
                                     fontWeight='500'
@@ -603,6 +624,7 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     value={values.shippingCountry}
                                     name="shippingCountry"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     disabled={values?.isCheck}
                                     placeholder='Shipping Country'
@@ -628,6 +650,7 @@ const AddEdit = (props) => {
                                 <Select
                                     value={values.currency}
                                     name="currency"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     mb={errors.currency && touched.currency ? undefined : '10px'}
                                     fontWeight='500'
@@ -646,6 +669,7 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     value={values.total}
                                     name="total"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     placeholder='Total'
                                     fontWeight='500'
@@ -662,6 +686,7 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     value={values.discount}
                                     name="discount"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     placeholder='Total'
                                     type='number'
@@ -679,6 +704,7 @@ const AddEdit = (props) => {
                                     value={values.subtotal}
                                     name="subtotal"
                                     type='number'
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     placeholder='Subtotal'
                                     fontWeight='500'
@@ -695,6 +721,7 @@ const AddEdit = (props) => {
                                     value={values.shipping}
                                     name="shipping"
                                     type='number'
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     placeholder='Shipping'
                                     fontWeight='500'
@@ -710,6 +737,7 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     value={values.shippingTax}
                                     name="shippingTax"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     placeholder='Shipping Tax'
                                     type='number'
@@ -725,6 +753,7 @@ const AddEdit = (props) => {
                                 <Select
                                     value={values.ptax}
                                     name="ptax"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     mb={errors.ptax && touched.ptax ? undefined : '10px'}
                                     fontWeight='500'
@@ -743,6 +772,7 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     value={values.tax}
                                     name="tax"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     fontWeight='500'
                                     type="number"
@@ -759,6 +789,7 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     value={values.grandTotal}
                                     name="grandTotal"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     fontWeight='500'
                                     type="number"

@@ -187,6 +187,7 @@ const AddEdit = (props) => {
                                     value={values.name}
                                     name="name"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Account Name'
                                     fontWeight='500'
                                     borderColor={errors.name && touched.name ? "red.300" : null}
@@ -203,6 +204,7 @@ const AddEdit = (props) => {
                                     name="officePhone"
                                     type="number"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Office Phone'
                                     fontWeight='500'
                                     borderColor={errors.officePhone && touched.officePhone ? "red.300" : null}
@@ -219,6 +221,7 @@ const AddEdit = (props) => {
                                     name="alternatePhone"
                                     type="number"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Alternate Phone'
                                     fontWeight='500'
                                     borderColor={errors.alternatePhone && touched.alternatePhone ? "red.300" : null}
@@ -235,6 +238,7 @@ const AddEdit = (props) => {
                                     name="website"
                                     type="url"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Website URL'
                                     fontWeight='500'
                                     borderColor={errors.website && touched.website ? "red.300" : null}
@@ -251,6 +255,7 @@ const AddEdit = (props) => {
                                     name="fax"
                                     type="number"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Fax'
                                     fontWeight='500'
                                     borderColor={errors.fax && touched.fax ? "red.300" : null}
@@ -266,6 +271,7 @@ const AddEdit = (props) => {
                                     value={values.ownership}
                                     name="ownership"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='ownership'
                                     fontWeight='500'
                                     borderColor={errors.ownership && touched.ownership ? "red.300" : null}
@@ -281,6 +287,7 @@ const AddEdit = (props) => {
                                     value={values.emailAddress}
                                     name="emailAddress"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Email Address'
                                     fontWeight='500'
                                     borderColor={errors.emailAddress && touched.emailAddress ? "red.300" : null}
@@ -296,6 +303,7 @@ const AddEdit = (props) => {
                                     value={values.nonPrimaryEmail}
                                     name="nonPrimaryEmail"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Non Primary Email'
                                     fontWeight='500'
                                     borderColor={errors.nonPrimaryEmail && touched.nonPrimaryEmail ? "red.300" : null}
@@ -311,6 +319,7 @@ const AddEdit = (props) => {
                                     value={values.shippingStreet}
                                     name="shippingStreet"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Shipping Street'
                                     fontWeight='500'
                                     borderColor={errors.shippingStreet && touched.shippingStreet ? "red.300" : null}
@@ -326,6 +335,7 @@ const AddEdit = (props) => {
                                     value={values.billingStreet}
                                     name="billingStreet"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Billing Street'
                                     fontWeight='500'
                                     borderColor={errors.billingStreet && touched.billingStreet ? "red.300" : null}
@@ -341,6 +351,7 @@ const AddEdit = (props) => {
                                     value={values.shippingStreet2}
                                     name="shippingStreet2"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Shipping Street2'
                                     fontWeight='500'
                                     borderColor={errors.shippingStreet2 && touched.shippingStreet2 ? "red.300" : null}
@@ -356,6 +367,7 @@ const AddEdit = (props) => {
                                     value={values.billingStreet2}
                                     name="billingStreet2"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Billing Street2'
                                     fontWeight='500'
                                     borderColor={errors.billingStreet2 && touched.billingStreet2 ? "red.300" : null}
@@ -371,6 +383,7 @@ const AddEdit = (props) => {
                                     value={values.shippingStreet3}
                                     name="shippingStreet3"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Shipping Street3'
                                     fontWeight='500'
                                     borderColor={errors.shippingStreet3 && touched.shippingStreet3 ? "red.300" : null}
@@ -386,6 +399,7 @@ const AddEdit = (props) => {
                                     value={values.billingStreet3}
                                     name="billingStreet3"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Billing Street3'
                                     fontWeight='500'
                                     borderColor={errors.billingStreet3 && touched.billingStreet3 ? "red.300" : null}
@@ -401,6 +415,7 @@ const AddEdit = (props) => {
                                     value={values.shippingStreet4}
                                     name="shippingStreet4"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Shipping Street4'
                                     fontWeight='500'
                                     borderColor={errors.shippingStreet4 && touched.shippingStreet4 ? "red.300" : null}
@@ -416,6 +431,7 @@ const AddEdit = (props) => {
                                     value={values.billingStreet4}
                                     name="billingStreet4"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Billing Street4'
                                     fontWeight='500'
                                     borderColor={errors.billingStreet4 && touched.billingStreet4 ? "red.300" : null}
@@ -431,6 +447,7 @@ const AddEdit = (props) => {
                                     value={values.shippingPostalcode}
                                     name="shippingPostalcode"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Shipping Postal Code'
                                     fontWeight='500'
                                     borderColor={errors.shippingPostalcode && touched.shippingPostalcode ? "red.300" : null}
@@ -446,6 +463,7 @@ const AddEdit = (props) => {
                                     value={values.billingPostalcode}
                                     name="billingPostalcode"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Billing Postal Code'
                                     fontWeight='500'
                                     borderColor={errors.billingPostalcode && touched.billingPostalcode ? "red.300" : null}
@@ -461,6 +479,7 @@ const AddEdit = (props) => {
                                     value={values.shippingCity}
                                     name="shippingCity"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Shipping City'
                                     fontWeight='500'
                                     borderColor={errors.shippingCity && touched.shippingCity ? "red.300" : null}
@@ -476,6 +495,7 @@ const AddEdit = (props) => {
                                     value={values.billingCity}
                                     name="billingCity"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Billing City'
                                     fontWeight='500'
                                     borderColor={errors.billingCity && touched.billingCity ? "red.300" : null}
@@ -491,6 +511,7 @@ const AddEdit = (props) => {
                                     value={values.shippingState}
                                     name="shippingState"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Shipping State'
                                     fontWeight='500'
                                     borderColor={errors.shippingState && touched.shippingState ? "red.300" : null}
@@ -506,6 +527,7 @@ const AddEdit = (props) => {
                                     value={values.billingState}
                                     name="billingState"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Billing State'
                                     fontWeight='500'
                                     borderColor={errors.billingState && touched.billingState ? "red.300" : null}
@@ -521,6 +543,7 @@ const AddEdit = (props) => {
                                     value={values.shippingCountry}
                                     name="shippingCountry"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Shipping Country'
                                     fontWeight='500'
                                     borderColor={errors.shippingCountry && touched.shippingCountry ? "red.300" : null}
@@ -536,6 +559,7 @@ const AddEdit = (props) => {
                                     value={values.billingCountry}
                                     name="billingCountry"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Billing Country'
                                     fontWeight='500'
                                     borderColor={errors.billingCountry && touched.billingCountry ? "red.300" : null}
@@ -552,6 +576,7 @@ const AddEdit = (props) => {
                                     value={values.type}
                                     name="type"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     mb={errors.type && touched.type ? undefined : '10px'}
                                     fontWeight='500'
                                     placeholder={'Select Type'}
@@ -579,6 +604,7 @@ const AddEdit = (props) => {
                                     value={values.industry}
                                     name="industry"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     mb={errors.industry && touched.industry ? undefined : '10px'}
                                     fontWeight='500'
                                     placeholder={'Select Industry'}
@@ -625,6 +651,7 @@ const AddEdit = (props) => {
                                     value={values.description}
                                     name="description"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Description'
                                     fontWeight='500'
                                     borderColor={errors.description && touched.description ? "red.300" : null}
@@ -640,6 +667,7 @@ const AddEdit = (props) => {
                                     value={values.annualRevenue}
                                     name="annualRevenue"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='annualRevenue'
                                     fontWeight='500'
                                     borderColor={errors.annualRevenue && touched.annualRevenue ? "red.300" : null}
@@ -655,6 +683,7 @@ const AddEdit = (props) => {
                                     value={values.rating}
                                     name="rating"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='Rating'
                                     fontWeight='500'
                                     borderColor={errors.rating && touched.rating ? "red.300" : null}
@@ -670,6 +699,7 @@ const AddEdit = (props) => {
                                     value={values.SICCode}
                                     name="SICCode"
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     placeholder='SIC Code'
                                     fontWeight='500'
                                     borderColor={errors.SICCode && touched.SICCode ? "red.300" : null}
@@ -687,6 +717,7 @@ const AddEdit = (props) => {
                                             value={values.assignUser}
                                             name="assignUser"
                                             onChange={handleChange}
+                                            onBlur={handleBlur}
                                             mb={errors.assignUser && touched.assignUser ? undefined : '10px'}
                                             fontWeight='500'
                                             placeholder={'Assign To'}
@@ -709,6 +740,7 @@ const AddEdit = (props) => {
                                         value={values.memberOf}
                                         name="memberOf"
                                         onChange={handleChange}
+                                        onBlur={handleBlur}
                                         mb={errors.memberOf && touched.memberOf ? undefined : '10px'}
                                         fontWeight='500'
                                         placeholder={'Member Of'}
