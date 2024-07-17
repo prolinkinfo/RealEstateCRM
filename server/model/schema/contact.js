@@ -29,6 +29,10 @@ const contactSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'Properties',
     }],
+    quotes: [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'Quotes',
+    }],
     // // 5. History:
     // notesandComments: String,
     // // 6. Tags or Categories

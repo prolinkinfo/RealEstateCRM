@@ -5,6 +5,7 @@ const phoneCall = require('../../model/schema/phoneCall')
 const Task = require('../../model/schema/task')
 const TextMsg = require('../../model/schema/textMsg')
 const DocumentSchema = require('../../model/schema/document')
+const Quotes = require("../../model/schema/quotes.js");
 
 const index = async (req, res) => {
     const query = req.query
