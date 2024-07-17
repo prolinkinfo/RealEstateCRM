@@ -19,7 +19,7 @@ const QuotesAdvanceSearch = (props) => {
         contactName: '',
         accountName: '',
         grandTotal: '',
-        validUntile: '',
+        validUntil: '',
     }
     const validationSchema = yup.object({
         quoteNumber: yup.string(),
@@ -28,7 +28,7 @@ const QuotesAdvanceSearch = (props) => {
         contactName: yup.string(),
         accountName: yup.string(),
         grandTotal: yup.string(),
-        validUntile: yup.string()
+        validUntil: yup.string()
     });
     const formik = useFormik({
         initialValues: initialValues,
@@ -63,8 +63,8 @@ const QuotesAdvanceSearch = (props) => {
                     value: values.grandTotal
                 },
                 {
-                    name: ["validUntile"],
-                    value: values.validUntile
+                    name: ["validUntil"],
+                    value: values.validUntil
                 },
             ]
             dispatch(setGetTagValues(getValue.filter(item => item.value)))

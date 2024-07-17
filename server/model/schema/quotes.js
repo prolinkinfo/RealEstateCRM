@@ -14,7 +14,7 @@ const Quotes = new mongoose.Schema({
     shippingState: String,
     shippingPostalCode: String,
     shippingCountry: String,
-    validUntile: String,
+    validUntil: String,
     quoteNumber: String,
     lineItems: String,
     total: String,

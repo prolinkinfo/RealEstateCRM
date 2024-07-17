@@ -39,7 +39,7 @@ const AddEdit = (props) => {
         oppotunity: type === "edit" ? quotesDetails?.oppotunity : null,
         quoteStage: type === "edit" ? quotesDetails?.quoteStage : "",
         invoiceStatus: type === "edit" ? quotesDetails?.invoiceStatus : "",
-        validUntile: type === "edit" ? quotesDetails?.validUntile : "",
+        validUntil: type === "edit" ? quotesDetails?.validUntil : "",
         assignedTo: type === "edit" ? quotesDetails?.assignedTo : null,
         paymentTerms: type === "edit" ? quotesDetails?.paymentTerms : "",
         approvalStatus: type === "edit" ? quotesDetails?.approvalStatus : "",
@@ -291,19 +291,19 @@ const AddEdit = (props) => {
 
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Valid Untile<Text color={"red"}>*</Text>
+                                    Valid Until<Text color={"red"}>*</Text>
                                 </FormLabel>
                                 <Input
                                     fontSize='sm'
-                                    value={dayjs(values.validUntile).format("YYYY-MM-DD")}
-                                    name="validUntile"
+                                    value={dayjs(values.validUntil).format("YYYY-MM-DD")}
+                                    name="validUntil"
                                     type="date"
                                     onChange={handleChange}
-                                    placeholder='Valid Untile'
+                                    placeholder='Valid Until'
                                     fontWeight='500'
-                                    borderColor={errors.validUntile && touched.validUntile ? "red.300" : null}
+                                    borderColor={errors.validUntil && touched.validUntil ? "red.300" : null}
                                 />
-                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.validUntile && touched.validUntile && errors.validUntile}</Text>
+                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.validUntil && touched.validUntil && errors.validUntil}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>

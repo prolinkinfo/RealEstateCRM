@@ -167,7 +167,7 @@ const Index = (props) => {
                 </div>
             )
         },
-        { Header: "valid Until", accessor: "validUntile" },
+        { Header: "valid Until", accessor: "validUntil" },
         ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : [])
 
     ];
@@ -536,7 +536,7 @@ const Index = (props) => {
             "_id": "669509b120a9be3594c8768b"
         },
         {
-            "name": "validUntile",
+            "name": "validUntil",
             "label": "Valid Until",
             "type": "date",
             "fixed": false,
