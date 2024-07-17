@@ -1,5 +1,5 @@
 import { CloseIcon } from '@chakra-ui/icons';
-import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, FormLabel, Grid, GridItem, IconButton, Input, Select, Text } from '@chakra-ui/react';
+import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, FormLabel, Grid, GridItem, IconButton, Input, Select, Text, Textarea } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
 import dayjs from 'dayjs';
 import { useFormik } from 'formik';
@@ -387,12 +387,13 @@ const AddEdit = (props) => {
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                     Description
                                 </FormLabel>
-                                <Input
+                                <Textarea
                                     fontSize='sm'
                                     value={values.description}
                                     name="description"
-                                    placeholder='Description'
+                                    resize={"none"}
                                     onChange={handleChange}
+                                    placeholder='Description'
                                     fontWeight='500'
                                     borderColor={errors.description && touched.description ? "red.300" : null}
                                 />
