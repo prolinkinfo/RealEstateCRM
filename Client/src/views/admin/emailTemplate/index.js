@@ -53,6 +53,8 @@ const Index = () => {
                 <Menu isLazy >
                     <MenuButton ><CiMenuKebab /></MenuButton>
                     <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
+                        {permission?.view &&
+                            <MenuItem py={2.5} color={"green"} icon={<ViewIcon fontSize={15} mb={1} />} onClick={() => navigate(`/email-template/${row?.values?._id}`)}>View</MenuItem>}
                         {permission?.update &&
                             <MenuItem py={2.5} icon={<EditIcon fontSize={15} mb={1} />} onClick={() => handleEditOpen(row)}>Edit</MenuItem>}
                         {permission?.delete &&
@@ -71,6 +73,20 @@ const Index = () => {
         },
         {
             Header: 'Template Name', accessor: 'templateName',
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text
+                        onClick={() => navigate(`/email-template/${cell?.row?.original._id}`)}
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.value}
+                    </Text>
+                </div>
+            )
         },
         { Header: "Description", accessor: "description" },
         ...(permission?.update || permission?.delete ? [actionHeader] : []),
