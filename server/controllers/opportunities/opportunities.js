@@ -166,7 +166,7 @@ const view = async (req, res) => {
                         }
                     },
                     modifiedUserName: { $concat: ['$modifiedByUser.firstName', ' ', '$modifiedByUser.lastName'] },
-                    accountName: '$accountData.name'
+                    accountName2: '$accountData.name'
                 }
             },
             {

@@ -25,7 +25,7 @@ const View = (props) => {
     const { id } = params
     const user = JSON.parse(localStorage.getItem("user"))
 
-    const [permission, contactAccess, leadAccess] = HasAccess(['Opportunities', 'Contacts', 'Leads'])
+    const [opportunityAccess, accountAccess] = HasAccess(['Opportunities', 'Account'])
 
     const [data, setData] = useState()
     const { onOpen, onClose } = useDisclosure()
@@ -150,17 +150,17 @@ const View = (props) => {
                                         </Heading>
                                         <Flex id="hide-btn" >
                                             <Menu>
-                                                {(user.role === 'superAdmin' || permission?.create || permission?.update || permission?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' size="sm" va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
+                                                {(user.role === 'superAdmin' || opportunityAccess?.create || opportunityAccess?.update || opportunityAccess?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' size="sm" va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
                                                     Actions
                                                 </MenuButton>}
                                                 <MenuDivider />
                                                 <MenuList minWidth={2}>
-                                                    {(user.role === 'superAdmin' || permission?.create) && <MenuItem onClick={() => { setEdit(true); setType("add"); formik.resetForm() }
+                                                    {(user.role === 'superAdmin' || opportunityAccess?.create) && <MenuItem onClick={() => { setEdit(true); setType("add"); formik.resetForm() }
                                                     } alignItems={'start'} color={'blue'} icon={<AddIcon />}>Add</MenuItem>}
-                                                    {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => { setEdit(true); setType("edit") }} alignItems={'start'} icon={<EditIcon />}>Edit</MenuItem>}
+                                                    {(user.role === 'superAdmin' || opportunityAccess?.update) && <MenuItem onClick={() => { setEdit(true); setType("edit") }} alignItems={'start'} icon={<EditIcon />}>Edit</MenuItem>}
                                                     <MenuItem onClick={generatePDF} alignItems={"start"} icon={<FaFilePdf />} display={"flex"} style={{ alignItems: "center" }}>Print as PDF</MenuItem >
 
-                                                    {(user.role === 'superAdmin' || permission?.delete) && <>
+                                                    {(user.role === 'superAdmin' || opportunityAccess?.delete) && <>
                                                         <MenuDivider />
                                                         <MenuItem alignItems={'start'} onClick={() => setDeleteManyModel(true)} color={'red'} icon={<DeleteIcon />}>Delete</MenuItem>
                                                     </>}
@@ -197,22 +197,27 @@ const View = (props) => {
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Account Name </Text>
-                                <Text >{data?.accountName ? data?.accountName : ' - '}</Text>
+                                {
+                                    data?.accountName ?
+                                        <Link to={accountAccess?.view && `/accountView/${data?.accountName}`}>
+                                            <Text color={accountAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: accountAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: accountAccess?.view ? 'underline' : 'none' } }} style={{ cursor: "pointer" }}>{data?.accountName2 ? data?.accountName2 : ' - '}</Text>
+                                        </Link>
+                                        :
+                                        <Text color={accountAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: accountAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: accountAccess?.view ? 'underline' : 'none' } }}>{data?.accountName2 ? data?.accountName2 : ' - '}</Text>
+
+                                }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Assigned User </Text>
-                                {/* <Text>{data?.assignUserName ? data?.assignUserName : ' - '}</Text> */}
                                 {
                                     data?.assignUser ?
-                                        <Link to={`/userView/${data?.assignUser}`}>
-                                            <Text color={contactAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }} style={{ cursor: "pointer" }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
+                                        <Link to={user.role === 'superAdmin' && `/userView/${data?.assignUser}`}>
+                                            <Text color={user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900', textDecoration: user.role === 'superAdmin' ? 'underline' : 'none' } }} style={{ cursor: "pointer" }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
                                         </Link>
                                         :
-                                        <Text color={contactAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
+                                        <Text color={user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900', textDecoration: user.role === 'superAdmin' ? 'underline' : 'none' } }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
 
                                 }
-
-
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Type</Text>
@@ -464,8 +469,8 @@ const View = (props) => {
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Assign To  </Text>
-                                <Link to={data?.assignTo ? contactAccess?.view && `/contactView/${data?.assignTo}` : leadAccess?.view && `/leadView/${data?.assignToLead}`}>
-                                    <Text color={(data?.category === 'contact' && (contactAccess?.view || user?.role === 'superAdmin')) ? 'brand.600' : (leadAccess?.view || user?.role === 'superAdmin' && data?.category === 'lead') ? 'brand.600' : 'blackAlpha.900'} sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.assignToName ? data?.assignToName : ' - '}</Text>
+                                <Link to={data?.assignTo ? opportunityAccess?.view && `/contactView/${data?.assignTo}` : leadAccess?.view && `/leadView/${data?.assignToLead}`}>
+                                    <Text color={(data?.category === 'contact' && (opportunityAccess?.view || user?.role === 'superAdmin')) ? 'brand.600' : (leadAccess?.view || user?.role === 'superAdmin' && data?.category === 'lead') ? 'brand.600' : 'blackAlpha.900'} sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{data?.assignToName ? data?.assignToName : ' - '}</Text>
                                 </Link>
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
@@ -521,12 +526,12 @@ const View = (props) => {
 
             </Grid>
             {
-                (permission?.update || permission?.delete || user?.role === 'superAdmin') && <Card mt={3}>
+                (opportunityAccess?.update || opportunityAccess?.delete || user?.role === 'superAdmin') && <Card mt={3}>
                     <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                         <GridItem colStart={6} >
                             <Flex justifyContent={"right"}>
-                                {(permission?.update || user?.role === 'superAdmin') && <Button size="sm" onClick={() => { setEdit(true); setType("edit") }} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button>}
-                                {(permission?.delete || user?.role === 'superAdmin') && <Button size="sm" style={{ background: 'red.800' }} onClick={() => setDeleteManyModel(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>}
+                                {(opportunityAccess?.update || user?.role === 'superAdmin') && <Button size="sm" onClick={() => { setEdit(true); setType("edit") }} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button>}
+                                {(opportunityAccess?.delete || user?.role === 'superAdmin') && <Button size="sm" style={{ background: 'red.800' }} onClick={() => setDeleteManyModel(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button>}
                             </Flex>
                         </GridItem>
                     </Grid>

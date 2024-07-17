@@ -768,24 +768,23 @@ const View = (props) => {
                                 {/* <Text>{data?.assignUserName ? data?.assignUserName : ' - '}</Text> */}
                                 {
                                     data?.assignUser ?
-                                        <Link to={`/userView/${data?.assignUser}`}>
-                                            <Text color={contactAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }} style={{ cursor: "pointer" }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
+                                        <Link to={user.role === 'superAdmin' && `/userView/${data?.assignUser}`}>
+                                            <Text color={user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900', textDecoration: user.role === 'superAdmin' ? 'underline' : 'none' } }} style={{ cursor: "pointer" }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
                                         </Link>
                                         :
-                                        <Text color={contactAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
+                                        <Text color={user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900', textDecoration: user.role === 'superAdmin' ? 'underline' : 'none' } }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
 
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Member Of </Text>
-                                {/* <Text>{data?.assignUserName ? data?.assignUserName : ' - '}</Text> */}
                                 {
                                     data?.memberOf ?
                                         <Link to={`/accountView/${data?.memberOf}`}>
-                                            <Text color={contactAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }} style={{ cursor: "pointer" }}>{data?.memberOfName ? data?.memberOfName : ' - '}</Text>
+                                            <Text color={permission?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: permission?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: permission?.view ? 'underline' : 'none' } }} style={{ cursor: "pointer" }}>{data?.memberOfName ? data?.memberOfName : ' - '}</Text>
                                         </Link>
                                         :
-                                        <Text color={contactAccess?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: contactAccess?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: contactAccess?.view ? 'underline' : 'none' } }}>{data?.memberOfName ? data?.memberOfName : ' - '}</Text>
+                                        <Text color={permission?.view ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: permission?.view ? 'blue.500' : 'blackAlpha.900', textDecoration: permission?.view ? 'underline' : 'none' } }}>{data?.memberOfName ? data?.memberOfName : ' - '}</Text>
 
                                 }
                             </GridItem>
