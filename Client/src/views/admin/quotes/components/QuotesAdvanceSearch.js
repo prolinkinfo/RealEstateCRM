@@ -188,15 +188,13 @@ const QuotesAdvanceSearch = (props) => {
                                 <Input
                                     fontSize='sm'
                                     onChange={handleChange} onBlur={handleBlur}
-                                    value={values?.validUntile}
-                                    name="validUntile"
+                                    value={values?.validUntil}
+                                    name="validUntil"
                                     type='date'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.validUntile && touched.validUntile && errors.validUntile}</Text>
+                                <Text mb='10px' color={'red'}> {errors.validUntil && touched.validUntil && errors.validUntil}</Text>
                             </GridItem>
-
-
                         </Grid>
                     </ModalBody>
                     <ModalFooter>
