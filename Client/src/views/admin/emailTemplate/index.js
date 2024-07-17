@@ -159,6 +159,7 @@ const Index = () => {
                 searchboxOutside={searchboxOutside}
                 setGetTagValuesOutside={setGetTagValuesOutside}
                 setSearchboxOutside={setSearchboxOutside}
+                handleSearchType="template"
             />
             <CommonDeleteModel isOpen={deleteMany} onClose={() => setDeleteMany(false)} type='Email Template' handleDeleteData={handleDeleteTask} ids={selectedValues} />
         </div>

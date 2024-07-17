@@ -133,6 +133,9 @@ const advanceSearchSlice = createSlice({
                             (!action.payload?.values?.validUntil || (item?.validUntil && item?.validUntil.toLowerCase().includes(action.payload?.values?.validUntil?.toLowerCase())))
                     )
                     break;
+                case 'QuotesSearch':
+                    state.searchResult = action.payload.searchData;
+                    break;
                 case 'invoice':
                     state.searchResult = action?.payload?.allData?.filter(
                         (item) =>
@@ -144,8 +147,13 @@ const advanceSearchSlice = createSlice({
                             (!action.payload?.values?.grandTotal || (item?.grandTotal && item?.grandTotal?.toString().toLowerCase().includes(action.payload?.values?.grandTotal?.toString().toLowerCase())))
                     )
                     break;
+                case 'InvoiceSearch':
+                    state.searchResult = action.payload.searchData;
+                    break;
+                case 'template':
+                    state.searchResult = action.payload.searchData;
+                    break;
                 default:
-                // state.count += 3;
             }
         },
     },

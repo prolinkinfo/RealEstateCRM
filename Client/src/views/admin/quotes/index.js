@@ -670,7 +670,7 @@ const Index = (props) => {
                 searchboxOutside={searchboxOutside}
                 setGetTagValuesOutside={setGetTagValuesOutside}
                 setSearchboxOutside={setSearchboxOutside}
-                handleSearchType="AccountSearch"
+                handleSearchType="QuotesSearch"
             />
 
             <QuotesAdvanceSearch
