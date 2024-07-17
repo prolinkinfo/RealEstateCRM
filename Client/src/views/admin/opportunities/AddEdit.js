@@ -14,6 +14,7 @@ import UserModel from '../../../components/commonTableModel/UserModel';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import AccountModel from '../../../components/commonTableModel/AccountModel';
+import { HasAccess } from '../../../redux/accessUtils';
 
 const AddEdit = (props) => {
     const { isOpen, size, onClose, type, setAction, selectedId } = props;
@@ -23,6 +24,8 @@ const AddEdit = (props) => {
     const [userData, setUserData] = useState([]);
     const [opprtunityDetails, setOpportunityDetails] = useState({});
     const accountList = useSelector((state) => state?.accountData?.data?.data)
+    const user = JSON.parse(localStorage.getItem("user"))
+    const [accountAccess] = HasAccess(['Account'])
 
     const initialValues = {
         opportunityName: type === "edit" ? opprtunityDetails?.opportunityName : "",
@@ -129,7 +132,7 @@ const AddEdit = (props) => {
     }
 
     useEffect(() => {
-        fetchData();
+        if (user.role === 'superAdmin') fetchData();
     }, [])
 
 
@@ -167,49 +170,55 @@ const AddEdit = (props) => {
                                 />
                                 <Text mb='10px' fontSize='sm' color={'red'}> {errors.opportunityName && touched.opportunityName && errors.opportunityName}</Text>
                             </GridItem>
-                            <GridItem colSpan={{ base: 12, md: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Account Name<Text color={"red"}>*</Text>
-                                </FormLabel>
-                                <Flex justifyContent={'space-between'}>
-                                    <Select
-                                        value={values.accountName}
-                                        name="accountName"
-                                        onChange={handleChange}
-                                        mb={errors.accountName && touched.accountName ? undefined : '10px'}
-                                        fontWeight='500'
-                                        placeholder={'Account Name'}
-                                        borderColor={errors.accountName && touched.accountName ? "red.300" : null}
-                                    >
-                                        {accountList?.length > 0 && accountList?.map((item) => {
-                                            return <option value={item._id} key={item._id}>{`${item?.name}`}</option>
-                                        })}
-                                    </Select>
-                                    <IconButton onClick={() => setAccountModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
-                                </Flex>
-                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.accountName && touched.accountName && errors.accountName}</Text>
-                            </GridItem>
-                            <GridItem colSpan={{ base: 12, md: 6 }} >
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Assigned User
-                                </FormLabel>
-                                <Flex justifyContent={'space-between'}>
-                                    <Select
-                                        value={values.assignUser}
-                                        name="assignUser"
-                                        onChange={handleChange}
-                                        mb={errors.assignUser && touched.assignUser ? undefined : '10px'}
-                                        fontWeight='500'
-                                        placeholder={'Assign To'}
-                                        borderColor={errors.assignUser && touched.assignUser ? "red.300" : null}
-                                    >
-                                        {userData?.map((item) => {
-                                            return <option value={item._id} key={item._id}>{`${item?.firstName} ${item?.lastName}`}</option>
-                                        })}
-                                    </Select>
-                                    <IconButton onClick={() => setUserModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
-                                </Flex>
-                            </GridItem>
+                            {
+                                (user.role === 'superAdmin' || accountAccess?.view) &&
+                                <GridItem colSpan={{ base: 12, md: 6 }}>
+                                    <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                        Account Name<Text color={"red"}>*</Text>
+                                    </FormLabel>
+                                    <Flex justifyContent={'space-between'}>
+                                        <Select
+                                            value={values.accountName}
+                                            name="accountName"
+                                            onChange={handleChange}
+                                            mb={errors.accountName && touched.accountName ? undefined : '10px'}
+                                            fontWeight='500'
+                                            placeholder={'Account Name'}
+                                            borderColor={errors.accountName && touched.accountName ? "red.300" : null}
+                                        >
+                                            {accountList?.length > 0 && accountList?.map((item) => {
+                                                return <option value={item._id} key={item._id}>{`${item?.name}`}</option>
+                                            })}
+                                        </Select>
+                                        <IconButton onClick={() => setAccountModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
+                                    </Flex>
+                                    <Text mb='10px' fontSize='sm' color={'red'}> {errors.accountName && touched.accountName && errors.accountName}</Text>
+                                </GridItem>
+                            }
+                            {
+                                user.role === 'superAdmin' &&
+                                <GridItem colSpan={{ base: 12, md: 6 }} >
+                                    <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                        Assigned User
+                                    </FormLabel>
+                                    <Flex justifyContent={'space-between'}>
+                                        <Select
+                                            value={values.assignUser}
+                                            name="assignUser"
+                                            onChange={handleChange}
+                                            mb={errors.assignUser && touched.assignUser ? undefined : '10px'}
+                                            fontWeight='500'
+                                            placeholder={'Assign To'}
+                                            borderColor={errors.assignUser && touched.assignUser ? "red.300" : null}
+                                        >
+                                            {userData?.map((item) => {
+                                                return <option value={item._id} key={item._id}>{`${item?.firstName} ${item?.lastName}`}</option>
+                                            })}
+                                        </Select>
+                                        <IconButton onClick={() => setUserModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
+                                    </Flex>
+                                </GridItem>
+                            }
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                     Type

@@ -2,8 +2,6 @@ import * as yup from 'yup'
 
 export const opprtunitiesSchema = yup.object({
     opportunityName: yup.string().required("Opportunity Name Is required"),
-    accountName: yup.string().required("Account Name Is required"),
-    assignUser: yup.string(),
     type: yup.string(),
     leadSource: yup.string(),
     currency: yup.string(),

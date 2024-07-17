@@ -24,6 +24,7 @@ const AddEdit = (props) => {
     const [userData, setUserData] = useState([]);
     const [accountDetails, setAccountDetails] = useState({});
     const dispatch = useDispatch();
+    const user = JSON.parse(localStorage.getItem("user"))
 
     const accountList = useSelector((state) => state?.accountData?.data?.data)
     // const { isLoding } = useSelector((state) => state?.accountData)
@@ -156,7 +157,7 @@ const AddEdit = (props) => {
 
     useEffect(() => {
         if (type === "edit") fetchAccountDetails();
-        fetchData()
+        if (user.role === 'superAdmin') fetchData();
     }, [type, selectedId])
 
     // useEffect(() => {
@@ -675,27 +676,30 @@ const AddEdit = (props) => {
                                 />
                                 <Text mb='10px' fontSize='sm' color={'red'}> {errors.SICCode && touched.SICCode && errors.SICCode}</Text>
                             </GridItem>
-                            <GridItem colSpan={{ base: 12, md: 6 }} >
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Assigned User
-                                </FormLabel>
-                                <Flex justifyContent={'space-between'}>
-                                    <Select
-                                        value={values.assignUser}
-                                        name="assignUser"
-                                        onChange={handleChange}
-                                        mb={errors.assignUser && touched.assignUser ? undefined : '10px'}
-                                        fontWeight='500'
-                                        placeholder={'Assign To'}
-                                        borderColor={errors.assignUser && touched.assignUser ? "red.300" : null}
-                                    >
-                                        {userData?.map((item) => {
-                                            return <option value={item._id} key={item._id}>{`${item?.firstName} ${item?.lastName}`}</option>
-                                        })}
-                                    </Select>
-                                    <IconButton onClick={() => setUserModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
-                                </Flex>
-                            </GridItem>
+                            {
+                                user.role === 'superAdmin' &&
+                                <GridItem colSpan={{ base: 12, md: 6 }} >
+                                    <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                        Assigned User
+                                    </FormLabel>
+                                    <Flex justifyContent={'space-between'}>
+                                        <Select
+                                            value={values.assignUser}
+                                            name="assignUser"
+                                            onChange={handleChange}
+                                            mb={errors.assignUser && touched.assignUser ? undefined : '10px'}
+                                            fontWeight='500'
+                                            placeholder={'Assign To'}
+                                            borderColor={errors.assignUser && touched.assignUser ? "red.300" : null}
+                                        >
+                                            {userData?.map((item) => {
+                                                return <option value={item._id} key={item._id}>{`${item?.firstName} ${item?.lastName}`}</option>
+                                            })}
+                                        </Select>
+                                        <IconButton onClick={() => setUserModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
+                                    </Flex>
+                                </GridItem>
+                            }
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                     Member Of

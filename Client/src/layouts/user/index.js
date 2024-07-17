@@ -17,6 +17,7 @@ import { getApi } from 'services/api';
 import DynamicPage from 'views/admin/dynamicPage';
 import { LuChevronRightCircle } from 'react-icons/lu';
 import { FaCalendarAlt } from 'react-icons/fa';
+import { fetchModules } from '../../redux/slices/moduleSlice';
 
 const MainDashboard = React.lazy(() => import("views/admin/default"));
 const SignInCentered = React.lazy(() => import("views/auth/signIn"));
@@ -32,6 +33,7 @@ export default function User(props) {
     const [route, setRoute] = useState();
     const [openSidebar, setOpenSidebar] = useState(true)
     const user = JSON.parse(localStorage.getItem("user"))
+    const modules = useSelector((state) => state?.modules?.data)
     // functions for changing the states from components
     const getRoute = () => {
         return window.location.pathname !== '/admin/full-screen-maps';
@@ -132,7 +134,22 @@ export default function User(props) {
     })
     const accessRoute = newRoute?.filter(item => Object.keys(mergedPermissions)?.find(data => (data?.toLowerCase() === item?.name?.toLowerCase()) || (data?.toLowerCase() === item.parentName?.toLowerCase())))
 
-    routes.push(...accessRoute)
+    // routes.push(...accessRoute)
+    let filterData = [...accessRoute]
+
+    const activeModel = modules?.filter(module => module?.isActive)?.map(module => module?.moduleName);
+
+    const activeRoutes = filterData?.filter(
+        (data) =>
+            activeModel?.includes(data?.name) ||
+            activeModel?.includes(data?.parentName) ||
+            !modules?.some(
+                (module) =>
+                    module?.moduleName === data?.name ||
+                    module?.moduleName === data?.parentName
+            )
+    );
+    routes.push(...activeRoutes)
 
     const getActiveRoute = (routes) => {
         let activeRoute = 'Prolink';
@@ -248,6 +265,8 @@ export default function User(props) {
     useEffect(() => {
         // Dispatch the fetchRoles action on component mount
         dispatch(fetchImage());
+        dispatch(fetchModules())
+
     }, [dispatch]);
 
     const largeLogo = useSelector((state) => state?.images?.images?.filter(item => item?.isActive === true));
