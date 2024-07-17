@@ -1,5 +1,6 @@
 const Invoices = require("../../model/schema/invoices.js");
 const mongoose = require("mongoose");
+const User = require('../../model/schema/user')
 
 
 
@@ -11,10 +12,11 @@ async function getNextAutoIncrementValue() {
 const index = async (req, res) => {
     query = req.query;
     query.deleted = false;
-    if (query.createBy) {
-        query.createBy = new mongoose.Types.ObjectId(query.createBy);
+    const user = await User.findById(req.user.userId)
+    if (user?.role !== "superAdmin") {
+        delete query.createBy
+        query.$or = [{ createBy: new mongoose.Types.ObjectId(req.user.userId) }, { assignUser: new mongoose.Types.ObjectId(req.user.userId) }];
     }
-
     try {
         let result = await Invoices.aggregate([
             { $match: query },
@@ -117,17 +119,12 @@ const edit = async (req, res) => {
 };
 const addMany = async (req, res) => {
     try {
-        // const data = {
-        //     ...req.body,
-        //     account: new mongoose.Types.ObjectId(req.body.account),
-        //     contact: new mongoose.Types.ObjectId(req.body.contact),
-        // };
-        // const d = req.body.map((item) => ({
-        //     ...item,
-        //     account: new mongoose.Types.ObjectId(item.account),
-        //     contact: new mongoose.Types.ObjectId(item.contact),
-        // }))
-        const inserted = await Invoices.insertMany(req.body);
+        const data = req.body.map((item) => ({
+            ...item,
+            account: item.account ? item.account : null,
+            contact: item.contact ? item.contact : null,
+        }))
+        const inserted = await Invoices.insertMany(data);
 
         res.status(200).json(inserted);
     } catch (err) {

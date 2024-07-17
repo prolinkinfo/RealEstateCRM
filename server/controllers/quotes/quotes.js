@@ -1,5 +1,6 @@
 const Quotes = require("../../model/schema/quotes.js");
 const mongoose = require("mongoose");
+const User = require('../../model/schema/user')
 
 
 
@@ -11,8 +12,10 @@ async function getNextAutoIncrementValue() {
 const index = async (req, res) => {
     query = req.query;
     query.deleted = false;
-    if (query.createBy) {
-        query.createBy = new mongoose.Types.ObjectId(query.createBy);
+    const user = await User.findById(req.user.userId)
+    if (user?.role !== "superAdmin") {
+        delete query.createBy
+        query.$or = [{ createBy: new mongoose.Types.ObjectId(req.user.userId) }, { assignUser: new mongoose.Types.ObjectId(req.user.userId) }];
     }
 
     try {
@@ -117,16 +120,11 @@ const edit = async (req, res) => {
 };
 const addMany = async (req, res) => {
     try {
-        const data = {
-            ...req.body,
-            account: req.body.account ? req.body.account : null,
-            contact: req.body.contact ? req.body.contact : null,
-        };
-        // const d = req.body.map((item) => ({
-        //     ...item,
-        //     account: new mongoose.Types.ObjectId(item.account),
-        //     contact: new mongoose.Types.ObjectId(item.contact),
-        // }))
+        const data = req.body.map((item) => ({
+            ...item,
+            account: item.account ? item.account : null,
+            contact: item.contact ? item.contact : null,
+        }))
         const inserted = await Quotes.insertMany(data);
 
         res.status(200).json(inserted);

@@ -4,7 +4,7 @@ import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList, Text, useDisclosure } from '@chakra-ui/react';
 import { getApi, deleteManyApi } from 'services/api';
 import { HasAccess } from '../../../redux/accessUtils';
-import CommonCheckTable from '../../../components/checkTable/checktable';
+import CommonCheckTable from '../../../components/reactTable/checktable';
 import { SearchIcon } from "@chakra-ui/icons";
 import { CiMenuKebab } from 'react-icons/ci';
 import moment from 'moment';
@@ -39,7 +39,7 @@ const Index = (props) => {
     const [type, setType] = useState("")
     const [isImport, setIsImport] = useState(false);
 
-    const [permission] = HasAccess(["Invoices"]);
+    const [permission, accountAccess, contactAccess] = HasAccess(["Invoices", "Account", "Contacts"]);
 
     const actionHeader = {
         Header: "Action",
@@ -124,35 +124,47 @@ const Index = (props) => {
         {
             Header: 'Contact', accessor: 'contact',
             cell: (cell) => (
-                <div className="selectOpt">
+                contactAccess?.view ?
+                    <div className="selectOpt">
+                        <Text
+                            onClick={() => navigate(`/contactView/${cell?.row?.original.contact}`)}
+                            me="10px"
+                            sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                            color='brand.600'
+                            fontSize="sm"
+                            fontWeight="700"
+                        >
+                            {cell?.row?.original?.contactName ? cell?.row?.original?.contactName : "-"}
+                        </Text>
+                    </div>
+                    :
                     <Text
-                        onClick={() => navigate(`/contactView/${cell?.row?.original.contact}`)}
-                        me="10px"
-                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
-                        color='brand.600'
-                        fontSize="sm"
-                        fontWeight="700"
                     >
                         {cell?.row?.original?.contactName ? cell?.row?.original?.contactName : "-"}
                     </Text>
-                </div>
             )
         },
         {
             Header: 'Account', accessor: 'account',
             cell: (cell) => (
-                <div className="selectOpt">
+                accountAccess?.view ?
+                    <div className="selectOpt">
+                        <Text
+                            onClick={() => navigate(`/accountView/${cell?.row?.original.account}`)}
+                            me="10px"
+                            sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                            color='brand.600'
+                            fontSize="sm"
+                            fontWeight="700"
+                        >
+                            {cell?.row?.original?.accountName ? cell?.row?.original?.accountName : "-"}
+                        </Text>
+                    </div>
+                    :
                     <Text
-                        onClick={() => navigate(`/accountView/${cell?.row?.original.account}`)}
-                        me="10px"
-                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
-                        color='brand.600'
-                        fontSize="sm"
-                        fontWeight="700"
                     >
                         {cell?.row?.original?.accountName ? cell?.row?.original?.accountName : "-"}
                     </Text>
-                </div>
             )
         },
         {
@@ -547,7 +559,7 @@ const Index = (props) => {
                 title={"Invoices"}
                 isLoding={isLoding}
                 columnData={columns ?? []}
-                dataColumn={dataColumn ?? []}
+                // dataColumn={dataColumn ?? []}
                 allData={data ?? []}
                 tableData={data}
                 searchDisplay={displaySearchData}
@@ -556,12 +568,12 @@ const Index = (props) => {
                 setSearchedDataOut={setSearchedData}
                 tableCustomFields={[]}
                 access={permission}
-                action={action}
-                setAction={setAction}
-                selectedColumns={selectedColumns}
-                setSelectedColumns={setSelectedColumns}
-                isOpen={isOpen}
-                onClose={onclose}
+                // action={action}
+                // setAction={setAction}
+                // selectedColumns={selectedColumns}
+                // setSelectedColumns={setSelectedColumns}
+                // isOpen={isOpen}
+                // onClose={onclose}
                 setIsImport={setIsImport}
                 onOpen={handleOpenAdd}
                 selectedValues={selectedValues}

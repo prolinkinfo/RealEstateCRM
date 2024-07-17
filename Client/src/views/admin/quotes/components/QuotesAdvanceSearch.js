@@ -141,7 +141,7 @@ const QuotesAdvanceSearch = (props) => {
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
-                                    Contact Name
+                                    Contact
                                 </FormLabel>
                                 <Input
                                     fontSize='sm'
@@ -155,7 +155,7 @@ const QuotesAdvanceSearch = (props) => {
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
-                                    Account Name
+                                    Account
                                 </FormLabel>
                                 <Input
                                     fontSize='sm'
@@ -188,15 +188,13 @@ const QuotesAdvanceSearch = (props) => {
                                 <Input
                                     fontSize='sm'
                                     onChange={handleChange} onBlur={handleBlur}
-                                    value={values?.validUntile}
-                                    name="validUntile"
+                                    value={values?.validUntil}
+                                    name="validUntil"
                                     type='date'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.validUntile && touched.validUntile && errors.validUntile}</Text>
+                                <Text mb='10px' color={'red'}> {errors.validUntil && touched.validUntil && errors.validUntil}</Text>
                             </GridItem>
-
-
                         </Grid>
                     </ModalBody>
                     <ModalFooter>
