@@ -26,7 +26,7 @@ const View = (props) => {
     const { id } = params
     const user = JSON.parse(localStorage.getItem("user"))
 
-    const [permission, contactAccess, leadAccess] = HasAccess(['Tasks', 'Contacts', 'Leads'])
+    const [permission, contactAccess, leadAccess] = HasAccess(['Invoices', 'Contacts', 'Leads'])
 
     const [data, setData] = useState()
     const { onOpen, onClose } = useDisclosure()
@@ -180,7 +180,7 @@ const View = (props) => {
                                                     {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => { setEdit(true); setType("edit") }} alignItems={'start'} icon={<EditIcon />}>Edit</MenuItem>}
                                                     <MenuItem onClick={generatePDF} alignItems={"start"} icon={<FaFilePdf />} display={"flex"} style={{ alignItems: "center" }}>Print as PDF</MenuItem >
 
-                                                    {(user.role === 'superAdmin' || permission?.deleteModel) && <>
+                                                    {(user.role === 'superAdmin' || permission?.delete) && <>
                                                         <MenuDivider />
                                                         <MenuItem alignItems={'start'} onClick={() => setDeleteManyModel(true)} color={'red'} icon={<DeleteIcon />}>Delete</MenuItem>
                                                     </>}

@@ -141,7 +141,7 @@ const TaskView = (props) => {
                                                     {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => setEdit(true)} alignItems={'start'} icon={<EditIcon />}>Edit</MenuItem>}
                                                     <MenuItem onClick={generatePDF} alignItems={"start"} icon={<FaFilePdf />} display={"flex"} style={{ alignItems: "center" }}>Print as PDF</MenuItem >
 
-                                                    {(user.role === 'superAdmin' || permission?.deleteModel) && <>
+                                                    {(user.role === 'superAdmin' || permission?.delete) && <>
                                                         <MenuDivider />
                                                         <MenuItem alignItems={'start'} onClick={() => setDeleteManyModel(true)} color={'red'} icon={<DeleteIcon />}>Delete</MenuItem>
                                                     </>}
