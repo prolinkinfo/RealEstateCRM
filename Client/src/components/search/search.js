@@ -7,15 +7,15 @@ const CustomSearchInput = ({ allData, setSearchbox, setDisplaySearchData, search
     const handleInputChange = (e) => {
         const searchTerm = e.target.value?.toLowerCase();
 
-        const results = allData.filter((item) => {
+        const results = allData?.filter((item) => {
             // Check if any of the specified columns contains the search term
-            return dataColumn.some((column) => {
-                const columnValue = item[column.accessor];
+            return dataColumn?.some((column) => {
+                const columnValue = item[column?.accessor];
 
                 return (
                     columnValue &&
                         typeof columnValue === 'string' ?
-                        columnValue.toLowerCase().includes(searchTerm) : typeof columnValue === 'number' && columnValue.toString().includes(searchTerm)
+                        columnValue?.toLowerCase()?.includes(searchTerm) : typeof columnValue === 'number' && columnValue?.toString()?.includes(searchTerm)
                 );
             });
         });

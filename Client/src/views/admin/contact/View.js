@@ -28,13 +28,16 @@ import CustomView from "utils/customView";
 import AddDocumentModal from "utils/addDocumentModal";
 import CommonDeleteModel from "components/commonDeleteModel";
 import { deleteApi } from "services/api";
-import CommonCheckTable from "components/checkTable/checktable";
+import CommonCheckTable from "components/reactTable/checktable";
 import moment from 'moment';
 import AddEdit from '../task/components/AddEdit'
 import { useDispatch, useSelector } from "react-redux";
-import { fetchContactCustomFiled } from '../../../redux/contactCustomFiledSlice';
-import { fetchPropertyCustomFiled } from "../../../redux/propertyCustomFiledSlice";
-
+import { fetchContactCustomFiled } from '../../../redux/slices/contactCustomFiledSlice';
+import { fetchPropertyCustomFiled } from "../../../redux/slices/propertyCustomFiledSlice";
+import html2pdf from "html2pdf.js";
+import { FaFilePdf } from "react-icons/fa";
+import AddEditQuotes from '../quotes/AddEdit'
+import AddEditInvoice from '../invoice/AddEdit'
 const View = () => {
 
     const param = useParams()
@@ -55,12 +58,17 @@ const View = () => {
     const [taskModel, setTaskModel] = useState(false);
     const [addEmailHistory, setAddEmailHistory] = useState(false);
     const [addPhoneCall, setAddPhoneCall] = useState(false);
+    const [addQuotes, setAddQuotes] = useState(false);
+    const [addInvoice, setAddInvoice] = useState(false);
     const [addMeeting, setMeeting] = useState(false);
     const [showEmail, setShowEmail] = useState(false);
     const [showCall, setShowCall] = useState(false);
     const [showTasks, setShowTasks] = useState(false);
     const [showMeetings, setShowMeetings] = useState(false);
+    const [showQuotes, setShowQuotes] = useState(false);
+    const [showInvoices, setShowInvoices] = useState(false);
     const [addDocument, setAddDocument] = useState(false);
+
     const [selectedTab, setSelectedTab] = useState(0);
     const size = "lg";
     const navigate = useNavigate()
@@ -70,8 +78,8 @@ const View = () => {
 
     const [propertyData, setPropertyData] = useState([]);
     const [columns, setColumns] = useState([]);
-    const [permission, callAccess, emailAccess, taskAccess, meetingAccess] = HasAccess(['Contacts', 'Calls', 'Emails', 'Tasks', 'Meetings']);
-
+    const [permission, callAccess, emailAccess, taskAccess, meetingAccess, quotesAccess, invoicesAccess] = HasAccess(['Contacts', 'Calls', 'Emails', 'Tasks', 'Meetings', 'Quotes', 'Invoices']);
+    console.log(quotesAccess, "quotesAccess")
     const columnsDataColumns = [
         { Header: "sender", accessor: "senderName", },
         {
@@ -195,6 +203,133 @@ const View = () => {
         },
         { Header: "create By", accessor: "createdByName", },
     ];
+    const quotesColumns = [
+        { Header: "Quote Number", accessor: "quoteNumber", isSortable: false, width: 10 },
+        {
+            Header: 'Title', accessor: 'title', cell: (cell) => (
+                <div className="selectOpt">
+                    <Text
+                        onClick={() => navigate(`/quotesView/${cell?.row?.original._id}`)}
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.value}
+                    </Text>
+                </div>
+            )
+        },
+        { Header: 'Quote Stage', accessor: 'quoteStage' },
+        {
+            Header: 'Contact',
+            accessor: 'contact',
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text
+                    >
+                        {cell?.row?.original?.contactName ? cell?.row?.original?.contactName : "-"}
+                    </Text>
+                </div>
+            )
+        },
+        {
+            Header: 'Account',
+            accessor: 'account',
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text
+                        onClick={() => navigate(`/accountView/${cell?.row?.original?.account}`)}
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.row?.original?.accountName ? cell?.row?.original?.accountName : "-"}
+                    </Text>
+                </div>
+            )
+        },
+        {
+            Header: "Grand Total",
+            accessor: "grandTotal",
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text
+                    >
+                        {cell?.row?.original?.grandTotal ? `$${cell?.row?.original?.grandTotal}` : '-'}
+                    </Text>
+                </div>
+            )
+        },
+        { Header: "valid Until", accessor: "validUntil" },
+    ];
+    const invoicesColumns = [
+        { Header: "Invoice Number", accessor: "invoiceNumber", isSortable: false, width: 10 },
+        {
+            Header: 'Title', accessor: 'title', cell: (cell) => (
+                <div className="selectOpt">
+                    <Text
+                        onClick={() => navigate(`/invoicesView/${cell?.row?.original._id}`)}
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.value}
+                    </Text>
+                </div>
+            )
+        },
+        {
+            Header: 'Status', accessor: 'status',
+        },
+        {
+            Header: 'Contact', accessor: 'contact',
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text
+                    >
+                        {cell?.row?.original?.contactName ? cell?.row?.original?.contactName : "-"}
+                    </Text>
+                </div>
+            )
+        },
+        {
+            Header: 'Account', accessor: 'account',
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text
+                        onClick={() => navigate(`/accountView/${cell?.row?.original?.account}`)}
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.row?.original?.accountName ? cell?.row?.original?.accountName : "-"}
+                    </Text>
+                </div>
+            )
+        },
+        {
+            Header: "Grand Total",
+            accessor: "grandTotal",
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text>
+                        {cell?.row?.original?.grandTotal ? `$${cell?.row?.original?.grandTotal}` : '-'}
+                    </Text>
+                </div>
+            )
+        },
+    ];
+
+
+
     const taskColumns = [
         {
             Header: "Title", accessor: "title", cell: (cell) => (
@@ -220,6 +355,30 @@ const View = () => {
         setSelectedTab(index);
     };
 
+    const generatePDF = () => {
+        const element = document.getElementById("reports");
+        if (element) {
+            element.style.display = 'block';
+            element.style.width = '100%'; // Adjust width for mobile
+            element.style.height = 'auto';
+            // setTimeout(() => {
+            html2pdf()
+                .from(element)
+                .set({
+                    margin: [0, 0, 0, 0],
+                    filename: `Contact_Details_${moment().format("DD-MM-YYYY")}.pdf`,
+                    image: { type: "jpeg", quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true, allowTaint: true },
+                    jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+                })
+                .save().then(() => {
+                    element.style.display = '';
+                })
+            // }, 500);
+        } else {
+            console.error("Element with ID 'reports' not found.");
+        }
+    };
 
     const download = async (data) => {
         if (data) {
@@ -317,6 +476,8 @@ const View = () => {
                                         <MenuList minWidth={2} zIndex={"99"}>
                                             {(user.role === 'superAdmin' || permission?.create) && <MenuItem alignItems={'start'} onClick={() => onOpen()} color={'blue'} icon={<AddIcon />}>Add</MenuItem>}
                                             {(user.role === 'superAdmin' || permission?.update) && <MenuItem alignItems={'start'} onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
+                                            <MenuItem onClick={generatePDF} alignItems={"start"} icon={<FaFilePdf />} display={"flex"} style={{ alignItems: "center" }}>Print as PDF</MenuItem >
+
                                             {(user.role === 'superAdmin' || permission?.delete) &&
                                                 <>
                                                     <MenuDivider />
@@ -335,7 +496,7 @@ const View = () => {
                         </Grid>
                         <TabPanels>
                             <TabPanel pt={4} p={0}>
-                                <CustomView data={contactData[0]} fieldData={data} toCamelCase={toCamelCase} />
+                                <CustomView data={contactData?.[0]} fieldData={data} toCamelCase={toCamelCase} moduleId={contactData?.[0]?._id} fetchData={fetchData} id="reports" />
                                 <GridItem colSpan={{ base: 12 }} mt={4}>
                                     <Card >
                                         <Grid templateColumns={{ base: "1fr" }} gap={4}>
@@ -384,7 +545,7 @@ const View = () => {
                                                         title={"Email"}
                                                         isLoding={isLoding}
                                                         columnData={columnsDataColumns ?? []}
-                                                        dataColumn={columnsDataColumns ?? []}
+                                                        // dataColumn={columnsDataColumns ?? []}
                                                         allData={showEmail ? allData.EmailHistory : allData?.EmailHistory?.length > 0 ? [allData.EmailHistory[0]] : []}
                                                         tableData={showEmail ? allData.EmailHistory : allData?.EmailHistory?.length > 0 ? [allData.EmailHistory[0]] : []}
                                                         AdvanceSearch={false}
@@ -408,7 +569,7 @@ const View = () => {
                                                         title={"Call"}
                                                         isLoding={isLoding}
                                                         columnData={callColumns ?? []}
-                                                        dataColumn={callColumns ?? []}
+                                                        // dataColumn={callColumns ?? []}
                                                         allData={showCall ? allData?.phoneCallHistory : allData?.phoneCallHistory?.length > 0 ? [allData?.phoneCallHistory[0]] : []}
                                                         tableData={showCall ? allData?.phoneCallHistory : allData?.phoneCallHistory?.length > 0 ? [allData?.phoneCallHistory[0]] : []}
                                                         AdvanceSearch={false}
@@ -431,7 +592,7 @@ const View = () => {
                                                         title={"Task"}
                                                         isLoding={isLoding}
                                                         columnData={taskColumns ?? []}
-                                                        dataColumn={taskColumns ?? []}
+                                                        // dataColumn={taskColumns ?? []}
                                                         allData={showTasks ? allData?.task : allData?.task?.length > 0 ? [allData?.task[0]] : []}
                                                         tableData={showTasks ? allData?.task : allData?.task?.length > 0 ? [allData?.task[0]] : []}
                                                         AdvanceSearch={false}
@@ -454,7 +615,7 @@ const View = () => {
                                                         title={"Meeting"}
                                                         isLoding={isLoding}
                                                         columnData={MeetingColumns ?? []}
-                                                        dataColumn={MeetingColumns ?? []}
+                                                        // dataColumn={MeetingColumns ?? []}
                                                         dataLength={allData?.meetingHistory?.length}
                                                         allData={showMeetings ? allData?.meetingHistory : allData?.meetingHistory?.length > 0 ? [allData?.meetingHistory[0]] : []}
                                                         tableData={showMeetings ? allData?.meetingHistory : allData?.meetingHistory?.length > 0 ? [allData?.meetingHistory[0]] : []}
@@ -468,6 +629,52 @@ const View = () => {
                                                     />
                                                     {allData?.meetingHistory?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
                                                         <Button colorScheme="brand" size='sm' variant="outline" display="flex" justifyContant="end" onClick={() => showMeetings ? setShowMeetings(false) : setShowMeetings(true)}>{showMeetings ? "Show less" : "Show more"}</Button>
+                                                    </div>}
+                                                </Card>
+                                            </GridItem>}
+                                            {quotesAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
+                                                <Card overflow={'scroll'}>
+                                                    <CommonCheckTable
+                                                        title={"Quotes"}
+                                                        isLoding={isLoding}
+                                                        columnData={quotesColumns ?? []}
+                                                        // dataColumn={quotesColumns ?? []}
+                                                        dataLength={allData?.quotes?.length}
+                                                        allData={showQuotes ? allData?.quotes : allData?.quotes?.length > 0 ? [allData?.quotes[0]] : []}
+                                                        tableData={showQuotes ? allData?.quotes : allData?.quotes?.length > 0 ? [allData?.quotes[0]] : []}
+                                                        AdvanceSearch={false}
+                                                        tableCustomFields={[]}
+                                                        checkBox={false}
+                                                        deleteMany={true}
+                                                        ManageGrid={false}
+                                                        onOpen={() => setAddQuotes(true)}
+                                                        access={quotesAccess}
+                                                    />
+                                                    {allData?.quotes?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
+                                                        <Button colorScheme="brand" size='sm' variant="outline" display="flex" justifyContant="end" onClick={() => showQuotes ? setShowQuotes(false) : setShowQuotes(true)}>{showQuotes ? "Show less" : "Show more"}</Button>
+                                                    </div>}
+                                                </Card>
+                                            </GridItem>}
+                                            {invoicesAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
+                                                <Card overflow={'scroll'}>
+                                                    <CommonCheckTable
+                                                        title={"Invoices"}
+                                                        isLoding={isLoding}
+                                                        columnData={invoicesColumns ?? []}
+                                                        // dataColumn={invoicesColumns ?? []}
+                                                        dataLength={allData?.invoice?.length}
+                                                        allData={showInvoices ? allData?.invoice : allData?.invoice?.length > 0 ? [allData?.invoice[0]] : []}
+                                                        tableData={showInvoices ? allData?.invoice : allData?.invoice?.length > 0 ? [allData?.invoice[0]] : []}
+                                                        AdvanceSearch={false}
+                                                        tableCustomFields={[]}
+                                                        checkBox={false}
+                                                        deleteMany={true}
+                                                        ManageGrid={false}
+                                                        onOpen={() => setAddInvoice(true)}
+                                                        access={invoicesAccess}
+                                                    />
+                                                    {allData?.invoice?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
+                                                        <Button colorScheme="brand" size='sm' variant="outline" display="flex" justifyContant="end" onClick={() => showInvoices ? setShowInvoices(false) : setShowInvoices(true)}>{showInvoices ? "Show less" : "Show more"}</Button>
                                                     </div>}
                                                 </Card>
                                             </GridItem>}
@@ -575,15 +782,16 @@ const View = () => {
                         </Grid>
                     </Card>}
                 </>}
-            {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} contactData={contactData[0]} />}
-            <Edit isOpen={edit} contactData={contactData[0]} size={size} onClose={setEdit} setAction={setAction} moduleId={contactData?.[0]?._id} data={data} />
+            {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} contactData={contactData?.[0]} />}
+            <Edit isOpen={edit} contactData={contactData?.[0]} size={size} onClose={setEdit} setAction={setAction} moduleId={contactData?.[0]?._id} data={data} />
             <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Contact' handleDeleteData={handleDeleteContact} ids={param.id} />
             <AddEmailHistory lead="false" contactEmail={allData?.contact?.email} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} />
             <AddDocumentModal addDocument={addDocument} setAddDocument={setAddDocument} linkId={param.id} from="contact" setAction={setAction} fetchData={fetchData} />
             <AddMeeting fetchData={fetchData} leadContect={splitValue[0]} isOpen={addMeeting} onClose={setMeeting} from="contact" id={param.id} setAction={setAction} view={true} />
             <AddEdit isOpen={taskModel} fetchData={fetchData} leadContect={splitValue[0]} onClose={setTaskModel} id={param.id} userAction={'add'} view={true} />
             <AddPhoneCall viewData={allData} fetchData={fetchData} setAction={setAction} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param.id} cData={data} />
-
+            <AddEditQuotes isOpen={addQuotes} size={"lg"} onClose={() => setAddQuotes(false)} setAction={setAction} type={"add"} contactId={param.id} />
+            <AddEditInvoice isOpen={addInvoice} size={"lg"} onClose={() => setAddInvoice(false)} setAction={setAction} type={"add"} contactId={param.id} />
             <PropertyModel fetchData={fetchData} isOpen={propertyModel} onClose={setPropertyModel} id={param.id} interestProperty={data?.interestProperty} />
 
         </>

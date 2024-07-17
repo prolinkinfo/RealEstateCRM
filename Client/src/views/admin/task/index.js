@@ -3,7 +3,7 @@ import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList, Select, Text, useDisclosure } from '@chakra-ui/react';
 import { getApi } from 'services/api';
 import { HasAccess } from '../../../redux/accessUtils';
-import CommonCheckTable from '../../../components/checkTable/checktable';
+import CommonCheckTable from '../../../components/reactTable/checktable';
 import TaskAdvanceSearch from './components/TaskAdvanceSearch';
 import { SearchIcon } from "@chakra-ui/icons";
 import { CiMenuKebab } from 'react-icons/ci';
@@ -16,11 +16,10 @@ import { deleteManyApi } from 'services/api';
 import AddEdit from './components/AddEdit';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { fetchTaskData } from '../../../redux/taskSlice';
+import { fetchTaskData } from '../../../redux/slices/taskSlice';
 import { toast } from 'react-toastify';
 
 const Task = () => {
-    const title = "Tasks";
     const [action, setAction] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [edit, setEdit] = useState(false);
@@ -45,6 +44,7 @@ const Task = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch();
 
+    console.log("displaySearchData----::", displaySearchData)
     const handleEditOpen = (row) => {
         onOpen();
         setUserAction("edit")
@@ -175,8 +175,8 @@ const Task = () => {
         setId(cell?.row?.values?._id)
         setEventView(true)
     }
-    const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
-    const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
+    // const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
+    // const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 
     const handleViewOpen = (id) => {
         navigate(`/view/${id}`)
@@ -198,10 +198,10 @@ const Task = () => {
     return (
         <div>
             <CommonCheckTable
-                title={title}
+                title={"Tasks"}
                 isLoding={isLoding}
                 columnData={tableColumns ?? []}
-                dataColumn={dataColumn ?? []}
+                // dataColumn={dataColumn ?? []}
                 allData={data ?? []}
                 searchDisplay={displaySearchData}
                 setSearchDisplay={setDisplaySearchData}
@@ -209,8 +209,8 @@ const Task = () => {
                 setSearchedDataOut={setSearchedData}
                 tableCustomFields={[]}
                 access={permission}
-                selectedColumns={selectedColumns}
-                setSelectedColumns={setSelectedColumns}
+                // selectedColumns={selectedColumns}
+                // setSelectedColumns={setSelectedColumns}
                 state={state}
                 onOpen={addBtn}
                 selectedValues={selectedValues}
@@ -223,6 +223,7 @@ const Task = () => {
                 searchboxOutside={searchboxOutside}
                 setGetTagValuesOutside={setGetTagValuesOutside}
                 setSearchboxOutside={setSearchboxOutside}
+                handleSearchType="TasksSearch"
             />
 
             <TaskAdvanceSearch

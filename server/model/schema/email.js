@@ -10,8 +10,10 @@ const email = new mongoose.Schema({
     // cc: { type: String },
     // bcc: { type: String },
     subject: { type: String },
+    type: { type: String },
     startDate: { type: String, default: Date.now },
     message: { type: String },
+    html: { type: String },
     createByLead: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Lead",

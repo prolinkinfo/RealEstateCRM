@@ -8,6 +8,9 @@ import { LiaMousePointerSolid } from 'react-icons/lia';
 import { emailSchema } from 'schema';
 import { getApi, postApi } from 'services/api';
 import dayjs from 'dayjs';
+import { fetchEmailTempData } from '../../../redux/slices/emailTempSlice';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 const AddEmailHistory = (props) => {
     const { onClose, isOpen } = props
@@ -16,6 +19,9 @@ const AddEmailHistory = (props) => {
     const [assignToContactData, setAssignToContactData] = useState([]);
     const [contactModelOpen, setContactModel] = useState(false);
     const [leadModelOpen, setLeadModel] = useState(false);
+    const [data, setData] = useState([]);
+    const dispatch = useDispatch();
+
     const user = JSON.parse(localStorage.getItem('user'))
     const todayTime = new Date().toISOString().split('.')[0];
 
@@ -27,6 +33,8 @@ const AddEmailHistory = (props) => {
         createByContact: '',
         createByLead: '',
         startDate: '',
+        type: 'message',
+        html: '',
         category: 'contact',
         // assignTo: '',
         // assignToLead: '',
@@ -92,6 +100,21 @@ const AddEmailHistory = (props) => {
         }
     }
 
+    const fetchData = async () => {
+        setIsLoding(true)
+        const result = await dispatch(fetchEmailTempData())
+        if (result.payload.status === 200) {
+            setData(result?.payload?.data);
+        } else {
+            toast.error("Failed to fetch data", "error");
+        }
+        setIsLoding(false)
+    }
+
+    useEffect(() => {
+        if (values?.type === "template") fetchData()
+    }, [values?.type])
+
     useEffect(() => {
         fetchRecipientData()
     }, [values.createByContact, values.createByLead])
@@ -119,7 +142,6 @@ const AddEmailHistory = (props) => {
                                     <Radio value='Lead'>Lead</Radio>
                                 </Stack>
                             </RadioGroup>
-
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             {values.category === "Contact" ?
@@ -225,19 +247,45 @@ const AddEmailHistory = (props) => {
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Message
                             </FormLabel>
-                            <Textarea
-                                resize={'none'}
-                                fontSize='sm'
-                                placeholder='Enter Message'
-                                onChange={handleChange} onBlur={handleBlur}
-                                value={values.message}
-                                name="message"
-                                fontWeight='500'
-                                borderColor={errors.message && touched.message ? "red.300" : null}
-                            />
-                            <Text fontSize='sm' mb='10px' color={'red'}> {errors.message && touched.message && errors.message}</Text>
+                            <RadioGroup onChange={(e) => { setFieldValue('type', e) }} value={values.type}>
+                                <Stack direction='row'>
+                                    <Radio value='message'>Message</Radio>
+                                    <Radio value='template'>Template</Radio>
+                                </Stack>
+                            </RadioGroup>
                         </GridItem>
-
+                        <GridItem colSpan={{ base: 12 }}>
+                            {
+                                values?.type === "message" ?
+                                    <>
+                                        <Textarea
+                                            resize={'none'}
+                                            fontSize='sm'
+                                            placeholder='Enter Message'
+                                            onChange={handleChange} onBlur={handleBlur}
+                                            value={values.message}
+                                            name="message"
+                                            fontWeight='500'
+                                            borderColor={errors.message && touched.message ? "red.300" : null}
+                                        />
+                                        <Text fontSize='sm' mb='10px' color={'red'}> {errors.message && touched.message && errors.message}</Text>
+                                    </>
+                                    :
+                                    <Select
+                                        // value={values.assignTo}
+                                        name="html"
+                                        onChange={handleChange} onBlur={handleBlur}
+                                        value={values.html}
+                                        fontWeight='500'
+                                        placeholder={'Select Template'}
+                                    // borderColor={errors.assignTo && touched.assignTo ? "red.300" : null}
+                                    >
+                                        {data?.map((item) => {
+                                            return <option value={item?.html} key={item._id}>{item?.templateName}</option>
+                                        })}
+                                    </Select>
+                            }
+                        </GridItem>
                     </Grid>
 
 

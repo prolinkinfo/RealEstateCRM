@@ -20,12 +20,15 @@ import xls from '../../../assets/img/fileImage/xls.png'
 import csv from '../../../assets/img/fileImage/csv.png'
 import file from '../../../assets/img/fileImage/file.png'
 import CustomView from "utils/customView";
-import CommonCheckTable from "components/checkTable/checktable";
+import CommonCheckTable from "components/reactTable/checktable";
 import CommonDeleteModel from "components/commonDeleteModel";
 import { deleteApi } from "services/api";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPropertyCustomFiled } from "../../../redux/propertyCustomFiledSlice";
-import { fetchContactCustomFiled } from '../../../redux/contactCustomFiledSlice';
+import { fetchPropertyCustomFiled } from "../../../redux/slices/propertyCustomFiledSlice";
+import { fetchContactCustomFiled } from '../../../redux/slices/contactCustomFiledSlice';
+import { FaFilePdf } from "react-icons/fa";
+import html2pdf from "html2pdf.js";
+import moment from 'moment';
 
 const View = () => {
 
@@ -94,7 +97,30 @@ const View = () => {
         setIsLoding(false)
         setSelectedTab(i)
     }
-
+    const generatePDF = () => {
+        const element = document.getElementById("reports");
+        if (element) {
+            element.style.display = 'block';
+            element.style.width = '100%'; // Adjust width for mobile
+            element.style.height = 'auto';
+            // setTimeout(() => {
+            html2pdf()
+                .from(element)
+                .set({
+                    margin: [0, 0, 0, 0],
+                    filename: `Property_Details_${moment().format("DD-MM-YYYY")}.pdf`,
+                    image: { type: "jpeg", quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true, allowTaint: true },
+                    jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+                })
+                .save().then(() => {
+                    element.style.display = '';
+                })
+            // }, 500);
+        } else {
+            console.error("Element with ID 'reports' not found.");
+        }
+    };
     const handleDeleteProperties = async (id) => {
         try {
             setIsLoding(true)
@@ -123,8 +149,8 @@ const View = () => {
 
     return (
         <>
-            <Add isOpen={isOpen} size={size} onClose={onClose} propertyData={propertyData[0]} />
-            <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} propertyData={propertyData[0]} data={data} />
+            <Add isOpen={isOpen} size={size} onClose={onClose} propertyData={propertyData?.[0]} />
+            <Edit isOpen={edit} size={size} onClose={setEdit} setAction={setAction} propertyData={propertyData?.[0]} data={data} />
             <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Property' handleDeleteData={handleDeleteProperties} ids={param.id} />
 
             {isLoding ?
@@ -159,6 +185,7 @@ const View = () => {
                                         <MenuList minWidth={2}>
                                             {(user.role === 'superAdmin' || permission?.create) && <MenuItem alignItems={'start'} color={'blue'} onClick={() => onOpen()} icon={<AddIcon />}>Add</MenuItem>}
                                             {(user.role === 'superAdmin' || permission?.update) && <MenuItem alignItems={'start'} onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
+                                            <MenuItem onClick={generatePDF} alignItems={"start"} icon={<FaFilePdf />} display={"flex"} style={{ alignItems: "center" }}>Print as PDF</MenuItem >
                                             {(user.role === 'superAdmin' || permission?.delete) && <>
                                                 <MenuDivider />
                                                 <MenuItem alignItems={'start'} color={'red'} onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
@@ -176,7 +203,7 @@ const View = () => {
 
                         <TabPanels>
                             <TabPanel pt={4} p={0}>
-                                <CustomView data={propertyData[0]} fieldData={data} />
+                                <CustomView data={propertyData?.[0]} fieldData={data} fetchData={fetchData} editUrl={`api/property/edit/${param.id}`} moduleId={propertyData?.[0]?._id} id="reports" />
                                 {filteredContacts?.length > 0 &&
                                     <GridItem colSpan={{ base: 12 }} mt={4}>
                                         <Grid templateColumns={{ base: "1fr" }} >
@@ -188,12 +215,12 @@ const View = () => {
                                                             ManageGrid={false}
                                                             access={false}
                                                             columnData={columns ?? []}
-                                                            dataColumn={columns ?? []}
+                                                            // dataColumn={columns ?? []}
                                                             title={"Interested Contact"}
                                                             allData={filteredContacts ?? []}
                                                             tableData={filteredContacts}
-                                                            selectedColumns={selectedColumns}
-                                                            setSelectedColumns={setSelectedColumns}
+                                                            // selectedColumns={selectedColumns}
+                                                            // setSelectedColumns={setSelectedColumns}
                                                             size={"md"}
                                                             tableCustomFields={contactData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
                                                             customSearch={true}

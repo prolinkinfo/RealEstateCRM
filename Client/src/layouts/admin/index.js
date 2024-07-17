@@ -12,14 +12,15 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { ROLE_PATH } from '../../roles';
 import newRoutes from 'routes.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchImage } from '../../redux/imageSlice';
+import { fetchImage } from '../../redux/slices/imageSlice';
 import { getApi } from 'services/api';
 import { MdHome, MdLock } from 'react-icons/md';
 import DynamicPage from 'views/admin/dynamicPage';
 import DynamicPageview from 'views/admin/dynamicPage/DynamicPageview';
-import { fetchRouteData } from '../../redux/routeSlice';
+import { fetchRouteData } from '../../redux/slices/routeSlice';
 import { LuChevronRightCircle } from 'react-icons/lu';
-import { fetchRoles } from '../../redux/roleSlice';
+import { fetchRoles } from '../../redux/slices/roleSlice';
+import { fetchModules } from '../../redux/slices/moduleSlice';
 
 const MainDashboard = React.lazy(() => import("views/admin/default"));
 
@@ -36,14 +37,13 @@ export default function Dashboard(props) {
 	// let routes = newRoutes;
 	const [routes, setRoutes] = useState(newRoutes)
 	const route = useSelector((state) => state?.route?.data)
+	const modules = useSelector((state) => state?.modules?.data)
 	const dispatch = useDispatch();
 
 	const pathName = (name) => {
-		return `/${name.toLowerCase().replace(/ /g, '-')}`;
+		return `/${name?.toLowerCase()?.replace(/ /g, '-')}`;
 	}
 
-
-	// functions for changing the states from components
 	const getRoute = () => {
 		return window.location.pathname !== '/admin/full-screen-maps';
 	};
@@ -51,11 +51,49 @@ export default function Dashboard(props) {
 	const dynamicRoute = () => {
 		let apiData = []
 
-		route &&
-			route?.length > 0 &&
-			route?.map((item, i) => {
-				let rec = routes.find(route => route?.name === item?.moduleName)
-				if (!routes.some(route => route?.name === item?.moduleName)) {
+		route && route?.length > 0 && route?.map((item, i) => {
+			let rec = routes.find(route => route?.name === item?.moduleName)
+			if (!routes.some(route => route?.name === item?.moduleName)) {
+
+				const newRoute = [{
+					name: item?.moduleName,
+					layout: [ROLE_PATH.superAdmin],
+					path: pathName(item.moduleName),
+					icon: item?.icon ? (
+						<img src={item?.icon} width="20px" height="20px" alt="icon" />
+					) : (
+						<Icon as={LuChevronRightCircle} width="20px" height="20px" color="inherit" />
+					),
+					component: DynamicPage,
+				},
+				{
+					name: item?.moduleName,
+					layout: [ROLE_PATH.superAdmin],
+					under: item?.moduleName,
+					parentName: item?.moduleName,
+					path: `${pathName(item.moduleName)}/:id`,
+					icon: item?.icon ? (
+						<img src={item?.icon} width="20px" height="20px" alt="icon" />
+					) : (
+						<Icon as={LuChevronRightCircle} width="20px" height="20px" color="inherit" />
+					),
+					component: DynamicPageview,
+				}
+				]
+				setRoutes((pre) => [...pre, ...newRoute])
+			} else if (routes.some(route => route?.name === item?.moduleName) && rec.icon?.props?.src !== item?.icon) {
+
+				const updatedData = routes?.map(i => {
+					if (i.name === item?.moduleName) {
+						return { ...i, icon: <img src={item?.icon} width="20px" height="20px" alt="icon" /> };
+					}
+					return i;
+				});
+				setRoutes(updatedData)
+			}
+			if (routes.find(route => route?.name !== item?.moduleName)) {
+
+				if (!newRoutes.find(route => route?.name?.toLowerCase() === item?.moduleName?.toLowerCase())) {
 
 					const newRoute = [{
 						name: item?.moduleName,
@@ -82,55 +120,29 @@ export default function Dashboard(props) {
 						component: DynamicPageview,
 					}
 					]
-					setRoutes((pre) => [...pre, ...newRoute])
-				} else if (routes.some(route => route?.name === item?.moduleName) && rec.icon?.props?.src !== item?.icon) {
 
-					const updatedData = routes?.map(i => {
-						if (i.name === item?.moduleName) {
-							return { ...i, icon: <img src={item?.icon} width="20px" height="20px" alt="icon" /> };
-						}
-						return i;
-					});
-					setRoutes(updatedData)
+					apiData.push(...newRoute)
 				}
-				if (routes.find(route => route?.name !== item?.moduleName)) {
+			}
 
-					if (!newRoutes.find(route => route?.name?.toLowerCase() === item?.moduleName?.toLowerCase())) {
-
-						const newRoute = [{
-							name: item?.moduleName,
-							layout: [ROLE_PATH.superAdmin],
-							path: pathName(item.moduleName),
-							icon: item?.icon ? (
-								<img src={item?.icon} width="20px" height="20px" alt="icon" />
-							) : (
-								<Icon as={LuChevronRightCircle} width="20px" height="20px" color="inherit" />
-							),
-							component: DynamicPage,
-						},
-						{
-							name: item?.moduleName,
-							layout: [ROLE_PATH.superAdmin],
-							under: item?.moduleName,
-							parentName: item?.moduleName,
-							path: `${pathName(item.moduleName)}/:id`,
-							icon: item?.icon ? (
-								<img src={item?.icon} width="20px" height="20px" alt="icon" />
-							) : (
-								<Icon as={LuChevronRightCircle} width="20px" height="20px" color="inherit" />
-							),
-							component: DynamicPageview,
-						}
-						]
-
-						apiData.push(...newRoute)
-					}
-				}
-
-			});
+		});
 
 		let filterData = [...newRoutes, ...apiData]
-		setRoutes(filterData)
+
+		const activeModel = modules?.filter(module => module?.isActive)?.map(module => module?.moduleName);
+
+		const activeRoutes = filterData?.filter(
+			(data) =>
+				activeModel?.includes(data?.name) ||
+				activeModel?.includes(data?.parentName) ||
+				!modules?.some(
+					(module) =>
+						module?.moduleName === data?.name ||
+						module?.moduleName === data?.parentName
+				)
+		);
+
+		setRoutes(activeRoutes)
 
 	};
 
@@ -159,13 +171,14 @@ export default function Dashboard(props) {
 
 	useEffect(() => {
 		dynamicRoute();
-	}, [route]);
+	}, [route, modules]);
 
 	useEffect(async () => {
 		if (window.location.pathname === "/default") {
 			await dispatch(fetchRouteData());
 			await dispatch(fetchImage());
 		}
+		await dispatch(fetchModules())
 	}, []);
 
 	const largeLogo = useSelector((state) => state?.images?.images?.filter(item => item?.isActive === true));

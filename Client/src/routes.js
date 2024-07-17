@@ -21,10 +21,16 @@ import ChangeImage from "views/admin/image";
 import Validation from "views/admin/validation";
 import CustomField from "views/admin/customField";
 import TableField from "views/admin/tableField";
+import activeDiactiveModule from "views/admin/activeDiactiveModule";
 import { TbExchange, TbTableColumn } from "react-icons/tb";
 import { GrValidate } from "react-icons/gr";
 import { VscFileSubmodule } from "react-icons/vsc";
-
+import { HiTemplate } from "react-icons/hi";
+import { TbBulb } from "react-icons/tb";
+import { BsBlockquoteRight } from "react-icons/bs";
+import { RiAccountCircleFill } from "react-icons/ri";
+import { TbInvoice } from "react-icons/tb";
+import { TbFileInvoice } from "react-icons/tb";
 // Admin Imports
 const MainDashboard = React.lazy(() => import("views/admin/default"));
 
@@ -32,6 +38,14 @@ const MainDashboard = React.lazy(() => import("views/admin/default"));
 const Contact = React.lazy(() => import('views/admin/contact'));
 const ContactView = React.lazy(() => import('views/admin/contact/View'));
 const ContactImport = React.lazy(() => import("views/admin/contact/components/ContactImport"));
+
+const Quotes = React.lazy(() => import('views/admin/quotes'));
+const QuotesView = React.lazy(() => import('views/admin/quotes/View'));
+const QuotesImport = React.lazy(() => import("views/admin/quotes/components/QuotesImport"));
+
+const Invoices = React.lazy(() => import('views/admin/invoice'));
+const InvoicesView = React.lazy(() => import('views/admin/invoice/View'));
+const InvoicesImport = React.lazy(() => import("views/admin/invoice/components/InvoiceImport"));
 
 const User = React.lazy(() => import("views/admin/users"));
 const UserView = React.lazy(() => import("views/admin/users/View"));
@@ -64,6 +78,9 @@ const PhoneCall = React.lazy(() => import("views/admin/phoneCall"));
 const PhoneCallView = React.lazy(() => import("views/admin/phoneCall/View"));
 
 const Report = React.lazy(() => import("views/admin/reports"));
+const EmailTemplate = React.lazy(() => import("views/admin/emailTemplate"));
+const AddEdit = React.lazy(() => import("views/admin/emailTemplate/AddEdit"));
+const templateView = React.lazy(() => import("views/admin/emailTemplate/view.js"));
 
 // Auth Imports
 const SignInCentered = React.lazy(() => import("views/auth/signIn"));
@@ -71,6 +88,12 @@ const SignInCentered = React.lazy(() => import("views/auth/signIn"));
 const AdminSetting = React.lazy(() => import("views/admin/adminSetting"));
 const validation = React.lazy(() => import("views/admin/validation"));
 const module = React.lazy(() => import("views/admin/moduleName"));
+const Opportunities = React.lazy(() => import("views/admin/opportunities"));
+const OpportunitiesView = React.lazy(() => import("views/admin/opportunities/View"));
+const OpportunitiesImport = React.lazy(() => import("views/admin/opportunities/components/OpprtunityImport"));
+const Account = React.lazy(() => import("views/admin/account"));
+const AccountView = React.lazy(() => import("views/admin/account/View"));
+const AccountImport = React.lazy(() => import("views/admin/account/components/AccountImport"));
 
 const routes = [
   // ========================== Dashboard ==========================
@@ -131,6 +154,57 @@ const routes = [
     path: "/contactImport",
     component: ContactImport,
   },
+  // --------------- Quotes Routes --------------------
+  {
+    name: "Quotes",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/quotes",
+    icon: <Icon as={BsBlockquoteRight} width='20px' height='20px' color='inherit' />,
+    component: Quotes,
+  },
+  {
+    name: "Quotes",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    under: "quotes",
+    parentName: "Quotes",
+    path: "/quotesView/:id",
+    component: QuotesView,
+  },
+  {
+    name: "Quotes Import",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    both: true,
+    under: "quotes",
+    parentName: "Quotes",
+    path: "/quotesImport",
+    component: QuotesImport,
+  },
+  // --------------- Invoices Routes --------------------
+  {
+
+    name: "Invoices",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/invoices",
+    icon: <Icon as={TbFileInvoice} width='20px' height='20px' color='inherit' />,
+    component: Invoices,
+  },
+  {
+    name: "Invoices",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    under: "invoices",
+    parentName: "Invoices",
+    path: "/invoicesView/:id",
+    component: InvoicesView,
+  },
+  {
+    name: "Invoices Import",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    both: true,
+    under: "invoices",
+    parentName: "Invoices",
+    path: "/invoicesImport",
+    component: InvoicesImport,
+  },
   // ------------- Property Routes ------------------------
   {
     name: "Properties",
@@ -140,7 +214,7 @@ const routes = [
     component: Property,
   },
   {
-    name: "Properties ",
+    name: "Properties",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     parentName: "Properties",
     under: "properties",
@@ -156,14 +230,85 @@ const routes = [
     path: "/propertyImport",
     component: PropertyImport,
   },
-  // -----------------------------Admin setting-------------------------------------
+
+  // -----------------------------Opportunities-------------------------------------
   {
-    name: "Admin Setting",
+    name: "Opportunities",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-    parentName: "admin",
-    under: "admin",
-    path: "/admin-setting",
-    component: AdminSetting,
+    path: "/opportunities",
+    icon: <Icon as={TbBulb} width='20px' height='20px' color='inherit' />,
+    component: Opportunities,
+  },
+  {
+    name: "Opportunities",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/opportunitiesView/:id",
+    under: "opportunities",
+    parentName: "Opportunities",
+    icon: <Icon as={TbBulb} width='20px' height='20px' color='inherit' />,
+    component: OpportunitiesView,
+  },
+  {
+    name: "Opportunities",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/opprotunitiesImport",
+    under: "opportunities",
+    parentName: "Opportunities",
+    icon: <Icon as={TbBulb} width='20px' height='20px' color='inherit' />,
+    component: OpportunitiesImport,
+  },
+  // -----------------------------Account-------------------------------------
+  {
+    name: "Account",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/account",
+    icon: <Icon as={RiAccountCircleFill} width='20px' height='20px' color='inherit' />,
+    component: Account,
+  },
+  {
+    name: "Account",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/accountView/:id",
+    under: "account",
+    parentName: "Account",
+    icon: <Icon as={RiAccountCircleFill} width='20px' height='20px' color='inherit' />,
+    component: AccountView,
+  },
+  {
+    name: "Account",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/accountImport",
+    under: "account",
+    parentName: "Account",
+    icon: <Icon as={RiAccountCircleFill} width='20px' height='20px' color='inherit' />,
+    component: AccountImport,
+  },
+
+  // -----------------------------Email Template-------------------------------------
+  {
+    name: "Email Template",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/email-template",
+    icon: <Icon as={HiTemplate} width='20px' height='20px' color='inherit' />,
+    component: EmailTemplate,
+  },
+  {
+    name: "Add Email Template",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    under: "email-template",
+    parentName: "Email Template",
+    path: "/email-template/email-template-addEdit",
+    icon: <Icon as={HiTemplate} width='20px' height='20px' color='inherit' />,
+    component: AddEdit,
+  },
+  {
+    name: "Email Template",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    under: "email-template",
+    parentName: "Email Template",
+    path: "/email-template/:id",
+    icon: <Icon as={HiTemplate} width='20px' height='20px' color='inherit' />,
+    component: templateView,
   },
 
   // // ------------- Communication Integration Routes ------------------------
@@ -257,7 +402,15 @@ const routes = [
     component: Payments,
   },
 
-  // ------------- Roles Routes ------------------------
+  // -----------------------------Admin setting-------------------------------------
+  {
+    name: "Admin Setting",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    // parentName: "admin",
+    under: "admin",
+    path: "/admin-setting",
+    component: AdminSetting,
+  },
   {
     name: "Roles",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
@@ -297,6 +450,14 @@ const routes = [
     under: "tableField",
     icon: <Icon as={TbTableColumn} width='20px' height='20px' color='inherit' />,
     component: TableField,
+  },
+  {
+    name: "Active Diactive Module",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/active-diactive-module",
+    under: "activeDiactiveModule",
+    icon: <Icon as={TbTableColumn} width='20px' height='20px' color='inherit' />,
+    component: activeDiactiveModule,
   },
   {
     name: "Module",

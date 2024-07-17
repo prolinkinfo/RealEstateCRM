@@ -1,7 +1,7 @@
 import { Box, Button, Flex, Grid, GridItem, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react'
 import Card from 'components/card/Card'
 import React, { useEffect, useState } from 'react'
-import { fetchImage } from "../../../redux/imageSlice";
+import { fetchImage } from "../../../redux/slices/imageSlice";
 import { useDispatch, useSelector } from 'react-redux'
 import ImageView from './imageView';
 import AddImage from './addImage';

@@ -2,10 +2,10 @@ import { Button, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFo
 import Spinner from 'components/spinner/Spinner'
 import { useEffect, useState } from 'react'
 import { postApi } from 'services/api'
-import { fetchPropertyData } from '../../../../redux/propertySlice'
+import { fetchPropertyData } from '../../../../redux/slices/propertySlice'
 import { useDispatch, useSelector } from 'react-redux'
-import CommonCheckTable from 'components/checkTable/checktable'
-import { fetchPropertyCustomFiled } from '../../../../redux/propertyCustomFiledSlice'
+import CommonCheckTable from 'components/reactTable/checktable'
+import { fetchPropertyCustomFiled } from '../../../../redux/slices/propertyCustomFiledSlice'
 
 const PropertyModel = (props) => {
     const { onClose, isOpen, fetchData, id, interestProperty } = props
@@ -74,7 +74,7 @@ const PropertyModel = (props) => {
                             title={'Properties'}
                             isLoding={isLoding}
                             columnData={columns ?? []}
-                            dataColumn={columns ?? []}
+                            // dataColumn={columns ?? []}
                             allData={data ?? []}
                             tableData={data}
                             tableCustomFields={propertyData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}

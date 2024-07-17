@@ -4,7 +4,7 @@ import * as yup from "yup";
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Grid, GridItem, Input, FormLabel, Text, Button, } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
 import moment from 'moment';
-import { getSearchData, setGetTagValues, setSearchValue } from '../../../../redux/advanceSearchSlice';
+import { getSearchData, setGetTagValues, setSearchValue } from '../../../../redux/slices/advanceSearchSlice';
 import { useDispatch } from 'react-redux';
 
 

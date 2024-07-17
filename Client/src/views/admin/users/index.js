@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList, Text, useDisclosure } from '@chakra-ui/react';
 import { getApi } from 'services/api';
-import CommonCheckTable from '../../../components/checkTable/checktable';
+import CommonCheckTable from '../../../components/reactTable/checktable';
 import { SearchIcon } from "@chakra-ui/icons";
 import { CiMenuKebab } from 'react-icons/ci';
 import { IoIosArrowBack } from 'react-icons/io';
@@ -16,7 +16,6 @@ import AddEditUser from './AddEditUser';
 
 
 const Index = () => {
-    const title = "Users";
     const [action, setAction] = useState(false);
     const [edit, setEdit] = useState(false);
     const [editData, setEditData] = useState({});
@@ -38,7 +37,7 @@ const Index = () => {
     const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
         {
-            Header: 'email Id', accessor: 'username', cell: (cell) => (
+            Header: 'Email Id', accessor: 'username', cell: (cell) => (
                 <Link to={`/userView/${cell?.row?.values._id}`}>
                     <Text
                         me="10px"
@@ -51,9 +50,9 @@ const Index = () => {
                     </Text>
                 </Link>)
         },
-        { Header: "first Name", accessor: "firstName", },
-        { Header: "last Name", accessor: "lastName", },
-        { Header: "role", accessor: "role", },
+        { Header: "First Name", accessor: "firstName", },
+        { Header: "Last Name", accessor: "lastName", },
+        { Header: "Role", accessor: "role", },
         {
             Header: "Action", accessor: 'action', isSortable: false, center: true,
             cell: ({ row }) => (
@@ -71,9 +70,9 @@ const Index = () => {
         },
     ];
 
-    const [columns, setColumns] = useState([...tableColumns]);
-    const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
-    const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
+    // const [columns, setColumns] = useState([...tableColumns]);
+    // const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
+    // const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 
     const handleOpen = () => {
         setUserAction('add')
@@ -115,10 +114,10 @@ const Index = () => {
     return (
         <div>
             <CommonCheckTable
-                title={title}
+                title={"Users"}
                 isLoding={isLoding}
-                columnData={columns ?? []}
-                dataColumn={dataColumn ?? []}
+                columnData={tableColumns ?? []}
+                // dataColumn={dataColumn ?? []}
                 allData={data ?? []}
                 tableData={displaySearchData ? searchedData : data}
                 searchDisplay={displaySearchData}
@@ -126,17 +125,17 @@ const Index = () => {
                 searchedDataOut={searchedData}
                 setSearchedDataOut={setSearchedData}
                 tableCustomFields={[]}
-                action={action}
-                setAction={setAction}
-                selectedColumns={selectedColumns}
-                setSelectedColumns={setSelectedColumns}
-                isOpen={isOpen}
-                onClose={onclose}
+                // action={action}
+                // setAction={setAction}
+                // selectedColumns={selectedColumns}
+                // setSelectedColumns={setSelectedColumns}
+                // isOpen={isOpen}
+                // onClose={onclose}
                 access={{
-                    create : true,
-                    edit : true,
-                    delete : true,
-                    view : true,
+                    create: true,
+                    edit: true,
+                    delete: true,
+                    view: true,
                 }}
                 onOpen={handleOpen}
                 selectedValues={selectedValues}
@@ -150,6 +149,7 @@ const Index = () => {
                 searchboxOutside={searchboxOutside}
                 setGetTagValuesOutside={setGetTagValuesOutside}
                 setSearchboxOutside={setSearchboxOutside}
+                handleSearchType="UsersSearch"
             />
             <AddEditUser isOpen={isOpen} onClose={handleClose} data={editData} selectedId={selectedId} userAction={userAction} setUserAction={setUserAction} fetchData={fetchData} />
             <CommonDeleteModel isOpen={deleteMany} onClose={() => setDelete(false)} type='User' handleDeleteData={handleDeleteClick} ids={''} selectedValues={selectedValues} />

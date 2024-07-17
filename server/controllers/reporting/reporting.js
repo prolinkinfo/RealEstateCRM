@@ -8,8 +8,12 @@ const { Property } = require('../../model/schema/property')
 const TextMsg = require('../../model/schema/textMsg');
 const Task = require('../../model/schema/task')
 const MeetingHistory = require('../../model/schema/meeting');
-const user = require('../../model/schema/user');
+// const user = require('../../model/schema/user');
 const customField = require('../../model/schema/customField');
+const Account = require('../../model/schema/account');
+const EmailTemp = require('../../model/schema/emailTemplate')
+const Opprtunities = require('../../model/schema/opprtunity')
+const Invoices = require("../../model/schema/invoices.js");
 
 const index = async (req, res) => {
     const query = req.query
@@ -31,47 +35,72 @@ const lineChart = async (req, res) => {
 
     let lead = await Lead.find(query).populate({
         path: 'createBy',
-        match: { deleted: false } // Populate only if createBy.deleted is false
+        match: { deleted: false }
     }).exec()
-    const leadData = lead.filter(item => item.createBy !== null);
+    const leadData = lead.filter(item => item?.createBy !== null);
 
     let contact = await Contact.find(query).populate({
         path: 'createBy',
-        match: { deleted: false } // Populate only if createBy.deleted is false
+        match: { deleted: false }
     }).exec()
-    const contactData = contact.filter(item => item.createBy !== null);
+    const contactData = contact.filter(item => item?.createBy !== null);
 
     let property = await Property.find(query).populate({
         path: 'createBy',
-        match: { deleted: false } // Populate only if createBy.deleted is false
+        match: { deleted: false }
     }).exec()
-    const propertyData = property.filter(item => item.createBy !== null);
+    const propertyData = property.filter(item => item?.createBy !== null);
 
     let task = await Task.find(query).populate({
         path: 'createBy',
-        match: { deleted: false } // Populate only if createBy.deleted is false
+        match: { deleted: false }
     }).exec()
-    const taskData = task.filter(item => item.createBy !== null);
+    const taskData = task.filter(item => item?.createBy !== null);
 
     let meetingHistory = await MeetingHistory.find(query).populate({
         path: 'createBy',
-        match: { deleted: false } // Populate only if createBy.deleted is false
+        match: { deleted: false }
     }).exec()
-    const meetingHistoryData = meetingHistory.filter(item => item.createdBy !== null);
+    const meetingHistoryData = meetingHistory.filter(item => item?.createdBy !== null);
 
     let emails = await email.find(senderQuery).populate({
         path: 'sender',
-        match: { deleted: false } // Populate only if createBy.deleted is false
+        match: { deleted: false }
     }).exec()
-    const emailData = emails.filter(item => item.sender !== null);
+    const emailData = emails.filter(item => item?.sender !== null);
 
     let phoneCall = await PhoneCall.find(senderQuery).populate({
         path: 'sender',
-        match: { deleted: false } // Populate only if createBy.deleted is false
+        match: { deleted: false }
     }).exec()
-    const phoneCallData = phoneCall.filter(item => item.sender !== null);
+    const phoneCallData = phoneCall.filter(item => item?.sender !== null);
 
-    const userDetails = await user.findOne({ _id: req.user.userId }).populate({
+    let account = await Account.find(senderQuery).populate({
+        path: 'createBy',
+        match: { deleted: false }
+    }).exec()
+    const AccountData = account.filter(item => item?.createBy !== null);
+
+    let emailTemp = await EmailTemp.find(senderQuery).populate({
+        path: 'createBy',
+        match: { deleted: false }
+    }).exec()
+    const EmailTempData = emailTemp.filter(item => item?.createBy !== null);
+
+    let opprtunities = await Opprtunities.find(senderQuery).populate({
+        path: 'createBy',
+        match: { deleted: false }
+    }).exec()
+    const OpprtunitiesData = opprtunities.filter(item => item?.createBy !== null);
+
+    let invoices = await Invoices.find(senderQuery).populate({
+        path: 'createBy',
+        match: { deleted: false }
+    }).exec()
+    const InvoicesData = invoices.filter(item => item?.createBy !== null);
+
+
+    const userDetails = await User.findOne({ _id: req.user.userId }).populate({
         path: 'roles'
     })
     const fields = await customField.find({ deleted: false })
@@ -102,6 +131,10 @@ const lineChart = async (req, res) => {
         { name: "Meetings", length: meetingHistoryData?.length, color: "purple" },
         { name: "Emails", length: emailData?.length, color: "yellow" },
         { name: "Calls", length: phoneCallData?.length, color: "cyan" },
+        { name: "Email Template", length: EmailTempData?.length, color: "orange" },
+        { name: "Account", length: AccountData?.length, color: "teal" },
+        { name: "Opportunities", length: OpprtunitiesData?.length, color: "linkedin" },
+        { name: "Invoices", length: InvoicesData?.length, color: "linkedin" },
     ]
 
     const colors = ["whiteAlpha", "blackAlpha", "gray", "red", "orange", "yellow", "green", "teal", "blue", "cyan", "purple", "pink", "linkedin", "facebook", "messenger", "whatsapp", "twitter", "telegram"];
@@ -134,6 +167,22 @@ const lineChart = async (req, res) => {
             }
             if (item.title === "Properties" && item.view === false) {
                 const data = result.filter((val) => val.name !== "Properties")
+                result = data
+            }
+            if (item.title === "Account" && item.view === false) {
+                const data = result.filter((val) => val.name !== "Account")
+                result = data
+            }
+            if (item.title === "Email Template" && item.view === false) {
+                const data = result.filter((val) => val.name !== "Email Template")
+                result = data
+            }
+            if (item.title === "Opportunities" && item.view === false) {
+                const data = result.filter((val) => val.name !== "Opportunities")
+                result = data
+            }
+            if (item.title === "Invoices" && item.view === false) {
+                const data = result.filter((val) => val.name !== "Invoices")
                 result = data
             }
             if (item.view === true) {

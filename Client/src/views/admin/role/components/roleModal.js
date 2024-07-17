@@ -65,7 +65,7 @@ function RoleModal(props) {
   const [editModal, setEditModal] = useState(false);
   const [openUser, setOpenUser] = useState();
   const [gopageValue, setGopageValue] = useState();
-  const data = useMemo(() => tableData, [tableData]);
+  const data = useMemo(() => tableData || [], [tableData]);
   const user = JSON.parse(localStorage.getItem("user"));
   const [userdata, setUserData] = useState([]);
 
@@ -73,13 +73,12 @@ function RoleModal(props) {
     {
       columns,
       data,
-      initialState: { pageIndex: 0 },
+      initialState: { pageIndex: 0, pageSize: 500 },
     },
     useGlobalFilter,
     useSortBy,
     usePagination
   );
-
 
   const {
     getTableBodyProps,
@@ -93,13 +92,13 @@ function RoleModal(props) {
   if (pageOptions.length < gopageValue) {
     setGopageValue(pageOptions.length);
   }
+
   const userFetchData = async () => {
     if (_id) {
       let result = await getApi('api/role-access/assignedUsers/', _id);
       setUserData(result?.data);
     }
   }
-
 
   useEffect(() => {
     userFetchData()
@@ -137,7 +136,6 @@ function RoleModal(props) {
                         borderColor={borderColor}
                         display={column.display === false && "none"}
                       >
-
                         {column.display !== false && column.render("Header")}
                       </Th>
                     ))}

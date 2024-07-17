@@ -5,7 +5,7 @@ import { ViewIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList, Text, useDisclosure } from '@chakra-ui/react';
 import { getApi } from 'services/api';
 import { HasAccess } from '../../../redux/accessUtils';
-import CommonCheckTable from '../../../components/checkTable/checktable';
+import CommonCheckTable from '../../../components/reactTable/checktable';
 import { SearchIcon } from "@chakra-ui/icons";
 import { CiMenuKebab } from 'react-icons/ci';
 import EmailAdvanceSearch from './components/EmailAdvanceSearch';
@@ -14,7 +14,7 @@ import { MdLeaderboard } from 'react-icons/md';
 import { IoIosContact } from 'react-icons/io';
 import AddEmailHistory from './add';
 import { useDispatch } from 'react-redux';
-import { fetchEmailsData } from '../../../redux/emailsSlice';
+import { fetchEmailsData } from '../../../redux/slices/emailsSlice';
 import { toast } from 'react-toastify';
 
 const Index = (props) => {
@@ -156,9 +156,9 @@ const Index = (props) => {
         setIsLoding(false)
     }
 
-    const [columns, setColumns] = useState([...tableColumns]);
-    const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
-    const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
+    // const [columns, setColumns] = useState([...tableColumns]);
+    // const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
+    // const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 
 
     useEffect(() => {
@@ -170,8 +170,8 @@ const Index = (props) => {
             <CommonCheckTable
                 title={title}
                 isLoding={isLoding}
-                columnData={columns ?? []}
-                dataColumn={dataColumn ?? []}
+                columnData={tableColumns ?? []}
+                // dataColumn={dataColumn ?? []}
                 allData={data ?? []}
                 tableData={data}
                 searchDisplay={displaySearchData}
@@ -180,12 +180,12 @@ const Index = (props) => {
                 setSearchedDataOut={setSearchedData}
                 tableCustomFields={[]}
                 access={permission}
-                action={action}
-                setAction={setAction}
-                selectedColumns={selectedColumns}
-                setSelectedColumns={setSelectedColumns}
-                isOpen={isOpen}
-                onClose={onclose}
+                // action={action}
+                // setAction={setAction}
+                // selectedColumns={selectedColumns}
+                // setSelectedColumns={setSelectedColumns}
+                // isOpen={isOpen}
+                // onClose={onclose}
                 onOpen={onOpen}
                 selectedValues={selectedValues}
                 setSelectedValues={setSelectedValues}
@@ -198,6 +198,7 @@ const Index = (props) => {
                 searchboxOutside={searchboxOutside}
                 setGetTagValuesOutside={setGetTagValuesOutside}
                 setSearchboxOutside={setSearchboxOutside}
+                handleSearchType="EmailSearch"
             />
 
             <EmailAdvanceSearch

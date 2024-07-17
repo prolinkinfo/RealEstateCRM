@@ -2,10 +2,10 @@ import { Button, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFo
 import React, { useEffect, useState } from 'react'
 import Spinner from 'components/spinner/Spinner'
 import { GiClick } from "react-icons/gi";
-import CommonCheckTable from 'components/checkTable/checktable';
-import { fetchLeadCustomFiled } from '../../redux/leadCustomFiledSlice';
+import CommonCheckTable from 'components/reactTable/checktable';
+import { fetchLeadCustomFiled } from '../../redux/slices/leadCustomFiledSlice';
 import { useDispatch } from 'react-redux';
-import { fetchLeadData } from '../../redux/leadSlice';
+import { fetchLeadData } from '../../redux/slices/leadSlice';
 
 const ContactModel = (props) => {
     const { onClose, isOpen, fieldName, setFieldValue, data } = props
@@ -72,7 +72,7 @@ const ContactModel = (props) => {
                             title={title}
                             isLoding={isLoding}
                             columnData={columns ?? []}
-                            dataColumn={columns ?? []}
+                            // dataColumn={columns ?? []}
                             allData={data ?? []}
                             tableData={data}
                             tableCustomFields={leadData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}

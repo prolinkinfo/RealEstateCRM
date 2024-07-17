@@ -11,10 +11,11 @@ import { IoIosArrowBack } from 'react-icons/io'
 import DataNotFound from 'components/notFoundData'
 import Spinner from '../../../components/spinner/Spinner'
 import { deleteManyApi } from 'services/api'
-import { fetchRouteData } from '../../../redux/routeSlice';
+import { fetchRouteData } from '../../../redux/slices/routeSlice';
 import CommonDeleteModel from 'components/commonDeleteModel';
 import { useDispatch } from 'react-redux'
 import { deleteApi } from 'services/api'
+import { fetchModules } from '../../../redux/slices/moduleSlice'
 
 const Index = () => {
     const navigate = useNavigate()
@@ -93,6 +94,7 @@ const Index = () => {
                         await dispatch(fetchRouteData());
                         setDeleteModal(false)
                         fetchData()
+                        await dispatch(fetchModules())
                     }
                 }
             } catch (error) {
@@ -110,6 +112,7 @@ const Index = () => {
                     setSelectedValues([])
                     setDeleteModal(false)
                     fetchData()
+                    await dispatch(fetchModules())
                 }
             } catch (error) {
                 console.log(error)

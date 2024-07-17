@@ -15,11 +15,12 @@ import AdvanceSearchUsingCustomFields from "../search/advanceSearch";
 import DataNotFound from "../notFoundData";
 import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
-import { getSearchData, setGetTagValues, setSearchValue } from '../../redux/advanceSearchSlice'
+import { getSearchData, setGetTagValues, setSearchValue } from '../../redux/slices/advanceSearchSlice'
 
 const CommonCheckTable = (props) => {
     const { isLoding, title, columnData, size, dataColumn, setSearchedDataOut, state, allData, ManageGrid, deleteMany, tableCustomFields, access, selectedColumns, setSelectedColumns, onOpen, setDelete, selectedValues, setSelectedValues, setIsImport, checkBox, AdvanceSearch, searchDisplay, setSearchDisplay, BackButton, searchboxOutside, setGetTagValuesOutside, setSearchboxOutside, selectType, customSearch } = props;
     const { dataLength } = props;
+    const { handleSearchType } = props;
     const textColor = useColorModeValue("secondaryGray.900", "white");
     const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
     const [displaySearchData, setDisplaySearchData] = useState(false);
@@ -72,8 +73,8 @@ const CommonCheckTable = (props) => {
         setGopageValue(pageOptions.length)
     }
 
-
     const handleSearch = (results) => {
+        AdvanceSearch && dispatch(getSearchData({ searchData: results, type: handleSearchType }))
         AdvanceSearch ? setSearchedDataOut(results) : setSearchedData(results);
     };
 
@@ -148,7 +149,6 @@ const CommonCheckTable = (props) => {
 
 
     const handleClear = () => {
-        // AdvanceSearch ? props?.setSearchDisplay(false) : setDisplaySearchData(false)
         setSearchDisplay && setSearchDisplay(false)
         setDisplaySearchData && setDisplaySearchData(false)
         if (searchboxOutside) {
@@ -180,10 +180,10 @@ const CommonCheckTable = (props) => {
         setDisplaySearchData(true)
         setAdvaceSearch(false)
     }
+
     useEffect(() => {
         state && findStatus()
     }, [state, allData]);
-
 
     let isColumnSelected;
     const toggleColumnVisibility = (columnKey) => {
@@ -220,6 +220,7 @@ const CommonCheckTable = (props) => {
         setTempSelectedColumns(columnData);
         setManageColumns(!manageColumns ? !manageColumns : false)
     };
+
 
     const handleExportLeads = (extension) => {
         selectedValues && selectedValues?.length > 0
@@ -452,8 +453,7 @@ const CommonCheckTable = (props) => {
                                                     if (cell?.column.Header === item.Header) {
                                                         if (item.cell && typeof item.cell === 'function') {
                                                             data = (
-                                                                <Flex Flex align="center" justifyContent={item?.Header === 'Action' && 'center'
-                                                                }>
+                                                                <Flex Flex align="center" justifyContent={item?.Header === 'Action' && 'center'}>
                                                                     <Text color={textColor} fontSize="sm" fontWeight="700" >
                                                                         {item.cell(cell) === ' ' ? '-' : item.cell(cell)}
                                                                     </Text>

@@ -33,11 +33,13 @@ import CustomView from "utils/customView";
 import AddDocumentModal from "utils/addDocumentModal";
 import CommonDeleteModel from "components/commonDeleteModel";
 import { deleteApi } from "services/api";
-import CommonCheckTable from "components/checkTable/checktable";
+import CommonCheckTable from "components/reactTable/checktable";
 import moment from 'moment';
 import AddEdit from '../task/components/AddEdit'
 import { useDispatch, useSelector } from "react-redux";
-import { fetchLeadCustomFiled } from "../../../redux/leadCustomFiledSlice";
+import { fetchLeadCustomFiled } from "../../../redux/slices/leadCustomFiledSlice";
+import { FaFilePdf } from "react-icons/fa";
+import html2pdf from "html2pdf.js";
 
 const View = () => {
     const param = useParams()
@@ -200,6 +202,30 @@ const View = () => {
     const handleTabChange = (index) => {
         setSelectedTab(index);
     };
+    const generatePDF = () => {
+        const element = document.getElementById("reports");
+        if (element) {
+            element.style.display = 'block';
+            element.style.width = '100%'; // Adjust width for mobile
+            element.style.height = 'auto';
+            // setTimeout(() => {
+            html2pdf()
+                .from(element)
+                .set({
+                    margin: [0, 0, 0, 0],
+                    filename: `Lead_Details_${moment().format("DD-MM-YYYY")}.pdf`,
+                    image: { type: "jpeg", quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true, allowTaint: true },
+                    jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+                })
+                .save().then(() => {
+                    element.style.display = '';
+                })
+            // }, 500);
+        } else {
+            console.error("Element with ID 'reports' not found.");
+        }
+    };
 
     const download = async (data) => {
         if (data) {
@@ -287,8 +313,9 @@ const View = () => {
                                         </MenuButton>}
                                         <MenuDivider />
                                         <MenuList minWidth={2}>
-                                            {(user.role === 'superAdmin' || permission?.create) && <MenuItem color={'blue'} onClick={() => onOpen()} alignItems={"start"} icon={<AddIcon />}>Add</MenuItem>}
+                                            {(user.role === 'superAdmin' || permission?.create) && <MenuItem color={'blue'} onClick={() => onOpen()} alignItems={"start"} icon={<AddIcon />}  >Add</MenuItem>}
                                             {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => setEdit(true)} alignItems={"start"} icon={<EditIcon />}>Edit</MenuItem>}
+                                            <MenuItem onClick={generatePDF} alignItems={"start"} icon={<FaFilePdf />} display={"flex"} style={{ alignItems: "center" }}>Print as PDF</MenuItem >
                                             {(user.role === 'superAdmin' || permission?.delete) && <>
                                                 <MenuDivider />
                                                 <MenuItem alignItems={"start"} color={'red'} onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
@@ -306,7 +333,7 @@ const View = () => {
 
                         <TabPanels>
                             <TabPanel pt={4} p={0}>
-                                <CustomView data={leadData[0]} fieldData={data} toCamelCase={toCamelCase} />
+                                <CustomView data={leadData?.[0]} fieldData={data} toCamelCase={toCamelCase} moduleId={leadData?.[0]?._id} fetchData={fetchData} id="reports" />
                             </TabPanel>
                             <TabPanel pt={4} p={0}>
                                 <GridItem colSpan={{ base: 4 }} >
@@ -318,7 +345,7 @@ const View = () => {
                                                         title={"Email"}
                                                         isLoding={isLoding}
                                                         columnData={columnsDataColumns ?? []}
-                                                        dataColumn={columnsDataColumns ?? []}
+                                                        // dataColumn={columnsDataColumns ?? []}
                                                         allData={showEmail ? allData.Email : allData?.Email?.length > 0 ? [allData.Email[0]] : []}
                                                         tableData={showEmail ? allData.Email : allData?.Email?.length > 0 ? [allData.Email[0]] : []}
                                                         AdvanceSearch={false}
@@ -330,7 +357,7 @@ const View = () => {
                                                         onOpen={() => setAddEmailHistory(true)}
                                                         access={emailAccess}
                                                     />
-                                                    {allData.Email?.length > 1 &&
+                                                    {allData?.Email?.length > 1 &&
                                                         <div style={{ display: "flex", justifyContent: "end" }}>
                                                             <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showEmail ? setShowEmail(false) : setShowEmail(true)}>{showEmail ? "Show less" : "Show more"}</Button>
                                                         </div>}
@@ -342,7 +369,7 @@ const View = () => {
                                                         title={"Call"}
                                                         isLoding={isLoding}
                                                         columnData={callColumns ?? []}
-                                                        dataColumn={callColumns ?? []}
+                                                        // dataColumn={callColumns ?? []}
                                                         allData={showCall ? allData?.phoneCall : allData?.phoneCall?.length > 0 ? [allData?.phoneCall[0]] : []}
                                                         tableData={showCall ? allData?.phoneCall : allData?.phoneCall?.length > 0 ? [allData?.phoneCall[0]] : []}
                                                         AdvanceSearch={false}
@@ -365,7 +392,7 @@ const View = () => {
                                                         title={"Task"}
                                                         isLoding={isLoding}
                                                         columnData={taskColumns ?? []}
-                                                        dataColumn={taskColumns ?? []}
+                                                        // dataColumn={taskColumns ?? []}
                                                         allData={showTasks ? allData?.task : allData?.task?.length > 0 ? [allData?.task[0]] : []}
                                                         tableData={showTasks ? allData?.task : allData?.task?.length > 0 ? [allData?.task[0]] : []}
                                                         dataLength={allData?.task?.length}
@@ -390,7 +417,7 @@ const View = () => {
                                                         title={"Meeting"}
                                                         isLoding={isLoding}
                                                         columnData={MeetingColumns ?? []}
-                                                        dataColumn={MeetingColumns ?? []}
+                                                        // dataColumn={MeetingColumns ?? []}
                                                         allData={showMeetings ? allData?.meeting : allData?.meeting?.length > 0 ? [allData?.meeting[0]] : []}
                                                         tableData={showMeetings ? allData?.meeting : allData?.meeting?.length > 0 ? [allData?.meeting[0]] : []}
                                                         AdvanceSearch={false}
@@ -451,10 +478,10 @@ const View = () => {
                     }
                 </>
             }
-            {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} leadData={leadData[0]} setAction={setAction} />}
-            <Edit isOpen={edit} size={size} onClose={setEdit} leadData={leadData[0]} setAction={setAction} moduleId={leadData?.[0]?._id} data={data} />
-            <AddMeeting fetchData={fetchData} isOpen={addMeeting} leadContect={splitValue[0]} onClose={setMeeting} from="contact" id={param.id} setAction={setAction} view={true} />
-            <AddEdit isOpen={taskModel} fetchData={fetchData} leadContect={splitValue[0]} onClose={setTaskModel} id={param.id} userAction={'add'} view={true} />
+            {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} leadData={leadData?.[0]} setAction={setAction} />}
+            <Edit isOpen={edit} size={size} onClose={setEdit} leadData={leadData?.[0]} setAction={setAction} moduleId={leadData?.[0]?._id} data={data} />
+            <AddMeeting fetchData={fetchData} isOpen={addMeeting} leadContect={splitValue?.[0]} onClose={setMeeting} from="contact" id={param.id} setAction={setAction} view={true} />
+            <AddEdit isOpen={taskModel} fetchData={fetchData} leadContect={splitValue?.[0]} onClose={setTaskModel} id={param.id} userAction={'add'} view={true} />
             <AddPhoneCall viewData={allData} fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} setAction={setAction} data={data?.contact} id={param.id} lead={true} LData={data} />
             <AddEmailHistory lead={true} leadEmail={allData?.lead?.leadEmail} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} />
             <AddDocumentModal addDocument={addDocument} setAddDocument={setAddDocument} linkId={param.id} from="lead" setAction={setAction} fetchData={fetchData} />
