@@ -23,7 +23,7 @@ const AddEdit = () => {
     const navigate = useNavigate()
     const loction = useLocation()
     const { type, id } = loction?.state || {}
-    const [permission, contactAccess, leadAccess] = HasAccess(['Tasks', 'Contacts', 'Leads'])
+    const [permission] = HasAccess(['Email Template'])
     const emailEditorRef = useRef(null);
     const [preview, setPreview] = useState(false);
     const [name, setName] = useState('');
