@@ -62,6 +62,8 @@ const View = () => {
     const [showCall, setShowCall] = useState(false);
     const [showTasks, setShowTasks] = useState(false);
     const [showMeetings, setShowMeetings] = useState(false);
+    const [showQuotes, setShowQuotes] = useState(false);
+    const [showInvoices, setShowInvoices] = useState(false);
     const [addDocument, setAddDocument] = useState(false);
     const [selectedTab, setSelectedTab] = useState(0);
     const size = "lg";
@@ -234,6 +236,12 @@ const View = () => {
             cell: (cell) => (
                 <div className="selectOpt">
                     <Text
+                        onClick={() => navigate(`/accountView/${cell?.row?.original?.account}`)}
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
                     >
                         {cell?.row?.original?.accountName ? cell?.row?.original?.accountName : "-"}
                     </Text>
@@ -291,6 +299,12 @@ const View = () => {
             cell: (cell) => (
                 <div className="selectOpt">
                     <Text
+                        onClick={() => navigate(`/accountView/${cell?.row?.original?.account}`)}
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
                     >
                         {cell?.row?.original?.accountName ? cell?.row?.original?.accountName : "-"}
                     </Text>
@@ -621,9 +635,9 @@ const View = () => {
                                                         isLoding={isLoding}
                                                         columnData={quotesColumns ?? []}
                                                         // dataColumn={quotesColumns ?? []}
-                                                        dataLength={allData?.meetingHistory?.length}
-                                                        allData={showMeetings ? allData?.meetingHistory : allData?.meetingHistory?.length > 0 ? [allData?.meetingHistory[0]] : []}
-                                                        tableData={showMeetings ? allData?.meetingHistory : allData?.meetingHistory?.length > 0 ? [allData?.meetingHistory[0]] : []}
+                                                        dataLength={allData?.quotes?.length}
+                                                        allData={showQuotes ? allData?.quotes : allData?.quotes?.length > 0 ? [allData?.quotes[0]] : []}
+                                                        tableData={showQuotes ? allData?.quotes : allData?.quotes?.length > 0 ? [allData?.quotes[0]] : []}
                                                         AdvanceSearch={false}
                                                         tableCustomFields={[]}
                                                         checkBox={false}
@@ -632,8 +646,8 @@ const View = () => {
                                                         onOpen={() => setMeeting(true)}
                                                         access={meetingAccess}
                                                     />
-                                                    {allData?.meetingHistory?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
-                                                        <Button colorScheme="brand" size='sm' variant="outline" display="flex" justifyContant="end" onClick={() => showMeetings ? setShowMeetings(false) : setShowMeetings(true)}>{showMeetings ? "Show less" : "Show more"}</Button>
+                                                    {allData?.quotes?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
+                                                        <Button colorScheme="brand" size='sm' variant="outline" display="flex" justifyContant="end" onClick={() => showQuotes ? setShowQuotes(false) : setShowQuotes(true)}>{showQuotes ? "Show less" : "Show more"}</Button>
                                                     </div>}
                                                 </Card>
                                             </GridItem>}
@@ -644,9 +658,9 @@ const View = () => {
                                                         isLoding={isLoding}
                                                         columnData={invoicesColumns ?? []}
                                                         // dataColumn={invoicesColumns ?? []}
-                                                        dataLength={allData?.meetingHistory?.length}
-                                                        allData={showMeetings ? allData?.meetingHistory : allData?.meetingHistory?.length > 0 ? [allData?.meetingHistory[0]] : []}
-                                                        tableData={showMeetings ? allData?.meetingHistory : allData?.meetingHistory?.length > 0 ? [allData?.meetingHistory[0]] : []}
+                                                        dataLength={allData?.invoice?.length}
+                                                        allData={showInvoices ? allData?.invoice : allData?.invoice?.length > 0 ? [allData?.invoice[0]] : []}
+                                                        tableData={showInvoices ? allData?.invoice : allData?.invoice?.length > 0 ? [allData?.invoice[0]] : []}
                                                         AdvanceSearch={false}
                                                         tableCustomFields={[]}
                                                         checkBox={false}
@@ -655,8 +669,8 @@ const View = () => {
                                                         onOpen={() => setMeeting(true)}
                                                         access={meetingAccess}
                                                     />
-                                                    {allData?.meetingHistory?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
-                                                        <Button colorScheme="brand" size='sm' variant="outline" display="flex" justifyContant="end" onClick={() => showMeetings ? setShowMeetings(false) : setShowMeetings(true)}>{showMeetings ? "Show less" : "Show more"}</Button>
+                                                    {allData?.invoice?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
+                                                        <Button colorScheme="brand" size='sm' variant="outline" display="flex" justifyContant="end" onClick={() => showInvoices ? setShowInvoices(false) : setShowInvoices(true)}>{showInvoices ? "Show less" : "Show more"}</Button>
                                                     </div>}
                                                 </Card>
                                             </GridItem>}
