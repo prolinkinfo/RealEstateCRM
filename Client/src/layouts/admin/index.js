@@ -131,7 +131,16 @@ export default function Dashboard(props) {
 
 		const activeModel = modules?.filter(module => module?.isActive)?.map(module => module?.moduleName);
 
-		const activeRoutes = filterData?.filter(data => ((activeModel?.includes(data?.name) || activeModel?.includes(data?.parentName)) || !modules?.some(module => (module?.moduleName === data?.name || module?.moduleName === data?.parentName))));
+		const activeRoutes = filterData?.filter(
+			(data) =>
+				activeModel?.includes(data?.name) ||
+				activeModel?.includes(data?.parentName) ||
+				!modules?.some(
+					(module) =>
+						module?.moduleName === data?.name ||
+						module?.moduleName === data?.parentName
+				)
+		);
 
 		setRoutes(activeRoutes)
 

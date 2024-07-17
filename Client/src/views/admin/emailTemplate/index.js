@@ -15,7 +15,6 @@ import CommonDeleteModel from 'components/commonDeleteModel';
 import { fetchEmailTempData } from '../../../redux/slices/emailTempSlice';
 
 const Index = () => {
-    const title = "Email Template";
     const [action, setAction] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [edit, setEdit] = useState(false);
@@ -34,7 +33,7 @@ const Index = () => {
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
     const [userAction, setUserAction] = useState("");
-    const [permission, leadAccess, contactAccess] = HasAccess(["Tasks", 'Leads', 'Contacts']);
+    const [permission] = HasAccess(["Email Template"]);
     const location = useLocation();
     // const state = location.state;
     const navigate = useNavigate()
@@ -121,7 +120,7 @@ const Index = () => {
     return (
         <div>
             <CommonCheckTable
-                title={title}
+                title={"Email Template"}
                 isLoding={isLoding}
                 columnData={tableColumns ?? []}
                 // dataColumn={dataColumn ?? []}

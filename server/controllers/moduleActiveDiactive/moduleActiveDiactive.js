@@ -31,11 +31,11 @@ const index = async (req, res) => {
             "Calender",
             "Payments",
             "Opportunities",
+            "Reporting and Analytics",
             "Account",
             "Quotes",
             "Invoices",
             "Documents",
-            "Reporting and Analytics",
         ];
 
         filteredCustomFields?.map(item => item?.moduleName)?.forEach((item) => {

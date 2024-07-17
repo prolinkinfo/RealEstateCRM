@@ -33,10 +33,12 @@ const add = async (req, res) => {
                 "Properties",
                 "Contacts",
                 "Leads",
+                "Documents",
                 "Email Template",
                 "Opportunities",
                 "Account",
                 "Quotes",
+                "Invoices",
             ];
 
             const customModules = Array.from(await customField.find(), item => item.moduleName);
