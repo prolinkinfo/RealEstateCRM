@@ -22,7 +22,7 @@ const View = () => {
     const user = JSON.parse(localStorage.getItem("user"))
     const navigate = useNavigate()
     const { id } = useParams()
-    const [permission, contactAccess, leadAccess] = HasAccess(['Tasks', 'Contacts', 'Leads'])
+    const [permission, contactAccess, leadAccess] = HasAccess(['Email Template', 'Contacts', 'Leads'])
     const emailEditorRef = useRef(null);
     const [preview, setPreview] = useState(true);
     const [name, setName] = useState('');
