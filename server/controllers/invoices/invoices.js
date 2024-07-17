@@ -119,17 +119,12 @@ const edit = async (req, res) => {
 };
 const addMany = async (req, res) => {
     try {
-        // const data = {
-        //     ...req.body,
-        //     account: new mongoose.Types.ObjectId(req.body.account),
-        //     contact: new mongoose.Types.ObjectId(req.body.contact),
-        // };
-        // const d = req.body.map((item) => ({
-        //     ...item,
-        //     account: new mongoose.Types.ObjectId(item.account),
-        //     contact: new mongoose.Types.ObjectId(item.contact),
-        // }))
-        const inserted = await Invoices.insertMany(req.body);
+        const data = req.body.map((item) => ({
+            ...item,
+            account: item.account ? item.account : null,
+            contact: item.contact ? item.contact : null,
+        }))
+        const inserted = await Invoices.insertMany(data);
 
         res.status(200).json(inserted);
     } catch (err) {

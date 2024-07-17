@@ -14,7 +14,10 @@ const add = async (req, res) => {
 }
 const addMany = async (req, res) => {
     try {
-        const data = req.body;
+        const data = req.body.map((item) => ({
+            ...item,
+            account: item.account ? item.account : null
+        }))
         const insertedOppotunity = await Opprtunities.insertMany(data);
 
         res.status(200).json(insertedOppotunity);
