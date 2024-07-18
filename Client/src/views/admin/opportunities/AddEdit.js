@@ -175,7 +175,7 @@ const AddEdit = (props) => {
                                 (user.role === 'superAdmin' || accountAccess?.view) &&
                                 <GridItem colSpan={{ base: 12, md: 6 }}>
                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                        Account Name<Text color={"red"}>*</Text>
+                                        Account Name
                                     </FormLabel>
                                     <Flex justifyContent={'space-between'}>
                                         <Select

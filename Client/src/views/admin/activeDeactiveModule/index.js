@@ -37,18 +37,7 @@ const Index = () => {
     });
     const { values, dirty, handleSubmit, setFieldValue } = formik
 
-    const updateData = async () => {
-        try {
-            setIsLoading(true);
-            await putApi("api/modules/edit", values);
 
-            setAction((pre) => !pre);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
 
     const fetchData = async () => {
         setIsLoading(true);
@@ -60,10 +49,21 @@ const Index = () => {
             setIsLoading(false);
         }
     };
-
-    useEffect(() => {
-        fetchData();
-    }, [action]);
+    const updateData = async () => {
+        try {
+            setIsLoading(true);
+            await putApi("api/modules/edit", values);
+            fetchData()
+            // setAction((pre) => !pre);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    // useEffect(() => {
+    //     fetchData();
+    // }, [action]);
 
     useEffect(() => {
         setInitialValues(modules);

@@ -122,12 +122,13 @@ const Index = (props) => {
             Header: 'Status', accessor: 'status',
         },
         {
-            Header: 'Contact', accessor: 'contact',
+            Header: 'Contact',
+            accessor: 'contact',
             cell: (cell) => (
-                contactAccess?.view ?
+                (user.role === 'superAdmin' || contactAccess?.view) ?
                     <div className="selectOpt">
                         <Text
-                            onClick={() => navigate(`/contactView/${cell?.row?.original.contact}`)}
+                            onClick={() => navigate(cell?.row?.original.contact !== null && `/contactView/${cell?.row?.original.contact}`)}
                             me="10px"
                             sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
                             color='brand.600'
@@ -145,12 +146,13 @@ const Index = (props) => {
             )
         },
         {
-            Header: 'Account', accessor: 'account',
+            Header: 'Account',
+            accessor: 'account',
             cell: (cell) => (
-                accountAccess?.view ?
+                (user.role === 'superAdmin' || accountAccess?.view) ?
                     <div className="selectOpt">
                         <Text
-                            onClick={() => navigate(`/accountView/${cell?.row?.original.account}`)}
+                            onClick={() => navigate(cell?.row?.original.account !== null && `/accountView/${cell?.row?.original.account}`)}
                             me="10px"
                             sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
                             color='brand.600'
