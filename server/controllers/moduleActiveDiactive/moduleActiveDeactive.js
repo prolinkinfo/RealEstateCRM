@@ -1,5 +1,5 @@
 const CustomField = require("../../model/schema/customField");
-const ModuleActiveDiactive = require("../../model/schema/moduleActiveDiactive");
+const ModuleActiveDeactive = require("../../model/schema/moduleActiveDeactive");
 
 const index = async (req, res) => {
     try {
@@ -16,7 +16,7 @@ const index = async (req, res) => {
         filteredCustomFields?.sort((a, b) => a?.no - b?.no);
 
         // Fetch active/inactive modules based on query
-        let data = await ModuleActiveDiactive?.find(query);
+        let data = await ModuleActiveDeactive?.find(query);
 
         let routes = [
             "Dashboard",
@@ -47,17 +47,17 @@ const index = async (req, res) => {
 
         // Insert missing routes
         if (missingRoutes?.length) {
-            await ModuleActiveDiactive?.insertMany(
+            await ModuleActiveDeactive?.insertMany(
                 missingRoutes?.map(route => ({ moduleName: route }))
             );
         }
 
         customFieldsDeletedData?.forEach(async (item) => {
-            await ModuleActiveDiactive.deleteOne({ moduleName: item?.moduleName })
+            await ModuleActiveDeactive.deleteOne({ moduleName: item?.moduleName })
         })
 
         // Fetch updated modules
-        data = await ModuleActiveDiactive?.find(query);
+        data = await ModuleActiveDeactive?.find(query);
 
         return res.status(200).json(data);
     } catch (err) {
@@ -71,7 +71,7 @@ const Edit = async (req, res) => {
         const updates = req.body;
 
         const updatePromises = updates.map(update => {
-            return ModuleActiveDiactive.updateOne(
+            return ModuleActiveDeactive.updateOne(
                 { _id: update._id },
                 { $set: { isActive: update.isActive } }
             );
