@@ -25,7 +25,7 @@ const calendarRoute = require("./calendar/_routes")
 const emailTempRoute = require("./emailTemplate/_routes")
 const opportunityRoute = require("./opportunities/_routes")
 const quotesRoute = require("./quotes/_routes")
-const moduleActiveDiactiveRoute = require("./moduleActiveDiactive/_routes")
+const moduleActiveDeactiveRoute = require("./moduleActiveDeactive/_routes")
 const accountRoute = require("./account/_routes")
 const invoicesRoute = require("./invoices/_routes")
 
@@ -48,7 +48,7 @@ router.use("/images", imagesRoute);
 router.use('/role-access', roleAccessRoute);
 router.use('/route', route);
 
-router.use('/modules', moduleActiveDiactiveRoute);
+router.use('/modules', moduleActiveDeactiveRoute);
 router.use("/custom-field", customFieldRoute);
 router.use("/validation", validationRoute);
 router.use("/form", formRoute);
