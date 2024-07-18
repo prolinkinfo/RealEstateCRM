@@ -23,18 +23,18 @@ const index = async (req, res) => {
             "Leads",
             "Contacts",
             "Properties",
-            "Email Template",
+            "Opportunities",
+            "Account",
+            "Quotes",
+            "Invoices",
             "Tasks",
             "Meetings",
             "Calls",
             "Emails",
+            "Email Template",
             "Calender",
             "Payments",
-            "Opportunities",
             "Reporting and Analytics",
-            "Account",
-            "Quotes",
-            "Invoices",
             "Documents",
         ];
 
@@ -45,10 +45,15 @@ const index = async (req, res) => {
         const existingModuleNames = data?.map(record => record?.moduleName);
         const missingRoutes = routes?.filter(route => !existingModuleNames?.includes(route));
 
-        // Insert missing routes
+        // Assign order numbers to missing routes
+        let orderNumber = 1; // Start with 1 or any other base number as needed
+
         if (missingRoutes?.length) {
             await ModuleActiveDeactive?.insertMany(
-                missingRoutes?.map(route => ({ moduleName: route }))
+                missingRoutes?.map(route => ({
+                    moduleName: route,
+                    order: orderNumber++
+                }))
             );
         }
 
@@ -58,6 +63,7 @@ const index = async (req, res) => {
 
         // Fetch updated modules
         data = await ModuleActiveDeactive?.find(query);
+        data = data.sort((a, b) => a?.order - b?.order);
 
         return res.status(200).json(data);
     } catch (err) {
@@ -73,7 +79,7 @@ const Edit = async (req, res) => {
         const updatePromises = updates.map(update => {
             return ModuleActiveDeactive.updateOne(
                 { _id: update._id },
-                { $set: { isActive: update.isActive } }
+                { $set: { isActive: update.isActive, order: update.order } }
             );
         });
 

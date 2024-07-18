@@ -288,7 +288,6 @@ const CustomField = () => {
 
                                                                 <Text display='flex' alignItems='center' size='sm' colorScheme='gray' ms='4px' mt={4} fontSize='md' fontWeight='500' mb='8px' >
                                                                     {!item.fixed && <div {...provided.dragHandleProps} style={{ marginRight: '10px', cursor: 'grab' }} size={18} >
-                                                                        {/* Wrap the BiGridVertical icon with the drag handle */}
                                                                         <BiGridVertical size={18} />
                                                                     </div>}
                                                                     {!item.fixed && <Checkbox colorScheme="brandScheme" value={selectedHeadings} isChecked={selectedHeadings.includes(item?._id)} onChange={(event) => handleHeadigsCheckboxChange(event, item?._id)} me="10px" />}
@@ -296,7 +295,7 @@ const CustomField = () => {
                                                                 </Text>
                                                                 <span className="EditDelete">
                                                                     <Button size='sm' variant='outline' me={2} color={'green'} onClick={() => { setEditHeadingModal(true); setUpdateHeading(item) }}><EditIcon /></Button>
-                                                                    {item.fixed ? <Button size='sm' variant='outline' me={2} color={'gray'}><DeleteIcon /></Button> : <Button size='sm' variant='outline' me={2} color={'red'} onClick={() => {handleOpenDeleteModel(item?._id,'one')}}><DeleteIcon /></Button>}
+                                                                    {item.fixed ? <Button size='sm' variant='outline' me={2} color={'gray'}><DeleteIcon /></Button> : <Button size='sm' variant='outline' me={2} color={'red'} onClick={() => { handleOpenDeleteModel(item?._id, 'one') }}><DeleteIcon /></Button>}
                                                                 </span>
                                                             </Flex>
                                                         </div>

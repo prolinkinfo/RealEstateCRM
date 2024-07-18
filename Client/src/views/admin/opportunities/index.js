@@ -40,7 +40,7 @@ const Index = (props) => {
     const [type, setType] = useState("")
     const [isImport, setIsImport] = useState(false);
 
-    const [permission] = HasAccess(["Opportunities"]);
+    const [permission, accountAccess] = HasAccess(["Opportunities", "Account"]);
 
     const actionHeader = {
         Header: "Action",
@@ -120,18 +120,25 @@ const Index = (props) => {
         },
         {
             Header: 'Account Name', accessor: 'accountName', cell: (cell) => (
-                <div className="selectOpt">
+                (user.role === 'superAdmin' || accountAccess?.view) ?
+                    <div className="selectOpt">
+                        <Text
+                            onClick={() => navigate(cell?.row?.original.accountName !== null && `/accountView/${cell?.row?.original.accountName}`)}
+                            me="10px"
+                            sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                            color='brand.600'
+                            fontSize="sm"
+                            fontWeight="700"
+                        >
+                            {cell?.row?.original?.accountName2 ? cell?.row?.original?.accountName2 : "-"}
+                        </Text>
+                    </div>
+                    :
                     <Text
-                        onClick={() => navigate(`/accountView/${cell?.row?.original?.accountName}`)}
-                        me="10px"
-                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
-                        color='brand.600'
-                        fontSize="sm"
-                        fontWeight="700"
                     >
                         {cell?.row?.original?.accountName2 ? cell?.row?.original?.accountName2 : "-"}
                     </Text>
-                </div>
+
             )
         },
         {

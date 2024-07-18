@@ -274,7 +274,6 @@ const CustomView = ({ data, toCamelCase, fieldData, moduleId, fetchData, editUrl
         enableReinitialize: true,
         validationSchema: yup.object().shape(generateValidationSchema(data?.fields)),
         onSubmit: async (values) => {
-            setEditableField(null)
             let payload = {
                 ...values,
                 moduleId: moduleId
@@ -282,6 +281,7 @@ const CustomView = ({ data, toCamelCase, fieldData, moduleId, fetchData, editUrl
             try {
                 let response = await putApi(editUrl ? editUrl : `api/form/edit/${param.id}`, payload);
                 if (response.status === 200) {
+                    setEditableField(null)
                     toast.success(`${editableFieldName} Update successfully`)
                     fetchData();
                 }

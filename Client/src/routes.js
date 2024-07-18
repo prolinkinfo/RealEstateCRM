@@ -154,57 +154,6 @@ const routes = [
     path: "/contactImport",
     component: ContactImport,
   },
-  // --------------- Quotes Routes --------------------
-  {
-    name: "Quotes",
-    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-    path: "/quotes",
-    icon: <Icon as={BsBlockquoteRight} width='20px' height='20px' color='inherit' />,
-    component: Quotes,
-  },
-  {
-    name: "Quotes",
-    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-    under: "quotes",
-    parentName: "Quotes",
-    path: "/quotesView/:id",
-    component: QuotesView,
-  },
-  {
-    name: "Quotes Import",
-    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-    both: true,
-    under: "quotes",
-    parentName: "Quotes",
-    path: "/quotesImport",
-    component: QuotesImport,
-  },
-  // --------------- Invoices Routes --------------------
-  {
-
-    name: "Invoices",
-    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-    path: "/invoices",
-    icon: <Icon as={TbFileInvoice} width='20px' height='20px' color='inherit' />,
-    component: Invoices,
-  },
-  {
-    name: "Invoices",
-    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-    under: "invoices",
-    parentName: "Invoices",
-    path: "/invoicesView/:id",
-    component: InvoicesView,
-  },
-  {
-    name: "Invoices Import",
-    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-    both: true,
-    under: "invoices",
-    parentName: "Invoices",
-    path: "/invoicesImport",
-    component: InvoicesImport,
-  },
   // ------------- Property Routes ------------------------
   {
     name: "Properties",
@@ -283,32 +232,56 @@ const routes = [
     icon: <Icon as={RiAccountCircleFill} width='20px' height='20px' color='inherit' />,
     component: AccountImport,
   },
+  // --------------- Quotes Routes --------------------
+  {
+    name: "Quotes",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/quotes",
+    icon: <Icon as={BsBlockquoteRight} width='20px' height='20px' color='inherit' />,
+    component: Quotes,
+  },
+  {
+    name: "Quotes",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    under: "quotes",
+    parentName: "Quotes",
+    path: "/quotesView/:id",
+    component: QuotesView,
+  },
+  {
+    name: "Quotes Import",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    both: true,
+    under: "quotes",
+    parentName: "Quotes",
+    path: "/quotesImport",
+    component: QuotesImport,
+  },
+  // --------------- Invoices Routes --------------------
+  {
 
-  // -----------------------------Email Template-------------------------------------
-  {
-    name: "Email Template",
+    name: "Invoices",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-    path: "/email-template",
-    icon: <Icon as={HiTemplate} width='20px' height='20px' color='inherit' />,
-    component: EmailTemplate,
+    path: "/invoices",
+    icon: <Icon as={TbFileInvoice} width='20px' height='20px' color='inherit' />,
+    component: Invoices,
   },
   {
-    name: "Add Email Template",
+    name: "Invoices",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-    under: "email-template",
-    parentName: "Email Template",
-    path: "/email-template/email-template-addEdit",
-    icon: <Icon as={HiTemplate} width='20px' height='20px' color='inherit' />,
-    component: AddEdit,
+    under: "invoices",
+    parentName: "Invoices",
+    path: "/invoicesView/:id",
+    component: InvoicesView,
   },
   {
-    name: "Email Template",
+    name: "Invoices Import",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-    under: "email-template",
-    parentName: "Email Template",
-    path: "/email-template/:id",
-    icon: <Icon as={HiTemplate} width='20px' height='20px' color='inherit' />,
-    component: templateView,
+    both: true,
+    under: "invoices",
+    parentName: "Invoices",
+    path: "/invoicesImport",
+    component: InvoicesImport,
   },
 
   // // ------------- Communication Integration Routes ------------------------
@@ -384,6 +357,32 @@ const routes = [
     parentName: "Emails",
     path: "/Email/:id",
     component: EmailHistoryView,
+  },
+  // -----------------------------Email Template-------------------------------------
+  {
+    name: "Email Template",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/email-template",
+    icon: <Icon as={HiTemplate} width='20px' height='20px' color='inherit' />,
+    component: EmailTemplate,
+  },
+  {
+    name: "Add Email Template",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    under: "email-template",
+    parentName: "Email Template",
+    path: "/email-template/email-template-addEdit",
+    icon: <Icon as={HiTemplate} width='20px' height='20px' color='inherit' />,
+    component: AddEdit,
+  },
+  {
+    name: "Email Template",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    under: "email-template",
+    parentName: "Email Template",
+    path: "/email-template/:id",
+    icon: <Icon as={HiTemplate} width='20px' height='20px' color='inherit' />,
+    component: templateView,
   },
   // ------------- Calender Routes ------------------------
   {
