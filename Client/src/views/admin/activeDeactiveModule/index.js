@@ -75,7 +75,7 @@ const Index = () => {
                 <Flex justifyContent={"space-between"} alignItems={"center"} mb={5}>
                     <Box>
                         <Text color={"secondaryGray.900"} fontSize="22px" fontWeight="700">
-                            Active Diactive Module
+                            Active Deactive Module
                         </Text>
                     </Box>
                     <Button

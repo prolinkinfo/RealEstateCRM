@@ -21,7 +21,7 @@ import ChangeImage from "views/admin/image";
 import Validation from "views/admin/validation";
 import CustomField from "views/admin/customField";
 import TableField from "views/admin/tableField";
-import activeDiactiveModule from "views/admin/activeDiactiveModule";
+import activeDeactiveModule from "views/admin/activeDeactiveModule";
 import { TbExchange, TbTableColumn } from "react-icons/tb";
 import { GrValidate } from "react-icons/gr";
 import { VscFileSubmodule } from "react-icons/vsc";
@@ -452,12 +452,12 @@ const routes = [
     component: TableField,
   },
   {
-    name: "Active Diactive Module",
+    name: "Active Deactive Module",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-    path: "/active-diactive-module",
-    under: "activeDiactiveModule",
+    path: "/active-deactive-module",
+    under: "activeDeactiveModule",
     icon: <Icon as={TbTableColumn} width='20px' height='20px' color='inherit' />,
-    component: activeDiactiveModule,
+    component: activeDeactiveModule,
   },
   {
     name: "Module",

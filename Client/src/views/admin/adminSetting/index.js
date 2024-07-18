@@ -113,7 +113,7 @@ const Index = () => {
                 />
                 <MiniStatistics
                     fontsize="md"
-                    onClick={() => navigate("/active-diactive-module")}
+                    onClick={() => navigate("/active-deactive-module")}
                     startContent={
                         <IconBox
                             w="56px"
@@ -122,7 +122,7 @@ const Index = () => {
                             icon={<Icon w="28px" h="28px" as={IoIosSwitch} color="white" />}
                         />
                     }
-                    name="Active Diactive Module"
+                    name="Active Deactive Module"
                 />
             </SimpleGrid>
         </div>
