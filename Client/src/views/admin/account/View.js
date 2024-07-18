@@ -135,8 +135,8 @@ const View = (props) => {
                 modifiedDate: new Date()
             }
             let response = await putApi(`api/account/edit/${id}`, payload)
+            setEditableField(null);
             if (response.status === 200) {
-                setEditableField(null);
                 fetchViewData()
                 toast.success(`${editableFieldName} Update successfully`)
             } else {

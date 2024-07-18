@@ -3,7 +3,7 @@ import { Button, Checkbox, Drawer, DrawerBody, DrawerContent, DrawerFooter, Draw
 import Spinner from 'components/spinner/Spinner';
 import dayjs from 'dayjs';
 import { useFormik } from 'formik';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { LiaMousePointerSolid } from 'react-icons/lia';
 import { postApi, getApi, putApi } from 'services/api';
 import { generateValidationSchema } from 'utils';
@@ -175,6 +175,21 @@ const AddEdit = (props) => {
             }
         }
     }
+    const calculateValues = useCallback(() => {
+        const subtotal = Number(values?.total) * Number(values?.discount) / 100;
+        const shippingTax = subtotal + Number(values?.shipping);
+        const tax = shippingTax * Number(values?.ptax) / 100;
+        const grandTotal = shippingTax + tax;
+
+        setFieldValue('subtotal', subtotal.toFixed(2));
+        setFieldValue('shippingTax', shippingTax.toFixed(2));
+        setFieldValue('tax', tax.toFixed(2));
+        setFieldValue('grandTotal', grandTotal.toFixed(2));
+    }, [values?.total, values?.discount, values?.shipping, values?.ptax]);
+
+    useEffect(() => {
+        calculateValues();
+    }, [calculateValues]);
 
 
     useEffect(() => {
@@ -663,7 +678,7 @@ const AddEdit = (props) => {
                                     value={values.discount}
                                     name="discount"
                                     onChange={handleChange}
-                                    placeholder='Total'
+                                    placeholder='Discount'
                                     type='number'
                                     fontWeight='500'
                                     borderColor={errors.discount && touched.discount ? "red.300" : null}
@@ -730,8 +745,9 @@ const AddEdit = (props) => {
                                     fontWeight='500'
                                     borderColor={errors.ptax && touched.ptax ? "red.300" : null}
                                 >
-                                    <option value="0%">0%</option>
-                                    <option value="18%">18%</option>
+                                    <option value="0">0%</option>
+                                    <option value="10">10%</option>
+                                    <option value="18">18%</option>
                                 </Select>
                                 <Text mb='10px' fontSize='sm' color={'red'}> {errors.ptax && touched.ptax && errors.ptax}</Text>
                             </GridItem>
