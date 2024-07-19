@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import ReactApexChart from "react-apexcharts";
 import ReactDatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
+import { useSelector } from 'react-redux';
 import { postApi } from "services/api";
 
 
@@ -15,9 +16,9 @@ const ReportChart = (props) => {
     const [endDate, setEndDate] = useState(new Date());
     const [select, setSelect] = useState('all');
     const [selection, setSelection] = useState('day');
+    const modules = useSelector((state) => state?.modules?.data)
 
     const user = JSON.parse(localStorage.getItem("user"))
-
 
     const featchChart = async () => {
         const data = {
