@@ -14,6 +14,7 @@ const Account = require('../../model/schema/account');
 const EmailTemp = require('../../model/schema/emailTemplate')
 const Opprtunities = require('../../model/schema/opprtunity')
 const Invoices = require("../../model/schema/invoices.js");
+const Quotes = require("../../model/schema/quotes.js");
 
 const index = async (req, res) => {
     const query = req.query
@@ -99,6 +100,12 @@ const lineChart = async (req, res) => {
     }).exec()
     const InvoicesData = invoices.filter(item => item?.createBy !== null);
 
+    let quotes = await Quotes.find(senderQuery).populate({
+        path: 'createBy',
+        match: { deleted: false }
+    }).exec()
+    const QuotesData = quotes.filter(item => item?.createBy !== null);
+
 
     const userDetails = await User.findOne({ _id: req.user.userId }).populate({
         path: 'roles'
@@ -127,36 +134,21 @@ const lineChart = async (req, res) => {
         { name: "Leads", length: leadData?.length, color: "red" },
         { name: "Contacts", length: contactData?.length, color: "blue" },
         { name: "Properties", length: propertyData?.length, color: "green" },
+        { name: "Opportunities", length: OpprtunitiesData?.length, color: "linkedin" },
+        { name: "Account", length: AccountData?.length, color: "teal" },
+        { name: "Quotes", length: QuotesData?.length, color: "blackAlpha" },
+        { name: "Invoices", length: InvoicesData?.length, color: "linkedin" },
         { name: "Tasks", length: taskData?.length, color: "pink" },
         { name: "Meetings", length: meetingHistoryData?.length, color: "purple" },
-        { name: "Emails", length: emailData?.length, color: "yellow" },
         { name: "Calls", length: phoneCallData?.length, color: "cyan" },
+        { name: "Emails", length: emailData?.length, color: "yellow" },
         { name: "Email Template", length: EmailTempData?.length, color: "orange" },
-        { name: "Account", length: AccountData?.length, color: "teal" },
-        { name: "Opportunities", length: OpprtunitiesData?.length, color: "linkedin" },
-        { name: "Invoices", length: InvoicesData?.length, color: "linkedin" },
     ]
 
     const colors = ["whiteAlpha", "blackAlpha", "gray", "red", "orange", "yellow", "green", "teal", "blue", "cyan", "purple", "pink", "linkedin", "facebook", "messenger", "whatsapp", "twitter", "telegram"];
 
     if (mergedRoles && mergedRoles.length > 0) {
         for (const item of mergedRoles) {
-            if (item.title === "Calls" && item.view === false) {
-                const data = result.filter((val) => val.name !== "Calls")
-                result = data
-            }
-            if (item.title === "Emails" && item.view === false) {
-                const data = result.filter((val) => val.name !== "Emails")
-                result = data
-            }
-            if (item.title === "Meetings" && item.view === false) {
-                const data = result.filter((val) => val.name !== "Meetings")
-                result = data
-            }
-            if (item.title === "Tasks" && item.view === false) {
-                const data = result.filter((val) => val.name !== "Tasks")
-                result = data
-            }
             if (item.title === "Leads" && item.view === false) {
                 const data = result.filter((val) => val.name !== "Leads")
                 result = data
@@ -169,22 +161,43 @@ const lineChart = async (req, res) => {
                 const data = result.filter((val) => val.name !== "Properties")
                 result = data
             }
+            if (item.title === "Opportunities" && item.view === false) {
+                const data = result.filter((val) => val.name !== "Opportunities")
+                result = data
+            }
             if (item.title === "Account" && item.view === false) {
                 const data = result.filter((val) => val.name !== "Account")
                 result = data
             }
-            if (item.title === "Email Template" && item.view === false) {
-                const data = result.filter((val) => val.name !== "Email Template")
-                result = data
-            }
-            if (item.title === "Opportunities" && item.view === false) {
-                const data = result.filter((val) => val.name !== "Opportunities")
+            if (item.title === "Quotes" && item.view === false) {
+                const data = result.filter((val) => val.name !== "Quotes")
                 result = data
             }
             if (item.title === "Invoices" && item.view === false) {
                 const data = result.filter((val) => val.name !== "Invoices")
                 result = data
             }
+            if (item.title === "Tasks" && item.view === false) {
+                const data = result.filter((val) => val.name !== "Tasks")
+                result = data
+            }
+            if (item.title === "Meetings" && item.view === false) {
+                const data = result.filter((val) => val.name !== "Meetings")
+                result = data
+            }
+            if (item.title === "Calls" && item.view === false) {
+                const data = result.filter((val) => val.name !== "Calls")
+                result = data
+            }
+            if (item.title === "Emails" && item.view === false) {
+                const data = result.filter((val) => val.name !== "Emails")
+                result = data
+            }
+            if (item.title === "Email Template" && item.view === false) {
+                const data = result.filter((val) => val.name !== "Email Template")
+                result = data
+            }
+
             if (item.view === true) {
                 if (!result.find((i) => i.name === item.title)) {
                     const ExistingModel = mongoose.model(item.title);
