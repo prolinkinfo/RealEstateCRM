@@ -257,7 +257,7 @@ export default function UserReports() {
           </Card>
         }
 
-        {leadView?.view && <Card>
+        {leadView?.view && (leadModule?.isActive) && <Card>
           <Heading size="md" pb={2}>Lead Statistics</Heading>
           {(leadView?.view) &&
             <Grid templateColumns="repeat(12, 1fr)" gap={2}>
@@ -310,7 +310,7 @@ export default function UserReports() {
 
         </Card>}
 
-        {taskView?.view && <Card >
+        {taskView?.view && (tasksModule?.isActive) && <Card >
           <Heading size="md" pb={3}>Task Statistics</Heading>
           <Grid templateColumns="repeat(12, 1fr)" gap={2} mb={2}>
             <GridItem colSpan={{ base: 12 }}>
