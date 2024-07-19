@@ -30,6 +30,7 @@ import { HasAccess } from "../../../redux/accessUtils";
 import PieChart from "components/charts/PieChart";
 import CountUpComponent from "../../../../src/components/countUpComponent/countUpComponent";
 import Spinner from 'components/spinner/Spinner';
+import { useSelector } from "react-redux";
 
 export default function UserReports() {
   // Chakra Color Mode
@@ -41,6 +42,7 @@ export default function UserReports() {
   const [allData, setAllData] = useState([]);
   const [data, setData] = useState([]);
   const navigate = useNavigate();
+  const modules = useSelector((state) => state?.modules?.data)
   const [contactsView, taskView, leadView, proprtyView] = HasAccess(["Contacts", "Tasks", "Leads", "Properties"]);
 
   const fetchData = async () => {
@@ -75,6 +77,11 @@ export default function UserReports() {
     const filterData = allData?.taskData?.filter(item => item?.status === title)
     return filterData?.length || 0
   }
+
+  const leadModule = modules?.find(({ moduleName }) => moduleName === "Leads")
+  const contactModule = modules?.find(({ moduleName }) => moduleName === "Contacts")
+  const propertiesModule = modules?.find(({ moduleName }) => moduleName === "Properties")
+  const tasksModule = modules?.find(({ moduleName }) => moduleName === "Tasks")
 
   const taskStatus = [
     {
@@ -122,12 +129,10 @@ export default function UserReports() {
     fetchData();
   }, [user?._id]);
 
-
   return (
     <>
       <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} gap="20px" mb="20px">
-        {/* , "2xl": 6 */}
-        {(taskView?.create || taskView?.update || taskView?.delete || taskView?.view) &&
+        {(taskView?.create || taskView?.update || taskView?.delete || taskView?.view) && (tasksModule?.isActive) &&
           <MiniStatistics
             onClick={() => navigate("/task")}
             startContent={
@@ -141,8 +146,8 @@ export default function UserReports() {
             name="Tasks"
             value={findModuleData("Tasks")}
           />}
-        {(contactsView?.create || contactsView?.update || contactsView?.delete || contactsView?.view) &&
-          <MiniStatistics
+        {(contactsView?.create || contactsView?.update || contactsView?.delete || contactsView?.view) && (contactModule?.isActive) &&
+          < MiniStatistics
             onClick={() => navigate("/contacts")}
             startContent={
               <IconBox
@@ -157,7 +162,7 @@ export default function UserReports() {
             name="Contacts"
             value={findModuleData("Contacts")}
           />}
-        {(leadView?.create || leadView?.update || leadView?.delete || leadView?.view) &&
+        {(leadView?.create || leadView?.update || leadView?.delete || leadView?.view) && (leadModule?.isActive) &&
           <MiniStatistics
             onClick={() => navigate("/lead")}
             startContent={
@@ -173,7 +178,7 @@ export default function UserReports() {
             name="Leads"
             value={findModuleData("Leads")}
           />}
-        {(proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view) &&
+        {(proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view) && (propertiesModule?.isActive) &&
           <MiniStatistics
             onClick={() => navigate("/properties")}
             startContent={
