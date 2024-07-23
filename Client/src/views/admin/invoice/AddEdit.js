@@ -1,8 +1,8 @@
-import { CloseIcon } from '@chakra-ui/icons';
-import { Button, Checkbox, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, FormLabel, Grid, GridItem, Heading, IconButton, Input, Select, Text, Textarea } from '@chakra-ui/react';
+import { AddIcon, CloseIcon } from '@chakra-ui/icons';
+import { Box, Button, Checkbox, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, FormControl, FormLabel, Grid, GridItem, Heading, IconButton, Input, Select, Table, Tbody, Td, Text, Textarea, Th, Thead, Tr } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
 import dayjs from 'dayjs';
-import { useFormik } from 'formik';
+import { ErrorMessage, Field, FieldArray, useFormik, Form } from 'formik';
 import { useState, useEffect, useCallback } from 'react';
 import { LiaMousePointerSolid } from 'react-icons/lia';
 import { postApi, getApi, putApi } from 'services/api';
@@ -19,6 +19,7 @@ import AccountModel from 'components/commonTableModel/AccountModel';
 import { fetchAccountData } from '../../../redux/slices/accountSlice';
 import ContactModel from 'components/commonTableModel/ContactModel';
 import { HasAccess } from '../../../redux/accessUtils';
+import { fetchInvoicesData } from '../../../redux/slices/invoicesSlice';
 
 const AddEdit = (props) => {
     const { isOpen, size, onClose, type, setAction, selectedId, contactId } = props;
@@ -29,6 +30,10 @@ const AddEdit = (props) => {
     const [accountModel, setAccountModel] = useState(false)
     const [contactModel, setContactModel] = useState(false)
     const [invoiceDetails, setInvoiceDetails] = useState({});
+    const [items, setItems] = useState([{ id: 1, productName: "", qty: 0, rate: 0, amount: 0 }]);
+    const [total, setTotal] = useState(0);
+    const [discounts, setDiscount] = useState(0);
+    const [netAmount, setNetAmount] = useState(0);
     const dispatch = useDispatch();
     const user = JSON.parse(localStorage.getItem("user"))
     const [accountAccess, contactAccess] = HasAccess(['Account', 'Contacts'])
@@ -59,16 +64,17 @@ const AddEdit = (props) => {
         billingCountry: type === "edit" ? invoiceDetails?.billingCountry : "",
         shippingCountry: type === "edit" ? invoiceDetails?.shippingCountry : "",
         isCheck: type === "edit" ? invoiceDetails?.isCheck : false,
-        currency: type === "edit" ? invoiceDetails?.currency : "",
+        currency: type === "edit" ? invoiceDetails?.currency : "$",
         total: type === "edit" ? invoiceDetails?.total : "",
         discount: type === "edit" ? invoiceDetails?.discount : "",
         subtotal: type === "edit" ? invoiceDetails?.subtotal : "",
         shipping: type === "edit" ? invoiceDetails?.shipping : "",
         shippingTax: type === "edit" ? invoiceDetails?.shippingTax : "",
         ptax: type === "edit" ? invoiceDetails?.ptax : "",
-        tax: type === "edit" ? invoiceDetails?.tax : "",
+        tax: type === "edit" ? invoiceDetails?.tax : "0",
         grandTotal: type === "edit" ? invoiceDetails?.grandTotal : "",
-
+        discountType: type === "edit" ? invoiceDetails?.discountType : "none",
+        items: type === "edit" ? invoiceDetails?.items : [],
         createBy: JSON.parse(localStorage.getItem('user'))._id,
         modifiedBy: JSON.parse(localStorage.getItem('user'))._id
     };
@@ -100,7 +106,7 @@ const AddEdit = (props) => {
                 onClose();
                 toast.success(`Invoice Update successfully`)
                 formik.resetForm();
-                // setAction((pre) => !pre)
+                setAction((pre) => !pre)
             }
         } catch (e) {
             console.log(e);
@@ -155,7 +161,56 @@ const AddEdit = (props) => {
         setUserData(result?.data?.user);
         setIsLoding(false)
     }
+    const calculateAmounts = (items) => {
+        const totalAmount = items?.reduce((sum, item) => sum + item.amount, 0);
+        let netAmount = 0;
+        let discount = 0;
+        if (values?.discountType === "percent") {
+            netAmount = totalAmount - (totalAmount * values?.discount / 100);
+            discount = totalAmount * values?.discount / 100;
+        } else {
+            netAmount = totalAmount - values?.discount;
+            discount = values?.discount;
+        }
+        return { totalAmount, netAmount, discount };
+    };
 
+    const handleAddItem = () => {
+        setFieldValue("items", [
+            ...values?.items,
+            { id: values?.items?.length + 1, productName: "", qty: 0, rate: 0, amount: 0 }
+        ]);
+    };
+
+    const handleRemoveItem = (index) => {
+        const newItems = values?.items?.filter((_, idx) => idx !== index);
+        setFieldValue("items", newItems);
+        const { totalAmount, netAmount } = calculateAmounts(newItems);
+        setTotal(totalAmount);
+        setFieldValue("total", totalAmount);
+        setFieldValue("grandTotal", netAmount);
+        setNetAmount(netAmount);
+    };
+
+    const handleChangeCalculation = (index, field, value) => {
+        const newItems = values?.items?.map((item, idx) => {
+            if (idx === index) {
+                const updatedItem = { ...item, [field]: value };
+                if (field === 'qty' || field === 'rate') {
+                    updatedItem.amount = updatedItem.qty * updatedItem.rate;
+                }
+                return updatedItem;
+            }
+            return item;
+        });
+        setFieldValue("items", newItems);
+        const { totalAmount, netAmount, discount } = calculateAmounts(newItems);
+        setFieldValue("total", totalAmount);
+        setFieldValue("grandTotal", netAmount);
+        setTotal(totalAmount);
+        setNetAmount(netAmount);
+        setDiscount(discount);
+    }
 
     const fetchInvoiceDetails = async () => {
         if (type === "edit") {
@@ -176,7 +231,12 @@ const AddEdit = (props) => {
         }
     }
     const calculateValues = useCallback(() => {
-        const subtotal = Number(values?.total) * Number(values?.discount) / 100;
+        let subtotal = 0
+        if (values?.discountType === "percent") {
+            subtotal = values?.total - (Number(values?.total) * Number(values?.discount) / 100);
+        } else {
+            subtotal = values?.total - Number(values?.discount);
+        }
         const shippingTax = subtotal + Number(values?.shipping);
         const tax = shippingTax * Number(values?.ptax) / 100;
         const grandTotal = shippingTax + tax;
@@ -303,54 +363,6 @@ const AddEdit = (props) => {
                                 />
                                 <Text mb='10px' fontSize='sm' color={'red'}> {errors.invoiceDate && touched.invoiceDate && errors.invoiceDate}</Text>
                             </GridItem>
-                            {/* <GridItem colSpan={{ base: 12, md: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Opportunity
-                                </FormLabel>
-                                <Flex justifyContent={'space-between'}>
-                                    <Select
-                                        value={values.oppotunity}
-                                        name="oppotunity"
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        mb={errors.oppotunity && touched.oppotunity ? undefined : '10px'}
-                                        fontWeight='500'
-                                        placeholder={'Opportunity'}
-                                        borderColor={errors.oppotunity && touched.oppotunity ? "red.300" : null}
-                                    >
-                                        {opportunityList?.length > 0 && opportunityList?.map((item) => {
-                                            return <option value={item._id} key={item._id}>{`${item?.opportunityName}`}</option>
-                                        })}
-                                    </Select>
-                                    <IconButton onClick={() => setOpprtunityModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
-                                </Flex>
-                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.oppotunity && touched.oppotunity && errors.oppotunity}</Text>
-                            </GridItem> */}
-                            {/* <GridItem colSpan={{ base: 12, md: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Quote Stage<Text color={"red"}>*</Text>
-                                </FormLabel>
-                                <Select
-                                    value={values.quoteStage}
-                                    name="quoteStage"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    mb={errors.quoteStage && touched.quoteStage ? undefined : '10px'}
-                                    fontWeight='500'
-                                    placeholder={'Quote Stage'}
-                                    borderColor={errors.quoteStage && touched.quoteStage ? "red.300" : null}
-                                >
-                                    <option value="Draft" >Draft</option>
-                                    <option value="Negotiation" >Negotiation</option>
-                                    <option value="Delivered" >Delivered</option>
-                                    <option value="On Hold" >On Hold</option>
-                                    <option value="Confirmed" >Confirmed</option>
-                                    <option value="Closed Accepted" >Closed Accepted</option>
-                                    <option value="Closed Lost" >Closed Lost</option>
-                                    <option value="Closed Dead" >Closed Dead</option>
-                                </Select>
-                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.quoteStage && touched.quoteStage && errors.quoteStage}</Text>
-                            </GridItem> */}
                             {
                                 user.role === 'superAdmin' &&
                                 <GridItem colSpan={{ base: 12, md: 6 }} >
@@ -657,8 +669,7 @@ const AddEdit = (props) => {
                                     Line Items
                                 </Heading>
                             </GridItem>
-
-                            <GridItem colSpan={{ base: 12 }}>
+                            <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                     Currency
                                 </FormLabel>
@@ -675,6 +686,146 @@ const AddEdit = (props) => {
                                     <option value="$" selected>US Dollars:$</option>
                                 </Select>
                                 <Text mb='10px' fontSize='sm' color={'red'}> {errors.currency && touched.currency && errors.currency}</Text>
+                            </GridItem>
+                            <GridItem colSpan={{ base: 12, md: 6 }}>
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                    Discount Type
+                                </FormLabel>
+                                <Select
+                                    value={values.discountType}
+                                    name="discountType"
+                                    onBlur={handleBlur}
+                                    onChange={(e) => {
+                                        handleChange(e);
+                                        if (values.discountType === "none") {
+                                            setDiscount(0)
+                                        } else {
+                                            calculateValues()
+                                        }
+
+                                    }}
+                                    mb={errors.discountType && touched.discountType ? undefined : '10px'}
+                                    fontWeight='500'
+                                    placeholder={'Select Discount Type'}
+                                    borderColor={errors.discountType && touched.discountType ? "red.300" : null}
+                                >
+                                    <option value="none" selected>None</option>
+                                    <option value="percent" selected>Percent</option>
+                                    <option value="fAmount" selected>Flat Amount</option>
+                                </Select>
+                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.discountType && touched.discountType && errors.discountType}</Text>
+                            </GridItem>
+                            {/* {
+                                values?.discountType !== "none" &&
+                                <GridItem colSpan={{ base: 12, md: 4 }}>
+                                    <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                        {values?.discountType === "percent" ? "Percent" : values?.discountType === "fAmount" ? "Flat Amount" : ""}
+                                    </FormLabel>
+                                    <Input
+                                        fontSize='sm'
+                                        value={values.discount}
+                                        name="discount"
+                                        onBlur={handleBlur}
+                                        type='number'
+                                        onChange={handleChange}
+                                        placeholder={values?.discountType === "percent" ? "Percent" : values?.discountType === "fAmount" ? "Flat Amount" : ""}
+                                        fontWeight='500'
+                                        borderColor={errors.discount && touched.discount ? "red.300" : null}
+                                    />
+                                    <Text mb='10px' fontSize='sm' color={'red'}> {errors.discount && touched.discount && errors.discount}</Text>
+                                </GridItem>
+                            } */}
+                            <GridItem colSpan={{ base: 12 }}>
+                                <Box>
+                                    <Table variant="simple" size="sm" mt={5} backgroundColor="#f9f9f9">
+                                        <Thead>
+                                            <Tr>
+                                                <Th></Th>
+                                                <Th>#</Th>
+                                                <Th>Item</Th>
+                                                <Th>Qty</Th>
+                                                <Th>Rate</Th>
+                                                <Th>Amount</Th>
+                                            </Tr>
+                                        </Thead>
+                                        <Tbody>
+                                            {values?.items?.length > 0 && values?.items?.map((item, index) => (
+                                                <Tr key={item.id}>
+                                                    <Td className="text-center">
+                                                        <IconButton
+                                                            icon={<CloseIcon />}
+                                                            onClick={() => handleRemoveItem(index)}
+                                                            colorScheme="red"
+                                                            variant="outline"
+                                                            size="sm"
+                                                            style={{ fontSize: "10px" }}
+                                                        />
+                                                    </Td>
+                                                    <Td>{index + 1}</Td>
+                                                    <Td>
+                                                        <FormControl>
+                                                            <Input
+                                                                type="text"
+                                                                value={item?.productName}
+                                                                onChange={(e) => handleChangeCalculation(index, 'productName', e.target.value)}
+                                                                size="sm"
+                                                            />
+                                                        </FormControl>
+                                                    </Td>
+                                                    <Td>
+                                                        <FormControl>
+                                                            <Input
+                                                                type="number"
+                                                                value={item?.qty}
+                                                                onChange={(e) => handleChangeCalculation(index, 'qty', Number(e.target.value))}
+                                                                size="sm"
+                                                            />
+                                                        </FormControl>
+                                                    </Td>
+                                                    <Td>
+                                                        <FormControl>
+                                                            <Input
+                                                                type="number"
+                                                                value={item?.rate}
+                                                                onChange={(e) => handleChangeCalculation(index, 'rate', Number(e.target.value))}
+                                                                size="sm"
+                                                            />
+                                                        </FormControl>
+                                                    </Td>
+                                                    <Td>
+                                                        <FormControl>
+                                                            <Input
+                                                                type="number"
+                                                                value={item?.amount}
+                                                                readOnly
+                                                                size="sm"
+                                                            />
+                                                        </FormControl>
+                                                    </Td>
+
+                                                </Tr>
+                                            ))}
+                                            <Tr>
+                                                <Td colSpan={4} display="flex" justifyContent={"end"}>
+                                                    <IconButton
+                                                        icon={<AddIcon />}
+                                                        onClick={handleAddItem}
+                                                        colorScheme="green"
+                                                        variant="outline"
+                                                        size="sm"
+                                                        style={{ fontSize: "10px" }}
+                                                    />
+                                                </Td>
+                                                <Td></Td>
+                                                <Td></Td>
+                                                <Td></Td>
+                                                <Td></Td>
+
+                                            </Tr>
+                                        </Tbody>
+                                    </Table>
+
+                                </Box>
                             </GridItem>
                             <GridItem colSpan={{ base: 12 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -693,23 +844,26 @@ const AddEdit = (props) => {
                                 />
                                 <Text mb='10px' fontSize='sm' color={'red'}> {errors.total && touched.total && errors.total}</Text>
                             </GridItem>
-                            <GridItem colSpan={{ base: 12 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Discount
-                                </FormLabel>
-                                <Input
-                                    fontSize='sm'
-                                    value={values.discount}
-                                    name="discount"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    placeholder='Discount'
-                                    type='number'
-                                    fontWeight='500'
-                                    borderColor={errors.discount && touched.discount ? "red.300" : null}
-                                />
-                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.discount && touched.discount && errors.discount}</Text>
-                            </GridItem>
+                            {
+                                values?.discountType !== "none" &&
+                                <GridItem colSpan={{ base: 12 }}>
+                                    <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                        Discount {values?.discountType === "percent" ? "(%)" : ""}
+                                    </FormLabel>
+                                    <Input
+                                        fontSize='sm'
+                                        value={values.discount}
+                                        name="discount"
+                                        onBlur={handleBlur}
+                                        type='number'
+                                        onChange={handleChange}
+                                        placeholder={values?.discountType === "percent" ? "Percent" : values?.discountType === "fAmount" ? "Flat Amount" : ""}
+                                        fontWeight='500'
+                                        borderColor={errors.discount && touched.discount ? "red.300" : null}
+                                    />
+                                    <Text mb='10px' fontSize='sm' color={'red'}> {errors.discount && touched.discount && errors.discount}</Text>
+                                </GridItem>
+                            }
                             <GridItem colSpan={{ base: 12 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                     Subtotal
@@ -834,7 +988,7 @@ const AddEdit = (props) => {
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>
-        </div>
+        </div >
     )
 }
 

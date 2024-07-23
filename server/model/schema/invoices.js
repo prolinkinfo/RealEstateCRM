@@ -34,6 +34,8 @@ const Invoices = new mongoose.Schema({
     description: String,
     approvalStatus: String,
     invoiceStatus: String,
+    discountType: String,
+    items: [],
     account: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Accounts",
