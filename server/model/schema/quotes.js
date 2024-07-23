@@ -32,6 +32,8 @@ const Quotes = new mongoose.Schema({
     description: String,
     approvalStatus: String,
     invoiceStatus: String,
+    discountType: String,
+    items: [],
     oppotunity: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Opportunities",
