@@ -278,6 +278,10 @@ const View = (props) => {
                             </GridItem>
 
                             <GridItem colSpan={{ base: 2, md: 1 }} >
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Quotes Number </Text>
+                                <Text >{data?.quoteNumber ? data?.quoteNumber : ' - '}</Text>
+                            </GridItem>
+                            <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Title </Text>
                                 {
                                     editableField === "title" ?
@@ -734,8 +738,12 @@ const View = (props) => {
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Discount</Text>
-                                <Text>{data?.discount ? data?.discount : ' - '}</Text>
-                            </GridItem>
+                                {
+                                    data?.discount ?
+                                        <Text >{data?.discountType === "percent" ? `${data?.discount}%` : data?.discountType === "fAmount" ? `${data?.currency}${data?.discount}` : ""}</Text>
+                                        :
+                                        <Text >{' - '}</Text>
+                                }                            </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Subtotal</Text>
                                 <Text>{data?.subtotal ? data?.subtotal : ' - '}</Text>

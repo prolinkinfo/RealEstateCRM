@@ -1,23 +1,22 @@
-import { useEffect, useState } from 'react';
-import { Link, useNavigate } from "react-router-dom";
-import { DeleteIcon, EditIcon, ViewIcon } from '@chakra-ui/icons';
+import { DeleteIcon, EditIcon, SearchIcon, ViewIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList, Text, useDisclosure } from '@chakra-ui/react';
-import { getApi, deleteManyApi } from 'services/api';
-import { HasAccess } from '../../../redux/accessUtils';
-import CommonCheckTable from '../../../components/reactTable/checktable';
-import { SearchIcon } from "@chakra-ui/icons";
-import { CiMenuKebab } from 'react-icons/ci';
+import html2pdf from "html2pdf.js";
 import moment from 'moment';
-import { MdLeaderboard } from 'react-icons/md';
-import { IoIosContact } from 'react-icons/io';
-import AddEdit from './AddEdit';
+import { useEffect, useState } from 'react';
+import { CiMenuKebab } from 'react-icons/ci';
 import { useDispatch } from 'react-redux';
-import { fetchEmailsData } from '../../../redux/slices/emailsSlice';
+import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
-import InvoiceAdvanceSearch from './components/InvoiceAdvanceSearch';
-import CommonDeleteModel from '../../../components/commonDeleteModel'
-import ImportModal from './components/ImportModel';
+import { deleteManyApi } from 'services/api';
+import CommonDeleteModel from '../../../components/commonDeleteModel';
+import CommonCheckTable from '../../../components/reactTable/checktable';
+import { HasAccess } from '../../../redux/accessUtils';
 import { fetchInvoicesData } from '../../../redux/slices/invoicesSlice';
+import AddEdit from './AddEdit';
+import ImportModal from './components/ImportModel';
+import InvoiceAdvanceSearch from './components/InvoiceAdvanceSearch';
+import Preview from './preview';
+import { TbFileInvoice } from 'react-icons/tb';
 
 const Index = (props) => {
     const [action, setAction] = useState(false);
@@ -30,6 +29,7 @@ const Index = (props) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [isLoding, setIsLoding] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
@@ -38,6 +38,7 @@ const Index = (props) => {
     const [edit, setEdit] = useState(false);
     const [type, setType] = useState("")
     const [isImport, setIsImport] = useState(false);
+    const [isOpenPreview, setIsOpenPreview] = useState(false)
 
     const [permission, accountAccess, contactAccess] = HasAccess(["Invoices", "Account", "Contacts"]);
 
@@ -81,6 +82,17 @@ const Index = (props) => {
                                 View
                             </MenuItem>
                         )}
+                        <MenuItem
+                            py={2.5}
+                            color={"black"}
+                            icon={<TbFileInvoice mb={1} fontSize={15} />}
+                            onClick={() => {
+                                setSelectedId(row?.values?._id)
+                                setIsOpenPreview(true)
+                            }}
+                        >
+                            Invoice
+                        </MenuItem>
                         {permission?.delete && (
                             <MenuItem
                                 py={2.5}
@@ -550,6 +562,30 @@ const Index = (props) => {
     const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);
     const dataColumn = tableColumns?.filter(item => selectedColumns?.find(colum => colum?.Header === item.Header))
 
+    const generatePDF = () => {
+        setLoading(true)
+        const element = document.getElementById("reports");
+
+        if (element) {
+            html2pdf()
+                .from(element)
+                .set({
+                    margin: [0, 0, 0, 0],
+                    filename: `Invoice_${moment().format("DD-MM-YYYY")}.pdf`,
+                    image: { type: "jpeg", quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true, allowTaint: true },
+                    jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+                })
+                .save().then(() => {
+                    setLoading(false)
+                    setIsOpenPreview(false)
+                })
+            // }, 500);
+        } else {
+            console.error("Element with ID 'reports' not found.");
+            setLoading(false)
+        }
+    };
 
     useEffect(() => {
         fetchData();
@@ -602,6 +638,8 @@ const Index = (props) => {
                 setGetTagValues={setGetTagValuesOutside}
                 setSearchbox={setSearchboxOutside}
             />
+
+            <Preview isOpen={isOpenPreview} onClose={setIsOpenPreview} generatePDF={generatePDF} id="reports" selectedId={selectedId} isLoading={loading} />
 
             <AddEdit isOpen={isOpen} size={"lg"} onClose={onClose} setAction={setAction} type={type} selectedId={selectedId} />
             <CommonDeleteModel

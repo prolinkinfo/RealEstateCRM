@@ -70,7 +70,6 @@ option {
   background: #ffffff;
   border-bottom: 1px solid black;
   box-shadow: -2px 0px 4px -2px #5c5d5efa;
-
 }
 
 .table-fix-container {
@@ -123,7 +122,6 @@ option {
   width: 400px; */
 }
 
-
 .imageContent {
   content: "";
   position: absolute;
@@ -162,8 +160,8 @@ option {
 
 .onHold {
   background-color: #ffeeeb !important;
-  color: #DB5436 !important;
-  border: 1px solid #DB5436 !important;
+  color: #db5436 !important;
+  border: 1px solid #db5436 !important;
 }
 
 .completed {
@@ -187,4 +185,86 @@ option {
 .chakra-checkbox[disabled] .chakra-checkbox__control {
   background-color: #dcdee0 !important;
   border: 2px solid #d1d1d1;
+}
+
+/* Invoice.css */
+.invoice-container {
+  width: 100%;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #000;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+.invoice-container2 {
+  width: 50%;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #000;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 24px;
+  color: orange;
+}
+
+.invoice-details {
+  text-align: right;
+}
+
+.address-section {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.address {
+  width: 45%;
+  margin-top: 20px;
+}
+
+.invoice-info {
+  margin-top: 20px;
+}
+
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.invoice-table th,
+.invoice-table td {
+  border: 1px solid #000;
+  padding: 5px;
+  text-align: center;
+}
+
+.totals {
+  margin-top: 20px;
+  display: flex;
+  justify-content: end;
+}
+
+.totals > div {
+  margin-bottom: 5px;
+}
+
+.net-amount {
+  font-weight: bold;
+}
+
+.footer {
+  margin-top: 20px;
+  text-align: center;
+  font-style: italic;
 }

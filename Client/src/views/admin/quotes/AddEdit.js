@@ -554,7 +554,10 @@ const AddEdit = (props) => {
                                 </Heading>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                <Checkbox isChecked={values?.isCheck} onChange={(e) => handleCheck(e)} visibility={"hidden"}>
+                                    Copy address from left
+                                </Checkbox>
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px' mt={3}>
                                     Billing Street
                                 </FormLabel>
                                 <Input
@@ -569,7 +572,10 @@ const AddEdit = (props) => {
                                 <Text mb='10px' fontSize='sm' color={'red'}> {errors.billingStreet && touched.billingStreet && errors.billingStreet}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                <Checkbox isChecked={values?.isCheck} onChange={(e) => handleCheck(e)}>
+                                    Copy address from left
+                                </Checkbox>
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px' mt={3}>
                                     Shipping Street
                                 </FormLabel>
                                 <Input
@@ -709,9 +715,6 @@ const AddEdit = (props) => {
                                     borderColor={errors.shippingCountry && touched.shippingCountry ? "red.300" : null}
                                 />
                                 <Text mb='10px' fontSize='sm' color={'red'}> {errors.shippingCountry && touched.shippingCountry && errors.shippingCountry}</Text>
-                                <Checkbox isChecked={values?.isCheck} onChange={(e) => handleCheck(e)}>
-                                    Copy address from left
-                                </Checkbox>
                             </GridItem>
 
                             <GridItem colSpan={{ base: 12 }}>

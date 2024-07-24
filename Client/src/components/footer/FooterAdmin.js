@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 
 export default function Footer() {
-  const textColor = useColorModeValue("gray.400", "white");
+  const textColor = useColorModeValue("blue.700", "white");
   const { toggleColorMode } = useColorMode();
   return (
     <Flex
