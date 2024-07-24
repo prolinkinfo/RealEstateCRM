@@ -321,7 +321,7 @@ const AddEdit = (props) => {
                                 </FormLabel>
                                 <Input
                                     fontSize='sm'
-                                    value={dayjs(values.quoteDate).format("YYYY-MM-DD")}
+                                    value={values.quoteDate && dayjs(values.quoteDate).format("YYYY-MM-DD")}
                                     name="quoteDate"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
@@ -337,7 +337,7 @@ const AddEdit = (props) => {
                                 </FormLabel>
                                 <Input
                                     fontSize='sm'
-                                    value={dayjs(values.dueDate).format("YYYY-MM-DD")}
+                                    value={values.dueDate && dayjs(values.dueDate).format("YYYY-MM-DD")}
                                     name="dueDate"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
@@ -353,7 +353,7 @@ const AddEdit = (props) => {
                                 </FormLabel>
                                 <Input
                                     fontSize='sm'
-                                    value={dayjs(values.invoiceDate).format("YYYY-MM-DD")}
+                                    value={values.invoiceDate && dayjs(values.invoiceDate).format("YYYY-MM-DD")}
                                     name="invoiceDate"
                                     onBlur={handleBlur}
                                     onChange={handleChange}

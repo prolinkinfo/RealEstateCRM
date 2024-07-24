@@ -40,8 +40,8 @@ const AddEdit = (props) => {
     const initialValues = {
         title: type === "edit" ? quotesDetails?.title : "",
         oppotunity: type === "edit" ? quotesDetails?.oppotunity : null,
-        quoteStage: type === "edit" ? quotesDetails?.quoteStage : "",
-        invoiceStatus: type === "edit" ? quotesDetails?.invoiceStatus : "",
+        quoteStage: type === "edit" ? quotesDetails?.quoteStage : "Draft",
+        invoiceStatus: type === "edit" ? quotesDetails?.invoiceStatus : "Not Invoiced",
         validUntil: type === "edit" ? quotesDetails?.validUntil : "",
         assignedTo: type === "edit" ? quotesDetails?.assignedTo : null,
         paymentTerms: type === "edit" ? quotesDetails?.paymentTerms : "",
@@ -63,7 +63,7 @@ const AddEdit = (props) => {
         billingCountry: type === "edit" ? quotesDetails?.billingCountry : "",
         shippingCountry: type === "edit" ? quotesDetails?.shippingCountry : "",
         isCheck: type === "edit" ? quotesDetails?.isCheck : false,
-        currency: type === "edit" ? quotesDetails?.currency : "",
+        currency: type === "edit" ? quotesDetails?.currency : "$",
         total: type === "edit" ? quotesDetails?.total : "",
         discount: type === "edit" ? quotesDetails?.discount : "",
         subtotal: type === "edit" ? quotesDetails?.subtotal : "",
@@ -105,7 +105,7 @@ const AddEdit = (props) => {
                 onClose();
                 toast.success(`Quotes Update successfully`)
                 formik.resetForm();
-                // setAction((pre) => !pre)
+                setAction((pre) => !pre)
             }
         } catch (e) {
             console.log(e);
@@ -168,7 +168,7 @@ const AddEdit = (props) => {
                 setIsLoding(true)
                 let result = await getApi('api/quotes/view/', selectedId)
                 if (result?.status === 200) {
-                    setQuotesDetails(result?.data)
+                    setQuotesDetails(result?.data?.result)
                 }
 
             }
@@ -244,6 +244,11 @@ const AddEdit = (props) => {
         setFieldValue('tax', tax.toFixed(2));
         setFieldValue('grandTotal', grandTotal.toFixed(2));
     }, [values?.total, values?.discount, values?.shipping, values?.ptax]);
+
+    useEffect(() => {
+        calculateValues();
+    }, [calculateValues]);
+
     useEffect(() => {
         if (type === "edit") fetchQuotesDetails();
         if (user.role === 'superAdmin') fetchData();

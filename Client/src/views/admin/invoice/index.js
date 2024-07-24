@@ -175,7 +175,7 @@ const Index = (props) => {
             cell: (cell) => (
                 <div className="selectOpt">
                     <Text>
-                        {cell?.row?.original?.grandTotal ? `$${cell?.row?.original?.grandTotal}` : '-'}
+                        {cell?.row?.original?.grandTotal ? `${cell?.row?.original?.currency} ${cell?.row?.original?.grandTotal}` : '-'}
                     </Text>
                 </div>
             )
