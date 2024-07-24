@@ -1,5 +1,5 @@
 import { CloseIcon } from '@chakra-ui/icons';
-import { Button, IconButton, Image, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Spinner } from '@chakra-ui/react';
+import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, IconButton, Image, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Spinner } from '@chakra-ui/react';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -33,13 +33,13 @@ const Preview = (props) => {
     }, [selectedId])
 
     return (
-        <Modal isOpen={isOpen} size={'xl'} >
-            <ModalContent overflowY={"auto"} height={"600px"}>
-                <ModalHeader justifyContent='space-between' display='flex' >
+        <Drawer isOpen={isOpen} size={'lg'}>
+            <DrawerContent>
+                <DrawerHeader alignItems={"center"} justifyContent='space-between' display='flex'  >
                     Invoice
                     <IconButton onClick={() => onClose(false)} icon={<CloseIcon />} />
-                </ModalHeader>
-                <ModalBody overflowY={"auto"} height={"700px"}>
+                </DrawerHeader>
+                <DrawerBody>
                     {
                         !isLoding ?
                             <div id={id} style={{ padding: "5px" }}>
@@ -182,15 +182,14 @@ const Preview = (props) => {
                                 <Spinner />
                             </div>
                     }
-
-                </ModalBody>
-                <ModalFooter>
+                </DrawerBody>
+                <DrawerFooter>
                     <Button sx={{ textTransform: "capitalize" }} size="sm" disabled={isLoading} variant="brand" type="submit" onClick={generatePDF}>
                         {isLoading ? <Spinner /> : 'Download'}
                     </Button>
-                </ModalFooter>
-            </ModalContent>
-        </Modal >
+                </DrawerFooter>
+            </DrawerContent>
+        </Drawer>
     )
 }
 
