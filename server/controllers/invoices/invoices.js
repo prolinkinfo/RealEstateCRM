@@ -1,6 +1,7 @@
 const Invoices = require("../../model/schema/invoices.js");
 const mongoose = require("mongoose");
 const User = require('../../model/schema/user')
+const Quotes = require("../../model/schema/quotes.js");
 
 
 
@@ -211,7 +212,21 @@ const view = async (req, res) => {
             },
             { $project: { users: 0, contactData: 0, accountData: 0, modifiedByUser: 0, oppotunityData: 0, assignedToData: 0 } },
         ]);
-        res.status(200).json(result[0]);
+        let quotesDetails = await Quotes.aggregate([
+            { $match: { _id: response.quotesId, deleted: false } },
+            {
+                $lookup: {
+                    from: "Quotes",
+                    localField: "quotesId",
+                    foreignField: "_id",
+                    as: "quotesData",
+                },
+            },
+            { $project: { quotesData: 0 } },
+
+        ]);
+
+        res.status(200).json({ result: result[0], quotesDetails });
     } catch (err) {
         console.log("Error:", err);
         res.status(400).json({ Error: err });

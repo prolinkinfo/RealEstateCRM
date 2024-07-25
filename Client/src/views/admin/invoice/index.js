@@ -34,6 +34,7 @@ const Index = (props) => {
     const [displaySearchData, setDisplaySearchData] = useState(false);
     const [searchedData, setSearchedData] = useState([]);
     const [selectedId, setSelectedId] = useState();
+    const [selectedPreviewId, setSelectedPreviewId] = useState();
     const [deleteModel, setDelete] = useState(false);
     const [edit, setEdit] = useState(false);
     const [type, setType] = useState("")

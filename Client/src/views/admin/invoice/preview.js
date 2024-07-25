@@ -16,9 +16,8 @@ const Preview = (props) => {
             setIsLoding(true)
             let result = await getApi('api/invoices/view/', selectedId)
             if (result?.status === 200) {
-                setInvoiceDetails(result?.data)
+                setInvoiceDetails(result?.data?.result)
             }
-
         }
         catch (e) {
             console.log(e);
@@ -178,7 +177,7 @@ const Preview = (props) => {
                                 </div>
                             </div>
                             :
-                            <div>
+                            <div style={{ display: "flex", justifyContent: "center" }}>
                                 <Spinner />
                             </div>
                     }

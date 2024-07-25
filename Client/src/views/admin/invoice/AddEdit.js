@@ -123,6 +123,7 @@ const AddEdit = (props) => {
     const handleCancel = () => {
         formik.resetForm();
         onClose()
+        setIsOpenPreview(false)
     }
 
     const formik = useFormik({
@@ -138,7 +139,6 @@ const AddEdit = (props) => {
             }
         },
     });
-
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
 
     const handleCheck = (e) => {
@@ -164,56 +164,6 @@ const AddEdit = (props) => {
         setUserData(result?.data?.user);
         setIsLoding(false)
     }
-    const calculateAmounts = (items) => {
-        const totalAmount = items?.reduce((sum, item) => sum + item.amount, 0);
-        let netAmount = 0;
-        let discount = 0;
-        if (values?.discountType === "percent") {
-            netAmount = totalAmount - (totalAmount * values?.discount / 100);
-            discount = totalAmount * values?.discount / 100;
-        } else {
-            netAmount = totalAmount - values?.discount;
-            discount = values?.discount;
-        }
-        return { totalAmount, netAmount, discount };
-    };
-
-    const handleAddItem = () => {
-        setFieldValue("items", [
-            ...values?.items,
-            { id: values?.items?.length + 1, productName: "", qty: 0, rate: 0, amount: 0 }
-        ]);
-    };
-
-    const handleRemoveItem = (index) => {
-        const newItems = values?.items?.filter((_, idx) => idx !== index);
-        setFieldValue("items", newItems);
-        const { totalAmount, netAmount } = calculateAmounts(newItems);
-        setTotal(totalAmount);
-        setFieldValue("total", totalAmount);
-        setFieldValue("grandTotal", netAmount);
-        setNetAmount(netAmount);
-    };
-
-    const handleChangeCalculation = (index, field, value) => {
-        const newItems = values?.items?.map((item, idx) => {
-            if (idx === index) {
-                const updatedItem = { ...item, [field]: value };
-                if (field === 'qty' || field === 'rate') {
-                    updatedItem.amount = updatedItem.qty * updatedItem.rate;
-                }
-                return updatedItem;
-            }
-            return item;
-        });
-        setFieldValue("items", newItems);
-        const { totalAmount, netAmount, discount } = calculateAmounts(newItems);
-        setFieldValue("total", totalAmount);
-        setFieldValue("grandTotal", netAmount);
-        setTotal(totalAmount);
-        setNetAmount(netAmount);
-        setDiscount(discount);
-    }
 
     const fetchInvoiceDetails = async () => {
         if (type === "edit") {
@@ -221,7 +171,7 @@ const AddEdit = (props) => {
                 setIsLoding(true)
                 let result = await getApi('api/invoices/view/', selectedId)
                 if (result?.status === 200) {
-                    setInvoiceDetails(result?.data)
+                    setInvoiceDetails(result?.data?.result)
                 }
 
             }
@@ -233,27 +183,71 @@ const AddEdit = (props) => {
             }
         }
     }
-    const calculateValues = useCallback(() => {
-        let subtotal = 0
-        if (values?.discountType === "percent") {
-            subtotal = values?.total - (Number(values?.total) * Number(values?.discount) / 100);
-        } else {
-            subtotal = values?.total - Number(values?.discount);
-        }
-        const shippingTax = subtotal + Number(values?.shipping);
-        const tax = shippingTax * Number(values?.ptax) / 100;
-        const grandTotal = shippingTax + tax;
+    const calculateAmounts = (items) => {
+        const totalAmount = items.reduce((sum, item) => sum + item.amount, 0);
+        const totalDiscount = items.reduce((sum, item) => sum + item.totalDiscount, 0);
+        const netAmount = Number(totalAmount) - Number(totalDiscount);
+        return { totalAmount, netAmount, discount: totalDiscount };
+    };
 
-        setFieldValue('subtotal', subtotal.toFixed(2));
-        setFieldValue('shippingTax', shippingTax.toFixed(2));
-        setFieldValue('tax', tax.toFixed(2));
-        setFieldValue('grandTotal', grandTotal.toFixed(2));
-    }, [values?.total, values?.discount, values?.shipping, values?.ptax]);
+    const handleAddItem = () => {
+        setFieldValue("items", [
+            ...values.items,
+            { id: values.items.length + 1, productName: "", qty: 0, rate: 0, discount: 0, discountType: "none", totalDiscount: 0, amount: 0 }
+        ]);
+    };
+
+    const handleRemoveItem = (index) => {
+        const newItems = values.items.filter((_, idx) => idx !== index);
+        setFieldValue("items", newItems);
+        const { totalAmount, netAmount, discount } = calculateAmounts(newItems);
+        setFieldValue("total", totalAmount);
+        setFieldValue("grandTotal", netAmount);
+        setFieldValue("discount", discount);
+    };
+
+    const handleChangeCalculation = (index, field, value) => {
+        const newItems = values.items.map((item, idx) => {
+            if (idx === index) {
+                const updatedItem = { ...item, [field]: value };
+                if (['qty', 'rate', 'discount', 'discountType'].includes(field)) {
+                    const discountValue = updatedItem.discountType === 'percent'
+                        ? (updatedItem.rate * updatedItem.qty * updatedItem.discount / 100)
+                        : updatedItem.discountType === 'none'
+                            ? 0
+                            : updatedItem.discount;
+                    updatedItem.amount = updatedItem.rate * updatedItem.qty;
+                    updatedItem.totalDiscount = discountValue;
+                }
+                return updatedItem;
+            }
+            return item;
+        });
+
+        setFieldValue("items", newItems);
+        const { totalAmount, netAmount, discount } = calculateAmounts(newItems);
+        setFieldValue("discount", discount);
+        setFieldValue("total", totalAmount);
+        setFieldValue("subtotal", netAmount);
+        setFieldValue("grandTotal", netAmount);
+    };
+
+    const calculateValues = useCallback(() => {
+        const subtotal = values.subtotal;
+        const shipping = Number(values.shipping);
+        const ptax = Number(values.ptax);
+        const shippingTax = Number(subtotal) + Number(shipping);
+        const tax = shippingTax * ptax / 100;
+        const grandTotal = Number(shippingTax) + Number(tax);
+
+        setFieldValue('shippingTax', shippingTax?.toFixed(2));
+        setFieldValue('tax', tax?.toFixed(2));
+        setFieldValue('grandTotal', grandTotal?.toFixed(2));
+    }, [values.subtotal, values.shipping, values.ptax]);
 
     useEffect(() => {
         calculateValues();
     }, [calculateValues]);
-
 
     useEffect(() => {
         if (type === "edit") fetchInvoiceDetails();
@@ -733,6 +727,7 @@ const AddEdit = (props) => {
                                                         <Th>Item</Th>
                                                         <Th>Qty</Th>
                                                         <Th>Rate</Th>
+                                                        <Th>Discount</Th>
                                                         <Th>Amount</Th>
                                                     </Tr>
                                                 </Thead>
@@ -780,6 +775,26 @@ const AddEdit = (props) => {
                                                                     />
                                                                 </FormControl>
                                                             </Td>
+                                                            <Td style={{ display: "flex" }}>
+                                                                <FormControl>
+                                                                    <Input
+                                                                        type="number"
+                                                                        value={item?.discount}
+                                                                        onChange={(e) => handleChangeCalculation(index, 'discount', Number(e.target.value))}
+                                                                        size="sm"
+                                                                        disabled={item?.discountType === "none"}
+                                                                    />
+                                                                    <Select
+                                                                        value={item?.discountType}
+                                                                        onChange={(e) => { handleChangeCalculation(index, 'discountType', e.target.value); }}
+                                                                        size="sm"
+                                                                    >
+                                                                        <option value="none">none</option>
+                                                                        <option value="percent">%</option>
+                                                                        <option value="flatAmount">{values?.currency}</option>
+                                                                    </Select>
+                                                                </FormControl>
+                                                            </Td>
                                                             <Td>
                                                                 <FormControl>
                                                                     <Input
@@ -790,7 +805,6 @@ const AddEdit = (props) => {
                                                                     />
                                                                 </FormControl>
                                                             </Td>
-
                                                         </Tr>
                                                     ))}
                                                     <Tr>
@@ -807,8 +821,6 @@ const AddEdit = (props) => {
                                                         <Td></Td>
                                                         <Td></Td>
                                                         <Td></Td>
-                                                        <Td></Td>
-
                                                     </Tr>
                                                 </Tbody>
                                             </Table>
@@ -832,26 +844,22 @@ const AddEdit = (props) => {
                                         />
                                         <Text mb='10px' fontSize='sm' color={'red'}> {errors.total && touched.total && errors.total}</Text>
                                     </GridItem>
-                                    {
-                                        values?.discountType !== "none" &&
-                                        <GridItem colSpan={{ base: 12 }}>
-                                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                                Discount {values?.discountType === "percent" ? "(%)" : ""}
-                                            </FormLabel>
-                                            <Input
-                                                fontSize='sm'
-                                                value={values.discount}
-                                                name="discount"
-                                                onBlur={handleBlur}
-                                                type='number'
-                                                onChange={handleChange}
-                                                placeholder={values?.discountType === "percent" ? "Percent" : values?.discountType === "fAmount" ? "Flat Amount" : ""}
-                                                fontWeight='500'
-                                                borderColor={errors.discount && touched.discount ? "red.300" : null}
-                                            />
-                                            <Text mb='10px' fontSize='sm' color={'red'}> {errors.discount && touched.discount && errors.discount}</Text>
-                                        </GridItem>
-                                    }
+                                    <GridItem colSpan={{ base: 12 }}>
+                                        <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                            Total Discount
+                                        </FormLabel>
+                                        <Input
+                                            fontSize='sm'
+                                            value={values.discount}
+                                            name="discount"
+                                            onBlur={handleBlur}
+                                            type='number'
+                                            onChange={handleChange}
+                                            fontWeight='500'
+                                            borderColor={errors.discount && touched.discount ? "red.300" : null}
+                                        />
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.discount && touched.discount && errors.discount}</Text>
+                                    </GridItem>
                                     <GridItem colSpan={{ base: 12 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                             Subtotal
@@ -1030,6 +1038,7 @@ const AddEdit = (props) => {
                                                 <th style={{ width: "100px" }}>ITEM</th>
                                                 <th style={{ width: "50px" }}>QTY</th>
                                                 <th style={{ width: "50px" }}>RATE</th>
+                                                <th style={{ width: "50px" }}>DISCOUNT</th>
                                                 <th style={{ width: "50px" }}>AMOUNT</th>
                                             </tr>
                                         </thead>
@@ -1041,6 +1050,7 @@ const AddEdit = (props) => {
                                                         <td>{item?.productName}</td>
                                                         <td>{item?.qty}</td>
                                                         <td>{item?.rate}</td>
+                                                        <td>{`${item?.discountType === "percent" ? `${item?.discount}%` : item?.discountType === "flatAmount" ? `${values?.currency}${item?.discount}` : item?.discountType === "none" ? 0 : ""}`}</td>
                                                         <td>{item?.amount}</td>
                                                     </tr>
                                                 ))
@@ -1055,9 +1065,9 @@ const AddEdit = (props) => {
                                                 <td style={{ textAlign: "start" }}>{`${values?.currency} ${values?.total || 0}`}</td>
                                             </tr>
                                             <tr>
-                                                <th style={{ textAlign: "start" }}>Discount {values?.discountType === "percent" && "(%)"}</th>
+                                                <th style={{ textAlign: "start" }}>Discount</th>
                                                 <td>:</td>
-                                                <td style={{ textAlign: "start" }}>{values?.discountType === "percent" ? `${values?.discount || 0}%` : values?.discountType === "fAmount" ? `${values?.currency} ${values?.discount || 0}` : 0}</td>
+                                                <td style={{ textAlign: "start" }}>{`${values?.currency} ${values?.discount || 0}`}</td>
                                             </tr>
                                             <tr>
                                                 <th style={{ textAlign: "start" }}>Subtotal</th>

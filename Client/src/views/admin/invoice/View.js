@@ -44,7 +44,7 @@ const View = (props) => {
     const fetchViewData = async () => {
         if (id) {
             let result = await getApi('api/invoices/view/', id);
-            setData(result?.data);
+            setData(result?.data?.result);
         }
     }
     const generatePDF = () => {
@@ -571,36 +571,31 @@ const View = (props) => {
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Total</Text>
-                                <Text >{data?.total ? data?.total : ' - '}</Text>
+                                <Text>{`${data?.currency}${data?.total ? data?.total : '0'}`}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Discount {data?.discountType === "percent" && "(%)"}</Text>
-                                {
-                                    data?.discount ?
-                                        <Text >{data?.discountType === "percent" ? `${data?.discount}%` : data?.discountType === "fAmount" ? `${data?.currency}${data?.discount}` : ""}</Text>
-                                        :
-                                        <Text >{' - '}</Text>
-                                }
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Discount</Text>
+                                <Text >{`${data?.currency}${data?.discount || "0"}`}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Subtotal</Text>
-                                <Text >{data?.subtotal ? data?.subtotal : ' - '}</Text>
+                                <Text>{`${data?.currency}${data?.subtotal ? data?.subtotal : '0'}`}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Shipping</Text>
-                                <Text >{data?.shipping ? data?.shipping : ' - '}</Text>
+                                <>{`${data?.currency}${data?.shipping ? data?.shipping : '0'}`}</>
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Shipping Tax</Text>
-                                <Text >{data?.shippingTax ? data?.shippingTax : ' - '}</Text>
+                                <Text >{`${data?.currency}${data?.shippingTax ? data?.shippingTax : '0'}`}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Tax</Text>
-                                <Text >{data?.tax ? data?.tax : ' - '}</Text>
+                                <Text >{`${data?.currency}${data?.tax ? data?.tax : '0'}`}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Grand Total</Text>
-                                <Text>{`${data?.currency}${data?.grandTotal ? data?.grandTotal : ' - '}`}</Text>
+                                <Text>{`${data?.currency}${data?.grandTotal ? data?.grandTotal : '0'}`}</Text>
                             </GridItem>
                         </Grid>
                     </Card>
