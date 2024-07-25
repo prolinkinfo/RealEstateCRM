@@ -736,7 +736,7 @@ const AddEdit = (props) => {
                                     placeholder={'Select Currency'}
                                     borderColor={errors.currency && touched.currency ? "red.300" : null}
                                 >
-                                    <option value="$" selected>US Dollars:$</option>
+                                    <option value="$" selected>USD</option>
                                 </Select>
                                 <Text mb='10px' fontSize='sm' color={'red'}> {errors.currency && touched.currency && errors.currency}</Text>
                             </GridItem>
@@ -753,7 +753,7 @@ const AddEdit = (props) => {
                                         if (values.discountType !== "none") {
                                             calculateValues()
                                         }
-
+                                        setFieldValue("discount", 0)
                                     }}
                                     mb={errors.discountType && touched.discountType ? undefined : '10px'}
                                     fontWeight='500'

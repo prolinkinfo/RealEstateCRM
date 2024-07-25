@@ -254,7 +254,7 @@ const convertToInvoice = async (req, res) => {
             quoteDate: quotesData?.createdDate,
             dueDate: quotesData?.dueDate,
             invoiceDate: new Date(),
-            status: quotesData?.status,
+            status: "Paid",
             assignedTo: quotesData?.assignedTo,
             description: quotesData?.description,
             account: quotesData?.account,

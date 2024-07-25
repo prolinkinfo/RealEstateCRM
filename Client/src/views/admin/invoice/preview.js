@@ -46,7 +46,7 @@ const Preview = (props) => {
                                 <div className="invoice-container" >
                                     <div style={{ marginBottom: 10 }}><h1 style={{ fontSize: 30, textAlign: "center" }}>Invoice</h1></div>
                                     <div className="invoice-header">
-                                        <div className="">
+                                        <div>
                                             <Image
                                                 style={{ width: "100%", height: '52px' }}
                                                 src={largeLogo[0]?.logoLgImg}
