@@ -23,7 +23,7 @@ import { fetchInvoicesData } from '../../../redux/slices/invoicesSlice';
 import moment from 'moment';
 
 const AddEdit = (props) => {
-    const { isOpen, size, onClose, type, setAction, selectedId, contactId, } = props;
+    const { isOpen, size, onClose, type, setAction, selectedId, contactId, action } = props;
     const [isLoding, setIsLoding] = useState(false)
     const [userModel, setUserModel] = useState(false)
     const [opprtunityModel, setOpprtunityModel] = useState(false)
@@ -216,7 +216,7 @@ const AddEdit = (props) => {
                         : updatedItem.discountType === 'none'
                             ? 0
                             : updatedItem.discount;
-                    updatedItem.amount = updatedItem.rate * updatedItem.qty;
+                    updatedItem.amount = updatedItem.rate * updatedItem.qty - discountValue;
                     updatedItem.totalDiscount = discountValue;
                 }
                 return updatedItem;
@@ -228,7 +228,7 @@ const AddEdit = (props) => {
         const { totalAmount, netAmount, discount } = calculateAmounts(newItems);
         setFieldValue("discount", discount);
         setFieldValue("total", totalAmount);
-        setFieldValue("subtotal", netAmount);
+        setFieldValue("subtotal", totalAmount);
         setFieldValue("grandTotal", netAmount);
     };
 
@@ -252,7 +252,7 @@ const AddEdit = (props) => {
     useEffect(() => {
         if (type === "edit") fetchInvoiceDetails();
         if (user.role === 'superAdmin') fetchData();
-    }, [type, selectedId])
+    }, [type, selectedId, action])
 
     useEffect(() => {
         if (opportunityList?.length === 0 || opportunityList === undefined) { dispatch(fetchOpportunityData()) }
@@ -673,7 +673,7 @@ const AddEdit = (props) => {
                                             Line Items
                                         </Heading>
                                     </GridItem>
-                                    <GridItem colSpan={{ base: 12, md: 6 }}>
+                                    <GridItem colSpan={{ base: 12 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                             Currency
                                         </FormLabel>
@@ -688,34 +688,8 @@ const AddEdit = (props) => {
                                             borderColor={errors.currency && touched.currency ? "red.300" : null}
                                         >
                                             <option value="$" selected>USD</option>
-                                            <option value="" selected>INR</option>
-                                            {/* <option value="$" selected>EUR</option> */}
-                                            {/* <option value="$" selected>GBP</option> */}
                                         </Select>
                                         <Text mb='10px' fontSize='sm' color={'red'}> {errors.currency && touched.currency && errors.currency}</Text>
-                                    </GridItem>
-                                    <GridItem colSpan={{ base: 12, md: 6 }}>
-                                        <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                            Discount Type
-                                        </FormLabel>
-                                        <Select
-                                            value={values.discountType}
-                                            name="discountType"
-                                            onBlur={handleBlur}
-                                            onChange={(e) => {
-                                                handleChange(e);
-                                                setFieldValue("discount", 0)
-                                            }}
-                                            mb={errors.discountType && touched.discountType ? undefined : '10px'}
-                                            fontWeight='500'
-                                            placeholder={'Select Discount Type'}
-                                            borderColor={errors.discountType && touched.discountType ? "red.300" : null}
-                                        >
-                                            <option value="none" selected>None</option>
-                                            <option value="percent" selected>Percent</option>
-                                            <option value="fAmount" selected>Flat Amount</option>
-                                        </Select>
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.discountType && touched.discountType && errors.discountType}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12 }}>
                                         <Box>

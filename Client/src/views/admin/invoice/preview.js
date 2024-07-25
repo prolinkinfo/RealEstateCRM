@@ -28,7 +28,7 @@ const Preview = (props) => {
     }
 
     useEffect(() => {
-        fetchInvoiceDetails()
+        if (selectedId) fetchInvoiceDetails()
     }, [selectedId])
 
     return (
@@ -113,6 +113,7 @@ const Preview = (props) => {
                                                 <th style={{ width: "100px" }}>ITEM</th>
                                                 <th style={{ width: "50px" }}>QTY</th>
                                                 <th style={{ width: "50px" }}>RATE</th>
+                                                <th style={{ width: "50px" }}>DISCOUNT</th>
                                                 <th style={{ width: "50px" }}>AMOUNT</th>
                                             </tr>
                                         </thead>
@@ -124,6 +125,7 @@ const Preview = (props) => {
                                                         <td>{item?.productName}</td>
                                                         <td>{item?.qty}</td>
                                                         <td>{item?.rate}</td>
+                                                        <td>{`${item?.discountType === "percent" ? `${item?.discount}%` : item?.discountType === "flatAmount" ? `${invoiceDetails?.currency}${item?.discount}` : item?.discountType === "none" ? 0 : ""}`}</td>
                                                         <td>{item?.amount}</td>
                                                     </tr>
                                                 ))
@@ -138,9 +140,9 @@ const Preview = (props) => {
                                                 <td style={{ textAlign: "start" }}>{`${invoiceDetails?.currency} ${invoiceDetails?.total || 0}`}</td>
                                             </tr>
                                             <tr>
-                                                <th style={{ textAlign: "start" }}>Discount {invoiceDetails?.discountType === "percent" && "(%)"}</th>
+                                                <th style={{ textAlign: "start" }}>Discount </th>
                                                 <td>:</td>
-                                                <td style={{ textAlign: "start" }}>{invoiceDetails?.discountType === "percent" ? `${invoiceDetails?.discount || 0}%` : invoiceDetails?.discountType === "fAmount" ? `${invoiceDetails?.currency} ${invoiceDetails?.discount || 0}` : 0}</td>
+                                                <td style={{ textAlign: "start" }}>{`${invoiceDetails?.currency} ${invoiceDetails?.discount || 0}`}</td>
                                             </tr>
                                             <tr>
                                                 <th style={{ textAlign: "start" }}>Subtotal</th>

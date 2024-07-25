@@ -214,7 +214,7 @@ const AddEdit = (props) => {
                         : updatedItem.discountType === 'none'
                             ? 0
                             : updatedItem.discount;
-                    updatedItem.amount = updatedItem.rate * updatedItem.qty;
+                    updatedItem.amount = updatedItem.rate * updatedItem.qty - discountValue;
                     updatedItem.totalDiscount = discountValue;
                 }
                 return updatedItem;
@@ -226,7 +226,7 @@ const AddEdit = (props) => {
         const { totalAmount, netAmount, discount } = calculateAmounts(newItems);
         setFieldValue("discount", discount);
         setFieldValue("total", totalAmount);
-        setFieldValue("subtotal", netAmount);
+        setFieldValue("subtotal", totalAmount);
         setFieldValue("grandTotal", netAmount);
     };
 
@@ -238,9 +238,9 @@ const AddEdit = (props) => {
         const tax = shippingTax * ptax / 100;
         const grandTotal = Number(shippingTax) + Number(tax);
 
-        setFieldValue('shippingTax', shippingTax);
-        setFieldValue('tax', tax);
-        setFieldValue('grandTotal', grandTotal);
+        setFieldValue('shippingTax', shippingTax?.toFixed(2));
+        setFieldValue('tax', tax?.toFixed(2));
+        setFieldValue('grandTotal', grandTotal?.toFixed(2));
     }, [values.subtotal, values.shipping, values.ptax]);
 
     useEffect(() => {

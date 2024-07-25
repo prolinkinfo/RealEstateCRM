@@ -642,7 +642,7 @@ const Index = (props) => {
 
             <Preview isOpen={isOpenPreview} onClose={setIsOpenPreview} generatePDF={generatePDF} id="reports" selectedId={selectedId} isLoading={loading} />
 
-            <AddEdit isOpen={isOpen} size={"lg"} onClose={onClose} setAction={setAction} type={type} selectedId={selectedId} />
+            <AddEdit isOpen={isOpen} size={"lg"} onClose={onClose} setAction={setAction} type={type} selectedId={selectedId} action={action} />
             <CommonDeleteModel
                 isOpen={deleteModel}
                 onClose={() => setDelete(false)}
