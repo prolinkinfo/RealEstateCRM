@@ -15,6 +15,7 @@ const EmailTemp = require('../../model/schema/emailTemplate')
 const Opprtunities = require('../../model/schema/opprtunity')
 const Invoices = require("../../model/schema/invoices.js");
 const Quotes = require("../../model/schema/quotes.js");
+const ModuleActiveDeactive = require('../../model/schema/moduleActiveDeactive.js');
 
 const index = async (req, res) => {
     const query = req.query
@@ -216,7 +217,7 @@ const lineChart = async (req, res) => {
 
             }
         }
-    } else if (userDetails.role === "superAdmin") {
+    } else if (userDetails?.role === "superAdmin") {
         for (const item of fields) {
             if (!result.find((i) => i.name === item.moduleName)) {
                 const ExistingModel = mongoose.model(item.moduleName);
@@ -237,7 +238,11 @@ const lineChart = async (req, res) => {
         result = [];
     }
 
-    res.send(result)
+    let moduleData = await ModuleActiveDeactive?.find({ isActive: true });
+    const activeModules = moduleData?.map(item => item?.moduleName)
+    let activeModulesReport = result?.filter(item => activeModules?.includes(item?.name))
+
+    res.send(activeModulesReport)
 }
 
 const data = async (req, res) => {

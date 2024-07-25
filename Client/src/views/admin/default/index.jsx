@@ -30,6 +30,7 @@ import { HasAccess } from "../../../redux/accessUtils";
 import PieChart from "components/charts/PieChart";
 import CountUpComponent from "../../../../src/components/countUpComponent/countUpComponent";
 import Spinner from 'components/spinner/Spinner';
+import { useSelector } from "react-redux";
 
 export default function UserReports() {
   // Chakra Color Mode
@@ -41,6 +42,7 @@ export default function UserReports() {
   const [allData, setAllData] = useState([]);
   const [data, setData] = useState([]);
   const navigate = useNavigate();
+  const modules = useSelector((state) => state?.modules?.data)
   const [contactsView, taskView, leadView, proprtyView] = HasAccess(["Contacts", "Tasks", "Leads", "Properties"]);
 
   const fetchData = async () => {
@@ -75,6 +77,14 @@ export default function UserReports() {
     const filterData = allData?.taskData?.filter(item => item?.status === title)
     return filterData?.length || 0
   }
+
+  const leadModule = modules?.find(({ moduleName }) => moduleName === "Leads")
+  const contactModule = modules?.find(({ moduleName }) => moduleName === "Contacts")
+  const propertiesModule = modules?.find(({ moduleName }) => moduleName === "Properties")
+  const tasksModule = modules?.find(({ moduleName }) => moduleName === "Tasks")
+  const reportModule = modules?.find(({ moduleName }) => moduleName === "Reporting and Analytics")
+  const emailModule = modules?.find(({ moduleName }) => moduleName === "Emails")
+  const callModule = modules?.find(({ moduleName }) => moduleName === "Calls")
 
   const taskStatus = [
     {
@@ -122,12 +132,10 @@ export default function UserReports() {
     fetchData();
   }, [user?._id]);
 
-
   return (
     <>
       <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} gap="20px" mb="20px">
-        {/* , "2xl": 6 */}
-        {(taskView?.create || taskView?.update || taskView?.delete || taskView?.view) &&
+        {(taskView?.create || taskView?.update || taskView?.delete || taskView?.view) && (tasksModule?.isActive) &&
           <MiniStatistics
             onClick={() => navigate("/task")}
             startContent={
@@ -141,8 +149,8 @@ export default function UserReports() {
             name="Tasks"
             value={findModuleData("Tasks")}
           />}
-        {(contactsView?.create || contactsView?.update || contactsView?.delete || contactsView?.view) &&
-          <MiniStatistics
+        {(contactsView?.create || contactsView?.update || contactsView?.delete || contactsView?.view) && (contactModule?.isActive) &&
+          < MiniStatistics
             onClick={() => navigate("/contacts")}
             startContent={
               <IconBox
@@ -157,7 +165,7 @@ export default function UserReports() {
             name="Contacts"
             value={findModuleData("Contacts")}
           />}
-        {(leadView?.create || leadView?.update || leadView?.delete || leadView?.view) &&
+        {(leadView?.create || leadView?.update || leadView?.delete || leadView?.view) && (leadModule?.isActive) &&
           <MiniStatistics
             onClick={() => navigate("/lead")}
             startContent={
@@ -173,7 +181,7 @@ export default function UserReports() {
             name="Leads"
             value={findModuleData("Leads")}
           />}
-        {(proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view) &&
+        {(proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view) && (propertiesModule?.isActive) &&
           <MiniStatistics
             onClick={() => navigate("/properties")}
             startContent={
@@ -192,24 +200,29 @@ export default function UserReports() {
       </SimpleGrid>
 
       <Grid Grid templateColumns="repeat(12, 1fr)" gap={3} >
-
-        <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
-          <Card>
-            <Flex mb={3} alignItems={"center"} justifyContent={"space-between"}>
-              <Heading size="md">Email and Call Report</Heading>
-              <IconButton
-                color={"green.500"}
-                onClick={() => navigate("/reporting-analytics")}
-                aria-label="Call Fred"
-                borderRadius="10px"
-                size="md"
-                icon={<ViewIcon />}
-              />
-            </Flex>
-            <HSeparator />
-            <ReportChart dashboard={"dashboard"} />
-          </Card>
-        </GridItem>
+        {
+          (emailModule?.isActive || callModule?.isActive) &&
+          <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
+            <Card>
+              <Flex mb={3} alignItems={"center"} justifyContent={"space-between"}>
+                <Heading size="md">{(emailModule?.isActive && callModule?.isActive) ? "Email and Call" : emailModule?.isActive ? "Email" : callModule?.isActive ? "Call" : ""} Report</Heading>
+                {
+                  reportModule?.isActive &&
+                  <IconButton
+                    color={"green.500"}
+                    onClick={() => navigate("/reporting-analytics")}
+                    aria-label="Call Fred"
+                    borderRadius="10px"
+                    size="md"
+                    icon={<ViewIcon />}
+                  />
+                }
+              </Flex>
+              <HSeparator />
+              <ReportChart dashboard={"dashboard"} />
+            </Card>
+          </GridItem>
+        }
         <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
           <Card>
             <Flex mb={5} alignItems={"center"} justifyContent={"space-between"}>
@@ -252,7 +265,7 @@ export default function UserReports() {
           </Card>
         }
 
-        {leadView?.view && <Card>
+        {leadView?.view && (leadModule?.isActive) && <Card>
           <Heading size="md" pb={2}>Lead Statistics</Heading>
           {(leadView?.view) &&
             <Grid templateColumns="repeat(12, 1fr)" gap={2}>
@@ -305,7 +318,7 @@ export default function UserReports() {
 
         </Card>}
 
-        {taskView?.view && <Card >
+        {taskView?.view && (tasksModule?.isActive) && <Card >
           <Heading size="md" pb={3}>Task Statistics</Heading>
           <Grid templateColumns="repeat(12, 1fr)" gap={2} mb={2}>
             <GridItem colSpan={{ base: 12 }}>
