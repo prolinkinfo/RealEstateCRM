@@ -78,8 +78,7 @@ const View = () => {
 
     const [propertyData, setPropertyData] = useState([]);
     const [columns, setColumns] = useState([]);
-    const [permission, callAccess, emailAccess, taskAccess, meetingAccess, quotesAccess, invoicesAccess] = HasAccess(['Contacts', 'Calls', 'Emails', 'Tasks', 'Meetings', 'Quotes', 'Invoices']);
-    console.log(quotesAccess, "quotesAccess")
+    const [permission, callAccess, emailAccess, taskAccess, meetingAccess, quotesAccess, invoicesAccess, accountAccess] = HasAccess(['Contacts', 'Calls', 'Emails', 'Tasks', 'Meetings', 'Quotes', 'Invoices', 'Account']);
     const columnsDataColumns = [
         { Header: "sender", accessor: "senderName", },
         {
@@ -223,33 +222,35 @@ const View = () => {
         },
         { Header: 'Quote Stage', accessor: 'quoteStage' },
         {
-            Header: 'Contact',
-            accessor: 'contact',
+            Header: 'Contact', accessor: 'contact',
             cell: (cell) => (
-                <div className="selectOpt">
-                    <Text
-                    >
-                        {cell?.row?.original?.contactName ? cell?.row?.original?.contactName : "-"}
-                    </Text>
-                </div>
+                <Text
+                >
+                    {cell?.row?.original?.contactName ? cell?.row?.original?.contactName : "-"}
+                </Text>
             )
         },
         {
-            Header: 'Account',
-            accessor: 'account',
+            Header: 'Account', accessor: 'account',
             cell: (cell) => (
-                <div className="selectOpt">
+                (user.role === 'superAdmin' || accountAccess?.view) ?
+                    <div className="selectOpt">
+                        <Text
+                            onClick={() => navigate(cell?.row?.original.account !== null && `/accountView/${cell?.row?.original.account}`)}
+                            me="10px"
+                            sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                            color='brand.600'
+                            fontSize="sm"
+                            fontWeight="700"
+                        >
+                            {cell?.row?.original?.accountName ? cell?.row?.original?.accountName : "-"}
+                        </Text>
+                    </div>
+                    :
                     <Text
-                        onClick={() => navigate(`/accountView/${cell?.row?.original?.account}`)}
-                        me="10px"
-                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
-                        color='brand.600'
-                        fontSize="sm"
-                        fontWeight="700"
                     >
                         {cell?.row?.original?.accountName ? cell?.row?.original?.accountName : "-"}
                     </Text>
-                </div>
             )
         },
         {
@@ -290,29 +291,33 @@ const View = () => {
         {
             Header: 'Contact', accessor: 'contact',
             cell: (cell) => (
-                <div className="selectOpt">
-                    <Text
-                    >
-                        {cell?.row?.original?.contactName ? cell?.row?.original?.contactName : "-"}
-                    </Text>
-                </div>
+                <Text
+                >
+                    {cell?.row?.original?.contactName ? cell?.row?.original?.contactName : "-"}
+                </Text>
             )
         },
         {
             Header: 'Account', accessor: 'account',
             cell: (cell) => (
-                <div className="selectOpt">
+                (user.role === 'superAdmin' || accountAccess?.view) ?
+                    <div className="selectOpt">
+                        <Text
+                            onClick={() => navigate(cell?.row?.original.account !== null && `/accountView/${cell?.row?.original.account}`)}
+                            me="10px"
+                            sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                            color='brand.600'
+                            fontSize="sm"
+                            fontWeight="700"
+                        >
+                            {cell?.row?.original?.accountName ? cell?.row?.original?.accountName : "-"}
+                        </Text>
+                    </div>
+                    :
                     <Text
-                        onClick={() => navigate(`/accountView/${cell?.row?.original?.account}`)}
-                        me="10px"
-                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
-                        color='brand.600'
-                        fontSize="sm"
-                        fontWeight="700"
                     >
                         {cell?.row?.original?.accountName ? cell?.row?.original?.accountName : "-"}
                     </Text>
-                </div>
             )
         },
         {

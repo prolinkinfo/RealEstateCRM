@@ -216,13 +216,29 @@ const view = async (req, res) => {
             { $match: { _id: response.quotesId, deleted: false } },
             {
                 $lookup: {
-                    from: "Quotes",
-                    localField: "quotesId",
+                    from: "Contacts",
+                    localField: "contact",
                     foreignField: "_id",
-                    as: "quotesData",
+                    as: "contactData",
                 },
             },
-            { $project: { quotesData: 0 } },
+            {
+                $lookup: {
+                    from: "Accounts",
+                    localField: "account",
+                    foreignField: "_id",
+                    as: "accountData",
+                },
+            },
+            { $unwind: { path: "$contactData", preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: "$accountData", preserveNullAndEmptyArrays: true } },
+            {
+                $addFields: {
+                    contactName: { $concat: ['$contactData.firstName', ' ', '$contactData.lastName'] },
+                    accountName: '$accountData.name'
+                }
+            },
+            { $project: { contactData: 0, accountData: 0 } },
 
         ]);
 
