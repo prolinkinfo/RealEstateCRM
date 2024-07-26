@@ -20,20 +20,23 @@ import { useFormik } from 'formik';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 import { invoicesSchema } from '../../../schema/invoicesSchema';
+import CommonCheckTable from "components/reactTable/checktable";
 
 const View = (props) => {
     const params = useParams()
     const { id } = params
     const user = JSON.parse(localStorage.getItem("user"))
 
-    const [invoiceAccess, accountAccess, contactAccess] = HasAccess(['Invoices', 'Account', 'Contacts'])
+    const [invoiceAccess, accountAccess, contactAccess, quotesAccess] = HasAccess(['Invoices', 'Account', 'Contacts', 'Quotes'])
 
     const [data, setData] = useState()
+    const [quotesData, setQuotesData] = useState([])
     const { onOpen, onClose } = useDisclosure()
     const [edit, setEdit] = useState(false);
     const [deleteModel, setDelete] = useState(false);
     const [deleteManyModel, setDeleteManyModel] = useState(false);
     const [loading, setLoading] = useState(false)
+    const [isLoding, setIsLoding] = useState(false)
     const navigate = useNavigate()
     const [type, setType] = useState("")
     const [editableField, setEditableField] = useState(null);
@@ -41,10 +44,90 @@ const View = (props) => {
     const today = new Date().toISOString().split('T')[0];
     const todayTime = new Date().toISOString().split('.')[0];
 
+    const quotesColumns = [
+        { Header: "Quote Number", accessor: "quoteNumber", isSortable: false, width: 10 },
+        {
+            Header: 'Title', accessor: 'title', cell: (cell) => (
+                <div className="selectOpt">
+                    <Text
+                        onClick={() => navigate(`/quotesView/${cell?.row?.original._id}`)}
+                        me="10px"
+                        sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                        color='brand.600'
+                        fontSize="sm"
+                        fontWeight="700"
+                    >
+                        {cell?.value}
+                    </Text>
+                </div>
+            )
+        },
+        { Header: 'Quote Stage', accessor: 'quoteStage' },
+        {
+            Header: 'Contact', accessor: 'contact',
+            cell: (cell) => (
+                (user.role === 'superAdmin' || contactAccess?.view) ?
+                    <div className="selectOpt">
+                        <Text
+                            onClick={() => navigate(cell?.row?.original.contact !== null && `/contactView/${cell?.row?.original.contact}`)}
+                            me="10px"
+                            sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                            color='brand.600'
+                            fontSize="sm"
+                            fontWeight="700"
+                        >
+                            {cell?.row?.original?.contactName ? cell?.row?.original?.contactName : "-"}
+                        </Text>
+                    </div>
+                    :
+                    <Text
+                    >
+                        {cell?.row?.original?.contactName ? cell?.row?.original?.contactName : "-"}
+                    </Text>
+            )
+        },
+        {
+            Header: 'Account', accessor: 'account',
+            cell: (cell) => (
+                (user.role === 'superAdmin' || accountAccess?.view) ?
+                    <div className="selectOpt">
+                        <Text
+                            onClick={() => navigate(cell?.row?.original.account !== null && `/accountView/${cell?.row?.original.account}`)}
+                            me="10px"
+                            sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+                            color='brand.600'
+                            fontSize="sm"
+                            fontWeight="700"
+                        >
+                            {cell?.row?.original?.accountName ? cell?.row?.original?.accountName : "-"}
+                        </Text>
+                    </div>
+                    :
+                    <Text
+                    >
+                        {cell?.row?.original?.accountName ? cell?.row?.original?.accountName : "-"}
+                    </Text>
+            )
+        },
+        {
+            Header: "Grand Total",
+            accessor: "grandTotal",
+            cell: (cell) => (
+                <div className="selectOpt">
+                    <Text
+                    >
+                        {cell?.row?.original?.grandTotal ? `$${cell?.row?.original?.grandTotal}` : '-'}
+                    </Text>
+                </div>
+            )
+        },
+        { Header: "valid Until", accessor: "validUntil" },
+    ];
     const fetchViewData = async () => {
         if (id) {
             let result = await getApi('api/invoices/view/', id);
-            setData(result?.data);
+            setData(result?.data?.result);
+            setQuotesData(result?.data?.quotesDetails)
         }
     }
     const generatePDF = () => {
@@ -571,42 +654,54 @@ const View = (props) => {
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Total</Text>
-                                <Text >{data?.total ? data?.total : ' - '}</Text>
+                                <Text>{`${data?.currency}${data?.total ? data?.total : '0'}`}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
-                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Discount {data?.discountType === "percent" && "(%)"}</Text>
-                                {
-                                    data?.discount ?
-                                        <Text >{data?.discountType === "percent" ? `${data?.discount}%` : data?.discountType === "fAmount" ? `${data?.currency}${data?.discount}` : ""}</Text>
-                                        :
-                                        <Text >{' - '}</Text>
-                                }
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Discount</Text>
+                                <Text >{`${data?.currency}${data?.discount || "0"}`}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Subtotal</Text>
-                                <Text >{data?.subtotal ? data?.subtotal : ' - '}</Text>
+                                <Text>{`${data?.currency}${data?.subtotal ? data?.subtotal : '0'}`}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Shipping</Text>
-                                <Text >{data?.shipping ? data?.shipping : ' - '}</Text>
+                                <>{`${data?.currency}${data?.shipping ? data?.shipping : '0'}`}</>
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Shipping Tax</Text>
-                                <Text >{data?.shippingTax ? data?.shippingTax : ' - '}</Text>
+                                <Text >{`${data?.currency}${data?.shippingTax ? data?.shippingTax : '0'}`}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Tax</Text>
-                                <Text >{data?.tax ? data?.tax : ' - '}</Text>
+                                <Text >{`${data?.currency}${data?.tax ? data?.tax : '0'}`}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}>Grand Total</Text>
-                                <Text>{`${data?.currency}${data?.grandTotal ? data?.grandTotal : ' - '}`}</Text>
+                                <Text>{`${data?.currency}${data?.grandTotal ? data?.grandTotal : '0'}`}</Text>
                             </GridItem>
                         </Grid>
                     </Card>
                 </GridItem>
 
             </Grid>
+            {quotesAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
+                <Card overflow={'scroll'}>
+                    <CommonCheckTable
+                        title={"Quotes"}
+                        isLoding={isLoding}
+                        columnData={quotesColumns ?? []}
+                        allData={quotesData ?? []}
+                        tableData={quotesData ?? []}
+                        AdvanceSearch={false}
+                        tableCustomFields={[]}
+                        checkBox={false}
+                        deleteMany={true}
+                        ManageGrid={false}
+                        access={false}
+                    />
+                </Card>
+            </GridItem>}
             {
                 (invoiceAccess?.update || invoiceAccess?.delete || user?.role === 'superAdmin') && <Card mt={3}>
                     <Grid templateColumns="repeat(6, 1fr)" gap={1}>
