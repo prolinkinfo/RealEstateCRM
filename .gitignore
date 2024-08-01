@@ -19,6 +19,8 @@ Client/.env
 # production
 /build
 
+*.bat
+
 # misc
 .DS_Store
 .env.local
