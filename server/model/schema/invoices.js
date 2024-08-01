@@ -34,6 +34,8 @@ const Invoices = new mongoose.Schema({
     description: String,
     approvalStatus: String,
     invoiceStatus: String,
+    discountType: String,
+    items: [],
     account: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Accounts",
@@ -42,7 +44,10 @@ const Invoices = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Contacts",
     },
-
+    quotesId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Quotes",
+    },
     assignedTo: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
@@ -64,6 +69,9 @@ const Invoices = new mongoose.Schema({
     deleted: {
         type: Boolean,
         default: false,
+    },
+    invoiceConvertDate: {
+        type: Date,
     },
     updatedDate: {
         type: Date,

@@ -9,6 +9,7 @@ router.post('/add', auth, quotes.add)
 router.post('/addMany', auth, quotes.addMany)
 router.get('/view/:id', auth, quotes.view)
 router.put('/edit/:id', auth, quotes.edit)
+router.post('/convertToInvoice', auth, quotes.convertToInvoice)
 router.delete('/delete/:id', auth, quotes.deleteData)
 router.post('/deleteMany', auth, quotes.deleteMany)
 

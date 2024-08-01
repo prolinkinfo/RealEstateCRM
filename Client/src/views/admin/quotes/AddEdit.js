@@ -1,5 +1,5 @@
-import { CloseIcon } from '@chakra-ui/icons';
-import { Button, Checkbox, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, FormLabel, Grid, GridItem, Heading, IconButton, Input, Select, Text, Textarea } from '@chakra-ui/react';
+import { AddIcon, CloseIcon } from '@chakra-ui/icons';
+import { Box, Button, Checkbox, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, FormControl, FormLabel, Grid, GridItem, Heading, IconButton, Input, Select, Table, Tbody, Td, Text, Textarea, Th, Thead, Tr } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
 import dayjs from 'dayjs';
 import { useFormik } from 'formik';
@@ -40,8 +40,8 @@ const AddEdit = (props) => {
     const initialValues = {
         title: type === "edit" ? quotesDetails?.title : "",
         oppotunity: type === "edit" ? quotesDetails?.oppotunity : null,
-        quoteStage: type === "edit" ? quotesDetails?.quoteStage : "",
-        invoiceStatus: type === "edit" ? quotesDetails?.invoiceStatus : "",
+        quoteStage: type === "edit" ? quotesDetails?.quoteStage : "Draft",
+        invoiceStatus: type === "edit" ? quotesDetails?.invoiceStatus : "Not Invoiced",
         validUntil: type === "edit" ? quotesDetails?.validUntil : "",
         assignedTo: type === "edit" ? quotesDetails?.assignedTo : null,
         paymentTerms: type === "edit" ? quotesDetails?.paymentTerms : "",
@@ -63,7 +63,7 @@ const AddEdit = (props) => {
         billingCountry: type === "edit" ? quotesDetails?.billingCountry : "",
         shippingCountry: type === "edit" ? quotesDetails?.shippingCountry : "",
         isCheck: type === "edit" ? quotesDetails?.isCheck : false,
-        currency: type === "edit" ? quotesDetails?.currency : "",
+        currency: type === "edit" ? quotesDetails?.currency : "$",
         total: type === "edit" ? quotesDetails?.total : "",
         discount: type === "edit" ? quotesDetails?.discount : "",
         subtotal: type === "edit" ? quotesDetails?.subtotal : "",
@@ -72,7 +72,8 @@ const AddEdit = (props) => {
         ptax: type === "edit" ? quotesDetails?.ptax : "",
         tax: type === "edit" ? quotesDetails?.tax : "",
         grandTotal: type === "edit" ? quotesDetails?.grandTotal : "",
-
+        discountType: type === "edit" ? quotesDetails?.discountType : "none",
+        items: type === "edit" ? quotesDetails?.items : [],
         createBy: JSON.parse(localStorage.getItem('user'))._id,
         modifiedBy: JSON.parse(localStorage.getItem('user'))._id
     };
@@ -104,7 +105,7 @@ const AddEdit = (props) => {
                 onClose();
                 toast.success(`Quotes Update successfully`)
                 formik.resetForm();
-                // setAction((pre) => !pre)
+                setAction((pre) => !pre)
             }
         } catch (e) {
             console.log(e);
@@ -167,7 +168,7 @@ const AddEdit = (props) => {
                 setIsLoding(true)
                 let result = await getApi('api/quotes/view/', selectedId)
                 if (result?.status === 200) {
-                    setQuotesDetails(result?.data)
+                    setQuotesDetails(result?.data?.result)
                 }
 
             }
@@ -179,22 +180,72 @@ const AddEdit = (props) => {
             }
         }
     }
-    const calculateValues = useCallback(() => {
-        const subtotal = Number(values?.total) * Number(values?.discount) / 100;
-        const shippingTax = subtotal + Number(values?.shipping);
-        const tax = shippingTax * Number(values?.ptax) / 100;
-        const grandTotal = shippingTax + tax;
 
-        setFieldValue('subtotal', subtotal.toFixed(2));
-        setFieldValue('shippingTax', shippingTax.toFixed(2));
-        setFieldValue('tax', tax.toFixed(2));
-        setFieldValue('grandTotal', grandTotal.toFixed(2));
-    }, [values?.total, values?.discount, values?.shipping, values?.ptax]);
+    const calculateAmounts = (items) => {
+        const totalAmount = items.reduce((sum, item) => sum + item.amount, 0);
+        const totalDiscount = items.reduce((sum, item) => sum + item.totalDiscount, 0);
+        const netAmount = Number(totalAmount) - Number(totalDiscount);
+        return { totalAmount, netAmount, discount: totalDiscount };
+    };
+
+    const handleAddItem = () => {
+        setFieldValue("items", [
+            ...values.items,
+            { id: values.items.length + 1, productName: "", qty: 0, rate: 0, discount: 0, discountType: "none", totalDiscount: 0, amount: 0 }
+        ]);
+    };
+
+    const handleRemoveItem = (index) => {
+        const newItems = values.items.filter((_, idx) => idx !== index);
+        setFieldValue("items", newItems);
+        const { totalAmount, netAmount, discount } = calculateAmounts(newItems);
+        setFieldValue("total", totalAmount);
+        setFieldValue("grandTotal", netAmount);
+        setFieldValue("discount", discount);
+    };
+
+    const handleChangeCalculation = (index, field, value) => {
+        const newItems = values.items.map((item, idx) => {
+            if (idx === index) {
+                const updatedItem = { ...item, [field]: value };
+                if (['qty', 'rate', 'discount', 'discountType'].includes(field)) {
+                    const discountValue = updatedItem.discountType === 'percent'
+                        ? (updatedItem.rate * updatedItem.qty * updatedItem.discount / 100)
+                        : updatedItem.discountType === 'none'
+                            ? 0
+                            : updatedItem.discount;
+                    updatedItem.amount = updatedItem.rate * updatedItem.qty - discountValue;
+                    updatedItem.totalDiscount = discountValue;
+                }
+                return updatedItem;
+            }
+            return item;
+        });
+
+        setFieldValue("items", newItems);
+        const { totalAmount, netAmount, discount } = calculateAmounts(newItems);
+        setFieldValue("discount", discount);
+        setFieldValue("total", totalAmount);
+        setFieldValue("subtotal", totalAmount);
+        setFieldValue("grandTotal", netAmount);
+    };
+
+    const calculateValues = useCallback(() => {
+        const subtotal = values.subtotal;
+        const shipping = Number(values.shipping);
+        const ptax = Number(values.ptax);
+        const shippingTax = Number(subtotal) + Number(shipping);
+        const tax = shippingTax * ptax / 100;
+        const grandTotal = Number(shippingTax) + Number(tax);
+
+        setFieldValue('shippingTax', shippingTax?.toFixed(2));
+        setFieldValue('tax', tax?.toFixed(2));
+        setFieldValue('grandTotal', grandTotal?.toFixed(2));
+    }, [values.subtotal, values.shipping, values.ptax]);
 
     useEffect(() => {
         calculateValues();
     }, [calculateValues]);
-
 
     useEffect(() => {
         if (type === "edit") fetchQuotesDetails();
@@ -501,7 +552,10 @@ const AddEdit = (props) => {
                                 </Heading>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                <Checkbox isChecked={values?.isCheck} onChange={(e) => handleCheck(e)} visibility={"hidden"}>
+                                    Copy address from left
+                                </Checkbox>
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px' mt={3}>
                                     Billing Street
                                 </FormLabel>
                                 <Input
@@ -516,7 +570,10 @@ const AddEdit = (props) => {
                                 <Text mb='10px' fontSize='sm' color={'red'}> {errors.billingStreet && touched.billingStreet && errors.billingStreet}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                <Checkbox isChecked={values?.isCheck} onChange={(e) => handleCheck(e)}>
+                                    Copy address from left
+                                </Checkbox>
+                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px' mt={3}>
                                     Shipping Street
                                 </FormLabel>
                                 <Input
@@ -656,9 +713,6 @@ const AddEdit = (props) => {
                                     borderColor={errors.shippingCountry && touched.shippingCountry ? "red.300" : null}
                                 />
                                 <Text mb='10px' fontSize='sm' color={'red'}> {errors.shippingCountry && touched.shippingCountry && errors.shippingCountry}</Text>
-                                <Checkbox isChecked={values?.isCheck} onChange={(e) => handleCheck(e)}>
-                                    Copy address from left
-                                </Checkbox>
                             </GridItem>
 
                             <GridItem colSpan={{ base: 12 }}>
@@ -666,7 +720,6 @@ const AddEdit = (props) => {
                                     Line Items
                                 </Heading>
                             </GridItem>
-
                             <GridItem colSpan={{ base: 12 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                     Currency
@@ -674,15 +727,126 @@ const AddEdit = (props) => {
                                 <Select
                                     value={values.currency}
                                     name="currency"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     mb={errors.currency && touched.currency ? undefined : '10px'}
                                     fontWeight='500'
                                     placeholder={'Select Currency'}
                                     borderColor={errors.currency && touched.currency ? "red.300" : null}
                                 >
-                                    <option value="$">US Dollars:$</option>
+                                    <option value="$" selected>USD</option>
                                 </Select>
                                 <Text mb='10px' fontSize='sm' color={'red'}> {errors.currency && touched.currency && errors.currency}</Text>
+                            </GridItem>
+
+                            <GridItem colSpan={{ base: 12 }}>
+                                <Box>
+                                    <Table variant="simple" size="sm" mt={5} backgroundColor="#f9f9f9">
+                                        <Thead>
+                                            <Tr>
+                                                <Th></Th>
+                                                <Th>#</Th>
+                                                <Th>Item</Th>
+                                                <Th>Qty</Th>
+                                                <Th>Rate</Th>
+                                                <Th>Discount</Th>
+                                                <Th>Amount</Th>
+                                            </Tr>
+                                        </Thead>
+                                        <Tbody>
+                                            {values?.items?.length > 0 && values?.items?.map((item, index) => (
+                                                <Tr key={item.id}>
+                                                    <Td className="text-center">
+                                                        <IconButton
+                                                            icon={<CloseIcon />}
+                                                            onClick={() => handleRemoveItem(index)}
+                                                            colorScheme="red"
+                                                            variant="outline"
+                                                            size="sm"
+                                                            style={{ fontSize: "10px" }}
+                                                        />
+                                                    </Td>
+                                                    <Td>{index + 1}</Td>
+                                                    <Td>
+                                                        <FormControl>
+                                                            <Input
+                                                                type="text"
+                                                                value={item?.productName}
+                                                                onChange={(e) => handleChangeCalculation(index, 'productName', e.target.value)}
+                                                                size="sm"
+                                                            />
+                                                        </FormControl>
+                                                    </Td>
+                                                    <Td>
+                                                        <FormControl>
+                                                            <Input
+                                                                type="number"
+                                                                value={item?.qty}
+                                                                onChange={(e) => handleChangeCalculation(index, 'qty', Number(e.target.value))}
+                                                                size="sm"
+                                                            />
+                                                        </FormControl>
+                                                    </Td>
+                                                    <Td>
+                                                        <FormControl>
+                                                            <Input
+                                                                type="number"
+                                                                value={item?.rate}
+                                                                onChange={(e) => handleChangeCalculation(index, 'rate', Number(e.target.value))}
+                                                                size="sm"
+                                                            />
+                                                        </FormControl>
+                                                    </Td>
+                                                    <Td style={{ display: "flex" }}>
+                                                        <FormControl>
+                                                            <Input
+                                                                type="number"
+                                                                value={item?.discount}
+                                                                onChange={(e) => handleChangeCalculation(index, 'discount', Number(e.target.value))}
+                                                                size="sm"
+                                                                disabled={item?.discountType === "none"}
+                                                            />
+                                                            <Select
+                                                                value={item?.discountType}
+                                                                onChange={(e) => { handleChangeCalculation(index, 'discountType', e.target.value); }}
+                                                                size="sm"
+                                                            >
+                                                                <option value="none">none</option>
+                                                                <option value="percent">%</option>
+                                                                <option value="flatAmount">{values?.currency}</option>
+                                                            </Select>
+                                                        </FormControl>
+                                                    </Td>
+                                                    <Td>
+                                                        <FormControl>
+                                                            <Input
+                                                                type="number"
+                                                                value={item?.amount}
+                                                                readOnly
+                                                                size="sm"
+                                                            />
+                                                        </FormControl>
+                                                    </Td>
+                                                </Tr>
+                                            ))}
+                                            <Tr>
+                                                <Td colSpan={4} display="flex" justifyContent={"end"}>
+                                                    <IconButton
+                                                        icon={<AddIcon />}
+                                                        onClick={handleAddItem}
+                                                        colorScheme="green"
+                                                        variant="outline"
+                                                        size="sm"
+                                                        style={{ fontSize: "10px" }}
+                                                    />
+                                                </Td>
+                                                <Td></Td>
+                                                <Td></Td>
+                                                <Td></Td>
+                                            </Tr>
+                                        </Tbody>
+                                    </Table>
+                                </Box>
                             </GridItem>
                             <GridItem colSpan={{ base: 12 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -702,15 +866,15 @@ const AddEdit = (props) => {
                             </GridItem>
                             <GridItem colSpan={{ base: 12 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Discount
+                                    Total Discount
                                 </FormLabel>
                                 <Input
                                     fontSize='sm'
                                     value={values.discount}
                                     name="discount"
-                                    onChange={handleChange}
-                                    placeholder='Discount'
+                                    onBlur={handleBlur}
                                     type='number'
+                                    onChange={handleChange}
                                     fontWeight='500'
                                     borderColor={errors.discount && touched.discount ? "red.300" : null}
                                 />

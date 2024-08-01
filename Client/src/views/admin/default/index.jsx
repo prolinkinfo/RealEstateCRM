@@ -82,6 +82,9 @@ export default function UserReports() {
   const contactModule = modules?.find(({ moduleName }) => moduleName === "Contacts")
   const propertiesModule = modules?.find(({ moduleName }) => moduleName === "Properties")
   const tasksModule = modules?.find(({ moduleName }) => moduleName === "Tasks")
+  const reportModule = modules?.find(({ moduleName }) => moduleName === "Reporting and Analytics")
+  const emailModule = modules?.find(({ moduleName }) => moduleName === "Emails")
+  const callModule = modules?.find(({ moduleName }) => moduleName === "Calls")
 
   const taskStatus = [
     {
@@ -197,24 +200,29 @@ export default function UserReports() {
       </SimpleGrid>
 
       <Grid Grid templateColumns="repeat(12, 1fr)" gap={3} >
-
-        <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
-          <Card>
-            <Flex mb={3} alignItems={"center"} justifyContent={"space-between"}>
-              <Heading size="md">Email and Call Report</Heading>
-              <IconButton
-                color={"green.500"}
-                onClick={() => navigate("/reporting-analytics")}
-                aria-label="Call Fred"
-                borderRadius="10px"
-                size="md"
-                icon={<ViewIcon />}
-              />
-            </Flex>
-            <HSeparator />
-            <ReportChart dashboard={"dashboard"} />
-          </Card>
-        </GridItem>
+        {
+          (emailModule?.isActive || callModule?.isActive) &&
+          <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
+            <Card>
+              <Flex mb={3} alignItems={"center"} justifyContent={"space-between"}>
+                <Heading size="md">{(emailModule?.isActive && callModule?.isActive) ? "Email and Call" : emailModule?.isActive ? "Email" : callModule?.isActive ? "Call" : ""} Report</Heading>
+                {
+                  reportModule?.isActive &&
+                  <IconButton
+                    color={"green.500"}
+                    onClick={() => navigate("/reporting-analytics")}
+                    aria-label="Call Fred"
+                    borderRadius="10px"
+                    size="md"
+                    icon={<ViewIcon />}
+                  />
+                }
+              </Flex>
+              <HSeparator />
+              <ReportChart dashboard={"dashboard"} />
+            </Card>
+          </GridItem>
+        }
         <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
           <Card>
             <Flex mb={5} alignItems={"center"} justifyContent={"space-between"}>

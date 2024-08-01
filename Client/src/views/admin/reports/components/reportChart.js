@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import ReactApexChart from "react-apexcharts";
 import ReactDatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
+import { useSelector } from 'react-redux';
 import { postApi } from "services/api";
 
 
@@ -15,10 +16,10 @@ const ReportChart = (props) => {
     const [endDate, setEndDate] = useState(new Date());
     const [select, setSelect] = useState('all');
     const [selection, setSelection] = useState('day');
-
+    const modules = useSelector((state) => state?.modules?.data)
     const user = JSON.parse(localStorage.getItem("user"))
-
-
+    const isEmailsActive = modules?.find((item) => item?.moduleName === "Emails");
+    const isCallsActive = modules?.find((item) => item?.moduleName === "Calls");
     const featchChart = async () => {
         const data = {
             startDate: moment(startDate).format('YYYY-MM-DD'),
@@ -26,8 +27,8 @@ const ReportChart = (props) => {
             filter: selection
         }
         let result = await postApi(user.role === 'superAdmin' ? 'api/reporting/index' : `api/reporting/index?sender=${user._id}`, data);
-        if (result && result.status === 200) {
-            setReportChart(result?.data)
+        if (result.status === 200) {
+            setReportChart(result?.data);
         }
     }
 
@@ -52,36 +53,31 @@ const ReportChart = (props) => {
         const dataSet = reportChart[key][0];
         let seriesData = [];
 
-        if (dataSet?.Emails) {
+        if (dataSet?.Emails && isEmailsActive?.isActive) {
             seriesData = seriesData.concat(
                 dataSet?.Emails?.map((item) => ({ x: item?.date, y: item?.Emailcount }))
             );
         }
-        if (dataSet?.Calls) {
+        if (dataSet?.Calls && isCallsActive?.isActive) {
             seriesData = seriesData.concat(
                 dataSet?.Calls?.map((item) => ({ x: item?.date, y: item?.Callcount }))
             );
         }
-        if (dataSet?.TextMsges) {
-            seriesData = seriesData.concat(
-                dataSet?.TextMsges?.map((item) => ({ x: item?.date, y: item?.TextSentCount }))
-            );
-        }
 
         return {
-            name: key,
+            name: (key === "Email" && isEmailsActive?.isActive) ? "Emails" : (key === "Call" && isCallsActive?.isActive) ? "Call" : ((key === "Email" && isEmailsActive?.isActive) && (key === "Call" && isCallsActive?.isActive) ? key : ""),
             data: seriesData,
         };
 
     });
-
 
     useEffect(() => {
         featchChart()
     }, [startDate, endDate, selection])
 
 
-    const selectedSeries = select === 'all' ? series : series?.filter(series => series?.name === select);
+    const selectedSeries = select === 'all' ? series?.filter(series => series?.name !== "") : series?.filter(series => series?.name === select);
+
     return (
         <Card>
             {!dashboard &&

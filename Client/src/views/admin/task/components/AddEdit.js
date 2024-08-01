@@ -24,7 +24,6 @@ const AddEdit = (props) => {
     const [isLoding, setIsLoding] = useState(false)
     const [contactModelOpen, setContactModel] = useState(false);
     const [leadModelOpen, setLeadModel] = useState(false);
-
     const leadData = useSelector((state) => state?.leadData?.data);
 
 

@@ -2,11 +2,11 @@ import * as XLSX from "xlsx";
 
 export const commonUtils = {
     convertJsonToCsvOrExcel: ({ jsonArray, csvColumns, fileName, extension }) => {
-        const csvHeader = csvColumns?.map((col) => col?.Header);
+        const csvHeader = csvColumns?.length > 0 && csvColumns?.map((col) => col?.Header);
 
         const csvContent = [
             csvHeader,
-            ...jsonArray?.map((row) => csvColumns?.map((col) => row[col?.accessor]))
+            ...jsonArray?.map((row) => csvColumns?.length > 0 && csvColumns?.map((col) => row[col?.accessor]))
         ];
 
         const ws = XLSX.utils.aoa_to_sheet(csvContent);

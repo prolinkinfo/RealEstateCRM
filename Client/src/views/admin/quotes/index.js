@@ -18,6 +18,8 @@ import QuotesAdvanceSearch from './components/QuotesAdvanceSearch';
 import CommonDeleteModel from '../../../components/commonDeleteModel'
 import ImportModal from './components/ImportModel';
 import { fetchQuotesData } from '../../../redux/slices/quotesSlice';
+import { TbFileInvoice } from 'react-icons/tb';
+import { postApi } from 'services/api';
 
 const Index = (props) => {
     const [action, setAction] = useState(false);
@@ -81,6 +83,16 @@ const Index = (props) => {
                                 View
                             </MenuItem>
                         )}
+                        <MenuItem
+                            py={2.5}
+                            color={"black"}
+                            icon={<TbFileInvoice fontSize={15} mb={1} />}
+                            onClick={() => {
+                                convertToInvoice(row?.values?._id);
+                            }}
+                        >
+                            Convert To Invoice
+                        </MenuItem>
                         {permission?.delete && (
                             <MenuItem
                                 py={2.5}
@@ -174,7 +186,7 @@ const Index = (props) => {
                 <div className="selectOpt">
                     <Text
                     >
-                        {cell?.row?.original?.grandTotal ? `$${cell?.row?.original?.grandTotal}` : '-'}
+                        {cell?.row?.original?.grandTotal ? `${cell?.row?.original?.currency} ${cell?.row?.original?.grandTotal}` : '-'}
                     </Text>
                 </div>
             )
@@ -607,6 +619,23 @@ const Index = (props) => {
     const handleOpenAdd = () => {
         onOpen();
         setType("add")
+    }
+
+    const convertToInvoice = async (id) => {
+        try {
+            setIsLoding(true);
+            let response = await postApi("api/quotes/convertToInvoice", { _id: id });
+            if (response.status === 200) {
+                toast.success(`Invoice Convert successfully`)
+                setAction((pre) => !pre);
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error(`server error`)
+
+        } finally {
+            setIsLoding(false);
+        }
     }
 
     const handleDelete = async (ids) => {

@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 
 export default function Footer() {
-  let textColor = useColorModeValue("gray.400", "white");
+  let textColor = useColorModeValue("blue.700", "white");
   let linkColor = useColorModeValue({ base: "gray.400", lg: "gray.400" }, "gray.400");
   return (
     <Flex
