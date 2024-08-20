@@ -32,22 +32,22 @@ const contactFields = [
     //         }
     //     ],
     // },
-    // {
-    //     "name": "linkedInProfile",
-    //     "label": "LinkedIn Profile URL",
-    //     "type": "url",
-    //     "fixed": true,
-    //     "delete": false,
-    //     "belongsTo": null,
-    //     "backendType": "Mixed",
-    //     "isTableField": false,
-    //     "validation": [
-    //         {
-    //             "message": "Invalid type value for LinkedIn Profile URL",
-    //             "formikType": "url",
-    //         }
-    //     ],
-    // },
+     {
+         "name": "linkedInProfile",
+         "label": "LinkedIn Profile URL",
+         "type": "url",
+         "fixed": true,
+         "delete": false,
+         "belongsTo": null,
+         "backendType": "Mixed",
+         "isTableField": false,
+         "validation": [
+             {
+                 "message": "Invalid type value for LinkedIn Profile URL",
+                 "formikType": "url",
+             }
+         ],
+     },
     // {
     //     "name": "twitterHandle",
     //     "label": "Twitter Username",

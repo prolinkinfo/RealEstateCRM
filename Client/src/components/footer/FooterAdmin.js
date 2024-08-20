@@ -42,7 +42,7 @@ export default function Footer() {
             fontWeight='500'
             color={textColor}
             target="_blank"
-            href='https://prolinkinfotech.com/'> Prolink Infotech.</Link> All Rights Reserved.
+            href='https://www.linkedin.com/company/developwithus'> DevelopUS Technologies</Link> All Rights Reserved. Copyright © 2024
         </Text>
       </Text>
       {/* <List display='flex'>

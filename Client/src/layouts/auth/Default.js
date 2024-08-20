@@ -41,7 +41,7 @@ function AuthIllustration(props) {
           // bg={'black'}
           overflow={'hidden'}
           right='0px'>
-          <Link to="https://prolinkinfotech.com/" target="_blank" style={{ height: '50%', width: '50%' }} >
+          <Link to ="https://www.linkedin.com/company/developwithus" target="_blank" style={{ height: '50%', width: '50%' }} >
             <Flex
               bg={`url(${illustrationBackground})`}
               justify='center'

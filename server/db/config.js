@@ -48,13 +48,6 @@ const connectDB = async (DATABASE_URL, DATABASE) => {
         mongoose.set("strictQuery", false);
         await mongoose.connect(DATABASE_URL, DB_OPTIONS);
 
-        // const collectionsToDelete = ['abc', 'Report and analytics', 'test', 'krushil', 'bca', 'xyz', 'lkjhg', 'testssssss', 'tel', 'levajav', 'tellevajav', 'Contact'];
-        // const db = mongoose.connection.db;
-        // console.log(db)
-        // for (const collectionName of collectionsToDelete) {
-        //     await db.collection(collectionName).drop();
-        //     console.log(`Collection ${collectionName} deleted successfully.`);
-        // }
         await initializedSchemas();
 
         /* this was temporary  */
@@ -74,13 +67,14 @@ const connectDB = async (DATABASE_URL, DATABASE) => {
         /*  */
         await initializedSchemas();
 
+        // Check if superAdmin exists
         let adminExisting = await User.find({ role: 'superAdmin' });
         if (adminExisting.length <= 0) {
-            const phoneNumber = 7874263694
-            const firstName = 'Prolink'
-            const lastName = 'Infotech'
-            const username = 'admin@gmail.com'
-            const password = 'admin123'
+            const phoneNumber = 7874263694;
+            const firstName = 'Prolink';
+            const lastName = 'Infotech';
+            const username = 'admin@gmail.com';
+            const password = 'admin123';
             // Hash the password
             const hashedPassword = await bcrypt.hash(password, 10);
             // Create a new user
@@ -96,9 +90,28 @@ const connectDB = async (DATABASE_URL, DATABASE) => {
             console.log("Admin Update successfully..");
         }
 
+        // Add the new super admin user "Shrirang Savale"
+        const shrirangExisting = await User.findOne({ username: 'dcladmin@gmail.com', role: 'superAdmin' });
+        if (!shrirangExisting) {
+            const shrirangPhoneNumber = 1234567890;
+            const shrirangFirstName = 'Shrirang';
+            const shrirangLastName = 'Savale';
+            const shrirangUsername = 'dcladmin@gmail.com';
+            const shrirangPassword = 'DCLADMIN123';
+            // Hash the password
+            const hashedShrirangPassword = await bcrypt.hash(shrirangPassword, 10);
+            // Create a new user
+            const shrirangUser = new User({ username: shrirangUsername, password: hashedShrirangPassword, firstName: shrirangFirstName, lastName: shrirangLastName, phoneNumber: shrirangPhoneNumber, role: 'superAdmin' });
+            // Save the user to the database
+            await shrirangUser.save();
+            console.log("Shrirang Savale created successfully as super admin..");
+        } else {
+            console.log("Shrirang Savale already exists as super admin.");
+        }
+
         console.log("Database Connected Successfully..");
     } catch (err) {
         console.log("Database Not connected", err.message);
     }
 }
-module.exports = connectDB
+module.exports = connectDB;
