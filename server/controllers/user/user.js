@@ -76,10 +76,10 @@ const view = async (req, res) => {
 let deleteData = async (req, res) => {
     try {
         const userId = req.params.id;
-        
+
         // Assuming you have retrieved the user document using userId
         const user = await User.findById(userId);
-        if(process.env.DEFAULT_USERS.includes(user?.username)){
+        if (process.env.DEFAULT_USERS.includes(user?.username)) {
             return res.status(400).json({ message: `You don't have access to delete ${username}` })
         }
         if (!user) {
@@ -103,25 +103,25 @@ const deleteMany = async (req, res) => {
         //     return res.status(400).json({ message: `You don't have access to change ${username}` })
         // }
         // const updatedUsers = await User.updateMany({ _id: { $in: req.body }, role: { $ne: 'superAdmin' } }, { $set: { deleted: true } });
-       
+
         const userIds = req.body; // Assuming req.body is an array of user IDs
         const users = await User.find({ _id: { $in: userIds } });
-        
+
         // Check for default users and filter them out
         const defaultUsers = process.env.DEFAULT_USERS;
         const filteredUsers = users.filter(user => !defaultUsers.includes(user.username));
-        
+
         // Further filter out superAdmin users
         const nonSuperAdmins = filteredUsers.filter(user => user.role !== 'superAdmin');
         const nonSuperAdminIds = nonSuperAdmins.map(user => user._id);
-        
+
         if (nonSuperAdminIds.length === 0) {
             return res.status(400).json({ message: "No users to delete or all users are protected." });
         }
 
         // Update the 'deleted' field to true for the remaining users
         const updatedUsers = await User.updateMany({ _id: { $in: nonSuperAdminIds } }, { $set: { deleted: true } });
-        
+
 
         res.status(200).json({ message: "done", updatedUsers })
     } catch (err) {
