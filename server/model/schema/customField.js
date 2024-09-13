@@ -62,6 +62,10 @@ const fieldsSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    editable: {
+        type: Boolean,
+        default: true
+    },
     delete: {
         type: Boolean,
         default: false

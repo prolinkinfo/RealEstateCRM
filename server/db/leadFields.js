@@ -37,6 +37,7 @@ const leadFields = [
         "delete": false,
         "belongsTo": null,
         "backendType": "String",
+        "editable": false,
         "isTableField": true,
         "options": [],
         "validation": [
