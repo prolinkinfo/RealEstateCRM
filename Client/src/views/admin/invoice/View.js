@@ -243,6 +243,11 @@ const View = (props) => {
         <div>
             <Grid templateColumns="repeat(4, 1fr)" gap={3} id="reports">
                 <GridItem colSpan={{ base: 4 }}>
+                    <Heading size="lg" m={3}>
+                        {data?.title || ""}
+                    </Heading>
+                </GridItem>
+                <GridItem colSpan={{ base: 4 }}>
                     <Card >
                         <Grid gap={4}>
                             <GridItem colSpan={2}>
@@ -251,7 +256,7 @@ const View = (props) => {
                                         <Heading size="md" mb={3}>
                                             Invoice Details
                                         </Heading>
-                                        <Flex id="hide-btn" >
+                                        <Flex id="hide-btn">
                                             <Menu>
                                                 {(user.role === 'superAdmin' || invoiceAccess?.create || invoiceAccess?.update || invoiceAccess?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' size="sm" va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
                                                     Actions

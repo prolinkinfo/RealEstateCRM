@@ -1,4 +1,4 @@
-import { Button, Grid, GridItem, Flex, IconButton, Text, Menu, MenuButton, MenuDivider, MenuItem, MenuList, useDisclosure, Input, FormLabel } from '@chakra-ui/react'
+import { Button, Grid, GridItem, Heading, Flex, IconButton, Text, Menu, MenuButton, MenuDivider, MenuItem, MenuList, useDisclosure, Input, FormLabel } from '@chakra-ui/react'
 import { AddIcon, ChevronDownIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import React from 'react'
 import moment from 'moment'
@@ -46,6 +46,11 @@ const View = () => {
 
     return (
         <div>
+            <GridItem colSpan={{ base: 4 }}>
+                <Heading size="lg" m={3}>
+                    {name || ""}
+                </Heading>
+            </GridItem>
             <Card>
                 <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={1} justifyContent={"space-between"} alignItem={"center"}>
                     <GridItem colSpan={{ base: 12, md: 6 }}>
