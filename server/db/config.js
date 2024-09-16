@@ -8,6 +8,7 @@ const { createNewModule } = require("../controllers/customField/customField.js")
 const customField = require('../model/schema/customField.js');
 const { contactFields } = require('./contactFields.js');
 const { leadFields } = require('./leadFields.js');
+const { propertiesFields } = require('./propertiesFields.js');
 
 const initializedSchemas = async () => {
     await initializeLeadSchema();
@@ -70,7 +71,7 @@ const connectDB = async (DATABASE_URL, DATABASE) => {
         // Create default modules
         await createNewModule({ body: { moduleName: 'Leads', fields: leadFields, headings: [], isDefault: true } }, mockRes);
         await createNewModule({ body: { moduleName: 'Contacts', fields: contactFields, headings: [], isDefault: true } }, mockRes);
-        await createNewModule({ body: { moduleName: 'Properties', fields: [], headings: [], isDefault: true } }, mockRes);
+        await createNewModule({ body: { moduleName: 'Properties', fields: propertiesFields, headings: [], isDefault: true } }, mockRes);
         /*  */
         await initializedSchemas();
 
