@@ -258,6 +258,11 @@ const View = (props) => {
         <div>
             <Grid templateColumns="repeat(4, 1fr)" gap={3} id="reports">
                 <GridItem colSpan={{ base: 4 }}>
+                    <Heading size="lg" m={3}>
+                        {data?.title || ""}
+                    </Heading>
+                </GridItem>
+                <GridItem colSpan={{ base: 4 }}>
                     <Card >
                         <Grid gap={4}>
                             <GridItem colSpan={2}>

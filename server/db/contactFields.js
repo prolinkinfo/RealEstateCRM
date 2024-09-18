@@ -1,5 +1,23 @@
 const contactFields = [
     {
+        "name": "fullName",
+        "label": "Full Name",
+        "type": "text",
+        "fixed": true,
+        "delete": false,
+        "belongsTo": null,
+        "backendType": "String",
+        "editable": false,
+        "isTableField": true,
+        "options": [],
+        "validation": [
+            {
+                "require": true,
+                "message": "",
+            },
+        ],
+    },
+    {
         "name": "email",
         "label": "Email",
         "type": "email",
