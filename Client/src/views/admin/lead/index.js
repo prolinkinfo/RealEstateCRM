@@ -279,14 +279,11 @@ const Index = () => {
                         ) || []
                     : []),
                 ...(result?.payload?.data && result.payload.data.length > 0
-                    ? result.payload.data[0]?.fields
-                        ?.filter((field) => field?.isTableField === true && !field?.isView)
-                        ?.map(
-                            (field) =>
-                                field?.name !== "leadStatus" && {
-                                    Header: field?.label,
-                                    accessor: field?.name,
-                                }
+                    ? result.payload.data[0]?.fields?.filter((field) => field?.isTableField === true && !field?.isView && field?.name !== "leadStatus")
+                        ?.map((field) => ({
+                            Header: field?.label,
+                            accessor: field?.name,
+                        })
                         ) || []
                     : []),
                 ...(permission?.update || permission?.view || permission?.delete

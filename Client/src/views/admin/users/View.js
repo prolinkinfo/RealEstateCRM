@@ -105,8 +105,12 @@ const View = () => {
                 </Flex> : <>
                     <AddEditUser isOpen={isOpen} onClose={handleClose} data={data} selectedId={param?.id} userAction={userAction} setUserAction={setUserAction} fetchData={fetchData} />
                     <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='User' handleDeleteData={handleDeleteClick} ids={''} selectedValues={param.id} />
-
-                    <Card >
+                    <GridItem colSpan={{ base: 4 }}>
+                        <Heading size="lg" m={3}>
+                            {data?.firstName || ""}
+                        </Heading>
+                    </GridItem>
+                    <Card>
                         <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <Heading size="md" mb={3} textTransform={'capitalize'}>
@@ -179,4 +183,4 @@ const View = () => {
     );
 };
 
-export default View;
+export default View

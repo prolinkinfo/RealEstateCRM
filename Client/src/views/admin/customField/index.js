@@ -294,7 +294,9 @@ const CustomField = () => {
                                                                     {item?.heading}
                                                                 </Text>
                                                                 <span className="EditDelete">
-                                                                    <Button size='sm' variant='outline' me={2} color={'green'} onClick={() => { setEditHeadingModal(true); setUpdateHeading(item) }}><EditIcon /></Button>
+                                                                    {item?.editable ?
+                                                                        <Button size='sm' variant='outline' me={2} color={'green'} onClick={() => { setEditHeadingModal(true); setUpdateHeading(item) }}><EditIcon /></Button> :
+                                                                        <Button size='sm' variant='outline' me={2} color={'gray'} pointer="none" ><EditIcon /></Button>}
                                                                     {item.fixed ? <Button size='sm' variant='outline' me={2} color={'gray'}><DeleteIcon /></Button> : <Button size='sm' variant='outline' me={2} color={'red'} onClick={() => { handleOpenDeleteModel(item?._id, 'one') }}><DeleteIcon /></Button>}
                                                                 </span>
                                                             </Flex>
@@ -379,7 +381,10 @@ const CustomField = () => {
                                                                                 {item?.label}
                                                                             </Text>
                                                                             <span className="EditDelete">
-                                                                                <Button size='sm' variant='outline' me={2} color={'green'} onClick={() => { setEditModal(true); setUpdateField(item) }}><EditIcon /></Button>
+                                                                                {item?.editable ?
+                                                                                    <Button size='sm' variant='outline' me={2} color={'green'} onClick={() => { setEditModal(true); setUpdateField(item) }}><EditIcon /></Button> :
+                                                                                    <Button size='sm' variant='outline' me={2} color={'gray'} ><EditIcon /></Button>
+                                                                                }
                                                                                 {item.fixed ? <Button size='sm' variant='outline' me={2} color={'gray'}><DeleteIcon /></Button> : <Button size='sm' variant='outline' me={2} color={'red'} onClick={() => { handleOpenDeleteMany(item?._id, "one"); }}><DeleteIcon /></Button>}
                                                                             </span>
                                                                         </Flex>

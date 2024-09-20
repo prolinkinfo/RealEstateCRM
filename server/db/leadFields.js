@@ -1,5 +1,23 @@
 const leadFields = [
     {
+        "name": "leadName",
+        "label": "Lead Name",
+        "type": "text",
+        "fixed": true,
+        "delete": false,
+        "belongsTo": null,
+        "backendType": "String",
+        "editable": false,
+        "isTableField": true,
+        "options": [],
+        "validation": [
+            {
+                "require": true,
+                "message": "",
+            },
+        ],
+    },
+    {
         "name": "leadStatus",
         "label": "Lead Status",
         "type": "select",
@@ -27,23 +45,6 @@ const leadFields = [
                 "message": "Invalid type value for Lead Status",
                 "formikType": "String",
             }
-        ],
-    },
-    {
-        "name": "leadName",
-        "label": "Lead Name",
-        "type": "text",
-        "fixed": true,
-        "delete": false,
-        "belongsTo": null,
-        "backendType": "String",
-        "isTableField": true,
-        "options": [],
-        "validation": [
-            {
-                "require": true,
-                "message": "",
-            },
         ],
     },
     {

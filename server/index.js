@@ -3,8 +3,11 @@ const db = require('./db/config')
 const route = require('./controllers/route');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const port = process.env.PORT || 5001
+
+
+const port = 5001
 require('dotenv').config()
+
 const fs = require('fs');
 const path = require('path');
 

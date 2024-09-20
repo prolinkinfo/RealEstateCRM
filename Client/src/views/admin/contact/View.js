@@ -444,12 +444,13 @@ const View = () => {
 
     return (
         <>
-
-
             {isLoding ?
                 <Flex justifyContent={'center'} alignItems={'center'} width="100%" >
                     <Spinner />
                 </Flex> : <>
+                    <Heading size="lg" mt={0} m={3}>
+                        {data?.fullName || ""}
+                    </Heading>
                     <Tabs onChange={handleTabChange} index={selectedTab}>
                         <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={1}>
                             <GridItem colSpan={{ base: 12, md: 6 }}>

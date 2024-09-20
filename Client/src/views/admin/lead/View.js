@@ -286,6 +286,9 @@ const View = () => {
                     <Spinner />
                 </Flex> :
                 <>
+                    <Heading size="lg" mt={0} m={3}>
+                        {data?.leadName || ""}
+                    </Heading>
                     <Tabs onChange={handleTabChange} index={selectedTab}>
                         <Grid templateColumns={'repeat(12, 1fr)'} mb={3} gap={1}>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
