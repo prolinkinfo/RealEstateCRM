@@ -15,7 +15,7 @@ const index = async (req, res) => {
 
 const add = async (req, res) => {
     try {
-        const { roleName, description } = req.body;
+        const { roleName, description, access } = req.body;
 
         const existingRole = await RoleAccess.findOne({ roleName: { $regex: new RegExp(`^${roleName}$`, 'i') } }).exec();
 
@@ -54,11 +54,18 @@ const add = async (req, res) => {
 
             // Call the async function
             processModules().then(async () => {
-                const access = [];
+                const accessData = [];
+
+                const ignoreAlreadyGivenTitles = access?.map((item) => item.title);
 
                 await titles?.forEach((item) => {
-                    access.push({ title: item, create: false, update: false, delete: false, view: false });
-                })
+                    if (!ignoreAlreadyGivenTitles.includes(item)) {
+                        accessData.push({ title: item, create: false, update: false, delete: false, view: false });
+                    } else {
+                        const currentRolePermission = access?.find(aItem => aItem.title === item);
+                        accessData.push({ ...currentRolePermission });
+                    }
+                });
 
                 const role = new RoleAccess({ roleName: roleName, description, access, createdDate });
                 await role.save();

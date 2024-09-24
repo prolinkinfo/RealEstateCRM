@@ -1,16 +1,20 @@
-import { Button, FormLabel, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, Textarea } from '@chakra-ui/react';
+import { Button, FormLabel, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, Textarea, Flex, Select, IconButton } from '@chakra-ui/react';
+import { LiaMousePointerSolid } from 'react-icons/lia';
 import Spinner from 'components/spinner/Spinner';
 import dayjs from 'dayjs';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { phoneCallSchema } from 'schema';
 import { getApi, postApi } from 'services/api';
+import UserModel from "components/commonTableModel/UserModel";
 
 const AddPhoneCall = (props) => {
     const { onClose, isOpen, fetchData, setAction, cData, LData } = props
     const [isLoding, setIsLoding] = useState(false)
     const todayTime = new Date().toISOString().split('.')[0];
     const user = JSON.parse(localStorage.getItem('user'))
+    const [assignToSalesData, setAssignToSalesData] = useState([]);
+    const [salesPersonsModelOpen, setSalesPersonsModelOpen] = useState(false);
 
     const initialValues = {
         sender: user?._id,
@@ -21,6 +25,7 @@ const AddPhoneCall = (props) => {
         createByLead: '',
         startDate: '',
         createBy: user?._id,
+        salesAgent: ''       // sales person user id
     }
 
     const formik = useFormik({
@@ -89,6 +94,22 @@ const AddPhoneCall = (props) => {
     //     }
     // }
 
+    const fetchUsersData = async () => {
+        setIsLoding(true);
+        try {
+            let result = await getApi('api/user/');
+
+            let salesPersons = result?.data?.user?.filter(userData => userData?.roles?.some(role => role?.roleName === "Sales")) || [];
+            setAssignToSalesData(salesPersons);
+
+        } catch (error) {
+            console.error('Failed to fetch users data:', error);
+
+        } finally {
+            setIsLoding(false);
+        }
+    };
+
     const fetchDataR = async () => {
         if (LData && LData._id && props.lead === true) {
             setFieldValue('recipient', LData.leadPhoneNumber);
@@ -102,8 +123,8 @@ const AddPhoneCall = (props) => {
     }
     useEffect(() => {
         fetchDataR()
+        fetchUsersData();
     }, [props.id, cData, LData])
-
 
     return (
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
@@ -112,6 +133,8 @@ const AddPhoneCall = (props) => {
                 <ModalHeader>Add Call </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
+                    {/* User Model for sales person */}
+                    <UserModel onClose={() => setSalesPersonsModelOpen(false)} isOpen={salesPersonsModelOpen} fieldName={"salesAgent"} setFieldValue={setFieldValue} data={assignToSalesData} isLoding={isLoding} setIsLoding={setIsLoding} />
 
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12 }}>
@@ -164,21 +187,28 @@ const AddPhoneCall = (props) => {
                             />
                             <Text mb='10px' fontSize='sm' color={'red'}> {errors.callDuration && touched.callDuration && errors.callDuration}</Text>
                         </GridItem>
+
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Call Notes
+                                Assign To Sales Agent<Text color={"red"}>*</Text>
                             </FormLabel>
-                            <Textarea
-                                resize={'none'}
-                                fontSize='sm'
-                                placeholder='Enter Call Notes'
-                                onChange={handleChange} onBlur={handleBlur}
-                                value={values.callNotes}
-                                name="callNotes"
-                                fontWeight='500'
-                                borderColor={errors.callNotes && touched.callNotes ? "red.300" : null}
-                            />
-                            <Text mb='10px' fontSize='sm' color={'red'}> {errors.callNotes && touched.callNotes && errors.callNotes}</Text>
+                            <Flex justifyContent={'space-between'}>
+                                <Select
+                                    value={values.salesAgent}
+                                    name="salesAgent"
+                                    onChange={handleChange}
+                                    mb={errors.salesAgent && touched.salesAgent ? undefined : '10px'}
+                                    fontWeight='500'
+                                    placeholder={'Assign To Sales Agent'}
+                                    borderColor={errors.salesAgent && touched.salesAgent ? "red.300" : null}
+                                >
+                                    {assignToSalesData?.map((item) => {
+                                        return <option value={item._id} key={item._id}>{`${item.firstName} ${item.lastName}`}</option>
+                                    })}
+                                </Select>
+                                <IconButton onClick={() => setSalesPersonsModelOpen(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
+                            </Flex>
+                            <Text mb='10px' fontSize='sm' color={'red'}> {errors.salesAgent && touched.salesAgent && errors.salesAgent}</Text>
                         </GridItem>
                     </Grid>
                 </ModalBody>
