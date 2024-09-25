@@ -41,8 +41,6 @@ import PhoneCall from "../contact/components/phonCall";
 import AddEmailHistory from "../emailHistory/components/AddEmail";
 import AddMeeting from "../meeting/components/Addmeeting";
 import AddPhoneCall from "../phoneCall/components/AddPhoneCall";
-import Add from "./Add";
-import Edit from "./Edit";
 import { HasAccess } from "../../../redux/accessUtils";
 import DataNotFound from "components/notFoundData";
 import CustomView from "utils/customView";
@@ -65,11 +63,9 @@ import { putApi } from "services/api";
 
 const View = (props) => {
   const { userAction, userData, editData, selectedId, setUserAction } = props;
-  console.log(userAction, setUserAction, selectedId, "OOOOOOOOOOOOOOOO");
   const params = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  console.log(userData, "userData");
   const { id } = params;
   const user = JSON.parse(localStorage.getItem("user"));
   const userName =
@@ -83,11 +79,6 @@ const View = (props) => {
   const [deleteModel, setDelete] = useState(false);
   const [isLoding, setIsLoding] = useState(false);
   const [addMeeting, setMeeting] = useState(false);
-  const [showEmail, setShowEmail] = useState(false);
-  const [showCall, setShowCall] = useState(false);
-  const [showTasks, setShowTasks] = useState(false);
-  const [showMeetings, setShowMeetings] = useState(false);
-  const [addDocument, setAddDocument] = useState(false);
   const [action, setAction] = useState(false);
   const [editableField, setEditableField] = useState(null);
   const [useraction, setUserction] = useState(false);
@@ -95,27 +86,9 @@ const View = (props) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [taskModel, setTaskModel] = useState(false);
   const size = "lg";
-  const [addEmailHistory, setAddEmailHistory] = useState(false);
-  const [addPhoneCall, setAddPhoneCall] = useState(false);
 
   const leadData = useSelector((state) => state?.leadCustomFiled?.data.data);
-  const [
-    permission,
-    taskPermission,
-    meetingPermission,
-    callAccess,
-    emailAccess,
-    taskAccess,
-    meetingAccess,
-  ] = HasAccess([
-    "Leads",
-    "Tasks",
-    "Meetings",
-    "Calls",
-    "Emails",
-    "Tasks",
-    "Meetings",
-  ]);
+  const [permission] = HasAccess(["Opportunity Project"]);
   const fetchViewData = async () => {
     if (id) {
       const result = await getApi("api/opportunityproject/view/", id);
@@ -331,15 +304,6 @@ const View = (props) => {
     }
   };
 
-  const fetchData = async (i) => {
-    setIsLoding(true);
-    let response = await getApi("api/view/:id", params.id);
-    setData(response.data?.lead);
-    setAllData(response.data);
-    setIsLoding(false);
-    setSelectedTab(i);
-  };
-
   const handleDeleteLead = async (id) => {
     try {
       setIsLoding(true);
@@ -357,7 +321,7 @@ const View = (props) => {
   };
 
   useEffect(() => {
-    fetchData();
+    fetchViewData();
   }, [action]);
 
   function toCamelCase(text) {
@@ -424,7 +388,7 @@ const View = (props) => {
         console.log(response, "edit response");
         if (response && response.status === 200) {
           // setEdit(false)
-          fetchData();
+          fetchViewData();
           let updatedUserData = userData; // Create a copy of userData
           if (user?._id === params.id) {
             if (updatedUserData && typeof updatedUserData === "object") {
@@ -519,17 +483,17 @@ const View = (props) => {
                       permission?.create ||
                       permission?.update ||
                       permission?.delete) && (
-                      <MenuButton
-                        size="sm"
-                        variant="outline"
-                        colorScheme="blackAlpha"
-                        mr={2.5}
-                        as={Button}
-                        rightIcon={<ChevronDownIcon />}
-                      >
-                        Actions
-                      </MenuButton>
-                    )}
+                        <MenuButton
+                          size="sm"
+                          variant="outline"
+                          colorScheme="blackAlpha"
+                          mr={2.5}
+                          as={Button}
+                          rightIcon={<ChevronDownIcon />}
+                        >
+                          Actions
+                        </MenuButton>
+                      )}
                     <MenuDivider />
                     <MenuList minWidth={2}>
                       {(user.role === "superAdmin" || permission?.create) && (
@@ -662,7 +626,7 @@ const View = (props) => {
                         value={formik.values.requirement}
                         borderColor={
                           formik?.errors?.requirement &&
-                          formik?.touched?.requirement
+                            formik?.touched?.requirement
                             ? "red.300"
                             : null
                         }
@@ -693,206 +657,56 @@ const View = (props) => {
                 </Box>
               </GridItem>
             </Grid>
-            {/* <TabPanels>
-                            <TabPanel pt={4} p={0}>
-                                <CustomView data={leadData?.[0]} fieldData={data} toCamelCase={toCamelCase} moduleId={leadData?.[0]?._id} fetchData={fetchData} id="reports" />
-                            </TabPanel>
-                            <TabPanel pt={4} p={0}>
-                                <GridItem colSpan={{ base: 4 }} >
-                                    <Grid overflow={'hidden'} templateColumns={{ base: "1fr" }} gap={4}>
-                                        <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
-                                            {emailAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
-                                                <Card >
-                                                    <CommonCheckTable
-                                                        title={"Email"}
-                                                        isLoding={isLoding}
-                                                        columnData={columnsDataColumns ?? []}
-                                                        // dataColumn={columnsDataColumns ?? []}
-                                                        allData={showEmail ? allData.Email : allData?.Email?.length > 0 ? [allData.Email[0]] : []}
-                                                        tableData={showEmail ? allData.Email : allData?.Email?.length > 0 ? [allData.Email[0]] : []}
-                                                        AdvanceSearch={false}
-                                                        dataLength={allData?.Email?.length}
-                                                        tableCustomFields={[]}
-                                                        checkBox={false}
-                                                        deleteMany={true}
-                                                        ManageGrid={false}
-                                                        onOpen={() => setAddEmailHistory(true)}
-                                                        access={emailAccess}
-                                                    />
-                                                    {allData?.Email?.length > 1 &&
-                                                        <div style={{ display: "flex", justifyContent: "end" }}>
-                                                            <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showEmail ? setShowEmail(false) : setShowEmail(true)}>{showEmail ? "Show less" : "Show more"}</Button>
-                                                        </div>}
-                                                </Card>
-                                            </GridItem>}
-                                            {callAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
-                                                <Card>
-                                                    <CommonCheckTable
-                                                        title={"Call"}
-                                                        isLoding={isLoding}
-                                                        columnData={callColumns ?? []}
-                                                        // dataColumn={callColumns ?? []}
-                                                        allData={showCall ? allData?.phoneCall : allData?.phoneCall?.length > 0 ? [allData?.phoneCall[0]] : []}
-                                                        tableData={showCall ? allData?.phoneCall : allData?.phoneCall?.length > 0 ? [allData?.phoneCall[0]] : []}
-                                                        AdvanceSearch={false}
-                                                        dataLength={allData?.phoneCall?.length}
-                                                        tableCustomFields={[]}
-                                                        checkBox={false}
-                                                        deleteMany={true}
-                                                        ManageGrid={false}
-                                                        onOpen={() => setAddPhoneCall(true)}
-                                                        access={callAccess}
-                                                    />
-                                                    {allData?.phoneCall?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
-                                                        <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showCall ? setShowCall(false) : setShowCall(true)}>{showCall ? "Show less" : "Show more"}</Button>
-                                                    </div>}
-                                                </Card>
-                                            </GridItem>}
-                                            {taskAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
-                                                <Card >
-                                                    <CommonCheckTable
-                                                        title={"Task"}
-                                                        isLoding={isLoding}
-                                                        columnData={taskColumns ?? []}
-                                                        // dataColumn={taskColumns ?? []}
-                                                        allData={showTasks ? allData?.task : allData?.task?.length > 0 ? [allData?.task[0]] : []}
-                                                        tableData={showTasks ? allData?.task : allData?.task?.length > 0 ? [allData?.task[0]] : []}
-                                                        dataLength={allData?.task?.length}
-                                                        AdvanceSearch={false}
-                                                        tableCustomFields={[]}
-                                                        checkBox={false}
-                                                        deleteMany={true}
-                                                        ManageGrid={false}
-                                                        onOpen={() => setTaskModel(true)}
-                                                        access={taskAccess}
-                                                    />
-                                                    {
-                                                        allData?.task?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
-                                                            <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showTasks ? setShowTasks(false) : setShowTasks(true)}>{showTasks ? "Show less" : "Show more"}</Button>
-                                                        </div>}
-                                                </Card>
-                                            </GridItem>}
 
-                                            {meetingAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
-                                                <Card overflow={'scroll'}>
-                                                    <CommonCheckTable
-                                                        title={"Meeting"}
-                                                        isLoding={isLoding}
-                                                        columnData={MeetingColumns ?? []}
-                                                        // dataColumn={MeetingColumns ?? []}
-                                                        allData={showMeetings ? allData?.meeting : allData?.meeting?.length > 0 ? [allData?.meeting[0]] : []}
-                                                        tableData={showMeetings ? allData?.meeting : allData?.meeting?.length > 0 ? [allData?.meeting[0]] : []}
-                                                        AdvanceSearch={false}
-                                                        dataLength={allData?.meeting?.length} tableCustomFields={[]}
-                                                        checkBox={false}
-                                                        deleteMany={true}
-                                                        ManageGrid={false}
-                                                        onOpen={() => setMeeting(true)}
-                                                        access={meetingAccess}
-                                                    />
-
-                                                    {allData?.meeting?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
-                                                        <Button colorScheme="brand" size='sm' variant="outline" display="flex" justifyContant="end" onClick={() => showMeetings ? setShowMeetings(false) : setShowMeetings(true)}>{showMeetings ? "Show less" : "Show more"}</Button>
-                                                    </div>}
-                                                </Card>
-                                            </GridItem>}
-                                        </Grid>
-                                    </Grid>
-                                </GridItem>
-                            </TabPanel>
-                            <TabPanel pt={4} p={0}>
-                                <GridItem colSpan={{ base: 4 }} >
-                                    <Card minH={'50vh'} >
-                                        <Flex alignItems={'center'} justifyContent={'space-between'} mb='2'>
-                                            <Heading size="md" mb={3}>
-                                                Documents
-                                            </Heading>
-                                            <Button leftIcon={<AddIcon />} size='sm' variant='brand' onClick={() => setAddDocument(true)}>Add Document</Button>
-                                        </Flex>
-                                        <HSeparator />
-                                        <VStack mt={4} alignItems="flex-start">
-                                            {allData?.Document?.length > 0 ? allData?.Document?.map((item) => (
-                                                <FolderTreeView name={item.folderName} item={item}>
-                                                    {item?.files?.map((file) => (
-                                                        <FolderTreeView download={download} data={file} name={file.fileName} isFile from="lead" />
-                                                    ))}
-                                                </FolderTreeView>
-                                            )) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
-                                                <DataNotFound />
-                                            </Text>}
-                                        </VStack>
-                                    </Card>
-                                </GridItem>
-                            </TabPanel>
-
-                        </TabPanels> */}
           </Tabs>
 
           {(user.role === "superAdmin" ||
             permission?.update ||
             permission?.delete) && (
-            <Card mt={3}>
-              <Grid templateColumns="repeat(2, 1fr)" gap={1}>
-                <GridItem colStart={6}>
-                  <Flex justifyContent={"right"}>
-                    {user.role === "superAdmin" || permission?.update ? (
-                      <Button
-                        size="sm"
-                        onClick={() => {
-                          setUserction("edit");
-                          onOpen();
-                        }}
-                        leftIcon={<EditIcon />}
-                        mr={2.5}
-                        variant="outline"
-                        colorScheme="green"
-                      >
-                        Edit
-                      </Button>
-                    ) : (
-                      ""
-                    )}
-                    {user.role === "superAdmin" || permission?.delete ? (
-                      <Button
-                        size="sm"
-                        style={{ background: "red.800" }}
-                        onClick={() => setDelete(true)}
-                        leftIcon={<DeleteIcon />}
-                        colorScheme="red"
-                      >
-                        Delete
-                      </Button>
-                    ) : (
-                      ""
-                    )}
-                  </Flex>
-                </GridItem>
-              </Grid>
-            </Card>
-          )}
+              <Card mt={3}>
+                <Grid templateColumns="repeat(2, 1fr)" gap={1}>
+                  <GridItem colStart={6}>
+                    <Flex justifyContent={"right"}>
+                      {user.role === "superAdmin" || permission?.update ? (
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            setUserction("edit");
+                            onOpen();
+                          }}
+                          leftIcon={<EditIcon />}
+                          mr={2.5}
+                          variant="outline"
+                          colorScheme="green"
+                        >
+                          Edit
+                        </Button>
+                      ) : (
+                        ""
+                      )}
+                      {user.role === "superAdmin" || permission?.delete ? (
+                        <Button
+                          size="sm"
+                          style={{ background: "red.800" }}
+                          onClick={() => setDelete(true)}
+                          leftIcon={<DeleteIcon />}
+                          colorScheme="red"
+                        >
+                          Delete
+                        </Button>
+                      ) : (
+                        ""
+                      )}
+                    </Flex>
+                  </GridItem>
+                </Grid>
+              </Card>
+            )}
         </>
       )}
 
-      {isOpen && (
-        <Add
-          // isOpen={isOpen}
-          size={size}
-          onClose={onClose}
-          leadData={leadData?.[0]}
-          setAction={setAction}
-        />
-      )}
-      <Edit
-        isOpen={edit}
-        size={size}
-        onClose={setEdit}
-        leadData={leadData?.[0]}
-        setAction={setAction}
-        moduleId={leadData?.[0]?._id}
-        data={data}
-      />
       <AddMeeting
-        fetchData={fetchData}
+        fetchData={fetchViewData}
         isOpen={addMeeting}
         leadContect={splitValue?.[0]}
         onClose={setMeeting}
@@ -903,7 +717,7 @@ const View = (props) => {
       />
       <AddEdit
         isOpen={taskModel}
-        fetchData={fetchData}
+        fetchData={fetchViewData}
         leadContect={splitValue?.[0]}
         onClose={setTaskModel}
         id={params.id}

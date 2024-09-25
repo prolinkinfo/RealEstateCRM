@@ -27,6 +27,7 @@ import { GrValidate } from "react-icons/gr";
 import { VscFileSubmodule } from "react-icons/vsc";
 import { HiTemplate } from "react-icons/hi";
 import { TbBulb } from "react-icons/tb";
+import { FaDiagramProject } from "react-icons/fa6";
 import { BsBlockquoteRight } from "react-icons/bs";
 import { RiAccountCircleFill } from "react-icons/ri";
 import { TbInvoice } from "react-icons/tb";
@@ -212,7 +213,7 @@ const routes = [
     name: "Opportunity Project",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     path: "/opportunityproject",
-    icon: <Icon as={TbBulb} width='20px' height='20px' color='inherit' />,
+    icon: <Icon as={FaDiagramProject} width='20px' height='20px' color='inherit' />,
     component: Opportunityproject
   },
   {
@@ -223,7 +224,7 @@ const routes = [
     path: "/opportunitiesprojectView/:id",
     component: OpportunityView,
   },
-  
+
   // -----------------------------Account-------------------------------------
   {
     name: "Account",

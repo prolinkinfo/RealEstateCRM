@@ -1,23 +1,17 @@
-import { CloseIcon, PhoneIcon } from '@chakra-ui/icons';
-import { Button, FormLabel, Grid, GridItem, Icon, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
+import { CloseIcon } from '@chakra-ui/icons';
+import { Button, FormLabel, Grid, GridItem, IconButton, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
 import Spinner from 'components/spinner/Spinner';
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
-import { MdOutlineRemoveRedEye } from 'react-icons/md';
-import { RiEyeCloseLine } from 'react-icons/ri';
 import { toast } from 'react-toastify';
-import { userSchema } from 'schema';
 import { putApi } from 'services/api';
 import { postApi } from 'services/api';
 import * as yup from 'yup';
 
 const Editopportunityproject = (props) => {
     const { onClose, isOpen, setAction, data, userAction, userData, editData, selectedId, fetchData, setUserAction } = props
-    // console.log(selectedId, data, "selectedId")
     const [isLoding, setIsLoding] = useState(false)
-    const [show, setShow] = React.useState(false);
-    const [modelEdit, setmodelEdit] = useState(true)
-    const showPass = () => setShow(!show);
+
     const validationSchema = yup.object({
         name: yup.string().required("Name is required"),
         requirement: yup.string().required("Requirement is required"),
@@ -27,7 +21,6 @@ const Editopportunityproject = (props) => {
         requirement: userAction === "add" ? '' : data?.requirement,
     }
     const user = JSON.parse(window.localStorage.getItem('user'))
-    // console.log(data, "dataaa")
     const formik = useFormik({
         initialValues: initialValues,
         validationSchema,
@@ -37,14 +30,11 @@ const Editopportunityproject = (props) => {
         }
     });
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
-    // console.log(errors)
     const AddData = async () => {
-        // console.log(userAction, "hello")
         if (userAction === "add") {
             try {
                 setIsLoding(true)
                 let response = await postApi('api/opportunityproject/add', values)
-                console.log(response, "response")
                 if (response && response.status === 200) {
                     onClose();
                     resetForm();
@@ -63,14 +53,11 @@ const Editopportunityproject = (props) => {
             try {
                 setIsLoding(true)
                 let response = await putApi(`api/opportunityproject/edit/${selectedId}`, values)
-                console.log(response, "edit response dataaa")
                 if (response && response.status === 200) {
-                    // setEdit(false)
                     fetchData()
                     let updatedUserData = userData; // Create a copy of userData
                     if (user?._id === selectedId) {
                         if (updatedUserData && typeof updatedUserData === 'object') {
-                            // Create a new object with the updated firstName
                             updatedUserData = {
                                 ...updatedUserData,
                                 Name: values?.name,
@@ -79,12 +66,9 @@ const Editopportunityproject = (props) => {
                         }
                         const updatedDataString = JSON.stringify(updatedUserData);
                         localStorage.setItem('user', updatedDataString);
-                        // dispatch(setUser(updatedDataString));
                     }
-                    // dispatch(fetchRoles(user?._id))
                     onClose();
                     setUserAction('')
-                    console.log("hello")
                     setAction((pre) => !pre)
                 } else {
                     toast.error(response.response.data?.message)
@@ -97,10 +81,7 @@ const Editopportunityproject = (props) => {
             }
         }
     };
-    const handleEditClose = () => {
-        setmodelEdit(false)
-    }
-    // console.log(userData, "userData")
+
     return (
         <Modal isOpen={isOpen} isCentered>
             <ModalOverlay />
@@ -145,74 +126,6 @@ const Editopportunityproject = (props) => {
                             />
                             <Text mb='10px' color={'red'}>{errors.requirement && touched.requirement && errors.requirement}</Text>
                         </GridItem>
-                        {/* <GridItem colSpan={{ base: 12 }}>
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Email<Text color={"red"}>*</Text>
-                            </FormLabel>
-                            <Input
-                                fontSize='sm'
-                                type='email'
-                                onChange={handleChange} onBlur={handleBlur}
-                                value={values.username}
-                                name="username"
-                                disabled={userAction === 'edit'}
-                                placeholder='Email Address'
-                                fontWeight='500'
-                                borderColor={errors.username && touched.username ? "red.300" : null}
-                            />
-                            <Text mb='10px' color={'red'}> {errors.username && touched.username && errors.username}</Text>
-                        </GridItem> */}
-                        {/* <GridItem colSpan={{ base: 12 }}>
-                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                Phone Number<Text color={"red"}>*</Text>
-                            </FormLabel>
-                            <InputGroup>
-                                <InputLeftElement
-                                    pointerEvents="none"
-                                    children={<PhoneIcon color="gray.300" borderRadius="16px" />}
-                                />
-                                <Input type="tel"
-                                    fontSize='sm'
-                                    onChange={handleChange} onBlur={handleBlur}
-                                    value={values.phoneNumber}
-                                    name="phoneNumber"
-                                    fontWeight='500'
-                                    borderColor={errors.phoneNumber && touched.phoneNumber ? "red.300" : null}
-                                    placeholder="Phone number" borderRadius="16px" />
-                            </InputGroup>
-                            <Text mb='10px' color={'red'}>{errors.phoneNumber && touched.phoneNumber && errors.phoneNumber}</Text>
-                        </GridItem> */}
-                        {/* {
-                            userAction !== "edit" &&
-                            <GridItem colSpan={{ base: 12 }}>
-                                <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
-                                    Name
-                                </FormLabel>
-                                <InputGroup size='md'>
-                                    <Input
-                                        isRequired={true}
-                                        fontSize='sm'
-                                        placeholder='Enter Your Name'
-                                        name='name'
-                                        size='lg'
-                                        variant='auth'
-                                        type={show ? "text" : "name"}
-                                        value={values.name} onChange={handleChange} onBlur={handleBlur}
-                                        borderColor={errors.name && touched.name ? "red.300" : null}
-                                        className={errors.name && touched.name ? "isInvalid" : null}
-                                    />
-                                    <InputRightElement display='flex' alignItems='center' mt='4px'>
-                                        <Icon
-                                            color={'gray.400'}
-                                            _hover={{ cursor: "pointer" }}
-                                            as={show ? RiEyeCloseLine : MdOutlineRemoveRedEye}
-                                            onClick={showPass}
-                                        />
-                                    </InputRightElement>
-                                </InputGroup>
-                                <Text mb='10px' color={'red'}> {errors.name && touched.name && errors.name}</Text>
-                            </GridItem>
-                        }  */}
                     </Grid>
 
                 </ModalBody>
