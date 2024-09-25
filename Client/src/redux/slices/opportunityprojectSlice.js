@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getApi } from '../../services/api'
 
-export const fetchOpportunityData = createAsyncThunk('fetchOpportunityData', async () => {
+export const fetchOpportunityProjectData = createAsyncThunk('fetchOpportunityData', async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     try {
-        const response = await getApi(user.role === 'superAdmin' ? 'api/opportunityproject/' : `api/opportunityproject/?createBy=${user._id}`);
+        const response = await getApi(user.role === 'superAdmin' ? 'api/opportunityproject' : `api/opportunityproject/?createBy=${user._id}`);
         console.log(response, "response")
         return response;
     } catch (error) {
@@ -12,9 +12,8 @@ export const fetchOpportunityData = createAsyncThunk('fetchOpportunityData', asy
     }
 });
 
-
-const opportunitySlice = createSlice({
-    name: 'opportunityData',
+const opportunityProjectSlice = createSlice({
+    name: 'opportunityProjectData',
     initialState: {
         data: [],
         isLoading: false,
@@ -22,15 +21,16 @@ const opportunitySlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchOpportunityData.pending, (state) => {
+            .addCase(fetchOpportunityProjectData.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(fetchOpportunityData.fulfilled, (state, action) => {
+            .addCase(fetchOpportunityProjectData.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.data = action.payload;
+                state.data = action.payload.data;
+                console.log(action.payload.data, "action/payload")
                 state.error = "";
             })
-            .addCase(fetchOpportunityData.rejected, (state, action) => {
+            .addCase(fetchOpportunityProjectData.rejected, (state, action) => {
                 state.isLoading = false;
                 state.data = [];
                 state.error = action.error.message;
@@ -38,4 +38,4 @@ const opportunitySlice = createSlice({
     },
 });
 
-export default opportunitySlice.reducer;
+export default opportunityProjectSlice.reducer;
