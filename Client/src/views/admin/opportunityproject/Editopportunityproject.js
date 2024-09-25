@@ -9,7 +9,7 @@ import { postApi } from 'services/api';
 import * as yup from 'yup';
 
 const Editopportunityproject = (props) => {
-    const { onClose, isOpen, setAction, data, userAction, userData, editData, selectedId, fetchData, setUserAction } = props
+    const { onClose, isOpen, setAction, data, userAction, userData, selectedId, fetchData, setUserAction } = props
     const [isLoding, setIsLoding] = useState(false)
 
     const validationSchema = yup.object({
@@ -25,11 +25,11 @@ const Editopportunityproject = (props) => {
         initialValues: initialValues,
         validationSchema,
         enableReinitialize: true,
-        onSubmit: (values) => {
+        onSubmit: () => {
             AddData();
         }
     });
-    const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, resetForm } = formik
+    const { errors, touched, values, handleBlur, handleChange, handleSubmit, resetForm } = formik
     const AddData = async () => {
         if (userAction === "add") {
             try {
