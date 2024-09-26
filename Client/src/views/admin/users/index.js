@@ -17,9 +17,7 @@ import AddEditUser from './AddEditUser';
 
 const Index = () => {
     const [action, setAction] = useState(false);
-    const [edit, setEdit] = useState(false);
     const [editData, setEditData] = useState({});
-    const { onOpen, onClose } = useDisclosure();
     const [isOpen, setIsOpen] = useState(false)
     const [selectedId, setSelectedId] = useState();
     const [deleteMany, setDelete] = useState(false);

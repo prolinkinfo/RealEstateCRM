@@ -82,7 +82,6 @@ const View = (props) => {
   const [action, setAction] = useState(false);
   const [editableField, setEditableField] = useState(null);
   const [useraction, setUserction] = useState(false);
-  // const [leadData, setLeadData] = useState([])
   const [selectedTab, setSelectedTab] = useState(0);
   const [taskModel, setTaskModel] = useState(false);
   const size = "lg";
@@ -270,7 +269,6 @@ const View = (props) => {
       element.style.display = "block";
       element.style.width = "100%"; // Adjust width for mobile
       element.style.height = "auto";
-      // setTimeout(() => {
       html2pdf()
         .from(element)
         .set({
@@ -286,7 +284,6 @@ const View = (props) => {
         .then(() => {
           element.style.display = "";
         });
-      // }, 500);
     } else {
       console.error("Element with ID 'reports' not found.");
     }
@@ -379,9 +376,7 @@ const View = (props) => {
           }
           const updatedDataString = JSON.stringify(updatedUserData);
           localStorage.setItem("user", updatedDataString);
-          // dispatch(setUser(updatedDataString));
         }
-        // dispatch(fetchRoles(user?._id))
         onClose();
         setUserAction("");
         setAction((pre) => !pre);

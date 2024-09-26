@@ -175,58 +175,6 @@ function LeadImport() {
         });
         setFilterLead(filterLeadData);
     }, [importedFileFields]);
-
-    // return (
-    //     <>
-    //         <Card overflowY={"auto"} className="importTable">
-    //             <Text color={"secondaryGray.900"}
-    //                 fontSize="22px"
-    //                 fontWeight="700"
-    //                 mb='20px'
-    //             >Import Leads</Text>
-    //             <Grid templateColumns="repeat(12, 1fr)" mb={3} pb={2} gap={1} borderBottom={'1px solid #e2e8f0'}>
-    //                 {
-    //                     columns.map((column, index) => (
-    //                         <GridItem key={index} colSpan={{ base: 6 }} fontWeight={'600'} fontSize={{ sm: "14px", lg: "14px" }} color="secondaryGray.900" style={{ textTransform: "uppercase" }}>
-    //                             {column.Header}
-    //                         </GridItem>
-    //                     ))
-    //                 }
-    //             </Grid>
-    //             <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={1} overflowY={'auto'}>
-    //                 {
-    //                     fieldsInCrm?.map((item, index) => (
-    //                         <>
-    //                             <GridItem colSpan={{ base: 6 }} key={item.id} mt='10px'>
-    //                                 {item.Header}
-    //                             </GridItem>
-    //                             <GridItem colSpan={{ base: 4 }}>
-    //                                 <Select
-    //                                     variant="flushed"
-    //                                     fontWeight='500'
-    //                                     isSearchable
-    //                                     value={values[item.accessor]}
-    //                                     name={item.accessor}
-    //                                     onChange={handleChange}
-    //                                 >
-    //                                     <option value=''> {filterLead ? filterLead.find((data) => (item.Header === data || item.accessor === data) && data) ? filterLead.find((data) => (item.Header === data || item.accessor === data) && data) : 'Select Field In File' : 'Select Field In File'}</option>
-    //                                     {
-    //                                         importedFileFields?.map(field => (
-    //                                             <option value={field} key={field}>{field}</option>
-    //                                         ))
-    //                                     }
-    //                                 </Select>
-    //                             </GridItem>
-    //                         </>
-    //                     ))
-    //                 }
-    //             </Grid>
-    //             <Flex Flex justifyContent={'end'} mt='5' >
-    //                 <Button size="sm" onClick={() => handleSubmit()} variant="brand">Save</Button>
-    //             </Flex>
-    //         </Card>
-    //     </>
-    // )
 }
 
 export default LeadImport

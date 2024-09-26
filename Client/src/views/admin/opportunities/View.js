@@ -147,9 +147,9 @@ const View = (props) => {
                                     <Box display={"flex"} justifyContent={"space-between"} >
 
                                         <Flex id="hide-btn" >
-                                            <Heading size="md">
-                                                Opportunities Details
-                                            </Heading>
+                                        <Heading size="md" mb={3}>
+                                            Opportunities Details
+                                        </Heading>
                                             <Menu>
                                                 {(user.role === 'superAdmin' || opportunityAccess?.create || opportunityAccess?.update || opportunityAccess?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' size="sm" va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
                                                     Actions
