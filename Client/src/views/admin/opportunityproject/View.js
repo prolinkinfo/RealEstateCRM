@@ -96,11 +96,6 @@ const View = (props) => {
       console.log(result?.data, "setData");
     }
   };
-  console.log(opportunitydata, "dattttt");
-  // const handleOpen = (type) => {
-  //     setUserAction(type)
-  //     setIsOpen(true)
-  // }
   const handleClick = () => {
     setUserction("add");
     onOpen();
@@ -108,6 +103,11 @@ const View = (props) => {
   useEffect(() => {
     fetchViewData();
   }, [id, edit]);
+
+  const handleDoubleClick = (fieldName, value) => {
+    formik.setFieldValue(fieldName, value);
+    setEditableField(fieldName);
+  };
 
   const columnsDataColumns = [
     { Header: "sender", accessor: "senderName" },
@@ -331,10 +331,9 @@ const View = (props) => {
   const firstValue = Object?.values(params)[0];
   const splitValue = firstValue?.split("/");
   const initialValues = {
-    name: data?.name,
-    requirement: data?.requirement,
+    name: opportunitydata?.name,
+    requirement: opportunitydata?.requirement,
   };
-
   const validationSchema = yup.object({
     name: yup.string().required("name is required"),
     requirement: yup.string().required("Requirement is required"),
@@ -344,90 +343,71 @@ const View = (props) => {
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
+      setEditableField(null);
       AddData();
     },
   });
-  console.log(params.id, "params.id");
   const {
     errors,
     touched,
     values,
-    handleBlur,
     handleChange,
     handleSubmit,
     setFieldValue,
     resetForm,
   } = formik;
   const AddData = async () => {
-    console.log(userAction, "hello");
-    if (userAction === "add") {
-      try {
-        setIsLoding(true);
-        let response = await postApi("api/opportunityproject/add", values);
-        console.log(response, "response");
-        if (response && response.status === 200) {
-          onClose();
-          resetForm();
-          setAction((pre) => !pre);
-          setUserAction("");
-        } else {
-          toast.error(response.response.data?.message);
-        }
-      } catch (e) {
-        console.log(e);
-      } finally {
-        setIsLoding(false);
-      }
-    } else if (userAction === "edit") {
-      try {
-        setIsLoding(true);
-        let response = await putApi(
-          `api/opportunityproject/edit/${params.id}`,
-          values
-        );
-        console.log(response, "edit response");
-        if (response && response.status === 200) {
-          // setEdit(false)
-          fetchViewData();
-          let updatedUserData = userData; // Create a copy of userData
-          if (user?._id === params.id) {
-            if (updatedUserData && typeof updatedUserData === "object") {
-              // Create a new object with the updated firstName
-              updatedUserData = {
-                ...updatedUserData,
-                Name: values?.name,
-                Requirement: values?.requirement,
-              };
-            }
-            const updatedDataString = JSON.stringify(updatedUserData);
-            localStorage.setItem("user", updatedDataString);
-            // dispatch(setUser(updatedDataString));
+    try {
+      setIsLoding(true);
+      let response = await putApi(
+        `api/opportunityproject/edit/${params.id}`,
+        values
+      );
+      if (response && response.status === 200) {
+        setEditableField(null);
+        // setEdit(false)
+        fetchViewData();
+        let updatedUserData = userData; // Create a copy of userData
+        if (user?._id === params.id) {
+          if (updatedUserData && typeof updatedUserData === "object") {
+            // Create a new object with the updated firstName
+            updatedUserData = {
+              ...updatedUserData,
+              Name: values?.name,
+              Requirement: values?.requirement,
+            };
           }
-          // dispatch(fetchRoles(user?._id))
-          onClose();
-          setUserAction("");
-          setAction((pre) => !pre);
-        } else {
-          toast.error(response.response.data?.message);
+          const updatedDataString = JSON.stringify(updatedUserData);
+          localStorage.setItem("user", updatedDataString);
+          // dispatch(setUser(updatedDataString));
         }
-      } catch (e) {
-        console.log(e);
-      } finally {
-        setIsLoding(false);
+        // dispatch(fetchRoles(user?._id))
+        onClose();
+        setUserAction("");
+        setAction((pre) => !pre);
+      } else {
+        toast.error(response.response.data?.message);
       }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoding(false);
     }
+  };
+  const handleBlur = (e) => {
+    formik.handleSubmit();
   };
   const handleOpenModal = (user) => {
     setEdit(true);
-    // dispatch(setUser(user)); // Dispatch setUser action to set user data
   };
   const handleCloseModel = () => {
     setEdit(false);
   };
+
   return (
     <>
       {isLoding ? (
-        <Flex justifyContent={"center"} alignItems={"center"} width="100%">
+        <Flex justifyContent={"center"} alignItems={"center"} width="100%" >
           <Spinner />
         </Flex>
       ) : (
@@ -445,8 +425,7 @@ const View = (props) => {
             }}
             id="reports"
           >
-            <Heading size="md">Opportunity Project Details</Heading>
-            <Grid templateColumns={"repeat(2, 1fr)"} mb={3} gap={1}>
+            <Grid templateColumns={"repeat(2, 1fr)"} mb={3} gap={1} id="reports">
               <GridItem colSpan={{ base: 12, md: 6 }}>
                 <TabList
                   sx={{
@@ -468,34 +447,37 @@ const View = (props) => {
                     },
                   }}
                 >
-                  {/* <Tab>Information</Tab>
-                                    {(emailAccess?.view || callAccess?.view || taskAccess?.view || meetingAccess?.view) && <Tab> Communication</Tab>}
-                                    <Tab>Document</Tab> */}
                 </TabList>
               </GridItem>
               <GridItem
                 colSpan={{ base: 12, md: 6 }}
                 mt={{ sm: "3px", md: "5px" }}
               >
-                <Flex justifyContent={"right"}>
-                  <Menu>
-                    {(user.role === "superAdmin" ||
-                      permission?.create ||
-                      permission?.update ||
-                      permission?.delete) && (
-                        <MenuButton
-                          size="sm"
-                          variant="outline"
-                          colorScheme="blackAlpha"
-                          mr={2.5}
-                          as={Button}
-                          rightIcon={<ChevronDownIcon />}
-                        >
-                          Actions
-                        </MenuButton>
-                      )}
-                    <MenuDivider />
-                    <MenuList minWidth={2}>
+                <GridItem colSpan={2}>
+                  <Box>
+                    <Box display={"flex"} justifyContent={"space-between"}>
+                      <Heading size="md" mb={3}>
+                        Opportunity Project Details
+                      </Heading>
+                      <Flex id="hide-btn">
+                        <Menu>
+                          {(user.role === "superAdmin" ||
+                            permission?.create ||
+                            permission?.update ||
+                            permission?.delete) && (
+                              <MenuButton
+                              size="sm"
+                              variant="outline"
+                              colorScheme="blackAlpha"
+                              mr={2.5}
+                              as={Button}
+                              rightIcon={<ChevronDownIcon />}
+                            >
+                              Actions
+                            </MenuButton>
+                          )}
+                          <MenuDivider />
+                          <MenuList minWidth={2}>
                       {(user.role === "superAdmin" || permission?.create) && (
                         <MenuItem
                           color={"blue"}
@@ -555,8 +537,11 @@ const View = (props) => {
                       Back
                     </Button>
                   </Link>
-                </Flex>
-                <HSeparator />
+                      </Flex>
+                    </Box>
+                    <HSeparator />
+                  </Box>
+                </GridItem>
               </GridItem>
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <Box>
@@ -575,7 +560,7 @@ const View = (props) => {
                         name="name"
                         type="text"
                         onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
+                        onBlur={handleBlur}
                         value={formik.values.name}
                         borderColor={
                           formik?.errors?.name && formik?.touched?.name
@@ -594,11 +579,7 @@ const View = (props) => {
                   ) : (
                     <Text
                       onDoubleClick={() =>
-                        formik.handleDoubleClick(
-                          "name",
-                          opportunitydata?.name,
-                          "Opportunity Name"
-                        )
+                        handleDoubleClick("name", opportunitydata?.name)
                       }
                     >
                       {opportunitydata?.name ? opportunitydata?.name : " - "}
@@ -622,11 +603,11 @@ const View = (props) => {
                         name="requirement"
                         type="text"
                         onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
+                        onBlur={handleBlur}
                         value={formik.values.requirement}
                         borderColor={
                           formik?.errors?.requirement &&
-                            formik?.touched?.requirement
+                          formik?.touched?.requirement
                             ? "red.300"
                             : null
                         }
@@ -642,7 +623,7 @@ const View = (props) => {
                   ) : (
                     <Text
                       onDoubleClick={() =>
-                        formik.handleDoubleClick(
+                        handleDoubleClick(
                           "requirement",
                           opportunitydata?.requirement,
                           "Opportunity Name"
@@ -657,51 +638,50 @@ const View = (props) => {
                 </Box>
               </GridItem>
             </Grid>
-
           </Tabs>
 
           {(user.role === "superAdmin" ||
             permission?.update ||
             permission?.delete) && (
-              <Card mt={3}>
-                <Grid templateColumns="repeat(2, 1fr)" gap={1}>
-                  <GridItem colStart={6}>
-                    <Flex justifyContent={"right"}>
-                      {user.role === "superAdmin" || permission?.update ? (
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            setUserction("edit");
-                            onOpen();
-                          }}
-                          leftIcon={<EditIcon />}
-                          mr={2.5}
-                          variant="outline"
-                          colorScheme="green"
-                        >
-                          Edit
-                        </Button>
-                      ) : (
-                        ""
-                      )}
-                      {user.role === "superAdmin" || permission?.delete ? (
-                        <Button
-                          size="sm"
-                          style={{ background: "red.800" }}
-                          onClick={() => setDelete(true)}
-                          leftIcon={<DeleteIcon />}
-                          colorScheme="red"
-                        >
-                          Delete
-                        </Button>
-                      ) : (
-                        ""
-                      )}
-                    </Flex>
-                  </GridItem>
-                </Grid>
-              </Card>
-            )}
+            <Card mt={3}>
+              <Grid templateColumns="repeat(2, 1fr)" gap={1}>
+                <GridItem colStart={6}>
+                  <Flex justifyContent={"right"}>
+                    {user.role === "superAdmin" || permission?.update ? (
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          setUserction("edit");
+                          onOpen();
+                        }}
+                        leftIcon={<EditIcon />}
+                        mr={2.5}
+                        variant="outline"
+                        colorScheme="green"
+                      >
+                        Edit
+                      </Button>
+                    ) : (
+                      ""
+                    )}
+                    {user.role === "superAdmin" || permission?.delete ? (
+                      <Button
+                        size="sm"
+                        style={{ background: "red.800" }}
+                        onClick={() => setDelete(true)}
+                        leftIcon={<DeleteIcon />}
+                        colorScheme="red"
+                      >
+                        Delete
+                      </Button>
+                    ) : (
+                      ""
+                    )}
+                  </Flex>
+                </GridItem>
+              </Grid>
+            </Card>
+          )}
         </>
       )}
 
