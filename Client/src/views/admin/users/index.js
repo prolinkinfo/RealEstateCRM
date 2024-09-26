@@ -17,9 +17,7 @@ import AddEditUser from './AddEditUser';
 
 const Index = () => {
     const [action, setAction] = useState(false);
-    const [edit, setEdit] = useState(false);
     const [editData, setEditData] = useState({});
-    // const { onOpen, onClose } = useDisclosure();
     const [isOpen, setIsOpen] = useState(false)
     const [selectedId, setSelectedId] = useState();
     const [deleteMany, setDelete] = useState(false);
@@ -57,7 +55,7 @@ const Index = () => {
             Header: "Action", accessor: 'action', isSortable: false, center: true,
             cell: ({ row }) => (
                 <Text fontSize="md" fontWeight="900" textAlign={"center"}>
-                    <Menu isLazy  >
+                    <Menu isLazy>
                         <MenuButton><CiMenuKebab /></MenuButton>
                         <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
                             <MenuItem py={2.5} onClick={() => { setEditData(row?.original); setIsOpen(true); setSelectedId(row?.original._id); setUserAction('edit') }} icon={<EditIcon mb={1} fontSize={15} />}>Edit</MenuItem>

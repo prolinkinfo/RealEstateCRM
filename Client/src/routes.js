@@ -27,6 +27,7 @@ import { GrValidate } from "react-icons/gr";
 import { VscFileSubmodule } from "react-icons/vsc";
 import { HiTemplate } from "react-icons/hi";
 import { TbBulb } from "react-icons/tb";
+import { FaDiagramProject } from "react-icons/fa6";
 import { BsBlockquoteRight } from "react-icons/bs";
 import { RiAccountCircleFill } from "react-icons/ri";
 import { TbInvoice } from "react-icons/tb";
@@ -94,7 +95,8 @@ const OpportunitiesImport = React.lazy(() => import("views/admin/opportunities/c
 const Account = React.lazy(() => import("views/admin/account"));
 const AccountView = React.lazy(() => import("views/admin/account/View"));
 const AccountImport = React.lazy(() => import("views/admin/account/components/AccountImport"));
-
+const Opportunityproject = React.lazy(() => import("views/admin/opportunityproject"))
+const OpportunityView = React.lazy(() => import("views/admin/opportunityproject/View"))
 const routes = [
   // ========================== Dashboard ==========================
   {
@@ -206,6 +208,23 @@ const routes = [
     icon: <Icon as={TbBulb} width='20px' height='20px' color='inherit' />,
     component: OpportunitiesImport,
   },
+  //------------------------------Opportunity project-------------------------
+  {
+    name: "Opportunity Project",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    path: "/opportunityproject",
+    icon: <Icon as={FaDiagramProject} width='20px' height='20px' color='inherit' />,
+    component: Opportunityproject
+  },
+  {
+    name: "Opportunity Project",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    under: "opportunityproject",
+    parentName: "Opportunity Project",
+    path: "/opportunitiesprojectView/:id",
+    component: OpportunityView,
+  },
+
   // -----------------------------Account-------------------------------------
   {
     name: "Account",

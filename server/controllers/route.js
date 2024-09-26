@@ -28,7 +28,7 @@ const quotesRoute = require("./quotes/_routes")
 const moduleActiveDeactiveRoute = require("./moduleActiveDeactive/_routes")
 const accountRoute = require("./account/_routes")
 const invoicesRoute = require("./invoices/_routes")
-
+const opportunitiesproject = require("./opportunityproject/_router")
 //Api`s
 router.use('/contact', contactRoute);
 router.use('/property', propertyRoute)
@@ -60,5 +60,5 @@ router.use("/opportunity", opportunityRoute);
 router.use("/quotes", quotesRoute);
 router.use("/invoices", invoicesRoute);
 router.use("/account", accountRoute);
-
+router.use("/opportunityproject",opportunitiesproject)
 module.exports = router;
