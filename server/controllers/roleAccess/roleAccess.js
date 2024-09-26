@@ -67,7 +67,7 @@ const add = async (req, res) => {
                     }
                 });
 
-                const role = new RoleAccess({ roleName: roleName, description, access, createdDate });
+                const role = new RoleAccess({ roleName: roleName, description, access: accessData, createdDate });
                 await role.save();
                 return res.status(200).json({ message: `${roleName} Role created successfully` });
             }).catch(error => {
