@@ -1,8 +1,4 @@
-import {
-  DeleteIcon,
-  EditIcon,
-  ViewIcon
-} from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon, ViewIcon } from "@chakra-ui/icons";
 import {
   Grid,
   GridItem,
@@ -11,7 +7,7 @@ import {
   MenuItem,
   MenuList,
   Text,
-  useDisclosure
+  useDisclosure,
 } from "@chakra-ui/react";
 import CommonDeleteModel from "components/commonDeleteModel";
 import { useEffect, useState } from "react";
@@ -23,6 +19,7 @@ import CommonCheckTable from "../../../components/reactTable/checktable";
 import { HasAccess } from "../../../redux/accessUtils";
 import { fetchOpportunityProjectData } from "../../../redux/slices/opportunityprojectSlice";
 import Editopportunityproject from "./Editopportunityproject";
+import ImportModal from "./components/ImportModal";
 
 const Index = () => {
   const title = "Opportunity Project";
@@ -236,8 +233,17 @@ const Index = () => {
               handleDeleteData={handleDeleteClick}
               ids={selectedValues}
             />
+            {isImport && (
+              <ImportModal
+                text="Opportunity Project file"
+                isOpen={isImport}
+                onClose={setIsImport}
+                customFields={opportunityproject?.[0]?.fields || []}
+              />
+            )}
           </GridItem>
         )}
+        {console.log(opportunityproject,"OOOOOOOOOOO")}
       </Grid>
     </div>
   );

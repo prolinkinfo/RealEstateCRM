@@ -22,12 +22,11 @@ const add = async (req, res) => {
 const addMany = async (req, res) => {
     try {
         const data = req.body;
-        const insertedLead = await OpportunityProject.insertMany(data);
-
-        res.status(200).json(insertedLead);
+        const insertedOportunityProject = await OpportunityProject.insertMany(data);
+        res.status(200).json(insertedOportunityProject);
     } catch (err) {
-        console.error('Failed to create Lead :', err);
-        res.status(400).json({ error: 'Failed to create Lead' });
+        console.error('Failed to create OpportunityProject :', err);
+        res.status(400).json({ error: 'Failed to create OpportunityProject' });
     }
 };
 
