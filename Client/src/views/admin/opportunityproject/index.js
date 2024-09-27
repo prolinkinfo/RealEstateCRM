@@ -114,22 +114,29 @@ const Index = () => {
   const tempTableColumns = [
     { Header: "#", accessor: "_id", isSortable: false, width: 10 },
     {
-      Header: "Name", accessor: "name", cell: (cell) => (
+      Header: "Name",
+      accessor: "name",
+      cell: (cell) => (
         <div className="selectOpt">
           <Text
-            onClick={() => navigate(`/opportunityprojectView/${cell?.row?.original._id}`, {
-              state: { OpportunityList: data },
-            })}
+            onClick={() =>
+              navigate(`/opportunityprojectView/${cell?.row?.original._id}`, {
+                state: { OpportunityList: data },
+              })
+            }
             me="10px"
-            sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
-            color='brand.600'
+            sx={{
+              "&:hover": { color: "blue.500", textDecoration: "underline" },
+              cursor: "pointer",
+            }}
+            color="brand.600"
             fontSize="sm"
             fontWeight="700"
           >
             {cell?.value}
           </Text>
         </div>
-      )
+      ),
     },
     { Header: "Requirement", accessor: "requirement" },
     ...(permission?.update || permission?.view || permission?.delete
@@ -233,17 +240,14 @@ const Index = () => {
               handleDeleteData={handleDeleteClick}
               ids={selectedValues}
             />
-            {isImport && (
-              <ImportModal
-                text="Opportunity Project file"
-                isOpen={isImport}
-                onClose={setIsImport}
-                customFields={opportunityproject?.[0]?.fields || []}
-              />
-            )}
+            <ImportModal
+              text="Opportunity Project file"
+              isOpen={isImport}
+              onClose={setIsImport}
+              customFields={[]}
+            />
           </GridItem>
         )}
-        {console.log(opportunityproject,"OOOOOOOOOOO")}
       </Grid>
     </div>
   );
