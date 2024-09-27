@@ -85,7 +85,7 @@ const Index = () => {
                 color={"green"}
                 icon={<ViewIcon mb={1} fontSize={15} />}
                 onClick={() => {
-                  navigate(`/opportunitiesprojectView/${row?.values?._id}`, {
+                  navigate(`/opportunityprojectView/${row?.values?._id}`, {
                     state: { OpportunityList: data },
                   });
                 }}
@@ -113,7 +113,24 @@ const Index = () => {
   };
   const tempTableColumns = [
     { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-    { Header: "Name", accessor: "name" },
+    {
+      Header: "Name", accessor: "name", cell: (cell) => (
+        <div className="selectOpt">
+          <Text
+            onClick={() => navigate(`/opportunityprojectView/${cell?.row?.original._id}`, {
+              state: { OpportunityList: data },
+            })}
+            me="10px"
+            sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
+            color='brand.600'
+            fontSize="sm"
+            fontWeight="700"
+          >
+            {cell?.value}
+          </Text>
+        </div>
+      )
+    },
     { Header: "Requirement", accessor: "requirement" },
     ...(permission?.update || permission?.view || permission?.delete
       ? [actionHeader]

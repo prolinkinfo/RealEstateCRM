@@ -67,6 +67,11 @@ const View = () => {
                 </Flex> : <>
                     <Grid templateColumns="repeat(4, 1fr)" gap={3} id="reports">
                         <GridItem colSpan={{ base: 4 }}>
+                            <Heading size="lg" m={3}>
+                                {data?.senderName || ""}
+                            </Heading>
+                        </GridItem>
+                        <GridItem colSpan={{ base: 4 }}>
                             <Card >
                                 <Grid gap={4}>
                                     <GridItem colSpan={2}>
@@ -127,15 +132,28 @@ const View = () => {
                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Call Duration </Text>
                                         <Text>{data?.callDuration ? data?.callDuration : ' - '}</Text>
                                     </GridItem>
-                                    <GridItem colSpan={{ base: 2 }}>
+                                    <GridItem colSpan={{ base: 2, md: 1 }}>
+                                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Sales Agent </Text>
+                                        <pre style={{ whiteSpace: 'pre-wrap' }}>{data?.salesAgentName ? data?.salesAgentName : ' - '}</pre>
+                                    </GridItem>
+                                    {/* <GridItem colSpan={{ base: 2 }}>
                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Call Notes </Text>
                                         <pre style={{ whiteSpace: 'pre-wrap' }}>{data?.callNotes ? data?.callNotes : ' - '}</pre>
-                                    </GridItem>
+                                    </GridItem> */}
                                 </Grid>
                             </Card>
                         </GridItem>
 
                     </Grid>
+
+                    <Card mt={3}>
+                        <Grid templateColumns="repeat(6, 1fr)" gap={1}>
+                            <GridItem colSpan={{ base: 2 }}>
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Call Notes </Text>
+                                <pre style={{ whiteSpace: 'pre-wrap' }}>{data?.callNotes ? data?.callNotes : ' - '}</pre>
+                            </GridItem>
+                        </Grid>
+                    </Card>
                 </>}
 
         </>

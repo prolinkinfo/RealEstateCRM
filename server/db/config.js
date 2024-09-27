@@ -5,10 +5,12 @@ const { initializeLeadSchema } = require("../model/schema/lead");
 const { initializeContactSchema } = require("../model/schema/contact");
 const { initializePropertySchema } = require("../model/schema/property");
 const { createNewModule } = require("../controllers/customField/customField.js");
+const { add: createNewRole } = require("../controllers/roleAccess/roleAccess.js");
 const customField = require('../model/schema/customField.js');
 const { contactFields } = require('./contactFields.js');
 const { leadFields } = require('./leadFields.js');
 const { propertiesFields } = require('./propertiesFields.js');
+const { defaultRole } = require("./defaultRoles.js");
 
 const initializedSchemas = async () => {
     await initializeLeadSchema();
@@ -72,6 +74,10 @@ const connectDB = async (DATABASE_URL, DATABASE) => {
         await createNewModule({ body: { moduleName: 'Leads', fields: leadFields, headings: [], isDefault: true } }, mockRes);
         await createNewModule({ body: { moduleName: 'Contacts', fields: contactFields, headings: [], isDefault: true } }, mockRes);
         await createNewModule({ body: { moduleName: 'Properties', fields: propertiesFields, headings: [], isDefault: true } }, mockRes);
+
+        // Create default role
+        await createNewRole({ body: defaultRole }, mockRes);
+
         /*  */
         await initializedSchemas();
 

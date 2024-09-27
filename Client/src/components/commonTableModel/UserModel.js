@@ -16,6 +16,7 @@ const UserModel = (props) => {
     // const [isLoding, setIsLoding] = useState(false);
     const [leadData, setLeadData] = useState([]);
     const [selectedValues, setSelectedValues] = useState([]);
+    const roleHeader = { Header: "role", accessor: "role" };
 
     const handleSubmit = async () => {
         try {
@@ -37,7 +38,7 @@ const UserModel = (props) => {
         },
         { Header: "first Name", accessor: "firstName", },
         { Header: "last Name", accessor: "lastName", },
-        { Header: "role", accessor: "role", },
+        ...(fieldName !== 'salesAgent' ? [roleHeader] : [])
     ];
 
     // const [columns, setColumns] = useState([...tableColumns]);

@@ -191,7 +191,7 @@ const Index = () => {
                                         }}
                                         icon={<EmailIcon fontSize={15} mb={1} />}
                                     >
-                                        EmailSend{" "}
+                                        Email Send{" "}
                                     </MenuItem>
                                 )}
                                 {permission?.view && (

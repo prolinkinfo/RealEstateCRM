@@ -92,7 +92,6 @@ const View = (props) => {
     if (id) {
       const result = await getApi("api/opportunityproject/view/", id);
       setOpportunityData(result?.data);
-      console.log(result?.data, "setData");
     }
   };
   const handleClick = () => {
@@ -614,7 +613,7 @@ const View = (props) => {
                         value={formik.values.requirement}
                         borderColor={
                           formik?.errors?.requirement &&
-                          formik?.touched?.requirement
+                            formik?.touched?.requirement
                             ? "red.300"
                             : null
                         }
@@ -650,45 +649,45 @@ const View = (props) => {
           {(user.role === "superAdmin" ||
             permission?.update ||
             permission?.delete) && (
-            <Card mt={3}>
-              <Grid templateColumns="repeat(2, 1fr)" gap={1}>
-                <GridItem colStart={6}>
-                  <Flex justifyContent={"right"}>
-                    {user.role === "superAdmin" || permission?.update ? (
-                      <Button
-                        size="sm"
-                        onClick={() => {
-                          setUserction("edit");
-                          onOpen();
-                        }}
-                        leftIcon={<EditIcon />}
-                        mr={2.5}
-                        variant="outline"
-                        colorScheme="green"
-                      >
-                        Edit
-                      </Button>
-                    ) : (
-                      ""
-                    )}
-                    {user.role === "superAdmin" || permission?.delete ? (
-                      <Button
-                        size="sm"
-                        style={{ background: "red.800" }}
-                        onClick={() => setDelete(true)}
-                        leftIcon={<DeleteIcon />}
-                        colorScheme="red"
-                      >
-                        Delete
-                      </Button>
-                    ) : (
-                      ""
-                    )}
-                  </Flex>
-                </GridItem>
-              </Grid>
-            </Card>
-          )}
+              <Card mt={3}>
+                <Grid templateColumns="repeat(2, 1fr)" gap={1}>
+                  <GridItem colStart={6}>
+                    <Flex justifyContent={"right"}>
+                      {user.role === "superAdmin" || permission?.update ? (
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            setUserction("edit");
+                            onOpen();
+                          }}
+                          leftIcon={<EditIcon />}
+                          mr={2.5}
+                          variant="outline"
+                          colorScheme="green"
+                        >
+                          Edit
+                        </Button>
+                      ) : (
+                        ""
+                      )}
+                      {user.role === "superAdmin" || permission?.delete ? (
+                        <Button
+                          size="sm"
+                          style={{ background: "red.800" }}
+                          onClick={() => setDelete(true)}
+                          leftIcon={<DeleteIcon />}
+                          colorScheme="red"
+                        >
+                          Delete
+                        </Button>
+                      ) : (
+                        ""
+                      )}
+                    </Flex>
+                  </GridItem>
+                </Grid>
+              </Card>
+            )}
         </>
       )}
 

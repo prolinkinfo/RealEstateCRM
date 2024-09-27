@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 const add = async (req, res) => {
     try {
-        const { sender, recipient, subject, message, startDate, createByContact, createBy, createByLead, html, type } = req.body;
+        const { sender, recipient, subject, message, startDate, createByContact, createBy, createByLead, html, type, salesAgent } = req.body;
 
         if (createByContact && !mongoose.Types.ObjectId.isValid(createByContact)) {
             res.status(400).json({ error: 'Invalid createByContact value' });
@@ -13,8 +13,11 @@ const add = async (req, res) => {
         if (createByLead && !mongoose.Types.ObjectId.isValid(createByLead)) {
             res.status(400).json({ error: 'Invalid createByLead value' });
         }
+        if (salesAgent && !mongoose.Types.ObjectId.isValid(salesAgent)) {
+            res.status(400).json({ error: 'Invalid salesAgent value' });
+        }
 
-        const email = { sender, recipient, subject, message, startDate, createBy, html, type }
+        const email = { sender, recipient, subject, message, startDate, createBy, html, type, salesAgent: new mongoose.Types.ObjectId(salesAgent) || null }
 
         if (createByContact) {
             email.createByContact = createByContact;
@@ -39,9 +42,17 @@ const add = async (req, res) => {
 
 const index = async (req, res) => {
     try {
-        const query = req.query
+        const query = req.query;
         if (query.sender) {
             query.sender = new mongoose.Types.ObjectId(query.sender);
+        }
+
+        const user = await User.findById(req.user.userId);
+
+        if (user?.role !== "superAdmin") {
+            delete query.sender;
+            query.deleted = false;
+            query.$or = [{ sender: new mongoose.Types.ObjectId(req.user.userId) }, { salesAgent: new mongoose.Types.ObjectId(req.user.userId) }];
         }
 
         let result = await Email.aggregate([
@@ -100,8 +111,7 @@ const index = async (req, res) => {
                     users: 0
                 }
             },
-        ])
-
+        ]);
 
         res.status(200).json(result);
     } catch (err) {
@@ -142,9 +152,18 @@ const view = async (req, res) => {
                     as: 'users'
                 }
             },
+            {
+                $lookup: {
+                    from: 'User',
+                    localField: 'salesAgent',
+                    foreignField: '_id',
+                    as: 'salesAgent'
+                }
+            },
             { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
             { $unwind: { path: '$createByRef', preserveNullAndEmptyArrays: true } },
             { $unwind: { path: '$createByrefLead', preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: '$salesAgent', preserveNullAndEmptyArrays: true } },
             { $match: { 'users.deleted': false } },
             {
                 $addFields: {
@@ -163,13 +182,21 @@ const view = async (req, res) => {
                             else: { $concat: ['$createByrefLead.leadName'] }
                         }
                     },
+                    salesAgentName: {
+                        $cond: {
+                            if: '$salesAgent',
+                            then: { $concat: ['$salesAgent.firstName', ' ', '$salesAgent.lastName'] },
+                            else: ''
+                        }
+                    },
                 }
             },
             {
                 $project: {
                     createByRef: 0,
                     createByrefLead: 0,
-                    users: 0
+                    users: 0,
+                    salesAgent: 0
                 }
             },
         ])

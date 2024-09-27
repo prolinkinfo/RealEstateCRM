@@ -73,6 +73,11 @@ const View = () => {
                 </Flex> : <>
                     <Grid templateColumns="repeat(4, 1fr)" gap={3} id="reports">
                         <GridItem colSpan={{ base: 4 }}>
+                            <Heading size="lg" m={3}>
+                                {data?.senderEmail}
+                            </Heading>
+                        </GridItem>
+                        <GridItem colSpan={{ base: 4 }}>
                             <Card >
                                 <Grid gap={4}>
                                     <GridItem colSpan={2}>
@@ -128,11 +133,15 @@ const View = () => {
                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Time stamp </Text>
                                         <Text> {data?.timestamp ? moment(data?.timestamp).format('lll ') : ' - '} [{data?.timestamp ? moment(data?.timestamp).toNow() : ' - '}]</Text>
                                     </GridItem>
-                                    <GridItem colSpan={{ base: 2 }}>
+                                    <GridItem colSpan={{ base: 2, md: 1 }}>
                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Subject </Text>
                                         <Text>{data?.subject ? data?.subject : ' - '}</Text>
                                     </GridItem>
-                                    <GridItem colSpan={{ base: 2 }} >
+                                    <GridItem colSpan={{ base: 2 }}>
+                                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Sales Agent </Text>
+                                        <Text>{data?.salesAgentName ? data?.salesAgentName : ' - '}</Text>
+                                    </GridItem>
+                                    {/* <GridItem colSpan={{ base: 2 }} >
                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Message </Text>
                                         {
                                             data?.type === "message" ?
@@ -140,13 +149,21 @@ const View = () => {
                                                 :
                                                 <div dangerouslySetInnerHTML={{ __html: data?.html }} />
                                         }
-                                    </GridItem>
+                                    </GridItem> */}
                                 </Grid>
                             </Card>
                         </GridItem>
 
                     </Grid>
 
+                    <Card mt={3}>
+                        <Grid templateColumns="repeat(6, 1fr)" gap={1}>
+                            <GridItem colSpan={{ base: 2 }}>
+                                <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Message </Text>
+                                <pre style={{ whiteSpace: 'pre-wrap' }}>{data?.type === "message" ? <Text>{data?.message ? data?.message : '-'}</Text> : <div dangerouslySetInnerHTML={{ __html: data?.html }} />}</pre>
+                            </GridItem>
+                        </Grid>
+                    </Card>
                 </>}
         </>
     );

@@ -2,6 +2,7 @@ import { Button, Flex, FormLabel, Grid, GridItem, IconButton, Input, Modal, Moda
 import Spinner from 'components/spinner/Spinner';
 import ContactModel from "components/commonTableModel/ContactModel";
 import LeadModel from "components/commonTableModel/LeadModel";
+import UserModel from "components/commonTableModel/UserModel";
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { LiaMousePointerSolid } from 'react-icons/lia';
@@ -19,6 +20,8 @@ const AddEmailHistory = (props) => {
     const [assignToContactData, setAssignToContactData] = useState([]);
     const [contactModelOpen, setContactModel] = useState(false);
     const [leadModelOpen, setLeadModel] = useState(false);
+    const [assignToSalesData, setAssignToSalesData] = useState([]);
+    const [salesPersonsModelOpen, setSalesPersonsModelOpen] = useState(false);
     const [data, setData] = useState([]);
     const dispatch = useDispatch();
 
@@ -39,6 +42,7 @@ const AddEmailHistory = (props) => {
         // assignTo: '',
         // assignToLead: '',
         createBy: user?._id,
+        salesAgent: ''       // sales person user id
     }
     const formik = useFormik({
         initialValues: initialValues,
@@ -109,7 +113,23 @@ const AddEmailHistory = (props) => {
             toast.error("Failed to fetch data", "error");
         }
         setIsLoding(false)
-    }
+    };
+
+    const fetchUsersData = async () => {
+        setIsLoding(true);
+        try {
+            let result = await getApi('api/user/');
+
+            let salesPersons = result?.data?.user?.filter(userData => userData?.roles?.some(role => role?.roleName === "Sales")) || [];
+            setAssignToSalesData(salesPersons);
+
+        } catch (error) {
+            console.error('Failed to fetch users data:', error);
+
+        } finally {
+            setIsLoding(false);
+        }
+    };
 
     useEffect(() => {
         if (values?.type === "template") fetchData()
@@ -119,17 +139,23 @@ const AddEmailHistory = (props) => {
         fetchRecipientData()
     }, [values.createByContact, values.createByLead])
 
+    useEffect(() => {
+        fetchUsersData();
+    }, [])
+
     return (
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
             <ModalOverlay />
             <ModalContent height={"580px"}>
-                <ModalHeader>Add Email </ModalHeader>
+                <ModalHeader>Add Email--- </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody overflowY={"auto"} height={"400px"}>
                     {/* Contact Model  */}
                     <ContactModel isOpen={contactModelOpen} data={assignToContactData} onClose={setContactModel} fieldName='createByContact' setFieldValue={setFieldValue} />
                     {/* Lead Model  */}
                     <LeadModel isOpen={leadModelOpen} data={assignToLeadData} onClose={setLeadModel} fieldName='createByLead' setFieldValue={setFieldValue} />
+                    {/* User Model for sales person */}
+                    <UserModel onClose={() => setSalesPersonsModelOpen(false)} isOpen={salesPersonsModelOpen} fieldName={"salesAgent"} setFieldValue={setFieldValue} data={assignToSalesData} isLoding={isLoding} setIsLoding={setIsLoding} />
 
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
@@ -226,6 +252,28 @@ const AddEmailHistory = (props) => {
                                 borderColor={errors?.startDate && touched?.startDate ? "red.300" : null}
                             />
                             <Text fontSize='sm' mb='10px' color={'red'}> {errors.startDate && touched.startDate && errors.startDate}</Text>
+                        </GridItem>
+                        <GridItem colSpan={{ base: 12 }}>
+                            <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
+                                Assign To Sales Agent
+                            </FormLabel>
+                            <Flex justifyContent={'space-between'}>
+                                <Select
+                                    value={values.salesAgent}
+                                    name="salesAgent"
+                                    onChange={handleChange}
+                                    mb={errors.salesAgent && touched.salesAgent ? undefined : '10px'}
+                                    fontWeight='500'
+                                    placeholder={'Assign To Sales Agent'}
+                                    borderColor={errors.salesAgent && touched.salesAgent ? "red.300" : null}
+                                >
+                                    {assignToSalesData?.map((item) => {
+                                        return <option value={item._id} key={item._id}>{`${item.firstName} ${item.lastName}`}</option>
+                                    })}
+                                </Select>
+                                <IconButton onClick={() => setSalesPersonsModelOpen(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
+                            </Flex>
+                            <Text fontSize='sm' mb='10px' color={'red'}> {errors.salesAgent && touched.salesAgent && errors.salesAgent}</Text>
                         </GridItem>
 
                         <GridItem colSpan={{ base: 12 }}>

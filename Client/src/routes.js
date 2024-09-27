@@ -222,7 +222,7 @@ const routes = [
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     under: "opportunityproject",
     parentName: "Opportunity Project",
-    path: "/opportunitiesprojectView/:id",
+    path: "/opportunityprojectView/:id",
     component: OpportunityView,
   },
   {

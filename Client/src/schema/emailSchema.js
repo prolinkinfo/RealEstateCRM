@@ -12,6 +12,7 @@ export const emailSchema = yup.object({
     startDate: yup.date().required("Start Date Is required"),
     createBy: yup.string(),
     createByLead: yup.string(),
+    salesAgent: yup.string().required("Assign To Sales Agent Is required"),
 }).test('createBy-or-createByLead-required', 'Recipient Is required', function (value) {
     if (!value.createBy && !value.createByLead) {
         return this.createError({

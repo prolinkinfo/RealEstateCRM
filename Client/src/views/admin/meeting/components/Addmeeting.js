@@ -101,7 +101,7 @@ const AddMeeting = (props) => {
     const countriesWithEmailAsLabel = (values.related === "Contact" ? contactdata : leaddata)?.map((item) => ({
         ...item,
         value: item._id,
-        label: values.related === "Contact" ? `${item.firstName} ${item.lastName}` : item.leadName,
+        label: values.related === "Contact" ? item.fullName : item.leadName,
     }));
 
     return (

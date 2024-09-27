@@ -121,7 +121,7 @@ const Edit = (props) => {
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerHeader alignItems={"center"} justifyContent='space-between' display='flex' >
-                        Edit Contact
+                        Edit {values?.fullName || "Contact"}
                         <IconButton onClick={handleClose} icon={<CloseIcon />} />
                     </DrawerHeader>
                     <DrawerBody>
@@ -130,9 +130,7 @@ const Edit = (props) => {
                                 <Spinner />
                             </Flex>
                             :
-
                             <CustomForm moduleData={props.contactData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
-
                         }
                     </DrawerBody>
 
