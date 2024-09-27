@@ -97,6 +97,9 @@ const AccountView = React.lazy(() => import("views/admin/account/View"));
 const AccountImport = React.lazy(() => import("views/admin/account/components/AccountImport"));
 const Opportunityproject = React.lazy(() => import("views/admin/opportunityproject"))
 const OpportunityView = React.lazy(() => import("views/admin/opportunityproject/View"))
+
+
+
 const routes = [
   // ========================== Dashboard ==========================
   {
@@ -221,7 +224,7 @@ const routes = [
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
     under: "opportunityproject",
     parentName: "Opportunity Project",
-    path: "/opportunitiesprojectView/:id",
+    path: "/opportunityprojectView/:id",
     component: OpportunityView,
   },
 

@@ -26,7 +26,6 @@ const opportunityProjectSlice = createSlice({
             .addCase(fetchOpportunityProjectData.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.data = action.payload.data;
-                console.log(action.payload.data, "action/payload")
                 state.error = "";
             })
             .addCase(fetchOpportunityProjectData.rejected, (state, action) => {
