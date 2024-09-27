@@ -85,7 +85,7 @@ const Edit = (props) => {
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerHeader alignItems={"center"} justifyContent='space-between' display='flex' >
-                        Edit Lead
+                        Edit {values?.leadName || "Lead "}
                         <IconButton onClick={handleClose} icon={<CloseIcon />} />
                     </DrawerHeader>
                     <DrawerBody>
@@ -96,7 +96,6 @@ const Edit = (props) => {
                             </Flex>
                             :
                             <CustomForm moduleData={props.leadData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
-
                         }
                     </DrawerBody>
 

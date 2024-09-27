@@ -84,7 +84,7 @@ const Edit = (props) => {
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerHeader alignItems={"center"} justifyContent='space-between' display='flex' >
-                        Edit Property
+                        Edit {values?.name || "Property"}
                         <IconButton onClick={handleClose} icon={<CloseIcon />} />
                     </DrawerHeader>
                     <DrawerBody>
