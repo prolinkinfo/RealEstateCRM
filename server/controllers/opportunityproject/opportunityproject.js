@@ -18,6 +18,19 @@ const add = async (req, res) => {
         res.status(400).json({ err, error: 'Failed to create' });
     }
 }
+
+const addMany = async (req, res) => {
+    try {
+        const data = req.body;
+        const insertedLead = await OpportunityProject.insertMany(data);
+
+        res.status(200).json(insertedLead);
+    } catch (err) {
+        console.error('Failed to create Lead :', err);
+        res.status(400).json({ error: 'Failed to create Lead' });
+    }
+};
+
 const view = async (req, res) => {
     try {
         let result = await OpportunityProject.findOne({ _id: req.params.id, deleted: false });
@@ -58,7 +71,7 @@ const deleteData = async (req, res) => {
 }
 const deleteMany = async (req, res) => {
     try {
-        const result = await OpportunityProject.updateMany({ _id: { $in: req.body }}, { $set: { deleted: true } });
+        const result = await OpportunityProject.updateMany({ _id: { $in: req.body } }, { $set: { deleted: true } });
         console.log(result)
         if (result?.matchedCount > 0 && result?.modifiedCount > 0) {
             return res.status(200).json({ message: "Opportunity Project Removed successfully", result });
@@ -71,4 +84,4 @@ const deleteMany = async (req, res) => {
         return res.status(404).json({ success: false, message: "error", err });
     }
 }
-module.exports = { index, add, view, edit, deleteData , deleteMany }
+module.exports = { index, add, addMany, view, edit, deleteData, deleteMany }
