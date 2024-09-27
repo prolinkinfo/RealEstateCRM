@@ -265,10 +265,13 @@ const View = (props) => {
   };
   const generatePDF = () => {
     const element = document.getElementById("reports");
+    const hideBtn = document.getElementById("hide-btn");
     if (element) {
-      element.style.display = "block";
+      hideBtn.style.display = "none";
+      // element.style.display = "block";
       element.style.width = "100%"; // Adjust width for mobile
       element.style.height = "auto";
+      element.style.padding = "15px";
       html2pdf()
         .from(element)
         .set({
@@ -283,6 +286,8 @@ const View = (props) => {
         .save()
         .then(() => {
           element.style.display = "";
+          hideBtn.style.display = "";
+          element.style.padding = "";
         });
     } else {
       console.error("Element with ID 'reports' not found.");
@@ -402,7 +407,7 @@ const View = (props) => {
   return (
     <>
       {isLoding ? (
-        <Flex justifyContent={"center"} alignItems={"center"} width="100%" >
+        <Flex justifyContent={"center"} alignItems={"center"} width="100%">
           <Spinner />
         </Flex>
       ) : (
@@ -418,10 +423,15 @@ const View = (props) => {
               borderRadius: "20px",
               padding: "20px",
             }}
-            id="reports"
+            // id="reports"
           >
-            <Grid templateColumns={"repeat(2, 1fr)"} mb={3} gap={1} id="reports">
-              <GridItem colSpan={{ base: 12, md: 6 }}>
+            <Grid
+              templateColumns={"repeat(2, 1fr)"}
+              mb={3}
+              gap={1}
+              id="reports"
+            >
+              <GridItem colSpan={{ base: 4 }}>
                 <TabList
                   sx={{
                     border: "none",
@@ -441,8 +451,7 @@ const View = (props) => {
                       zIndex: "0",
                     },
                   }}
-                >
-                </TabList>
+                ></TabList>
               </GridItem>
               <GridItem
                 colSpan={{ base: 12, md: 6 }}
@@ -460,7 +469,7 @@ const View = (props) => {
                             permission?.create ||
                             permission?.update ||
                             permission?.delete) && (
-                              <MenuButton
+                            <MenuButton
                               size="sm"
                               variant="outline"
                               colorScheme="blackAlpha"
@@ -473,65 +482,68 @@ const View = (props) => {
                           )}
                           <MenuDivider />
                           <MenuList minWidth={2}>
-                      {(user.role === "superAdmin" || permission?.create) && (
-                        <MenuItem
-                          color={"blue"}
-                          onClick={() => {
-                            // onOpen(); setUserAction('add'),
-                            handleClick();
-                          }}
-                          alignItems={"start"}
-                          icon={<AddIcon />}
-                        >
-                          {" "}
-                          Add{" "}
-                        </MenuItem>
-                      )}
-                      {(user.role === "superAdmin" || permission?.update) && (
-                        <MenuItem
-                          onClick={() => {
-                            setUserction("edit");
-                            onOpen();
-                          }}
-                          alignItems={"start"}
-                          icon={<EditIcon />}
-                        >
-                          Edit
-                        </MenuItem>
-                      )}
-                      <MenuItem
-                        onClick={generatePDF}
-                        alignItems={"start"}
-                        icon={<FaFilePdf />}
-                        display={"flex"}
-                        style={{ alignItems: "center" }}
-                      >
-                        Print as PDF
-                      </MenuItem>
-                      {(user.role === "superAdmin" || permission?.delete) && (
-                        <>
-                          <MenuDivider />
-                          <MenuItem
-                            alignItems={"start"}
-                            color={"red"}
-                            onClick={() => setDelete(true)}
-                            icon={<DeleteIcon />}
+                            {(user.role === "superAdmin" ||
+                              permission?.create) && (
+                              <MenuItem
+                                color={"blue"}
+                                onClick={() => {
+                                  // onOpen(); setUserAction('add'),
+                                  handleClick();
+                                }}
+                                alignItems={"start"}
+                                icon={<AddIcon />}
+                              >
+                                {" "}
+                                Add{" "}
+                              </MenuItem>
+                            )}
+                            {(user.role === "superAdmin" ||
+                              permission?.update) && (
+                              <MenuItem
+                                onClick={() => {
+                                  setUserction("edit");
+                                  onOpen();
+                                }}
+                                alignItems={"start"}
+                                icon={<EditIcon />}
+                              >
+                                Edit
+                              </MenuItem>
+                            )}
+                            <MenuItem
+                              onClick={generatePDF}
+                              alignItems={"start"}
+                              icon={<FaFilePdf />}
+                              display={"flex"}
+                              style={{ alignItems: "center" }}
+                            >
+                              Print as PDF
+                            </MenuItem>
+                            {(user.role === "superAdmin" ||
+                              permission?.delete) && (
+                              <>
+                                <MenuDivider />
+                                <MenuItem
+                                  alignItems={"start"}
+                                  color={"red"}
+                                  onClick={() => setDelete(true)}
+                                  icon={<DeleteIcon />}
+                                >
+                                  Delete
+                                </MenuItem>
+                              </>
+                            )}
+                          </MenuList>
+                        </Menu>
+                        <Link to="/opportunityproject">
+                          <Button
+                            leftIcon={<IoIosArrowBack />}
+                            size="sm"
+                            variant="brand"
                           >
-                            Delete
-                          </MenuItem>
-                        </>
-                      )}
-                    </MenuList>
-                  </Menu>
-                  <Link to="/opportunityproject">
-                    <Button
-                      leftIcon={<IoIosArrowBack />}
-                      size="sm"
-                      variant="brand"
-                    >
-                      Back
-                    </Button>
-                  </Link>
+                            Back
+                          </Button>
+                        </Link>
                       </Flex>
                     </Box>
                     <HSeparator />

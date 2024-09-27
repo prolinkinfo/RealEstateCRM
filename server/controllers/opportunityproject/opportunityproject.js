@@ -18,6 +18,18 @@ const add = async (req, res) => {
         res.status(400).json({ err, error: 'Failed to create' });
     }
 }
+
+const addMany = async (req, res) => {
+    try {
+        const data = req.body;
+        const insertedOportunityProject = await OpportunityProject.insertMany(data);
+        res.status(200).json(insertedOportunityProject);
+    } catch (err) {
+        console.error('Failed to create OpportunityProject :', err);
+        res.status(400).json({ error: 'Failed to create OpportunityProject' });
+    }
+};
+
 const view = async (req, res) => {
     try {
         let result = await OpportunityProject.findOne({ _id: req.params.id, deleted: false });
@@ -71,4 +83,4 @@ const deleteMany = async (req, res) => {
         return res.status(404).json({ success: false, message: "error", err });
     }
 }
-module.exports = { index, add, view, edit, deleteData , deleteMany }
+module.exports = { index, add, view, edit, deleteData ,addMany, deleteMany }
