@@ -52,6 +52,7 @@ const AddPhoneCall = (props) => {
     callNotes: "",
     createByContact: "",
     createByLead: "",
+    property: "",
     startDate: "",
     category: "contact",
     // assignTo: '',
@@ -109,7 +110,10 @@ const AddPhoneCall = (props) => {
             : `api/lead/?createBy=${user._id}`
         );
         setAssignToLeadData(result?.data);
-      } else if (values.category === "Property" && console.log(""),assignToProperyData.length <= 0) {
+      } else if (
+        (values.category === "property" && console.log(""),
+        assignToProperyData.length <= 0)
+      ) {
         result = await getApi(
           user.role === "superAdmin"
             ? "api/property"
@@ -224,6 +228,7 @@ const AddPhoneCall = (props) => {
             data={assignToProperyData}
             isLoding={isLoding}
             setIsLoding={setIsLoding}
+            fieldName="property"
             setFieldValue={setFieldValue}
           />
           <Grid templateColumns="repeat(12, 1fr)" gap={3}>
@@ -242,6 +247,7 @@ const AddPhoneCall = (props) => {
                   setFieldValue("category", e);
                   setFieldValue("createByContact", "");
                   setFieldValue("createByLead", "");
+                  setFieldValue("property", "");
                 }}
                 value={values.category}
               >
@@ -404,16 +410,14 @@ const AddPhoneCall = (props) => {
               </FormLabel>
               <Flex justifyContent={"space-between"}>
                 <Select
-                  value={values.salesAgent}
-                  name="salesAgent"
+                  value={values.property}
+                  name="property"
                   onChange={handleChange}
-                  mb={
-                    errors.salesAgent && touched.salesAgent ? undefined : "10px"
-                  }
+                  mb={errors.property && touched.property ? undefined : "10px"}
                   fontWeight="500"
-                  placeholder={"Assign To Sales Agent"}
+                  placeholder={"Assign To Property"}
                   borderColor={
-                    errors.salesAgent && touched.salesAgent ? "red.300" : null
+                    errors.property && touched.property ? "red.300" : null
                   }
                 >
                   {assignToProperyData?.map((item) => {
@@ -421,7 +425,7 @@ const AddPhoneCall = (props) => {
                       <option
                         value={item._id}
                         key={item._id}
-                      >{`${item.Name}`}</option>
+                      >{`${item.name}`}</option>
                     );
                   })}
                 </Select>
@@ -434,7 +438,7 @@ const AddPhoneCall = (props) => {
               </Flex>
               <Text mb="10px" fontSize="sm" color={"red"}>
                 {" "}
-                {errors.salesAgent && touched.salesAgent && errors.salesAgent}
+                {errors.Property && touched.Property && errors.Property}
               </Text>
             </GridItem>
             <GridItem colSpan={{ base: 12, md: 6 }}>

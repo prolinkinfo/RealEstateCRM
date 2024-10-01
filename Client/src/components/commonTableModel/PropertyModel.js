@@ -37,7 +37,7 @@ const PropertyModel = (props) => {
       setIsLoding(false);
     }
   };
-  console.log(selectedValues, "selectedValues");
+  
   const fetchCustomDataFields = async () => {
     setIsLoding(true);
     const result = await dispatch(fetchPropertyCustomFiled());
@@ -85,7 +85,7 @@ const PropertyModel = (props) => {
               columnData={columns ?? []}
               // dataColumn={columns ?? []}
               allData={data ?? []}
-              tableData={propertyData}
+              tableData={propertyData ?? data}
               tableCustomFields={
                 propertyData?.[0]?.fields?.filter(
                   (field) => field?.isTableField === true
@@ -100,7 +100,6 @@ const PropertyModel = (props) => {
               customSearch={false}
             />
           )}
-          {console.log(selectedValues, "selectedValuessss")}
         </ModalBody>
         <ModalFooter>
           <Button
