@@ -21,13 +21,11 @@ const MultiLeadModel = (props) => {
   const title = "Leads";
   const dispatch = useDispatch();
   const { onClose, isOpen, fieldName, setFieldValue, data } = props;
-  console.log(data, "kpkpkp");
   const [selectedValues, setSelectedValues] = useState([]);
   const [contactData, setContactData] = useState([]);
   const [isLoding, setIsLoding] = useState(false);
   const [columns, setColumns] = useState([]);
   const [leadData, setLeadData] = useState([]);
-  console.log(columns, "columns");
   const fetchCustomDataFields = async () => {
     setIsLoding(true);
 

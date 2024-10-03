@@ -29,7 +29,6 @@ const MultiContactModel = (props) => {
     setIsLoding(true);
     const result = await dispatch(fetchContactCustomFiled());
     setContactData(result?.payload?.data);
-    console.log(result?.payload?.data,"result?.payload?.data")
     const tempTableColumns = [
       { Header: "#", accessor: "_id", isSortable: false, width: 10 },
       ...(result?.payload?.data?.[0]?.fields || [])

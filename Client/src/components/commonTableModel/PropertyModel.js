@@ -48,11 +48,8 @@ const PropertyModel = (props) => {
         .filter((field) => field?.isTableField === true)
         .map((field) => ({ Header: field?.label, accessor: field?.name })),
     ];
-    console.log(result?.payload?.data?.[0]?.fields, "result");
-    console.log(tempTableColumns, "tempTableColumns");
     setColumns(tempTableColumns);
     setIsLoding(false);
-    console.log(columns, "columns");
   };
   useEffect(async () => {
     await dispatch(fetchPropertyData());
