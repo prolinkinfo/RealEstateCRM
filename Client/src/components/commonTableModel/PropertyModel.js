@@ -75,20 +75,10 @@ const PropertyModel = (props) => {
                 <Spinner />
               </Flex>
             ) : (
-              // <PropertyTable
-              //   tableData={propertyData}
-              //   data={data}
-              //   type="multi"
-              //   selectedValues={selectedValues}
-              //   setSelectedValues={setSelectedValues}
-              //   columnsData={columns}
-              //   title="Property"
-              // />
               <CommonCheckTable
                 title={"Property"}
                 isLoding={isLoding}
                 columnData={columns ?? []}
-                // dataColumn={columns ?? []}
                 allData={data ?? []}
                 tableData={propertyData ?? data}
                 tableCustomFields={

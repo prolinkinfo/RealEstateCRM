@@ -27,16 +27,6 @@ const MultiLeadModel = (props) => {
   const [isLoding, setIsLoding] = useState(false);
   const [columns, setColumns] = useState([]);
   const [leadData, setLeadData] = useState([]);
-  // const columns = [
-  //     { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-  //     { Header: 'Lead Name', accessor: 'leadName', width: 20 },
-  //     { Header: "Lead Email", accessor: "leadEmail", },
-  //     { Header: "Lead PhoneNumber", accessor: "leadPhoneNumber", },
-  //     { Header: "Lead Address", accessor: "leadAddress", },
-  //     { Header: "Lead Status", accessor: "leadStatus", },
-  //     { Header: "Lead Owner", accessor: "leadOwner", },
-  //     { Header: "Lead Score", accessor: "leadScore", },
-  // ];
   console.log(columns, "columns");
   const fetchCustomDataFields = async () => {
     setIsLoding(true);
@@ -46,13 +36,6 @@ const MultiLeadModel = (props) => {
 
     const tempTableColumns = [
       { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-    //   {
-    //     Header: "Status",
-    //     accessor: "leadStatus",
-    //     isSortable: true,
-    //     center: true,
-    //     cell: ({ row }) => row.original.leadStatus,
-    //   },
       ...(result?.payload?.data?.[0]?.fields
         ?.filter((field) => field?.isTableField === true)
         ?.map((field) => ({

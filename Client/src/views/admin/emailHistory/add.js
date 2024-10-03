@@ -196,7 +196,7 @@ const AddEmailHistory = (props) => {
   useEffect(() => {
     fetchUsersData();
   }, []);
-  const setValueProperty = assignToProperyData?.map((item) => ({
+  const getPropertyOptions = assignToProperyData?.map((item) => ({
     ...item,
     value: item._id,
     label: item.name,
@@ -408,8 +408,8 @@ const AddEmailHistory = (props) => {
                 <Text w={"100%"}>
                   <CUIAutoComplete
                     label={`Property`}
-                    items={setValueProperty}
-                    selectedItems={setValueProperty?.filter((item) =>
+                    items={getPropertyOptions}
+                    selectedItems={getPropertyOptions?.filter((item) =>
                       values?.property?.includes(item._id)
                     )}
                     onSelectedItemsChange={(changes) => {

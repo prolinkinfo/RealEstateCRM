@@ -42,17 +42,6 @@ const MultiPropertyModel = (props) => {
     await dispatch(fetchPropertyData());
     fetchCustomDataFields();
   }, []);
-  //   const columns = [
-  //     { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-  //     { Header: "title", accessor: "title" },
-  //     { Header: "first Name", accessor: "firstName" },
-  //     { Header: "last Name", accessor: "lastName" },
-  //     { Header: "phone Number", accessor: "phoneNumber" },
-  //     { Header: "Email Address", accessor: "email" },
-  //     { Header: "physical Address", accessor: "physicalAddress" },
-  //     { Header: "mailing Address", accessor: "mailingAddress" },
-  //     { Header: "Contact Method", accessor: "preferredContactMethod" },
-  //   ];
 
   const user = JSON.parse(localStorage.getItem("user"));
 
