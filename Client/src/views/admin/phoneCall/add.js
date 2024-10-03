@@ -46,8 +46,6 @@ const AddPhoneCall = (props) => {
   const [assignToSalesData, setAssignToSalesData] = useState([]);
   const [salesPersonsModelOpen, setSalesPersonsModelOpen] = useState(false);
   const [columns, setColumns] = useState([]);
-  const [contactData, setContactData] = useState([]);
-  const [selectedValues, setSelectedValues] = useState([]);
   const user = JSON.parse(localStorage.getItem("user"));
   const todayTime = new Date().toISOString().split(".")[0];
   const initialValues = {
@@ -130,25 +128,7 @@ const AddPhoneCall = (props) => {
       console.log(e);
     }
   }, [props?.date, values.category]);
-
-  // const fetchRecipientData = async () => {
-  //     if (values.createByContact) {
-  //         let response = await getApi('api/contact/view/', values.createByContact)
-  //         if (response?.status === 200) {
-  //             setFieldValue('recipient', response?.data?.contact?.phoneNumber);
-  //             values.recipient = response?.data?.contact?.phoneNumber
-  //         }
-  //     } else if (values.createByLead) {
-  //         let response = await getApi('api/lead/view/', values.createByLead)
-  //         if (response?.status === 200) {
-  //             setFieldValue('recipient', response?.data?.lead?.leadPhoneNumber);
-  //             values.recipient = response?.data?.lead?.leadPhoneNumber
-  //         }
-  //     } else {
-  //         setFieldValue('recipient', "");
-
-  //     }
-  // }
+  
   const fetchRecipientData = async () => {
     if (values.createByContact) {
       let findEmail = assignToContactData.find(
@@ -207,7 +187,7 @@ const AddPhoneCall = (props) => {
     <Modal onClose={onClose} isOpen={isOpen} isCentered>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Add Call--- </ModalHeader>
+        <ModalHeader>Add Call</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           {/* Contact Model  */}
@@ -237,15 +217,6 @@ const AddPhoneCall = (props) => {
             setIsLoding={setIsLoding}
           />
           {/*Property Model*/}
-          {/* <PropertyModel
-            onClose={() => setPropertyModelOpen(false)}
-            isOpen={propertyModelOpen}
-            data={assignToProperyData}
-            isLoding={isLoding}
-            setIsLoding={setIsLoding}
-            fieldName="property"
-            setFieldValue={setFieldValue}
-          /> */}
           <MultiPropertyModel
             onClose={() => setPropertyModelOpen(false)}
             isOpen={propertyModelOpen}
@@ -426,13 +397,11 @@ const AddPhoneCall = (props) => {
             <GridItem colSpan={{ base: 12 }}>
               <Flex alignItems={"end"} justifyContent={"space-between"}>
                 <Text w={"100%"}>
-                  {console.log(  values === "property",values,"values?.property")}
                   <CUIAutoComplete
                     label={`Property`}
                     items={setValueProperty}
                     selectedItems={setValueProperty?.filter((item) => values?.property.includes(item._id))}
                     onSelectedItemsChange={(changes) => {
-                      console.log(changes,"changes")
                       const selectProperty = extractLabels(changes.selectedItems);
                        setFieldValue("property",selectProperty);
                     }}
