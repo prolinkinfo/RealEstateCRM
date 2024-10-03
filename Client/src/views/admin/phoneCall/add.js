@@ -431,17 +431,10 @@ const AddPhoneCall = (props) => {
                     label={`Property`}
                     items={setValueProperty}
                     selectedItems={setValueProperty?.filter((item) => values?.property.includes(item._id))}
-                    // selectedItems={setValueProperty?.includes((item) =>
-                    //   item._id
-                    //   // assignToProperyData
-                    //   // ?.name.includes(item._id)
-                    // )}
-                    // selectedItems={countriesWithEmailAsLabel?.filter((item) => values.related === "Contact" ? values?.attendes.includes(item._id) : values.related === "Lead" && values?.attendesLead.includes(item._id))}
                     onSelectedItemsChange={(changes) => {
                       console.log(changes,"changes")
                       const selectProperty = extractLabels(changes.selectedItems);
                        setFieldValue("property",selectProperty);
-                      console.log(changes.selectedItems,"changes.selectedItems");
                     }}
                     value={values.property}
                     name="property"
@@ -459,11 +452,6 @@ const AddPhoneCall = (props) => {
                 <IconButton
                   mb={6}
                   onClick={() => setPropertyModelOpen(true)}
-                  // onClick={() =>
-                  //   // values.related === "Contact"
-                  //   //   ? setContactModel(true)
-                  //   //   : values.related === "Lead" && setLeadModel(true)
-                  // }
                   fontSize="25px"
                   icon={<LiaMousePointerSolid />}
                 />
@@ -473,49 +461,6 @@ const AddPhoneCall = (props) => {
                 {errors.attendes && touched.attendes && errors.attendes}
               </Text>
             </GridItem>
-            {/* <GridItem colSpan={{ base: 12 }}>
-              <FormLabel
-                display="flex"
-                ms="4px"
-                fontSize="sm"
-                fontWeight="500"
-                mb="8px"
-              >
-                Property
-              </FormLabel>
-              <Flex justifyContent={"space-between"}>
-                <Select
-                  value={values.property}
-                  name="property"
-                  onChange={handleChange}
-                  mb={errors.property && touched.property ? undefined : "10px"}
-                  fontWeight="500"
-                  placeholder={"Assign To Property"}
-                  borderColor={
-                    errors.property && touched.property ? "red.300" : null
-                  }
-                >
-                  {assignToProperyData?.map((item) => {
-                    return (
-                      <option
-                        value={item._id}
-                        key={item._id}
-                      >{`${item.name}`}</option>
-                    );
-                  })}
-                </Select>
-                <IconButton
-                  onClick={() => setPropertyModelOpen(true)}
-                  ml={2}
-                  fontSize="25px"
-                  icon={<LiaMousePointerSolid />}
-                />
-              </Flex>
-              <Text mb="10px" fontSize="sm" color={"red"}>
-                {" "}
-                {errors.property && touched.property && errors.property}
-              </Text>
-            </GridItem> */}
             <GridItem colSpan={{ base: 12, md: 6 }}>
               <FormLabel
                 display="flex"
