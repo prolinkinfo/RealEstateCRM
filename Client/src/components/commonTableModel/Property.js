@@ -36,7 +36,7 @@ export default function PropertyTable(props) {
     selectedValues,
     setSelectedValues,
   } = props;
-  console.log(selectedValues, "selectedValues");
+
   const columns = useMemo(() => columnsData, [columnsData]);
   const data = useMemo(() => tableData, [tableData]);
   const user = JSON.parse(localStorage.getItem("user"));
@@ -221,7 +221,7 @@ export default function PropertyTable(props) {
                           </Text>
                         </Flex>
                       );
-                    } else if (cell?.column.Header === " Name") {
+                    } else if (cell?.column.Header === "Name") {
                       data = (
                         <Text
                           me="10px"
@@ -233,64 +233,64 @@ export default function PropertyTable(props) {
                         </Text>
                       );
                     }
-                    //   else if (cell?.column.Header === "first Name") {
-                    //     data = (
-                    //       // <Link to={`/contactView/${cell?.row?.original._id}`}>
-                    //       <Text
-                    //         me="10px"
-                    //         // sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                    //         color={textColor}
-                    //         fontSize="sm"
-                    //         fontWeight="700"
-                    //       >
-                    //         {cell?.value}
-                    //       </Text>
-                    //       // </Link>
-                    //     );
-                    //   } else if (cell?.column.Header === "last Name") {
-                    //     data = (
-                    //       <Text
-                    //         me="10px"
-                    //         color={textColor}
-                    //         fontSize="sm"
-                    //         fontWeight="700"
-                    //       >
-                    //         {cell?.value}
-                    //       </Text>
-                    //     );
-                    //   } else if (cell?.column.Header === "Phone Number") {
-                    //     data = (
-                    //       <Text fontSize="sm" fontWeight="700"
-                    //         color={textColor}>
-                    //         {cell?.value}
-                    //       </Text>
-                    //     );
-                    //   } else if (cell?.column.Header === "Email") {
-                    //     data = (
-                    //       <Text fontSize="sm" fontWeight="700"
-                    //         color={textColor}>
-                    //         {cell?.value}
-                    //       </Text>
-                    //     );
-                    //   } else if (cell?.column.Header === "physical Address") {
-                    //     data = (
-                    //       <Text color={textColor} fontSize="sm" fontWeight="700">
-                    //         {cell?.value}
-                    //       </Text>
-                    //     );
-                    //   } else if (cell?.column.Header === "mailing Address") {
-                    //     data = (
-                    //       <Text color={textColor} fontSize="sm" fontWeight="700">
-                    //         {cell?.value}
-                    //       </Text>
-                    //     );
-                    //   } else if (cell?.column.Header === "Contact Method") {
-                    //     data = (
-                    //       <Text color={textColor} fontSize="sm" fontWeight="700">
-                    //         {cell?.value}
-                    //       </Text>
-                    //     );
-                    //   }
+                      else if (cell?.column.Header === "name") {
+                        data = (
+                          // <Link to={`/contactView/${cell?.row?.original._id}`}>
+                          <Text
+                            me="10px"
+                            // sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
+                            color={textColor}
+                            fontSize="sm"
+                            fontWeight="700"
+                          >
+                            {cell?.value}
+                          </Text>
+                          // </Link>
+                        );
+                      } else if (cell?.column.Header === "last Name") {
+                        data = (
+                          <Text
+                            me="10px"
+                            color={textColor}
+                            fontSize="sm"
+                            fontWeight="700"
+                          >
+                            {cell?.value}
+                          </Text>
+                        );
+                      } else if (cell?.column.Header === "Phone Number") {
+                        data = (
+                          <Text fontSize="sm" fontWeight="700"
+                            color={textColor}>
+                            {cell?.value}
+                          </Text>
+                        );
+                      } else if (cell?.column.Header === "Email") {
+                        data = (
+                          <Text fontSize="sm" fontWeight="700"
+                            color={textColor}>
+                            {cell?.value}
+                          </Text>
+                        );
+                      } else if (cell?.column.Header === "physical Address") {
+                        data = (
+                          <Text color={textColor} fontSize="sm" fontWeight="700">
+                            {cell?.value}
+                          </Text>
+                        );
+                      } else if (cell?.column.Header === "mailing Address") {
+                        data = (
+                          <Text color={textColor} fontSize="sm" fontWeight="700">
+                            {cell?.value}
+                          </Text>
+                        );
+                      } else if (cell?.column.Header === "Contact Method") {
+                        data = (
+                          <Text color={textColor} fontSize="sm" fontWeight="700">
+                            {cell?.value}
+                          </Text>
+                        );
+                      }
                     return (
                       <Td
                         {...cell?.getCellProps()}

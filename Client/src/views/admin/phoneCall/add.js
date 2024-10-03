@@ -31,9 +31,11 @@ import { useEffect, useState } from "react";
 import { LiaMousePointerSolid } from "react-icons/lia";
 import { phoneCallSchema } from "schema";
 import { getApi, postApi } from "services/api";
+import MultiPropertyModel from "components/commonTableModel/MultiPropertyModel";
+import { CUIAutoComplete } from "chakra-ui-autocomplete";
 
 const AddPhoneCall = (props) => {
-  const { onClose, isOpen, setAction } = props;
+  const { onClose, isOpen, setAction, data } = props;
   const [isLoding, setIsLoding] = useState(false);
   const [assignToLeadData, setAssignToLeadData] = useState([]);
   const [assignToContactData, setAssignToContactData] = useState([]);
@@ -43,6 +45,9 @@ const AddPhoneCall = (props) => {
   const [assignToProperyData, setAssignToPropertyData] = useState([]);
   const [assignToSalesData, setAssignToSalesData] = useState([]);
   const [salesPersonsModelOpen, setSalesPersonsModelOpen] = useState(false);
+  const [columns, setColumns] = useState([]);
+  const [contactData, setContactData] = useState([]);
+  const [selectedValues, setSelectedValues] = useState([]);
   const user = JSON.parse(localStorage.getItem("user"));
   const todayTime = new Date().toISOString().split(".")[0];
   const initialValues = {
@@ -188,6 +193,16 @@ const AddPhoneCall = (props) => {
   useEffect(() => {
     fetchUsersData();
   }, []);
+
+  const setValueProperty = assignToProperyData?.map((item) => ({
+    ...item,
+    value: item._id,
+    label: item.name,
+  }));
+
+  const extractLabels = (selectedItems) => {
+    return selectedItems.map((item) => item._id);
+  };
   return (
     <Modal onClose={onClose} isOpen={isOpen} isCentered>
       <ModalOverlay />
@@ -222,7 +237,7 @@ const AddPhoneCall = (props) => {
             setIsLoding={setIsLoding}
           />
           {/*Property Model*/}
-          <PropertyModel
+          {/* <PropertyModel
             onClose={() => setPropertyModelOpen(false)}
             isOpen={propertyModelOpen}
             data={assignToProperyData}
@@ -230,6 +245,16 @@ const AddPhoneCall = (props) => {
             setIsLoding={setIsLoding}
             fieldName="property"
             setFieldValue={setFieldValue}
+          /> */}
+          <MultiPropertyModel
+            onClose={() => setPropertyModelOpen(false)}
+            isOpen={propertyModelOpen}
+            data={assignToProperyData}
+            isLoding={isLoding}
+            setIsLoding={setIsLoding}
+            fieldName="property"
+            setFieldValue={setFieldValue}
+            columnsData={columns ?? []}
           />
           <Grid templateColumns="repeat(12, 1fr)" gap={3}>
             <GridItem colSpan={{ base: 12, md: 6 }}>
@@ -399,6 +424,56 @@ const AddPhoneCall = (props) => {
               />
             </GridItem>
             <GridItem colSpan={{ base: 12 }}>
+              <Flex alignItems={"end"} justifyContent={"space-between"}>
+                <Text w={"100%"}>
+                  {console.log(  values === "property",values,"values?.property")}
+                  <CUIAutoComplete
+                    label={`Property`}
+                    items={setValueProperty}
+                    selectedItems={setValueProperty?.filter((item) => values?.property.includes(item._id))}
+                    // selectedItems={setValueProperty?.includes((item) =>
+                    //   item._id
+                    //   // assignToProperyData
+                    //   // ?.name.includes(item._id)
+                    // )}
+                    // selectedItems={countriesWithEmailAsLabel?.filter((item) => values.related === "Contact" ? values?.attendes.includes(item._id) : values.related === "Lead" && values?.attendesLead.includes(item._id))}
+                    onSelectedItemsChange={(changes) => {
+                      console.log(changes,"changes")
+                      const selectProperty = extractLabels(changes.selectedItems);
+                       setFieldValue("property",selectProperty);
+                      console.log(changes.selectedItems,"changes.selectedItems");
+                    }}
+                    value={values.property}
+                    name="property"
+                    onChange={handleChange}
+                    mb={
+                      errors.property && touched.property ? undefined : "10px"
+                    }
+                    fontWeight="500"
+                    placeholder={"Assign To Property"}
+                    borderColor={
+                      errors.property && touched.property ? "red.300" : null
+                    }
+                  />
+                </Text>
+                <IconButton
+                  mb={6}
+                  onClick={() => setPropertyModelOpen(true)}
+                  // onClick={() =>
+                  //   // values.related === "Contact"
+                  //   //   ? setContactModel(true)
+                  //   //   : values.related === "Lead" && setLeadModel(true)
+                  // }
+                  fontSize="25px"
+                  icon={<LiaMousePointerSolid />}
+                />
+              </Flex>
+              <Text color={"red"}>
+                {" "}
+                {errors.attendes && touched.attendes && errors.attendes}
+              </Text>
+            </GridItem>
+            {/* <GridItem colSpan={{ base: 12 }}>
               <FormLabel
                 display="flex"
                 ms="4px"
@@ -438,9 +513,9 @@ const AddPhoneCall = (props) => {
               </Flex>
               <Text mb="10px" fontSize="sm" color={"red"}>
                 {" "}
-                {errors.Property && touched.Property && errors.Property}
+                {errors.property && touched.property && errors.property}
               </Text>
-            </GridItem>
+            </GridItem> */}
             <GridItem colSpan={{ base: 12, md: 6 }}>
               <FormLabel
                 display="flex"

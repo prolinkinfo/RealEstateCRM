@@ -17,6 +17,7 @@ import { useDispatch } from "react-redux";
 import { fetchPropertyCustomFiled } from "../../redux/slices/propertyCustomFiledSlice.js";
 import { fetchPropertyData } from "../../redux/slices/propertySlice.js";
 import PropertyTable from "./Property.js";
+import MultiPropertyModel from "./MultiPropertyModel.js";
 
 const PropertyModel = (props) => {
   const { onClose, isOpen, fieldName, setFieldValue, data } = props;
@@ -37,7 +38,6 @@ const PropertyModel = (props) => {
       setIsLoding(false);
     }
   };
-  
   const fetchCustomDataFields = async () => {
     setIsLoding(true);
     const result = await dispatch(fetchPropertyCustomFiled());
@@ -59,71 +59,78 @@ const PropertyModel = (props) => {
     fetchCustomDataFields();
   }, []);
   return (
-    <Modal onClose={onClose} size="full" isOpen={isOpen}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Select Property</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          {isLoding ? (
-            <Flex justifyContent={"center"} alignItems={"center"} width="100%">
-              <Spinner />
-            </Flex>
-          ) : (
-            // <PropertyTable
-            //   tableData={propertyData}
-            // //   data={data}
-            //   type="multi"
-            //   selectedValues={selectedValues}
-            //   setSelectedValues={setSelectedValues}
-            //   columnsData={columns}
-            //   title="Property"
-            // />
-            <CommonCheckTable
-              title={"Property"}
-              isLoding={isLoding}
-              columnData={columns ?? []}
-              // dataColumn={columns ?? []}
-              allData={data ?? []}
-              tableData={propertyData ?? data}
-              tableCustomFields={
-                propertyData?.[0]?.fields?.filter(
-                  (field) => field?.isTableField === true
-                ) || []
-              }
-              AdvanceSearch={() => ""}
-              ManageGrid={false}
-              deleteMany={false}
-              selectedValues={selectedValues}
-              setSelectedValues={setSelectedValues}
-              selectType="single"
-              customSearch={false}
-            />
-          )}
-        </ModalBody>
-        <ModalFooter>
-          <Button
-            variant="brand"
-            size="sm"
-            me={2}
-            onClick={handleSubmit}
-            disabled={isLoding ? true : false}
-            leftIcon={<GiClick />}
-          >
-            {" "}
-            {isLoding ? <Spinner /> : "Select"}
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            colorScheme="red"
-            onClick={() => onClose()}
-          >
-            Close
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+    <>
+      <Modal onClose={onClose} size="full" isOpen={isOpen}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Select Property</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {isLoding ? (
+              <Flex
+                justifyContent={"center"}
+                alignItems={"center"}
+                width="100%"
+              >
+                <Spinner />
+              </Flex>
+            ) : (
+              // <PropertyTable
+              //   tableData={propertyData}
+              //   data={data}
+              //   type="multi"
+              //   selectedValues={selectedValues}
+              //   setSelectedValues={setSelectedValues}
+              //   columnsData={columns}
+              //   title="Property"
+              // />
+              <CommonCheckTable
+                title={"Property"}
+                isLoding={isLoding}
+                columnData={columns ?? []}
+                // dataColumn={columns ?? []}
+                allData={data ?? []}
+                tableData={propertyData ?? data}
+                tableCustomFields={
+                  propertyData?.[0]?.fields?.filter(
+                    (field) => field?.isTableField === true
+                  ) || []
+                }
+                AdvanceSearch={() => ""}
+                ManageGrid={false}
+                deleteMany={false}
+                selectedValues={selectedValues}
+                setSelectedValues={setSelectedValues}
+                selectType="single"
+                customSearch={false}
+              />
+            )}
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              variant="brand"
+              size="sm"
+              me={2}
+              onClick={handleSubmit}
+              disabled={isLoding ? true : false}
+              leftIcon={<GiClick />}
+            >
+              {" "}
+              {isLoding ? <Spinner /> : "Select"}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              colorScheme="red"
+              onClick={() => onClose()}
+            >
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <MultiPropertyModel/>
+    </>
   );
 };
 
