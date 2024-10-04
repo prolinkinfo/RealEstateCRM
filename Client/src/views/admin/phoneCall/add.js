@@ -496,7 +496,7 @@ const AddPhoneCall = (props) => {
                 fontWeight="500"
                 mb="8px"
               >
-                Assign To Sales Agent
+                Assign To Sales Agent <Text color={"red"}>*</Text>
               </FormLabel>
               <Flex justifyContent={"space-between"}>
                 <Select
