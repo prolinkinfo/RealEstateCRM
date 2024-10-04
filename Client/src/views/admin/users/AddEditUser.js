@@ -58,7 +58,7 @@ const AddEditUser = (props) => {
     username: userAction === "add" ? "" : data?.username,
     phoneNumber: userAction === "add" ? "" : data?.phoneNumber,
     password: userAction === "add" ? "" : data?.password,
-    roles: userAction === "add" ? [] : data?.roles,
+    roles: userAction === "add" ? [] : data?.roles?.map((item) => item?._id),
   };
   const user = JSON.parse(window.localStorage.getItem("user"));
 
@@ -226,7 +226,6 @@ const AddEditUser = (props) => {
                     placeholder="Type a Name"
                     name="roles"
                     items={roles}
-                    key={values.roles}
                     mb={errors.roles && touched.roles ? undefined : "10px"}
                     className="custom-autoComplete"
                     selectedItems={roles?.filter((item) =>
@@ -251,8 +250,7 @@ const AddEditUser = (props) => {
                 />
               </Flex>
               <Text color={"red"}>
-                {" "}
-                {errors.attendes && touched.attendes && errors.attendes}
+                {errors.roles && touched.roles && errors.roles}
               </Text>
             </GridItem>
             <GridItem colSpan={{ base: 12 }}>
