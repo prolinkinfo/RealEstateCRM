@@ -20,6 +20,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { CUIAutoComplete } from "chakra-ui-autocomplete";
+import MultiRoleModel from "components/commonTableModel/MultiRoleModel";
 import Spinner from "components/spinner/Spinner";
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
@@ -47,8 +48,8 @@ const AddEditUser = (props) => {
   const [isLoding, setIsLoding] = useState(false);
   const [show, setShow] = React.useState(false);
   const [roles, setRoles] = React.useState([]);
-  console.log(roles);
-
+  const [roleModelOpen, setRoleModelOpen] = useState(false);
+  const [assignToRoleData, setAssignToRoleData] = useState([]);
   const showPass = () => setShow(!show);
 
   const initialValues = {
@@ -57,6 +58,7 @@ const AddEditUser = (props) => {
     username: userAction === "add" ? "" : data?.username,
     phoneNumber: userAction === "add" ? "" : data?.phoneNumber,
     password: userAction === "add" ? "" : data?.password,
+    roles: userAction === "add" ? [] : data?.roles,
   };
   const user = JSON.parse(window.localStorage.getItem("user"));
 
@@ -133,12 +135,15 @@ const AddEditUser = (props) => {
       }
     }
   };
-
+  const extractLabels = (selectedItems) => {
+    return selectedItems.map((item) => item._id);
+  };
   const fetchRoleData = async () => {
     setIsLoding(true);
     let result = await getApi("api/role-access");
     setRoles(
       result.data?.map((item) => ({
+        ...item,
         value: item?._id,
         label: item?.roleName,
       }))
@@ -149,7 +154,6 @@ const AddEditUser = (props) => {
   useEffect(() => {
     fetchRoleData();
   }, []);
-
   return (
     <Modal isOpen={isOpen} isCentered>
       <ModalOverlay />
@@ -220,27 +224,34 @@ const AddEditUser = (props) => {
                   <CUIAutoComplete
                     label={`Choose Role`}
                     placeholder="Type a Name"
-                    name="attendes"
+                    name="roles"
                     items={roles}
+                    key={values.roles}
+                    mb={errors.roles && touched.roles ? undefined : "10px"}
                     className="custom-autoComplete"
-                    // selectedItems={countriesWithEmailAsLabel?.filter((item) => values.related === "Contact" ? values?.attendes.includes(item._id) : values.related === "Lead" && values?.attendesLead.includes(item._id))}
+                    selectedItems={roles?.filter((item) =>
+                      values?.roles?.includes(item._id)
+                    )}
                     onSelectedItemsChange={(changes) => {
-                      // const selectedLabels = extractLabels(changes.selectedItems);
-                      // values.related === "Contact" ? setFieldValue('attendes', selectedLabels) : values.related === "Lead" && setFieldValue('attendesLead', selectedLabels)
+                      const selectedLabels = extractLabels(
+                        changes.selectedItems
+                      );
+                      setFieldValue("roles", selectedLabels);
                     }}
+                    borderColor={
+                      errors.roles && touched.roles ? "red.300" : null
+                    }
                   />
                 </Text>
                 <IconButton
                   mb={6}
-                  //   onClick={() =>
-                  //     setContactModel(true)
-                  //
-                  //   }
+                  onClick={() => setRoleModelOpen(true)}
                   fontSize="25px"
                   icon={<LiaMousePointerSolid />}
                 />
               </Flex>
               <Text color={"red"}>
+                {" "}
                 {errors.attendes && touched.attendes && errors.attendes}
               </Text>
             </GridItem>
@@ -359,6 +370,17 @@ const AddEditUser = (props) => {
               </GridItem>
             )}
           </Grid>
+          <MultiRoleModel
+            isOpen={roleModelOpen}
+            data={assignToRoleData}
+            role={roles}
+            onClose={() => setRoleModelOpen(false)}
+            isLoding={isLoding}
+            setIsLoding={setIsLoding}
+            fieldName="roles"
+            setFieldValue={setFieldValue}
+            // columnsData={columns ?? []}
+          />
         </ModalBody>
         <ModalFooter>
           <Button
