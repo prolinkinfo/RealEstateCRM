@@ -160,6 +160,14 @@ const view = async (req, res) => {
                     as: 'salesAgent'
                 }
             },
+            {
+                $lookup: {
+                    from: 'Properties',
+                    localField: 'property',
+                    foreignField: '_id',
+                    as: 'properties'
+                }
+            },
             { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
             { $unwind: { path: '$createByRef', preserveNullAndEmptyArrays: true } },
             { $unwind: { path: '$createByrefLead', preserveNullAndEmptyArrays: true } },
