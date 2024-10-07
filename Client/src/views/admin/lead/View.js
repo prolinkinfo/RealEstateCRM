@@ -350,7 +350,7 @@ const View = () => {
                                                         columnData={columnsDataColumns ?? []}
                                                         // dataColumn={columnsDataColumns ?? []}
                                                         allData={showEmail ? allData.Email : allData?.Email?.length > 0 ? [allData.Email[0]] : []}
-                                                        tableData={showEmail ? allData.Email : allData?.Email?.length > 0 ? [allData.Email[0]] : []}
+                                                        tableData={showEmail ? allData.Email   : allData?.Email?.length > 0 ? [allData.Email[0]] : []}
                                                         AdvanceSearch={false}
                                                         dataLength={allData?.Email?.length}
                                                         tableCustomFields={[]}

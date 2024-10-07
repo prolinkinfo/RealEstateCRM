@@ -48,6 +48,7 @@ const CommonCheckTable = (props) => {
         setSearchboxOutside,
         selectType,
         customSearch,
+        addBtn
     } = props;
     const { dataLength } = props;
     const { handleSearchType } = props;
@@ -406,7 +407,7 @@ const CommonCheckTable = (props) => {
                                     }
                                 </MenuList>
                             </Menu>}
-                        {(access?.create || access === true) && <Button onClick={() => handleClick()} size="sm" variant="brand" leftIcon={<AddIcon />}>Add New</Button>}
+                        {(addBtn!==false && (access?.create || access === true)) && <Button onClick={() => handleClick()} size="sm" variant="brand" leftIcon={<AddIcon />}>Add New</Button>}
                         {BackButton && BackButton}
                     </GridItem>
                     <HStack spacing={4} mb={2}>
