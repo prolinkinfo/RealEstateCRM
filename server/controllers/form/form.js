@@ -7,13 +7,13 @@ const index = async (req, res) => {
             return res.status(400).send({ success: false, message: "moduleId is required" });
         }
 
-        const customField = await CustomField.findById(req.query?.moduleId).select("moduleName");
+        const customFieldName = await CustomField.findById(req.query?.moduleId).select("moduleName");
 
-        if (!customField) {
+        if (!customFieldName) {
             return res.status(404).send({ success: false, message: "Module not found" });
         }
 
-        const collectionName = customField.moduleName;
+        const collectionName = customFieldName.moduleName;
         const collectionExists = await mongoose.connection.db.listCollections({ name: collectionName }).hasNext();
 
         if (!collectionExists) {

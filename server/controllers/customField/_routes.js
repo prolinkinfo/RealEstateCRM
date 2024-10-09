@@ -5,6 +5,7 @@ const img = require('../../controllers/images/imagesController');
 
 const router = express.Router();
 
+// module
 router.get('/', auth, customField.index);
 router.post("/add-module", auth, img.upload.single('icon'), customField.createNewModule);
 router.put("/change-icon/:id", auth, img.upload.single('icon'), customField.changeIcon);
