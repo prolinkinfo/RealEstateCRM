@@ -14,7 +14,7 @@ const index = async (req, res) => {
   let allData = await Property.find(query)
     .populate({
       path: "createBy",
-      match: { deleted: false }, // Populate only if createBy.deleted is false
+      match: { deleted: false },
     })
     .exec();
 
@@ -295,10 +295,10 @@ const upload = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-            "-" +
-            timestamp +
-            "." +
-            file.originalname.split(".")[1]
+          "-" +
+          timestamp +
+          "." +
+          file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -352,10 +352,10 @@ const virtualTours = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-            "-" +
-            timestamp +
-            "." +
-            file.originalname.split(".")[1]
+          "-" +
+          timestamp +
+          "." +
+          file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -408,10 +408,10 @@ const FloorPlansStorage = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-            "-" +
-            timestamp +
-            "." +
-            file.originalname.split(".")[1]
+          "-" +
+          timestamp +
+          "." +
+          file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -464,10 +464,10 @@ const PropertyDocumentsStorage = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-            "-" +
-            timestamp +
-            "." +
-            file.originalname.split(".")[1]
+          "-" +
+          timestamp +
+          "." +
+          file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);

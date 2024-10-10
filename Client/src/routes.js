@@ -51,7 +51,10 @@ const InvoicesImport = React.lazy(() => import("views/admin/invoice/components/I
 const User = React.lazy(() => import("views/admin/users"));
 const UserView = React.lazy(() => import("views/admin/users/View"));
 
-const Property = React.lazy(() => import("views/admin/property"));
+// const Property = React.lazy(() => import("views/admin/property"));
+// const PropertyView = React.lazy(() => import("views/admin/property/View"));
+// const PropertyImport = React.lazy(() => import("views/admin/property/components/PropertyImport"))
+const Property = React.lazy(() => import("views/admin/newProperty"));
 const PropertyView = React.lazy(() => import("views/admin/property/View"));
 const PropertyImport = React.lazy(() => import("views/admin/property/components/PropertyImport"))
 
