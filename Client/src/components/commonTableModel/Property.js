@@ -80,7 +80,7 @@ export default function PropertyTable(props) {
   const handleCheckboxChange = (event, value) => {
     if (type === "multi") {
       if (event.target.checked) {
-        setSelectedValues((prevSelectedValues) => [
+        setSelectedValues((prevSelectedValues = []) => [
           ...prevSelectedValues,
           value,
         ]);
@@ -195,7 +195,7 @@ export default function PropertyTable(props) {
                             <Checkbox
                               colorScheme="brandScheme"
                               value={selectedValues}
-                              isChecked={selectedValues.includes(cell?.value)}
+                              isChecked={selectedValues?.includes(cell?.value)}
                               onChange={(event) =>
                                 handleCheckboxChange(event, cell?.value)
                               }

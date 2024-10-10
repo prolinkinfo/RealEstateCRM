@@ -1,10 +1,8 @@
 import {
   Button,
-  Flex,
   FormLabel,
   Grid,
   GridItem,
-  IconButton,
   Input,
   Modal,
   ModalBody,
@@ -19,23 +17,30 @@ import {
   Stack,
   Text,
   Textarea,
+  Flex,
+  IconButton,
 } from "@chakra-ui/react";
-import ContactModel from "components/commonTableModel/ContactModel";
-import LeadModel from "components/commonTableModel/LeadModel";
-import UserModel from "components/commonTableModel/UserModel";
-import PropertyModel from "components/commonTableModel/PropertyModel";
+import { LiaMousePointerSolid } from "react-icons/lia";
 import Spinner from "components/spinner/Spinner";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
-import { LiaMousePointerSolid } from "react-icons/lia";
-import { phoneCallSchema } from "schema";
-import { getApi, postApi } from "services/api";
-import MultiPropertyModel from "components/commonTableModel/MultiPropertyModel";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { emailSchema } from "schema";
+import { postApi, getApi } from "services/api";
+import { fetchEmailTempData } from "../../redux/slices/emailTempSlice";
+import UserModel from "components/commonTableModel/UserModel";
 import { CUIAutoComplete } from "chakra-ui-autocomplete";
+import ContactModel from "./ContactModel";
+import LeadModel from "components/commonTableModel/LeadModel";
+import MultiPropertyModel from "components/commonTableModel/MultiPropertyModel";
+import * as yup from "yup";
+import { useParams } from "react-router-dom";
 
-const AddPhoneCall = (props) => {
-  const { onClose, isOpen, setAction, data } = props;
+const EmailModel = (props) => {
+  const { onClose, isOpen, fetchData } = props;
+  const user = JSON.parse(localStorage.getItem("user"));
   const [isLoding, setIsLoding] = useState(false);
   const [assignToLeadData, setAssignToLeadData] = useState([]);
   const [assignToContactData, setAssignToContactData] = useState([]);
@@ -43,29 +48,46 @@ const AddPhoneCall = (props) => {
   const [leadModelOpen, setLeadModel] = useState(false);
   const [propertyModelOpen, setPropertyModelOpen] = useState(false);
   const [assignToProperyData, setAssignToPropertyData] = useState([]);
+  const todayTime = new Date().toISOString().split(".")[0];
+  const [data, setData] = useState([]);
   const [assignToSalesData, setAssignToSalesData] = useState([]);
   const [salesPersonsModelOpen, setSalesPersonsModelOpen] = useState(false);
-  const [columns, setColumns] = useState([]);
-  const user = JSON.parse(localStorage.getItem("user"));
-  const todayTime = new Date().toISOString().split(".")[0];
+  const dispatch = useDispatch();
+  const { id } = useParams();
+
   const initialValues = {
     sender: user?._id,
-    recipient: "",
-    callDuration: "",
-    callNotes: "",
-    createByContact: "",
-    createByLead: "",
-    property: "",
+    recipient: props.lead !== true ? props?.contactEmail : props?.leadEmail,
+    subject: "",
+    message: "",
+    createByContact: props?.id && props?.lead !== true ? props?.id : "",
+    createByLead: props?.id && props?.lead === true ? props?.id : "",
     startDate: "",
-    category: "contact",
-    // assignTo: '',
-    // assignToLead: '',
+    property: [id],
+    type: "message",
+    html: "",
     createBy: user?._id,
     salesAgent: "", // sales person user id
   };
+  const validationSchema = yup.object({
+    sender: yup.string().required("Sender Is required"),
+    recipient: yup.string().email().required("Recipient Is required"),
+    cc: yup.string().email(),
+    bcc: yup.string().email(),
+    relatedToContact: yup.string(),
+    property: yup.array().required("property is required"),
+    relatedToLead: yup.string(),
+    subject: yup.string().required("Subject Is required"),
+    message: yup.string(),
+    startDate: yup.date().required("Start Date Is required"),
+    createBy: yup.string(),
+    createByLead: yup.string(),
+    salesAgent: yup.string().required("Assign To Sales Agent Is required"),
+  });
   const formik = useFormik({
     initialValues: initialValues,
-    validationSchema: phoneCallSchema,
+    validationSchema,
+    enableReinitialize: true,
     onSubmit: (values, { resetForm }) => {
       AddData();
       resetForm();
@@ -80,13 +102,15 @@ const AddPhoneCall = (props) => {
     handleSubmit,
     setFieldValue,
   } = formik;
+
   const AddData = async () => {
     try {
       setIsLoding(true);
-      let response = await postApi("api/phoneCall/add", values);
+      let response = await postApi("api/email/add", values);
       if (response.status === 200) {
         props.onClose();
-        setAction((pre) => !pre);
+        fetchData(1);
+        // setAction((pre) => !pre)
       }
     } catch (e) {
       console.log(e);
@@ -94,8 +118,40 @@ const AddPhoneCall = (props) => {
       setIsLoding(false);
     }
   };
+  const fetchRecipientData = async () => {
+    if (values.createByContact) {
+      let findEmail = assignToContactData.find(
+        (item) => item._id === values.createByContact
+      );
+      if (findEmail) {
+        setFieldValue("recipient", findEmail.email);
+      }
+    } else if (values.createByLead) {
+      let findEmail = assignToLeadData.find(
+        (item) => item._id === values.createByLead
+      );
+      if (findEmail) {
+        setFieldValue("recipient", findEmail.leadEmail);
+      }
+    } else {
+      setFieldValue("recipient", "");
+    }
+  };
+  useEffect(() => {
+    fetchRecipientData();
+  }, [values.createByContact, values.createByLead]);
 
-  useEffect(async () => {
+  const fetchEmailTemp = async () => {
+    setIsLoding(true);
+    const result = await dispatch(fetchEmailTempData());
+    if (result.payload.status === 200) {
+      setData(result?.payload?.data);
+    } else {
+      toast.error("Failed to fetch data", "error");
+    }
+    setIsLoding(false);
+  };
+  const getAllApi = async () => {
     values.start = props?.date;
     try {
       let result;
@@ -106,49 +162,27 @@ const AddPhoneCall = (props) => {
             : `api/contact/?createBy=${user._id}`
         );
         setAssignToContactData(result?.data);
-      } else if (values.category === "Lead" && assignToLeadData.length <= 0) {
+      } else if (values.category === "Lead" && assignToLeadData <= 0) {
         result = await getApi(
           user.role === "superAdmin"
             ? "api/lead/"
             : `api/lead/?createBy=${user._id}`
         );
         setAssignToLeadData(result?.data);
-      } else if (
-        (values.category === "property" && console.log(""),
-        assignToProperyData.length <= 0)
-      ) {
-        result = await getApi(
-          user.role === "superAdmin"
-            ? "api/property"
-            : `api/property/?createBy=${user._id}`
-        );
-        setAssignToPropertyData(result?.data);
       }
+      const propertyOptionData = await getApi(
+        user.role === "superAdmin"
+          ? "api/property"
+          : `api/property/?createBy=${user._id}`
+      );
+      setAssignToPropertyData(propertyOptionData?.data);
     } catch (e) {
       console.log(e);
     }
-  }, [props?.date, values.category]);
-  
-  const fetchRecipientData = async () => {
-    if (values.createByContact) {
-      let findEmail = assignToContactData.find(
-        (item) => item._id === values.createByContact
-      );
-      if (findEmail) {
-        setFieldValue("recipient", findEmail.phoneNumber);
-      }
-    } else if (values.createByLead) {
-      let findEmail = assignToLeadData.find(
-        (item) => item._id === values.createByLead
-      );
-      if (findEmail) {
-        setFieldValue("recipient", findEmail.leadPhoneNumber);
-      }
-    } else {
-      setFieldValue("recipient", "");
-    }
   };
-
+  useEffect(() => {
+    getAllApi();
+  }, [props, values.category]);
   const fetchUsersData = async () => {
     setIsLoding(true);
     try {
@@ -167,14 +201,13 @@ const AddPhoneCall = (props) => {
   };
 
   useEffect(() => {
-    fetchRecipientData();
-  }, [values.createByContact, values.createByLead]);
+    if (values?.type === "template") fetchEmailTemp();
+  }, [values?.type]);
 
   useEffect(() => {
     fetchUsersData();
   }, []);
-
-  const setValueProperty = assignToProperyData?.map((item) => ({
+  const getPropertyOptions = assignToProperyData?.map((item) => ({
     ...item,
     value: item._id,
     label: item.name,
@@ -183,13 +216,14 @@ const AddPhoneCall = (props) => {
   const extractLabels = (selectedItems) => {
     return selectedItems.map((item) => item._id);
   };
+
   return (
     <Modal onClose={onClose} isOpen={isOpen} isCentered>
       <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Add Call</ModalHeader>
+      <ModalContent height={"580px"}>
+        <ModalHeader>Add Email</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
+        <ModalBody overflowY={"auto"} height={"400px"}>
           {/* Contact Model  */}
           <ContactModel
             isOpen={contactModelOpen}
@@ -216,7 +250,7 @@ const AddPhoneCall = (props) => {
             isLoding={isLoding}
             setIsLoding={setIsLoding}
           />
-          {/*Property Model*/}
+          {/* Property Model */}
           <MultiPropertyModel
             onClose={() => setPropertyModelOpen(false)}
             isOpen={propertyModelOpen}
@@ -225,7 +259,9 @@ const AddPhoneCall = (props) => {
             setIsLoding={setIsLoding}
             fieldName="property"
             setFieldValue={setFieldValue}
-            columnsData={columns ?? []}
+            selectedItems={getPropertyOptions?.filter((item) =>
+              values?.property?.includes(item._id)
+            )}
           />
           <Grid templateColumns="repeat(12, 1fr)" gap={3}>
             <GridItem colSpan={{ base: 12, md: 6 }}>
@@ -243,7 +279,6 @@ const AddPhoneCall = (props) => {
                   setFieldValue("category", e);
                   setFieldValue("createByContact", "");
                   setFieldValue("createByLead", "");
-                  setFieldValue("property", "");
                 }}
                 value={values.category}
               >
@@ -252,10 +287,6 @@ const AddPhoneCall = (props) => {
                   <Radio value="Lead">Lead</Radio>
                 </Stack>
               </RadioGroup>
-              <Text mb="10px" fontSize="sm" color={"red"}>
-                {" "}
-                {errors.category && touched.category && errors.category}
-              </Text>
             </GridItem>
             <GridItem colSpan={{ base: 12 }}>
               {values.category === "Contact" ? (
@@ -305,12 +336,6 @@ const AddPhoneCall = (props) => {
                         icon={<LiaMousePointerSolid />}
                       />
                     </Flex>
-                    <Text mb="10px" fontSize="sm" color={"red"}>
-                      {" "}
-                      {errors.createByContact &&
-                        touched.createByContact &&
-                        errors.createByContact}
-                    </Text>
                   </GridItem>
                 </>
               ) : values.category === "Lead" ? (
@@ -360,12 +385,6 @@ const AddPhoneCall = (props) => {
                         icon={<LiaMousePointerSolid />}
                       />
                     </Flex>
-                    <Text mb="10px" fontSize="sm" color={"red"}>
-                      {" "}
-                      {errors.createByLead &&
-                        touched.createByLead &&
-                        errors.createByLead}
-                    </Text>
                   </GridItem>
                 </>
               ) : (
@@ -385,7 +404,7 @@ const AddPhoneCall = (props) => {
               <Input
                 fontSize="sm"
                 disabled
-                value={values.recipient ? values.recipient : ""}
+                value={values.recipient}
                 name="recipient"
                 placeholder="Recipient"
                 fontWeight="500"
@@ -393,19 +412,27 @@ const AddPhoneCall = (props) => {
                   errors.recipient && touched.recipient ? "red.300" : null
                 }
               />
+              <Text mb="10px" fontSize="sm" color={"red"}>
+                {" "}
+                {errors.recipient && touched.recipient && errors.recipient}
+              </Text>
             </GridItem>
             <GridItem colSpan={{ base: 12 }}>
               <Flex alignItems={"end"} justifyContent={"space-between"}>
                 <Text w={"100%"}>
                   <CUIAutoComplete
                     label={`Property`}
-                    items={setValueProperty}
-                    selectedItems={setValueProperty?.filter((item) => values?.property.includes(item._id))}
+                    items={getPropertyOptions}
+                    selectedItems={getPropertyOptions?.filter((item) =>
+                      values?.property?.includes(item._id)
+                    )}
                     onSelectedItemsChange={(changes) => {
-                      const selectProperty = extractLabels(changes.selectedItems);
-                       setFieldValue("property",selectProperty);
+                      const selectProperty = extractLabels(
+                        changes.selectedItems
+                      );
+                      setFieldValue("property", selectProperty);
                     }}
-                    value={values.property}
+                    value={assignToProperyData?.name || values.property}
                     name="property"
                     onChange={handleChange}
                     mb={
@@ -430,7 +457,7 @@ const AddPhoneCall = (props) => {
                 {errors.attendes && touched.attendes && errors.attendes}
               </Text>
             </GridItem>
-            <GridItem colSpan={{ base: 12, md: 6 }}>
+            <GridItem colSpan={{ base: 12 }}>
               <FormLabel
                 display="flex"
                 ms="4px"
@@ -456,36 +483,6 @@ const AddPhoneCall = (props) => {
               <Text fontSize="sm" mb="10px" color={"red"}>
                 {" "}
                 {errors.startDate && touched.startDate && errors.startDate}
-              </Text>
-            </GridItem>
-
-            <GridItem colSpan={{ base: 12, md: 6 }}>
-              <FormLabel
-                display="flex"
-                ms="4px"
-                fontSize="sm"
-                fontWeight="500"
-                mb="8px"
-              >
-                Call Duration<Text color={"red"}>*</Text>
-              </FormLabel>
-              <Input
-                fontSize="sm"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.callDuration}
-                name="callDuration"
-                placeholder="call Duration"
-                fontWeight="500"
-                borderColor={
-                  errors.callDuration && touched.callDuration ? "red.300" : null
-                }
-              />
-              <Text mb="10px" fontSize="sm" color={"red"}>
-                {" "}
-                {errors.callDuration &&
-                  touched.callDuration &&
-                  errors.callDuration}
               </Text>
             </GridItem>
             <GridItem colSpan={{ base: 12 }}>
@@ -528,9 +525,37 @@ const AddPhoneCall = (props) => {
                   icon={<LiaMousePointerSolid />}
                 />
               </Flex>
-              <Text mb="10px" fontSize="sm" color={"red"}>
+              <Text fontSize="sm" mb="10px" color={"red"}>
                 {" "}
                 {errors.salesAgent && touched.salesAgent && errors.salesAgent}
+              </Text>
+            </GridItem>
+
+            <GridItem colSpan={{ base: 12 }}>
+              <FormLabel
+                display="flex"
+                ms="4px"
+                fontSize="sm"
+                fontWeight="500"
+                mb="8px"
+              >
+                Subject<Text color={"red"}>*</Text>
+              </FormLabel>
+              <Input
+                fontSize="sm"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.subject}
+                name="subject"
+                placeholder="subject"
+                fontWeight="500"
+                borderColor={
+                  errors.subject && touched.subject ? "red.300" : null
+                }
+              />
+              <Text fontSize="sm" mb="10px" color={"red"}>
+                {" "}
+                {errors.subject && touched.subject && errors.subject}
               </Text>
             </GridItem>
             <GridItem colSpan={{ base: 12 }}>
@@ -541,25 +566,59 @@ const AddPhoneCall = (props) => {
                 fontWeight="500"
                 mb="8px"
               >
-                Call Notes
+                Message
               </FormLabel>
-              <Textarea
-                resize={"none"}
-                fontSize="sm"
-                placeholder="Enter Call Notes"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.callNotes}
-                name="callNotes"
-                fontWeight="500"
-                borderColor={
-                  errors.callNotes && touched.callNotes ? "red.300" : null
-                }
-              />
-              <Text mb="10px" fontSize="sm" color={"red"}>
-                {" "}
-                {errors.callNotes && touched.callNotes && errors.callNotes}
-              </Text>
+              <RadioGroup
+                onChange={(e) => {
+                  setFieldValue("type", e);
+                }}
+                value={values.type}
+              >
+                <Stack direction="row">
+                  <Radio value="message">Message</Radio>
+                  <Radio value="template">Template</Radio>
+                </Stack>
+              </RadioGroup>
+            </GridItem>
+            <GridItem colSpan={{ base: 12 }}>
+              {values?.type === "message" ? (
+                <>
+                  <Textarea
+                    resize={"none"}
+                    fontSize="sm"
+                    placeholder="Enter Message"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.message}
+                    name="message"
+                    fontWeight="500"
+                    borderColor={
+                      errors.message && touched.message ? "red.300" : null
+                    }
+                  />
+                  <Text fontSize="sm" mb="10px" color={"red"}>
+                    {" "}
+                    {errors.message && touched.message && errors.message}
+                  </Text>
+                </>
+              ) : (
+                <Select
+                  name="html"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.html}
+                  fontWeight="500"
+                  placeholder={"Select Template"}
+                >
+                  {data?.map((item) => {
+                    return (
+                      <option value={item?.html} key={item._id}>
+                        {item?.templateName}
+                      </option>
+                    );
+                  })}
+                </Select>
+              )}
             </GridItem>
           </Grid>
         </ModalBody>
@@ -573,7 +632,6 @@ const AddPhoneCall = (props) => {
             {isLoding ? <Spinner /> : "Save"}
           </Button>
           <Button
-            size="sm"
             sx={{
               marginLeft: 2,
               textTransform: "capitalize",
@@ -584,6 +642,7 @@ const AddPhoneCall = (props) => {
               formik.resetForm();
               onClose();
             }}
+            size="sm"
           >
             Close
           </Button>
@@ -593,4 +652,4 @@ const AddPhoneCall = (props) => {
   );
 };
 
-export default AddPhoneCall;
+export default EmailModel;

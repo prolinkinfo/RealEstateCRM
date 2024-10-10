@@ -309,7 +309,7 @@ const AddEmailHistory = (props) => {
                           return (
                             <option value={item._id} key={item._id}>
                               {values.category === "Contact"
-                                ? `${item.firstName} ${item.lastName}`
+                                ? `${item.fullName}`
                                 : item.leadName}
                             </option>
                           );
@@ -410,7 +410,7 @@ const AddEmailHistory = (props) => {
                     label={`Property`}
                     items={getPropertyOptions}
                     selectedItems={getPropertyOptions?.filter((item) =>
-                      values?.property?.includes(item._id)
+                      values?.property?.includes(item?._id)
                     )}
                     onSelectedItemsChange={(changes) => {
                       const selectProperty = extractLabels(

@@ -5,32 +5,22 @@ import {
   Grid,
   GridItem,
   Heading,
-  Table,
-  TableCaption,
-  TableContainer,
-  Tbody,
-  Td,
-  Text,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
+  Text
 } from "@chakra-ui/react";
 import Card from "components/card/Card";
 import { HSeparator } from "components/separator/Separator";
 import Spinner from "components/spinner/Spinner";
+import html2pdf from "html2pdf.js";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { IoIosArrowBack } from "react-icons/io";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { HasAccess } from "../../../redux/accessUtils";
-import { getApi } from "services/api";
 import { FaFilePdf } from "react-icons/fa";
-import html2pdf from "html2pdf.js";
-import { fetchPropertyData } from "../../../redux/slices/propertySlice";
-import { fetchPropertyCustomFiled } from "../../../redux/slices/propertyCustomFiledSlice.js";
+import { IoIosArrowBack } from "react-icons/io";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { getApi } from "services/api";
 import CommonCheckTable from "../../../components/reactTable/checktable";
-import { useDispatch, useSelector } from "react-redux";
+import { HasAccess } from "../../../redux/accessUtils";
+import { fetchPropertyCustomFiled } from "../../../redux/slices/propertyCustomFiledSlice.js";
 
 const View = () => {
   const param = useParams();
@@ -40,26 +30,23 @@ const View = () => {
   const [isLoding, setIsLoding] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedValues, setSelectedValues] = useState();
-  const [propertyData, setPropertyData] = useState([]);
   const [columns, setColumns] = useState([]);
   const dispatch = useDispatch();
-  const propertydata = useSelector((state) => state.propertyData.data);
-
   const fetchData = async () => {
     setIsLoding(true);
     let response = await getApi("api/phoneCall/view/", param.id);
     setData(response?.data);
     setIsLoding(false);
   };
+
   const fetchCustomDataFields = async () => {
     setIsLoding(true);
     const result = await dispatch(fetchPropertyCustomFiled());
-    setPropertyData(result?.payload?.data);
     const tempTableColumns = [
       { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-      ...(result?.payload?.data?.[0]?.fields || [])
-        .filter((field) => field?.isTableField === true)
-        .map((field) => ({ Header: field?.label, accessor: field?.name })),
+      ...result?.payload?.data?.[0]?.fields
+        ?.filter((field) => field?.isTableField === true)
+        ?.map((field) => ({ Header: field?.label, accessor: field?.name })),
     ];
     setColumns(tempTableColumns);
     setIsLoding(false);
@@ -97,11 +84,10 @@ const View = () => {
     fetchData();
   }, []);
 
-  useEffect(async () => {
-    await dispatch(fetchPropertyData());
+  useEffect(() => {
     fetchCustomDataFields();
   }, []);
-  
+
   const [contactAccess, leadAccess, PropertiesAccess] = HasAccess([
     "Contacts",
     "Leads",
@@ -340,17 +326,31 @@ const View = () => {
             </GridItem>
           </Grid>
 
+          <Card mt={3}>
+            <Grid templateColumns="repeat(6, 1fr)" gap={1}>
+              <GridItem colSpan={{ base: 2 }}>
+                <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
+                  {" "}
+                  Call Notes{" "}
+                </Text>
+                <pre style={{ whiteSpace: "pre-wrap" }}>
+                  {data?.callNotes ? data?.callNotes : " - "}
+                </pre>
+              </GridItem>
+            </Grid>
+          </Card>
+
           <Grid templateColumns="repeat(2, 1fr)" gap={1} mt={3}>
             <GridItem colSpan={{ base: 2 }}>
               <CommonCheckTable
                 title={"Properties"}
                 isLoding={isLoding}
                 columnData={columns ?? []}
-                allData={propertydata ?? []}
-                tableData={propertydata}
+                allData={data?.properties ?? []}
+                tableData={data?.properties ?? []}
                 AdvanceSearch={false}
                 tableCustomFields={
-                  propertyData?.[0]?.fields?.filter(
+                  data?.properties?.[0]?.fields?.filter(
                     (field) => field?.isTableField === true
                   ) || []
                 }
@@ -365,19 +365,7 @@ const View = () => {
             </GridItem>
           </Grid>
 
-          <Card mt={3}>
-            <Grid templateColumns="repeat(6, 1fr)" gap={1}>
-              <GridItem colSpan={{ base: 2 }}>
-                <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
-                  {" "}
-                  Call Notes{" "}
-                </Text>
-                <pre style={{ whiteSpace: "pre-wrap" }}>
-                  {data?.callNotes ? data?.callNotes : " - "}
-                </pre>
-              </GridItem>
-            </Grid>
-          </Card>
+         
         </>
       )}
     </>

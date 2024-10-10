@@ -63,6 +63,10 @@ import { fetchPropertyData } from "../../../redux/slices/propertySlice";
 import { FaFilePdf } from "react-icons/fa";
 import html2pdf from "html2pdf.js";
 import moment from "moment";
+import AddEmailHistory from "../emailHistory/components/AddEmail";
+import AddPhoneCall from "../phoneCall/components/AddPhoneCall";
+import EmailModel from "components/commonTableModel/EmailModel";
+import PhoneModel from "components/commonTableModel/PhoneModel";
 
 const View = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -83,24 +87,24 @@ const View = () => {
   const [propertyDocuments, setPropertyDocuments] = useState(false);
   const [selectedValues, setSelectedValues] = useState();
   const [showEmail, setShowEmail] = useState(false);
-  const [allData, setAllData] = useState([])
+  const [allData, setAllData] = useState([]);
   const [showCall, setShowCall] = useState(false);
-  const [addPhoneCall, setAddPhoneCall] = useState(false);
   const [isLoding, setIsLoding] = useState(false);
   const [displayPropertyPhoto, setDisplayPropertyPhoto] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
   const [addEmailHistory, setAddEmailHistory] = useState(false);
+  const [addPhoneCall, setAddPhoneCall] = useState(false);
+  const [phoneCall, setPhoneCall] = useState([]);
+  const [setEmail, setEmailData] = useState([]);
   const dispatch = useDispatch();
   const propertyData = useSelector(
     (state) => state?.propertyCustomFiled?.data?.data
   );
 
-  
   const [contactData, setContactData] = useState([]);
   const [columns, setColumns] = useState([]);
   const [type, setType] = useState(false);
   const navigate = useNavigate();
-
   const size = "lg";
   const [
     taskPermission,
@@ -118,42 +122,51 @@ const View = () => {
     "Tasks",
     "Meetings",
   ]);
-  const columnsDataColumns = [
-    { Header: "sender", accessor: "senderName", },
+
+  const emailColumn = [
+    { Header: "sender", accessor: "senderName" },
     {
-        Header: "recipient", accessor: "createByName", cell: (cell) => (
-            <Link to={`/Email/${cell?.row?.original?._id}`}>
-                <Text
-                    me="10px"
-                    sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                    color='brand.600'
-                    fontSize="sm"
-                    fontWeight="700"
-                >
-                    {cell?.value || ' - '}
-                </Text></Link>)
+      Header: "recipient",
+      accessor: "recipient",
+      cell: (cell) => (
+        <Link to={`/Email/${cell?.row?.original?._id}`}>
+          <Text
+            me="10px"
+            sx={{
+              "&:hover": { color: "blue.500", textDecoration: "underline" },
+            }}
+            color="brand.600"
+            fontSize="sm"
+            fontWeight="700"
+          >
+            {cell?.value || " - "}
+          </Text>
+        </Link>
+      ),
     },
     {
-        Header: "time stamp", accessor: "timestamp",
-        cell: (cell) => (
-            <div className="selectOpt">
-                <Text color={textColor} fontSize='sm' fontWeight='700'>
-                    {moment(cell?.value).fromNow()}
-                </Text>
-            </div>
-        )
+      Header: "time stamp",
+      accessor: "timestamp",
+      cell: (cell) => (
+        <div className="selectOpt">
+          <Text color={textColor} fontSize="sm" fontWeight="700">
+            {moment(cell?.value).fromNow()}
+          </Text>
+        </div>
+      ),
     },
     {
-        Header: "Created", accessor: "createBy",
-        cell: (cell) => (
-            <div className="selectOpt">
-                <Text color={textColor} fontSize='sm' fontWeight='700'>
-                    {moment(cell?.row?.values.timestamp).format('h:mma (DD/MM)')}
-                </Text>
-            </div>
-        )
+      Header: "Created",
+      accessor: "createBy",
+      cell: (cell) => (
+        <div className="selectOpt">
+          <Text color={textColor} fontSize="sm" fontWeight="700">
+            {moment(cell?.row?.values.timestamp).format("h:mma (DD/MM)")}
+          </Text>
+        </div>
+      ),
     },
-];
+  ];
   const contactColumns = [
     { Header: "Title", accessor: "title" },
     { Header: "First Name", accessor: "firstName" },
@@ -179,41 +192,49 @@ const View = () => {
   };
 
   const callColumns = [
-    { Header: "sender", accessor: "senderName", },
+    { Header: "sender", accessor: "senderName" },
     {
-        Header: "recipient", accessor: "createByName", cell: (cell) => (
-            <Link to={`/phone-call/${cell?.row?.original?._id}`}>
-                <Text
-                    me="10px"
-                    sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                    color='brand.600'
-                    fontSize="sm"
-                    fontWeight="700"
-                >
-                    {cell?.value || ' - '}
-                </Text></Link>)
+      Header: "recipient",
+      accessor: "recipient",
+      cell: (cell) => (
+        <Link to={`/phone-call/${cell?.row?.original?._id}`}>
+          <Text
+            me="10px"
+            sx={{
+              "&:hover": { color: "blue.500", textDecoration: "underline" },
+            }}
+            color="brand.600"
+            fontSize="sm"
+            fontWeight="700"
+          >
+            {cell?.value || " - "}
+          </Text>
+        </Link>
+      ),
     },
     {
-        Header: "time stamp", accessor: "timestamp",
-        cell: (cell) => (
-            <div className="selectOpt">
-                <Text color={textColor} fontSize='sm' fontWeight='700'>
-                    {moment(cell?.value).fromNow()}
-                </Text>
-            </div>
-        )
+      Header: "time stamp",
+      accessor: "timestamp",
+      cell: (cell) => (
+        <div className="selectOpt">
+          <Text color={textColor} fontSize="sm" fontWeight="700">
+            {moment(cell?.value).fromNow()}
+          </Text>
+        </div>
+      ),
     },
     {
-        Header: "Created", accessor: "createBy",
-        cell: (cell) => (
-            <div className="selectOpt">
-                <Text color={textColor} fontSize='sm' fontWeight='700'>
-                    {moment(cell?.row?.values.timestamp).format('h:mma (DD/MM)')}
-                </Text>
-            </div>
-        )
+      Header: "Created",
+      accessor: "createBy",
+      cell: (cell) => (
+        <div className="selectOpt">
+          <Text color={textColor} fontSize="sm" fontWeight="700">
+            {moment(cell?.row?.values.timestamp).format("h:mma (DD/MM)")}
+          </Text>
+        </div>
+      ),
     },
-];
+  ];
 
   const [selectedColumns, setSelectedColumns] = useState([...columns]);
 
@@ -225,6 +246,8 @@ const View = () => {
     setIsLoding(true);
     let response = await getApi("api/property/view/", param.id);
     setData(response.data.property);
+    setPhoneCall(response.data.phoneCall);
+    setEmailData(response.data.Emails);
     setFilteredContacts(response?.data?.filteredContacts);
     setIsLoding(false);
     setSelectedTab(i);
@@ -235,7 +258,6 @@ const View = () => {
       element.style.display = "block";
       element.style.width = "100%"; // Adjust width for mobile
       element.style.height = "auto";
-      // setTimeout(() => {
       html2pdf()
         .from(element)
         .set({
@@ -249,7 +271,6 @@ const View = () => {
         .then(() => {
           element.style.display = "";
         });
-      // }, 500);
     } else {
       console.error("Element with ID 'reports' not found.");
     }
@@ -276,7 +297,7 @@ const View = () => {
     fetchCustomDataFields();
   }, []);
 
-  const [permission, contactAccess, emailAccess, callAccess] = HasAccess([
+  const [permission, emailAccess, callAccess] = HasAccess([
     "Properties",
     "Contacts",
     "Emails",
@@ -306,7 +327,8 @@ const View = () => {
         handleDeleteData={handleDeleteProperties}
         ids={param.id}
       />
-
+      <EmailModel lead={true} leadEmail={allData?.lead?.leadEmail} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id}/>
+      <PhoneModel  viewData={allData} fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} setAction={setAction} data={data?.contact} id={param.id} lead={true} LData={data}/>
       {isLoding ? (
         <Flex justifyContent={"center"} alignItems={"center"} width="100%">
           <Spinner />
@@ -340,7 +362,9 @@ const View = () => {
                   }}
                 >
                   <Tab>Information</Tab>
-                  {(emailAccess?.view || callAccess?.view) && <Tab> Communication</Tab>}
+                  {(emailAccess?.view || callAccess?.view) && (
+                    <Tab>Communication</Tab>
+                  )}
                   <Tab>Gallery</Tab>
                 </TabList>
               </GridItem>
@@ -469,61 +493,63 @@ const View = () => {
               </TabPanel>
               {/* communication */}
               <TabPanel pt={4} p={0}>
-              <GridItem colSpan={{ base: 4 }} >
-              <Grid overflow={'hidden'} templateColumns={{ base: "1fr" }} gap={4}>
-              <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
-              
-                                            {emailAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
-                                                <Card >
-                                                    <CommonCheckTable
-                                                        title={"Email"}
-                                                        isLoding={isLoding}
-                                                        columnData={columnsDataColumns ?? []}
-                                                        // dataColumn={columnsDataColumns ?? []}
-                                                        allData={showEmail ? allData.Email : allData?.Email?.length > 0 ? [allData.Email[0]] : []}
-                                                        tableData={showEmail ? allData.Email : allData?.Email?.length > 0 ? [allData.Email[0]] : []}
-                                                        AdvanceSearch={false}
-                                                        dataLength={allData?.Email?.length}
-                                                        tableCustomFields={[]}
-                                                        checkBox={false}
-                                                        deleteMany={true}
-                                                        ManageGrid={false}
-                                                        onOpen={() => setAddEmailHistory(true)}
-                                                        access={emailAccess}
-                                                    />
-                                                    {allData?.Email?.length > 1 &&
-                                                        <div style={{ display: "flex", justifyContent: "end" }}>
-                                                            <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showEmail ? setShowEmail(false) : setShowEmail(true)}>{showEmail ? "Show less" : "Show more"}</Button>
-                                                        </div>}
-                                                </Card>
-                                            </GridItem>} 
-                                            {callAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
-                                                <Card>
-                                                    <CommonCheckTable
-                                                        title={"Call"}
-                                                        isLoding={isLoding}
-                                                        columnData={callColumns ?? []}
-                                                        // dataColumn={callColumns ?? []}
-                                                        allData={showCall ? allData?.phoneCall : allData?.phoneCall?.length > 0 ? [allData?.phoneCall[0]] : []}
-                                                        tableData={showCall ? allData?.phoneCall : allData?.phoneCall?.length > 0 ? [allData?.phoneCall[0]] : []}
-                                                        AdvanceSearch={false}
-                                                        dataLength={allData?.phoneCall?.length}
-                                                        tableCustomFields={[]}
-                                                        checkBox={false}
-                                                        deleteMany={true}
-                                                        ManageGrid={false}
-                                                        onOpen={() => setAddPhoneCall(true)}
-                                                        access={callAccess}
-                                                    />
-                                                    {allData?.phoneCall?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
-                                                        <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showCall ? setShowCall(false) : setShowCall(true)}>{showCall ? "Show less" : "Show more"}</Button>
-                                                    </div>}
-                                                </Card>
-                                            </GridItem>}                   
-                              
-              </Grid>
-              </Grid>
-              </GridItem>
+                <GridItem colSpan={{ base: 4 }}>
+                  <Grid
+                    overflow={"hidden"}
+                    templateColumns={{ base: "1fr" }}
+                    gap={4}
+                  >
+                    <Grid templateColumns={"repeat(12, 1fr)"} gap={4}>
+                      {emailAccess?.view && (
+                        <GridItem colSpan={{ base: 12, md: 6 }}>
+                          <Card>
+                            <CommonCheckTable
+                              title={"Email"}
+                              isLoding={isLoding}
+                              columnData={emailColumn ?? []}
+                              allData={setEmail}
+                              tableData={setEmail}
+                              AdvanceSearch={false}
+                              dataLength={allData?.Email?.length}
+                              tableCustomFields={[]}
+                              checkBox={false}
+                              deleteMany={true}
+                              ManageGrid={false}
+                              // onOpen={() => setAddEmailHistory(true)}
+                              onOpen={() => 
+                                setAddEmailHistory(true)
+                              }
+                              access={emailAccess}
+                            />
+                          
+                          </Card>
+                        </GridItem>
+                      )}
+                      {callAccess?.view && (
+                        <GridItem colSpan={{ base: 12, md: 6 }}>
+                          <Card>
+                            <CommonCheckTable
+                              title={"Call"}
+                              isLoding={isLoding}
+                              columnData={callColumns ?? []}
+                              allData={phoneCall}
+                              tableData={phoneCall}
+                              AdvanceSearch={false}
+                              dataLength={allData?.phoneCall?.length}
+                              tableCustomFields={[]}
+                              checkBox={false}
+                              deleteMany={true}
+                              ManageGrid={false}
+                              onOpen={() => setAddPhoneCall(true)}
+                              access={callAccess}
+                            />
+                            
+                          </Card>
+                        </GridItem>
+                      )}
+                    </Grid>
+                  </Grid>
+                </GridItem>
               </TabPanel>
               <TabPanel pt={4} p={0}>
                 <Grid templateColumns="repeat(12, 1fr)" gap={3}>
@@ -1076,7 +1102,6 @@ const View = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-
     </>
   );
 };

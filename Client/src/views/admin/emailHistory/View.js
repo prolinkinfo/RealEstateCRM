@@ -35,11 +35,10 @@ const View = () => {
   const [isLoding, setIsLoding] = useState(false);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [propertyData, setPropertyData] = useState([]);
+
   const [columns, setColumns] = useState([]);
   const [selectedValues, setSelectedValues] = useState();
   const dispatch = useDispatch();
-  const propertydata = useSelector((state) => state.propertyData.data);
   const size = "lg";
 
   const fetchData = async () => {
@@ -48,23 +47,24 @@ const View = () => {
     setData(response?.data);
     setIsLoding(false);
   };
+
   const fetchCustomDataFields = async () => {
     setIsLoding(true);
     const result = await dispatch(fetchPropertyCustomFiled());
-    setPropertyData(result?.payload?.data);
     const tempTableColumns = [
       { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-      ...(result?.payload?.data?.[0]?.fields || [])
-        .filter((field) => field?.isTableField === true)
-        .map((field) => ({ Header: field?.label, accessor: field?.name })),
+      ...result?.payload?.data?.[0]?.fields
+        ?.filter((field) => field?.isTableField === true)
+        ?.map((field) => ({ Header: field?.label, accessor: field?.name })),
     ];
     setColumns(tempTableColumns);
     setIsLoding(false);
   };
-  useEffect(async () => {
-    await dispatch(fetchPropertyData());
+
+  useEffect(() => {
     fetchCustomDataFields();
   }, []);
+
   const generatePDF = () => {
     setLoading(true);
     const element = document.getElementById("reports");
@@ -97,7 +97,11 @@ const View = () => {
     fetchData();
   }, []);
 
-  const [contactAccess, leadAccess ,PropertiesAccess] = HasAccess(["Contacts", "Leads" , "Properties",]);
+  const [contactAccess, leadAccess, PropertiesAccess] = HasAccess([
+    "Contacts",
+    "Leads",
+    "Properties",
+  ]);
 
   return (
     <>
@@ -324,18 +328,36 @@ const View = () => {
               </Card>
             </GridItem>
           </Grid>
-
+          
+          <Card mt={3}>
+            <Grid templateColumns="repeat(6, 1fr)" gap={1}>
+              <GridItem colSpan={{ base: 2 }}  style={{ maxWidth: '100%', width: '100%', boxSizing: 'border-box', padding: '0 10px'}}>
+                <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
+                  {" "}
+                  Message{" "}
+                </Text>
+                <pre style={{ whiteSpace: "pre-wrap" , display: 'flex', justifyContent: 'center',alignItems:'center', alignContent:'center' }}>
+                  {data?.type === "message" ? (
+                    <Text>{data?.message ? data?.message : "-"}</Text>
+                  ) : (
+                    <div style={{width:'100%',display:'flex',alignContent:'center',alignItems:'center',padding:'50px 50px'}} dangerouslySetInnerHTML={{ __html: data?.html }} />
+                  )}
+                </pre>
+              </GridItem>
+            </Grid>
+          </Card>
+          
           <Grid templateColumns="repeat(2, 1fr)" gap={1} mt={3}>
             <GridItem colSpan={{ base: 2 }}>
               <CommonCheckTable
                 title={"Properties"}
                 isLoding={isLoding}
                 columnData={columns ?? []}
-                allData={propertydata ?? []}
-                tableData={propertydata}
+                allData={data?.properties ?? []}
+                tableData={data?.properties ?? []}
                 AdvanceSearch={false}
                 tableCustomFields={
-                  propertyData?.[0]?.fields?.filter(
+                  data?.properties?.[0]?.fields?.filter(
                     (field) => field?.isTableField === true
                   ) || []
                 }
@@ -350,23 +372,7 @@ const View = () => {
             </GridItem>
           </Grid>
 
-          <Card mt={3}>
-            <Grid templateColumns="repeat(6, 1fr)" gap={1}>
-              <GridItem colSpan={{ base: 2 }}>
-                <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
-                  {" "}
-                  Message{" "}
-                </Text>
-                <pre style={{ whiteSpace: "pre-wrap" }}>
-                  {data?.type === "message" ? (
-                    <Text>{data?.message ? data?.message : "-"}</Text>
-                  ) : (
-                    <div dangerouslySetInnerHTML={{ __html: data?.html }} />
-                  )}
-                </pre>
-              </GridItem>
-            </Grid>
-          </Card>
+
         </>
       )}
     </>

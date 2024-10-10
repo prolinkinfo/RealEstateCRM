@@ -33,9 +33,11 @@ import { phoneCallSchema } from "schema";
 import { getApi, postApi } from "services/api";
 import MultiPropertyModel from "components/commonTableModel/MultiPropertyModel";
 import { CUIAutoComplete } from "chakra-ui-autocomplete";
+import { useParams } from "react-router-dom";
+import * as yup from 'yup'
 
-const AddPhoneCall = (props) => {
-  const { onClose, isOpen, setAction, data } = props;
+const PhoneModel = (props) => {
+  const { onClose, isOpen, setAction,fetchData} = props;
   const [isLoding, setIsLoding] = useState(false);
   const [assignToLeadData, setAssignToLeadData] = useState([]);
   const [assignToContactData, setAssignToContactData] = useState([]);
@@ -45,9 +47,10 @@ const AddPhoneCall = (props) => {
   const [assignToProperyData, setAssignToPropertyData] = useState([]);
   const [assignToSalesData, setAssignToSalesData] = useState([]);
   const [salesPersonsModelOpen, setSalesPersonsModelOpen] = useState(false);
-  const [columns, setColumns] = useState([]);
   const user = JSON.parse(localStorage.getItem("user"));
   const todayTime = new Date().toISOString().split(".")[0];
+  const { id } = useParams();
+
   const initialValues = {
     sender: user?._id,
     recipient: "",
@@ -55,7 +58,7 @@ const AddPhoneCall = (props) => {
     callNotes: "",
     createByContact: "",
     createByLead: "",
-    property: "",
+    property: [id],
     startDate: "",
     category: "contact",
     // assignTo: '',
@@ -63,9 +66,23 @@ const AddPhoneCall = (props) => {
     createBy: user?._id,
     salesAgent: "", // sales person user id
   };
+
+  const validationSchema =yup.object({
+    sender: yup.string().required("Sender Is required"),
+    recipient: yup.string().required("Recipient Is required"),
+    callDuration: yup.string().required("Call Duration is required"),
+    property: yup.array().required("property is required"),
+    callNotes: yup.string(),
+    createBy: yup.string(),
+    createByLead: yup.string(),
+    category: yup.string(),
+    startDate: yup.date().required("Start Date Is required"),
+    salesAgent: yup.string().required("Assign To Sales Agent Is required"),
+})
   const formik = useFormik({
     initialValues: initialValues,
-    validationSchema: phoneCallSchema,
+    validationSchema,
+    enableReinitialize: true,
     onSubmit: (values, { resetForm }) => {
       AddData();
       resetForm();
@@ -80,12 +97,14 @@ const AddPhoneCall = (props) => {
     handleSubmit,
     setFieldValue,
   } = formik;
+
   const AddData = async () => {
     try {
       setIsLoding(true);
       let response = await postApi("api/phoneCall/add", values);
       if (response.status === 200) {
         props.onClose();
+        fetchData(1)
         setAction((pre) => !pre);
       }
     } catch (e) {
@@ -95,7 +114,7 @@ const AddPhoneCall = (props) => {
     }
   };
 
-  useEffect(async () => {
+  const getAllApi = async() =>{
     values.start = props?.date;
     try {
       let result;
@@ -113,22 +132,21 @@ const AddPhoneCall = (props) => {
             : `api/lead/?createBy=${user._id}`
         );
         setAssignToLeadData(result?.data);
-      } else if (
-        (values.category === "property" && console.log(""),
-        assignToProperyData.length <= 0)
-      ) {
-        result = await getApi(
+      } 
+        const propertyOptionData = await getApi(
           user.role === "superAdmin"
             ? "api/property"
             : `api/property/?createBy=${user._id}`
         );
-        setAssignToPropertyData(result?.data);
-      }
+        setAssignToPropertyData(propertyOptionData?.data);
     } catch (e) {
       console.log(e);
     }
+  }
+  useEffect(() => {
+    getAllApi()
   }, [props?.date, values.category]);
-  
+
   const fetchRecipientData = async () => {
     if (values.createByContact) {
       let findEmail = assignToContactData.find(
@@ -183,6 +201,7 @@ const AddPhoneCall = (props) => {
   const extractLabels = (selectedItems) => {
     return selectedItems.map((item) => item._id);
   };
+  
   return (
     <Modal onClose={onClose} isOpen={isOpen} isCentered>
       <ModalOverlay />
@@ -225,7 +244,9 @@ const AddPhoneCall = (props) => {
             setIsLoding={setIsLoding}
             fieldName="property"
             setFieldValue={setFieldValue}
-            columnsData={columns ?? []}
+            selectedItems={setValueProperty?.filter((item) =>
+              values?.property?.includes(item._id)
+            )}
           />
           <Grid templateColumns="repeat(12, 1fr)" gap={3}>
             <GridItem colSpan={{ base: 12, md: 6 }}>
@@ -243,7 +264,6 @@ const AddPhoneCall = (props) => {
                   setFieldValue("category", e);
                   setFieldValue("createByContact", "");
                   setFieldValue("createByLead", "");
-                  setFieldValue("property", "");
                 }}
                 value={values.category}
               >
@@ -400,12 +420,15 @@ const AddPhoneCall = (props) => {
                   <CUIAutoComplete
                     label={`Property`}
                     items={setValueProperty}
-                    selectedItems={setValueProperty?.filter((item) => values?.property.includes(item._id))}
+                    selectedItems={setValueProperty?.filter((item) =>
+                      values?.property?.includes(item._id)
+                    )}
                     onSelectedItemsChange={(changes) => {
-                      const selectProperty = extractLabels(changes.selectedItems);
-                       setFieldValue("property",selectProperty);
+                      const selectProperty = extractLabels(
+                        changes.selectedItems
+                      );
+                      setFieldValue("property", selectProperty);
                     }}
-                    value={values.property}
                     name="property"
                     onChange={handleChange}
                     mb={
@@ -593,4 +616,4 @@ const AddPhoneCall = (props) => {
   );
 };
 
-export default AddPhoneCall;
+export default PhoneModel;

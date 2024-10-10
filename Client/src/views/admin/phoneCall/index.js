@@ -56,7 +56,7 @@ const Index = (props) => {
     const tableColumns = [
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
         {
-            Header: "Recipient", accessor: "createByName", cell: (cell) => (
+            Header: "Recipient", accessor: "recipient", cell: (cell) => (
                 <Link to={`/phone-call/${cell?.row?.values._id}`}>
                     <Text
                         me="10px"

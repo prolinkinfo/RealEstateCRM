@@ -18,8 +18,10 @@ import { GiClick } from "react-icons/gi";
 import { useDispatch } from "react-redux";
 
 const MultiPropertyModel = (props) => {
-  const { onClose, isOpen, fieldName, setFieldValue, data } = props;
-  const [selectedValues, setSelectedValues] = useState([]);
+  const { onClose, isOpen, fieldName, setFieldValue, data, selectedItems } = props;
+  const propertyIndex = selectedItems?.map((item) => item?._id);
+
+  const [selectedValues, setSelectedValues] = useState(propertyIndex);
   const [columns, setColumns] = useState([]);
   const [contactData, setContactData] = useState([]);
   const [isLoding, setIsLoding] = useState(false);
@@ -38,6 +40,10 @@ const MultiPropertyModel = (props) => {
     setColumns(tempTableColumns);
     setIsLoding(false);
   };
+  useEffect(() => {
+    setSelectedValues(propertyIndex);
+  }, [selectedItems]);
+
   useEffect(async () => {
     await dispatch(fetchPropertyData());
     fetchCustomDataFields();

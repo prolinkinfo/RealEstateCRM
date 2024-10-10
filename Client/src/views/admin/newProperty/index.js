@@ -31,6 +31,7 @@ import { fetchPropertyData } from "../../../redux/slices/propertySlice";
 import Add from "./Add";
 import Edit from "./Edit";
 import ImportModal from "./components/ImportModal";
+import PaginationProperty from "./PaginationProperty";
 
 const Index = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -52,7 +53,22 @@ const Index = () => {
   const [selectedValues, setSelectedValues] = useState([]);
   const [isImportProperty, setIsImportProperty] = useState(false);
 
+  //pagination
+  const [currentPage ,setCurrentPage] = useState(1)
+  const [rangeData ,setRangeData] = useState(10)
+  const [gotoPage, setGotoPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const pageCount = 5
+  
+  const nextPage = () => setCurrentPage((prev) => prev + 1);
+  const previousPage = () => setCurrentPage((prev) => Math.max(prev - 1, 0));
+
   const data = useSelector((state) => state?.propertyData?.data);
+  const calculateTotalPage = () => {
+    let  pageCount = 0
+    return pageCount
+  }
+  const pageOptions = Array.from({ length: pageCount });
 
   const fetchCustomDataFields = async () => {
     setIsLoding(true);
@@ -194,6 +210,7 @@ const Index = () => {
       );
     }
   };
+  const displayedData = data.slice(currentPage * rangeData, (currentPage + 1) * rangeData)
 
   return (
     <div>
@@ -262,7 +279,7 @@ const Index = () => {
         </Flex>
       ) : data && data.length > 0 ? (
         <Grid templateColumns="repeat(12, 1fr)" gap={3}>
-          {data?.map((item, i) => (
+          {displayedData?.map((item, i) => (
             <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }} key={i}>
               <Card>
                 <Flex alignItems={"center"} justifyContent={"space-between"}>
@@ -385,6 +402,13 @@ const Index = () => {
           customFields={propertyData?.[0]?.fields || []}
         />
       )}
+       <Card mt={3}>
+            <Grid templateColumns="repeat(6, 1fr)" gap={1} style={{ display:'block', margin:'auto' }}>
+              <GridItem colSpan={{ base: 2 }} >
+                  <PaginationProperty currentPage={currentPage}  nextPage={nextPage} previousPage={previousPage}  pageCount={pageCount}  pageOptions={pageOptions}  gotoPage={gotoPage} pageSize={pageSize} setPageSize={setPageSize} setGotoPage={setGotoPage} setCurrentPage={setCurrentPage} rangeData={rangeData} setRangeData={setRangeData}  />
+              </GridItem>
+            </Grid>
+      </Card>
     </div>
   );
 };
