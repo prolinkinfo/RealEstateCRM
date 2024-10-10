@@ -14,18 +14,18 @@ import {
   Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
-import Card from 'components/card/Card';
+import Card from "components/card/Card";
 import CommonDeleteModel from "components/commonDeleteModel";
-import DataNotFound from 'components/notFoundData';
+import DataNotFound from "components/notFoundData";
 import { useEffect, useState } from "react";
 import { CiMenuKebab } from "react-icons/ci";
 import { FaHome } from "react-icons/fa";
-import { IoIosArrowBack } from 'react-icons/io';
+import { IoIosArrowBack } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { deleteManyApi } from "services/api";
-import Spinner from '../../../components/spinner/Spinner';
+import Spinner from "../../../components/spinner/Spinner";
 import { HasAccess } from "../../../redux/accessUtils";
 import { fetchPropertyCustomFiled } from "../../../redux/slices/propertyCustomFiledSlice";
 import { fetchPropertyData } from "../../../redux/slices/propertySlice";
@@ -141,33 +141,33 @@ const Index = () => {
       { Header: "#", accessor: "_id", isSortable: false, width: 10 },
       ...(result?.payload?.data && result.payload.data.length > 0
         ? result.payload.data[0]?.fields
-          ?.filter((field) => field?.isTableField === true && field?.isView)
-          ?.map((field) => ({
-            Header: field?.label,
-            accessor: field?.name,
-            cell: (cell) => (
-              <div className="selectOpt">
-                <Text
-                  onClick={() => {
-                    navigate(`/propertyView/${cell?.row?.original?._id}`);
-                  }}
-                  me="10px"
-                  sx={{
-                    "&:hover": {
-                      color: "blue.500",
-                      textDecoration: "underline",
-                    },
-                    cursor: "pointer",
-                  }}
-                  color="brand.600"
-                  fontSize="sm"
-                  fontWeight="700"
-                >
-                  {cell?.value || "-"}
-                </Text>
-              </div>
-            ),
-          })) || []
+            ?.filter((field) => field?.isTableField === true && field?.isView)
+            ?.map((field) => ({
+              Header: field?.label,
+              accessor: field?.name,
+              cell: (cell) => (
+                <div className="selectOpt">
+                  <Text
+                    onClick={() => {
+                      navigate(`/propertyView/${cell?.row?.original?._id}`);
+                    }}
+                    me="10px"
+                    sx={{
+                      "&:hover": {
+                        color: "blue.500",
+                        textDecoration: "underline",
+                      },
+                      cursor: "pointer",
+                    }}
+                    color="brand.600"
+                    fontSize="sm"
+                    fontWeight="700"
+                  >
+                    {cell?.value || "-"}
+                  </Text>
+                </div>
+              ),
+            })) || []
         : []),
       ...(result?.payload?.data?.[0]?.fields || []) // Ensure result.payload[0].fields is an array
         .filter((field) => field?.isTableField === true && !field?.isView) // Filter out fields where isTableField is true
@@ -197,6 +197,21 @@ const Index = () => {
     }
   };
 
+  const changeStatus = (status) => {
+    switch (status) {
+      case "Available":
+        return "light-green";
+      case "Booked":
+        return "light-yellow";
+      case "Sold":
+        return "light-blue";
+      case "Blocked":
+        return "light-red";
+      default:
+        return "";
+    }
+  };
+
   useEffect(() => {
     dispatch(fetchPropertyData());
     fetchCustomDataFields();
@@ -211,7 +226,10 @@ const Index = () => {
       );
     }
   };
-  const displayedData = data.slice(currentPage * rangeData, (currentPage + 1) * rangeData)
+  const displayedData = data.slice(
+    currentPage * rangeData,
+    (currentPage + 1) * rangeData
+  );
 
   return (
     <div>
@@ -251,7 +269,7 @@ const Index = () => {
             mr={2}
             leftIcon={<DeleteIcon />}
             onClick={() => {
-              setDelete(true)
+              setDelete(true);
             }}
             size="sm"
           >
@@ -318,7 +336,17 @@ const Index = () => {
                       }
                       me="10px"
                     />
-                    <Flex className="light-yellow" style={{ height: "30px", width: "30px", borderRadius: "50%", justifyContent: "center", alignItems: "center", marginRight: "10PX" }}>
+                    <Flex
+                      className={changeStatus(item?.status)}
+                      style={{
+                        height: "30px",
+                        width: "30px",
+                        borderRadius: "50%",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        marginRight: "10PX",
+                      }}
+                    >
                       <FaHome />
                     </Flex>
                     <Tooltip
@@ -386,8 +414,8 @@ const Index = () => {
                           color={"red"}
                           icon={<DeleteIcon fontSize={15} mb={1} />}
                           onClick={() => {
-                            setSelectedValues([item?._id])
-                            setDelete(true)
+                            setSelectedValues([item?._id]);
+                            setDelete(true);
                           }}
                         >
                           Delete
