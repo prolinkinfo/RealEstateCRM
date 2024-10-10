@@ -250,6 +250,30 @@ const Index = () => {
           Add New
         </Button>
       </Flex>
+
+      <Grid templateColumns="repeat(12, 1fr)" gap={3} my={3}>
+        <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
+          <Card className="light-green">
+            Available
+          </Card>
+        </GridItem>
+        <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
+          <Card className="light-yellow">
+            Booked
+          </Card>
+        </GridItem>
+        <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
+          <Card className="light-blue">
+            Sold
+          </Card>
+        </GridItem>
+        <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
+          <Card className="light-red">
+            Blocked
+          </Card>
+        </GridItem>
+      </Grid>
+
       {isLoding ? (
         <Flex
           justifyContent={"center"}
