@@ -149,7 +149,7 @@ const Index = () => {
                 setSearchboxOutside={setSearchboxOutside}
                 handleSearchType="UsersSearch"
             />
-            <AddEditUser isOpen={isOpen} onClose={handleClose} data={editData} selectedId={selectedId} userAction={userAction} setUserAction={setUserAction} fetchData={fetchData} />
+            <AddEditUser isOpen={isOpen} onClose={handleClose} data={editData} selectedId={selectedId} userAction={userAction} setAction={setAction} setUserAction={setUserAction} fetchData={fetchData} />
             <CommonDeleteModel isOpen={deleteMany} onClose={() => setDelete(false)} type='User' handleDeleteData={handleDeleteClick} ids={''} selectedValues={selectedValues} />
 
             <UserAdvanceSearch

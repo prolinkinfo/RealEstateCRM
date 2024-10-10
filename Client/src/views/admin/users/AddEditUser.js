@@ -87,10 +87,10 @@ const AddEditUser = (props) => {
         setIsLoding(true);
         let response = await postApi("api/user/register", values);
         if (response && response.status === 200) {
-          onClose();
           resetForm();
           setAction((pre) => !pre);
           setUserAction("");
+          onClose();
         } else {
           toast.error(response.response.data?.message);
         }
@@ -121,10 +121,10 @@ const AddEditUser = (props) => {
             localStorage.setItem("user", updatedDataString);
             // dispatch(setUser(updatedDataString));
           }
-
-          onClose();
+          
           setUserAction("");
           setAction((pre) => !pre);
+          onClose();
         } else {
           toast.error(response.response.data?.message);
         }
