@@ -19,6 +19,7 @@ import CommonDeleteModel from "components/commonDeleteModel";
 import DataNotFound from 'components/notFoundData';
 import { useEffect, useState } from "react";
 import { CiMenuKebab } from "react-icons/ci";
+import { FaHome } from "react-icons/fa";
 import { IoIosArrowBack } from 'react-icons/io';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -253,22 +254,22 @@ const Index = () => {
 
       <Grid templateColumns="repeat(12, 1fr)" gap={3} my={3}>
         <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
-          <Card className="light-green">
+          <Card className="light-green" style={{ padding: "15px" }}>
             Available
           </Card>
         </GridItem>
         <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
-          <Card className="light-yellow">
+          <Card className="light-yellow" style={{ padding: "15px" }}>
             Booked
           </Card>
         </GridItem>
         <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
-          <Card className="light-blue">
+          <Card className="light-blue" style={{ padding: "15px" }}>
             Sold
           </Card>
         </GridItem>
         <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
-          <Card className="light-red">
+          <Card className="light-red" style={{ padding: "15px" }}>
             Blocked
           </Card>
         </GridItem>
@@ -287,9 +288,9 @@ const Index = () => {
       ) : data && data.length > 0 ? (
         <Grid templateColumns="repeat(12, 1fr)" gap={3}>
           {data?.map((item, i) => (
-            <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }} key={i}>
-              <Card>
-                <Flex alignItems={"center"} justifyContent={"space-between"}>
+            <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }} key={i} >
+              <Card >
+                <Flex alignItems={"center"} justifyContent={"space-between"} >
                   <Flex>
                     <Checkbox
                       colorScheme="brandScheme"
@@ -300,6 +301,9 @@ const Index = () => {
                       }
                       me="10px"
                     />
+                    <Flex className="light-yellow" style={{ height: "30px", width: "30px", borderRadius: "50%", justifyContent: "center", alignItems: "center", marginRight: "10PX" }}>
+                      <FaHome />
+                    </Flex>
                     <Tooltip
                       hasArrow
                       label={item?.name}
@@ -317,7 +321,7 @@ const Index = () => {
                         sx={{
                           textOverflow: "ellipsis",
                           whiteSpace: "nowrap",
-                          maxWidth: "6rem",
+                          maxWidth: "8rem",
                           overflow: "hidden",
                           cursor: "pointer",
                           textTransform: "capitalize",
@@ -327,7 +331,54 @@ const Index = () => {
                       </Heading>
                     </Tooltip>
                   </Flex>
-                  <Flex>
+                  <Menu isLazy>
+                    <MenuButton>
+                      <CiMenuKebab />
+                    </MenuButton>
+                    <MenuList
+                      minW={"fit-content"}
+                      transform={"translate(1520px, 173px);"}
+                    >
+                      {permission?.update && (
+                        <MenuItem
+                          py={2.5}
+                          icon={<EditIcon fontSize={15} mb={1} />}
+                          onClick={() => {
+                            setEdit(true);
+                            setSelectedId(item?._id);
+                          }}
+                        >
+                          Edit
+                        </MenuItem>
+                      )}
+                      {permission?.view && (
+                        <MenuItem
+                          py={2.5}
+                          color={"green"}
+                          icon={<ViewIcon mb={1} fontSize={15} />}
+                          onClick={() => {
+                            navigate(`/propertyView/${item?._id}`);
+                          }}
+                        >
+                          View
+                        </MenuItem>
+                      )}
+                      {permission?.delete && (
+                        <MenuItem
+                          py={2.5}
+                          color={"red"}
+                          icon={<DeleteIcon fontSize={15} mb={1} />}
+                          onClick={() => {
+                            setSelectedValues([item?._id])
+                            setDelete(true)
+                          }}
+                        >
+                          Delete
+                        </MenuItem>
+                      )}
+                    </MenuList>
+                  </Menu>
+                  {/* <Flex>
                     <Button
                       size="sm"
                       variant="outline"
@@ -352,7 +403,7 @@ const Index = () => {
                     >
                       <DeleteIcon />
                     </Button>
-                  </Flex>
+                  </Flex> */}
                 </Flex>
               </Card>
             </GridItem>
