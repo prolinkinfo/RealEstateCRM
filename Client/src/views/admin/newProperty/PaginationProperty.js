@@ -25,24 +25,40 @@ const PaginationProperty = (props) => {
     setCurrentPage,
     setRangeData,
     pageOptions,
-    canPreviousPage,
-    canNextPage,
     nextPage,
     previousPage,
+    pageSize,
     pageCount,
+    setpageOptions,
+    setPageSize, dataLength
   } = props;
 
-  const [gopageValue, setGopageValue] = useState(currentPage + 1);
+  const [gopageValue, setGopageValue] = useState(currentPage);
+
+  const canPreviousPage = currentPage > 0;
+  const canNextPage = currentPage < (Math.ceil(dataLength / pageSize)) - 1;
 
   useEffect(() => {
-    setGopageValue(currentPage + 1);
+    setGopageValue(currentPage);
   }, [currentPage]);
 
+  // const handlePageChange = (value) => {
+  //   const page = value ? value - 1 : 1;
+  //   setCurrentPage(page);
+  //   setGopageValue(value);
+  //   console.log(page, "page");
+
+  // };
+
   const handlePageChange = (value) => {
-    const page = value ? value - 1 : 0;
-    setCurrentPage(page);
-    setGopageValue(value);
+    const page = value ? Number(value) - 1 : 0; // Ensure we handle 0-based indexing for internal logic
+    if (page >= 0 && page < Math.ceil(dataLength / pageSize)) {
+      setCurrentPage(page);
+      setGopageValue(value);
+    }
   };
+
+  console.log("pageOptions", pageSize, currentPage);
 
   return (
     <Flex
@@ -82,14 +98,14 @@ const PaginationProperty = (props) => {
             <Text flexShrink="0" mr={8}>
               Page{" "}
               <Text fontWeight="bold" as="span">
-                {currentPage + 1}
+                {currentPage}
               </Text>{" "}
               of{" "}
               <Text fontWeight="bold" as="span">
-                {pageOptions.length}
+                {Math.ceil(dataLength / pageSize)}
               </Text>
             </Text>
-            <Text flexShrink="0">Go to page:</Text>{" "}
+            <Text flexShrink="0">Go to page:</Text>
             <NumberInput
               ml={2}
               mr={8}
@@ -112,6 +128,8 @@ const PaginationProperty = (props) => {
           value={rangeData}
           onChange={(e) => {
             setRangeData(Number(e.target.value));
+            setPageSize(Number(e.target.value))
+            setpageOptions(Number(e.target.value))
             setCurrentPage(0); // Reset to the first page on page size change
           }}
         >
