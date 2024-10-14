@@ -34,6 +34,7 @@ import ImportModal from "./components/ImportModal";
 import Edit from "./Edit";
 import PaginationProperty from "./PaginationProperty";
 import { BsColumnsGap } from "react-icons/bs";
+import CustomSearchInput from "components/search/search";
 
 const Index = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -41,11 +42,7 @@ const Index = () => {
   const dispatch = useDispatch();
   const [permission] = HasAccess(["Properties"]);
   const [isLoding, setIsLoding] = useState(false);
-  // const [data, setData] = useState([]);
-  const [tableColumns, setTableColumns] = useState([]);
   const [columns, setColumns] = useState([]);
-  // const [dataColumn, setDataColumn] = useState([]);
-  // const [selectedColumns, setSelectedColumns] = useState([]);
   const [action, setAction] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [propertyData, setPropertyData] = useState([]);
@@ -54,6 +51,11 @@ const Index = () => {
   const [selectedId, setSelectedId] = useState();
   const [selectedValues, setSelectedValues] = useState([]);
   const [isImportProperty, setIsImportProperty] = useState(false);
+
+  // search 
+  const [searchbox, setSearchbox] = useState("");
+  const [searchData, setSearchData] = useState([]);
+  const [displaySearchData, setDisplaySearchData] = useState(false);
 
   //pagination
   const [currentPage, setCurrentPage] = useState(0);
@@ -219,7 +221,9 @@ const Index = () => {
       );
     }
   };
-  const displayedData = data.slice(
+  const listData = displaySearchData ? searchData : data;
+
+  const displayedData = listData?.slice(
     currentPage * rangeData,
     (currentPage + 1) * rangeData
   );
@@ -254,6 +258,23 @@ const Index = () => {
                 }
             </Grid> */}
       <Flex justifyContent={"end"} alignItems={"center"} mb={3}>
+        <CustomSearchInput
+          setSearchbox={setSearchbox}
+          setDisplaySearchData={setDisplaySearchData}
+          searchbox={searchbox}
+          allData={data}
+          dataColumn={columns}
+          onSearch={(data) => {
+            console.log("data--::", data)
+            setSearchData(data)
+          }}
+        // setGetTagValues={
+        //   // props.setGetTagValuesOutside
+        //   //   ? props.setGetTagValuesOutside
+        //   //   : setGetTagValues
+        // }
+        // setGopageValue={setGopageValue}
+        />
         {selectedValues.length > 0 && (
           <Button
             variant="outline"
@@ -523,7 +544,7 @@ const Index = () => {
         <PaginationProperty
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
-          dataLength={data?.length}
+          dataLength={listData?.length}
           nextPage={nextPage}
           previousPage={previousPage}
           rangeData={rangeData}
