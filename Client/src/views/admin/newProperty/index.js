@@ -8,6 +8,7 @@ import {
   Heading,
   Menu,
   MenuButton,
+  MenuDivider,
   MenuItem,
   MenuList,
   Text,
@@ -20,7 +21,6 @@ import DataNotFound from "components/notFoundData";
 import { useEffect, useState } from "react";
 import { CiMenuKebab } from "react-icons/ci";
 import { FaHome } from "react-icons/fa";
-import { IoIosArrowBack } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -30,9 +30,10 @@ import { HasAccess } from "../../../redux/accessUtils";
 import { fetchPropertyCustomFiled } from "../../../redux/slices/propertyCustomFiledSlice";
 import { fetchPropertyData } from "../../../redux/slices/propertySlice";
 import Add from "./Add";
-import Edit from "./Edit";
 import ImportModal from "./components/ImportModal";
+import Edit from "./Edit";
 import PaginationProperty from "./PaginationProperty";
+import { BsColumnsGap } from "react-icons/bs";
 
 const Index = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -141,33 +142,33 @@ const Index = () => {
       { Header: "#", accessor: "_id", isSortable: false, width: 10 },
       ...(result?.payload?.data && result.payload.data.length > 0
         ? result.payload.data[0]?.fields
-            ?.filter((field) => field?.isTableField === true && field?.isView)
-            ?.map((field) => ({
-              Header: field?.label,
-              accessor: field?.name,
-              cell: (cell) => (
-                <div className="selectOpt">
-                  <Text
-                    onClick={() => {
-                      navigate(`/propertyView/${cell?.row?.original?._id}`);
-                    }}
-                    me="10px"
-                    sx={{
-                      "&:hover": {
-                        color: "blue.500",
-                        textDecoration: "underline",
-                      },
-                      cursor: "pointer",
-                    }}
-                    color="brand.600"
-                    fontSize="sm"
-                    fontWeight="700"
-                  >
-                    {cell?.value || "-"}
-                  </Text>
-                </div>
-              ),
-            })) || []
+          ?.filter((field) => field?.isTableField === true && field?.isView)
+          ?.map((field) => ({
+            Header: field?.label,
+            accessor: field?.name,
+            cell: (cell) => (
+              <div className="selectOpt">
+                <Text
+                  onClick={() => {
+                    navigate(`/propertyView/${cell?.row?.original?._id}`);
+                  }}
+                  me="10px"
+                  sx={{
+                    "&:hover": {
+                      color: "blue.500",
+                      textDecoration: "underline",
+                    },
+                    cursor: "pointer",
+                  }}
+                  color="brand.600"
+                  fontSize="sm"
+                  fontWeight="700"
+                >
+                  {cell?.value || "-"}
+                </Text>
+              </div>
+            ),
+          })) || []
         : []),
       ...(result?.payload?.data?.[0]?.fields || []) // Ensure result.payload[0].fields is an array
         .filter((field) => field?.isTableField === true && !field?.isView) // Filter out fields where isTableField is true
@@ -260,7 +261,7 @@ const Index = () => {
                     </GridItem>
                 }
             </Grid> */}
-      <Flex justifyContent={"end"} mb={3}>
+      <Flex justifyContent={"end"} alignItems={'center'} mb={3}>
         {selectedValues.length > 0 && (
           <Button
             variant="outline"
@@ -276,6 +277,39 @@ const Index = () => {
             Delete
           </Button>
         )}
+        <Menu isLazy>
+          <MenuButton p={4}>
+            <BsColumnsGap />
+          </MenuButton>
+          <MenuList
+            minW={"fit-content"}
+            transform={"translate(1670px, 60px)"}
+            zIndex={2}
+          >
+            <MenuItem width="165px"
+              onClick={() => setIsImportProperty(true)}
+            >
+              Import Properties
+            </MenuItem>
+            <MenuDivider />
+            <MenuItem
+              width="165px"
+            //  onClick={() => handleExportLeads("csv")}
+            >
+              {selectedValues && selectedValues?.length > 0
+                ? "Export Selected Data as CSV"
+                : "Export as CSV"}
+            </MenuItem>
+            <MenuItem
+              width="165px"
+            // onClick={() => handleExportLeads("xlsx")}
+            >
+              {selectedValues && selectedValues?.length > 0
+                ? "Export Selected Data as Excel"
+                : "Export as Excel"}
+            </MenuItem>
+          </MenuList>
+        </Menu>
         <Button
           size="sm"
           variant="brand"
@@ -288,22 +322,22 @@ const Index = () => {
       </Flex>
 
       <Grid templateColumns="repeat(12, 1fr)" gap={3} my={3}>
-        <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
+        <GridItem cursor="pointer" rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
           <Card className="light-green" style={{ padding: "15px" }}>
             Available
           </Card>
         </GridItem>
-        <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
+        <GridItem cursor="pointer" rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
           <Card className="light-yellow" style={{ padding: "15px" }}>
             Booked
           </Card>
         </GridItem>
-        <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
+        <GridItem cursor="pointer" rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
           <Card className="light-blue" style={{ padding: "15px" }}>
             Sold
           </Card>
         </GridItem>
-        <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
+        <GridItem cursor="pointer" rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
           <Card className="light-red" style={{ padding: "15px" }}>
             Blocked
           </Card>
