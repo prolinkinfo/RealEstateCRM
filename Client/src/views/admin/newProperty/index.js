@@ -56,18 +56,11 @@ const Index = () => {
   const [isImportProperty, setIsImportProperty] = useState(false);
 
   //pagination
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const [rangeData, setRangeData] = useState(10);
-  const [gotoPage, setGotoPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [pageOptions, setpageOptions] = useState(
-    Array.from({ length: pageSize })
-  );
-  const pageCount = 5;
 
   const nextPage = () => setCurrentPage((prev) => prev + 1);
   const previousPage = () => setCurrentPage((prev) => Math.max(prev - 1, 0));
-  console.log(currentPage, "currentPage");
 
   const data = useSelector((state) => state?.propertyData?.data);
 
@@ -141,33 +134,33 @@ const Index = () => {
       { Header: "#", accessor: "_id", isSortable: false, width: 10 },
       ...(result?.payload?.data && result.payload.data.length > 0
         ? result.payload.data[0]?.fields
-            ?.filter((field) => field?.isTableField === true && field?.isView)
-            ?.map((field) => ({
-              Header: field?.label,
-              accessor: field?.name,
-              cell: (cell) => (
-                <div className="selectOpt">
-                  <Text
-                    onClick={() => {
-                      navigate(`/propertyView/${cell?.row?.original?._id}`);
-                    }}
-                    me="10px"
-                    sx={{
-                      "&:hover": {
-                        color: "blue.500",
-                        textDecoration: "underline",
-                      },
-                      cursor: "pointer",
-                    }}
-                    color="brand.600"
-                    fontSize="sm"
-                    fontWeight="700"
-                  >
-                    {cell?.value || "-"}
-                  </Text>
-                </div>
-              ),
-            })) || []
+          ?.filter((field) => field?.isTableField === true && field?.isView)
+          ?.map((field) => ({
+            Header: field?.label,
+            accessor: field?.name,
+            cell: (cell) => (
+              <div className="selectOpt">
+                <Text
+                  onClick={() => {
+                    navigate(`/propertyView/${cell?.row?.original?._id}`);
+                  }}
+                  me="10px"
+                  sx={{
+                    "&:hover": {
+                      color: "blue.500",
+                      textDecoration: "underline",
+                    },
+                    cursor: "pointer",
+                  }}
+                  color="brand.600"
+                  fontSize="sm"
+                  fontWeight="700"
+                >
+                  {cell?.value || "-"}
+                </Text>
+              </div>
+            ),
+          })) || []
         : []),
       ...(result?.payload?.data?.[0]?.fields || []) // Ensure result.payload[0].fields is an array
         .filter((field) => field?.isTableField === true && !field?.isView) // Filter out fields where isTableField is true
@@ -291,7 +284,7 @@ const Index = () => {
             <MenuDivider />
             <MenuItem
               width="165px"
-              //  onClick={() => handleExportLeads("csv")}
+            //  onClick={() => handleExportLeads("csv")}
             >
               {selectedValues && selectedValues?.length > 0
                 ? "Export Selected Data as CSV"
@@ -299,7 +292,7 @@ const Index = () => {
             </MenuItem>
             <MenuItem
               width="165px"
-              // onClick={() => handleExportLeads("xlsx")}
+            // onClick={() => handleExportLeads("xlsx")}
             >
               {selectedValues && selectedValues?.length > 0
                 ? "Export Selected Data as Excel"
@@ -470,32 +463,6 @@ const Index = () => {
                       )}
                     </MenuList>
                   </Menu>
-                  {/* <Flex>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      me={2}
-                      color={"green"}
-                      onClick={() => {
-                        setEdit(true);
-                        setSelectedId(item?._id);
-                      }}
-                    >
-                      <EditIcon />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      me={2}
-                      color={"red"}
-                      onClick={() => {
-                        setSelectedValues(item?._id)
-                        setDelete(true)
-                      }}
-                    >
-                      <DeleteIcon />
-                    </Button>
-                  </Flex> */}
                 </Flex>
               </Card>
             </GridItem>
@@ -553,21 +520,12 @@ const Index = () => {
         />
       )}
       <Card mt={3} p={2}>
-        {/* <Grid templateColumns="repeat(6, 1fr)" gap={1} style={{ display: 'block', margin: 'auto' }}>
-          <GridItem colSpan={{ base: 2 }} > */}
         <PaginationProperty
           currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
           dataLength={data?.length}
           nextPage={nextPage}
           previousPage={previousPage}
-          setpageOptions={setpageOptions}
-          pageCount={pageCount}
-          pageOptions={pageOptions}
-          gotoPage={gotoPage}
-          pageSize={pageSize}
-          setPageSize={setPageSize}
-          setGotoPage={setGotoPage}
-          setCurrentPage={setCurrentPage}
           rangeData={rangeData}
           setRangeData={setRangeData}
         />
