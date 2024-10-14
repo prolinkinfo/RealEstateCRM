@@ -51,6 +51,7 @@ const Index = () => {
   const [selectedId, setSelectedId] = useState();
   const [selectedValues, setSelectedValues] = useState([]);
   const [isImportProperty, setIsImportProperty] = useState(false);
+  const [types, setTypes] = useState('');
 
   // search 
   const [searchbox, setSearchbox] = useState("");
@@ -64,7 +65,7 @@ const Index = () => {
   const nextPage = () => setCurrentPage((prev) => prev + 1);
   const previousPage = () => setCurrentPage((prev) => Math.max(prev - 1, 0));
 
-  const data = useSelector((state) => state?.propertyData?.data);
+  const data = useSelector((state) => state?.propertyData?.data)
 
   const fetchCustomDataFields = async () => {
     setIsLoding(true);
@@ -210,7 +211,7 @@ const Index = () => {
   useEffect(() => {
     dispatch(fetchPropertyData());
     fetchCustomDataFields();
-  }, [action]);
+  }, [action, types]);
 
   const handleCheckboxChange = (event, value) => {
     if (event.target.checked) {
@@ -221,12 +222,17 @@ const Index = () => {
       );
     }
   };
-  const listData = displaySearchData ? searchData : data;
+  const listData = (displaySearchData ? searchData : data)?.filter(item => !types || item?.status === types);
 
-  const displayedData = listData?.slice(
-    currentPage * rangeData,
-    (currentPage + 1) * rangeData
-  );
+  // const displayedData = listData?.slice(
+  //   currentPage * rangeData,
+  //   (currentPage + 1) * rangeData
+  // );
+
+  const displayedData = listData.slice(currentPage * rangeData, (currentPage + 1) * rangeData);
+
+
+  console.log(displayedData, "displayedData");
 
   return (
     <div>
@@ -331,12 +337,13 @@ const Index = () => {
           Add New
         </Button>
       </Flex>
-
+      {console.log("types", types)}
       <Grid templateColumns="repeat(12, 1fr)" gap={3} my={3}>
         <GridItem
           cursor="pointer"
           rowSpan={2}
           colSpan={{ base: 12, md: 6, lg: 3 }}
+          onClick={() => setTypes("Available")}
         >
           <Card className="light-green" style={{ padding: "15px" }}>
             Available
@@ -346,6 +353,7 @@ const Index = () => {
           cursor="pointer"
           rowSpan={2}
           colSpan={{ base: 12, md: 6, lg: 3 }}
+          onClick={() => setTypes("Booked")}
         >
           <Card className="light-yellow" style={{ padding: "15px" }}>
             Booked
@@ -355,6 +363,7 @@ const Index = () => {
           cursor="pointer"
           rowSpan={2}
           colSpan={{ base: 12, md: 6, lg: 3 }}
+          onClick={() => setTypes("Sold")}
         >
           <Card className="light-blue" style={{ padding: "15px" }}>
             Sold
@@ -364,6 +373,7 @@ const Index = () => {
           cursor="pointer"
           rowSpan={2}
           colSpan={{ base: 12, md: 6, lg: 3 }}
+          onClick={() => setTypes("Blocked")}
         >
           <Card className="light-red" style={{ padding: "15px" }}>
             Blocked
