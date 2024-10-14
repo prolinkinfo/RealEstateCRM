@@ -54,6 +54,7 @@ const Index = () => {
   const [selectedId, setSelectedId] = useState();
   const [selectedValues, setSelectedValues] = useState([]);
   const [isImportProperty, setIsImportProperty] = useState(false);
+  const [types, setTypes] = useState('');
 
   //pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -67,9 +68,8 @@ const Index = () => {
 
   const nextPage = () => setCurrentPage((prev) => prev + 1);
   const previousPage = () => setCurrentPage((prev) => Math.max(prev - 1, 0));
-  console.log(currentPage, "currentPage");
 
-  const data = useSelector((state) => state?.propertyData?.data);
+  const data = useSelector((state) => state?.propertyData?.data)
 
   const fetchCustomDataFields = async () => {
     setIsLoding(true);
@@ -141,33 +141,33 @@ const Index = () => {
       { Header: "#", accessor: "_id", isSortable: false, width: 10 },
       ...(result?.payload?.data && result.payload.data.length > 0
         ? result.payload.data[0]?.fields
-            ?.filter((field) => field?.isTableField === true && field?.isView)
-            ?.map((field) => ({
-              Header: field?.label,
-              accessor: field?.name,
-              cell: (cell) => (
-                <div className="selectOpt">
-                  <Text
-                    onClick={() => {
-                      navigate(`/propertyView/${cell?.row?.original?._id}`);
-                    }}
-                    me="10px"
-                    sx={{
-                      "&:hover": {
-                        color: "blue.500",
-                        textDecoration: "underline",
-                      },
-                      cursor: "pointer",
-                    }}
-                    color="brand.600"
-                    fontSize="sm"
-                    fontWeight="700"
-                  >
-                    {cell?.value || "-"}
-                  </Text>
-                </div>
-              ),
-            })) || []
+          ?.filter((field) => field?.isTableField === true && field?.isView)
+          ?.map((field) => ({
+            Header: field?.label,
+            accessor: field?.name,
+            cell: (cell) => (
+              <div className="selectOpt">
+                <Text
+                  onClick={() => {
+                    navigate(`/propertyView/${cell?.row?.original?._id}`);
+                  }}
+                  me="10px"
+                  sx={{
+                    "&:hover": {
+                      color: "blue.500",
+                      textDecoration: "underline",
+                    },
+                    cursor: "pointer",
+                  }}
+                  color="brand.600"
+                  fontSize="sm"
+                  fontWeight="700"
+                >
+                  {cell?.value || "-"}
+                </Text>
+              </div>
+            ),
+          })) || []
         : []),
       ...(result?.payload?.data?.[0]?.fields || []) // Ensure result.payload[0].fields is an array
         .filter((field) => field?.isTableField === true && !field?.isView) // Filter out fields where isTableField is true
@@ -215,7 +215,7 @@ const Index = () => {
   useEffect(() => {
     dispatch(fetchPropertyData());
     fetchCustomDataFields();
-  }, [action]);
+  }, [action, types]);
 
   const handleCheckboxChange = (event, value) => {
     if (event.target.checked) {
@@ -226,10 +226,18 @@ const Index = () => {
       );
     }
   };
-  const displayedData = data.slice(
-    currentPage * rangeData,
-    (currentPage + 1) * rangeData
-  );
+  
+  // const displayedData = data.slice(
+  //   currentPage * rangeData,
+  //   (currentPage + 1) * rangeData
+  // );
+
+  const displayedData = data
+    .filter(item => !types || item?.status === types)
+    .slice((currentPage - 1) * rangeData, currentPage * rangeData);
+
+
+  console.log(displayedData, "displayedData");
 
   return (
     <div>
@@ -291,7 +299,7 @@ const Index = () => {
             <MenuDivider />
             <MenuItem
               width="165px"
-              //  onClick={() => handleExportLeads("csv")}
+            //  onClick={() => handleExportLeads("csv")}
             >
               {selectedValues && selectedValues?.length > 0
                 ? "Export Selected Data as CSV"
@@ -299,7 +307,7 @@ const Index = () => {
             </MenuItem>
             <MenuItem
               width="165px"
-              // onClick={() => handleExportLeads("xlsx")}
+            // onClick={() => handleExportLeads("xlsx")}
             >
               {selectedValues && selectedValues?.length > 0
                 ? "Export Selected Data as Excel"
@@ -317,12 +325,13 @@ const Index = () => {
           Add New
         </Button>
       </Flex>
-
+      {console.log("types", types)}
       <Grid templateColumns="repeat(12, 1fr)" gap={3} my={3}>
         <GridItem
           cursor="pointer"
           rowSpan={2}
           colSpan={{ base: 12, md: 6, lg: 3 }}
+          onClick={() => setTypes("Available")}
         >
           <Card className="light-green" style={{ padding: "15px" }}>
             Available
@@ -332,6 +341,7 @@ const Index = () => {
           cursor="pointer"
           rowSpan={2}
           colSpan={{ base: 12, md: 6, lg: 3 }}
+          onClick={() => setTypes("Booked")}
         >
           <Card className="light-yellow" style={{ padding: "15px" }}>
             Booked
@@ -341,6 +351,7 @@ const Index = () => {
           cursor="pointer"
           rowSpan={2}
           colSpan={{ base: 12, md: 6, lg: 3 }}
+          onClick={() => setTypes("Sold")}
         >
           <Card className="light-blue" style={{ padding: "15px" }}>
             Sold
@@ -350,6 +361,7 @@ const Index = () => {
           cursor="pointer"
           rowSpan={2}
           colSpan={{ base: 12, md: 6, lg: 3 }}
+          onClick={() => setTypes("Blocked")}
         >
           <Card className="light-red" style={{ padding: "15px" }}>
             Blocked
