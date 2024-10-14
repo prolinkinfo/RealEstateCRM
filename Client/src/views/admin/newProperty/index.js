@@ -6,11 +6,15 @@ import {
   Grid,
   GridItem,
   Heading,
+  HStack,
   Menu,
   MenuButton,
   MenuDivider,
   MenuItem,
   MenuList,
+  Tag,
+  TagCloseButton,
+  TagLabel,
   Text,
   Tooltip,
   useDisclosure,
@@ -51,12 +55,14 @@ const Index = () => {
   const [selectedId, setSelectedId] = useState();
   const [selectedValues, setSelectedValues] = useState([]);
   const [isImportProperty, setIsImportProperty] = useState(false);
-  const [types, setTypes] = useState('');
+  const [types, setTypes] = useState([]);
 
   // search 
   const [searchbox, setSearchbox] = useState("");
   const [searchData, setSearchData] = useState([]);
+  const [gopageTagValue, setGetTagValues] = useState([]);
   const [displaySearchData, setDisplaySearchData] = useState(false);
+  console.log("gopageTagValue--::", gopageTagValue)
 
   //pagination
   const [currentPage, setCurrentPage] = useState(0);
@@ -222,17 +228,17 @@ const Index = () => {
       );
     }
   };
-  const listData = (displaySearchData ? searchData : data)?.filter(item => !types || item?.status === types);
 
-  // const displayedData = listData?.slice(
-  //   currentPage * rangeData,
-  //   (currentPage + 1) * rangeData
-  // );
-
+  const listData = (displaySearchData ? searchData : data)?.filter(item => types?.length === 0 || types?.includes(item?.status));
   const displayedData = listData.slice(currentPage * rangeData, (currentPage + 1) * rangeData);
 
-
-  console.log(displayedData, "displayedData");
+  const handleStatusChange = (values) => {
+    let selectedItems = [...types, values]
+    setTypes([...new Set(selectedItems)])
+  }
+  const handleRemoveTag = (value) => {
+    setTypes(pre => pre?.filter(item => item !== value))
+  }
 
   return (
     <div>
@@ -271,15 +277,8 @@ const Index = () => {
           allData={data}
           dataColumn={columns}
           onSearch={(data) => {
-            console.log("data--::", data)
             setSearchData(data)
           }}
-        // setGetTagValues={
-        //   // props.setGetTagValuesOutside
-        //   //   ? props.setGetTagValuesOutside
-        //   //   : setGetTagValues
-        // }
-        // setGopageValue={setGopageValue}
         />
         {selectedValues.length > 0 && (
           <Button
@@ -337,13 +336,12 @@ const Index = () => {
           Add New
         </Button>
       </Flex>
-      {console.log("types", types)}
       <Grid templateColumns="repeat(12, 1fr)" gap={3} my={3}>
         <GridItem
           cursor="pointer"
           rowSpan={2}
           colSpan={{ base: 12, md: 6, lg: 3 }}
-          onClick={() => setTypes("Available")}
+          onClick={() => handleStatusChange("Available")}
         >
           <Card className="light-green" style={{ padding: "15px" }}>
             Available
@@ -353,7 +351,7 @@ const Index = () => {
           cursor="pointer"
           rowSpan={2}
           colSpan={{ base: 12, md: 6, lg: 3 }}
-          onClick={() => setTypes("Booked")}
+          onClick={() => handleStatusChange("Booked")}
         >
           <Card className="light-yellow" style={{ padding: "15px" }}>
             Booked
@@ -363,7 +361,7 @@ const Index = () => {
           cursor="pointer"
           rowSpan={2}
           colSpan={{ base: 12, md: 6, lg: 3 }}
-          onClick={() => setTypes("Sold")}
+          onClick={() => handleStatusChange("Sold")}
         >
           <Card className="light-blue" style={{ padding: "15px" }}>
             Sold
@@ -373,13 +371,28 @@ const Index = () => {
           cursor="pointer"
           rowSpan={2}
           colSpan={{ base: 12, md: 6, lg: 3 }}
-          onClick={() => setTypes("Blocked")}
+          onClick={() => handleStatusChange("Blocked")}
         >
           <Card className="light-red" style={{ padding: "15px" }}>
             Blocked
           </Card>
         </GridItem>
       </Grid>
+      <HStack spacing={4} mb={2}>
+        {(types || []).map((item) => (
+          <Tag
+            size="md"
+            p={2}
+            key={item}
+            borderRadius="full"
+            variant="solid"
+            colorScheme="gray"
+          >
+            <TagLabel>{item}</TagLabel>
+            <TagCloseButton onClick={() => handleRemoveTag(item)} />
+          </Tag>
+        ))}
+      </HStack>
 
       {isLoding ? (
         <Flex
