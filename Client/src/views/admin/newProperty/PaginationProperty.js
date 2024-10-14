@@ -27,38 +27,25 @@ const PaginationProperty = (props) => {
     pageOptions,
     nextPage,
     previousPage,
-    pageSize,
-    pageCount,
-    setpageOptions,
-    setPageSize, dataLength
+    dataLength
   } = props;
 
-  const [gopageValue, setGopageValue] = useState(currentPage);
+  const [gopageValue, setGopageValue] = useState(currentPage + 1);
 
-  const canPreviousPage = currentPage > 0;
-  const canNextPage = currentPage < (Math.ceil(dataLength / pageSize)) - 1;
+  const canPreviousPage = currentPage >= 1;
+
+  const canNextPage = currentPage < (Math.ceil(dataLength / rangeData)) - 1;
 
   useEffect(() => {
-    setGopageValue(currentPage);
+    setGopageValue(currentPage + 1);
   }, [currentPage]);
 
-  // const handlePageChange = (value) => {
-  //   const page = value ? value - 1 : 1;
-  //   setCurrentPage(page);
-  //   setGopageValue(value);
-  //   console.log(page, "page");
-
-  // };
-
   const handlePageChange = (value) => {
-    const page = value ? Number(value) - 1 : 0; // Ensure we handle 0-based indexing for internal logic
-    if (page >= 0 && page < Math.ceil(dataLength / pageSize)) {
-      setCurrentPage(page);
-      setGopageValue(value);
+    const page = value ? Number(value) : 0; // Ensure we handle 0-based indexing for internal logic
+    if (page >= 0 && page <= Math.ceil(dataLength / rangeData)) {
+      setCurrentPage(page - 1);
     }
   };
-
-  console.log("pageOptions", pageSize, currentPage);
 
   return (
     <Flex
@@ -72,7 +59,6 @@ const PaginationProperty = (props) => {
             <IconButton
               onClick={() => {
                 setCurrentPage(0);
-                setGopageValue(1);
               }}
               isDisabled={!canPreviousPage}
               icon={<ArrowLeftIcon h={3} w={3} />}
@@ -83,7 +69,6 @@ const PaginationProperty = (props) => {
             <IconButton
               onClick={() => {
                 previousPage();
-                setGopageValue((pre) => pre - 1);
               }}
               isDisabled={!canPreviousPage}
               icon={<ChevronLeftIcon h={6} w={6} />}
@@ -98,11 +83,11 @@ const PaginationProperty = (props) => {
             <Text flexShrink="0" mr={8}>
               Page{" "}
               <Text fontWeight="bold" as="span">
-                {currentPage}
+                {currentPage + 1}
               </Text>{" "}
               of{" "}
               <Text fontWeight="bold" as="span">
-                {Math.ceil(dataLength / pageSize)}
+                {Math.ceil(dataLength / rangeData)}
               </Text>
             </Text>
             <Text flexShrink="0">Go to page:</Text>
@@ -110,7 +95,7 @@ const PaginationProperty = (props) => {
               ml={2}
               mr={8}
               w={28}
-              min={1}
+              min={0}
               max={pageOptions?.length}
               value={gopageValue}
               onChange={(value) => handlePageChange(value)}
@@ -128,9 +113,6 @@ const PaginationProperty = (props) => {
           value={rangeData}
           onChange={(e) => {
             setRangeData(Number(e.target.value));
-            setPageSize(Number(e.target.value))
-            setpageOptions(Number(e.target.value))
-            setCurrentPage(0); // Reset to the first page on page size change
           }}
         >
           {[5, 10, 20, 30, 40, 50].map((size) => (
@@ -147,7 +129,6 @@ const PaginationProperty = (props) => {
             <IconButton
               onClick={() => {
                 nextPage();
-                setGopageValue((pre) => pre + 1);
               }}
               isDisabled={!canNextPage}
               icon={<ChevronRightIcon h={6} w={6} />}
@@ -156,8 +137,7 @@ const PaginationProperty = (props) => {
           <Tooltip label="Last Page">
             <IconButton
               onClick={() => {
-                setCurrentPage(pageCount - 1);
-                setGopageValue(pageCount);
+                setCurrentPage(Math.ceil(dataLength / rangeData) - 1);
               }}
               isDisabled={!canNextPage}
               icon={<ArrowRightIcon h={3} w={3} />}

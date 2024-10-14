@@ -57,14 +57,8 @@ const Index = () => {
   const [types, setTypes] = useState('');
 
   //pagination
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const [rangeData, setRangeData] = useState(10);
-  const [gotoPage, setGotoPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [pageOptions, setpageOptions] = useState(
-    Array.from({ length: pageSize })
-  );
-  const pageCount = 5;
 
   const nextPage = () => setCurrentPage((prev) => prev + 1);
   const previousPage = () => setCurrentPage((prev) => Math.max(prev - 1, 0));
@@ -482,32 +476,6 @@ const Index = () => {
                       )}
                     </MenuList>
                   </Menu>
-                  {/* <Flex>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      me={2}
-                      color={"green"}
-                      onClick={() => {
-                        setEdit(true);
-                        setSelectedId(item?._id);
-                      }}
-                    >
-                      <EditIcon />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      me={2}
-                      color={"red"}
-                      onClick={() => {
-                        setSelectedValues(item?._id)
-                        setDelete(true)
-                      }}
-                    >
-                      <DeleteIcon />
-                    </Button>
-                  </Flex> */}
                 </Flex>
               </Card>
             </GridItem>
@@ -565,27 +533,15 @@ const Index = () => {
         />
       )}
       <Card mt={3} p={2}>
-        {/* <Grid templateColumns="repeat(6, 1fr)" gap={1} style={{ display: 'block', margin: 'auto' }}>
-          <GridItem colSpan={{ base: 2 }} > */}
         <PaginationProperty
           currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
           dataLength={data?.length}
           nextPage={nextPage}
           previousPage={previousPage}
-          setpageOptions={setpageOptions}
-          pageCount={pageCount}
-          pageOptions={pageOptions}
-          gotoPage={gotoPage}
-          pageSize={pageSize}
-          setPageSize={setPageSize}
-          setGotoPage={setGotoPage}
-          setCurrentPage={setCurrentPage}
           rangeData={rangeData}
           setRangeData={setRangeData}
         />
-
-        {/* </GridItem>
-        </Grid> */}
       </Card>
     </div>
   );
