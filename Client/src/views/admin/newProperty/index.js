@@ -529,9 +529,6 @@ const Index = () => {
           rangeData={rangeData}
           setRangeData={setRangeData}
         />
-
-        {/* </GridItem>
-        </Grid> */}
       </Card>
     </div>
   );
