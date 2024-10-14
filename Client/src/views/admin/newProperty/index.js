@@ -56,21 +56,20 @@ const Index = () => {
   const [isImportProperty, setIsImportProperty] = useState(false);
 
   //pagination
-  const [currentPage, setCurrentPage] = useState(1)
-  const [rangeData, setRangeData] = useState(10)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rangeData, setRangeData] = useState(10);
   const [gotoPage, setGotoPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [pageOptions, setpageOptions] = useState(Array.from({ length: pageSize }));
-  const pageCount = 5
+  const [pageOptions, setpageOptions] = useState(
+    Array.from({ length: pageSize })
+  );
+  const pageCount = 5;
 
   const nextPage = () => setCurrentPage((prev) => prev + 1);
   const previousPage = () => setCurrentPage((prev) => Math.max(prev - 1, 0));
   console.log(currentPage, "currentPage");
 
-
   const data = useSelector((state) => state?.propertyData?.data);
-
-
 
   const fetchCustomDataFields = async () => {
     setIsLoding(true);
@@ -142,33 +141,33 @@ const Index = () => {
       { Header: "#", accessor: "_id", isSortable: false, width: 10 },
       ...(result?.payload?.data && result.payload.data.length > 0
         ? result.payload.data[0]?.fields
-          ?.filter((field) => field?.isTableField === true && field?.isView)
-          ?.map((field) => ({
-            Header: field?.label,
-            accessor: field?.name,
-            cell: (cell) => (
-              <div className="selectOpt">
-                <Text
-                  onClick={() => {
-                    navigate(`/propertyView/${cell?.row?.original?._id}`);
-                  }}
-                  me="10px"
-                  sx={{
-                    "&:hover": {
-                      color: "blue.500",
-                      textDecoration: "underline",
-                    },
-                    cursor: "pointer",
-                  }}
-                  color="brand.600"
-                  fontSize="sm"
-                  fontWeight="700"
-                >
-                  {cell?.value || "-"}
-                </Text>
-              </div>
-            ),
-          })) || []
+            ?.filter((field) => field?.isTableField === true && field?.isView)
+            ?.map((field) => ({
+              Header: field?.label,
+              accessor: field?.name,
+              cell: (cell) => (
+                <div className="selectOpt">
+                  <Text
+                    onClick={() => {
+                      navigate(`/propertyView/${cell?.row?.original?._id}`);
+                    }}
+                    me="10px"
+                    sx={{
+                      "&:hover": {
+                        color: "blue.500",
+                        textDecoration: "underline",
+                      },
+                      cursor: "pointer",
+                    }}
+                    color="brand.600"
+                    fontSize="sm"
+                    fontWeight="700"
+                  >
+                    {cell?.value || "-"}
+                  </Text>
+                </div>
+              ),
+            })) || []
         : []),
       ...(result?.payload?.data?.[0]?.fields || []) // Ensure result.payload[0].fields is an array
         .filter((field) => field?.isTableField === true && !field?.isView) // Filter out fields where isTableField is true
@@ -261,7 +260,7 @@ const Index = () => {
                     </GridItem>
                 }
             </Grid> */}
-      <Flex justifyContent={"end"} alignItems={'center'} mb={3}>
+      <Flex justifyContent={"end"} alignItems={"center"} mb={3}>
         {selectedValues.length > 0 && (
           <Button
             variant="outline"
@@ -286,15 +285,13 @@ const Index = () => {
             transform={"translate(1670px, 60px)"}
             zIndex={2}
           >
-            <MenuItem width="165px"
-              onClick={() => setIsImportProperty(true)}
-            >
+            <MenuItem width="165px" onClick={() => setIsImportProperty(true)}>
               Import Properties
             </MenuItem>
             <MenuDivider />
             <MenuItem
               width="165px"
-            //  onClick={() => handleExportLeads("csv")}
+              //  onClick={() => handleExportLeads("csv")}
             >
               {selectedValues && selectedValues?.length > 0
                 ? "Export Selected Data as CSV"
@@ -302,7 +299,7 @@ const Index = () => {
             </MenuItem>
             <MenuItem
               width="165px"
-            // onClick={() => handleExportLeads("xlsx")}
+              // onClick={() => handleExportLeads("xlsx")}
             >
               {selectedValues && selectedValues?.length > 0
                 ? "Export Selected Data as Excel"
@@ -322,22 +319,38 @@ const Index = () => {
       </Flex>
 
       <Grid templateColumns="repeat(12, 1fr)" gap={3} my={3}>
-        <GridItem cursor="pointer" rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
+        <GridItem
+          cursor="pointer"
+          rowSpan={2}
+          colSpan={{ base: 12, md: 6, lg: 3 }}
+        >
           <Card className="light-green" style={{ padding: "15px" }}>
             Available
           </Card>
         </GridItem>
-        <GridItem cursor="pointer" rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
+        <GridItem
+          cursor="pointer"
+          rowSpan={2}
+          colSpan={{ base: 12, md: 6, lg: 3 }}
+        >
           <Card className="light-yellow" style={{ padding: "15px" }}>
             Booked
           </Card>
         </GridItem>
-        <GridItem cursor="pointer" rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
+        <GridItem
+          cursor="pointer"
+          rowSpan={2}
+          colSpan={{ base: 12, md: 6, lg: 3 }}
+        >
           <Card className="light-blue" style={{ padding: "15px" }}>
             Sold
           </Card>
         </GridItem>
-        <GridItem cursor="pointer" rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
+        <GridItem
+          cursor="pointer"
+          rowSpan={2}
+          colSpan={{ base: 12, md: 6, lg: 3 }}
+        >
           <Card className="light-red" style={{ padding: "15px" }}>
             Blocked
           </Card>
@@ -357,9 +370,9 @@ const Index = () => {
       ) : displayedData && displayedData.length > 0 ? (
         <Grid templateColumns="repeat(12, 1fr)" gap={3}>
           {displayedData?.map((item, i) => (
-            <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }} key={i} >
-              <Card >
-                <Flex alignItems={"center"} justifyContent={"space-between"} >
+            <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }} key={i}>
+              <Card>
+                <Flex alignItems={"center"} justifyContent={"space-between"}>
                   <Flex>
                     <Checkbox
                       colorScheme="brandScheme"
@@ -542,7 +555,22 @@ const Index = () => {
       <Card mt={3} p={2}>
         {/* <Grid templateColumns="repeat(6, 1fr)" gap={1} style={{ display: 'block', margin: 'auto' }}>
           <GridItem colSpan={{ base: 2 }} > */}
-        <PaginationProperty currentPage={currentPage} dataLength={data?.length} nextPage={nextPage} previousPage={previousPage} setpageOptions={setpageOptions} pageCount={pageCount} pageOptions={pageOptions} gotoPage={gotoPage} pageSize={pageSize} setPageSize={setPageSize} setGotoPage={setGotoPage} setCurrentPage={setCurrentPage} rangeData={rangeData} setRangeData={setRangeData} />
+        <PaginationProperty
+          currentPage={currentPage}
+          dataLength={data?.length}
+          nextPage={nextPage}
+          previousPage={previousPage}
+          setpageOptions={setpageOptions}
+          pageCount={pageCount}
+          pageOptions={pageOptions}
+          gotoPage={gotoPage}
+          pageSize={pageSize}
+          setPageSize={setPageSize}
+          setGotoPage={setGotoPage}
+          setCurrentPage={setCurrentPage}
+          rangeData={rangeData}
+          setRangeData={setRangeData}
+        />
 
         {/* </GridItem>
         </Grid> */}
