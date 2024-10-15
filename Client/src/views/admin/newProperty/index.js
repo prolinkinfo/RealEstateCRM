@@ -6,11 +6,15 @@ import {
   Grid,
   GridItem,
   Heading,
+  HStack,
   Menu,
   MenuButton,
   MenuDivider,
   MenuItem,
   MenuList,
+  Tag,
+  TagCloseButton,
+  TagLabel,
   Text,
   Tooltip,
   useDisclosure,
@@ -34,6 +38,7 @@ import ImportModal from "./components/ImportModal";
 import Edit from "./Edit";
 import PaginationProperty from "./PaginationProperty";
 import { BsColumnsGap } from "react-icons/bs";
+import CustomSearchInput from "components/search/search";
 
 const Index = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -41,11 +46,7 @@ const Index = () => {
   const dispatch = useDispatch();
   const [permission] = HasAccess(["Properties"]);
   const [isLoding, setIsLoding] = useState(false);
-  // const [data, setData] = useState([]);
-  const [tableColumns, setTableColumns] = useState([]);
   const [columns, setColumns] = useState([]);
-  // const [dataColumn, setDataColumn] = useState([]);
-  // const [selectedColumns, setSelectedColumns] = useState([]);
   const [action, setAction] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [propertyData, setPropertyData] = useState([]);
@@ -54,22 +55,23 @@ const Index = () => {
   const [selectedId, setSelectedId] = useState();
   const [selectedValues, setSelectedValues] = useState([]);
   const [isImportProperty, setIsImportProperty] = useState(false);
+  const [types, setTypes] = useState([]);
+
+  // search 
+  const [searchbox, setSearchbox] = useState("");
+  const [searchData, setSearchData] = useState([]);
+  const [gopageTagValue, setGetTagValues] = useState([]);
+  const [displaySearchData, setDisplaySearchData] = useState(false);
+  console.log("gopageTagValue--::", gopageTagValue)
 
   //pagination
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const [rangeData, setRangeData] = useState(10);
-  const [gotoPage, setGotoPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [pageOptions, setpageOptions] = useState(
-    Array.from({ length: pageSize })
-  );
-  const pageCount = 5;
 
   const nextPage = () => setCurrentPage((prev) => prev + 1);
   const previousPage = () => setCurrentPage((prev) => Math.max(prev - 1, 0));
-  console.log(currentPage, "currentPage");
 
-  const data = useSelector((state) => state?.propertyData?.data);
+  const data = useSelector((state) => state?.propertyData?.data)
 
   const fetchCustomDataFields = async () => {
     setIsLoding(true);
@@ -141,33 +143,33 @@ const Index = () => {
       { Header: "#", accessor: "_id", isSortable: false, width: 10 },
       ...(result?.payload?.data && result.payload.data.length > 0
         ? result.payload.data[0]?.fields
-            ?.filter((field) => field?.isTableField === true && field?.isView)
-            ?.map((field) => ({
-              Header: field?.label,
-              accessor: field?.name,
-              cell: (cell) => (
-                <div className="selectOpt">
-                  <Text
-                    onClick={() => {
-                      navigate(`/propertyView/${cell?.row?.original?._id}`);
-                    }}
-                    me="10px"
-                    sx={{
-                      "&:hover": {
-                        color: "blue.500",
-                        textDecoration: "underline",
-                      },
-                      cursor: "pointer",
-                    }}
-                    color="brand.600"
-                    fontSize="sm"
-                    fontWeight="700"
-                  >
-                    {cell?.value || "-"}
-                  </Text>
-                </div>
-              ),
-            })) || []
+          ?.filter((field) => field?.isTableField === true && field?.isView)
+          ?.map((field) => ({
+            Header: field?.label,
+            accessor: field?.name,
+            cell: (cell) => (
+              <div className="selectOpt">
+                <Text
+                  onClick={() => {
+                    navigate(`/propertyView/${cell?.row?.original?._id}`);
+                  }}
+                  me="10px"
+                  sx={{
+                    "&:hover": {
+                      color: "blue.500",
+                      textDecoration: "underline",
+                    },
+                    cursor: "pointer",
+                  }}
+                  color="brand.600"
+                  fontSize="sm"
+                  fontWeight="700"
+                >
+                  {cell?.value || "-"}
+                </Text>
+              </div>
+            ),
+          })) || []
         : []),
       ...(result?.payload?.data?.[0]?.fields || []) // Ensure result.payload[0].fields is an array
         .filter((field) => field?.isTableField === true && !field?.isView) // Filter out fields where isTableField is true
@@ -215,7 +217,7 @@ const Index = () => {
   useEffect(() => {
     dispatch(fetchPropertyData());
     fetchCustomDataFields();
-  }, [action]);
+  }, [action, types]);
 
   const handleCheckboxChange = (event, value) => {
     if (event.target.checked) {
@@ -226,10 +228,17 @@ const Index = () => {
       );
     }
   };
-  const displayedData = data.slice(
-    currentPage * rangeData,
-    (currentPage + 1) * rangeData
-  );
+
+  const listData = (displaySearchData ? searchData : data)?.filter(item => types?.length === 0 || types?.includes(item?.status));
+  const displayedData = listData.slice(currentPage * rangeData, (currentPage + 1) * rangeData);
+
+  const handleStatusChange = (values) => {
+    let selectedItems = [...types, values]
+    setTypes([...new Set(selectedItems)])
+  }
+  const handleRemoveTag = (value) => {
+    setTypes(pre => pre?.filter(item => item !== value))
+  }
 
   return (
     <div>
@@ -261,6 +270,16 @@ const Index = () => {
                 }
             </Grid> */}
       <Flex justifyContent={"end"} alignItems={"center"} mb={3}>
+        <CustomSearchInput
+          setSearchbox={setSearchbox}
+          setDisplaySearchData={setDisplaySearchData}
+          searchbox={searchbox}
+          allData={data}
+          dataColumn={columns}
+          onSearch={(data) => {
+            setSearchData(data)
+          }}
+        />
         {selectedValues.length > 0 && (
           <Button
             variant="outline"
@@ -291,7 +310,7 @@ const Index = () => {
             <MenuDivider />
             <MenuItem
               width="165px"
-              //  onClick={() => handleExportLeads("csv")}
+            //  onClick={() => handleExportLeads("csv")}
             >
               {selectedValues && selectedValues?.length > 0
                 ? "Export Selected Data as CSV"
@@ -299,7 +318,7 @@ const Index = () => {
             </MenuItem>
             <MenuItem
               width="165px"
-              // onClick={() => handleExportLeads("xlsx")}
+            // onClick={() => handleExportLeads("xlsx")}
             >
               {selectedValues && selectedValues?.length > 0
                 ? "Export Selected Data as Excel"
@@ -317,12 +336,12 @@ const Index = () => {
           Add New
         </Button>
       </Flex>
-
       <Grid templateColumns="repeat(12, 1fr)" gap={3} my={3}>
         <GridItem
           cursor="pointer"
           rowSpan={2}
           colSpan={{ base: 12, md: 6, lg: 3 }}
+          onClick={() => handleStatusChange("Available")}
         >
           <Card className="light-green" style={{ padding: "15px" }}>
             Available
@@ -332,6 +351,7 @@ const Index = () => {
           cursor="pointer"
           rowSpan={2}
           colSpan={{ base: 12, md: 6, lg: 3 }}
+          onClick={() => handleStatusChange("Booked")}
         >
           <Card className="light-yellow" style={{ padding: "15px" }}>
             Booked
@@ -341,6 +361,7 @@ const Index = () => {
           cursor="pointer"
           rowSpan={2}
           colSpan={{ base: 12, md: 6, lg: 3 }}
+          onClick={() => handleStatusChange("Sold")}
         >
           <Card className="light-blue" style={{ padding: "15px" }}>
             Sold
@@ -350,12 +371,28 @@ const Index = () => {
           cursor="pointer"
           rowSpan={2}
           colSpan={{ base: 12, md: 6, lg: 3 }}
+          onClick={() => handleStatusChange("Blocked")}
         >
           <Card className="light-red" style={{ padding: "15px" }}>
             Blocked
           </Card>
         </GridItem>
       </Grid>
+      <HStack spacing={4} mb={2}>
+        {(types || []).map((item) => (
+          <Tag
+            size="md"
+            p={2}
+            key={item}
+            borderRadius="full"
+            variant="solid"
+            colorScheme="gray"
+          >
+            <TagLabel>{item}</TagLabel>
+            <TagCloseButton onClick={() => handleRemoveTag(item)} />
+          </Tag>
+        ))}
+      </HStack>
 
       {isLoding ? (
         <Flex
@@ -470,32 +507,6 @@ const Index = () => {
                       )}
                     </MenuList>
                   </Menu>
-                  {/* <Flex>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      me={2}
-                      color={"green"}
-                      onClick={() => {
-                        setEdit(true);
-                        setSelectedId(item?._id);
-                      }}
-                    >
-                      <EditIcon />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      me={2}
-                      color={"red"}
-                      onClick={() => {
-                        setSelectedValues(item?._id)
-                        setDelete(true)
-                      }}
-                    >
-                      <DeleteIcon />
-                    </Button>
-                  </Flex> */}
                 </Flex>
               </Card>
             </GridItem>
@@ -553,27 +564,15 @@ const Index = () => {
         />
       )}
       <Card mt={3} p={2}>
-        {/* <Grid templateColumns="repeat(6, 1fr)" gap={1} style={{ display: 'block', margin: 'auto' }}>
-          <GridItem colSpan={{ base: 2 }} > */}
         <PaginationProperty
           currentPage={currentPage}
-          dataLength={data?.length}
+          setCurrentPage={setCurrentPage}
+          dataLength={listData?.length}
           nextPage={nextPage}
           previousPage={previousPage}
-          setpageOptions={setpageOptions}
-          pageCount={pageCount}
-          pageOptions={pageOptions}
-          gotoPage={gotoPage}
-          pageSize={pageSize}
-          setPageSize={setPageSize}
-          setGotoPage={setGotoPage}
-          setCurrentPage={setCurrentPage}
           rangeData={rangeData}
           setRangeData={setRangeData}
         />
-
-        {/* </GridItem>
-        </Grid> */}
       </Card>
     </div>
   );
