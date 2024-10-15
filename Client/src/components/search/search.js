@@ -23,7 +23,7 @@ const CustomSearchInput = ({ allData, setSearchbox, setDisplaySearchData, search
         setSearchbox(searchTerm ? searchTerm : '');
         setDisplaySearchData(e.target.value === "" ? false : true)
         onSearch(results);
-        setGetTagValues([]);
+        setGetTagValues && setGetTagValues([]);
 
         if (e.target.value === "" && setGopageValue) {
             setGopageValue(1);

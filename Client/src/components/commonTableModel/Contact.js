@@ -162,7 +162,7 @@ export default function ContactTable(props) {
                           </Text>
                         </Flex>
                       );
-                    } else if (cell?.column.Header === "title") {
+                    } else if (cell?.column.Header === "Full Name") {
                       data = (
                         <Text
                           me="10px"
@@ -198,14 +198,14 @@ export default function ContactTable(props) {
                           {cell?.value}
                         </Text>
                       );
-                    } else if (cell?.column.Header === "phone Number") {
+                    } else if (cell?.column.Header === "Phone Number") {
                       data = (
                         <Text fontSize="sm" fontWeight="700"
                           color={textColor}>
                           {cell?.value}
                         </Text>
                       );
-                    } else if (cell?.column.Header === "Email Address") {
+                    } else if (cell?.column.Header === "Email") {
                       data = (
                         <Text fontSize="sm" fontWeight="700"
                           color={textColor}>
