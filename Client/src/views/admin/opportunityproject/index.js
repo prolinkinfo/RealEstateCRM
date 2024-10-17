@@ -72,12 +72,13 @@ const Index = () => {
                 onClick={() => {
                   onOpen();
                   setUserAction("edit");
-                  setEditData(row?.values);
+                  setEditData(row?.original);
                   setSelectedId(row?.values?._id);
                 }}
               >
                 Edit
               </MenuItem>
+              
             )}
             {permission?.view && (
               <MenuItem
@@ -192,6 +193,7 @@ const Index = () => {
       setIsLoding(false);
     }
   };
+
 
   return (
     <div>
