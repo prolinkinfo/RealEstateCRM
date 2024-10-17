@@ -25,7 +25,7 @@ export default function Upload(props) {
           me='36px'
           minH={200}
           height={'100%'}
-          onFileSelect={props.onFileSelect}
+          onFileSelect={props?.onFileSelect}
           content={
             <Box>
               <Icon as={MdUpload} w='70px' h='70px' color={brandColor} />

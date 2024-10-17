@@ -34,13 +34,13 @@ const Calender = (props) => {
 
     const handleDateClick = (arg) => {
         setTaskModel(true)
-        setDate(arg.dateStr)
+        setDate(arg?.dateStr)
     }
 
     function handleEventClick(info) {
-        if (info.event.url) {
-            info.jsEvent.preventDefault();
-            window.open(info.event.url);
+        if (info?.event?.url) {
+            info?.jsEvent?.preventDefault();
+            window?.open(info?.event?.url);
         }
 
         if (info?.event?.groupId === "task") {

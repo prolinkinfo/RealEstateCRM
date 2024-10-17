@@ -114,7 +114,7 @@ const Index = () => {
                                     </GridItem>
                                     <GridItem colSpan={6} >
                                         <Switch
-                                            onChange={(e) => setFieldValue(`[${index}].isActive`, e.target.checked)}
+                                            onChange={(e) => setFieldValue(`[${index}].isActive`, e?.target?.checked)}
                                             isChecked={item?.isActive} />
                                     </GridItem>
                                 </>

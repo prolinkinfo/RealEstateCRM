@@ -24,7 +24,7 @@ const Index = () => {
 
     const fetchData = async () => {
         setIsLoding(true)
-        let result = await getApi(user.role === 'superAdmin' ? 'api/document' : `api/document?createBy=${user._id}`);
+        let result = await getApi(user?.role === 'superAdmin' ? 'api/document' : `api/document?createBy=${user?._id}`);
         setData(result?.data);
         setIsLoding(false)
     }
@@ -33,7 +33,7 @@ const Index = () => {
         folderName: '',
         files: '',
         filename: '',
-        createBy: user._id
+        createBy: user?._id
     };
 
     const formik = useFormik({
@@ -49,10 +49,10 @@ const Index = () => {
     const download = async (data) => {
         if (data) {
             let result = await getApi(`api/document/download/`, data)
-            if (result && result.status === 200) {
-                window.open(`${constant.baseUrl}api/document/download/${data}`)
+            if (result && result?.status === 200) {
+                window.open(`${constant?.baseUrl}api/document/download/${data}`)
                 toast.success('File Download successful')
-            } else if (result && result.response.status === 404) {
+            } else if (result && result?.response?.status === 404) {
                 toast.error('File Not Found')
             }
         }
@@ -60,7 +60,7 @@ const Index = () => {
     const deleteFile = async (data) => {
         if (data) {
             let result = await deleteApi(`api/document/delete/`, data)
-            if (result && result.status === 200) {
+            if (result && result?.status === 200) {
                 fetchData()
             }
         }
@@ -70,9 +70,9 @@ const Index = () => {
         try {
             setIsLoding(true)
             const formData = new FormData();
-            formData?.append('folderName', values.folderName);
-            formData?.append('createBy', values.createBy);
-            formData?.append('filename', values.filename);
+            formData?.append('folderName', values?.folderName);
+            formData?.append('createBy', values?.createBy);
+            formData?.append('filename', values?.filename);
 
             // Append files to the formData
             values.files.forEach((file) => {
@@ -80,7 +80,7 @@ const Index = () => {
             });
 
             let response = await postApi('api/document/add', formData);
-            if (response && response.status === 200) {
+            if (response && response?.status === 200) {
                 fetchData();
                 formik.resetForm();
             }
@@ -115,7 +115,7 @@ const Index = () => {
                                         -- No Document Found --
                                     </Text>
                                 ) : data?.map((item) => (
-                                    <FolderTreeView name={item.folderName} item={item}>
+                                    <FolderTreeView name={item?.folderName} item={item}>
                                         {item?.files?.map((file) => (
                                             <FolderTreeView download={download} setLinkDocument={setLinkDocument} deleteFile={deleteFile} data={file} name={file.fileName} isFile />
                                         ))}
@@ -135,15 +135,15 @@ const Index = () => {
                                 fontSize='sm'
                                 onChange={handleChange}
                                 onBlur={() => setTimeout(onClose, 200)}
-                                value={values.folderName}
+                                value={values?.folderName}
                                 name="folderName"
                                 placeholder='Enter Folder Name'
                                 fontWeight='500'
                                 borderColor={errors?.folderName && touched?.folderName ? "red.300" : null}
                             />
-                            {isOpen && values?.folderName && data?.filter((option) => option?.folderName?.toLowerCase()?.includes(values?.folderName.toLowerCase())).length > 0 && (
+                            {isOpen && values?.folderName && data?.filter((option) => option?.folderName?.toLowerCase()?.includes(values?.folderName?.toLowerCase()))?.length > 0 && (
                                 <List position={'relative'} border={'1px solid'} bg={'gray.100'} width={'100%'} borderRadius={'0px 0px 20px 20px'} lineHeight={1} >
-                                    {data?.filter((option) => option?.folderName?.toLowerCase()?.includes(values?.folderName.toLowerCase())).map((option, index) => (
+                                    {data?.filter((option) => option?.folderName?.toLowerCase()?.includes(values?.folderName?.toLowerCase()))?.map((option, index) => (
                                         <ListItem p={3} borderBottom={'2px solid #efefef'} sx={{ '&:last-child': { borderBottom: 'none' } }} key={option?._id} cursor={'pointer'}
                                             onClick={() => {
                                                 setFieldValue('folderName', option?.folderName)
@@ -154,7 +154,7 @@ const Index = () => {
                                     ))}
                                 </List>
                             )}
-                            <Text mb='10px' color={'red'}> {errors.folderName && touched.folderName && errors.folderName}</Text>
+                            <Text mb='10px' color={'red'}> {errors?.folderName && touched?.folderName && errors?.folderName}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -164,15 +164,15 @@ const Index = () => {
                                 fontSize='sm'
                                 onChange={handleChange}
                                 onBlur={() => setTimeout(onClose, 200)}
-                                value={values.filename}
+                                value={values?.filename}
                                 name="filename"
                                 placeholder='Enter File Name'
                                 fontWeight='500'
                                 borderColor={errors?.filename && touched?.filename ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.filename && touched.filename && errors.filename}</Text>
+                            <Text mb='10px' color={'red'}> {errors?.filename && touched?.filename && errors?.filename}</Text>
                         </GridItem>
-                        <Upload count={values.files.length} onFileSelect={(file) => setFieldValue('files', file)} />
+                        <Upload count={values?.files?.length} onFileSelect={(file) => setFieldValue('files', file)} />
                         <Button size="sm" disabled={isLoding ? true : false} onClick={handleSubmit} variant='brand' fontWeight='500'>
                             {isLoding ? <Spinner /> : 'Publish now'}
                         </Button>

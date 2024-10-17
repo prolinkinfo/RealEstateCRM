@@ -149,7 +149,7 @@ const Index = () => {
     try {
       setIsLoding(true);
       let response = await deleteManyApi("api/task/deleteMany", ids);
-      if (response.status === 200) {
+      if (response?.status === 200) {
         setSelectedValues([]);
         setDeleteMany(false);
         setAction((pre) => !pre);
@@ -162,7 +162,7 @@ const Index = () => {
   };
 
   useEffect(() => {
-    if (window.location.pathname === "/opportunityproject") {
+    if (window?.location?.pathname === "/opportunityproject") {
       fetchData();
     }
   }, [action]);
@@ -182,7 +182,7 @@ const Index = () => {
         `api/opportunityproject/deleteMany`,
         selectedValues
       );
-      if (response.status === 200) {
+      if (response?.status === 200) {
         setSelectedValues([]);
         setDeleteMany(false);
         setAction((pre) => !pre);

@@ -233,30 +233,30 @@ function OpportunityprojectImport() {
         >
           {fieldsInCrm?.map((item, index) => (
             <>
-              <GridItem colSpan={{ base: 6 }} key={item.id} mt="10px">
-                {item.Header}
+              <GridItem colSpan={{ base: 6 }} key={item?.id} mt="10px">
+                {item?.Header}
               </GridItem>
               <GridItem colSpan={{ base: 4 }}>
                 <Select
                   variant="flushed"
                   fontWeight="500"
                   isSearchable
-                  value={values[item.accessor]}
-                  name={item.accessor}
+                  value={values[item?.accessor]}
+                  name={item?.accessor}
                   onChange={handleChange}
                 >
                   <option value="">
                     {" "}
                     {filterContact
-                      ? filterContact.find(
+                      ? filterContact?.find(
                           (data) =>
-                            (item.Header === data || item.accessor === data) &&
+                            (item?.Header === data || item?.accessor === data) &&
                             data
                         )
-                        ? filterContact.find(
+                        ? filterContact?.find(
                             (data) =>
-                              (item.Header === data ||
-                                item.accessor === data) &&
+                              (item?.Header === data ||
+                                item?.accessor === data) &&
                               data
                           )
                         : "Select Field In File"

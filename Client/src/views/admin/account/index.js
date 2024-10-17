@@ -105,7 +105,7 @@ const Index = (props) => {
             Header: 'Account Name', accessor: 'name', cell: (cell) => (
                 <div className="selectOpt">
                     <Text
-                        onClick={() => handleViewOpen(cell?.row?.original._id)}
+                        onClick={() => handleViewOpen(cell?.row?.original?._id)}
                         me="10px"
                         sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
                         color='brand.600'
