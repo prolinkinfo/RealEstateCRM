@@ -60,9 +60,7 @@ const Index = () => {
   // search 
   const [searchbox, setSearchbox] = useState("");
   const [searchData, setSearchData] = useState([]);
-  const [gopageTagValue, setGetTagValues] = useState([]);
   const [displaySearchData, setDisplaySearchData] = useState(false);
-  console.log("gopageTagValue--::", gopageTagValue)
 
   //pagination
   const [currentPage, setCurrentPage] = useState(0);
@@ -460,7 +458,7 @@ const Index = () => {
                       </Heading>
                     </Tooltip>
                   </Flex>
-                  <Menu isLazy>
+                  <Menu isLazy placement="top">
                     <MenuButton>
                       <CiMenuKebab />
                     </MenuButton>

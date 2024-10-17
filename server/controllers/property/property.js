@@ -10,7 +10,6 @@ const Email = require("../../model/schema/email");
 const index = async (req, res) => {
   const query = req.query;
   query.deleted = false;
-  // let result = await Property.find(query)
   let allData = await Property.find(query)
     .populate({
       path: "createBy",
@@ -25,14 +24,129 @@ const index = async (req, res) => {
 const add = async (req, res) => {
   try {
     req.body.createdDate = new Date();
-    const user = new Property(req.body);
-    await user.save();
-    res.status(200).json(user);
+    const property = new Property(req.body);
+    await property.save();
+    res.status(200).json(property);
   } catch (err) {
     console.error("Failed to create Property:", err);
     res.status(400).json({ error: "Failed to create Property" });
   }
 };
+
+
+const buildApartmentData = (floorCount, unitData) => {
+  let apartmentData = [];
+
+  for (let i = 1; i <= floorCount; i++) {
+    let floorUnits = unitData?.map((item, index) => ({
+      flateName: i * 100 + (index + 1),
+      status: "",
+      unitType: item?._id,
+    }));
+
+    apartmentData.push({
+      floorNumber: i,
+      flats: floorUnits,
+    });
+  }
+
+  return apartmentData;
+};
+
+const addApartmentData = (oldUnits, newUnitTypeId) => {
+  let newFloors = oldUnits?.map((item, i) => ({
+    ...item,
+    flats: [
+      ...item.flats,
+      {
+        flateName: (i + 1) * 100 + (item?.flats?.length + 1),
+        status: "",
+        unitType: newUnitTypeId
+      }
+    ]
+  }))
+
+  return newFloors;
+};
+
+const addUnits = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { units, type } = req.body;
+
+    let result;
+
+    if (type === "A") {
+      let newUnit = units
+
+      const property = await Property.findById(id).lean();;
+      newUnit.order = (property?.unitType?.length || 0) + 1;
+      newUnit._id = new mongoose.Types.ObjectId();
+
+      result = await Property.updateOne(
+        { _id: id },
+        { $push: { unitType: newUnit } }
+      );
+
+      const updatedProperty = await Property.findById(id).lean();
+
+      if (updatedProperty?.units && updatedProperty?.units?.length > 0) {
+        const newUnits = addApartmentData(updatedProperty?.units, newUnit?._id)
+        await Property.updateOne(
+          { _id: id },
+          { $set: { units: newUnits } }
+        );
+
+      } else {
+        const flates = buildApartmentData(updatedProperty?.Floor, updatedProperty?.unitType);
+        result = await Property.updateOne(
+          { _id: id },
+          { $set: { units: flates } }
+        );
+      }
+
+    } else if (type === "E") {
+      result = await Property.updateOne(
+        { _id: id },
+        { $set: { unitType: units } }
+      );
+    }
+
+    res.status(200).json(result);
+  } catch (err) {
+    console.error("Failed to create Property:", err);
+    res.status(400).json({ error: "Failed to create Property" });
+  }
+};
+
+const changeUnitStatus = async (req, res) => {
+  try {
+    const { id } = req?.params;
+    const { floor, unit } = req?.body;
+
+    const property = await Property?.findById(id)?.lean();
+    if (!property) return res?.status(404)?.json({ error: "Property not found" });
+
+    const selectedFloor = property?.units?.find(item => item?._id?.toString() === floor?._id?.toString());
+    if (!selectedFloor) return res?.status(404)?.json({ error: "Floor not found" });
+
+    const flatIndex = selectedFloor?.flats?.findIndex(item => item?._id?.toString() === unit?._id?.toString());
+    if (flatIndex === -1) return res?.status(404)?.json({ error: "Flat not found" });
+
+    selectedFloor.flats[flatIndex] = unit;
+
+    const result = await Property.updateOne(
+      { _id: id, 'units._id': floor?._id },
+      { $set: { 'units.$.flats': selectedFloor?.flats } }
+    );
+
+    res?.status(200)?.json(result);
+  } catch (err) {
+    console?.error("Failed to create Property:", err);
+    res?.status(400)?.json({ error: "Failed to create Property" });
+  }
+};
+
 
 const addMany = async (req, res) => {
   try {
@@ -225,8 +339,8 @@ const view = async (req, res) => {
     },
   ]);
 
-  let filteredContacts = result.filter((contact) =>
-    contact.interestProperty.includes(id)
+  let filteredContacts = result?.filter((contact) =>
+    contact.interestProperty?.includes(id)
   );
 
   if (!property) return res.status(404).json({ message: "no Data Found." });
@@ -321,8 +435,7 @@ const propertyPhoto = async (req, res) => {
       img: `${url}/api/property/property-photos/${file.filename}`,
       createOn: new Date(),
     }));
-    // Update the "photos" field for the existing document
-    // await Property.updateOne({ _id: id }, { $set: { propertyPhotos: file } });
+
     await Property.updateOne(
       { _id: id },
       { $push: { propertyPhotos: { $each: file } } }
@@ -506,6 +619,8 @@ const PropertyDocuments = async (req, res) => {
 module.exports = {
   index,
   add,
+  addUnits,
+  changeUnitStatus,
   addMany,
   view,
   edit,

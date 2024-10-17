@@ -2,7 +2,7 @@ import {
   AddIcon,
   ChevronDownIcon,
   DeleteIcon,
-  EditIcon,
+  EditIcon
 } from "@chakra-ui/icons";
 import {
   Box,
@@ -30,47 +30,50 @@ import {
   TabPanels,
   Tabs,
   Text,
+  Tooltip,
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import Card from "components/card/Card";
+import CommonDeleteModel from "components/commonDeleteModel";
+import DataNotFound from "components/notFoundData";
+import CommonCheckTable from "components/reactTable/checktable";
 import { HSeparator } from "components/separator/Separator";
 import Spinner from "components/spinner/Spinner";
-import { useEffect, useState } from "react";
-import { IoIosArrowBack } from "react-icons/io";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { getApi } from "services/api";
-import Add from "./Add";
-import Edit from "./Edit";
-import PropertyPhoto from "./components/propertyPhoto";
-import { HasAccess } from "../../../redux/accessUtils";
-import DataNotFound from "components/notFoundData";
-import xlsx from "../../../assets/img/fileImage/xlsx.png";
-import jpg from "../../../assets/img/fileImage/jpg.png";
-import png from "../../../assets/img/fileImage/png.png";
-import pdf from "../../../assets/img/fileImage/pdf.png";
-import xls from "../../../assets/img/fileImage/xls.png";
-import csv from "../../../assets/img/fileImage/csv.png";
-import file from "../../../assets/img/fileImage/file.png";
-import CustomView from "utils/customView";
-import CommonCheckTable from "components/reactTable/checktable";
-import CommonDeleteModel from "components/commonDeleteModel";
-import { deleteApi } from "services/api";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchPropertyCustomFiled } from "../../../redux/slices/propertyCustomFiledSlice";
-import { fetchContactCustomFiled } from "../../../redux/slices/contactCustomFiledSlice";
-import { fetchPropertyData } from "../../../redux/slices/propertySlice";
-import { FaFilePdf } from "react-icons/fa";
 import html2pdf from "html2pdf.js";
 import moment from "moment";
+import { useEffect, useState } from "react";
+import { CiMenuKebab } from "react-icons/ci";
+import { FaFilePdf, FaHome } from "react-icons/fa";
+import { IoIosArrowBack } from "react-icons/io";
+import { MdMoveDown, MdMoveUp } from "react-icons/md";
+import { TbStatusChange } from "react-icons/tb";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { deleteApi, getApi, postApi } from "services/api";
+import CustomView from "utils/customView";
+import csv from "../../../assets/img/fileImage/csv.png";
+import file from "../../../assets/img/fileImage/file.png";
+import jpg from "../../../assets/img/fileImage/jpg.png";
+import pdf from "../../../assets/img/fileImage/pdf.png";
+import png from "../../../assets/img/fileImage/png.png";
+import xls from "../../../assets/img/fileImage/xls.png";
+import xlsx from "../../../assets/img/fileImage/xlsx.png";
+import { HasAccess } from "../../../redux/accessUtils";
+import { fetchContactCustomFiled } from "../../../redux/slices/contactCustomFiledSlice";
+import { fetchPropertyCustomFiled } from "../../../redux/slices/propertyCustomFiledSlice";
+import Add from "./Add";
+import AddEditUnits from "./components/AddEditUnits";
+import PropertyPhoto from "./components/propertyPhoto";
+import Edit from "./Edit";
 
 const View = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const param = useParams();
-  const buttonbg = useColorModeValue("gray.200", "white");
   const textColor = useColorModeValue("gray.500", "white");
 
   const [data, setData] = useState();
+  const [unitTypeList, setUnitTypeList] = useState([]);
   const [filteredContacts, setFilteredContacts] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [edit, setEdit] = useState(false);
@@ -81,86 +84,141 @@ const View = () => {
   const [virtualToursorVideos, setVirtualToursorVideos] = useState(false);
   const [floorPlans, setFloorPlans] = useState(false);
   const [propertyDocuments, setPropertyDocuments] = useState(false);
-  const [selectedValues, setSelectedValues] = useState();
   const [showEmail, setShowEmail] = useState(false);
-  const [allData, setAllData] = useState([])
+  const [allData, setAllData] = useState([]);
   const [showCall, setShowCall] = useState(false);
   const [addPhoneCall, setAddPhoneCall] = useState(false);
+  const [addUnit, setAddUnit] = useState(false);
   const [isLoding, setIsLoding] = useState(false);
   const [displayPropertyPhoto, setDisplayPropertyPhoto] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
   const [addEmailHistory, setAddEmailHistory] = useState(false);
+  const [apartmentStructure, setApartmentStructure] = useState([]);
+
   const dispatch = useDispatch();
   const propertyData = useSelector(
     (state) => state?.propertyCustomFiled?.data?.data
   );
 
-  
+  const buildApartmentData = (floorCount, unitData) => {
+    let apartmentData = [];
+
+    for (let i = 1; i <= floorCount; i++) {
+      let floorUnits = unitData?.map((item, index) => ({
+        flateName: i * 100 + (index + 1),
+        status: "book",
+        unitType: item?._id,
+      }));
+
+      apartmentData.push({
+        floorNumber: i,
+        flats: floorUnits,
+      });
+    }
+
+    return apartmentData;
+  };
+
+  // let apartmentStructure = buildApartmentData(
+  //   data?.Floor || 0,
+  //   data?.unitType || []
+  // );
+
   const [contactData, setContactData] = useState([]);
   const [columns, setColumns] = useState([]);
   const [type, setType] = useState(false);
   const navigate = useNavigate();
 
   const size = "lg";
-  const [
-    taskPermission,
-    PropertiesAccess,
-    meetingPermission,
-    taskAccess,
-    meetingAccess,
-  ] = HasAccess([
-    "Leads",
-    "Tasks",
-    "Meetings",
-    "Properties",
-    "Calls",
-    "Emails",
-    "Tasks",
-    "Meetings",
-  ]);
+
+  const handleSetUnitTypeList = (data) => {
+    const unitType = data?.sort((a, b) => a?.order - b?.order);
+    setUnitTypeList(unitType);
+  };
+
+  const handleUpdatePosition = async (values) => {
+    try {
+      setIsLoding(true);
+      let response = await postApi(`api/property/add-units/${param?.id}`, {
+        units: values,
+        type: "E",
+      });
+      if (response && response.status === 200) {
+        setAction((pre) => !pre);
+      } else {
+        // toast.error(response.response.data?.message)
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoding(false);
+    }
+  };
+
+  const handleChangeOrder = (row, type) => {
+    const newRows = [...unitTypeList];
+    const currentIndex = row?.index;
+
+    if (currentIndex === undefined) return;
+
+    let targetIndex = type === "up" ? currentIndex - 1 : currentIndex + 1;
+
+    if (targetIndex < 0 || targetIndex >= newRows.length) return;
+
+    [newRows[currentIndex].order, newRows[targetIndex].order] = [
+      newRows[targetIndex].order,
+      newRows[currentIndex].order,
+    ];
+
+    setUnitTypeList(newRows);
+
+    handleUpdatePosition(newRows);
+    // handleSetUnitTypeList(newRows);
+  };
+
   const columnsDataColumns = [
-    { Header: "sender", accessor: "senderName", },
+    { Header: "sender", accessor: "senderName" },
     {
-        Header: "recipient", accessor: "createByName", cell: (cell) => (
-            <Link to={`/Email/${cell?.row?.original?._id}`}>
-                <Text
-                    me="10px"
-                    sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                    color='brand.600'
-                    fontSize="sm"
-                    fontWeight="700"
-                >
-                    {cell?.value || ' - '}
-                </Text></Link>)
+      Header: "recipient",
+      accessor: "createByName",
+      cell: (cell) => (
+        <Link to={`/Email/${cell?.row?.original?._id}`}>
+          <Text
+            me="10px"
+            sx={{
+              "&:hover": { color: "blue.500", textDecoration: "underline" },
+            }}
+            color="brand.600"
+            fontSize="sm"
+            fontWeight="700"
+          >
+            {cell?.value || " - "}
+          </Text>
+        </Link>
+      ),
     },
     {
-        Header: "time stamp", accessor: "timestamp",
-        cell: (cell) => (
-            <div className="selectOpt">
-                <Text color={textColor} fontSize='sm' fontWeight='700'>
-                    {moment(cell?.value).fromNow()}
-                </Text>
-            </div>
-        )
+      Header: "time stamp",
+      accessor: "timestamp",
+      cell: (cell) => (
+        <div className="selectOpt">
+          <Text color={textColor} fontSize="sm" fontWeight="700">
+            {moment(cell?.value).fromNow()}
+          </Text>
+        </div>
+      ),
     },
     {
-        Header: "Created", accessor: "createBy",
-        cell: (cell) => (
-            <div className="selectOpt">
-                <Text color={textColor} fontSize='sm' fontWeight='700'>
-                    {moment(cell?.row?.values.timestamp).format('h:mma (DD/MM)')}
-                </Text>
-            </div>
-        )
+      Header: "Created",
+      accessor: "createBy",
+      cell: (cell) => (
+        <div className="selectOpt">
+          <Text color={textColor} fontSize="sm" fontWeight="700">
+            {moment(cell?.row?.values.timestamp).format("h:mma (DD/MM)")}
+          </Text>
+        </div>
+      ),
     },
-];
-  const contactColumns = [
-    { Header: "Title", accessor: "title" },
-    { Header: "First Name", accessor: "firstName" },
-    { Header: "Last Name", accessor: "lastName" },
-    { Header: "Phone Number", accessor: "phoneNumber" },
-    { Header: "Email Address", accessor: "email" },
-    { Header: "Contact Method", accessor: "preferredContactMethod" },
   ];
 
   const fetchCustomDataFields = async () => {
@@ -179,43 +237,99 @@ const View = () => {
   };
 
   const callColumns = [
-    { Header: "sender", accessor: "senderName", },
+    { Header: "sender", accessor: "senderName" },
     {
-        Header: "recipient", accessor: "createByName", cell: (cell) => (
-            <Link to={`/phone-call/${cell?.row?.original?._id}`}>
-                <Text
-                    me="10px"
-                    sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                    color='brand.600'
-                    fontSize="sm"
-                    fontWeight="700"
-                >
-                    {cell?.value || ' - '}
-                </Text></Link>)
+      Header: "recipient",
+      accessor: "createByName",
+      cell: (cell) => (
+        <Link to={`/phone-call/${cell?.row?.original?._id}`}>
+          <Text
+            me="10px"
+            sx={{
+              "&:hover": { color: "blue.500", textDecoration: "underline" },
+            }}
+            color="brand.600"
+            fontSize="sm"
+            fontWeight="700"
+          >
+            {cell?.value || " - "}
+          </Text>
+        </Link>
+      ),
     },
     {
-        Header: "time stamp", accessor: "timestamp",
-        cell: (cell) => (
-            <div className="selectOpt">
-                <Text color={textColor} fontSize='sm' fontWeight='700'>
-                    {moment(cell?.value).fromNow()}
-                </Text>
-            </div>
-        )
+      Header: "time stamp",
+      accessor: "timestamp",
+      cell: (cell) => (
+        <div className="selectOpt">
+          <Text color={textColor} fontSize="sm" fontWeight="700">
+            {moment(cell?.value).fromNow()}
+          </Text>
+        </div>
+      ),
     },
     {
-        Header: "Created", accessor: "createBy",
-        cell: (cell) => (
-            <div className="selectOpt">
-                <Text color={textColor} fontSize='sm' fontWeight='700'>
-                    {moment(cell?.row?.values.timestamp).format('h:mma (DD/MM)')}
-                </Text>
-            </div>
-        )
+      Header: "Created",
+      accessor: "createBy",
+      cell: (cell) => (
+        <div className="selectOpt">
+          <Text color={textColor} fontSize="sm" fontWeight="700">
+            {moment(cell?.row?.values.timestamp).format("h:mma (DD/MM)")}
+          </Text>
+        </div>
+      ),
     },
-];
+  ];
 
-  const [selectedColumns, setSelectedColumns] = useState([...columns]);
+  const unitsColumns = [
+    { Header: "#", accessor: "_id", isSortable: false, width: 10 },
+    { Header: "Name", accessor: "name" },
+    { Header: "Sqm", accessor: "sqm" },
+    { Header: "Price", accessor: "price" },
+    {
+      Header: "Action",
+      cell: ({ row }) => (
+        <Flex className="selectOpt">
+          <Tooltip
+            hasArrow
+            label={"Move Up"}
+            bg="gray.200"
+            color="gray"
+            textTransform={"capitalize"}
+            fontSize="sm"
+          >
+            <Button
+              size="sm"
+              disabled={row?.index === 0}
+              onClick={() => handleChangeOrder(row, "up")}
+              variant="outline"
+              me={2}
+            >
+              <MdMoveUp />
+            </Button>
+          </Tooltip>
+          <Tooltip
+            hasArrow
+            label={"Move Down"}
+            bg="gray.200"
+            color="gray"
+            textTransform={"capitalize"}
+            fontSize="sm"
+          >
+            <Button
+              size="sm"
+              disabled={row?.index === unitTypeList?.length - 1}
+              onClick={() => handleChangeOrder(row, "down")}
+              variant="outline"
+              me={2}
+            >
+              <MdMoveDown />
+            </Button>
+          </Tooltip>
+        </Flex>
+      ),
+    },
+  ];
 
   const handleTabChange = (index) => {
     setSelectedTab(index);
@@ -224,18 +338,19 @@ const View = () => {
   const fetchData = async (i) => {
     setIsLoding(true);
     let response = await getApi("api/property/view/", param.id);
-    setData(response.data.property);
+    setData(response?.data?.property);
+    handleSetUnitTypeList(response?.data?.property?.unitType);
     setFilteredContacts(response?.data?.filteredContacts);
     setIsLoding(false);
     setSelectedTab(i);
   };
+
   const generatePDF = () => {
     const element = document.getElementById("reports");
     if (element) {
       element.style.display = "block";
       element.style.width = "100%"; // Adjust width for mobile
       element.style.height = "auto";
-      // setTimeout(() => {
       html2pdf()
         .from(element)
         .set({
@@ -249,11 +364,11 @@ const View = () => {
         .then(() => {
           element.style.display = "";
         });
-      // }, 500);
     } else {
       console.error("Element with ID 'reports' not found.");
     }
   };
+
   const handleDeleteProperties = async (id) => {
     try {
       setIsLoding(true);
@@ -270,18 +385,89 @@ const View = () => {
     }
   };
 
+  const [permission, emailAccess, callAccess] = HasAccess([
+    "Properties",
+    "Emails",
+    "Calls",
+  ]);
+
+  const changeStatus = (status) => {
+    switch (status) {
+      case "Available":
+        return "light-green";
+      case "Booked":
+        return "light-yellow";
+      case "Sold":
+        return "light-blue";
+      case "Blocked":
+        return "light-red";
+      default:
+        return "";
+    }
+  };
+
+  const handleStatusChange = async (floor, selectedItem, newStatus) => {
+    try {
+      const paylaod = {
+        unit: {
+          ...selectedItem,
+          status: newStatus,
+        },
+        floor,
+      };
+      setIsLoding(true);
+      let response = await postApi(
+        `api/property/change-unit-status/${param?.id}`,
+        paylaod
+      );
+      if (response && response.status === 200) {
+        setAction((pre) => !pre);
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoding(false);
+    }
+  };
+
+  const getOrdinalSuffix = (number) => {
+    const remainder10 = number % 10;
+    const remainder100 = number % 100;
+
+    if (remainder10 === 1 && remainder100 !== 11) return "st Floor";
+    if (remainder10 === 2 && remainder100 !== 12) return "nd Floor";
+    if (remainder10 === 3 && remainder100 !== 13) return "rd Floor";
+    return "th Floor";
+  };
+
   useEffect(() => {
     dispatch(fetchPropertyCustomFiled());
     fetchData();
     fetchCustomDataFields();
-  }, []);
+  }, [action]);
 
-  const [permission, contactAccess, emailAccess, callAccess] = HasAccess([
-    "Properties",
-    "Contacts",
-    "Emails",
-    "Calls",
-  ]);
+  useEffect(() => {
+    data &&
+      setApartmentStructure(
+        buildApartmentData(data?.Floor || 0, data?.unitType || [])
+      );
+  }, [data]);
+
+  const statusCount = data?.units?.reduce((acc, floor) => {
+    floor?.flats?.forEach((flat) => {
+      const status =
+        flat?.status?.charAt(0)?.toUpperCase() +
+        flat?.status?.slice(1)?.toLowerCase();
+
+      if (acc[status]) {
+        acc[status]++;
+      } else {
+        acc[status] = 1;
+      }
+    });
+    return acc;
+  }, {});
+  console.log("statusCount--::", statusCount);
 
   return (
     <>
@@ -290,6 +476,12 @@ const View = () => {
         size={size}
         onClose={onClose}
         propertyData={propertyData?.[0]}
+      />
+      <AddEditUnits
+        isOpen={addUnit}
+        size={size}
+        setAction={setAction}
+        onClose={() => setAddUnit(false)}
       />
       <Edit
         isOpen={edit}
@@ -340,7 +532,10 @@ const View = () => {
                   }}
                 >
                   <Tab>Information</Tab>
-                  {(emailAccess?.view || callAccess?.view) && <Tab> Communication</Tab>}
+                  {(emailAccess?.view || callAccess?.view) && (
+                    <Tab> Communication</Tab>
+                  )}
+                  <Tab>Units</Tab>
                   <Tab>Gallery</Tab>
                 </TabList>
               </GridItem>
@@ -354,18 +549,18 @@ const View = () => {
                       permission?.create ||
                       permission?.update ||
                       permission?.delete) && (
-                      <MenuButton
-                        variant="outline"
-                        size="sm"
-                        colorScheme="blackAlpha"
-                        va
-                        mr={2.5}
-                        as={Button}
-                        rightIcon={<ChevronDownIcon />}
-                      >
-                        Actions
-                      </MenuButton>
-                    )}
+                        <MenuButton
+                          variant="outline"
+                          size="sm"
+                          colorScheme="blackAlpha"
+                          va
+                          mr={2.5}
+                          as={Button}
+                          rightIcon={<ChevronDownIcon />}
+                        >
+                          Actions
+                        </MenuButton>
+                      )}
                     <MenuDivider />
                     <MenuList minWidth={2}>
                       {(user.role === "superAdmin" || permission?.create) && (
@@ -467,64 +662,247 @@ const View = () => {
                   </GridItem>
                 )}
               </TabPanel>
+
               {/* communication */}
               <TabPanel pt={4} p={0}>
-              <GridItem colSpan={{ base: 4 }} >
-              <Grid overflow={'hidden'} templateColumns={{ base: "1fr" }} gap={4}>
-              <Grid templateColumns={'repeat(12, 1fr)'} gap={4}>
-              
-                                            {emailAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
-                                                <Card >
-                                                    <CommonCheckTable
-                                                        title={"Email"}
-                                                        isLoding={isLoding}
-                                                        columnData={columnsDataColumns ?? []}
-                                                        // dataColumn={columnsDataColumns ?? []}
-                                                        allData={showEmail ? allData.Email : allData?.Email?.length > 0 ? [allData.Email[0]] : []}
-                                                        tableData={showEmail ? allData.Email : allData?.Email?.length > 0 ? [allData.Email[0]] : []}
-                                                        AdvanceSearch={false}
-                                                        dataLength={allData?.Email?.length}
-                                                        tableCustomFields={[]}
-                                                        checkBox={false}
-                                                        deleteMany={true}
-                                                        ManageGrid={false}
-                                                        onOpen={() => setAddEmailHistory(true)}
-                                                        access={emailAccess}
-                                                    />
-                                                    {allData?.Email?.length > 1 &&
-                                                        <div style={{ display: "flex", justifyContent: "end" }}>
-                                                            <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showEmail ? setShowEmail(false) : setShowEmail(true)}>{showEmail ? "Show less" : "Show more"}</Button>
-                                                        </div>}
-                                                </Card>
-                                            </GridItem>} 
-                                            {callAccess?.view && <GridItem colSpan={{ base: 12, md: 6 }}>
-                                                <Card>
-                                                    <CommonCheckTable
-                                                        title={"Call"}
-                                                        isLoding={isLoding}
-                                                        columnData={callColumns ?? []}
-                                                        // dataColumn={callColumns ?? []}
-                                                        allData={showCall ? allData?.phoneCall : allData?.phoneCall?.length > 0 ? [allData?.phoneCall[0]] : []}
-                                                        tableData={showCall ? allData?.phoneCall : allData?.phoneCall?.length > 0 ? [allData?.phoneCall[0]] : []}
-                                                        AdvanceSearch={false}
-                                                        dataLength={allData?.phoneCall?.length}
-                                                        tableCustomFields={[]}
-                                                        checkBox={false}
-                                                        deleteMany={true}
-                                                        ManageGrid={false}
-                                                        onOpen={() => setAddPhoneCall(true)}
-                                                        access={callAccess}
-                                                    />
-                                                    {allData?.phoneCall?.length > 1 && <div style={{ display: "flex", justifyContent: "end" }}>
-                                                        <Button size="sm" colorScheme="brand" variant="outline" display="flex" justifyContant="end" onClick={() => showCall ? setShowCall(false) : setShowCall(true)}>{showCall ? "Show less" : "Show more"}</Button>
-                                                    </div>}
-                                                </Card>
-                                            </GridItem>}                   
-                              
-              </Grid>
-              </Grid>
-              </GridItem>
+                <GridItem colSpan={{ base: 4 }}>
+                  <Grid
+                    overflow={"hidden"}
+                    templateColumns={{ base: "1fr" }}
+                    gap={4}
+                  >
+                    <Grid templateColumns={"repeat(12, 1fr)"} gap={4}>
+                      {emailAccess?.view && (
+                        <GridItem colSpan={{ base: 12, md: 6 }}>
+                          <Card>
+                            <CommonCheckTable
+                              title={"Email"}
+                              isLoding={isLoding}
+                              columnData={columnsDataColumns ?? []}
+                              allData={[]}
+                              tableData={[]}
+                              AdvanceSearch={false}
+                              tableCustomFields={[]}
+                              checkBox={false}
+                              deleteMany={true}
+                              ManageGrid={false}
+                              onOpen={() => { }}
+                              access={emailAccess}
+                            />
+                          </Card>
+                        </GridItem>
+                      )}
+                      {callAccess?.view && (
+                        <GridItem colSpan={{ base: 12, md: 6 }}>
+                          <Card>
+                            <CommonCheckTable
+                              title={"Call"}
+                              isLoding={isLoding}
+                              columnData={callColumns ?? []}
+                              allData={[]}
+                              tableData={[]}
+                              AdvanceSearch={false}
+                              tableCustomFields={[]}
+                              checkBox={false}
+                              deleteMany={true}
+                              ManageGrid={false}
+                              onOpen={() => { }}
+                              access={callAccess}
+                            />
+                          </Card>
+                        </GridItem>
+                      )}
+                    </Grid>
+                  </Grid>
+                </GridItem>
               </TabPanel>
+
+              <TabPanel pt={4} p={0}>
+                <CommonCheckTable
+                  title={"Units"}
+                  isLoding={isLoding}
+                  columnData={unitsColumns ?? []}
+                  allData={unitTypeList ?? []}
+                  tableData={unitTypeList ?? []}
+                  AdvanceSearch={false}
+                  tableCustomFields={[]}
+                  checkBox={false}
+                  deleteMany={true}
+                  ManageGrid={false}
+                  onOpen={() => setAddUnit(true)}
+                  access={permission}
+                />
+
+                {/* Status Card */}
+                <Grid templateColumns="repeat(12, 1fr)" gap={3} mt={3}>
+                  <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
+                    <Card className="light-green" style={{ padding: "15px" }}>
+                      Available <span>{statusCount?.Available || "0"}</span>
+                    </Card>
+                  </GridItem>
+                  <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
+                    <Card className="light-yellow" style={{ padding: "15px" }}>
+                      Booked <span>{statusCount?.Booked || "0"}</span>
+                    </Card>
+                  </GridItem>
+                  <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
+                    <Card className="light-blue" style={{ padding: "15px" }}>
+                      Sold <span>{statusCount?.Sold || "0"}</span>
+                    </Card>
+                  </GridItem>
+                  <GridItem rowSpan={2} colSpan={{ base: 12, md: 6, lg: 3 }}>
+                    <Card className="light-red" style={{ padding: "15px" }}>
+                      Blocked <span>{statusCount?.Blocked || "0"}</span>
+                    </Card>
+                  </GridItem>
+                </Grid>
+
+                {(data?.units || [])?.map((floor) =>
+                  Array.isArray(floor?.flats) && floor?.flats?.length > 0 ? (
+                    <Grid templateColumns="repeat(12, 1fr)" gap={3} mt={3}>
+                      <GridItem rowSpan={2} colSpan={{ base: 12 }}>
+                        {`${floor?.floorNumber}${getOrdinalSuffix(
+                          floor?.floorNumber
+                        )}`}
+                      </GridItem>
+                      {floor?.flats?.map((item, i) => (
+                        <GridItem
+                          rowSpan={2}
+                          colSpan={{ base: 12, md: 6, lg: 3 }}
+                          key={i}
+                        >
+                          <Card>
+                            <Flex
+                              alignItems={"center"}
+                              justifyContent={"space-between"}
+                            >
+                              <Flex>
+                                <Flex
+                                  className={changeStatus(item?.status)}
+                                  style={{
+                                    height: "30px",
+                                    width: "30px",
+                                    borderRadius: "50%",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    marginRight: "10PX",
+                                  }}
+                                >
+                                  <FaHome />
+                                </Flex>
+                                <Tooltip
+                                  hasArrow
+                                  label={item?.flateName?.toString() || "-"}
+                                  bg="gray.200"
+                                  color="gray"
+                                  textTransform="capitalize"
+                                  fontSize="sm"
+                                >
+                                  {item?.flateName?.toString() || "-"}
+                                </Tooltip>
+                              </Flex>
+                              <Flex alignItems="center">
+                                {/* <Button
+                                  size="sm"
+                                  variant="outline"
+                                  me={2}
+                                  color={"gray"}
+                                >
+                                  <ViewIcon />
+                                </Button> */}
+                                <Menu isLazy placement="top">
+                                  <MenuButton>
+                                    <CiMenuKebab />
+                                  </MenuButton>
+                                  <MenuList
+                                    minW={"fit-content"}
+                                    transform={"translate(1520px, 173px);"}
+                                  >
+                                    <MenuItem
+                                      py={2.5}
+                                      icon={
+                                        <TbStatusChange fontSize={15} mb={1} />
+                                      }
+                                      onClick={() => {
+                                        handleStatusChange(
+                                          floor,
+                                          item,
+                                          "Available"
+                                        );
+                                      }}
+                                    >
+                                      Available
+                                    </MenuItem>
+                                    <MenuItem
+                                      py={2.5}
+                                      icon={
+                                        <TbStatusChange fontSize={15} mb={1} />
+                                      }
+                                      onClick={() => {
+                                        handleStatusChange(
+                                          floor,
+                                          item,
+                                          "Booked"
+                                        );
+                                      }}
+                                    >
+                                      Booked
+                                    </MenuItem>
+                                    <MenuItem
+                                      py={2.5}
+                                      icon={
+                                        <TbStatusChange fontSize={15} mb={1} />
+                                      }
+                                      onClick={() => {
+                                        handleStatusChange(floor, item, "Sold");
+                                      }}
+                                    >
+                                      Sold
+                                    </MenuItem>
+                                    {user?.role === "superAdmin" && (
+                                      <MenuItem
+                                        py={2.5}
+                                        icon={
+                                          <TbStatusChange
+                                            fontSize={15}
+                                            mb={1}
+                                          />
+                                        }
+                                        onClick={() => {
+                                          handleStatusChange(
+                                            floor,
+                                            item,
+                                            "Blocked"
+                                          );
+                                        }}
+                                      >
+                                        Blocked
+                                      </MenuItem>
+                                    )}
+                                  </MenuList>
+                                </Menu>
+                              </Flex>
+                            </Flex>
+                          </Card>
+                        </GridItem>
+                      ))}
+                    </Grid>
+                  ) : (
+                    <Card mt="5">
+                      <Text
+                        textAlign={"center"}
+                        width="100%"
+                        color={"gray.500"}
+                        fontSize="sm"
+                        fontWeight="700"
+                      >
+                        <DataNotFound />
+                      </Text>
+                    </Card>
+                  )
+                )}
+              </TabPanel>
+
               <TabPanel pt={4} p={0}>
                 <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                   <GridItem colSpan={{ base: 12, md: 6 }}>
@@ -886,38 +1264,38 @@ const View = () => {
           {(permission?.delete ||
             permission?.update ||
             user?.role === "superAdmin") && (
-            <Card mt={3}>
-              <Grid templateColumns="repeat(6, 1fr)" gap={1}>
-                <GridItem colStart={6}>
-                  <Flex justifyContent={"right"}>
-                    {permission?.update && (
-                      <Button
-                        onClick={() => setEdit(true)}
-                        size="sm"
-                        leftIcon={<EditIcon />}
-                        mr={2.5}
-                        variant="outline"
-                        colorScheme="green"
-                      >
-                        Edit
-                      </Button>
-                    )}
-                    {permission?.delete && (
-                      <Button
-                        style={{ background: "red.800" }}
-                        size="sm"
-                        onClick={() => setDelete(true)}
-                        leftIcon={<DeleteIcon />}
-                        colorScheme="red"
-                      >
-                        Delete
-                      </Button>
-                    )}
-                  </Flex>
-                </GridItem>
-              </Grid>
-            </Card>
-          )}
+              <Card mt={3}>
+                <Grid templateColumns="repeat(6, 1fr)" gap={1}>
+                  <GridItem colStart={6}>
+                    <Flex justifyContent={"right"}>
+                      {permission?.update && (
+                        <Button
+                          onClick={() => setEdit(true)}
+                          size="sm"
+                          leftIcon={<EditIcon />}
+                          mr={2.5}
+                          variant="outline"
+                          colorScheme="green"
+                        >
+                          Edit
+                        </Button>
+                      )}
+                      {permission?.delete && (
+                        <Button
+                          style={{ background: "red.800" }}
+                          size="sm"
+                          onClick={() => setDelete(true)}
+                          leftIcon={<DeleteIcon />}
+                          colorScheme="red"
+                        >
+                          Delete
+                        </Button>
+                      )}
+                    </Flex>
+                  </GridItem>
+                </Grid>
+              </Card>
+            )}
         </>
       )}
 
@@ -932,31 +1310,31 @@ const View = () => {
             {type === "photo"
               ? "Property All Photos"
               : type === "video"
-              ? "Virtual Tours or Videos"
-              : type === "floor"
-              ? "Floors plans"
-              : ""}
+                ? "Virtual Tours or Videos"
+                : type === "floor"
+                  ? "Floors plans"
+                  : ""}
           </ModalHeader>
           <ModalCloseButton onClick={() => setDisplayPropertyPhoto(false)} />
           <ModalBody overflowY={"auto"} height={"700px"}>
             <div style={{ columns: 3 }}>
               {type === "photo"
                 ? data &&
-                  data?.propertyPhotos?.length > 0 &&
-                  data?.propertyPhotos?.map((item) => (
-                    <a href={item.img} target="_blank">
-                      {" "}
-                      <Image
-                        width={"100%"}
-                        m={1}
-                        mb={4}
-                        src={item.img}
-                        alt="Your Image"
-                      />
-                    </a>
-                  ))
+                data?.propertyPhotos?.length > 0 &&
+                data?.propertyPhotos?.map((item) => (
+                  <a href={item.img} target="_blank">
+                    {" "}
+                    <Image
+                      width={"100%"}
+                      m={1}
+                      mb={4}
+                      src={item.img}
+                      alt="Your Image"
+                    />
+                  </a>
+                ))
                 : type === "video"
-                ? data &&
+                  ? data &&
                   data?.virtualToursOrVideos?.length > 0 &&
                   data?.virtualToursOrVideos?.map((item) => (
                     <a href={item.img} target="_blank">
@@ -972,21 +1350,21 @@ const View = () => {
                       </video>
                     </a>
                   ))
-                : type === "floor"
-                ? data &&
-                  data?.floorPlans?.length > 0 &&
-                  data?.floorPlans?.map((item) => (
-                    <a href={item.img} target="_blank">
-                      <Image
-                        width={"100%"}
-                        m={1}
-                        mb={4}
-                        src={item.img}
-                        alt="Your Image"
-                      />
-                    </a>
-                  ))
-                : ""}
+                  : type === "floor"
+                    ? data &&
+                    data?.floorPlans?.length > 0 &&
+                    data?.floorPlans?.map((item) => (
+                      <a href={item.img} target="_blank">
+                        <Image
+                          width={"100%"}
+                          m={1}
+                          mb={4}
+                          src={item.img}
+                          alt="Your Image"
+                        />
+                      </a>
+                    ))
+                    : ""}
             </div>
           </ModalBody>
           <ModalFooter>
@@ -1002,7 +1380,6 @@ const View = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      {/* <AddEmailHistory lead={true} leadEmail={allData?.lead?.leadEmail} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} /> */}
       {/* property document modal */}
       <Modal onClose={() => setShowProperty(false)} isOpen={showProperty}>
         <ModalOverlay />
@@ -1076,7 +1453,6 @@ const View = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-
     </>
   );
 };
