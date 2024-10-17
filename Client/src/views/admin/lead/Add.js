@@ -13,11 +13,11 @@ const Add = (props) => {
 
 
     const initialFieldValues = Object.fromEntries(
-        (props?.leadData?.fields || []).map(field => [field?.name, ''])
+        (props?.leadData?.fields || [])?.map(field => [field?.name, ''])
     );
     const initialValues = {
         ...initialFieldValues,
-        createBy: JSON.parse(localStorage.getItem('user'))._id
+        createBy: JSON.parse(localStorage.getItem('user'))?._id
     };
 
     const formik = useFormik({
@@ -34,7 +34,7 @@ const Add = (props) => {
         try {
             setIsLoding(true)
             let response = await postApi('api/form/add', { ...values, moduleId: props?.leadData?._id })
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 props.onClose();
                 formik.resetForm();
                 props.setAction((pre) => !pre)
@@ -54,15 +54,15 @@ const Add = (props) => {
 
     return (
         <div>
-            <Drawer isOpen={props.isOpen} size={props.size}>
+            <Drawer isOpen={props?.isOpen} size={props?.size}>
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerHeader alignItems={"center"} justifyContent='space-between' display='flex'  >
                         Add Lead
-                        <IconButton onClick={props.onClose} icon={<CloseIcon />} />
+                        <IconButton onClick={props?.onClose} icon={<CloseIcon />} />
                     </DrawerHeader>
                     <DrawerBody>
-                        <CustomForm moduleData={props.leadData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
+                        <CustomForm moduleData={props?.leadData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
                     </DrawerBody>
                     <DrawerFooter>
                         <Button sx={{ textTransform: "capitalize" }} size="sm" disabled={isLoding ? true : false} variant="brand" type="submit" onClick={handleSubmit}                        >

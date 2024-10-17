@@ -230,10 +230,10 @@ const View = () => {
     const download = async (data) => {
         if (data) {
             let result = await getApi(`api/document/download/`, data)
-            if (result && result.status === 200) {
-                window.open(`${constant.baseUrl}api/document/download/${data}`)
+            if (result && result?.status === 200) {
+                window.open(`${constant?.baseUrl}api/document/download/${data}`)
                 toast.success('file Download successful')
-            } else if (result && result.response.status === 404) {
+            } else if (result && result?.response?.status === 404) {
                 toast.error('file Not Found')
             }
         }
@@ -241,9 +241,9 @@ const View = () => {
 
     const fetchData = async (i) => {
         setIsLoding(true)
-        let response = await getApi('api/lead/view/', param.id)
-        setData(response.data?.lead);
-        setAllData(response.data);
+        let response = await getApi('api/lead/view/', param?.id)
+        setData(response?.data?.lead);
+        setAllData(response?.data);
         setIsLoding(false)
         setSelectedTab(i)
     }
@@ -252,7 +252,7 @@ const View = () => {
         try {
             setIsLoding(true)
             let response = await deleteApi('api/lead/delete/', id)
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 setDelete(false)
                 setAction((pre) => !pre)
                 navigate('/lead')
@@ -311,15 +311,15 @@ const View = () => {
                             <GridItem colSpan={{ base: 12, md: 6 }} mt={{ sm: "3px", md: "5px" }} >
                                 <Flex justifyContent={"right"}>
                                     <Menu>
-                                        {(user.role === 'superAdmin' || (permission?.create || permission?.update || permission?.delete)) && <MenuButton size="sm" variant="outline" colorScheme='blackAlpha' mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
+                                        {(user?.role === 'superAdmin' || (permission?.create || permission?.update || permission?.delete)) && <MenuButton size="sm" variant="outline" colorScheme='blackAlpha' mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
                                             Actions
                                         </MenuButton>}
                                         <MenuDivider />
                                         <MenuList minWidth={2}>
-                                            {(user.role === 'superAdmin' || permission?.create) && <MenuItem color={'blue'} onClick={() => onOpen()} alignItems={"start"} icon={<AddIcon />}  >Add</MenuItem>}
-                                            {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => setEdit(true)} alignItems={"start"} icon={<EditIcon />}>Edit</MenuItem>}
+                                            {(user?.role === 'superAdmin' || permission?.create) && <MenuItem color={'blue'} onClick={() => onOpen()} alignItems={"start"} icon={<AddIcon />}  >Add</MenuItem>}
+                                            {(user?.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => setEdit(true)} alignItems={"start"} icon={<EditIcon />}>Edit</MenuItem>}
                                             <MenuItem onClick={generatePDF} alignItems={"start"} icon={<FaFilePdf />} display={"flex"} style={{ alignItems: "center" }}>Print as PDF</MenuItem >
-                                            {(user.role === 'superAdmin' || permission?.delete) && <>
+                                            {(user?.role === 'superAdmin' || permission?.delete) && <>
                                                 <MenuDivider />
                                                 <MenuItem alignItems={"start"} color={'red'} onClick={() => setDelete(true)} icon={<DeleteIcon />}>Delete</MenuItem>
                                             </>}
@@ -349,8 +349,8 @@ const View = () => {
                                                         isLoding={isLoding}
                                                         columnData={columnsDataColumns ?? []}
                                                         // dataColumn={columnsDataColumns ?? []}
-                                                        allData={showEmail ? allData.Email : allData?.Email?.length > 0 ? [allData.Email[0]] : []}
-                                                        tableData={showEmail ? allData.Email   : allData?.Email?.length > 0 ? [allData.Email[0]] : []}
+                                                        allData={showEmail ? allData?.Email : allData?.Email?.length > 0 ? [allData?.Email[0]] : []}
+                                                        tableData={showEmail ? allData?.Email   : allData?.Email?.length > 0 ? [allData?.Email[0]] : []}
                                                         AdvanceSearch={false}
                                                         dataLength={allData?.Email?.length}
                                                         tableCustomFields={[]}
@@ -453,9 +453,9 @@ const View = () => {
                                         <HSeparator />
                                         <VStack mt={4} alignItems="flex-start">
                                             {allData?.Document?.length > 0 ? allData?.Document?.map((item) => (
-                                                <FolderTreeView name={item.folderName} item={item}>
+                                                <FolderTreeView name={item?.folderName} item={item}>
                                                     {item?.files?.map((file) => (
-                                                        <FolderTreeView download={download} data={file} name={file.fileName} isFile from="lead" />
+                                                        <FolderTreeView download={download} data={file} name={file?.fileName} isFile from="lead" />
                                                     ))}
                                                 </FolderTreeView>
                                             )) : <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
@@ -468,12 +468,12 @@ const View = () => {
 
                         </TabPanels>
                     </Tabs>
-                    {(user.role === 'superAdmin' || (permission?.update || permission?.delete)) && <Card mt={3}>
+                    {(user?.role === 'superAdmin' || (permission?.update || permission?.delete)) && <Card mt={3}>
                         <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                             <GridItem colStart={6} >
                                 <Flex justifyContent={"right"}>
-                                    {(user.role === 'superAdmin' || permission?.update) ? <Button size='sm' onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button> : ''}
-                                    {(user.role === 'superAdmin' || permission?.delete) ? <Button size='sm' style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button> : ''}
+                                    {(user?.role === 'superAdmin' || permission?.update) ? <Button size='sm' onClick={() => setEdit(true)} leftIcon={<EditIcon />} mr={2.5} variant="outline" colorScheme="green">Edit</Button> : ''}
+                                    {(user?.role === 'superAdmin' || permission?.delete) ? <Button size='sm' style={{ background: 'red.800' }} onClick={() => setDelete(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button> : ''}
                                 </Flex>
                             </GridItem>
                         </Grid>
@@ -484,11 +484,11 @@ const View = () => {
             {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} leadData={leadData?.[0]} setAction={setAction} />}
             <Edit isOpen={edit} size={size} onClose={setEdit} leadData={leadData?.[0]} setAction={setAction} moduleId={leadData?.[0]?._id} data={data} />
             <AddMeeting fetchData={fetchData} isOpen={addMeeting} leadContect={splitValue?.[0]} onClose={setMeeting} from="contact" id={param.id} setAction={setAction} view={true} />
-            <AddEdit isOpen={taskModel} fetchData={fetchData} leadContect={splitValue?.[0]} onClose={setTaskModel} id={param.id} userAction={'add'} view={true} />
-            <AddPhoneCall viewData={allData} fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} setAction={setAction} data={data?.contact} id={param.id} lead={true} LData={data} />
-            <AddEmailHistory lead={true} leadEmail={allData?.lead?.leadEmail} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} />
-            <AddDocumentModal addDocument={addDocument} setAddDocument={setAddDocument} linkId={param.id} from="lead" setAction={setAction} fetchData={fetchData} />
-            <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Lead' handleDeleteData={handleDeleteLead} ids={param.id} />
+            <AddEdit isOpen={taskModel} fetchData={fetchData} leadContect={splitValue?.[0]} onClose={setTaskModel} id={param?.id} userAction={'add'} view={true} />
+            <AddPhoneCall viewData={allData} fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} setAction={setAction} data={data?.contact} id={param?.id} lead={true} LData={data} />
+            <AddEmailHistory lead={true} leadEmail={allData?.lead?.leadEmail} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param?.id} />
+            <AddDocumentModal addDocument={addDocument} setAddDocument={setAddDocument} linkId={param?.id} from="lead" setAction={setAction} fetchData={fetchData} />
+            <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Lead' handleDeleteData={handleDeleteLead} ids={param?.id} />
         </>
     );
 };

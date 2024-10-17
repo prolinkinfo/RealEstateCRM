@@ -100,7 +100,7 @@ const View = () => {
             cell: (cell) => (
                 <div className="selectOpt">
                     <Text color={textColor} fontSize='sm' fontWeight='700'>
-                        {moment(cell?.value).fromNow()}
+                        {moment(cell?.value)?.fromNow()}
                     </Text>
                 </div>
             )
@@ -110,7 +110,7 @@ const View = () => {
             cell: (cell) => (
                 <div className="selectOpt">
                     <Text color={textColor} fontSize='sm' fontWeight='700'>
-                        {moment(cell?.row?.values.timestamp).format('h:mma (DD/MM)')}
+                        {moment(cell?.row?.values?.timestamp)?.format('h:mma (DD/MM)')}
                     </Text>
                 </div>
             )
@@ -137,7 +137,7 @@ const View = () => {
             cell: (cell) => (
                 <div className="selectOpt">
                     <Text color={textColor} fontSize='sm' fontWeight='700'>
-                        {moment(cell?.value).fromNow()}
+                        {moment(cell?.value)?.fromNow()}
                     </Text>
                 </div>
             )
@@ -147,7 +147,7 @@ const View = () => {
             cell: (cell) => (
                 <div className="selectOpt">
                     <Text color={textColor} fontSize='sm' fontWeight='700'>
-                        {moment(cell?.row?.values.timestamp).format('h:mma (DD/MM)')}
+                        {moment(cell?.row?.values?.timestamp)?.format('h:mma (DD/MM)')}
                     </Text>
                 </div>
             )
@@ -195,7 +195,7 @@ const View = () => {
             cell: (cell) => (
                 <div className="selectOpt">
                     <Text color={textColor} fontSize='sm' fontWeight='700'>
-                        {moment(cell?.value).fromNow()}
+                        {moment(cell?.value)?.fromNow()}
                     </Text>
                 </div>
             )
@@ -233,10 +233,10 @@ const View = () => {
         {
             Header: 'Account', accessor: 'account',
             cell: (cell) => (
-                (user.role === 'superAdmin' || accountAccess?.view) ?
+                (user?.role === 'superAdmin' || accountAccess?.view) ?
                     <div className="selectOpt">
                         <Text
-                            onClick={() => navigate(cell?.row?.original.account !== null && `/accountView/${cell?.row?.original.account}`)}
+                            onClick={() => navigate(cell?.row?.original?.account !== null && `/accountView/${cell?.row?.original?.account}`)}
                             me="10px"
                             sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
                             color='brand.600'
@@ -273,7 +273,7 @@ const View = () => {
             Header: 'Title', accessor: 'title', cell: (cell) => (
                 <div className="selectOpt">
                     <Text
-                        onClick={() => navigate(`/invoicesView/${cell?.row?.original._id}`)}
+                        onClick={() => navigate(`/invoicesView/${cell?.row?.original?._id}`)}
                         me="10px"
                         sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
                         color='brand.600'
@@ -300,10 +300,10 @@ const View = () => {
         {
             Header: 'Account', accessor: 'account',
             cell: (cell) => (
-                (user.role === 'superAdmin' || accountAccess?.view) ?
+                (user?.role === 'superAdmin' || accountAccess?.view) ?
                     <div className="selectOpt">
                         <Text
-                            onClick={() => navigate(cell?.row?.original.account !== null && `/accountView/${cell?.row?.original.account}`)}
+                            onClick={() => navigate(cell?.row?.original?.account !== null && `/accountView/${cell?.row?.original?.account}`)}
                             me="10px"
                             sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
                             color='brand.600'
@@ -388,10 +388,10 @@ const View = () => {
     const download = async (data) => {
         if (data) {
             let result = await getApi(`api/document/download/`, data)
-            if (result && result.status === 200) {
-                window.open(`${constant.baseUrl}api/document/download/${data}`)
+            if (result && result?.status === 200) {
+                window?.open(`${constant?.baseUrl}api/document/download/${data}`)
                 toast.success('file Download successful')
-            } else if (result && result.response.status === 404) {
+            } else if (result && result?.response?.status === 404) {
                 toast.error('file Not Found')
             }
         }
@@ -399,8 +399,8 @@ const View = () => {
 
     const fetchData = async (i) => {
         setIsLoding(true)
-        let response = await getApi('api/contact/view/', param.id)
-        setData(response.data?.contact);
+        let response = await getApi('api/contact/view/', param?.id)
+        setData(response?.data?.contact);
         setAllData(response?.data);
         setIsLoding(false)
         setSelectedTab(i)
@@ -410,7 +410,7 @@ const View = () => {
         try {
             setIsLoding(true)
             let response = await deleteApi('api/contact/delete/', id)
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 setDelete(false)
                 setAction((pre) => !pre)
                 navigate('/contacts')
@@ -475,16 +475,16 @@ const View = () => {
                             <GridItem colSpan={{ base: 12, md: 6 }} mt={{ sm: "3px", md: "5px" }} >
                                 <Flex justifyContent={"right"}>
                                     <Menu>
-                                        {(user.role === 'superAdmin' || permission?.create || permission?.update || permission?.delete) && <MenuButton size="sm" variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
+                                        {(user?.role === 'superAdmin' || permission?.create || permission?.update || permission?.delete) && <MenuButton size="sm" variant="outline" colorScheme='blackAlpha' va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
                                             Actions
                                         </MenuButton>}
                                         <MenuDivider />
                                         <MenuList minWidth={2} zIndex={"99"}>
-                                            {(user.role === 'superAdmin' || permission?.create) && <MenuItem alignItems={'start'} onClick={() => onOpen()} color={'blue'} icon={<AddIcon />}>Add</MenuItem>}
-                                            {(user.role === 'superAdmin' || permission?.update) && <MenuItem alignItems={'start'} onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
+                                            {(user?.role === 'superAdmin' || permission?.create) && <MenuItem alignItems={'start'} onClick={() => onOpen()} color={'blue'} icon={<AddIcon />}>Add</MenuItem>}
+                                            {(user?.role === 'superAdmin' || permission?.update) && <MenuItem alignItems={'start'} onClick={() => setEdit(true)} icon={<EditIcon />}>Edit</MenuItem>}
                                             <MenuItem onClick={generatePDF} alignItems={"start"} icon={<FaFilePdf />} display={"flex"} style={{ alignItems: "center" }}>Print as PDF</MenuItem >
 
-                                            {(user.role === 'superAdmin' || permission?.delete) &&
+                                            {(user?.role === 'superAdmin' || permission?.delete) &&
                                                 <>
                                                     <MenuDivider />
                                                     <MenuItem alignItems={'start'} onClick={() => setDelete(true)} color={'red'} icon={<DeleteIcon />}>Delete</MenuItem>
@@ -552,8 +552,8 @@ const View = () => {
                                                         isLoding={isLoding}
                                                         columnData={columnsDataColumns ?? []}
                                                         // dataColumn={columnsDataColumns ?? []}
-                                                        allData={showEmail ? allData.EmailHistory : allData?.EmailHistory?.length > 0 ? [allData.EmailHistory[0]] : []}
-                                                        tableData={showEmail ? allData.EmailHistory : allData?.EmailHistory?.length > 0 ? [allData.EmailHistory[0]] : []}
+                                                        allData={showEmail ? allData?.EmailHistory : allData?.EmailHistory?.length > 0 ? [allData?.EmailHistory[0]] : []}
+                                                        tableData={showEmail ? allData?.EmailHistory : allData?.EmailHistory?.length > 0 ? [allData?.EmailHistory[0]] : []}
                                                         AdvanceSearch={false}
                                                         dataLength={allData?.EmailHistory?.length}
                                                         tableCustomFields={[]}
@@ -702,9 +702,9 @@ const View = () => {
                                         <HSeparator />
                                         <VStack mt={4} alignItems="flex-start">
                                             {allData?.Document?.length > 0 ? allData?.Document?.map((item) => (
-                                                <FolderTreeView name={item.folderName} item={item}>
+                                                <FolderTreeView name={item?.folderName} item={item}>
                                                     {item?.files?.map((file) => (
-                                                        <FolderTreeView download={download} data={file} name={file.fileName} isFile from="contact" />
+                                                        <FolderTreeView download={download} data={file} name={file?.fileName} isFile from="contact" />
                                                     ))}
                                                 </FolderTreeView>
                                             )) :
@@ -740,13 +740,13 @@ const View = () => {
                                                         <Text fontSize="sm" mt={2} fontWeight="bold" color={'blackAlpha.900'}> LinkedIn Profile  </Text>
                                                     </GridItem>}
                                                     {data?.facebookProfile && <GridItem textAlign={'center'} colSpan={{ base: 2, md: 1 }}>
-                                                        <a target='_blank' href={`https://www.facebook.com/${data.facebookProfile}`}>
+                                                        <a target='_blank' href={`https://www.facebook.com/${data?.facebookProfile}`}>
                                                             <IconButton colorScheme="brand" aria-label="Call Fred" borderRadius="10px" size="md" icon={<FaFacebook />} />
                                                         </a>
                                                         <Text fontSize="sm" mt={2} fontWeight="bold" color={'blackAlpha.900'}> Facebook Profile  </Text>
                                                     </GridItem>}
                                                     {data?.linkedInProfile && <GridItem textAlign={'center'} colSpan={{ base: 2, md: 1 }}>
-                                                        <a target='_blank' href={`https://www.facebook.com/${data.facebookProfile}`}>
+                                                        <a target='_blank' href={`https://www.facebook.com/${data?.facebookProfile}`}>
                                                             <IconButton colorScheme="brand" aria-label="Call Fred" borderRadius="10px" size="md" icon={<BsTwitter />} />
                                                         </a>
                                                         <Text fontSize="sm" mt={2} px={2} fontWeight="bold" color={'blackAlpha.900'}>Twitter Handle </Text>
@@ -777,7 +777,7 @@ const View = () => {
 
 
 
-                    {(user.role === 'superAdmin' || (permission?.update || permission?.delete)) && <Card mt={3}>
+                    {(user?.role === 'superAdmin' || (permission?.update || permission?.delete)) && <Card mt={3}>
                         <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                             <GridItem colStart={6} >
                                 <Flex justifyContent={"right"}>
@@ -790,15 +790,15 @@ const View = () => {
                 </>}
             {isOpen && <Add isOpen={isOpen} size={size} onClose={onClose} contactData={contactData?.[0]} />}
             <Edit isOpen={edit} contactData={contactData?.[0]} size={size} onClose={setEdit} setAction={setAction} moduleId={contactData?.[0]?._id} data={data} />
-            <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Contact' handleDeleteData={handleDeleteContact} ids={param.id} />
-            <AddEmailHistory lead="false" contactEmail={allData?.contact?.email} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param.id} />
-            <AddDocumentModal addDocument={addDocument} setAddDocument={setAddDocument} linkId={param.id} from="contact" setAction={setAction} fetchData={fetchData} />
-            <AddMeeting fetchData={fetchData} leadContect={splitValue[0]} isOpen={addMeeting} onClose={setMeeting} from="contact" id={param.id} setAction={setAction} view={true} />
-            <AddEdit isOpen={taskModel} fetchData={fetchData} leadContect={splitValue[0]} onClose={setTaskModel} id={param.id} userAction={'add'} view={true} />
-            <AddPhoneCall viewData={allData} fetchData={fetchData} setAction={setAction} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param.id} cData={data} />
-            <AddEditQuotes isOpen={addQuotes} size={"lg"} onClose={() => setAddQuotes(false)} setAction={setAction} type={"add"} contactId={param.id} />
-            <AddEditInvoice isOpen={addInvoice} size={"lg"} onClose={() => setAddInvoice(false)} setAction={setAction} type={"add"} contactId={param.id} />
-            <PropertyModel fetchData={fetchData} isOpen={propertyModel} onClose={setPropertyModel} id={param.id} interestProperty={data?.interestProperty} />
+            <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='Contact' handleDeleteData={handleDeleteContact} ids={param?.id} />
+            <AddEmailHistory lead="false" contactEmail={allData?.contact?.email} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param?.id} />
+            <AddDocumentModal addDocument={addDocument} setAddDocument={setAddDocument} linkId={param?.id} from="contact" setAction={setAction} fetchData={fetchData} />
+            <AddMeeting fetchData={fetchData} leadContect={splitValue[0]} isOpen={addMeeting} onClose={setMeeting} from="contact" id={param?.id} setAction={setAction} view={true} />
+            <AddEdit isOpen={taskModel} fetchData={fetchData} leadContect={splitValue[0]} onClose={setTaskModel} id={param?.id} userAction={'add'} view={true} />
+            <AddPhoneCall viewData={allData} fetchData={fetchData} setAction={setAction} isOpen={addPhoneCall} onClose={setAddPhoneCall} data={data?.contact} id={param?.id} cData={data} />
+            <AddEditQuotes isOpen={addQuotes} size={"lg"} onClose={() => setAddQuotes(false)} setAction={setAction} type={"add"} contactId={param?.id} />
+            <AddEditInvoice isOpen={addInvoice} size={"lg"} onClose={() => setAddInvoice(false)} setAction={setAction} type={"add"} contactId={param?.id} />
+            <PropertyModel fetchData={fetchData} isOpen={propertyModel} onClose={setPropertyModel} id={param?.id} interestProperty={data?.interestProperty} />
 
         </>
     );

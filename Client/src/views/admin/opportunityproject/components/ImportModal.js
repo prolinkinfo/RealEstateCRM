@@ -147,11 +147,11 @@ const ImportModal = (props) => {
     try {
       setIsLoding(true);
       resetForm();
-      if (values.opportunityproject) {
+      if (values?.opportunityproject) {
         onClose();
         navigate("/opportunityProjectImport", {
           state: {
-            fileData: values.opportunityproject,
+            fileData: values?.opportunityproject,
             customFields: customFields,
           },
         });
@@ -174,7 +174,7 @@ const ImportModal = (props) => {
             <Grid templateColumns="repeat(12, 1fr)" gap={3}>
               <GridItem colSpan={{ base: 12 }}>
                 <CommonFileUpload
-                  count={values.opportunityproject.length}
+                  count={values?.opportunityproject?.length}
                   onFileSelect={(file) =>
                     setFieldValue("opportunityproject", file)
                   }
@@ -182,7 +182,7 @@ const ImportModal = (props) => {
                 />
                 <Text mb="10px" color={"red"}>
                   {" "}
-                  {errors.opportunityproject && touched.opportunityproject && (
+                  {errors?.opportunityproject && touched?.opportunityproject && (
                     <>Please Select {text}</>
                   )}
                 </Text>

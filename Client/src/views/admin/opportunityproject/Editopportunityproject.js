@@ -106,7 +106,10 @@ const Editopportunityproject = (props) => {
     } else {
       try {
         let result;
-        if (values?.category === "Contact" && assignToContactData?.length <= 0) {
+        if (
+          values?.category === "Contact" &&
+          assignToContactData?.length <= 0
+        ) {
           result = await getApi(
             user?.role === "superAdmin"
               ? "api/contact/"
@@ -173,7 +176,6 @@ const Editopportunityproject = (props) => {
           `api/opportunityproject/edit/${selectedId}`,
           values
         );
-
         if (response && response?.status === 200) {
           fetchData();
           let updatedUserData = userData; // Create a copy of userData
@@ -183,16 +185,14 @@ const Editopportunityproject = (props) => {
                 ...updatedUserData,
                 Name: values?.name,
                 Requirement: values?.requirement,
-                contact: values?.contact,
-                lead: values?.lead,
               };
             }
             const updatedDataString = JSON.stringify(updatedUserData);
             localStorage.setItem("user", updatedDataString);
           }
           onClose();
-          setUserAction("");
           setAction((pre) => !pre);
+          setUserAction("");
         } else {
           toast.error(response?.response?.data?.message);
         }
@@ -225,7 +225,7 @@ const Editopportunityproject = (props) => {
           <IconButton onClick={onClose} icon={<CloseIcon />} />
         </ModalHeader>
         <ModalBody>
-          {/* Contact Model  */}
+          {/* Contact Model*/}
           <ContactModel
             isOpen={contactModelOpen}
             data={assignToContactData}
@@ -335,7 +335,8 @@ const Editopportunityproject = (props) => {
                   setFieldValue("category", e);
                   setFieldValue("contact", null);
                   setFieldValue("lead", null);
-                }}
+                }
+              }
                 value={values?.category}
               >
                 <Stack direction="row">
@@ -356,7 +357,8 @@ const Editopportunityproject = (props) => {
               </Text>
             </GridItem>
             <GridItem colSpan={{ base: 12, md: 12 }}>
-              {values?.category === "Contact" ? (
+              {values?.category === "Contact" ?
+               (
                 <>
                   <GridItem colSpan={{ base: 12, md: 12 }}>
                     <FormLabel
@@ -410,7 +412,9 @@ const Editopportunityproject = (props) => {
                     </Text>
                   </GridItem>
                 </>
-              ) : values?.category === "Lead" ? (
+              )
+               : values?.category === "Lead" ?
+                (
                 <>
                   <GridItem colSpan={{ base: 12, md: 12 }}>
                     <FormLabel
@@ -459,9 +463,12 @@ const Editopportunityproject = (props) => {
                     </Text>
                   </GridItem>
                 </>
-              ) : (
+              ) 
+              : 
+              (
                 ""
-              )}
+              )
+              }
             </GridItem>
             <GridItem colSpan={{ base: 12 }}>
               <Flex alignItems={"end"} justifyContent={"space-between"}>

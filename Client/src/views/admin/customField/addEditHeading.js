@@ -51,11 +51,11 @@ const AddEditHeading = (props) => {
             }
 
             let response = await postApi('api/custom-field/add-heading', addDataPayload);
-            if (response.status === 200) {
-                props.onClose(false);
-                props.fetchData();
+            if (response?.status === 200) {
+                props?.onClose(false);
+                props?.fetchData();
             } else {
-                toast.error(response.response.data)
+                toast.error(response?.response?.data)
             }
         }
         catch {
@@ -72,9 +72,9 @@ const AddEditHeading = (props) => {
             }
 
             let response = await putApi(`api/custom-field/change-single-heading/${updateData?._id}`, editDataPayload);
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 handleClose();
-                props.fetchData();
+                props?.fetchData();
             }
         }
         catch {
@@ -100,13 +100,13 @@ const AddEditHeading = (props) => {
                                     <Input
                                         fontSize='sm'
                                         onChange={handleChange} onBlur={handleBlur}
-                                        value={values.heading}
+                                        value={values?.heading}
                                         name="heading"
                                         placeholder={`Enter Heading`}
                                         fontWeight='500'
-                                        borderColor={errors.heading && touched.heading ? "red.300" : null}
+                                        borderColor={errors?.heading && touched?.heading ? "red.300" : null}
                                     />
-                                    <Text mb='10px' color={'red'}> {errors.heading && touched.heading && errors.heading}</Text>
+                                    <Text mb='10px' color={'red'}> {errors?.heading && touched?.heading && errors?.heading}</Text>
                                 </GridItem>
                             </Grid>
                         </>

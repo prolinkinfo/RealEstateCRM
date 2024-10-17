@@ -37,9 +37,9 @@ export default function PaymentForm() {
                 mode: "cors",
                 body: JSON.stringify({
                     items: [
-                        { quantity: 1, price: values.amount, name: values.name, description: 'send to Prolink' },
+                        { quantity: 1, price: values?.amount, name: values?.name, description: 'send to Prolink' },
                     ],
-                    customer_email: values.email,
+                    customer_email: values?.email,
                 }),
             }
         )
@@ -72,13 +72,13 @@ export default function PaymentForm() {
                     fontSize='sm'
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.name}
+                    value={values?.name}
                     name="name"
                     placeholder="Enter name"
                     fontWeight='500'
                     borderColor={errors?.name && touched?.name ? "red.300" : null}
                 />
-                <Text mb='10px' color={'red'}> {errors.name && touched.name && errors.name}</Text>
+                <Text mb='10px' color={'red'}> {errors?.name && touched?.name && errors?.name}</Text>
             </GridItem>
             <GridItem sx={{ m: 1, width: '100%' }} >
                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -89,13 +89,13 @@ export default function PaymentForm() {
                     fontSize='sm'
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.email}
+                    value={values?.email}
                     name="email"
                     placeholder="Enter Email"
                     fontWeight='500'
                     borderColor={errors?.email && touched?.email ? "red.300" : null}
                 />
-                <Text mb='10px' color={'red'}> {errors.email && touched.email && errors.email}</Text>
+                <Text mb='10px' color={'red'}> {errors?.email && touched?.email && errors?.email}</Text>
             </GridItem>
             <GridItem sx={{ m: 1, width: '100%' }} >
                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -106,13 +106,13 @@ export default function PaymentForm() {
                     fontSize='sm'
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.amount}
+                    value={values?.amount}
                     placeholder="Enter Amount"
                     name="amount"
                     fontWeight='500'
                     borderColor={errors?.amount && touched?.amount ? "red.300" : null}
                 />
-                <Text mb='10px' color={'red'}> {errors.amount && touched.amount && errors.amount}</Text>
+                <Text mb='10px' color={'red'}> {errors?.amount && touched?.amount && errors?.amount}</Text>
             </GridItem>
             <Button onClick={handleSubmit} variant="brand" size="sm">Pay</Button>
         </>
