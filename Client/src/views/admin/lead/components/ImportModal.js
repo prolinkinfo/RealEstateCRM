@@ -28,9 +28,9 @@ const ImportModal = (props) => {
             setIsLoding(true)
             resetForm()
 
-            if (values.lead) {
+            if (values?.lead) {
                 onClose();
-                navigate('/leadImport', { state: { fileData: values.lead, customFields: customFields } });
+                navigate('/leadImport', { state: { fileData: values?.lead, customFields: customFields } });
             }
         } catch (e) {
             console.log(e);
@@ -49,8 +49,8 @@ const ImportModal = (props) => {
                 <ModalBody>
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12 }}>
-                            <CommonFileUpload count={values.lead.length} onFileSelect={(file) => setFieldValue('lead', file)} text={text} />
-                            <Text mb='10px' color={'red'}> {errors.lead && touched.lead && <>Please Select {text}</>}</Text>
+                            <CommonFileUpload count={values?.lead?.length} onFileSelect={(file) => setFieldValue('lead', file)} text={text} />
+                            <Text mb='10px' color={'red'}> {errors?.lead && touched?.lead && <>Please Select {text}</>}</Text>
                         </GridItem>
                     </Grid>
                 </ModalBody>

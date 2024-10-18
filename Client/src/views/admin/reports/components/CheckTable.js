@@ -67,8 +67,8 @@ export default function CheckTable(props) {
         state: { pageIndex, pageSize }
     } = tableInstance;
 
-    if (pageOptions.length < gopageValue) {
-        setGopageValue(pageOptions.length)
+    if (pageOptions?.length < gopageValue) {
+        setGopageValue(pageOptions?.length)
     }
 
 
@@ -86,10 +86,10 @@ export default function CheckTable(props) {
                     fontWeight="700"
                     lineHeight="100%"
                 >
-                    Reports ({data.length})
+                    Reports ({data?.length})
                 </Text>
                 {/* <Menu /> */}
-                {selectedValues.length > 0 && <DeleteIcon onClick={() => setDelete(true)} color={'red'} />}
+                {selectedValues?.length > 0 && <DeleteIcon onClick={() => setDelete(true)} color={'red'} />}
             </Flex>
             {/* Delete model */}
             <Delete isOpen={deleteModel} onClose={setDelete} setSelectedValues={setSelectedValues} url='api/contact/deleteMany' data={selectedValues} method='many' />
@@ -98,26 +98,26 @@ export default function CheckTable(props) {
                 <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
                     <Thead>
                         {headerGroups?.map((headerGroup, index) => (
-                            <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
+                            <Tr {...headerGroup?.getHeaderGroupProps()} key={index}>
                                 {headerGroup.headers?.map((column, index) => (
                                     <Th
-                                        {...column.getHeaderProps(column.isSortable !== false && column.getSortByToggleProps())}
+                                        {...column?.getHeaderProps(column?.isSortable !== false && column?.getSortByToggleProps())}
                                         pe="10px"
                                         key={index}
                                         borderColor={borderColor}
                                     >
                                         <Flex
                                             align="center"
-                                            justifyContent={column.center ? "center" : "start"}
+                                            justifyContent={column?.center ? "center" : "start"}
                                             fontSize={{ sm: "14px", lg: "16px" }}
                                             color="secondaryGray.900"
                                         >
                                             <span style={{ textTransform: "capitalize", marginRight: "8px" }}>
-                                                {column.render("Header")}
+                                                {column?.render("Header")}
                                             </span>
-                                            {column.isSortable !== false && (
+                                            {column?.isSortable !== false && (
                                                 <span>
-                                                    {column.isSorted ? (column.isSortedDesc ? <FaSortDown /> : <FaSortUp />) : <FaSort />}
+                                                    {column?.isSorted ? (column?.isSortedDesc ? <FaSortDown /> : <FaSortUp />) : <FaSort />}
                                                 </span>
                                             )}
                                         </Flex>
@@ -144,7 +144,7 @@ export default function CheckTable(props) {
                             </Tr>
                         ) : data?.length === 0 ? (
                             <Tr>
-                                <Td colSpan={columns.length}>
+                                <Td colSpan={columns?.length}>
                                     <Text
                                         textAlign={"center"}
                                         width="100%"
@@ -163,7 +163,7 @@ export default function CheckTable(props) {
                                     <Tr {...row?.getRowProps()} key={i}>
                                         {row?.cells?.map((cell, index) => {
                                             let data = "";
-                                            if (cell?.column.Header === "#") {
+                                            if (cell?.column?.Header === "#") {
                                                 data = (
                                                     <Flex align="center">
                                                         <Text color={textColor} fontSize="sm" fontWeight="700">
@@ -171,7 +171,7 @@ export default function CheckTable(props) {
                                                         </Text>
                                                     </Flex>
                                                 );
-                                            } else if (cell?.column.Header === "Name") {
+                                            } else if (cell?.column?.Header === "Name") {
                                                 data = (
                                                     <Text
                                                         me="10px"
@@ -182,7 +182,7 @@ export default function CheckTable(props) {
                                                         {cell?.value}
                                                     </Text>
                                                 );
-                                            } else if (cell?.column.Header === "Email Sent") {
+                                            } else if (cell?.column?.Header === "Email Sent") {
                                                 data = (
 
                                                     <Text
@@ -194,7 +194,7 @@ export default function CheckTable(props) {
                                                         {cell?.value}
                                                     </Text>
                                                 );
-                                            } else if (cell?.column.Header === "Text Sent") {
+                                            } else if (cell?.column?.Header === "Text Sent") {
                                                 data = (
                                                     <Text
                                                         me="10px"
@@ -206,7 +206,7 @@ export default function CheckTable(props) {
                                                     </Text>
                                                 );
                                             }
-                                            else if (cell?.column.Header === "Outbound Calls") {
+                                            else if (cell?.column?.Header === "Outbound Calls") {
                                                 data = (
                                                     <Text
                                                         me="10px"
@@ -218,7 +218,7 @@ export default function CheckTable(props) {
                                                     </Text>
                                                 );
                                             }
-                                            else if (cell?.column.Header === "Email Received") {
+                                            else if (cell?.column?.Header === "Email Received") {
                                                 data = (
                                                     <Text
                                                         me="10px"
@@ -230,7 +230,7 @@ export default function CheckTable(props) {
                                                     </Text>
                                                 );
                                             }
-                                            else if (cell?.column.Header === "Text Received") {
+                                            else if (cell?.column?.Header === "Text Received") {
                                                 data = (
                                                     <Text
                                                         me="10px"

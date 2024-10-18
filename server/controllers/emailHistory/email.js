@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 const add = async (req, res) => {
     try {
-        const { sender, recipient, subject, message, startDate, createByContact, createBy, createByLead, html, type, salesAgent } = req.body;
+        const { sender, recipient, property, subject, message, startDate, createByContact, createBy, createByLead, html, type, salesAgent } = req.body;
 
         if (createByContact && !mongoose.Types.ObjectId.isValid(createByContact)) {
             res.status(400).json({ error: 'Invalid createByContact value' });
@@ -17,7 +17,7 @@ const add = async (req, res) => {
             res.status(400).json({ error: 'Invalid salesAgent value' });
         }
 
-        const email = { sender, recipient, subject, message, startDate, createBy, html, type, salesAgent: new mongoose.Types.ObjectId(salesAgent) || null }
+        const email = { sender, recipient, subject, message, startDate, createBy, html, property, type, salesAgent: new mongoose.Types.ObjectId(salesAgent) || null }
 
         if (createByContact) {
             email.createByContact = createByContact;
@@ -158,6 +158,14 @@ const view = async (req, res) => {
                     localField: 'salesAgent',
                     foreignField: '_id',
                     as: 'salesAgent'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'Properties',
+                    localField: 'property',
+                    foreignField: '_id',
+                    as: 'properties'
                 }
             },
             { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },

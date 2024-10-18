@@ -42,23 +42,23 @@ const CustomField = () => {
     const [isLoading, setIsLoading] = useState(false)
 
     const handleHeadigsCheckboxChange = (event, value) => {
-        if (event.target.checked) {
+        if (event?.target?.checked) {
             setSelectedHeadings((prevSelectedHeadings) => [...prevSelectedHeadings, value]);
         } else {
             setSelectedHeadings((prevSelectedHeadings) =>
-                prevSelectedHeadings.filter((selectedHeading) => selectedHeading !== value)
+                prevSelectedHeadings?.filter((selectedHeading) => selectedHeading !== value)
             );
         }
     };
 
     const handleHeadingsDragEnd = async (result) => {
-        if (!result.destination) {
+        if (!result?.destination) {
             return;
         }
 
         const newData = [...data[0]?.headings];
-        const [removed] = newData.splice(result.source.index, 1);
-        newData.splice(result.destination.index, 0, removed);
+        const [removed] = newData?.splice(result?.source?.index, 1);
+        newData?.splice(result?.destination?.index, 0, removed);
         setData((prev) => [{ ...prev[0], headings: newData }]);
 
         const response = await putApi(`api/custom-field/change-headings/${moduleId}`, newData)
@@ -69,7 +69,7 @@ const CustomField = () => {
 
     const getValidationData = async () => {
         const response = await getApi('api/validation')
-        setValidations(response.data)
+        setValidations(response?.data)
     }
 
     useEffect(() => {
@@ -79,32 +79,32 @@ const CustomField = () => {
     const navigate = useNavigate()
 
     const handleCheckboxChange = (event, value) => {
-        if (event.target.checked) {
+        if (event?.target?.checked) {
             setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
         } else {
             setSelectedValues((prevSelectedValues) =>
-                prevSelectedValues.filter((selectedValue) => selectedValue !== value)
+                prevSelectedValues?.filter((selectedValue) => selectedValue !== value)
             );
         }
     };
 
     const handleDragEnd = async (result) => {
-        if (!result.destination) {
+        if (!result?.destination) {
             return;
         }
 
         const newData = [...data[0]?.fields];
         const newFilterData = [...dataFilter];
-        const [removed] = newData.splice(result.source.index, 1);
-        newData.splice(result.destination.index, 0, removed);
-        const [removed1] = newFilterData.splice(result.source.index, 1);
-        newFilterData.splice(result.destination.index, 0, removed1);
+        const [removed] = newData?.splice(result?.source?.index, 1);
+        newData?.splice(result?.destination?.index, 0, removed);
+        const [removed1] = newFilterData?.splice(result?.source?.index, 1);
+        newFilterData.splice(result?.destination?.index, 0, removed1);
         setData((prev) => [{ ...prev[0], fields: newData }]);
         setDataFilter(newFilterData);
 
         const mergedArray = [...newFilterData, ...newData];
 
-        const unique = [...new Set(mergedArray.map(item => item))]
+        const unique = [...new Set(mergedArray?.map(item => item))]
 
         await putApi(`api/custom-field/change-fields/${moduleId}`, unique);
         fetchData();
@@ -132,7 +132,7 @@ const CustomField = () => {
             try {
                 setIsLoding(true)
                 const response = await deleteApi(`api/custom-field/delete/${id}?moduleId=`, moduleId)
-                if (response.status === 200) {
+                if (response?.status === 200) {
                     setDeleteMany(false)
                     fetchData()
                 }
@@ -150,7 +150,7 @@ const CustomField = () => {
                     fieldsIds: fieldsIds
                 }
                 let response = await deleteManyApi('api/custom-field/deleteMany', payload)
-                if (response.status === 200) {
+                if (response?.status === 200) {
                     setSelectedValues([])
                     setDeleteMany(false)
                     fetchData()
@@ -169,7 +169,7 @@ const CustomField = () => {
             try {
                 setIsLoding(true)
                 const response = await deleteApi(`api/custom-field/delete-heading/${id}?moduleId=`, moduleId)
-                if (response.status === 200) {
+                if (response?.status === 200) {
                     setDeleteManyHeadings(false)
                     fetchData()
                 }
@@ -187,7 +187,7 @@ const CustomField = () => {
                     headingsIds: headingsIds
                 }
                 let response = await deleteManyApi('api/custom-field/deleteMany-headings', payload)
-                if (response.status === 200) {
+                if (response?.status === 200) {
                     setSelectedHeadings([])
                     setDeleteManyHeadings(false)
                     fetchData()
@@ -226,7 +226,7 @@ const CustomField = () => {
                             fontSize="22px"
                             fontWeight="700"
                         >{moduleName ? 'Custom Heading' : 'Select Module'}</Text>
-                        {selectedHeadings.length > 0 && <Button color="red" ml='2' onClick={() => handleOpenDeleteModel('', 'many')} size='sm' ><DeleteIcon /></Button>}
+                        {selectedHeadings?.length > 0 && <Button color="red" ml='2' onClick={() => handleOpenDeleteModel('', 'many')} size='sm' ><DeleteIcon /></Button>}
                     </Flex>
                     <Box>
                         <Flex>
@@ -238,7 +238,7 @@ const CustomField = () => {
                                     <MenuList minWidth={"10rem"} maxHeight={'15rem'} overflow={'auto'}>
                                         <MenuItem onClick={() => { setModuleName(''); setData([]); setDataFilter([]); }}>Select Module</MenuItem>
                                         {fields?.map((item, id) => (
-                                            <MenuItem key={id} onClick={() => { setModuleName(item.moduleName); setModuleId(item._id); setHeadingId('') }}>{item.moduleName}</MenuItem>
+                                            <MenuItem key={id} onClick={() => { setModuleName(item?.moduleName); setModuleId(item?._id); setHeadingId('') }}>{item?.moduleName}</MenuItem>
                                         ))}
                                     </MenuList>
                                 </Menu>
@@ -273,11 +273,11 @@ const CustomField = () => {
                                         fontWeight="700"
                                     >-- No Data Found --</Text> : <Grid templateColumns="repeat(12, 1fr)" gap={3} mt={5}>
                                         {data[0]?.headings?.map((item, i) => (
-                                            <GridItem colSpan={{ base: 12, md: 6 }} key={item._id}>
-                                                <Draggable draggableId={item._id} index={i}>
+                                            <GridItem colSpan={{ base: 12, md: 6 }} key={item?._id}>
+                                                <Draggable draggableId={item?._id} index={i}>
                                                     {(provided, snapshot) => (
                                                         <div
-                                                            ref={provided.innerRef}
+                                                            ref={provided?.innerRef}
                                                             {...provided.draggableProps}
                                                         >
                                                             <Flex
@@ -287,17 +287,17 @@ const CustomField = () => {
                                                             >
 
                                                                 <Text display='flex' alignItems='center' size='sm' colorScheme='gray' ms='4px' mt={4} fontSize='md' fontWeight='500' mb='8px' >
-                                                                    {!item.fixed && <div {...provided.dragHandleProps} style={{ marginRight: '10px', cursor: 'grab' }} size={18} >
+                                                                    {!item?.fixed && <div {...provided?.dragHandleProps} style={{ marginRight: '10px', cursor: 'grab' }} size={18} >
                                                                         <BiGridVertical size={18} />
                                                                     </div>}
-                                                                    {!item.fixed && <Checkbox colorScheme="brandScheme" value={selectedHeadings} isChecked={selectedHeadings.includes(item?._id)} onChange={(event) => handleHeadigsCheckboxChange(event, item?._id)} me="10px" />}
+                                                                    {!item?.fixed && <Checkbox colorScheme="brandScheme" value={selectedHeadings} isChecked={selectedHeadings?.includes(item?._id)} onChange={(event) => handleHeadigsCheckboxChange(event, item?._id)} me="10px" />}
                                                                     {item?.heading}
                                                                 </Text>
                                                                 <span className="EditDelete">
                                                                     {item?.editable ?
                                                                         <Button size='sm' variant='outline' me={2} color={'green'} onClick={() => { setEditHeadingModal(true); setUpdateHeading(item) }}><EditIcon /></Button> :
                                                                         <Button size='sm' variant='outline' me={2} color={'gray'} pointer="none" ><EditIcon /></Button>}
-                                                                    {item.fixed ? <Button size='sm' variant='outline' me={2} color={'gray'}><DeleteIcon /></Button> : <Button size='sm' variant='outline' me={2} color={'red'} onClick={() => { handleOpenDeleteModel(item?._id, 'one') }}><DeleteIcon /></Button>}
+                                                                    {item?.fixed ? <Button size='sm' variant='outline' me={2} color={'gray'}><DeleteIcon /></Button> : <Button size='sm' variant='outline' me={2} color={'red'} onClick={() => { handleOpenDeleteModel(item?._id, 'one') }}><DeleteIcon /></Button>}
                                                                 </span>
                                                             </Flex>
                                                         </div>
@@ -321,18 +321,18 @@ const CustomField = () => {
                             fontSize="22px"
                             fontWeight="700"
                         >{moduleName && 'Custom Field'}</Text>
-                        {selectedValues.length > 0 && <Button color="red" ml='2' onClick={() => handleOpenDeleteMany('', 'many')} size='sm' ><DeleteIcon /></Button>}
+                        {selectedValues?.length > 0 && <Button color="red" ml='2' onClick={() => handleOpenDeleteMany('', 'many')} size='sm' ><DeleteIcon /></Button>}
                     </Flex>
 
                     <Box>
-                        {(!isLoading && data[0]?.headings.length > 0) && <Menu>
+                        {(!isLoading && data[0]?.headings?.length > 0) && <Menu>
                             <MenuButton as={Button} size='sm' rightIcon={<ChevronDownIcon />} variant="outline">
                                 {heading ? heading : 'Select All Headings'}
                             </MenuButton>
                             <MenuList minWidth={"10rem"} maxHeight={'15rem'} overflow={'auto'}>
                                 <MenuItem onClick={() => { setHeading(''); setHeadingId('') }}>Select All Headings</MenuItem>
                                 {data[0]?.headings?.map((item, id) => (
-                                    <MenuItem key={id} onClick={() => { setHeading(item.heading); setHeadingId(item._id) }}>{item.heading}</MenuItem>
+                                    <MenuItem key={id} onClick={() => { setHeading(item?.heading); setHeadingId(item?._id) }}>{item?.heading}</MenuItem>
                                 ))}
                             </MenuList>
                         </Menu>}
@@ -347,9 +347,9 @@ const CustomField = () => {
                         <DragDropContext DragDropContext onDragEnd={handleDragEnd} >
                             <Droppable droppableId="droppable">
                                 {(provided) => (
-                                    <div ref={provided.innerRef} {...provided.droppableProps}>
+                                    <div ref={provided?.innerRef} {...provided?.droppableProps}>
                                         {
-                                            dataFilter.length === 0 ?
+                                            dataFilter?.length === 0 ?
                                                 <Text
                                                     textAlign={"center"}
                                                     width="100%"
@@ -364,8 +364,8 @@ const CustomField = () => {
                                                             <Draggable draggableId={item._id} index={i}>
                                                                 {(provided, snapshot) => (
                                                                     <div
-                                                                        ref={provided.innerRef}
-                                                                        {...provided.draggableProps}
+                                                                        ref={provided?.innerRef}
+                                                                        {...provided?.draggableProps}
                                                                     >
                                                                         <Flex
                                                                             alignItems="center"
@@ -374,10 +374,10 @@ const CustomField = () => {
                                                                         >
 
                                                                             <Text display='flex' alignItems='center' size='sm' colorScheme='gray' ms='4px' mt={4} fontSize='md' fontWeight='500' mb='8px' >
-                                                                                <div {...provided.dragHandleProps} style={{ marginRight: '10px', cursor: 'grab' }} size={18} >
+                                                                                <div {...provided?.dragHandleProps} style={{ marginRight: '10px', cursor: 'grab' }} size={18} >
                                                                                     <BiGridVertical size={18} />
                                                                                 </div>
-                                                                                {!item.fixed && <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(item?._id)} onChange={(event) => handleCheckboxChange(event, item?._id)} me="10px" />}
+                                                                                {!item?.fixed && <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(item?._id)} onChange={(event) => handleCheckboxChange(event, item?._id)} me="10px" />}
                                                                                 {item?.label}
                                                                             </Text>
                                                                             <span className="EditDelete">
@@ -385,7 +385,7 @@ const CustomField = () => {
                                                                                     <Button size='sm' variant='outline' me={2} color={'green'} onClick={() => { setEditModal(true); setUpdateField(item) }}><EditIcon /></Button> :
                                                                                     <Button size='sm' variant='outline' me={2} color={'gray'} ><EditIcon /></Button>
                                                                                 }
-                                                                                {item.fixed ? <Button size='sm' variant='outline' me={2} color={'gray'}><DeleteIcon /></Button> : <Button size='sm' variant='outline' me={2} color={'red'} onClick={() => { handleOpenDeleteMany(item?._id, "one"); }}><DeleteIcon /></Button>}
+                                                                                {item?.fixed ? <Button size='sm' variant='outline' me={2} color={'gray'}><DeleteIcon /></Button> : <Button size='sm' variant='outline' me={2} color={'red'} onClick={() => { handleOpenDeleteMany(item?._id, "one"); }}><DeleteIcon /></Button>}
                                                                             </span>
                                                                         </Flex>
                                                                     </div>

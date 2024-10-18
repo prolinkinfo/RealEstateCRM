@@ -45,32 +45,32 @@ const RoleUser = (props) => {
         state: { pageIndex, pageSize }
     } = tableInstance;
 
-    if (pageOptions.length < gopageValue) {
-        setGopageValue(pageOptions.length)
+    if (pageOptions?.length < gopageValue) {
+        setGopageValue(pageOptions?.length)
     }
 
     const uniqueValues = [...new Set(selectedValues)];
 
 
     const handleCheckboxChange = (event, value) => {
-        if (event.target.checked) {
+        if (event?.target?.checked) {
             setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
         } else {
             setSelectedValues((prevSelectedValues) =>
-                prevSelectedValues.filter((selectedValue) => selectedValue !== value)
+                prevSelectedValues?.filter((selectedValue) => selectedValue !== value)
             );
         }
     };
 
     useEffect(() => {
-        const pre = userRole?.map((item) => item._id)
+        const pre = userRole?.map((item) => item?._id)
         setSelectedValues(pre)
     }, [userModal])
 
 
     const addUser = async () => {
         const response = await putApi(`api/role-access/assignedUsers/${_id}`, uniqueValues)
-        if (response.status === 200) {
+        if (response?.status === 200) {
             setUserModal(false)
             fetchData()
         }
@@ -90,10 +90,10 @@ const RoleUser = (props) => {
                     <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
                         <Thead>
                             {headerGroups?.map((headerGroup, index) => (
-                                <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
-                                    {headerGroup.headers?.map((column, index) => (
+                                <Tr {...headerGroup?.getHeaderGroupProps()} key={index}>
+                                    {headerGroup?.headers?.map((column, index) => (
                                         <Th
-                                            {...column.getHeaderProps(column.isSortable !== false && column.getSortByToggleProps())}
+                                            {...column?.getHeaderProps(column?.isSortable !== false && column?.getSortByToggleProps())}
                                             pe="10px"
                                             key={index}
                                             borderColor={borderColor}
@@ -101,7 +101,7 @@ const RoleUser = (props) => {
 
                                             <Flex
                                                 align="center"
-                                                justifyContent={column.center ? "center" : "start"}
+                                                justifyContent={column?.center ? "center" : "start"}
                                                 fontSize={{ sm: "14px", lg: "16px" }}
                                                 color=" secondaryGray.900"
                                             >
@@ -109,11 +109,11 @@ const RoleUser = (props) => {
                                                     textTransform: "capitalize",
                                                     //  marginRight: "8px"
                                                 }}>
-                                                    {column.render("Header")}
+                                                    {column?.render("Header")}
                                                 </span>
-                                                {column.isSortable !== false && (
+                                                {column?.isSortable !== false && (
                                                     <span>
-                                                        {column.isSorted ? (column.isSortedDesc ? <FaSortDown /> : <FaSortUp />) : <FaSort />}
+                                                        {column?.isSorted ? (column?.isSortedDesc ? <FaSortDown /> : <FaSortUp />) : <FaSort />}
                                                     </span>
                                                 )}
                                             </Flex>
@@ -133,7 +133,7 @@ const RoleUser = (props) => {
                                 </Tr>
                                 : data?.length === 0 ? (
                                     <Tr>
-                                        <Td colSpan={columns.length}>
+                                        <Td colSpan={columns?.length}>
                                             <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
                                                 <DataNotFound />
                                             </Text>
@@ -145,7 +145,7 @@ const RoleUser = (props) => {
                                         <Tr {...row?.getRowProps()} key={i}>
                                             {row?.cells?.map((cell, index) => {
                                                 let data = "";
-                                                if (cell?.column.Header === "#") {
+                                                if (cell?.column?.Header === "#") {
                                                     data = (
                                                         <Flex align="center" >
                                                             <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />
@@ -154,7 +154,7 @@ const RoleUser = (props) => {
                                                             </Text>
                                                         </Flex>
                                                     );
-                                                } else if (cell?.column.Header === "email Id") {
+                                                } else if (cell?.column?.Header === "email Id") {
                                                     data = (
                                                         <Text
                                                             me="10px"
@@ -165,7 +165,7 @@ const RoleUser = (props) => {
                                                             {cell?.value}
                                                         </Text>
                                                     );
-                                                } else if (cell?.column.Header === "first Name") {
+                                                } else if (cell?.column?.Header === "first Name") {
                                                     data = (
                                                         <Text
                                                             me="10px"
@@ -176,7 +176,7 @@ const RoleUser = (props) => {
                                                             {cell?.value ? cell?.value : ' - '}
                                                         </Text>
                                                     );
-                                                } else if (cell?.column.Header === "last Name") {
+                                                } else if (cell?.column?.Header === "last Name") {
                                                     data = (
                                                         <Text
                                                             me="10px"
@@ -187,7 +187,7 @@ const RoleUser = (props) => {
                                                             {cell?.value ? cell?.value : ' - '}
                                                         </Text>
                                                     );
-                                                } else if (cell?.column.Header === "role") {
+                                                } else if (cell?.column?.Header === "role") {
                                                     data = (
                                                         <Text color={textColor} fontSize="sm" fontWeight="700">
                                                             {cell?.value}

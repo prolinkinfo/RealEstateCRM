@@ -66,7 +66,7 @@ const Index = () => {
   const fetchData = async () => {
     setIsLoding(true);
     let result = await getApi("api/role-access");
-    setData(result.data);
+    setData(result?.data);
     setIsLoding(false);
   };
 

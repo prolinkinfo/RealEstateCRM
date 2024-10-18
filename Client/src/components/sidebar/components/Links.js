@@ -23,7 +23,7 @@ export function SidebarLinks(props) {
 
   // verifies if routeName is the one active (in browser input)
   const activeRoute = (routeName) => {
-    return location.pathname ===  routeName;
+    return location?.pathname ===  routeName;
   };
 
 
@@ -53,7 +53,7 @@ export function SidebarLinks(props) {
         );
       } else if (!route?.under && user?.role && route?.layout?.includes(`/${user?.role}`)) {
         return (
-          <NavLink key={index} to={route.path}>
+          <NavLink key={index} to={route?.path}>
             {route?.separator &&
               <Box position='relative'
                 margin='20px 0'
@@ -66,13 +66,13 @@ export function SidebarLinks(props) {
             }
             {
               route.icon ? (
-                <Box backgroundColor={activeRoute(route.path.toLowerCase())
+                <Box backgroundColor={activeRoute(route?.path?.toLowerCase())
                   ? sidebarBgColor
                   : ""}
                   ps={"25px"} pb={"6px"} pt={"10px"}>
 
                   <HStack
-                    spacing={activeRoute(route.path.toLowerCase()) ? "22px" : "26px"}
+                    spacing={activeRoute(route?.path?.toLowerCase()) ? "22px" : "26px"}
                     py='5px'
                   >
                     {openSidebar === true ?
@@ -81,12 +81,12 @@ export function SidebarLinks(props) {
                       >
                         <Box
                           color={
-                            activeRoute(route.path.toLowerCase())
+                            activeRoute(route?.path?.toLowerCase())
                               ? activeIcon
                               : textColor
                           }
                           me='18px' >
-                          {route.icon}
+                          {route?.icon}
                         </Box>
                         <Text
                           me='auto'
@@ -97,17 +97,17 @@ export function SidebarLinks(props) {
                           whiteSpace='nowrap'
                           width="190px"
                           color={
-                            activeRoute(route.path.toLowerCase())
+                            activeRoute(route?.path?.toLowerCase())
                               ? activeColor
                               : textColor
                           }
                           fontWeight={
-                            activeRoute(route.path.toLowerCase())
+                            activeRoute(route?.path?.toLowerCase())
                               ? "bold"
                               : "normal"
                           }>
-                          <Tooltip hasArrow label={route.name}>
-                            {route.name}
+                          <Tooltip hasArrow label={route?.name}>
+                            {route?.name}
                           </Tooltip>
                         </Text>
                       </Flex>
@@ -117,19 +117,19 @@ export function SidebarLinks(props) {
                       >
                         <Box
                           color={
-                            activeRoute(route.path.toLowerCase())
+                            activeRoute(route?.path?.toLowerCase())
                               ? activeIcon
                               : textColor
                           }
                           me='18px' >
-                          {route.icon}
+                          {route?.icon}
                         </Box>
                       </Flex>}
                     <Box
                       // h='36px'
                       w='4px'
                       bg={
-                        activeRoute(route.path.toLowerCase())
+                        activeRoute(route?.path?.toLowerCase())
                           ? brandColor
                           : brandColor
                       }
@@ -141,21 +141,21 @@ export function SidebarLinks(props) {
                 <Box>
                   <HStack
                     spacing={
-                      activeRoute(route.path.toLowerCase()) ? "22px" : "26px"
+                      activeRoute(route?.path?.toLowerCase()) ? "22px" : "26px"
                     }
                     py='5px'
                     ps='10px'>
                     <Text
                       me='auto'
                       color={
-                        activeRoute(route.path.toLowerCase())
+                        activeRoute(route?.path?.toLowerCase())
                           ? activeColor
                           : inactiveColor
                       }
                       fontWeight={
-                        activeRoute(route.path.toLowerCase()) ? "bold" : "normal"
+                        activeRoute(route?.path?.toLowerCase()) ? "bold" : "normal"
                       }>
-                      {route.name}
+                      {route?.name}
                     </Text>
                     <Box h='36px' w='4px' bg='brand.400' borderRadius='5px' />
                   </HStack>

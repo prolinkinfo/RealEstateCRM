@@ -32,7 +32,7 @@ const Edit = (props) => {
 
     const EditData = async () => {
         let response = await putApi(`api/custom-field/change-module-name/${selectedId}`, values);
-        if (response.status === 200) {
+        if (response?.status === 200) {
             await dispatch(fetchRouteData())
             onClose()
             fetchData()
@@ -50,7 +50,7 @@ const Edit = (props) => {
 
             formData.append("icon", file?.[0])
             const response = await putApi(`api/custom-field/change-icon/${editdata?._id}`, formData);
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 await dispatch(fetchRouteData());
                 onClose();
                 setAction((pre) => !pre)
@@ -100,13 +100,13 @@ const Edit = (props) => {
                                     <Input
                                         fontSize='sm'
                                         onChange={handleChange} onBlur={handleBlur}
-                                        value={values.moduleName}
+                                        value={values?.moduleName}
                                         name="moduleName"
                                         placeholder='Enter Name'
                                         fontWeight='500'
-                                        borderColor={errors.moduleName && touched.moduleName ? "red.300" : null}
+                                        borderColor={errors?.moduleName && touched?.moduleName ? "red.300" : null}
                                     />
-                                    <Text mb='10px' color={'red'}> {errors.moduleName && touched.moduleName && errors.moduleName}</Text>
+                                    <Text mb='10px' color={'red'}> {errors?.moduleName && touched?.moduleName && errors?.moduleName}</Text>
                                 </GridItem>
                             </Grid>
                         </>

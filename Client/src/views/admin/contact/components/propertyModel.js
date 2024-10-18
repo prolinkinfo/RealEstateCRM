@@ -16,7 +16,7 @@ const PropertyModel = (props) => {
     const [columns, setColumns] = useState([]);
 
     const dispatch = useDispatch()
-    const data = useSelector((state) => state.propertyData.data)
+    const data = useSelector((state) => state?.propertyData?.data)
 
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
@@ -37,7 +37,7 @@ const PropertyModel = (props) => {
         try {
             setIsLoding(true)
             let result = await postApi(`api/contact/add-property-interest/${id}`, uniqueValues);
-            if (result && result.status === 200) {
+            if (result && result?.status === 200) {
                 fetchData()
                 onClose()
             }

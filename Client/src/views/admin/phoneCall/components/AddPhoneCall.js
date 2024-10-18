@@ -43,8 +43,8 @@ const AddPhoneCall = (props) => {
         try {
             setIsLoding(true)
             let response = await postApi('api/phoneCall/add', values)
-            if (response.status === 200) {
-                props.onClose();
+            if (response?.status === 200) {
+                props?.onClose();
                 fetchData(1)
                 // setAction((pre) => !pre)
             }
@@ -111,11 +111,11 @@ const AddPhoneCall = (props) => {
     };
 
     const fetchDataR = async () => {
-        if (LData && LData._id && props.lead === true) {
-            setFieldValue('recipient', LData.leadPhoneNumber);
+        if (LData && LData?._id && props?.lead === true) {
+            setFieldValue('recipient', LData?.leadPhoneNumber);
             setFieldValue('createByLead', props?.id);
             values.recipient = LData.leadPhoneNumber
-        } else if (cData && cData._id && props.lead !== true) {
+        } else if (cData && cData?._id && props?.lead !== true) {
             setFieldValue('recipient', cData?.phoneNumber);
             setFieldValue('createByContact', props?.id);
             values.recipient = cData?.phoneNumber
@@ -124,7 +124,7 @@ const AddPhoneCall = (props) => {
     useEffect(() => {
         fetchDataR()
         fetchUsersData();
-    }, [props.id, cData, LData])
+    }, [props?.id, cData, LData])
 
     return (
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
@@ -146,13 +146,13 @@ const AddPhoneCall = (props) => {
                                 type='number'
                                 disabled
                                 onChange={handleChange} onBlur={handleBlur}
-                                value={values.recipient}
+                                value={values?.recipient}
                                 name="recipient"
                                 placeholder='Recipient'
                                 fontWeight='500'
-                                borderColor={errors.recipient && touched.recipient ? "red.300" : null}
+                                borderColor={errors?.recipient && touched?.recipient ? "red.300" : null}
                             />
-                            <Text mb='10px' fontSize='sm' color={'red'}> {errors.recipient && touched.recipient && errors.recipient}</Text>
+                            <Text mb='10px' fontSize='sm' color={'red'}> {errors?.recipient && touched?.recipient && errors?.recipient}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -164,7 +164,7 @@ const AddPhoneCall = (props) => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 min={dayjs(todayTime).format('YYYY-MM-DD HH:mm')}
-                                value={values.startDate}
+                                value={values?.startDate}
                                 name="startDate"
                                 fontWeight='500'
                                 borderColor={errors?.startDate && touched?.startDate ? "red.300" : null}
@@ -179,13 +179,13 @@ const AddPhoneCall = (props) => {
                             <Input
                                 fontSize='sm'
                                 onChange={handleChange} onBlur={handleBlur}
-                                value={values.callDuration}
+                                value={values?.callDuration}
                                 name="callDuration"
                                 placeholder='call Duration'
                                 fontWeight='500'
-                                borderColor={errors.callDuration && touched.callDuration ? "red.300" : null}
+                                borderColor={errors?.callDuration && touched?.callDuration ? "red.300" : null}
                             />
-                            <Text mb='10px' fontSize='sm' color={'red'}> {errors.callDuration && touched.callDuration && errors.callDuration}</Text>
+                            <Text mb='10px' fontSize='sm' color={'red'}> {errors?.callDuration && touched?.callDuration && errors?.callDuration}</Text>
                         </GridItem>
 
                         <GridItem colSpan={{ base: 12 }}>
@@ -194,21 +194,21 @@ const AddPhoneCall = (props) => {
                             </FormLabel>
                             <Flex justifyContent={'space-between'}>
                                 <Select
-                                    value={values.salesAgent}
+                                    value={values?.salesAgent}
                                     name="salesAgent"
                                     onChange={handleChange}
-                                    mb={errors.salesAgent && touched.salesAgent ? undefined : '10px'}
+                                    mb={errors?.salesAgent && touched?.salesAgent ? undefined : '10px'}
                                     fontWeight='500'
                                     placeholder={'Assign To Sales Agent'}
-                                    borderColor={errors.salesAgent && touched.salesAgent ? "red.300" : null}
+                                    borderColor={errors?.salesAgent && touched?.salesAgent ? "red.300" : null}
                                 >
                                     {assignToSalesData?.map((item) => {
-                                        return <option value={item._id} key={item._id}>{`${item.firstName} ${item.lastName}`}</option>
+                                        return <option value={item._id} key={item?._id}>{`${item?.firstName} ${item?.lastName}`}</option>
                                     })}
                                 </Select>
                                 <IconButton onClick={() => setSalesPersonsModelOpen(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
                             </Flex>
-                            <Text mb='10px' fontSize='sm' color={'red'}> {errors.salesAgent && touched.salesAgent && errors.salesAgent}</Text>
+                            <Text mb='10px' fontSize='sm' color={'red'}> {errors?.salesAgent && touched?.salesAgent && errors?.salesAgent}</Text>
                         </GridItem>
                     </Grid>
                 </ModalBody>

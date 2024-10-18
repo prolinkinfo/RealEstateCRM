@@ -43,7 +43,7 @@ const Index = () => {
                     <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
 
                         {permission?.view && <MenuItem py={2.5} color={'green'}
-                            onClick={() => navigate(`/metting/${row?.values._id}`)}
+                            onClick={() => navigate(`/metting/${row?.values?._id}`)}
                             icon={<ViewIcon fontSize={15} />}>View</MenuItem>}
                         {permission?.delete && <MenuItem py={2.5} color={'red'} onClick={() => { setDeleteMany(true); setSelectedValues([row?.values?._id]); }} icon={<DeleteIcon fontSize={15} />}>Delete</MenuItem>}
                     </MenuList>
@@ -60,7 +60,7 @@ const Index = () => {
         },
         {
             Header: 'Agenda', accessor: 'agenda', cell: (cell) => (
-                <Link to={`/metting/${cell?.row?.values._id}`}> <Text
+                <Link to={`/metting/${cell?.row?.values?._id}`}> <Text
                     me="10px"
                     sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
                     color='brand.600'
@@ -80,7 +80,7 @@ const Index = () => {
     const fetchData = async () => {
         setIsLoding(true)
         const result = await dispatch(fetchMeetingData())
-        if (result.payload.status === 200) {
+        if (result?.payload?.status === 200) {
             setData(result?.payload?.data);
         } else {
             toast.error("Failed to fetch data", "error");
@@ -92,7 +92,7 @@ const Index = () => {
         try {
             setIsLoding(true)
             let response = await deleteManyApi('api/meeting/deleteMany', ids)
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 setSelectedValues([])
                 setDeleteMany(false)
                 setAction((pre) => !pre)

@@ -30,13 +30,13 @@ const ChangeImage = () => {
     const fetchData = async (selectedId) => {
         setIsLoding(true)
         let result = await getApi(`api/images/view/${selectedId}`);
-        setData(result.data)
+        setData(result?.data)
         setIsLoding(false)
     }
     const image = useSelector((state) => state?.images?.images);
     const load = useSelector((state) => state?.images);
     const handleViewOpen = (item) => {
-        fetchData(item._id)
+        fetchData(item?._id)
         setImageView(!imageview)
     }
     const handleViewClose = () => {
@@ -45,14 +45,14 @@ const ChangeImage = () => {
     const handleDeleteClose = () => { setDelete(false) }
     const handleDeleteOpen = (item) => {
         setDelete(!deleteOpen);
-        setSelectedId(item._id)
+        setSelectedId(item?._id)
     }
 
     const handleDelete = async () => {
         try {
             setIsLoding(true)
             let response = await deleteApi(`api/images/delete/`, selectedId);
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 dispatch(fetchImage());
                 setDelete(false);
                 setImageView(false)
@@ -69,7 +69,7 @@ const ChangeImage = () => {
         try {
             setIsLoding(true)
             let response = await putApi(`api/images/isActive/${item?._id}`, { isActive: true });
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 handleViewClose();
                 dispatch(fetchImage());
             }
@@ -86,7 +86,7 @@ const ChangeImage = () => {
 
     useEffect(() => {
         if (image?.length === 0) {
-            localStorage.removeItem('persist:image')
+            localStorage?.removeItem('persist:image')
         }
     }, [image])
 
@@ -97,7 +97,7 @@ const ChangeImage = () => {
                     <Button variant='brand' size='sm' onClick={() => setImageModal(true)} leftIcon={<AddIcon />}>Add New</Button>
                     <Button onClick={() => navigate('/admin-setting')} variant="brand" size="sm" leftIcon={<IoIosArrowBack />} ml={2}>Back</Button>
                 </Flex>
-                {!(load.status === 'succeeded') ? <Flex justifyContent={'center'} alignItems={'center'} width="100%" color={'black'} fontSize="sm" fontWeight="700">
+                {!(load?.status === 'succeeded') ? <Flex justifyContent={'center'} alignItems={'center'} width="100%" color={'black'} fontSize="sm" fontWeight="700">
                     <Spinner />
                 </Flex> : <Card>
                     <Grid templateColumns={'repeat(12, 1fr)'} gap={5}>

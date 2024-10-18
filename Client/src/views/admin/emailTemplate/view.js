@@ -31,11 +31,11 @@ const View = () => {
 
     const fetchData = async () => {
         const result = await getApi(`api/email-temp/view/${id}`)
-        if (result && result.status === 200) {
+        if (result && result?.status === 200) {
             setName(result?.data?.templateName)
             setDescription(result?.data?.description)
             emailEditorRef?.current?.editor?.loadDesign(result?.data?.design);
-            emailEditorRef.current?.editor?.showPreview('desktop');
+            emailEditorRef?.current?.editor?.showPreview('desktop');
         }
     }
 

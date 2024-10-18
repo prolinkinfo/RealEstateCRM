@@ -44,7 +44,7 @@ const Add = (props) => {
 
 
             let response = await postApi('api/custom-field/add-module', formData);
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 fetchData()
                 await dispatch(fetchRouteData());
                 await dispatch(fetchModules())
@@ -52,12 +52,12 @@ const Add = (props) => {
                 resetForm()
                 setAction((pre) => !pre)
             } else {
-                toast.error(response.response.data.message);
+                toast.error(response?.response?.data?.message);
             }
         }
         catch (error) {
-            if (error.response && error.response.data) {
-                toast.error(error.response.data.message);
+            if (error?.response && error?.response?.data) {
+                toast.error(error?.response?.data?.message);
             } else {
                 toast.error("An error occurred while processing your request.");
             }
@@ -84,7 +84,7 @@ const Add = (props) => {
                                         w={{ base: "100%" }}
                                         me='36px'
                                         minH={100}
-                                        img={props.text === 'Property Photos' ? 'img' : ''}
+                                        img={props?.text === 'Property Photos' ? 'img' : ''}
                                         isMultipleAllow={false}
                                         height={'100%'}
                                         onFileSelect={(file) => setFieldValue('icon', file)}
@@ -96,8 +96,8 @@ const Add = (props) => {
                                                         Upload File
                                                     </Text>
                                                 </Flex>
-                                                {values?.icon.length > 0 && <Text fontSize='sm' fontWeight='500' color='secondaryGray.500'>
-                                                    Selected Files : {values?.icon.length}
+                                                {values?.icon?.length > 0 && <Text fontSize='sm' fontWeight='500' color='secondaryGray.500'>
+                                                    Selected Files : {values?.icon?.length}
                                                 </Text>}
                                             </Box>
                                         }
@@ -110,13 +110,13 @@ const Add = (props) => {
                                     <Input
                                         fontSize='sm'
                                         onChange={handleChange} onBlur={handleBlur}
-                                        value={values.moduleName}
+                                        value={values?.moduleName}
                                         name="moduleName"
                                         placeholder='Enter Name'
                                         fontWeight='500'
-                                        borderColor={errors.moduleName && touched.moduleName ? "red.300" : null}
+                                        borderColor={errors?.moduleName && touched?.moduleName ? "red.300" : null}
                                     />
-                                    <Text mb='10px' fontSize='sm' color={'red'}> {errors.moduleName && touched.moduleName && errors.moduleName}</Text>
+                                    <Text mb='10px' fontSize='sm' color={'red'}> {errors?.moduleName && touched?.moduleName && errors?.moduleName}</Text>
                                 </GridItem>
                             </Grid>
                         </>

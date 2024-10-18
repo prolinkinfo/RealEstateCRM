@@ -20,7 +20,7 @@ import Card from 'components/card/Card';
 function LeadImport() {
 
     const location = useLocation();
-    const { fileData, customFields } = location.state || {};
+    const { fileData, customFields } = location?.state || {};
     const [importedFileFields, setImportedFileFields] = useState([]);
     const [importedFileData, setImportedFileData] = useState([]);
     const [isLoding, setIsLoding] = useState(false);
@@ -32,15 +32,15 @@ function LeadImport() {
         { Header: 'Fields In File', accessor: 'fileFields' },
     ];
 
-    const initialFieldValues = Object.fromEntries(
-        (customFields || []).map(field => [field?.name, ''])
+    const initialFieldValues = Object?.fromEntries(
+        (customFields || [])?.map(field => [field?.name, ''])
     );
     const initialValues = {
         ...initialFieldValues
     };
 
     const fieldsInCrm = [
-        ...customFields?.map((field) => ({ Header: field?.label, accessor: field?.name, type: field?.type, formikType: field?.validations?.find(obj => obj.hasOwnProperty('formikType')) }))
+        ...customFields?.map((field) => ({ Header: field?.label, accessor: field?.name, type: field?.type, formikType: field?.validations?.find(obj => obj?.hasOwnProperty('formikType')) }))
     ];
 
     const formik = useFormik({
@@ -50,8 +50,8 @@ function LeadImport() {
             const leadsData = importedFileData?.map((item, ind) => {
                 const lead = {
                     createdDate: new Date(),
-                    deleted: item[values.deleted || "deleted"] || false,
-                    createBy: JSON.parse(localStorage.getItem('user'))._id,
+                    deleted: item[values?.deleted || "deleted"] || false,
+                    createBy: JSON.parse(localStorage.getItem('user'))?._id,
                 };
 
                 fieldsInCrm?.forEach(field => {
@@ -60,7 +60,7 @@ function LeadImport() {
 
                     if (field?.type?.toLowerCase() === "date") {
                         lead[field?.accessor] = moment(fieldValue).isValid() ? fieldValue : '';
-                    } else if (field?.type?.toLowerCase() === "number" && ['positive', 'negative'].includes(field?.formikType?.toLowerCase())) {
+                    } else if (field?.type?.toLowerCase() === "number" && ['positive', 'negative']?.includes(field?.formikType?.toLowerCase())) {
                         lead[field?.accessor] = parseFloat(fieldValue) || '';
                     } else if (field?.type?.toLowerCase() === "number") {
                         lead[field?.accessor] = parseInt(fieldValue, 10) || '';
@@ -82,7 +82,7 @@ function LeadImport() {
         try {
             setIsLoding(true);
             let response = await postApi('api/lead/addMany', leads)
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 toast.success(`Leads imported successfully`)
                 resetForm();
                 navigate('/lead');
@@ -100,19 +100,19 @@ function LeadImport() {
 
     const parseFileData = async (file) => {
         const reader = new FileReader();
-        const extension = file.name.split('.').pop().toLowerCase();
+        const extension = file.name.split('.')?.pop()?.toLowerCase();
 
         reader.onload = async ({ target }) => {
 
             if (extension === 'csv') {
-                const csv = Papa.parse(target.result, {
+                const csv = Papa.parse(target?.result, {
                     header: true,
                 });
                 const parsedData = csv?.data;
 
-                if (parsedData && parsedData.length > 0) {
+                if (parsedData && parsedData?.length > 0) {
                     setImportedFileData(parsedData);
-                    const fileHeadingFields = Object.keys(parsedData[0]);
+                    const fileHeadingFields = Object?.keys(parsedData[0]);
                     setImportedFileFields(fileHeadingFields);
                 } else {
                     toast.error("Empty or invalid CSV file");
@@ -129,18 +129,18 @@ function LeadImport() {
                 const jsonData = [];
 
                 // Iterate over rows and cells
-                worksheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+                worksheet?.eachRow({ includeEmpty: true }, (row, rowNumber) => {
                     const rowData = {};
-                    row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
-                        rowData[worksheet.getCell(1, colNumber).value] = cell.value;
+                    row?.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+                        rowData[worksheet?.getCell(1, colNumber)?.value] = cell?.value;
                     });
-                    jsonData.push(rowData);
+                    jsonData?.push(rowData);
                 });
                 jsonData?.splice(0, 1);
                 setImportedFileData(jsonData);
 
-                if (jsonData && jsonData.length > 0) {
-                    const fileHeadingFields = Object.keys(jsonData[0]);
+                if (jsonData && jsonData?.length > 0) {
+                    const fileHeadingFields = Object?.keys(jsonData[0]);
                     setImportedFileFields(fileHeadingFields);
                 } else {
                     toast.error("Empty or invalid XLSX file");
@@ -150,15 +150,15 @@ function LeadImport() {
         };
 
         if (extension === 'csv') {
-            reader.readAsText(file);
+            reader?.readAsText(file);
         } else if (extension === 'xlsx') {
             const blob = new Blob([file]);
-            reader.readAsArrayBuffer(blob);
+            reader?.readAsArrayBuffer(blob);
         }
     };
 
     useEffect(() => {
-        if (fileData && fileData.length > 0) {
+        if (fileData && fileData?.length > 0) {
             const firstFile = fileData[0];
             parseFileData(firstFile);
         }
@@ -186,9 +186,9 @@ function LeadImport() {
                 >Import Leads</Text>
                 <Grid templateColumns="repeat(12, 1fr)" mb={3} pb={2} gap={1} borderBottom={'1px solid #e2e8f0'}>
                     {
-                        columns.map((column, index) => (
+                        columns?.map((column, index) => (
                             <GridItem key={index} colSpan={{ base: 6 }} fontWeight={'600'} fontSize={{ sm: "14px", lg: "14px" }} color="secondaryGray.900" style={{ textTransform: "uppercase" }}>
-                                {column.Header}
+                                {column?.Header}
                             </GridItem>
                         ))
                     }
@@ -197,19 +197,19 @@ function LeadImport() {
                     {
                         fieldsInCrm?.map((item, index) => (
                             <>
-                                <GridItem colSpan={{ base: 6 }} key={item.id} mt='10px'>
-                                    {item.Header}
+                                <GridItem colSpan={{ base: 6 }} key={item?.id} mt='10px'>
+                                    {item?.Header}
                                 </GridItem>
                                 <GridItem colSpan={{ base: 4 }}>
                                     <Select
                                         variant="flushed"
                                         fontWeight='500'
                                         isSearchable
-                                        value={values[item.accessor]}
-                                        name={item.accessor}
+                                        value={values[item?.accessor]}
+                                        name={item?.accessor}
                                         onChange={handleChange}
                                     >
-                                        <option value=''> {filterLead ? filterLead.find((data) => (item.Header === data || item.accessor === data) && data) ? filterLead.find((data) => (item.Header === data || item.accessor === data) && data) : 'Select Field In File' : 'Select Field In File'}</option>
+                                        <option value=''> {filterLead ? filterLead?.find((data) => (item?.Header === data || item?.accessor === data) && data) ? filterLead?.find((data) => (item?.Header === data || item?.accessor === data) && data) : 'Select Field In File' : 'Select Field In File'}</option>
                                         {
                                             importedFileFields?.map(field => (
                                                 <option value={field} key={field}>{field}</option>

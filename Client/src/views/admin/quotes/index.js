@@ -118,7 +118,7 @@ const Index = (props) => {
             Header: 'Title', accessor: 'title', cell: (cell) => (
                 <div className="selectOpt">
                     <Text
-                        onClick={() => handleViewOpen(cell?.row?.original._id)}
+                        onClick={() => handleViewOpen(cell?.row?.original?._id)}
                         me="10px"
                         sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
                         color='brand.600'
@@ -135,10 +135,10 @@ const Index = (props) => {
             Header: 'Contact',
             accessor: 'contact',
             cell: (cell) => (
-                (user.role === 'superAdmin' || contactAccess?.view) ?
+                (user?.role === 'superAdmin' || contactAccess?.view) ?
                     <div className="selectOpt">
                         <Text
-                            onClick={() => navigate(cell?.row?.original.contact !== null && `/contactView/${cell?.row?.original.contact}`)}
+                            onClick={() => navigate(cell?.row?.original?.contact !== null && `/contactView/${cell?.row?.original?.contact}`)}
                             me="10px"
                             sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
                             color='brand.600'
@@ -159,10 +159,10 @@ const Index = (props) => {
             Header: 'Account',
             accessor: 'account',
             cell: (cell) => (
-                (user.role === 'superAdmin' || accountAccess?.view) ?
+                (user?.role === 'superAdmin' || accountAccess?.view) ?
                     <div className="selectOpt">
                         <Text
-                            onClick={() => navigate(cell?.row?.original.account !== null && `/accountView/${cell?.row?.original.account}`)}
+                            onClick={() => navigate(cell?.row?.original.account !== null && `/accountView/${cell?.row?.original?.account}`)}
                             me="10px"
                             sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
                             color='brand.600'
@@ -625,7 +625,7 @@ const Index = (props) => {
         try {
             setIsLoding(true);
             let response = await postApi("api/quotes/convertToInvoice", { _id: id });
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 toast.success(`Invoice Convert successfully`)
                 setAction((pre) => !pre);
             }
@@ -642,7 +642,7 @@ const Index = (props) => {
         try {
             setIsLoding(true);
             let response = await deleteManyApi("api/quotes/deleteMany", ids);
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 toast.success(`Quotes Delete successfully`)
                 setSelectedValues([]);
                 setDelete(false);
@@ -661,7 +661,7 @@ const Index = (props) => {
         setIsLoding(true)
         const result = await dispatch(fetchQuotesData())
 
-        if (result.payload.status === 200) {
+        if (result?.payload?.status === 200) {
             setData(result?.payload?.data);
         } else {
             toast.error("Failed to fetch data", "error");

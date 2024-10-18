@@ -1,5 +1,27 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap");
 
+:root {
+  --light-yellow-bg: #fbf4dd;
+  --light-yellow-color: #a37f08;
+  --light-yellow-border: #a37f08;
+
+  --light-red-bg: #ffeeeb;
+  --light-red-color: #db5436;
+  --light-red-border: #db5436;
+
+  --light-green-bg: #eaf9e6;
+  --light-green-color: #4d8f3a;
+  --light-green-border: #4d8f3a;
+
+  --light-blue-bg: #ebf5ff;
+  --light-blue-color: #1f7eeb;
+  --light-blue-border: #1f7eeb;
+
+  --light-purpule-bg: #eee7fc;
+  --light-purpule-color: #7038db;
+  --light-purpule-border: #7038db;
+}
+
 body {
   font-family: "DM Sans", sans-serif;
 }
@@ -153,33 +175,63 @@ option {
 }
 
 .pending {
-  background-color: #fbf4dd !important;
-  color: #a37f08 !important;
-  border: 1px solid #a37f08 !important;
+  background-color: var(--light-yellow-bg) !important;
+  color: var(--light-yellow-color) !important;
+  border: 1px solid var(--light-yellow-border) !important;
 }
 
 .onHold {
-  background-color: #ffeeeb !important;
-  color: #db5436 !important;
-  border: 1px solid #db5436 !important;
+  background-color: var(--light-red-bg) !important;
+  color: var(--light-red-color) !important;
+  border: 1px solid var(--light-red-border) !important;
 }
 
 .completed {
-  background-color: #eaf9e6 !important;
-  color: #4d8f3a !important;
-  border: 1px solid #4d8f3a !important;
+  background-color: var(--light-green-bg) !important;
+  color: var(--light-green-color) !important;
+  border: 1px solid var(--light-green-border) !important;
 }
 
 .toDo {
-  background-color: #ebf5ff !important;
-  color: #1f7eeb !important;
-  border: 1px solid #1f7eeb !important;
+  background-color: var(--light-blue-bg) !important;
+  color: var(--light-blue-color) !important;
+  border: 1px solid var(--light-blue-border) !important;
 }
 
 .inProgress {
-  background-color: #eee7fc !important;
-  color: #7038db !important;
-  border: 1px solid #7038db !important;
+  background-color: var(--light-purpule-bg) !important;
+  color: var(--light-purpule-color) !important;
+  border: 1px solid var(--light-purpule-border) !important;
+}
+
+.light-yellow {
+  background-color: var(--light-yellow-bg) !important;
+  color: var(--light-yellow-color) !important;
+  border: 1px solid var(--light-yellow-border) !important;
+}
+
+.light-red {
+  background-color: var(--light-red-bg) !important;
+  color: var(--light-red-color) !important;
+  border: 1px solid var(--light-red-border) !important;
+}
+
+.light-green {
+  background-color: var(--light-green-bg) !important;
+  color: var(--light-green-color) !important;
+  border: 1px solid var(--light-green-border) !important;
+}
+
+.light-blue {
+  background-color: var(--light-blue-bg) !important;
+  color: var(--light-blue-color) !important;
+  border: 1px solid var(--light-blue-border) !important;
+}
+
+.light-purpule {
+  background-color: var(--light-purpule-bg) !important;
+  color: var(--light-purpule-color) !important;
+  border: 1px solid var(--light-purpule-border) !important;
 }
 
 .chakra-checkbox[disabled] .chakra-checkbox__control {

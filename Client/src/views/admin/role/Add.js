@@ -35,11 +35,11 @@ const AddRole = (props) => {
         try {
             setIsLoding(true)
             let response = await postApi('api/role-access/add', values)
-            if (response && response.status === 200) {
+            if (response && response?.status === 200) {
                 onClose(false);
                 setAction((pre) => !pre)
             } else {
-                toast.error(response.response.data?.message)
+                toast.error(response?.response?.data?.message)
             }
         } catch (e) {
             console.log(e);
@@ -67,13 +67,13 @@ const AddRole = (props) => {
                             <Input
                                 fontSize='sm'
                                 onChange={handleChange} onBlur={handleBlur}
-                                value={values.roleName}
+                                value={values?.roleName}
                                 name="roleName"
                                 placeholder='Enter Role Name'
                                 fontWeight='500'
-                                borderColor={errors.roleName && touched.roleName ? "red.300" : null}
+                                borderColor={errors?.roleName && touched?.roleName ? "red.300" : null}
                             />
-                            <Text mb='10px' fontSize={'sm'} color={'red'}> {errors.roleName && touched.roleName && errors.roleName}</Text>
+                            <Text mb='10px' fontSize={'sm'} color={'red'}> {errors?.roleName && touched?.roleName && errors?.roleName}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -82,13 +82,13 @@ const AddRole = (props) => {
                             <Input
                                 fontSize='sm'
                                 onChange={handleChange} onBlur={handleBlur}
-                                value={values.description}
+                                value={values?.description}
                                 name="description"
                                 placeholder='Enter Description'
                                 fontWeight='500'
-                                borderColor={errors.description && touched.description ? "red.300" : null}
+                                borderColor={errors?.description && touched?.description ? "red.300" : null}
                             />
-                            <Text mb='10px' fontSize={'sm'} color={'red'}> {errors.description && touched.description && errors.description}</Text>
+                            <Text mb='10px' fontSize={'sm'} color={'red'}> {errors?.description && touched?.description && errors?.description}</Text>
                         </GridItem>
                     </Grid>
 

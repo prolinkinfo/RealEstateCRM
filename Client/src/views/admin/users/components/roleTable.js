@@ -56,8 +56,8 @@ export default function RoleTable(props) {
     state: { pageIndex, pageSize }
   } = tableInstance;
 
-  if (pageOptions.length < gopageValue) {
-    setGopageValue(pageOptions.length)
+  if (pageOptions?.length < gopageValue) {
+    setGopageValue(pageOptions?.length)
   }
 
 
@@ -84,10 +84,10 @@ export default function RoleTable(props) {
         <Table  {...getTableProps()} variant='simple' color='gray.500' mb='24px'>
           <Thead >
             {headerGroups?.map((headerGroup, index) => (
-              <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
-                {headerGroup.headers.map((column, index) => (
+              <Tr {...headerGroup?.getHeaderGroupProps()} key={index}>
+                {headerGroup?.headers?.map((column, index) => (
                   <Th
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    {...column?.getHeaderProps(column?.getSortByToggleProps())}
                     pe='10px'
                     key={index}
                     borderColor={borderColor}>
@@ -96,7 +96,7 @@ export default function RoleTable(props) {
                       align='center'
                       fontSize={{ sm: "10px", lg: "12px" }}
                       color='gray.400'>
-                      {column.render("Header")}
+                      {column?.render("Header")}
                     </Flex>
                   </Th>
                 ))}
@@ -106,7 +106,7 @@ export default function RoleTable(props) {
           <Tbody  {...getTableBodyProps()}>
             {data?.length === 0 && (
               <Tr>
-                <Td colSpan={columns.length}>
+                <Td colSpan={columns?.length}>
                   <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
                     <DataNotFound />
                   </Text>
@@ -119,7 +119,7 @@ export default function RoleTable(props) {
                 <Tr {...row?.getRowProps()} key={index}>
                   {row?.cells?.map((cell, index) => {
                     let data = "";
-                    if (cell?.column.Header === "#") {
+                    if (cell?.column?.Header === "#") {
                       data = (
                         <Flex align="center">
                           <Text color={textColor} fontSize="sm" fontWeight="700">
@@ -127,7 +127,7 @@ export default function RoleTable(props) {
                           </Text>
                         </Flex>
                       );
-                    } else if (cell?.column.Header === "Role Name") {
+                    } else if (cell?.column?.Header === "Role Name") {
                       data = (
                         <Text
                           me="10px"
@@ -138,7 +138,7 @@ export default function RoleTable(props) {
                           {cell?.value}
                         </Text>
                       );
-                    } else if (cell?.column.Header === "Description") {
+                    } else if (cell?.column?.Header === "Description") {
                       data = (
 
                         <Text

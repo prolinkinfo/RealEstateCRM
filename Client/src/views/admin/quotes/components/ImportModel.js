@@ -28,9 +28,9 @@ const ImportModal = (props) => {
             setIsLoding(true)
             resetForm()
 
-            if (values.quotes) {
+            if (values?.quotes) {
                 onClose();
-                navigate('/quotesImport', { state: { fileData: values.quotes, customFields: customFields } });
+                navigate('/quotesImport', { state: { fileData: values?.quotes, customFields: customFields } });
             }
 
         } catch (e) {
@@ -50,8 +50,8 @@ const ImportModal = (props) => {
                 <ModalBody>
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12 }}>
-                            <CommonFileUpload count={values.quotes.length} onFileSelect={(file) => setFieldValue('quotes', file)} text={text} />
-                            <Text mb='10px' color={'red'}> {errors.quotes && touched.quotes && <>Please Select {text}</>}</Text>
+                            <CommonFileUpload count={values?.quotes?.length} onFileSelect={(file) => setFieldValue('quotes', file)} text={text} />
+                            <Text mb='10px' color={'red'}> {errors?.quotes && touched?.quotes && <>Please Select {text}</>}</Text>
                         </GridItem>
                     </Grid>
                 </ModalBody>
@@ -63,7 +63,7 @@ const ImportModal = (props) => {
                     }} variant="outline"
                         colorScheme="red" size="sm" onClick={() => {
                             onClose()
-                            formik.resetForm()
+                            formik?.resetForm()
                         }}>Close</Button>
                 </ModalFooter>
             </ModalContent>

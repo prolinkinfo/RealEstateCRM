@@ -30,8 +30,8 @@ const Report = () => {
     //     // setSelectedColumns(JSON.parse(JSON.stringify(tempTableColumns)));
     // }
 
-    if (user.role === 'superAdmin') {
-        tableColumns.unshift({
+    if (user?.role === 'superAdmin') {
+        tableColumns?.unshift({
             Header: "#",
             accessor: "_id",
             isSortable: false,
@@ -41,8 +41,8 @@ const Report = () => {
 
     const fetchData = async () => {
         setIsLoding(true)
-        let result = await getApi(user.role === 'superAdmin' ? 'api/reporting' : `api/reporting?_id=${user._id}`);
-        if (result && result.status === 200) {
+        let result = await getApi(user?.role === 'superAdmin' ? 'api/reporting' : `api/reporting?_id=${user?._id}`);
+        if (result && result?.status === 200) {
             setData(result?.data)
         }
         setIsLoding(false)

@@ -71,8 +71,8 @@ function ChangeAccess(props) {
     state: { pageIndex, pageSize },
   } = tableInstance;
 
-  if (pageOptions.length < gopageValue) {
-    setGopageValue(pageOptions.length);
+  if (pageOptions?.length < gopageValue) {
+    setGopageValue(pageOptions?.length);
   }
 
   const initialValues = {
@@ -136,11 +136,11 @@ function ChangeAccess(props) {
   // };
 
   const handleCheckboxChange = (index, fieldName, secondFieldName) => (event) => {
-    const { checked } = event.target;
-    const leadsIndex = values.access.findIndex(accessItem => accessItem.title === "Leads");
-    const contactsIndex = values.access.findIndex(accessItem => accessItem.title === "Contacts");
+    const { checked } = event?.target;
+    const leadsIndex = values?.access?.findIndex(accessItem => accessItem?.title === "Leads");
+    const contactsIndex = values?.access?.findIndex(accessItem => accessItem?.title === "Contacts");
 
-    const updatedAccess = values.access.map((item, idx) => {
+    const updatedAccess = values?.access?.map((item, idx) => {
       if (idx === index) {
         const updatedItem = { ...item, [fieldName]: checked };
         if (secondFieldName && !checked) {
@@ -155,7 +155,7 @@ function ChangeAccess(props) {
 
     const finalUpdatedAccessWith = updatedAccess.map((item, idx) => {
       if (secondFieldName && checked === false && (!updatedAccess[contactsIndex]?.view && !updatedAccess[leadsIndex]?.view)) {
-        if (["Emails", "Calls", "Meetings"].includes(item.title)) {
+        if (["Emails", "Calls", "Meetings"]?.includes(item?.title)) {
           return {
             ...item,
             create: false,
@@ -176,7 +176,7 @@ function ChangeAccess(props) {
       setIsLoding(true);
       setAccess(values?.access)
       let response = await putApi(`api/role-access/edit/${_id}`, values);
-      if (response.status === 200) {
+      if (response?.status === 200) {
         setEditModal(false)
         fetchData()
         setRoleModal(true)
@@ -189,8 +189,8 @@ function ChangeAccess(props) {
   };
 
   const disable = (cell) => {
-    if (["Emails", "Calls", "Meetings"].includes(cell.title)) {
-      return !values?.access?.some((i => (i.title === "Contacts" || i.title === "Leads") && i.view));
+    if (["Emails", "Calls", "Meetings"].includes(cell?.title)) {
+      return !values?.access?.some((i => (i?.title === "Contacts" || i?.title === "Leads") && i?.view));
     }
     return false;
   }
@@ -215,14 +215,14 @@ function ChangeAccess(props) {
           <Table>
             <Thead>
               {headerGroups?.map((headerGroup, index) => (
-                <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
-                  {headerGroup.headers?.map((column, index) => (
+                <Tr {...headerGroup?.getHeaderGroupProps()} key={index}>
+                  {headerGroup?.headers?.map((column, index) => (
                     <Th
                       sx={{ width: "10px" }}
                       pe="10px"
                       key={index}
                       borderColor={borderColor}
-                      display={column.display === false && "none"}
+                      display={column?.display === false && "none"}
                     >
                       <Flex
                         justify="space-between"
@@ -230,7 +230,7 @@ function ChangeAccess(props) {
                         fontSize={{ sm: "10px", lg: "12px" }}
                         color="gray.400"
                       >
-                        {column.display !== false && column.render("Header")}
+                        {column?.display !== false && column?.render("Header")}
                       </Flex>
                     </Th>
                   ))}
@@ -255,7 +255,7 @@ function ChangeAccess(props) {
                 </Tr>
               ) : data?.length === 0 ? (
                 <Tr>
-                  <Td colSpan={columns.length}>
+                  <Td colSpan={columns?.length}>
                     <Text
                       textAlign={"center"}
                       width="100%"
@@ -274,7 +274,7 @@ function ChangeAccess(props) {
                     <Tr {...row?.getRowProps()} key={i}>
                       {row?.cells?.map((cell, index) => {
                         let data = "";
-                        if (cell?.column.Header === "title") {
+                        if (cell?.column?.Header === "title") {
                           data = (
                             <Text
                               me="10px"
@@ -285,7 +285,7 @@ function ChangeAccess(props) {
                               {cell?.value}
                             </Text>
                           );
-                        } else if (cell?.column.Header === "create") {
+                        } else if (cell?.column?.Header === "create") {
                           data = (
                             <Text
                               color={textColor}
@@ -354,7 +354,7 @@ function ChangeAccess(props) {
                             minW={{ sm: "150px", md: "200px", lg: "auto" }}
                             borderColor="transparent"
                             sx={{
-                              display: cell?.column.Header === "#" && "none",
+                              display: cell?.column?.Header === "#" && "none",
                             }}
                           >
                             {data}

@@ -4,7 +4,7 @@ import { getApi } from '../../services/api'
 export const fetchLeadData = createAsyncThunk('fetchLeadData', async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     try {
-        const response = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
+        const response = await getApi(user?.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user?._id}`);
         return response.data;
     } catch (error) {
         throw error;
@@ -26,13 +26,13 @@ const leadSlice = createSlice({
             })
             .addCase(fetchLeadData.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.data = action.payload;
+                state.data = action?.payload;
                 state.error = "";
             })
             .addCase(fetchLeadData.rejected, (state, action) => {
                 state.isLoading = false;
                 state.data = [];
-                state.error = action.error.message;
+                state.error = action?.error?.message;
             });
     },
 });

@@ -28,9 +28,9 @@ const ImportModal = (props) => {
             setIsLoding(true)
             resetForm()
 
-            if (values.accounts) {
+            if (values?.accounts) {
                 onClose();
-                navigate('/accountImport', { state: { fileData: values.accounts, customFields: customFields } });
+                navigate('/accountImport', { state: { fileData: values?.accounts, customFields: customFields } });
             }
 
         } catch (e) {
@@ -50,8 +50,8 @@ const ImportModal = (props) => {
                 <ModalBody>
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12 }}>
-                            <CommonFileUpload count={values.accounts.length} onFileSelect={(file) => setFieldValue('accounts', file)} text={text} />
-                            <Text mb='10px' color={'red'}> {errors.accounts && touched.accounts && <>Please Select {text}</>}</Text>
+                            <CommonFileUpload count={values?.accounts?.length} onFileSelect={(file) => setFieldValue('accounts', file)} text={text} />
+                            <Text mb='10px' color={'red'}> {errors?.accounts && touched?.accounts && <>Please Select {text}</>}</Text>
                         </GridItem>
                     </Grid>
                 </ModalBody>

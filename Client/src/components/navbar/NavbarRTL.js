@@ -17,10 +17,10 @@ export default function AdminNavbar(props) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    window.addEventListener("scroll", changeNavbar);
+    window?.addEventListener("scroll", changeNavbar);
 
     return () => {
-      window.removeEventListener("scroll", changeNavbar);
+      window?.removeEventListener("scroll", changeNavbar);
     };
   });
 
@@ -42,7 +42,7 @@ export default function AdminNavbar(props) {
   let paddingX = "15px";
   let gap = "0px";
   const changeNavbar = () => {
-    if (window.scrollY > 1) {
+    if (window?.scrollY > 1) {
       setScrolled(true);
     } else {
       setScrolled(false);
@@ -135,10 +135,10 @@ export default function AdminNavbar(props) {
         </Box>
         <Box ms='auto' w={{ sm: "100%", md: "unset" }}>
           <AdminNavbarLinks
-            onOpen={props.onOpen}
-            logoText={props.logoText}
-            secondary={props.secondary}
-            fixed={props.fixed}
+            onOpen={props?.onOpen}
+            logoText={props?.logoText}
+            secondary={props?.secondary}
+            fixed={props?.fixed}
             scrolled={scrolled}
           />
         </Box>
@@ -149,9 +149,9 @@ export default function AdminNavbar(props) {
 }
 
 AdminNavbar.propTypes = {
-  brandText: PropTypes.string,
-  variant: PropTypes.string,
-  secondary: PropTypes.bool,
-  fixed: PropTypes.bool,
-  onOpen: PropTypes.func,
+  brandText: PropTypes?.string,
+  variant: PropTypes?.string,
+  secondary: PropTypes?.bool,
+  fixed: PropTypes?.bool,
+  onOpen: PropTypes?.func,
 };

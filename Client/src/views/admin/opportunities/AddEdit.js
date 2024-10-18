@@ -50,7 +50,7 @@ const AddEdit = (props) => {
         try {
             setIsLoding(true)
             let response = await postApi('api/opportunity/add', values)
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 onClose();
                 toast.success(`Opprtunities Save successfully`)
                 formik.resetForm();
@@ -68,7 +68,7 @@ const AddEdit = (props) => {
         try {
             setIsLoding(true)
             let response = await putApi(`api/opportunity/edit/${selectedId}`, values)
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 onClose();
                 toast.success(`Opprtunities Update successfully`)
                 formik.resetForm();
@@ -132,7 +132,7 @@ const AddEdit = (props) => {
     }
 
     useEffect(() => {
-        if (user.role === 'superAdmin') fetchData();
+        if (user?.role === 'superAdmin') fetchData();
     }, [])
 
 
@@ -161,40 +161,40 @@ const AddEdit = (props) => {
                                 </FormLabel>
                                 <Input
                                     fontSize='sm'
-                                    value={values.opportunityName}
+                                    value={values?.opportunityName}
                                     name="opportunityName"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
                                     placeholder='Opportunity Name'
                                     fontWeight='500'
-                                    borderColor={errors.opportunityName && touched.opportunityName ? "red.300" : null}
+                                    borderColor={errors?.opportunityName && touched?.opportunityName ? "red.300" : null}
                                 />
-                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.opportunityName && touched.opportunityName && errors.opportunityName}</Text>
+                                <Text mb='10px' fontSize='sm' color={'red'}> {errors?.opportunityName && touched?.opportunityName && errors?.opportunityName}</Text>
                             </GridItem>
                             {
-                                (user.role === 'superAdmin' || accountAccess?.view) &&
+                                (user?.role === 'superAdmin' || accountAccess?.view) &&
                                 <GridItem colSpan={{ base: 12, md: 6 }}>
                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                         Account Name
                                     </FormLabel>
                                     <Flex justifyContent={'space-between'}>
                                         <Select
-                                            value={values.accountName}
+                                            value={values?.accountName} 
                                             name="accountName"
                                             onBlur={handleBlur}
                                             onChange={handleChange}
-                                            mb={errors.accountName && touched.accountName ? undefined : '10px'}
+                                            mb={errors?.accountName && touched?.accountName ? undefined : '10px'}
                                             fontWeight='500'
                                             placeholder={'Account Name'}
-                                            borderColor={errors.accountName && touched.accountName ? "red.300" : null}
+                                            borderColor={errors?.accountName && touched?.accountName ? "red.300" : null}
                                         >
                                             {accountList?.length > 0 && accountList?.map((item) => {
-                                                return <option value={item._id} key={item._id}>{`${item?.name}`}</option>
+                                                return <option value={item?._id} key={item?._id}>{`${item?.name}`}</option>
                                             })}
                                         </Select>
                                         <IconButton onClick={() => setAccountModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
                                     </Flex>
-                                    <Text mb='10px' fontSize='sm' color={'red'}> {errors.accountName && touched.accountName && errors.accountName}</Text>
+                                    <Text mb='10px' fontSize='sm' color={'red'}> {errors?.accountName && touched?.accountName && errors?.accountName}</Text>
                                 </GridItem>
                             }
                             {
@@ -205,17 +205,17 @@ const AddEdit = (props) => {
                                     </FormLabel>
                                     <Flex justifyContent={'space-between'}>
                                         <Select
-                                            value={values.assignUser}
+                                            value={values?.assignUser}
                                             name="assignUser"
                                             onBlur={handleBlur}
                                             onChange={handleChange}
-                                            mb={errors.assignUser && touched.assignUser ? undefined : '10px'}
+                                            mb={errors?.assignUser && touched?.assignUser ? undefined : '10px'}
                                             fontWeight='500'
                                             placeholder={'Assign To'}
-                                            borderColor={errors.assignUser && touched.assignUser ? "red.300" : null}
+                                            borderColor={errors?.assignUser && touched?.assignUser ? "red.300" : null}
                                         >
                                             {userData?.map((item) => {
-                                                return <option value={item._id} key={item._id}>{`${item?.firstName} ${item?.lastName}`}</option>
+                                                return <option value={item?._id} key={item?._id}>{`${item?.firstName} ${item?.lastName}`}</option>
                                             })}
                                         </Select>
                                         <IconButton onClick={() => setUserModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
@@ -227,33 +227,33 @@ const AddEdit = (props) => {
                                     Type
                                 </FormLabel>
                                 <Select
-                                    value={values.type}
+                                    value={values?.type}
                                     name="type"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    mb={errors.type && touched.type ? undefined : '10px'}
+                                    mb={errors?.type && touched?.type ? undefined : '10px'}
                                     fontWeight='500'
                                     placeholder={'Select Type'}
-                                    borderColor={errors.type && touched.type ? "red.300" : null}
+                                    borderColor={errors?.type && touched?.type ? "red.300" : null}
                                 >
                                     <option value={"Existing Bussiness"} >Existing Bussiness</option>
                                     <option value={"New Bussiness"} >New Bussiness</option>
                                 </Select>
-                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.type && touched.type && errors.type}</Text>
+                                <Text mb='10px' fontSize='sm' color={'red'}> {errors?.type && touched?.type && errors?.type}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                     Lead Source
                                 </FormLabel>
                                 <Select
-                                    value={values.leadSource}
+                                    value={values?.leadSource}
                                     name="leadSource"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    mb={errors.leadSource && touched.leadSource ? undefined : '10px'}
+                                    mb={errors?.leadSource && touched?.leadSource ? undefined : '10px'}
                                     fontWeight='500'
                                     placeholder={'Select Lead Source'}
-                                    borderColor={errors.leadSource && touched.leadSource ? "red.300" : null}
+                                    borderColor={errors?.leadSource && touched?.leadSource ? "red.300" : null}
                                 >
                                     <option value={"Cold Call"}>Cold Call</option>
                                     <option value={"Existing Customer"}>Existing Customer</option>
@@ -269,25 +269,25 @@ const AddEdit = (props) => {
                                     <option value={"Email"}>Email</option>
                                     <option value={"Other"}>Other</option>
                                 </Select>
-                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.leadSource && touched.leadSource && errors.leadSource}</Text>
+                                <Text mb='10px' fontSize='sm' color={'red'}> {errors?.leadSource && touched?.leadSource && errors?.leadSource}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                     Currency
                                 </FormLabel>
                                 <Select
-                                    value={values.currency}
+                                    value={values?.currency}
                                     name="currency"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    mb={errors.currency && touched.currency ? undefined : '10px'}
+                                    mb={errors?.currency && touched?.currency ? undefined : '10px'}
                                     fontWeight='500'
                                     placeholder={'Select Currency'}
-                                    borderColor={errors.currency && touched.currency ? "red.300" : null}
+                                    borderColor={errors?.currency && touched?.currency ? "red.300" : null}
                                 >
                                     <option value={"$"}>USD</option>
                                 </Select>
-                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.currency && touched.currency && errors.currency}</Text>
+                                <Text mb='10px' fontSize='sm' color={'red'}> {errors?.currency && touched?.currency && errors?.currency}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -295,16 +295,16 @@ const AddEdit = (props) => {
                                 </FormLabel>
                                 <Input
                                     fontSize='sm'
-                                    value={values.opportunityAmount}
+                                    value={values?.opportunityAmount}
                                     name="opportunityAmount"
                                     type='number'
                                     onBlur={handleBlur}
                                     onChange={handleChange}
                                     placeholder='Opportunity Amount'
                                     fontWeight='500'
-                                    borderColor={errors.opportunityAmount && touched.opportunityAmount ? "red.300" : null}
+                                    borderColor={errors?.opportunityAmount && touched?.opportunityAmount ? "red.300" : null}
                                 />
-                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.opportunityAmount && touched.opportunityAmount && errors.opportunityAmount}</Text>
+                                <Text mb='10px' fontSize='sm' color={'red'}> {errors?.opportunityAmount && touched?.opportunityAmount && errors?.opportunityAmount}</Text>
                             </GridItem>
 
                             <GridItem colSpan={{ base: 12, md: 6 }}>
@@ -313,16 +313,16 @@ const AddEdit = (props) => {
                                 </FormLabel>
                                 <Input
                                     fontSize='sm'
-                                    value={values.amount}
+                                    value={values?.amount}
                                     name="amount"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
                                     type='number'
                                     placeholder='Amount'
                                     fontWeight='500'
-                                    borderColor={errors.amount && touched.amount ? "red.300" : null}
+                                    borderColor={errors?.amount && touched?.amount ? "red.300" : null}
                                 />
-                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.amount && touched.amount && errors.amount}</Text>
+                                <Text mb='10px' fontSize='sm' color={'red'}> {errors?.amount && touched?.amount && errors?.amount}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -333,12 +333,12 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={dayjs(values.expectedCloseDate).format("YYYY-MM-DD")}
+                                    value={dayjs(values?.expectedCloseDate).format("YYYY-MM-DD")}
                                     name="expectedCloseDate"
                                     fontWeight='500'
                                     borderColor={errors?.expectedCloseDate && touched?.expectedCloseDate ? "red.300" : null}
                                 />
-                                <Text fontSize='sm' mb='10px' color={'red'}> {errors.expectedCloseDate && touched.expectedCloseDate && errors.expectedCloseDate}</Text>
+                                <Text fontSize='sm' mb='10px' color={'red'}> {errors?.expectedCloseDate && touched?.expectedCloseDate && errors?.expectedCloseDate}</Text>
                             </GridItem>
 
                             <GridItem colSpan={{ base: 12, md: 6 }}>
@@ -349,27 +349,27 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.nextStep}
+                                    value={values?.nextStep}
                                     name="nextStep"
                                     placeholder='Next Step'
                                     fontWeight='500'
-                                    borderColor={errors.nextStep && touched.nextStep ? "red.300" : null}
+                                    borderColor={errors?.nextStep && touched?.nextStep ? "red.300" : null}
                                 />
-                                <Text fontSize='sm' mb='10px' color={'red'}> {errors.nextStep && touched.nextStep && errors.nextStep}</Text>
+                                <Text fontSize='sm' mb='10px' color={'red'}> {errors?.nextStep && touched?.nextStep && errors?.nextStep}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                     Sales Stage<Text color={"red"}>*</Text>
                                 </FormLabel>
                                 <Select
-                                    value={values.salesStage}
+                                    value={values?.salesStage}
                                     name="salesStage"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    mb={errors.salesStage && touched.salesStage ? undefined : '10px'}
+                                    mb={errors?.salesStage && touched?.salesStage ? undefined : '10px'}
                                     fontWeight='500'
                                     placeholder={'Select Sales Stage'}
-                                    borderColor={errors.salesStage && touched.salesStage ? "red.300" : null}
+                                    borderColor={errors?.salesStage && touched?.salesStage ? "red.300" : null}
                                 >
                                     <option value={"Prospecting"}>Prospecting</option>
                                     <option value={"Qualification"}>Qualification</option>
@@ -382,7 +382,7 @@ const AddEdit = (props) => {
                                     <option value={"Closed/Won"}>Closed/Won</option>
                                     <option value={"Closed/Lost"}>Closed/Lost</option>
                                 </Select>
-                                <Text fontSize='sm' mb='10px' color={'red'}> {errors.salesStage && touched.salesStage && errors.salesStage}</Text>
+                                <Text fontSize='sm' mb='10px' color={'red'}> {errors?.salesStage && touched?.salesStage && errors?.salesStage}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -392,14 +392,14 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.probability}
+                                    value={values?.probability}
                                     name="probability"
                                     placeholder='Probability'
                                     type='number'
                                     fontWeight='500'
-                                    borderColor={errors.probability && touched.probability ? "red.300" : null}
+                                    borderColor={errors?.probability && touched?.probability ? "red.300" : null}
                                 />
-                                <Text fontSize='sm' mb='10px' color={'red'}> {errors.probability && touched.probability && errors.probability}</Text>
+                                <Text fontSize='sm' mb='10px' color={'red'}> {errors?.probability && touched?.probability && errors?.probability}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -407,16 +407,16 @@ const AddEdit = (props) => {
                                 </FormLabel>
                                 <Textarea
                                     fontSize='sm'
-                                    value={values.description}
+                                    value={values?.description}
                                     name="description"
                                     resize={"none"}
                                     onBlur={handleBlur}
                                     onChange={handleChange}
                                     placeholder='Description'
                                     fontWeight='500'
-                                    borderColor={errors.description && touched.description ? "red.300" : null}
+                                    borderColor={errors?.description && touched?.description ? "red.300" : null}
                                 />
-                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.description && touched.description && errors.description}</Text>
+                                <Text mb='10px' fontSize='sm' color={'red'}> {errors?.description && touched?.description && errors?.description}</Text>
                             </GridItem>
                         </Grid>
                     </DrawerBody>

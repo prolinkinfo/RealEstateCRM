@@ -5,12 +5,12 @@ import { Box, Button, Flex, FormLabel, Grid, GridItem, Input, InputGroup, InputL
 
 const AdvanceSearch = ({ handleAdvanceSearch, setAdvaceSearch, search, advaceSearch, isLoding, allData, setDisplaySearchData, setSearchedData, setGetTagValues, setSearchClear, tableCustomFields, setSearchbox }) => {
 
-    const initialFieldValues = Object.fromEntries(
-        (tableCustomFields || []).flatMap(field => {
-            if (field.type === 'date') {
+    const initialFieldValues = Object?.fromEntries(
+        (tableCustomFields || [])?.flatMap(field => {
+            if (field?.type === 'date') {
                 return [
-                    [`from${field.name}`, ''],
-                    [`to${field.name}`, '']
+                    [`from${field?.name}`, ''],
+                    [`to${field?.name}`, '']
                 ];
             } else {
                 return [[field?.name, '']];
@@ -117,15 +117,15 @@ const AdvanceSearch = ({ handleAdvanceSearch, setAdvaceSearch, search, advaceSea
                     <Grid templateColumns="repeat(12, 1fr)" mb={3} gap={2}>
                         {
                             tableCustomFields?.map((field) => (
-                                <GridItem colSpan={{ base: 12, sm: (field.type === 'date' ? 12 : 6) }} key={field?.name}>
+                                <GridItem colSpan={{ base: 12, sm: (field?.type === 'date' ? 12 : 6) }} key={field?.name}>
                                     <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2} htmlFor={field?.name}>
                                         {field?.label}
                                     </FormLabel>
-                                    {field.type === 'select' ?
+                                    {field?.type === 'select' ?
                                         <Select
                                             fontSize='sm'
-                                            id={field.name}
-                                            name={field.name}
+                                            id={field?.name}
+                                            name={field?.name}
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                             value={values?.[field?.name]}
@@ -133,13 +133,13 @@ const AdvanceSearch = ({ handleAdvanceSearch, setAdvaceSearch, search, advaceSea
                                         // borderColor={errors?.[field?.name] && touched?.[field?.name] ? "red.300" : null}
                                         >
                                             <option value="">Select {field?.label}</option>
-                                            {field.options.map(option => (
+                                            {field.options?.map(option => (
                                                 <option key={option?._id} value={option?.value}>
                                                     {option?.name}
                                                 </option>
                                             ))}
                                         </Select>
-                                        : field.type === 'date' ? (
+                                        : field?.type === 'date' ? (
                                             <>
                                                 <Flex justifyContent="space-between">
                                                     <Box w="49%">
@@ -150,9 +150,9 @@ const AdvanceSearch = ({ handleAdvanceSearch, setAdvaceSearch, search, advaceSea
                                                             fontSize='sm'
                                                             onChange={handleChange}
                                                             onBlur={handleBlur}
-                                                            value={values[`from${field.name}`]}
+                                                            value={values[`from${field?.name}`]}
                                                             type="date"
-                                                            name={`from${field.name}`}
+                                                            name={`from${field?.name}`}
                                                             fontWeight='500'
                                                         />
                                                     </Box>
@@ -164,10 +164,10 @@ const AdvanceSearch = ({ handleAdvanceSearch, setAdvaceSearch, search, advaceSea
                                                             fontSize='sm'
                                                             onChange={handleChange}
                                                             onBlur={handleBlur}
-                                                            value={values[`to${field.name}`]}
+                                                            value={values[`to${field?.name}`]}
                                                             type="date"
-                                                            min={values[`from${field.name}`]}
-                                                            name={`to${field.name}`}
+                                                            min={values[`from${field?.name}`]}
+                                                            name={`to${field?.name}`}
                                                             fontWeight='500'
                                                         />
                                                     </Box>
@@ -181,14 +181,14 @@ const AdvanceSearch = ({ handleAdvanceSearch, setAdvaceSearch, search, advaceSea
                                             />} */}
                                             < Input
                                                 fontSize='sm'
-                                                type={field.type}
-                                                id={field.name}
-                                                name={field.name}
+                                                type={field?.type}
+                                                id={field?.name}
+                                                name={field?.name}
                                                 onChange={handleChange}
                                                 onBlur={handleBlur}
-                                                value={values[field.name]}
+                                                value={values[field?.name]}
                                                 fontWeight='500'
-                                                placeholder={`Enter ${field.label}`}
+                                                placeholder={`Enter ${field?.label}`}
                                             // borderColor={errors?.[field?.name] && touched?.[field?.name] ? "red.300" : null}
                                             />
                                         </InputGroup>

@@ -31,17 +31,17 @@ const AddEdit = () => {
 
     const togglePreview = () => {
         if (preview) {
-            emailEditorRef.current?.editor?.hidePreview();
+            emailEditorRef?.current?.editor?.hidePreview();
             setPreview(false);
         } else {
-            emailEditorRef.current?.editor?.showPreview('desktop');
+            emailEditorRef?.current?.editor?.showPreview('desktop');
             setPreview(true);
         }
     };
 
     const fetchData = async () => {
         const result = await getApi(`api/email-temp/view/${id}`)
-        if (result && result.status === 200) {
+        if (result && result?.status === 200) {
             setName(result?.data?.templateName)
             setDescription(result?.data?.description)
             emailEditorRef?.current?.editor?.loadDesign(result?.data?.design);
@@ -50,7 +50,7 @@ const AddEdit = () => {
 
     const saveDesign = () => {
         if (name !== "") {
-            emailEditorRef.current?.editor?.exportHtml(async (allData) => {
+            emailEditorRef?.current?.editor?.exportHtml(async (allData) => {
                 const { html } = allData
                 const { design } = allData
 
@@ -62,8 +62,8 @@ const AddEdit = () => {
                     createBy: user?._id
                 }
                 const result = await postApi('api/email-temp/add', data)
-                if (result && result.status === 200) {
-                    toast.success(result.data.message)
+                if (result && result?.status === 200) {
+                    toast.success(result?.data?.message)
                     setName('')
                 }
                 navigate('/email-template')
@@ -76,7 +76,7 @@ const AddEdit = () => {
 
     const editDesign = () => {
         if (name !== "") {
-            emailEditorRef.current?.editor?.exportHtml(async (allData) => {
+            emailEditorRef?.current?.editor?.exportHtml(async (allData) => {
                 const { html } = allData
                 const { design } = allData
 
@@ -88,8 +88,8 @@ const AddEdit = () => {
                     createBy: user?._id
                 }
                 const result = await putApi(`api/email-temp/edit/${id}`, data)
-                if (result && result.status === 200) {
-                    toast.success(result.data.message)
+                if (result && result?.status === 200) {
+                    toast.success(result?.data?.message)
                     navigate('/email-template')
                 }
             });
@@ -142,7 +142,7 @@ const AddEdit = () => {
                                 placeholder='Template Name'
                                 fontWeight='500'
                                 value={name}
-                                onChange={(e) => setName(e.target.value)}
+                                onChange={(e) => setName(e?.target?.value)}
                             />
                         </GridItem>
                         <GridItem colSpan={{ base: 12, md: 6 }} >
@@ -152,7 +152,7 @@ const AddEdit = () => {
                                 placeholder='Description'
                                 fontWeight='500'
                                 value={description}
-                                onChange={(e) => setDescription(e.target.value)}
+                                onChange={(e) => setDescription(e?.target?.value)}
                             />
                         </GridItem>
                         <GridItem colSpan={{ base: 12, md: 12 }} mt={2}>

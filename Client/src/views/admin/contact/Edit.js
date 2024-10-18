@@ -12,8 +12,8 @@ import CustomForm from 'utils/customForm';
 const Edit = (props) => {
     const { data } = props;
     const [isLoding, setIsLoding] = useState(false)
-    const initialFieldValues = Object.fromEntries(
-        (props?.contactData?.fields || []).map(field => [field?.name, ''])
+    const initialFieldValues = Object?.fromEntries(
+        (props?.contactData?.fields || [])?.map(field => [field?.name, ''])
     );
 
     //     lastName: "",
@@ -61,14 +61,14 @@ const Edit = (props) => {
     // });
     const [initialValues, setInitialValues] = useState({
         ...initialFieldValues,
-        createBy: JSON.parse(localStorage.getItem('user'))._id
+        createBy: JSON.parse(localStorage.getItem('user'))?._id
     });
     const param = useParams()
 
     const formik = useFormik({
         initialValues: initialValues,
         enableReinitialize: true,
-        validationSchema: yup.object().shape(generateValidationSchema(props?.contactData?.fields)),
+        validationSchema: yup?.object()?.shape(generateValidationSchema(props?.contactData?.fields)),
         onSubmit: (values, { resetForm }) => {
             EditData();
         },
@@ -79,10 +79,10 @@ const Edit = (props) => {
     const EditData = async () => {
         try {
             setIsLoding(true)
-            let response = await putApi(`api/form/edit/${props?.selectedId || param.id}`, { ...values, moduleId: props?.moduleId })
-            if (response.status === 200) {
-                props.onClose();
-                props.setAction((pre) => !pre)
+            let response = await putApi(`api/form/edit/${props?.selectedId || param?.id}`, { ...values, moduleId: props?.moduleId })
+            if (response?.status === 200) {
+                props?.onClose();
+                props?.setAction((pre) => !pre)
             }
         } catch (e) {
             console.log(e);
@@ -99,10 +99,10 @@ const Edit = (props) => {
     const fetchData = async () => {
         if (data) {
             setInitialValues((prev) => ({ ...prev, ...data }))
-        } else if (props?.selectedId || param.id) {
+        } else if (props?.selectedId || param?.id) {
             try {
                 setIsLoding(true)
-                response = await getApi('api/contact/view/', props?.selectedId ? props?.selectedId : param.id)
+                response = await getApi('api/contact/view/', props?.selectedId ? props?.selectedId : param?.id)
                 setInitialValues((prev) => ({ ...prev, ...response?.data?.contact }))
             } catch (e) {
                 console.error(e)
@@ -117,7 +117,7 @@ const Edit = (props) => {
 
     return (
         <div>
-            <Drawer isOpen={props.isOpen} size={props.size}>
+            <Drawer isOpen={props?.isOpen} size={props?.size}>
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerHeader alignItems={"center"} justifyContent='space-between' display='flex' >
@@ -130,7 +130,7 @@ const Edit = (props) => {
                                 <Spinner />
                             </Flex>
                             :
-                            <CustomForm moduleData={props.contactData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
+                            <CustomForm moduleData={props?.contactData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
                         }
                     </DrawerBody>
 

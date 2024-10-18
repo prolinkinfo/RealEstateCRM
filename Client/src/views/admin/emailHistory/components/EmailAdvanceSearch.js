@@ -49,7 +49,7 @@ const EmailAdvanceSearch = (props) => {
                     value: values.createByName
                 },
             ]
-            dispatch(setGetTagValues(getValue.filter(item => item.value)))
+            dispatch(setGetTagValues(getValue?.filter(item => item?.value)))
             setDisplaySearchData(true)
             setAdvanceSearch(false)
             resetForm();
@@ -80,7 +80,7 @@ const EmailAdvanceSearch = (props) => {
                                     placeholder='Enter Sender Name'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.senderName && touched.senderName && errors.senderName}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.senderName && touched?.senderName && errors?.senderName}</Text>
 
                             </GridItem>
                             <GridItem colSpan={{ base: 12 }}>
@@ -98,7 +98,7 @@ const EmailAdvanceSearch = (props) => {
                                     <option value='contact'>Contact</option>
                                     <option value='lead'>Lead</option>
                                 </Select>
-                                <Text mb='10px' color={'red'}> {errors.realetedTo && touched.realetedTo && errors.realetedTo}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.realetedTo && touched?.realetedTo && errors?.realetedTo}</Text>
 
                             </GridItem>
 
@@ -114,7 +114,7 @@ const EmailAdvanceSearch = (props) => {
                                     placeholder='Enter CreateBy Name'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.createByName && touched.createByName && errors.createByName}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.createByName && touched?.createByName && errors?.createByName}</Text>
                             </GridItem>
                         </Grid>
                     </ModalBody>

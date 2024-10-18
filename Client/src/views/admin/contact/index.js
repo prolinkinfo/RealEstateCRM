@@ -84,8 +84,8 @@ const Index = () => {
 
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-            ...(result?.payload?.data && result.payload.data.length > 0
-                ? result.payload.data[0]?.fields
+            ...(result?.payload?.data && result?.payload?.data?.length > 0
+                ? result?.payload?.data[0]?.fields
                     ?.filter((field) => field?.isTableField === true && field?.isView)
                     ?.map(
                         (field) => ({
@@ -111,8 +111,8 @@ const Index = () => {
                     ) || []
                 : []),
             ...(result?.payload?.data?.[0]?.fields || []) // Check if fields is defined, if not, use empty array
-                .filter(field => field?.isTableField === true && !field?.isView) // Filter out fields where isTableField is true
-                .map(field => ({ Header: field?.label, accessor: field?.name })),
+                ?.filter(field => field?.isTableField === true && !field?.isView) // Filter out fields where isTableField is true
+                ?.map(field => ({ Header: field?.label, accessor: field?.name })),
             ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : [])
         ];
 
@@ -124,7 +124,7 @@ const Index = () => {
         try {
             setIsLoding(true)
             let response = await deleteManyApi('api/contact/deleteMany', ids)
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 setSelectedValues([])
                 setDelete(false)
                 setAction((pre) => !pre)

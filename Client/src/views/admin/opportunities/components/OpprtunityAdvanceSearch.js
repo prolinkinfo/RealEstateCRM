@@ -42,26 +42,26 @@ const OpprtunityAdvanceSearch = (props) => {
             const getValue = [
                 {
                     name: ["opportunityName"],
-                    value: values.opportunityName
+                    value: values?.opportunityName
                 },
                 {
                     name: ["accountName2"],
-                    value: values.accountName2
+                    value: values?.accountName2
                 },
                 {
                     name: ["opportunityAmount"],
-                    value: values.opportunityAmount
+                    value: values?.opportunityAmount
                 },
                 {
                     name: ["expectedCloseDate"],
-                    value: values.expectedCloseDate
+                    value: values?.expectedCloseDate
                 },
                 {
                     name: ["salesStage"],
-                    value: values.salesStage
+                    value: values?.salesStage
                 },
             ]
-            dispatch(setGetTagValues(getValue.filter(item => item.value)))
+            dispatch(setGetTagValues(getValue?.filter(item => item?.value)))
             setDisplaySearchData(true)
             setAdvanceSearch(false)
             resetForm();
@@ -92,7 +92,7 @@ const OpprtunityAdvanceSearch = (props) => {
                                     placeholder='Enter Opportunity Name'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.opportunityName && touched.opportunityName && errors.opportunityName}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.opportunityName && touched?.opportunityName && errors?.opportunityName}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
@@ -106,7 +106,7 @@ const OpprtunityAdvanceSearch = (props) => {
                                     placeholder='Enter Account Name'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.accountName2 && touched.accountName2 && errors.accountName2}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.accountName2 && touched?.accountName2 && errors?.accountName2}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
@@ -120,7 +120,7 @@ const OpprtunityAdvanceSearch = (props) => {
                                     placeholder='Enter Opportunity Amount'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.opportunityAmount && touched.opportunityAmount && errors.opportunityAmount}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.opportunityAmount && touched?.opportunityAmount && errors?.opportunityAmount}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
@@ -134,14 +134,14 @@ const OpprtunityAdvanceSearch = (props) => {
                                     type="date"
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.expectedCloseDate && touched.expectedCloseDate && errors.expectedCloseDate}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.expectedCloseDate && touched?.expectedCloseDate && errors?.expectedCloseDate}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
                                     Sales Stage
                                 </FormLabel>
                                 <Select
-                                    value={values.salesStage}
+                                    value={values?.salesStage}
                                     name="salesStage"
                                     onChange={handleChange}
                                     fontWeight='500'
@@ -158,7 +158,7 @@ const OpprtunityAdvanceSearch = (props) => {
                                     <option value={"Closed/Won"}>Closed/Won</option>
                                     <option value={"Closed/Lost"}>Closed/Lost</option>
                                 </Select>
-                                <Text mb='10px' color={'red'}> {errors.salesStage && touched.salesStage && errors.salesStage}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.salesStage && touched?.salesStage && errors?.salesStage}</Text>
                             </GridItem>
 
                         </Grid>

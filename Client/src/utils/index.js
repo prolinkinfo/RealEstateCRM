@@ -42,23 +42,23 @@ export const generateValidationSchema = (fields) => {
     return fields?.reduce((acc, field) => {
         // let formikValObj = field?.validation?.find(obj => obj?.hasOwnProperty('formikType'));
 
-        acc[field.name] = field.validation.reduce((fieldAcc, rule) => {
-            if (rule.require) {
-                fieldAcc = fieldAcc.required(rule.message);
+        acc[field?.name] = field?.validation?.reduce((fieldAcc, rule) => {
+            if (rule?.require) {
+                fieldAcc = fieldAcc?.required(rule?.message);
             }
-            if (rule.min) {
-                fieldAcc = fieldAcc.min(rule.value, rule.message);
+            if (rule?.min) {
+                fieldAcc = fieldAcc?.min(rule?.value, rule?.message);
             }
-            if (rule.max) {
-                fieldAcc = fieldAcc.max(rule.value, rule.message);
+            if (rule?.max) {
+                fieldAcc = fieldAcc?.max(rule?.value, rule?.message);
             }
-            if (rule.match) {
+            if (rule?.match) {
                 const regexPattern = rule?.value?.replace(/^\/|\/$/g, ''); // Remove leading and trailing slashes
                 const regex = new RegExp(regexPattern);
-                fieldAcc = fieldAcc.matches(regex, rule.message);
+                fieldAcc = fieldAcc?.matches(regex, rule?.message);
             }
-            if (rule.formikType === 'date') {
-                fieldAcc = fieldAcc.required(rule.message);
+            if (rule?.formikType === 'date') {
+                fieldAcc = fieldAcc?.required(rule?.message);
             }
             // Add other formikType cases as needed
 
@@ -96,26 +96,26 @@ export const generateValidationSchema = (fields) => {
             fieldValidation = yup.string()
         }
 
-        if (field.validation && Array.isArray(field.validation)) {
-            field.validation.forEach((validationRule) => {
+        if (field?.validation && Array?.isArray(field?.validation)) {
+            field?.validation?.forEach((validationRule) => {
 
-                if (validationRule.require) {
-                    fieldValidation = fieldValidation.required(validationRule.message || 'This field is required');
+                if (validationRule?.require) {
+                    fieldValidation = fieldValidation?.required(validationRule?.message || 'This field is required');
                 }
                 if (validationRule.min) {
-                    fieldValidation = fieldValidation.min(validationRule.value, validationRule.message || (fieldFormikType === 'date' ? "Date is too small" : 'Value is too small'));
+                    fieldValidation = fieldValidation?.min(validationRule?.value, validationRule?.message || (fieldFormikType === 'date' ? "Date is too small" : 'Value is too small'));
                 }
                 if (validationRule.max) {
-                    fieldValidation = fieldValidation.max(validationRule.value, validationRule.message || (fieldFormikType === 'date' ? "Date is too large" : 'Value is too large'));
+                    fieldValidation = fieldValidation?.max(validationRule?.value, validationRule?.message || (fieldFormikType === 'date' ? "Date is too large" : 'Value is too large'));
                 }
                 if (validationRule.match) {
-                    fieldValidation = fieldValidation.matches(
-                        new RegExp(validationRule.match),
-                        validationRule.message || 'Value does not match the pattern'
+                    fieldValidation = fieldValidation?.matches(
+                        new RegExp(validationRule?.match),
+                        validationRule?.message || 'Value does not match the pattern'
                     );
                 }
                 if (validationRule?.formikType && validationRule?.message) {
-                    fieldValidation = fieldValidation.typeError(validationRule.message)
+                    fieldValidation = fieldValidation?.typeError(validationRule?.message)
                 }
             });
         }

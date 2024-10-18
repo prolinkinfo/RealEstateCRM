@@ -48,7 +48,7 @@ export default function HeaderLinks(props) {
 	// const [loginUser, setLoginUser] = useState();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const userData = useSelector(state => state.user.user)
+	const userData = useSelector(state => state?.user?.user)
 
 	const data = typeof userData === 'string' ? JSON.parse(userData) : userData
 	const user = data?.firstName + " " + data?.lastName;
@@ -78,13 +78,13 @@ export default function HeaderLinks(props) {
 			try {
 				const decodedToken = jwtDecode(token);
 				const currentTime = Date.now() / 1000; // Convert milliseconds to seconds
-				if (decodedToken.exp < currentTime) {
+				if (decodedToken?.exp < currentTime) {
 					if (!isLogoutScheduled) {
 						logOut("Token has expired");
 					}
 				} else {
 					// Schedule automatic logout when the token expires
-					const timeToExpire = (decodedToken.exp - currentTime) * 1000; // Convert seconds to milliseconds
+					const timeToExpire = (decodedToken?.exp - currentTime) * 1000; // Convert seconds to milliseconds
 					setTimeout(() => {
 						if (!isLogoutScheduled) {
 							logOut("Token has expired");
@@ -320,8 +320,8 @@ export default function HeaderLinks(props) {
 }
 
 HeaderLinks.propTypes = {
-	variant: PropTypes.string,
-	fixed: PropTypes.bool,
-	secondary: PropTypes.bool,
-	onOpen: PropTypes.func,
+	variant: PropTypes?.string,
+	fixed: PropTypes?.bool,
+	secondary: PropTypes?.bool,
+	onOpen: PropTypes?.func,
 };

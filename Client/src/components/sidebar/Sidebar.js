@@ -95,7 +95,7 @@ export function SidebarResponsive(props) {
       <Drawer
         isOpen={isOpen}
         onClose={handlesidebarClose}
-        placement={document.documentElement.dir === "rtl" ? "right" : "left"}
+        placement={document?.documentElement?.dir === "rtl" ? "right" : "left"}
         finalFocusRef={btnRef}>
         <DrawerOverlay />
         <DrawerContent boxShadow={'xl'} w='285px' maxW='285px' bg={sidebarBackgroundColor}>
@@ -122,9 +122,9 @@ export function SidebarResponsive(props) {
 // PROPS
 
 Sidebar.propTypes = {
-  logoText: PropTypes.string,
-  routes: PropTypes.arrayOf(PropTypes.object),
-  variant: PropTypes.string,
+  logoText: PropTypes?.string,
+  routes: PropTypes?.arrayOf(PropTypes?.object),
+  variant: PropTypes?.string,
 };
 
 export default Sidebar;

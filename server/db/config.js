@@ -28,6 +28,7 @@ const initializedSchemas = async () => {
                 const schemaFields = {};
                 for (const field of fields) {
                     schemaFields[field.name] = { type: field.backendType };
+                    if (field.ref) schemaFields[field.name] = { type: field.backendType, ref: field.ref };
                 }
                 // Create Mongoose schema
                 const moduleSchema = new mongoose.Schema(schemaFields);

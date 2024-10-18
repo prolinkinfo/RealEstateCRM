@@ -58,8 +58,8 @@ const Index = () => {
 
     const handleCheckboxChange = (event, fieldId, fieldProperty) => {
         let updatedFields = [...fields];
-        let index = fields.findIndex((field) => field._id === fieldId);
-        const isChecked = event.target.checked;
+        let index = fields?.findIndex((field) => field?._id === fieldId);
+        const isChecked = event?.target?.checked;
 
         // If updating 'isView' and the checkbox is checked, ensure only one item can have 'isView' set to true
         if (fieldProperty === 'isView') {
@@ -70,7 +70,7 @@ const Index = () => {
         }
 
         if (fieldProperty === 'isView' && isChecked) {
-            updatedFields = updatedFields.map((field, i) => {
+            updatedFields = updatedFields?.map((field, i) => {
                 if (i !== index) {
                     return { ...field, isView: false };
                 }
@@ -123,7 +123,7 @@ const Index = () => {
         try {
             setIsLoading(true);
 
-            const updates = Object.entries(selectedFields)?.map(
+            const updates = Object?.entries(selectedFields)?.map(
                 ([fieldId, isTableField]) => ({
                     fieldId: fieldId,
                     isTableField,
@@ -214,11 +214,11 @@ const Index = () => {
                                             <MenuItem
                                                 key={id}
                                                 onClick={() => {
-                                                    setModuleName(item.moduleName);
-                                                    setModuleId(item._id);
+                                                    setModuleName(item?.moduleName);
+                                                    setModuleId(item?._id);
                                                 }}
                                             >
-                                                {item.moduleName}
+                                                {item?.moduleName}
                                             </MenuItem>
                                         ))}
                                     </MenuList>
@@ -256,7 +256,7 @@ const Index = () => {
                                 <Grid templateColumns="repeat(12, 1fr)" gap={3} mt={5}>
                                     {fields &&
                                         fields?.map((item, i) => (
-                                            <GridItem colSpan={{ base: 12, md: 6 }} key={item._id}>
+                                            <GridItem colSpan={{ base: 12, md: 6 }} key={item?._id}>
                                                 <Box className="CustomFieldName">
                                                     <Flex
                                                         alignItems="center"
@@ -316,7 +316,7 @@ const Index = () => {
                                         ))}
                                 </Grid>
                                 <Flex Flex justifyContent={"end"} mt="5">
-                                    {Object.keys(selectedFields)?.length > 0 && (
+                                    {Object?.keys(selectedFields)?.length > 0 && (
                                         <Button
                                             colorScheme="brand"
                                             mr={2}

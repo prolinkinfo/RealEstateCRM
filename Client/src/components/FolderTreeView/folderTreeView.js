@@ -40,8 +40,8 @@ const FolderTreeView = ({ data, deleteFile, item, download, name, isFile, childr
 
     function isImageUrl(url) {
         const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
-        const urlExtension = url.substring(url.lastIndexOf('.')).toLowerCase();
-        return imageExtensions.includes(urlExtension);
+        const urlExtension = url?.substring(url?.lastIndexOf('.'))?.toLowerCase();
+        return imageExtensions?.includes(urlExtension);
     }
     return (
         <List width={'100%'} >

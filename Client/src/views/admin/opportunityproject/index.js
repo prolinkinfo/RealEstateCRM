@@ -1,8 +1,4 @@
-import {
-  DeleteIcon,
-  EditIcon,
-  ViewIcon
-} from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon, ViewIcon } from "@chakra-ui/icons";
 import {
   Grid,
   GridItem,
@@ -11,7 +7,7 @@ import {
   MenuItem,
   MenuList,
   Text,
-  useDisclosure
+  useDisclosure,
 } from "@chakra-ui/react";
 import CommonDeleteModel from "components/commonDeleteModel";
 import { useEffect, useState } from "react";
@@ -23,6 +19,7 @@ import CommonCheckTable from "../../../components/reactTable/checktable";
 import { HasAccess } from "../../../redux/accessUtils";
 import { fetchOpportunityProjectData } from "../../../redux/slices/opportunityprojectSlice";
 import Editopportunityproject from "./Editopportunityproject";
+import ImportModal from "./components/ImportModal";
 
 const Index = () => {
   const title = "Opportunity Project";
@@ -75,12 +72,13 @@ const Index = () => {
                 onClick={() => {
                   onOpen();
                   setUserAction("edit");
-                  setEditData(row?.values);
+                  setEditData(row?.original);
                   setSelectedId(row?.values?._id);
                 }}
               >
                 Edit
               </MenuItem>
+              
             )}
             {permission?.view && (
               <MenuItem
@@ -117,22 +115,29 @@ const Index = () => {
   const tempTableColumns = [
     { Header: "#", accessor: "_id", isSortable: false, width: 10 },
     {
-      Header: "Name", accessor: "name", cell: (cell) => (
+      Header: "Name",
+      accessor: "name",
+      cell: (cell) => (
         <div className="selectOpt">
           <Text
-            onClick={() => navigate(`/opportunityprojectView/${cell?.row?.original._id}`, {
-              state: { OpportunityList: data },
-            })}
+            onClick={() =>
+              navigate(`/opportunityprojectView/${cell?.row?.original._id}`, {
+                state: { OpportunityList: data },
+              })
+            }
             me="10px"
-            sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
-            color='brand.600'
+            sx={{
+              "&:hover": { color: "blue.500", textDecoration: "underline" },
+              cursor: "pointer",
+            }}
+            color="brand.600"
             fontSize="sm"
             fontWeight="700"
           >
             {cell?.value}
           </Text>
         </div>
-      )
+      ),
     },
     { Header: "Requirement", accessor: "requirement" },
     ...(permission?.update || permission?.view || permission?.delete
@@ -144,7 +149,7 @@ const Index = () => {
     try {
       setIsLoding(true);
       let response = await deleteManyApi("api/task/deleteMany", ids);
-      if (response.status === 200) {
+      if (response?.status === 200) {
         setSelectedValues([]);
         setDeleteMany(false);
         setAction((pre) => !pre);
@@ -157,7 +162,7 @@ const Index = () => {
   };
 
   useEffect(() => {
-    if (window.location.pathname === "/opportunityproject") {
+    if (window?.location?.pathname === "/opportunityproject") {
       fetchData();
     }
   }, [action]);
@@ -177,7 +182,7 @@ const Index = () => {
         `api/opportunityproject/deleteMany`,
         selectedValues
       );
-      if (response.status === 200) {
+      if (response?.status === 200) {
         setSelectedValues([]);
         setDeleteMany(false);
         setAction((pre) => !pre);
@@ -188,6 +193,7 @@ const Index = () => {
       setIsLoding(false);
     }
   };
+
 
   return (
     <div>
@@ -235,6 +241,12 @@ const Index = () => {
               type="Opportunity Project"
               handleDeleteData={handleDeleteClick}
               ids={selectedValues}
+            />
+            <ImportModal
+              text="Opportunity Project file"
+              isOpen={isImport}
+              onClose={setIsImport}
+              customFields={[]}
             />
           </GridItem>
         )}

@@ -31,18 +31,18 @@ const UserAdvanceSearch = (props) => {
             const getValue = [
                 {
                     name: ["firstName"],
-                    value: values.firstName
+                    value: values?.firstName
                 },
                 {
                     name: ["lastName"],
-                    value: values.lastName
+                    value: values?.lastName
                 },
                 {
                     name: ["username"],
-                    value: values.username
+                    value: values?.username
                 },
             ]
-            dispatch(setGetTagValues(getValue.filter(item => item.value)))
+            dispatch(setGetTagValues(getValue?.filter(item => item?.value)))
             // setSearchedData(searchResult);
             setDisplaySearchData(true)
             setAdvanceSearch(false)
@@ -73,7 +73,7 @@ const UserAdvanceSearch = (props) => {
                                     placeholder='Enter First Name'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.firstName && touched.firstName && errors.firstName}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.firstName && touched?.firstName && errors?.firstName}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
@@ -87,7 +87,7 @@ const UserAdvanceSearch = (props) => {
                                     placeholder='Enter Last Name'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.lastName && touched.lastName && errors.lastName}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.lastName && touched?.lastName && errors?.lastName}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2} >
@@ -101,7 +101,7 @@ const UserAdvanceSearch = (props) => {
                                     placeholder='Enter User Name'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.username && touched.username && errors.username}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.username && touched?.username && errors?.username}</Text>
 
                             </GridItem>
                         </Grid>

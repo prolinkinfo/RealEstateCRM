@@ -17,7 +17,7 @@ import { HasAccess } from "../../../../redux/accessUtils";
 const AddEdit = (props) => {
     const { onClose, isOpen, fetchData, userAction, setAction, id, view, data } = props
     const [isChecked, setIsChecked] = useState(false);
-    const userId = JSON.parse(localStorage.getItem('user'))._id
+    const userId = JSON.parse(localStorage.getItem('user'))?._id
     const [assignToLeadData, setAssignToLeadData] = useState([]);
     const [assignToContactData, setAssignToContactData] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"))
@@ -27,8 +27,8 @@ const AddEdit = (props) => {
     const leadData = useSelector((state) => state?.leadData?.data);
 
 
-    const today = new Date().toISOString().split('T')[0];
-    const todayTime = new Date().toISOString().split('.')[0];
+    const today = new Date()?.toISOString()?.split('T')[0];
+    const todayTime = new Date()?.toISOString()?.split('.')[0];
 
     const [leadAccess, contactAccess] = HasAccess(['Leads', 'Contacts']);
 
@@ -36,11 +36,11 @@ const AddEdit = (props) => {
 
     const initialValues = {
         title: '',
-        category: props.leadContect === 'contactView' ? 'Contact' : props.leadContect === 'leadView' ? 'Lead' : 'None',
+        category: props?.leadContect === 'contactView' ? 'Contact' : props?.leadContect === 'leadView' ? 'Lead' : 'None',
         description: '',
         notes: '',
-        assignTo: props.leadContect === 'contactView' && id ? id : '',
-        assignToLead: props.leadContect === 'leadView' && id ? id : '',
+        assignTo: props?.leadContect === 'contactView' && id ? id : '',
+        assignToLead: props?.leadContect === 'leadView' && id ? id : '',
         reminder: '',
         start: '',
         end: '',
@@ -71,14 +71,14 @@ const AddEdit = (props) => {
                 setIsLoding(true)
 
                 if (values?.start) {
-                    values.start = values?.allDay ? moment(values?.start).format('YYYY-MM-DD') : moment(values?.start).format('YYYY-MM-DD HH:mm');
+                    values.start = values?.allDay ? moment(values?.start)?.format('YYYY-MM-DD') : moment(values?.start)?.format('YYYY-MM-DD HH:mm');
                 }
                 if (values?.end) {
-                    values.end = values?.allDay ? moment(values?.end).format('YYYY-MM-DD') : moment(values?.end).format('YYYY-MM-DD HH:mm');
+                    values.end = values?.allDay ? moment(values?.end)?.format('YYYY-MM-DD') : moment(values?.end)?.format('YYYY-MM-DD HH:mm');
                 }
 
                 let response = await postApi('api/task/add', values)
-                if (response.status === 200) {
+                if (response?.status === 200) {
                     formik.resetForm()
                     onClose();
                     fetchData(1)
@@ -94,14 +94,14 @@ const AddEdit = (props) => {
                 setIsLoding(true)
 
                 if (values?.start) {
-                    values.start = values?.allDay ? moment(values?.start).format('YYYY-MM-DD') : moment(values?.start).format('YYYY-MM-DD HH:mm');
+                    values.start = values?.allDay ? moment(values?.start)?.format('YYYY-MM-DD') : moment(values?.start)?.format('YYYY-MM-DD HH:mm');
                 }
                 if (values?.end) {
-                    values.end = values?.allDay ? moment(values?.end).format('YYYY-MM-DD') : moment(values?.end).format('YYYY-MM-DD HH:mm');
+                    values.end = values?.allDay ? moment(values?.end)?.format('YYYY-MM-DD') : moment(values?.end)?.format('YYYY-MM-DD HH:mm');
                 }
 
                 let response = await putApi(`api/task/edit/${id}`, values)
-                if (response.status === 200) {
+                if (response?.status === 200) {
                     formik.resetForm()
                     onClose();
                     setAction((pre) => !pre)
@@ -171,21 +171,21 @@ const AddEdit = (props) => {
     useEffect(async () => {
         values.start = props?.date
         if (view === true) {
-            if (values.category === "Contact" && assignToContactData.length <= 0) {
+            if (values?.category === "Contact" && assignToContactData?.length <= 0) {
                 setAssignToContactData(contactData)
                 // result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
                 // setAssignToContactData(result?.data)
-            } else if (values.category === "Lead" && assignToLeadData.length <= 0) {
+            } else if (values?.category === "Lead" && assignToLeadData?.length <= 0) {
                 setAssignToLeadData(leadData)
             }
         } else {
             try {
                 let result
-                if (values.category === "Contact" && assignToContactData.length <= 0) {
+                if (values?.category === "Contact" && assignToContactData?.length <= 0) {
                     result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
                     setAssignToContactData(result?.data)
-                } else if (values.category === "Lead" && assignToLeadData.length <= 0) {
-                    result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
+                } else if (values?.category === "Lead" && assignToLeadData?.length <= 0) {
+                    result = await getApi(user?.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
                     setAssignToLeadData(result?.data)
                 }
             }
@@ -193,7 +193,7 @@ const AddEdit = (props) => {
                 console.log(e);
             }
         }
-    }, [props, values.category])
+    }, [props, values?.category])
     useEffect(() => {
         if (userAction === "edit" || data) {
             fetchTaskData()
@@ -232,13 +232,13 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.title}
+                                    value={values?.title}
                                     name="title"
                                     placeholder='Title'
                                     fontWeight='500'
                                     borderColor={errors?.title && touched?.title ? "red.300" : null}
                                 />
-                                <Text mb='10px' color={'red'} fontSize='sm'> {errors.title && touched.title && errors.title}</Text>
+                                <Text mb='10px' color={'red'} fontSize='sm'> {errors?.title && touched?.title && errors?.title}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -248,9 +248,9 @@ const AddEdit = (props) => {
                                     <Stack direction='row'>
                                         <Stack direction='row'>
                                             <Radio value='None'>None</Radio>
-                                            {props.leadContect === 'contactView' && <Radio value='Contact'>Contact</Radio>}
-                                            {props.leadContect === 'leadView' && <Radio value='Lead'>Lead</Radio>}
-                                            {!props.leadContect &&
+                                            {props?.leadContect === 'contactView' && <Radio value='Contact'>Contact</Radio>}
+                                            {props?.leadContect === 'leadView' && <Radio value='Lead'>Lead</Radio>}
+                                            {!props?.leadContect &&
                                                 <>
                                                     {(user?.role === "superAdmin" || contactAccess?.create) && <Radio value='Contact'>Contact</Radio>}
                                                     {(user?.role === "superAdmin" || leadAccess?.create) && <Radio value='Lead'>Lead</Radio>}
@@ -260,9 +260,9 @@ const AddEdit = (props) => {
 
                                     </Stack>
                                 </RadioGroup>
-                                <Text mb='10px' color={'red'}> {errors.category && touched.category && errors.category}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.category && touched?.category && errors?.category}</Text>
                             </GridItem>
-                            <GridItem colSpan={{ base: 12, md: values.category === "None" ? 12 : 6 }} >
+                            <GridItem colSpan={{ base: 12, md: values?.category === "None" ? 12 : 6 }} >
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                     Description
                                 </FormLabel>
@@ -270,7 +270,7 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.description}
+                                    value={values?.description}
                                     name="description"
                                     placeholder='Description'
                                     fontWeight='500'
@@ -278,7 +278,7 @@ const AddEdit = (props) => {
                                 />
                                 <Text mb='10px' color={'red'}> {errors.description && touched.description && errors.description}</Text>
                             </GridItem>
-                            {values.category === "Contact" ?
+                            {values?.category === "Contact" ?
                                 <>
                                     <GridItem colSpan={{ base: 12, md: 6 }} >
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -286,24 +286,24 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Flex justifyContent={'space-between'}>
                                             <Select
-                                                value={values.assignTo}
+                                                value={values?.assignTo}
                                                 name="assignTo"
                                                 onChange={handleChange}
-                                                mb={errors.assignTo && touched.assignTo ? undefined : '10px'}
+                                                mb={errors?.assignTo && touched?.assignTo ? undefined : '10px'}
                                                 fontWeight='500'
                                                 placeholder={'Assign To'}
-                                                borderColor={errors.assignTo && touched.assignTo ? "red.300" : null}
+                                                borderColor={errors?.assignTo && touched?.assignTo ? "red.300" : null}
                                             >
                                                 {assignToContactData?.map((item) => {
-                                                    return <option value={item._id} key={item._id}>{values.category === 'Contact' ? `${item.firstName} ${item.lastName}` : item.leadName}</option>
+                                                    return <option value={item?._id} key={item?._id}>{values?.category === 'Contact' ? `${item?.firstName} ${item?.lastName}` : item?.leadName}</option>
                                                 })}
                                             </Select>
                                             <IconButton onClick={() => setContactModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
                                         </Flex>
-                                        <Text mb='10px' color={'red'}> {errors.assignTo && touched.assignTo && errors.assignTo}</Text>
+                                        <Text mb='10px' color={'red'}> {errors?.assignTo && touched?.assignTo && errors?.assignTo}</Text>
                                     </GridItem>
                                 </>
-                                : values.category === "Lead" ?
+                                : values?.category === "Lead" ?
                                     <>
                                         <GridItem colSpan={{ base: 12, md: 6 }} >
                                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -311,21 +311,21 @@ const AddEdit = (props) => {
                                             </FormLabel>
                                             <Flex justifyContent={'space-between'}>
                                                 <Select
-                                                    value={values.assignToLead}
+                                                    value={values?.assignToLead}
                                                     name="assignToLead"
                                                     onChange={handleChange}
-                                                    mb={errors.assignToLead && touched.assignToLead ? undefined : '10px'}
+                                                    mb={errors?.assignToLead && touched?.assignToLead ? undefined : '10px'}
                                                     fontWeight='500'
                                                     placeholder={'Assign To'}
-                                                    borderColor={errors.assignToLead && touched.assignToLead ? "red.300" : null}
+                                                    borderColor={errors?.assignToLead && touched?.assignToLead ? "red.300" : null}
                                                 >
                                                     {assignToLeadData?.map((item) => {
-                                                        return <option value={item._id} key={item._id}>{item.leadName}</option>
+                                                        return <option value={item?._id} key={item?._id}>{item?.leadName}</option>
                                                     })}
                                                 </Select>
                                                 <IconButton onClick={() => setLeadModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
                                             </Flex>
-                                            <Text mb='10px' color={'red'}> {errors.assignToLead && touched.assignToLead && errors.assignToLead}</Text>
+                                            <Text mb='10px' color={'red'}> {errors?.assignToLead && touched?.assignToLead && errors?.assignToLead}</Text>
                                         </GridItem>
                                     </>
                                     : ''
@@ -357,7 +357,7 @@ const AddEdit = (props) => {
                                     fontWeight='500'
                                     borderColor={errors?.start && touched?.start ? "red.300" : null}
                                 />
-                                <Text mb='10px' fontSize='sm' color={'red'}> {errors.start && touched.start && errors.start}</Text>
+                                <Text mb='10px' fontSize='sm' color={'red'}> {errors?.start && touched?.start && errors?.start}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -365,7 +365,7 @@ const AddEdit = (props) => {
                                 </FormLabel>
                                 <Input
                                     type={values?.allDay ? 'date' : 'datetime-local'}
-                                    min={values.start}
+                                    min={values?.start}
                                     fontSize='sm'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
@@ -374,7 +374,7 @@ const AddEdit = (props) => {
                                     fontWeight='500'
                                     borderColor={errors?.end && touched?.end ? "red.300" : null}
                                 />
-                                <Text mb='10px' color={'red'}> {errors.end && touched.end && errors.end}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.end && touched?.end && errors?.end}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, sm: 4 }} >
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -385,12 +385,12 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.backgroundColor}
+                                    value={values?.backgroundColor}
                                     name="backgroundColor"
                                     fontWeight='500'
                                     borderColor={errors?.backgroundColor && touched?.backgroundColor ? "red.300" : null}
                                 />
-                                <Text mb='10px' color={'red'}> {errors.backgroundColor && touched.backgroundColor && errors.backgroundColor}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.backgroundColor && touched?.backgroundColor && errors?.backgroundColor}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, sm: 4 }} >
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -401,13 +401,13 @@ const AddEdit = (props) => {
                                     type='color'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.borderColor}
+                                    value={values?.borderColor}
                                     name="borderColor"
                                     placeholder='borderColor'
                                     fontWeight='500'
                                     borderColor={errors?.borderColor && touched?.borderColor ? "red.300" : null}
                                 />
-                                <Text mb='10px' color={'red'}> {errors.borderColor && touched.borderColor && errors.borderColor}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.borderColor && touched?.borderColor && errors?.borderColor}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, sm: 4 }} >
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -418,13 +418,13 @@ const AddEdit = (props) => {
                                     type='color'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.textColor}
+                                    value={values?.textColor}
                                     name="textColor"
                                     placeholder='textColor'
                                     fontWeight='500'
                                     textColor={errors?.textColor && touched?.textColor ? "red.300" : null}
                                 />
-                                <Text mb='10px' color={'red'}> {errors.textColor && touched.textColor && errors.textColor}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.textColor && touched?.textColor && errors?.textColor}</Text>
                             </GridItem>
 
 
@@ -436,20 +436,20 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.url}
+                                    value={values?.url}
                                     name="url"
                                     placeholder='Enter url'
                                     fontWeight='500'
                                     borderColor={errors?.url && touched?.url ? "red.300" : null}
                                 />
-                                <Text mb='10px' color={'red'}> {errors.url && touched.url && errors.url}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.url && touched?.url && errors?.url}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }} >
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                     Status
                                 </FormLabel>
                                 <Select
-                                    onChange={(e) => setFieldValue("status", e.target.value)}
+                                    onChange={(e) => setFieldValue("status", e?.target?.value)}
                                     value={values?.status}
                                     style={{ fontSize: "14px" }}>
                                     <option value='todo'>Todo</option>
@@ -468,13 +468,13 @@ const AddEdit = (props) => {
                                     fontSize='sm'
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.notes}
+                                    value={values?.notes}
                                     name="notes"
                                     placeholder='Notes'
                                     fontWeight='500'
                                     borderColor={errors?.notes && touched?.notes ? "red.300" : null}
                                 />
-                                <Text mb='10px' color={'red'}> {errors.notes && touched.notes && errors.notes}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.notes && touched?.notes && errors?.notes}</Text>
                             </GridItem>
                         </Grid>
                     }

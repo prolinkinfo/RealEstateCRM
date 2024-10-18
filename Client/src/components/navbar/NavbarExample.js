@@ -58,33 +58,33 @@ export default function AuthNavbar(props) {
 
   // Menus
   let authObject = {};
-  routes.map((route) => {
-    if (route.items) {
-      authObject = route.items.find((link) => link.name === "Authentication");
+  routes?.map((route) => {
+    if (route?.items) {
+      authObject = route?.items?.find((link) => link?.name === "Authentication");
     }
   });
 
   let applicationsObject = {};
-  routes.map((route) => {
-    if (route.items) {
-      applicationsObject = route.items.find(
-        (link) => link.name === "Applications"
+  routes?.map((route) => {
+    if (route?.items) {
+      applicationsObject = route?.items?.find(
+        (link) => link?.name === "Applications"
       );
     }
   });
 
   let ecommerceObject = {};
-  routes.map((route) => {
-    if (route.items) {
-      ecommerceObject = route.items.find((link) => link.name === "Ecommerce");
+  routes?.map((route) => {
+    if (route?.items) {
+      ecommerceObject = route?.items?.find((link) => link?.name === "Ecommerce");
     }
   });
 
   let extraArr = [];
-  routes.map((route) => {
-    route.items.map((item) => {
-      if (item.items && item.name === "Pages") {
-        extraArr = item.items.filter((link) => !link.collapse);
+  routes?.map((route) => {
+    route?.items?.map((item) => {
+      if (item?.items && item?.name === "Pages") {
+        extraArr = item?.items?.filter((link) => !link?.collapse);
       }
     });
   });
@@ -115,7 +115,7 @@ export default function AuthNavbar(props) {
       </Text>
     </Link>
   );
-  if (props.secondary === true) {
+  if (props?.secondary === true) {
     brand = (
       <Link
         href={`${process.env.PUBLIC_URL}/#/`}
@@ -150,7 +150,7 @@ export default function AuthNavbar(props) {
   }
 
   const createPagesLinks = (routes) => {
-    return routes.map((link) => {
+    return routes?.map((link) => {
       if (
         link.name === "Applications" ||
         link.name === "Ecommerce" ||
@@ -162,7 +162,7 @@ export default function AuthNavbar(props) {
       ) {
         return;
       }
-      if (link.name === "Pricing Page") {
+      if (link?.name === "Pricing Page") {
         return (
           <Stack direction='column'>
             <Stack
@@ -182,7 +182,7 @@ export default function AuthNavbar(props) {
           </Stack>
         );
       }
-      if (link.authIcon) {
+      if (link?.authIcon) {
         return (
           <Stack direction='column'>
             <Stack
@@ -192,26 +192,26 @@ export default function AuthNavbar(props) {
               mb='6px'
               cursor='default'>
               <IconBox bg='blue.500' color='white' h='30px' w='30px'>
-                {link.authIcon}
+                {link?.authIcon}
               </IconBox>
               <Text fontWeight='bold' fontSize='sm' color={textColor}>
-                {link.name}
+                {link?.name}
               </Text>
             </Stack>
-            {createPagesLinks(link.items)}
+            {createPagesLinks(link?.items)}
           </Stack>
         );
       } else {
         if (link.component) {
           return (
-            <NavLink to={link.layout + link.path}>
+            <NavLink to={link?.layout + link?.path}>
               <MenuItem
                 ps='36px'
                 py='0px'
                 _hover={{ boxShadow: "none", bg: "none" }}
                 borderRadius='12px'>
                 <Text color='gray.400' fontSize='sm' fontWeight='normal'>
-                  {link.name}
+                  {link?.name}
                 </Text>
               </MenuItem>
             </NavLink>
@@ -224,16 +224,16 @@ export default function AuthNavbar(props) {
   };
 
   const createExtraLinks = (routes) => {
-    return routes.map((link) => {
+    return routes?.map((link) => {
       return (
-        <NavLink to={link.layout + link.path}>
+        <NavLink to={link?.layout + link?.path}>
           <MenuItem
             ps='36px'
             py='0px'
             _hover={{ boxShadow: "none", bg: "none" }}
             borderRadius='12px'>
             <Text color='gray.400' fontSize='sm' fontWeight='normal'>
-              {link.name}
+              {link?.name}
             </Text>
           </MenuItem>
         </NavLink>
@@ -242,8 +242,8 @@ export default function AuthNavbar(props) {
   };
 
   const createAuthLinks = (routes) => {
-    return routes.map((link) => {
-      if (link.authIcon && link.collapse === true) {
+    return routes?.map((link) => {
+      if (link?.authIcon && link?.collapse === true) {
         return (
           <Stack direction='column' my='auto'>
             <Stack
@@ -252,7 +252,7 @@ export default function AuthNavbar(props) {
               align='center'
               cursor='default'>
               <Text fontWeight='bold' fontSize='sm' me='auto' color={textColor}>
-                {link.name}
+                {link?.name}
               </Text>
               <Icon
                 as={GoChevronRight}
@@ -264,15 +264,15 @@ export default function AuthNavbar(props) {
             </Stack>
 
             <Flex direction='column' bg={menuBg}>
-              {createAuthLinks(link.items)}
+              {createAuthLinks(link?.items)}
             </Flex>
           </Stack>
         );
       } else {
         return (
-          <NavLink to={link.layout + link.path}>
+          <NavLink to={link?.layout + link?.path}>
             <Text color='red' fontSize='sm' fontWeight='normal'>
-              {link.name}
+              {link?.name}
             </Text>
           </NavLink>
         );
@@ -281,15 +281,15 @@ export default function AuthNavbar(props) {
   };
 
   const createApplicationLinks = (routes) => {
-    return routes.map((link) => {
+    return routes?.map((link) => {
       return (
-        <NavLink to={link.layout + link.path}>
+        <NavLink to={link?.layout + link?.path}>
           <Stack direction='row' spacing='12px' align='center' cursor='pointer'>
             <IconBox bg='blue.500' color='white' h='30px' w='30px'>
-              {link.authIcon}
+              {link?.authIcon}
             </IconBox>
             <Text fontWeight='bold' fontSize='sm' color={textColor}>
-              {link.name}
+              {link?.name}
             </Text>
           </Stack>
         </NavLink>
@@ -298,8 +298,8 @@ export default function AuthNavbar(props) {
   };
 
   const createEcommerceLinks = (routes) => {
-    return routes.map((link) => {
-      if (link.authIcon) {
+    return routes?.map((link) => {
+      if (link?.authIcon) {
         return (
           <Stack direction='column'>
             <Stack
@@ -309,19 +309,19 @@ export default function AuthNavbar(props) {
               mb='6px'
               cursor='default'>
               <IconBox bg='blue.500' color='white' h='30px' w='30px'>
-                {link.authIcon}
+                {link?.authIcon}
               </IconBox>
               <Text fontWeight='bold' fontSize='sm' color={textColor}>
-                {link.name}
+                {link?.name}
               </Text>
             </Stack>
-            {createPagesLinks(link.items)}
+            {createPagesLinks(link?.items)}
           </Stack>
         );
       } else {
-        if (link.component) {
+        if (link?.component) {
           return (
-            <NavLink to={link.layout + link.path}>
+            <NavLink to={link?.layout + link?.path}>
               <MenuItem
                 ps='36px'
                 py='0px'
@@ -334,7 +334,7 @@ export default function AuthNavbar(props) {
             </NavLink>
           );
         } else {
-          return <>{createPagesLinks(link.items)}</>;
+          return <>{createPagesLinks(link?.items)}</>;
         }
       }
     });
@@ -435,7 +435,7 @@ export default function AuthNavbar(props) {
                 </Text>
               </Flex>
               <SimpleGrid templateColumns='1fr' width='100%'>
-                {createAuthLinks(authObject.items)}
+                {createAuthLinks(authObject?.items)}
               </SimpleGrid>
             </Stack>
           </MenuList>
@@ -471,7 +471,7 @@ export default function AuthNavbar(props) {
             top='30px'
             left='-10px'>
             <Grid templateColumns='1fr' gap='16px'>
-              {createApplicationLinks(applicationsObject.items)}
+              {createApplicationLinks(applicationsObject?.items)}
             </Grid>
           </MenuList>
         </Menu>
@@ -507,7 +507,7 @@ export default function AuthNavbar(props) {
             top='30px'
             left='-10px'>
             <Grid templateColumns='repeat(2, 1fr)' gap='16px'>
-              {createEcommerceLinks(ecommerceObject.items)}
+              {createEcommerceLinks(ecommerceObject?.items)}
             </Grid>
           </MenuList>
         </Menu>
@@ -553,8 +553,8 @@ export default function AuthNavbar(props) {
                   />
                 </Stack>
               }
-              logoText={props.logoText}
-              secondary={props.secondary}
+              logoText={props?.logoText}
+              secondary={props?.secondary}
               routes={routes}
               {...rest}
             />
@@ -581,6 +581,6 @@ export default function AuthNavbar(props) {
 }
 
 AuthNavbar.propTypes = {
-  color: PropTypes.oneOf(["primary", "info", "success", "warning", "danger"]),
-  brandText: PropTypes.string,
+  color: PropTypes?.oneOf(["primary", "info", "success", "warning", "danger"]),
+  brandText: PropTypes?.string,
 };

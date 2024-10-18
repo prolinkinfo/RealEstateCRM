@@ -20,7 +20,7 @@ export default function Default(props) {
   const textColorSecondary = "secondaryGray.600";
 
   return (
-    <Card cursor={'pointer'} py='15px' onClick={props.onClick} >
+    <Card cursor={'pointer'} py='15px' onClick={props?.onClick} >
       <Flex
         my='auto'
         h='100%'

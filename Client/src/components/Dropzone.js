@@ -8,26 +8,26 @@ function Dropzone(props) {
   const { content, ...rest } = props;
   const { getRootProps, getInputProps } = useDropzone({
     // multiple: true, // Set to false if you only want to allow selecting one file
-    multiple: props.hasOwnProperty('isMultipleAllow') ? props.isMultipleAllow : true, // assign false in props.isMultipleAllow if you only want to allow selecting one file
+    multiple: props?.hasOwnProperty('isMultipleAllow') ? props?.isMultipleAllow : true, // assign false in props.isMultipleAllow if you only want to allow selecting one file
     onDrop: (acceptedFiles) => {
-      if (props.img === "img") {
-        const imageFiles = acceptedFiles.filter((file) => {
-          return file.type.startsWith("image/");
+      if (props?.img === "img") {
+        const imageFiles = acceptedFiles?.filter((file) => {
+          return file?.type?.startsWith("image/");
         })
-        if (imageFiles.length > 0) {
-          props.onFileSelect(imageFiles);
+        if (imageFiles?.length > 0) {
+          props?.onFileSelect(imageFiles);
         }
       }
-      else if (props.csv === "csv") {
-        const excelFiles = acceptedFiles.filter((file) => {
+      else if (props?.csv === "csv") {
+        const excelFiles = acceptedFiles?.filter((file) => {
           return ["text/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]?.includes(file?.type)
         })
-        if (excelFiles.length > 0) {
-          props.onFileSelect(excelFiles);
+        if (excelFiles?.length > 0) {
+          props?.onFileSelect(excelFiles);
         }
       }
-      else if (acceptedFiles.length > 0) {
-        props.onFileSelect(acceptedFiles);
+      else if (acceptedFiles?.length > 0) {
+        props?.onFileSelect(acceptedFiles);
       }
 
     },

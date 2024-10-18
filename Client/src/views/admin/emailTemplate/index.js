@@ -76,7 +76,7 @@ const Index = () => {
             cell: (cell) => (
                 <div className="selectOpt">
                     <Text
-                        onClick={() => navigate(`/email-template/${cell?.row?.original._id}`)}
+                        onClick={() => navigate(`/email-template/${cell?.row?.original?._id}`)}
                         me="10px"
                         sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
                         color='brand.600'
@@ -95,7 +95,7 @@ const Index = () => {
     const fetchData = async () => {
         setIsLoding(true)
         const result = await dispatch(fetchEmailTempData())
-        if (result.payload.status === 200) {
+        if (result?.payload?.status === 200) {
             setData(result?.payload?.data);
         } else {
             toast.error("Failed to fetch data", "error");
@@ -107,7 +107,7 @@ const Index = () => {
         try {
             setIsLoding(true)
             let response = await deleteManyApi('api/email-temp/deleteMany', ids)
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 setSelectedValues([])
                 setDeleteMany(false)
                 setAction((pre) => !pre)

@@ -36,7 +36,7 @@ const Index = () => {
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
         {
             Header: 'Email Id', accessor: 'username', cell: (cell) => (
-                <Link to={`/userView/${cell?.row?.values._id}`}>
+                <Link to={`/userView/${cell?.row?.values?._id}`}>
                     <Text
                         me="10px"
                         sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
@@ -92,7 +92,7 @@ const Index = () => {
         try {
             setIsLoding(true)
             let response = await deleteManyApi(`api/user/deleteMany`, selectedValues)
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 setSelectedValues([])
                 setDelete(false)
                 setAction((pre) => !pre)
@@ -149,7 +149,7 @@ const Index = () => {
                 setSearchboxOutside={setSearchboxOutside}
                 handleSearchType="UsersSearch"
             />
-            <AddEditUser isOpen={isOpen} onClose={handleClose} data={editData} selectedId={selectedId} userAction={userAction} setUserAction={setUserAction} fetchData={fetchData} />
+            <AddEditUser isOpen={isOpen} onClose={handleClose} data={editData} selectedId={selectedId} userAction={userAction} setAction={setAction} setUserAction={setUserAction} fetchData={fetchData} />
             <CommonDeleteModel isOpen={deleteMany} onClose={() => setDelete(false)} type='User' handleDeleteData={handleDeleteClick} ids={''} selectedValues={selectedValues} />
 
             <UserAdvanceSearch

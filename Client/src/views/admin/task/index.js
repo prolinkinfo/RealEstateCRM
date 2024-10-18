@@ -40,7 +40,7 @@ const Task = () => {
     const [userAction, setUserAction] = useState("");
     const [permission, leadAccess, contactAccess] = HasAccess(["Tasks", 'Leads', 'Contacts']);
     const location = useLocation();
-    const state = location.state;
+    const state = location?.state;
     const navigate = useNavigate()
     const dispatch = useDispatch();
 
@@ -59,7 +59,7 @@ const Task = () => {
                         {permission?.update &&
                             <MenuItem py={2.5} icon={<EditIcon fontSize={15} mb={1} />} onClick={() => handleEditOpen(row)}>Edit</MenuItem>}
                         {permission?.view &&
-                            <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { setId(row?.original._id); handleViewOpen(row?.values?._id); }}>View</MenuItem>}
+                            <MenuItem py={2.5} color={'green'} icon={<ViewIcon mb={1} fontSize={15} />} onClick={() => { setId(row?.original?._id); handleViewOpen(row?.values?._id); }}>View</MenuItem>}
                         {permission?.delete &&
                             <MenuItem py={2.5} color={'red'} icon={<DeleteIcon fontSize={15} mb={1} />} onClick={() => { setDeleteMany(true); setSelectedValues([row?.values?._id]); }}>Delete</MenuItem>}
                     </MenuList>
@@ -78,7 +78,7 @@ const Task = () => {
             Header: 'Title', accessor: 'title', type: 'text', formikType: '', cell: (cell) => (
                 <div className="selectOpt">
                     <Text
-                        onClick={() => handleViewOpen(cell?.row?.original._id)}
+                        onClick={() => handleViewOpen(cell?.row?.original?._id)}
                         me="10px"
                         sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
                         color='brand.600'
@@ -113,7 +113,7 @@ const Task = () => {
     const fetchData = async () => {
         setIsLoding(true)
         const result = await dispatch(fetchTaskData())
-        if (result.payload.status === 200) {
+        if (result?.payload?.status === 200) {
             setData(result?.payload?.data);
         } else {
             toast.error("Failed to fetch data", "error");
@@ -123,8 +123,8 @@ const Task = () => {
     const setStatusData = async (cell, e) => {
         try {
             setIsLoding(true)
-            let response = await putApi(`api/task/changeStatus/${cell?.row?.original?._id}`, { status: e.target.value });
-            if (response.status === 200) {
+            let response = await putApi(`api/task/changeStatus/${cell?.row?.original?._id}`, { status: e?.target?.value });
+            if (response?.status === 200) {
                 setAction((pre) => !pre)
             }
         } catch (e) {
@@ -135,7 +135,7 @@ const Task = () => {
         }
     }
     const changeStatus = (cell) => {
-        switch (cell.value) {
+        switch (cell?.value) {
             case 'pending':
                 return 'pending';
             case 'completed':
@@ -156,7 +156,7 @@ const Task = () => {
         try {
             setIsLoding(true)
             let response = await deleteManyApi('api/task/deleteMany', ids)
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 setSelectedValues([])
                 setDeleteMany(false)
                 setAction((pre) => !pre)

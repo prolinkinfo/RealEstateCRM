@@ -78,8 +78,8 @@ const AddEdit = (props) => {
         grandTotal: type === "edit" ? invoiceDetails?.grandTotal : "0",
         discountType: type === "edit" ? invoiceDetails?.discountType : "none",
         items: type === "edit" ? invoiceDetails?.items : [],
-        createBy: JSON.parse(localStorage.getItem('user'))._id,
-        modifiedBy: JSON.parse(localStorage.getItem('user'))._id
+        createBy: JSON.parse(localStorage.getItem('user'))?._id,
+        modifiedBy: JSON.parse(localStorage.getItem('user'))?._id
     };
 
 
@@ -87,7 +87,7 @@ const AddEdit = (props) => {
         try {
             setIsLoding(true)
             let response = await postApi('api/invoices/add', values)
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 onClose();
                 toast.success(`Invoice Save successfully`)
                 formik.resetForm();
@@ -105,7 +105,7 @@ const AddEdit = (props) => {
         try {
             setIsLoding(true)
             let response = await putApi(`api/invoices/edit/${selectedId}`, values)
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 onClose();
                 toast.success(`Invoice Update successfully`)
                 formik.resetForm();
@@ -142,8 +142,8 @@ const AddEdit = (props) => {
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
 
     const handleCheck = (e) => {
-        setFieldValue("isCheck", e.target.checked)
-        if (e.target.checked) {
+        setFieldValue("isCheck", e?.target?.checked)
+        if (e?.target?.checked) {
             setFieldValue("shippingStreet", values?.billingStreet)
             setFieldValue("shippingCity", values?.billingCity)
             setFieldValue("shippingState", values?.billingState)
@@ -184,21 +184,21 @@ const AddEdit = (props) => {
         }
     }
     const calculateAmounts = (items) => {
-        const totalAmount = items.reduce((sum, item) => sum + item.amount, 0);
-        const totalDiscount = items.reduce((sum, item) => sum + item.totalDiscount, 0);
+        const totalAmount = items?.reduce((sum, item) => sum + item?.amount, 0);
+        const totalDiscount = items?.reduce((sum, item) => sum + item?.totalDiscount, 0);
         const netAmount = Number(totalAmount) - Number(totalDiscount);
         return { totalAmount, netAmount, discount: totalDiscount };
     };
 
     const handleAddItem = () => {
         setFieldValue("items", [
-            ...values.items,
-            { id: values.items.length + 1, productName: "", qty: 0, rate: 0, discount: 0, discountType: "none", totalDiscount: 0, amount: 0 }
+            ...values?.items,
+            { id: values?.items?.length + 1, productName: "", qty: 0, rate: 0, discount: 0, discountType: "none", totalDiscount: 0, amount: 0 }
         ]);
     };
 
     const handleRemoveItem = (index) => {
-        const newItems = values.items.filter((_, idx) => idx !== index);
+        const newItems = values?.items?.filter((_, idx) => idx !== index);
         setFieldValue("items", newItems);
         const { totalAmount, netAmount, discount } = calculateAmounts(newItems);
         setFieldValue("total", totalAmount);
@@ -207,16 +207,16 @@ const AddEdit = (props) => {
     };
 
     const handleChangeCalculation = (index, field, value) => {
-        const newItems = values.items.map((item, idx) => {
+        const newItems = values?.items?.map((item, idx) => {
             if (idx === index) {
                 const updatedItem = { ...item, [field]: value };
-                if (['qty', 'rate', 'discount', 'discountType'].includes(field)) {
-                    const discountValue = updatedItem.discountType === 'percent'
-                        ? (updatedItem.rate * updatedItem.qty * updatedItem.discount / 100)
-                        : updatedItem.discountType === 'none'
+                if (['qty', 'rate', 'discount', 'discountType']?.includes(field)) {
+                    const discountValue = updatedItem?.discountType === 'percent'
+                        ? (updatedItem?.rate * updatedItem?.qty * updatedItem?.discount / 100)
+                        : updatedItem?.discountType === 'none'
                             ? 0
-                            : updatedItem.discount;
-                    updatedItem.amount = updatedItem.rate * updatedItem.qty - discountValue;
+                            : updatedItem?.discount;
+                    updatedItem.amount = updatedItem?.rate * updatedItem?.qty - discountValue;
                     updatedItem.totalDiscount = discountValue;
                 }
                 return updatedItem;
@@ -243,7 +243,7 @@ const AddEdit = (props) => {
         setFieldValue('shippingTax', shippingTax?.toFixed(2));
         setFieldValue('tax', tax?.toFixed(2));
         setFieldValue('grandTotal', grandTotal?.toFixed(2));
-    }, [values.subtotal, values.shipping, values.ptax]);
+    }, [values?.subtotal, values?.shipping, values?.ptax]);
 
     useEffect(() => {
         calculateValues();
@@ -288,15 +288,15 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Input
                                             fontSize='sm'
-                                            value={values.title}
+                                            value={values?.title}
                                             name="title"
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             placeholder='Title'
                                             fontWeight='500'
-                                            borderColor={errors.title && touched.title ? "red.300" : null}
+                                            borderColor={errors?.title && touched?.title ? "red.300" : null}
                                         />
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.title && touched.title && errors.title}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.title && touched?.title && errors?.title}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -304,15 +304,15 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Input
                                             fontSize='sm'
-                                            value={values.quoteNumber}
+                                            value={values?.quoteNumber}
                                             name="quoteNumber"
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             placeholder='Quote Number'
                                             fontWeight='500'
-                                            borderColor={errors.quoteNumber && touched.quoteNumber ? "red.300" : null}
+                                            borderColor={errors?.quoteNumber && touched?.quoteNumber ? "red.300" : null}
                                         />
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.quoteNumber && touched.quoteNumber && errors.quoteNumber}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.quoteNumber && touched?.quoteNumber && errors?.quoteNumber}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -320,15 +320,15 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Input
                                             fontSize='sm'
-                                            value={values.quoteDate && dayjs(values.quoteDate).format("YYYY-MM-DD")}
+                                            value={values?.quoteDate && dayjs(values?.quoteDate).format("YYYY-MM-DD")}
                                             name="quoteDate"
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             type='date'
                                             fontWeight='500'
-                                            borderColor={errors.quoteDate && touched.quoteDate ? "red.300" : null}
+                                            borderColor={errors?.quoteDate && touched?.quoteDate ? "red.300" : null}
                                         />
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.quoteDate && touched.quoteDate && errors.quoteDate}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.quoteDate && touched?.quoteDate && errors?.quoteDate}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -336,15 +336,15 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Input
                                             fontSize='sm'
-                                            value={values.dueDate && dayjs(values.dueDate).format("YYYY-MM-DD")}
+                                            value={values?.dueDate && dayjs(values?.dueDate).format("YYYY-MM-DD")}
                                             name="dueDate"
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             type='date'
                                             fontWeight='500'
-                                            borderColor={errors.dueDate && touched.dueDate ? "red.300" : null}
+                                            borderColor={errors?.dueDate && touched?.dueDate ? "red.300" : null}
                                         />
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.dueDate && touched.dueDate && errors.dueDate}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.dueDate && touched?.dueDate && errors?.dueDate}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -352,35 +352,35 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Input
                                             fontSize='sm'
-                                            value={values.invoiceDate && dayjs(values.invoiceDate).format("YYYY-MM-DD")}
+                                            value={values?.invoiceDate && dayjs(values?.invoiceDate).format("YYYY-MM-DD")}
                                             name="invoiceDate"
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             type='date'
                                             fontWeight='500'
-                                            borderColor={errors.invoiceDate && touched.invoiceDate ? "red.300" : null}
+                                            borderColor={errors?.invoiceDate && touched?.invoiceDate ? "red.300" : null}
                                         />
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.invoiceDate && touched.invoiceDate && errors.invoiceDate}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.invoiceDate && touched?.invoiceDate && errors?.invoiceDate}</Text>
                                     </GridItem>
                                     {
-                                        user.role === 'superAdmin' &&
+                                        user?.role === 'superAdmin' &&
                                         <GridItem colSpan={{ base: 12, md: 6 }} >
                                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                                 Assigned To
                                             </FormLabel>
                                             <Flex justifyContent={'space-between'}>
                                                 <Select
-                                                    value={values.assignedTo}
+                                                    value={values?.assignedTo}
                                                     name="assignedTo"
                                                     onBlur={handleBlur}
                                                     onChange={handleChange}
-                                                    mb={errors.assignedTo && touched.assignedTo ? undefined : '10px'}
+                                                    mb={errors?.assignedTo && touched?.assignedTo ? undefined : '10px'}
                                                     fontWeight='500'
                                                     placeholder={'Assigned To'}
-                                                    borderColor={errors.assignedTo && touched.assignedTo ? "red.300" : null}
+                                                    borderColor={errors?.assignedTo && touched?.assignedTo ? "red.300" : null}
                                                 >
                                                     {userData?.map((item) => {
-                                                        return <option value={item._id} key={item._id}>{`${item?.firstName} ${item?.lastName}`}</option>
+                                                        return <option value={item?._id} key={item?._id}>{`${item?.firstName} ${item?.lastName}`}</option>
                                                     })}
                                                 </Select>
                                                 <IconButton onClick={() => setUserModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
@@ -392,20 +392,20 @@ const AddEdit = (props) => {
                                             Status
                                         </FormLabel>
                                         <Select
-                                            value={values.status}
+                                            value={values?.status}
                                             name="status"
                                             onBlur={handleBlur}
                                             onChange={handleChange}
-                                            mb={errors.status && touched.status ? undefined : '10px'}
+                                            mb={errors?.status && touched?.status ? undefined : '10px'}
                                             fontWeight='500'
                                             placeholder={'Status'}
-                                            borderColor={errors.status && touched.status ? "red.300" : null}
+                                            borderColor={errors?.status && touched?.status ? "red.300" : null}
                                         >
                                             <option value="Paid">Paid</option>
                                             <option value="Unpaid">Unpaid</option>
                                             <option value="Cancelled">Cancelled</option>
                                         </Select>
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.status && touched.status && errors.status}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.status && touched?.status && errors?.status}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -413,16 +413,16 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Textarea
                                             fontSize='sm'
-                                            value={values.description}
+                                            value={values?.description}
                                             name="description"
                                             resize={"none"}
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             placeholder='Description'
                                             fontWeight='500'
-                                            borderColor={errors.description && touched.description ? "red.300" : null}
+                                            borderColor={errors?.description && touched?.description ? "red.300" : null}
                                         />
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.description && touched.description && errors.description}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.description && touched?.description && errors?.description}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12 }}>
                                         <Heading as="h1" size="md" mt='10px'>
@@ -430,55 +430,55 @@ const AddEdit = (props) => {
                                         </Heading>
                                     </GridItem>
                                     {
-                                        (user.role === 'superAdmin' || accountAccess?.view) &&
+                                        (user?.role === 'superAdmin' || accountAccess?.view) &&
                                         <GridItem colSpan={{ base: 12, md: 6 }}>
                                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                                 Account
                                             </FormLabel>
                                             <Flex justifyContent={'space-between'}>
                                                 <Select
-                                                    value={values.account}
+                                                    value={values?.account}
                                                     name="account"
                                                     onBlur={handleBlur}
                                                     onChange={handleChange}
-                                                    mb={errors.account && touched.account ? undefined : '10px'}
+                                                    mb={errors?.account && touched?.account ? undefined : '10px'}
                                                     fontWeight='500'
                                                     placeholder={'Account'}
-                                                    borderColor={errors.account && touched.account ? "red.300" : null}
+                                                    borderColor={errors?.account && touched?.account ? "red.300" : null}
                                                 >
                                                     {accountList?.length > 0 && accountList?.map((item) => {
-                                                        return <option value={item._id} key={item._id}>{`${item?.name}`}</option>
+                                                        return <option value={item?._id} key={item?._id}>{`${item?.name}`}</option>
                                                     })}
                                                 </Select>
                                                 <IconButton onClick={() => setAccountModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
                                             </Flex>
-                                            <Text mb='10px' fontSize='sm' color={'red'}> {errors.account && touched.account && errors.account}</Text>
+                                            <Text mb='10px' fontSize='sm' color={'red'}> {errors?.account && touched?.account && errors?.account}</Text>
                                         </GridItem>
                                     }
                                     {
-                                        (user.role === 'superAdmin' || contactAccess?.view) &&
+                                        (user?.role === 'superAdmin' || contactAccess?.view) &&
                                         <GridItem colSpan={{ base: 12, md: 6 }}>
                                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                                 Contact
                                             </FormLabel>
                                             <Flex justifyContent={'space-between'}>
                                                 <Select
-                                                    value={values.contact}
+                                                    value={values?.contact}
                                                     name="contact"
                                                     onBlur={handleBlur}
                                                     onChange={handleChange}
-                                                    mb={errors.contact && touched.contact ? undefined : '10px'}
+                                                    mb={errors?.contact && touched?.contact ? undefined : '10px'}
                                                     fontWeight='500'
                                                     placeholder={'Contact'}
-                                                    borderColor={errors.contact && touched.contact ? "red.300" : null}
+                                                    borderColor={errors?.contact && touched?.contact ? "red.300" : null}
                                                 >
                                                     {contactList?.length > 0 && contactList?.map((item) => {
-                                                        return <option value={item._id} key={item._id}>{`${item.firstName} ${item.lastName}`}</option>
+                                                        return <option value={item?._id} key={item?._id}>{`${item?.firstName} ${item?.lastName}`}</option>
                                                     })}
                                                 </Select>
                                                 <IconButton onClick={() => setContactModel(true)} ml={2} fontSize='25px' icon={<LiaMousePointerSolid />} />
                                             </Flex>
-                                            <Text mb='10px' fontSize='sm' color={'red'}> {errors.contact && touched.contact && errors.contact}</Text>
+                                            <Text mb='10px' fontSize='sm' color={'red'}> {errors?.contact && touched?.contact && errors?.contact}</Text>
                                         </GridItem>
                                     }
 
@@ -502,15 +502,15 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Input
                                             fontSize='sm'
-                                            value={values.billingStreet}
+                                            value={values?.billingStreet}
                                             name="billingStreet"
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             placeholder='Billing Street'
                                             fontWeight='500'
-                                            borderColor={errors.billingStreet && touched.billingStreet ? "red.300" : null}
+                                            borderColor={errors?.billingStreet && touched?.billingStreet ? "red.300" : null}
                                         />
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.billingStreet && touched.billingStreet && errors.billingStreet}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.billingStreet && touched?.billingStreet && errors?.billingStreet}</Text>
                                     </GridItem>
 
                                     <GridItem colSpan={{ base: 12, md: 6 }}>
@@ -522,16 +522,16 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Input
                                             fontSize='sm'
-                                            value={values.shippingStreet}
+                                            value={values?.shippingStreet}
                                             name="shippingStreet"
                                             disabled={values?.isCheck}
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             placeholder='Shipping Street'
                                             fontWeight='500'
-                                            borderColor={errors.shippingStreet && touched.shippingStreet ? "red.300" : null}
+                                            borderColor={errors?.shippingStreet && touched?.shippingStreet ? "red.300" : null}
                                         />
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.shippingStreet && touched.shippingStreet && errors.shippingStreet}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.shippingStreet && touched?.shippingStreet && errors?.shippingStreet}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -539,15 +539,15 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Input
                                             fontSize='sm'
-                                            value={values.billingCity}
+                                            value={values?.billingCity}
                                             name="billingCity"
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             placeholder='Billing City'
                                             fontWeight='500'
-                                            borderColor={errors.billingCity && touched.billingCity ? "red.300" : null}
+                                            borderColor={errors?.billingCity && touched?.billingCity ? "red.300" : null}
                                         />
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.billingCity && touched.billingCity && errors.billingCity}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.billingCity && touched?.billingCity && errors?.billingCity}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -555,16 +555,16 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Input
                                             fontSize='sm'
-                                            value={values.shippingCity}
+                                            value={values?.shippingCity}
                                             name="shippingCity"
                                             disabled={values?.isCheck}
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             placeholder='Shipping City'
                                             fontWeight='500'
-                                            borderColor={errors.shippingCity && touched.shippingCity ? "red.300" : null}
+                                            borderColor={errors?.shippingCity && touched?.shippingCity ? "red.300" : null}
                                         />
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.shippingCity && touched.shippingCity && errors.shippingCity}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.shippingCity && touched?.shippingCity && errors?.shippingCity}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -572,15 +572,15 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Input
                                             fontSize='sm'
-                                            value={values.billingState}
+                                            value={values?.billingState}
                                             name="billingState"
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             placeholder='Billing State'
                                             fontWeight='500'
-                                            borderColor={errors.billingState && touched.billingState ? "red.300" : null}
+                                            borderColor={errors?.billingState && touched?.billingState ? "red.300" : null}
                                         />
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.billingState && touched.billingState && errors.billingState}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.billingState && touched?.billingState && errors?.billingState}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -588,16 +588,16 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Input
                                             fontSize='sm'
-                                            value={values.shippingState}
+                                            value={values?.shippingState}
                                             disabled={values?.isCheck}
                                             name="shippingState"
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             placeholder='Shipping State'
                                             fontWeight='500'
-                                            borderColor={errors.shippingState && touched.shippingState ? "red.300" : null}
+                                            borderColor={errors?.shippingState && touched?.shippingState ? "red.300" : null}
                                         />
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.shippingState && touched.shippingState && errors.shippingState}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.shippingState && touched?.shippingState && errors?.shippingState}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -605,16 +605,16 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Input
                                             fontSize='sm'
-                                            value={values.billingPostalCode}
+                                            value={values?.billingPostalCode}
                                             name="billingPostalCode"
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             type='number'
                                             placeholder='Billing Postal Code'
                                             fontWeight='500'
-                                            borderColor={errors.billingPostalCode && touched.billingPostalCode ? "red.300" : null}
+                                            borderColor={errors?.billingPostalCode && touched?.billingPostalCode ? "red.300" : null}
                                         />
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.billingPostalCode && touched.billingPostalCode && errors.billingPostalCode}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.billingPostalCode && touched?.billingPostalCode && errors?.billingPostalCode}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -622,7 +622,7 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Input
                                             fontSize='sm'
-                                            value={values.shippingPostalCode}
+                                            value={values?.shippingPostalCode}
                                             disabled={values?.isCheck}
                                             name="shippingPostalCode"
                                             type='number'
@@ -630,9 +630,9 @@ const AddEdit = (props) => {
                                             onChange={handleChange}
                                             placeholder='Shipping Postal Code'
                                             fontWeight='500'
-                                            borderColor={errors.shippingPostalCode && touched.shippingPostalCode ? "red.300" : null}
+                                            borderColor={errors?.shippingPostalCode && touched?.shippingPostalCode ? "red.300" : null}
                                         />
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.shippingPostalCode && touched.shippingPostalCode && errors.shippingPostalCode}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.shippingPostalCode && touched?.shippingPostalCode && errors?.shippingPostalCode}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -640,15 +640,15 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Input
                                             fontSize='sm'
-                                            value={values.billingCountry}
+                                            value={values?.billingCountry}
                                             name="billingCountry"
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             placeholder='Billing Country'
                                             fontWeight='500'
-                                            borderColor={errors.billingCountry && touched.billingCountry ? "red.300" : null}
+                                            borderColor={errors?.billingCountry && touched?.billingCountry ? "red.300" : null}
                                         />
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.billingCountry && touched.billingCountry && errors.billingCountry}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.billingCountry && touched?.billingCountry && errors?.billingCountry}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12, md: 6 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -656,16 +656,16 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Input
                                             fontSize='sm'
-                                            value={values.shippingCountry}
+                                            value={values?.shippingCountry}
                                             name="shippingCountry"
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             disabled={values?.isCheck}
                                             placeholder='Shipping Country'
                                             fontWeight='500'
-                                            borderColor={errors.shippingCountry && touched.shippingCountry ? "red.300" : null}
+                                            borderColor={errors?.shippingCountry && touched?.shippingCountry ? "red.300" : null}
                                         />
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.shippingCountry && touched.shippingCountry && errors.shippingCountry}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.shippingCountry && touched?.shippingCountry && errors?.shippingCountry}</Text>
                                     </GridItem>
 
                                     <GridItem colSpan={{ base: 12 }}>
@@ -678,18 +678,18 @@ const AddEdit = (props) => {
                                             Currency
                                         </FormLabel>
                                         <Select
-                                            value={values.currency}
+                                            value={values?.currency}
                                             name="currency"
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             mb={errors.currency && touched.currency ? undefined : '10px'}
                                             fontWeight='500'
                                             placeholder={'Select Currency'}
-                                            borderColor={errors.currency && touched.currency ? "red.300" : null}
+                                            borderColor={errors?.currency && touched?.currency ? "red.300" : null}
                                         >
                                             <option value="$" selected>USD</option>
                                         </Select>
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.currency && touched.currency && errors.currency}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.currency && touched?.currency && errors?.currency}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12 }}>
                                         <Box>
@@ -707,7 +707,7 @@ const AddEdit = (props) => {
                                                 </Thead>
                                                 <Tbody>
                                                     {values?.items?.length > 0 && values?.items?.map((item, index) => (
-                                                        <Tr key={item.id}>
+                                                        <Tr key={item?.id}>
                                                             <Td className="text-center">
                                                                 <IconButton
                                                                     icon={<CloseIcon />}
@@ -807,16 +807,16 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Input
                                             fontSize='sm'
-                                            value={values.total}
+                                            value={values?.total}
                                             name="total"
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             placeholder='Total'
                                             fontWeight='500'
                                             type='number'
-                                            borderColor={errors.total && touched.total ? "red.300" : null}
+                                            borderColor={errors?.total && touched?.total ? "red.300" : null}
                                         />
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.total && touched.total && errors.total}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.total && touched?.total && errors?.total}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -824,15 +824,15 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Input
                                             fontSize='sm'
-                                            value={values.discount}
+                                            value={values?.discount}
                                             name="discount"
                                             onBlur={handleBlur}
                                             type='number'
                                             onChange={handleChange}
                                             fontWeight='500'
-                                            borderColor={errors.discount && touched.discount ? "red.300" : null}
+                                            borderColor={errors?.discount && touched?.discount ? "red.300" : null}
                                         />
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.discount && touched.discount && errors.discount}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.discount && touched?.discount && errors?.discount}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -840,16 +840,16 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Input
                                             fontSize='sm'
-                                            value={values.subtotal}
+                                            value={values?.subtotal}
                                             name="subtotal"
                                             type='number'
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             placeholder='Subtotal'
                                             fontWeight='500'
-                                            borderColor={errors.subtotal && touched.subtotal ? "red.300" : null}
+                                            borderColor={errors?.subtotal && touched?.subtotal ? "red.300" : null}
                                         />
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.subtotal && touched.subtotal && errors.subtotal}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.subtotal && touched?.subtotal && errors?.subtotal}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -857,16 +857,16 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Input
                                             fontSize='sm'
-                                            value={values.shipping}
+                                            value={values?.shipping}
                                             name="shipping"
                                             type='number'
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             placeholder='Shipping'
                                             fontWeight='500'
-                                            borderColor={errors.shipping && touched.shipping ? "red.300" : null}
+                                            borderColor={errors?.shipping && touched?.shipping ? "red.300" : null}
                                         />
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.shipping && touched.shipping && errors.shipping}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.shipping && touched?.shipping && errors?.shipping}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12, md: 10 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -874,35 +874,35 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Input
                                             fontSize='sm'
-                                            value={values.shippingTax}
+                                            value={values?.shippingTax}
                                             name="shippingTax"
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             placeholder='Shipping Tax'
                                             type='number'
                                             fontWeight='500'
-                                            borderColor={errors.shippingTax && touched.shippingTax ? "red.300" : null}
+                                            borderColor={errors?.shippingTax && touched?.shippingTax ? "red.300" : null}
                                         />
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.shippingTax && touched.shippingTax && errors.shippingTax}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.shippingTax && touched?.shippingTax && errors?.shippingTax}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12, md: 2 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px' visibility={"hidden"}>
                                             -
                                         </FormLabel>
                                         <Select
-                                            value={values.ptax}
+                                            value={values?.ptax}
                                             name="ptax"
                                             onBlur={handleBlur}
                                             onChange={handleChange}
-                                            mb={errors.ptax && touched.ptax ? undefined : '10px'}
+                                            mb={errors?.ptax && touched?.ptax ? undefined : '10px'}
                                             fontWeight='500'
-                                            borderColor={errors.ptax && touched.ptax ? "red.300" : null}
+                                            borderColor={errors?.ptax && touched?.ptax ? "red.300" : null}
                                         >
                                             <option value="0">0%</option>
                                             <option value="10">10%</option>
                                             <option value="18">18%</option>
                                         </Select>
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.ptax && touched.ptax && errors.ptax}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.ptax && touched?.ptax && errors?.ptax}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px' >
@@ -910,16 +910,16 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Input
                                             fontSize='sm'
-                                            value={values.tax}
+                                            value={values?.tax}
                                             name="tax"
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             fontWeight='500'
                                             type="number"
                                             placeholder='Tax'
-                                            borderColor={errors.tax && touched.tax ? "red.300" : null}
+                                            borderColor={errors?.tax && touched?.tax ? "red.300" : null}
                                         />
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.tax && touched.tax && errors.tax}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.tax && touched?.tax && errors?.tax}</Text>
                                     </GridItem>
                                     <GridItem colSpan={{ base: 12 }}>
                                         <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px' >
@@ -927,16 +927,16 @@ const AddEdit = (props) => {
                                         </FormLabel>
                                         <Input
                                             fontSize='sm'
-                                            value={values.grandTotal}
+                                            value={values?.grandTotal}
                                             name="grandTotal"
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             fontWeight='500'
                                             type="number"
                                             placeholder='Grand Total'
-                                            borderColor={errors.grandTotal && touched.grandTotal ? "red.300" : null}
+                                            borderColor={errors?.grandTotal && touched?.grandTotal ? "red.300" : null}
                                         />
-                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors.grandTotal && touched.grandTotal && errors.grandTotal}</Text>
+                                        <Text mb='10px' fontSize='sm' color={'red'}> {errors?.grandTotal && touched?.grandTotal && errors?.grandTotal}</Text>
                                     </GridItem>
                                 </Grid>
                             </DrawerBody>

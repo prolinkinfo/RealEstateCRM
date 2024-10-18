@@ -55,7 +55,7 @@ const OpprtunityAdvanceSearch = (props) => {
                     value: values.emailAddress
                 },
             ]
-            dispatch(setGetTagValues(getValue.filter(item => item.value)))
+            dispatch(setGetTagValues(getValue?.filter(item => item?.value)))
             setDisplaySearchData(true)
             setAdvanceSearch(false)
             resetForm();
@@ -86,7 +86,7 @@ const OpprtunityAdvanceSearch = (props) => {
                                     placeholder='Enter Account Name'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.name && touched.name && errors.name}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.name && touched?.name && errors?.name}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
@@ -101,7 +101,7 @@ const OpprtunityAdvanceSearch = (props) => {
                                     placeholder='Enter Office Phone'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.officePhone && touched.officePhone && errors.officePhone}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.officePhone && touched?.officePhone && errors?.officePhone}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
@@ -116,7 +116,7 @@ const OpprtunityAdvanceSearch = (props) => {
                                     type="number"
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.fax && touched.fax && errors.fax}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.fax && touched?.fax && errors?.fax}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
@@ -131,7 +131,7 @@ const OpprtunityAdvanceSearch = (props) => {
                                     type="email"
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.emailAddress && touched.emailAddress && errors.emailAddress}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.emailAddress && touched?.emailAddress && errors?.emailAddress}</Text>
                             </GridItem>
 
 

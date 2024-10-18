@@ -32,7 +32,7 @@ const TextMsg = () => {
 
     const { errors, touched, values, handleChange, handleSubmit, setFieldValue, } = formik
 
-    if (touched.to && errors.createFor) {
+    if (touched?.to && errors?.createFor) {
         toast.error('Please select an authorized to');
         formik.resetForm();
 
@@ -42,8 +42,8 @@ const TextMsg = () => {
         try {
             setIsLoding(true)
             let response = await postApi('api/text-msg/add', values)
-            if (response.status === 200) {
-                toast.success(`Text Msg send successfully to ${values.to} `)
+            if (response?.status === 200) {
+                toast.success(`Text Msg send successfully to ${values?.to} `)
                 formik.resetForm();
             }
         } catch (e) {
@@ -55,9 +55,9 @@ const TextMsg = () => {
     };
 
     const fetchData = async () => {
-        let result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`);
+        let result = await getApi(user?.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user?._id}`);
         values.createFor = result?._id;
-        setData(result.data);
+        setData(result?.data);
     }
 
     useEffect(() => {
@@ -66,10 +66,10 @@ const TextMsg = () => {
 
     useEffect(() => {
         data?.map((item) => {
-            let recipientExists = item?.phoneNumber === values.to
+            let recipientExists = item?.phoneNumber === values?.to
             if (recipientExists) {
-                values.createFor = item._id
-                setFieldValue('createFor', item._id)
+                values.createFor = item?._id
+                setFieldValue('createFor', item?._id)
             }
         })
     }, [values])
@@ -91,7 +91,7 @@ const TextMsg = () => {
                     type='number'
                     onChange={handleChange}
                     onBlur={() => setTimeout(onClose, 200)}
-                    value={values.to}
+                    value={values?.to}
                     name="to"
                     placeholder='to'
                     fontWeight='500'
@@ -100,23 +100,23 @@ const TextMsg = () => {
                 {isOpen && values?.to && (
                     <List position={'relative'} border={'1px solid'} bg={'gray.100'} width={'100%'} borderRadius={'0px 0px 20px 20px'} lineHeight={1} >
                         {data?.filter((option) => {
-                            if (option && option.phoneNumber && typeof option.phoneNumber === 'number') {
-                                return option.phoneNumber.toString().includes(values.to.toString().toLowerCase());
+                            if (option && option?.phoneNumber && typeof option?.phoneNumber === 'number') {
+                                return option?.phoneNumber?.toString()?.includes(values?.to?.toString()?.toLowerCase());
                             }
                             return false;
-                        }).map((option, index) => (
+                        })?.map((option, index) => (
                             <ListItem p={3} borderBottom={'2px solid #efefef'} sx={{ '&:last-child': { borderBottom: 'none' } }} key={option?._id} cursor={'pointer'}
                                 onClick={() => {
                                     setFieldValue('createFor', option?._id)
-                                    setFieldValue('to', option.phoneNumber.toString())
+                                    setFieldValue('to', option?.phoneNumber?.toString())
                                 }}
                             >
-                                {option.phoneNumber}
+                                {option?.phoneNumber}
                             </ListItem>
                         ))}
                     </List>
                 )}
-                <Text mb='10px' color={'red'}> {errors.to && touched.to && errors.to}</Text>
+                <Text mb='10px' color={'red'}> {errors?.to && touched?.to && errors?.to}</Text>
             </GridItem>
             <GridItem colSpan={{ base: 12 }} >
                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -127,13 +127,13 @@ const TextMsg = () => {
                     fontSize='sm'
                     resize={'none'}
                     onChange={handleChange}
-                    value={values.message}
+                    value={values?.message}
                     name="message"
                     placeholder='message'
                     fontWeight='500'
                     borderColor={errors?.message && touched?.message ? "red.300" : null}
                 />
-                <Text mb='10px' color={'red'}> {errors.message && touched.message && errors.message}</Text>
+                <Text mb='10px' color={'red'}> {errors?.message && touched?.message && errors?.message}</Text>
             </GridItem>
 
             <GridItem colSpan={{ base: 12 }} >

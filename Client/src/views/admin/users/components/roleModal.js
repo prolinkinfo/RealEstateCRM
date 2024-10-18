@@ -47,16 +47,16 @@ const RoleModal = (props) => {
         state: { pageIndex, pageSize },
     } = tableInstance;
 
-    if (pageOptions.length < gopageValue) {
-        setGopageValue(pageOptions.length);
+    if (pageOptions?.length < gopageValue) {
+        setGopageValue(pageOptions?.length);
     }
 
     const handleCheckboxChange = (event, value) => {
-        if (event.target.checked) {
+        if (event?.target?.checked) {
             setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
         } else {
             setSelectedValues((prevSelectedValues) =>
-                prevSelectedValues.filter((selectedValue) => selectedValue !== value)
+                prevSelectedValues?.filter((selectedValue) => selectedValue !== value)
             );
         }
     };
@@ -67,7 +67,7 @@ const RoleModal = (props) => {
         try {
             setIsLoding(true)
             let result = await putApi(`api/user/change-roles/${id}`, uniqueValues);
-            if (result && result.status === 200) {
+            if (result && result?.status === 200) {
                 fetchData()
                 onClose()
             }
@@ -99,10 +99,10 @@ const RoleModal = (props) => {
                             <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
                                 <Thead>
                                     {headerGroups?.map((headerGroup, index) => (
-                                        <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
-                                            {headerGroup.headers?.map((column, index) => (
+                                        <Tr {...headerGroup?.getHeaderGroupProps()} key={index}>
+                                            {headerGroup?.headers?.map((column, index) => (
                                                 <Th
-                                                    {...column.getHeaderProps(column.isSortable !== false && column.getSortByToggleProps())}
+                                                    {...column?.getHeaderProps(column?.isSortable !== false && column?.getSortByToggleProps())}
                                                     pe="10px"
                                                     key={index}
                                                     borderColor={borderColor}
@@ -113,7 +113,7 @@ const RoleModal = (props) => {
                                                         fontSize={{ sm: "10px", lg: "12px" }}
                                                         color="gray.400"
                                                     >
-                                                        {column.render("Header")}
+                                                        {column?.render("Header")}
 
                                                     </Flex>
                                                 </Th>
@@ -144,16 +144,16 @@ const RoleModal = (props) => {
                                                 <Tr {...row?.getRowProps()} key={i}>
                                                     {row?.cells?.map((cell, index) => {
                                                         let data = "";
-                                                        if (cell?.column.Header === "#") {
+                                                        if (cell?.column?.Header === "#") {
                                                             data = (
                                                                 <Flex align="center" >
-                                                                    <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />
+                                                                    <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues?.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />
                                                                     <Text color={textColor} fontSize="sm" fontWeight="700">
                                                                         {cell?.row?.index + 1}
                                                                     </Text>
                                                                 </Flex>
                                                             );
-                                                        } else if (cell?.column.Header === "Role Name") {
+                                                        } else if (cell?.column?.Header === "Role Name") {
                                                             data = (
                                                                 <Text
                                                                     me="10px"
@@ -164,7 +164,7 @@ const RoleModal = (props) => {
                                                                     {cell?.value}
                                                                 </Text>
                                                             );
-                                                        } else if (cell?.column.Header === "Description") {
+                                                        } else if (cell?.column?.Header === "Description") {
                                                             data = (
                                                                 <Text
                                                                     me="10px"
