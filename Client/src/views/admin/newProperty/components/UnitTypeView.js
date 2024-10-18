@@ -1,10 +1,7 @@
-import React, { useState } from "react";
 import {
   Button,
-  FormLabel,
   Grid,
   GridItem,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -13,77 +10,51 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
-  Textarea,
-  Flex,
-  Select,
-  IconButton,
-  Spinner,
 } from "@chakra-ui/react";
-import { useFormik } from "formik";
-import * as yup from "yup";
+import { IoLogoUsd } from "react-icons/io";
 
 const UnitTypeView = (props) => {
-  const { onClose, isOpen } = props;
-  const [isLoding, setIsLoding] = useState(false);
+  const { onClose, isOpen, data } = props;
 
-  const initialValues = {
-    name: "",
-    sqm: "",
-    price: "",
-  };
-  const validationSchema = yup.object({
-    name: yup.string().required("Name Is required"),
-    sqm: yup.number().required("Sqm Is required").typeError("Sqm must be a number"),
-    price: yup.number().required("Price Is required").typeError("Price must be a number"),
-  });
-  const formik = useFormik({
-    initialValues: initialValues,
-    validationSchema,
-    onSubmit: (values, { resetForm }) => {
-      // AddData();
-      resetForm();
-    },
-  });
-  const {
-    errors,
-    touched,
-    values,
-    handleBlur,
-    handleChange,
-    handleSubmit,
-    setFieldValue,
-    resetForm,
-  } = formik;
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Units</ModalHeader>
+          <ModalHeader>
+            {`${data?.floorName?.floorNumber}`}
+            <sup>{data?.floorName?.floorNumberSuffix}</sup> Floor -{" "}
+            {data?.unit?.flateName}
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Grid templateColumns="repeat(12, 1fr)" gap={3}>
-              <GridItem colSpan={{ base: 12 }}>
-                    <Text>Name</Text>
+              <GridItem colSpan={{ base: 6 }}>
+                <Text fontSize="sm" fontWeight="bold" color="blackAlpha.900">
+                  Name
+                </Text>
+                <Text>
+                  {data?.unitType?.name ? data?.unitType?.name : " - "}
+                </Text>
+              </GridItem>
+              <GridItem colSpan={{ base: 6 }}>
+                <Text fontSize="sm" fontWeight="bold" color="blackAlpha.900">
+                  Sqm
+                </Text>
+                <Text>{data?.unitType?.sqm ? data?.unitType?.sqm : " - "}</Text>
               </GridItem>
               <GridItem colSpan={{ base: 12 }}>
-                    <Text>Sqm</Text>
-              </GridItem>
-              <GridItem colSpan={{ base: 12 }}>
-                    <Text>Price</Text>
+                <Text fontSize="sm" fontWeight="bold" color="blackAlpha.900">
+                  Price
+                </Text>
+                <Text display="flex" alignItems="center">
+                  {data?.unitType?.price ? data?.unitType?.price : " 0 "}{" "}
+                  <IoLogoUsd color="gray.300" borderRadius="16px" />
+                </Text>
               </GridItem>
             </Grid>
           </ModalBody>
           <ModalFooter>
-            {/* <Button
-              variant="brand"
-              size="sm"
-              disabled={isLoding ? true : false}
-              onClick={handleSubmit}
-            >
-              {isLoding ? <Spinner /> : "Save"}
-            </Button> */}
-            {/* <Button size="sm" variant='brand' disabled={isLoding ? true : false} onClick={handleSubmit}>{isLoding ? <Spinner /> : 'Save'}</Button> */}
             <Button
               size="sm"
               sx={{
@@ -93,7 +64,6 @@ const UnitTypeView = (props) => {
               variant="outline"
               colorScheme="red"
               onClick={() => {
-                formik.resetForm();
                 onClose();
               }}
             >
