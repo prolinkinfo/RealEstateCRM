@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { CloseIcon } from "@chakra-ui/icons";
@@ -25,9 +25,10 @@ import { toast } from "react-toastify";
 import { postApi } from "services/api";
 import * as yup from "yup";
 import { IoLogoUsd } from "react-icons/io";
+import { putApi } from "services/api";
 
 const AddEditUnits = (props) => {
-  const { isOpen, onClose, setAction, data } = props;
+  const { isOpen, onClose, setAction, selectedUnitType, actionType } = props;
   const param = useParams();
   const [isLoding, setIsLoding] = useState(false);
 
@@ -51,9 +52,10 @@ const AddEditUnits = (props) => {
 
   const formik = useFormik({
     initialValues: initialValues,
+    enableReinitialize: true,
     validationSchema,
     onSubmit: (values) => {
-      AddData();
+      AddUpdateData();
     },
   });
 
@@ -67,13 +69,19 @@ const AddEditUnits = (props) => {
     resetForm,
   } = formik;
 
-  const AddData = async () => {
+  const AddUpdateData = async () => {
     try {
       setIsLoding(true);
-      let response = await postApi(`api/property/add-units/${param?.id}`, {
-        units: values,
-        type: "A",
-      });
+      let response
+      if (actionType === "Edit") {
+        response = await putApi(`api/property/edit-unit/${param?.id}`, values);
+      } else {
+        response = await postApi(`api/property/add-units/${param?.id}`, {
+          units: values,
+          type: "A",
+        });
+      }
+
       if (response && response.status === 200) {
         onClose();
         resetForm();
@@ -88,12 +96,16 @@ const AddEditUnits = (props) => {
     }
   };
 
+  useEffect(() => {
+    actionType === "Edit" && setInitialValues(selectedUnitType)
+  }, [selectedUnitType])
+
   return (
     <Modal isOpen={isOpen} isCentered>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader justifyContent="space-between" display="flex">
-          Add Unit
+          {actionType === "Edit" ? "Edit" : "Add"} Unit
           <IconButton onClick={onClose} icon={<CloseIcon />} />
         </ModalHeader>
         <ModalBody>
@@ -187,7 +199,7 @@ const AddEditUnits = (props) => {
             disabled={isLoding ? true : false}
             onClick={handleSubmit}
           >
-            {isLoding ? <Spinner /> : "Save"}
+            {isLoding ? <Spinner /> : actionType === "Edit" ? "Update" : "Save"}
           </Button>
           <Button
             sx={{

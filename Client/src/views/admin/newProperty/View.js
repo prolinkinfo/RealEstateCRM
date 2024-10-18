@@ -74,10 +74,10 @@ const View = () => {
   const param = useParams();
   const textColor = useColorModeValue("gray.500", "white");
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [data, setData] = useState();
   const [unitTypeList, setUnitTypeList] = useState([]);
   const [filteredContacts, setFilteredContacts] = useState([]);
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [edit, setEdit] = useState(false);
   const [deleteModel, setDelete] = useState(false);
   const [action, setAction] = useState(false);
@@ -86,6 +86,8 @@ const View = () => {
   const [virtualToursorVideos, setVirtualToursorVideos] = useState(false);
   const [floorPlans, setFloorPlans] = useState(false);
   const [propertyDocuments, setPropertyDocuments] = useState(false);
+  const [actionType, setActionType] = useState("Add");
+  const [selectedUnitType, setSelectedUnitType] = useState({});
   const [addUnit, setAddUnit] = useState(false);
   const [isLoding, setIsLoding] = useState(false);
   const [displayPropertyPhoto, setDisplayPropertyPhoto] = useState(false);
@@ -129,6 +131,11 @@ const View = () => {
     }
   };
 
+  const handleEditOpen = (row) => {
+    setAddUnit(true)
+    setActionType("Edit")
+    setSelectedUnitType(row)
+  }
 
   const handleChangeOrder = (row, type) => {
     const newRows = [...unitTypeList];
@@ -302,6 +309,24 @@ const View = () => {
               <MdMoveDown />
             </Button>
           </Tooltip>
+          <Tooltip
+            hasArrow
+            label="Edit"
+            bg="gray.200"
+            color="gray"
+            textTransform="capitalize"
+            fontSize="sm"
+          >
+            <Button
+              color='green'
+              size="sm"
+              onClick={() => handleEditOpen(row?.original)}
+              variant="outline"
+              me={2}
+            >
+              <EditIcon />
+            </Button>
+          </Tooltip>
         </Flex>
       ),
     },
@@ -453,8 +478,13 @@ const View = () => {
       <AddEditUnits
         isOpen={addUnit}
         size={size}
+        actionType={actionType}
+        selectedUnitType={selectedUnitType}
         setAction={setAction}
-        onClose={() => setAddUnit(false)}
+        onClose={() => {
+          setSelectedUnitType({})
+          setAddUnit(false)
+        }}
       />
       <Edit
         isOpen={edit}
