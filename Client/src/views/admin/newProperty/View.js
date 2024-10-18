@@ -85,45 +85,15 @@ const View = () => {
   const [virtualToursorVideos, setVirtualToursorVideos] = useState(false);
   const [floorPlans, setFloorPlans] = useState(false);
   const [propertyDocuments, setPropertyDocuments] = useState(false);
-  const [showEmail, setShowEmail] = useState(false);
-  const [allData, setAllData] = useState([]);
-  const [showCall, setShowCall] = useState(false);
-  const [addPhoneCall, setAddPhoneCall] = useState(false);
   const [addUnit, setAddUnit] = useState(false);
   const [isLoding, setIsLoding] = useState(false);
   const [displayPropertyPhoto, setDisplayPropertyPhoto] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
-  const [addEmailHistory, setAddEmailHistory] = useState(false);
-  const [apartmentStructure, setApartmentStructure] = useState([]);
 
   const dispatch = useDispatch();
   const propertyData = useSelector(
     (state) => state?.propertyCustomFiled?.data?.data
   );
-
-  const buildApartmentData = (floorCount, unitData) => {
-    let apartmentData = [];
-
-    for (let i = 1; i <= floorCount; i++) {
-      let floorUnits = unitData?.map((item, index) => ({
-        flateName: i * 100 + (index + 1),
-        status: "book",
-        unitType: item?._id,
-      }));
-
-      apartmentData.push({
-        floorNumber: i,
-        flats: floorUnits,
-      });
-    }
-
-    return apartmentData;
-  };
-
-  // let apartmentStructure = buildApartmentData(
-  //   data?.Floor || 0,
-  //   data?.unitType || []
-  // );
 
   const [contactData, setContactData] = useState([]);
   const [columns, setColumns] = useState([]);
@@ -289,6 +259,7 @@ const View = () => {
     { Header: "Price", accessor: "price" },
     {
       Header: "Action",
+      center: true,
       cell: ({ row }) => (
         <Flex className="selectOpt">
           <Tooltip
@@ -343,7 +314,6 @@ const View = () => {
     handleSetUnitTypeList(response?.data?.property?.unitType);
     setFilteredContacts(response?.data?.filteredContacts);
     setIsLoding(false);
-    setSelectedTab(i);
   };
 
   const generatePDF = () => {
@@ -447,13 +417,6 @@ const View = () => {
     fetchCustomDataFields();
   }, [action]);
 
-  useEffect(() => {
-    data &&
-      setApartmentStructure(
-        buildApartmentData(data?.Floor || 0, data?.unitType || [])
-      );
-  }, [data]);
-
   const statusCount = data?.units?.reduce((acc, floor) => {
     floor?.flats?.forEach((flat) => {
       const status =
@@ -468,7 +431,6 @@ const View = () => {
     });
     return acc;
   }, {});
-  console.log("statusCount--::", statusCount);
 
   return (
     <>
@@ -688,6 +650,7 @@ const View = () => {
                               deleteMany={true}
                               ManageGrid={false}
                               onOpen={() => { }}
+                              addBtn={false}
                               access={emailAccess}
                             />
                           </Card>
@@ -708,6 +671,7 @@ const View = () => {
                               deleteMany={true}
                               ManageGrid={false}
                               onOpen={() => { }}
+                              addBtn={false}
                               access={callAccess}
                             />
                           </Card>
