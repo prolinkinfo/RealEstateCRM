@@ -9,6 +9,8 @@ import {
   GridItem,
   IconButton,
   Input,
+  InputGroup,
+  InputRightElement,
   Modal,
   ModalBody,
   ModalContent,
@@ -22,6 +24,7 @@ import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import { postApi } from "services/api";
 import * as yup from "yup";
+import { IoLogoUsd } from "react-icons/io";
 
 const AddEditUnits = (props) => {
   const { isOpen, onClose, setAction } = props;
@@ -145,16 +148,22 @@ const AddEditUnits = (props) => {
               >
                 price<Text color={"red"}>*</Text>
               </FormLabel>
-              <Input
-                fontSize="sm"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values?.price}
-                name="price"
-                placeholder="Enter Price"
-                fontWeight="500"
-                borderColor={errors?.price && touched?.price ? "red.300" : null}
-              />
+              <InputGroup>
+                <Input
+                  fontSize="sm"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values?.price}
+                  name="price"
+                  placeholder="Enter Price"
+                  fontWeight="500"
+                  borderColor={errors?.price && touched?.price ? "red.300" : null}
+                />
+                <InputRightElement
+                  pointerEvents="none"
+                  children={<IoLogoUsd color="gray.300" borderRadius="16px" />}
+                />
+              </InputGroup>
               <Text mb="10px" color={"red"}>
                 {errors?.price && touched?.price && errors?.price}
               </Text>
