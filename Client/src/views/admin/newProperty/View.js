@@ -2,7 +2,8 @@ import {
   AddIcon,
   ChevronDownIcon,
   DeleteIcon,
-  EditIcon
+  EditIcon,
+  ViewIcon
 } from "@chakra-ui/icons";
 import {
   Box,
@@ -805,6 +806,7 @@ const View = () => {
                                 {/* <Button
                                   size="sm"
                                   variant="outline"
+                                  onclick=""
                                   me={2}
                                   color={"gray"}
                                 >

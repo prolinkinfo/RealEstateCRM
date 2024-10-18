@@ -41,8 +41,8 @@ const View = (props) => {
     const [type, setType] = useState("")
     const [editableField, setEditableField] = useState(null);
     const [editableFieldName, setEditableFieldName] = useState(null);
-    const today = new Date().toISOString().split('T')[0];
-    const todayTime = new Date().toISOString().split('.')[0];
+    const today = new Date()?.toISOString()?.split('T')[0];
+    const todayTime = new Date()?.toISOString()?.split('.')[0];
 
     const quotesColumns = [
         { Header: "Quote Number", accessor: "quoteNumber", isSortable: false, width: 10 },
@@ -50,7 +50,7 @@ const View = (props) => {
             Header: 'Title', accessor: 'title', cell: (cell) => (
                 <div className="selectOpt">
                     <Text
-                        onClick={() => navigate(`/quotesView/${cell?.row?.original._id}`)}
+                        onClick={() => navigate(`/quotesView/${cell?.row?.original?._id}`)}
                         me="10px"
                         sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
                         color='brand.600'
@@ -69,7 +69,7 @@ const View = (props) => {
                 (user.role === 'superAdmin' || contactAccess?.view) ?
                     <div className="selectOpt">
                         <Text
-                            onClick={() => navigate(cell?.row?.original.contact !== null && `/contactView/${cell?.row?.original.contact}`)}
+                            onClick={() => navigate(cell?.row?.original?.contact !== null && `/contactView/${cell?.row?.original?.contact}`)}
                             me="10px"
                             sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
                             color='brand.600'
@@ -159,7 +159,7 @@ const View = (props) => {
     const handleDeleteAccount = async (ids) => {
         try {
             let response = await deleteManyApi('api/invoices/deleteMany', ids)
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 navigate('/invoices')
                 toast.success(`Invoices Delete successfully`)
                 setDeleteManyModel(false)
@@ -204,7 +204,7 @@ const View = (props) => {
         tax: data?.tax,
         grandTotal: data?.grandTotal,
         grandTotal: data?.grandTotal,
-        modifiedBy: JSON.parse(localStorage.getItem('user'))._id
+        modifiedBy: JSON.parse(localStorage.getItem('user'))?._id
     }
 
     const formik = useFormik({
@@ -217,7 +217,7 @@ const View = (props) => {
                 modifiedDate: new Date()
             }
             let response = await putApi(`api/invoices/edit/${id}`, payload)
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 setEditableField(null);
                 fetchViewData()
                 toast.success(`${editableFieldName} Update successfully`)
@@ -258,17 +258,17 @@ const View = (props) => {
                                         </Heading>
                                         <Flex id="hide-btn">
                                             <Menu>
-                                                {(user.role === 'superAdmin' || invoiceAccess?.create || invoiceAccess?.update || invoiceAccess?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' size="sm" va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
+                                                {(user?.role === 'superAdmin' || invoiceAccess?.create || invoiceAccess?.update || invoiceAccess?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' size="sm" va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
                                                     Actions
                                                 </MenuButton>}
                                                 <MenuDivider />
                                                 <MenuList minWidth={2}>
-                                                    {(user.role === 'superAdmin' || invoiceAccess?.create) && <MenuItem onClick={() => { setEdit(true); setType("add"); formik.resetForm() }
+                                                    {(user?.role === 'superAdmin' || invoiceAccess?.create) && <MenuItem onClick={() => { setEdit(true); setType("add"); formik.resetForm() }
                                                     } alignItems={'start'} color={'blue'} icon={<AddIcon />}>Add</MenuItem>}
-                                                    {(user.role === 'superAdmin' || invoiceAccess?.update) && <MenuItem onClick={() => { setEdit(true); setType("edit") }} alignItems={'start'} icon={<EditIcon />}>Edit</MenuItem>}
+                                                    {(user?.role === 'superAdmin' || invoiceAccess?.update) && <MenuItem onClick={() => { setEdit(true); setType("edit") }} alignItems={'start'} icon={<EditIcon />}>Edit</MenuItem>}
                                                     <MenuItem onClick={generatePDF} alignItems={"start"} icon={<FaFilePdf />} display={"flex"} style={{ alignItems: "center" }}>Print as PDF</MenuItem >
 
-                                                    {(user.role === 'superAdmin' || invoiceAccess?.delete) && <>
+                                                    {(user?.role === 'superAdmin' || invoiceAccess?.delete) && <>
                                                         <MenuDivider />
                                                         <MenuItem alignItems={'start'} onClick={() => setDeleteManyModel(true)} color={'red'} icon={<DeleteIcon />}>Delete</MenuItem>
                                                     </>}
@@ -298,7 +298,7 @@ const View = (props) => {
                                                 type="text"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.title}
+                                                value={formik?.values?.title}
                                                 borderColor={formik?.errors?.title && formik?.touched?.title ? "red.300" : null}
                                                 autoFocus
                                             />
@@ -325,7 +325,7 @@ const View = (props) => {
                                                 type="date"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={dayjs(formik.values.quoteDate).format("YYYY-MM-DD")}
+                                                value={dayjs(formik?.values?.quoteDate).format("YYYY-MM-DD")}
                                                 borderColor={formik?.errors?.quoteDate && formik?.touched?.quoteDate ? "red.300" : null}
                                                 autoFocus
                                             />
@@ -346,11 +346,11 @@ const View = (props) => {
                                                 type="date"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={dayjs(formik.values.dueDate).format("YYYY-MM-DD")}
+                                                value={dayjs(formik?.values?.dueDate).format("YYYY-MM-DD")}
                                                 borderColor={formik?.errors?.dueDate && formik?.touched?.dueDate ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.dueDate && formik?.touched.dueDate && formik?.errors.dueDate}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.dueDate && formik?.touched.dueDate && formik?.errors?.dueDate}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("dueDate", data?.dueDate, "Due Date")}>{data?.dueDate ? dayjs(data?.dueDate).format("YYYY-MM-DD") : ' - '}</Text>
@@ -367,11 +367,11 @@ const View = (props) => {
                                                 type="date"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={dayjs(formik.values.invoiceDate).format("YYYY-MM-DD")}
+                                                value={dayjs(formik?.values?.invoiceDate).format("YYYY-MM-DD")}
                                                 borderColor={formik?.errors?.invoiceDate && formik?.touched?.invoiceDate ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.invoiceDate && formik?.touched.invoiceDate && formik?.errors.invoiceDate}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.invoiceDate && formik?.touched.invoiceDate && formik?.errors?.invoiceDate}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("invoiceDate", data?.invoiceDate, "Invoice Date")}>{data?.invoiceDate ? dayjs(data?.invoiceDate).format("YYYY-MM-DD") : ' - '}</Text>
@@ -389,15 +389,15 @@ const View = (props) => {
                                                 name="status"
                                                 onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                mb={formik?.errors.status && formik?.touched.status ? undefined : '10px'}
+                                                mb={formik?.errors?.status && formik?.touched?.status ? undefined : '10px'}
                                                 fontWeight='500'
-                                                borderColor={formik?.errors.status && formik?.touched.status ? "red.300" : null}
+                                                borderColor={formik?.errors?.status && formik?.touched?.status ? "red.300" : null}
                                             >
                                                 <option value="Paid">Paid</option>
                                                 <option value="Unpaid">Unpaid</option>
                                                 <option value="Cancelled">Cancelled</option>
                                             </Select>
-                                            <Text mb='10px' color={'red'}> {formik?.errors.status && formik?.touched.status && formik?.errors.status}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.status && formik?.touched.status && formik?.errors?.status}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("status", data?.status, "Status")}>{data?.status ? data?.status : ' - '}</Text>
@@ -413,16 +413,16 @@ const View = (props) => {
                                         <>
                                             <Textarea
                                                 fontSize='sm'
-                                                value={formik?.values.description}
+                                                value={formik?.values?.description}
                                                 name="description"
                                                 resize={"none"}
                                                 onBlur={handleBlur}
                                                 onChange={formik?.handleChange}
                                                 placeholder='Description'
                                                 fontWeight='500'
-                                                borderColor={formik?.errors.description && formik?.touched.description ? "red.300" : null}
+                                                borderColor={formik?.errors.description && formik?.touched?.description ? "red.300" : null}
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.description && formik?.touched.description && formik?.errors.description}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.description && formik?.touched?.description && formik?.errors?.description}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("description", data?.description, "Description")} style={{ width: "300px" }}>{data?.description ? data?.description : ' - '}</Text>
@@ -456,11 +456,11 @@ const View = (props) => {
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Assigned To</Text>
                                 {
                                     data?.assignedTo ?
-                                        <Link to={user.role === 'superAdmin' && `/userView/${data?.assignedTo}`}>
-                                            <Text color={user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900', textDecoration: user.role === 'superAdmin' ? 'underline' : 'none' } }} style={{ cursor: "pointer" }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
+                                        <Link to={user?.role === 'superAdmin' && `/userView/${data?.assignedTo}`}>
+                                            <Text color={user?.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900', textDecoration: user.role === 'superAdmin' ? 'underline' : 'none' } }} style={{ cursor: "pointer" }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
                                         </Link>
                                         :
-                                        <Text color={user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900', textDecoration: user.role === 'superAdmin' ? 'underline' : 'none' } }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
+                                        <Text color={user?.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900', textDecoration: user.role === 'superAdmin' ? 'underline' : 'none' } }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
 
                                 }
                             </GridItem>
@@ -473,11 +473,11 @@ const View = (props) => {
                                                 name="billingStreet"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.billingStreet}
+                                                value={formik?.values?.billingStreet}
                                                 borderColor={formik?.errors?.billingStreet && formik?.touched?.billingStreet ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.billingStreet && formik?.touched.billingStreet && formik?.errors.billingStreet}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.billingStreet && formik?.touched?.billingStreet && formik?.errors?.billingStreet}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("billingStreet", data?.billingStreet, "Billing Street")}>{data?.billingStreet ? data?.billingStreet : ' - '}</Text>
@@ -492,7 +492,7 @@ const View = (props) => {
                                                 name="shippingStreet"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.shippingStreet}
+                                                value={formik?.values?.shippingStreet}
                                                 borderColor={formik?.errors?.shippingStreet && formik?.touched?.shippingStreet ? "red.300" : null}
                                                 autoFocus
                                             />
@@ -513,11 +513,11 @@ const View = (props) => {
                                                 name="billingCity"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.billingCity}
+                                                value={formik?.values?.billingCity}
                                                 borderColor={formik?.errors?.billingCity && formik?.touched?.billingCity ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.billingCity && formik?.touched.billingCity && formik?.errors.billingCity}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.billingCity && formik?.touched.billingCity && formik?.errors?.billingCity}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("billingCity", data?.billingCity, "Billing City")}>{data?.billingCity ? data?.billingCity : ' - '}</Text>
@@ -533,7 +533,7 @@ const View = (props) => {
                                                 name="shippingCity"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.shippingCity}
+                                                value={formik?.values?.shippingCity}
                                                 borderColor={formik?.errors?.shippingCity && formik?.touched?.shippingCity ? "red.300" : null}
                                                 autoFocus
                                             />
@@ -552,11 +552,11 @@ const View = (props) => {
                                                 name="billingState"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.billingState}
+                                                value={formik?.values?.billingState}
                                                 borderColor={formik?.errors?.billingState && formik?.touched?.billingState ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.billingState && formik?.touched.billingState && formik?.errors.billingState}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.billingState && formik?.touched?.billingState && formik?.errors.billingState}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("billingState", data?.billingState, "Billing State")}>{data?.billingState ? data?.billingState : ' - '}</Text>
@@ -571,11 +571,11 @@ const View = (props) => {
                                                 name="shippingState"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.shippingState}
+                                                value={formik?.values?.shippingState}
                                                 borderColor={formik?.errors?.shippingState && formik?.touched?.shippingState ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.shippingState && formik?.touched.shippingState && formik?.errors.shippingState}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.shippingState && formik?.touched.shippingState && formik?.errors.shippingState}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("shippingState", data?.shippingState, "Shipping State")}>{data?.shippingState ? data?.shippingState : ' - '}</Text>
@@ -590,7 +590,7 @@ const View = (props) => {
                                                 name="billingPostalCode"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.billingPostalCode}
+                                                value={formik?.values?.billingPostalCode}
                                                 borderColor={formik?.errors?.billingPostalCode && formik?.touched?.billingPostalCode ? "red.300" : null}
                                                 autoFocus
                                             />
@@ -609,7 +609,7 @@ const View = (props) => {
                                                 name="shippingPostalCode"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.shippingPostalCode}
+                                                value={formik?.values?.shippingPostalCode}
                                                 borderColor={formik?.errors?.shippingPostalCode && formik?.touched?.shippingPostalCode ? "red.300" : null}
                                                 autoFocus
                                             />
@@ -628,7 +628,7 @@ const View = (props) => {
                                                 name="billingCountry"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.billingCountry}
+                                                value={formik?.values?.billingCountry}
                                                 borderColor={formik?.errors?.billingCountry && formik?.touched?.billingCountry ? "red.300" : null}
                                                 autoFocus
                                             />
@@ -647,7 +647,7 @@ const View = (props) => {
                                                 name="shippingCountry"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.shippingCountry}
+                                                value={formik?.values?.shippingCountry}
                                                 borderColor={formik?.errors?.shippingCountry && formik?.touched?.shippingCountry ? "red.300" : null}
                                                 autoFocus
                                             />
