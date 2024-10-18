@@ -7,6 +7,7 @@ const router = express.Router();
 router.get('/', auth, property.index)
 router.post('/add', auth, property.add)
 router.post('/add-units/:id', auth, property.addUnits)
+router.put('/edit-unit/:id', auth, property.editUnit)
 router.post('/change-unit-status/:id', auth, property.changeUnitStatus)
 router.post('/addMany', auth, property.addMany)
 router.get('/view/:id', auth, property.view)

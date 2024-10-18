@@ -74,10 +74,10 @@ const View = () => {
   const param = useParams();
   const textColor = useColorModeValue("gray.500", "white");
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [data, setData] = useState();
   const [unitTypeList, setUnitTypeList] = useState([]);
   const [filteredContacts, setFilteredContacts] = useState([]);
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [edit, setEdit] = useState(false);
   const [deleteModel, setDelete] = useState(false);
   const [action, setAction] = useState(false);
@@ -86,11 +86,15 @@ const View = () => {
   const [virtualToursorVideos, setVirtualToursorVideos] = useState(false);
   const [floorPlans, setFloorPlans] = useState(false);
   const [propertyDocuments, setPropertyDocuments] = useState(false);
+  const [actionType, setActionType] = useState("Add");
+  const [selectedUnitType, setSelectedUnitType] = useState({});
   const [addUnit, setAddUnit] = useState(false);
   const [isLoding, setIsLoding] = useState(false);
   const [displayPropertyPhoto, setDisplayPropertyPhoto] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
   const [unitOpenModel, setUnitOpenModel] = useState(false);
+  const [selectedViewUnitType, setSelectedViewUnitType] = useState({});
+
   const dispatch = useDispatch();
   const propertyData = useSelector(
     (state) => state?.propertyCustomFiled?.data?.data
@@ -125,6 +129,12 @@ const View = () => {
     } finally {
       setIsLoding(false);
     }
+  };
+
+  const handleEditOpen = (row) => {
+    setAddUnit(true);
+    setActionType("Edit");
+    setSelectedUnitType(row);
   };
 
   const handleChangeOrder = (row, type) => {
@@ -299,6 +309,24 @@ const View = () => {
               <MdMoveDown />
             </Button>
           </Tooltip>
+          <Tooltip
+            hasArrow
+            label="Edit"
+            bg="gray.200"
+            color="gray"
+            textTransform="capitalize"
+            fontSize="sm"
+          >
+            <Button
+              color="green"
+              size="sm"
+              onClick={() => handleEditOpen(row?.original)}
+              variant="outline"
+              me={2}
+            >
+              <EditIcon />
+            </Button>
+          </Tooltip>
         </Flex>
       ),
     },
@@ -403,20 +431,20 @@ const View = () => {
   };
 
   const getOrdinalSuffix = (number) => {
-    const remainder10 = number % 10;
-    const remainder100 = number % 100;
-
-    if (remainder10 === 1 && remainder100 !== 11) return "st Floor";
-    if (remainder10 === 2 && remainder100 !== 12) return "nd Floor";
-    if (remainder10 === 3 && remainder100 !== 13) return "rd Floor";
-    return "th Floor";
+    const suffix = ["th", "st", "nd", "rd"][number % 10] || "th";
+    return number % 100 === 11 || number % 100 === 12 || number % 100 === 13
+      ? "th"
+      : suffix;
   };
 
-  useEffect(() => {
-    dispatch(fetchPropertyCustomFiled());
-    fetchData();
-    fetchCustomDataFields();
-  }, [action]);
+  const handleViewUnitType = (item, floorName) => {
+    setUnitOpenModel(true);
+    setSelectedViewUnitType({
+      unitType: data?.unitType?.find((unit) => unit?._id === item?.unitType),
+      unit: item,
+      floorName,
+    });
+  };
 
   const statusCount = data?.units?.reduce((acc, floor) => {
     floor?.flats?.forEach((flat) => {
@@ -433,6 +461,12 @@ const View = () => {
     return acc;
   }, {});
 
+  useEffect(() => {
+    dispatch(fetchPropertyCustomFiled());
+    fetchData();
+    fetchCustomDataFields();
+  }, [action]);
+
   return (
     <>
       <Add
@@ -444,8 +478,13 @@ const View = () => {
       <AddEditUnits
         isOpen={addUnit}
         size={size}
+        actionType={actionType}
+        selectedUnitType={selectedUnitType}
         setAction={setAction}
-        onClose={() => setAddUnit(false)}
+        onClose={() => {
+          setSelectedUnitType({});
+          setAddUnit(false);
+        }}
       />
       <Edit
         isOpen={edit}
@@ -463,6 +502,7 @@ const View = () => {
         ids={param?.id}
       />
       <UnitTypeView
+        data={selectedViewUnitType}
         isOpen={unitOpenModel}
         onClose={() => setUnitOpenModel(false)}
       />
@@ -730,9 +770,8 @@ const View = () => {
                   Array?.isArray(floor?.flats) && floor?.flats?.length > 0 ? (
                     <Grid templateColumns="repeat(12, 1fr)" gap={3} mt={3}>
                       <GridItem rowSpan={2} colSpan={{ base: 12 }}>
-                        {`${floor?.floorNumber}${getOrdinalSuffix(
-                          floor?.floorNumber
-                        )}`}
+                        {`${floor?.floorNumber}`}
+                        <sup>{getOrdinalSuffix(floor?.floorNumber)}</sup> Floor
                       </GridItem>
                       {floor?.flats?.map((item, i) => (
                         <GridItem
@@ -774,9 +813,16 @@ const View = () => {
                                 <Button
                                   size="sm"
                                   variant="outline"
-                                  onClick={() => setUnitOpenModel(true)}
+                                  onClick={() =>
+                                    handleViewUnitType(item, {
+                                      floorNumber: floor?.floorNumber,
+                                      floorNumberSuffix: getOrdinalSuffix(
+                                        floor?.floorNumber
+                                      ),
+                                    })
+                                  }
                                   me={2}
-                                  color={"gray"}
+                                  colorScheme="green"
                                 >
                                   <ViewIcon />
                                 </Button>

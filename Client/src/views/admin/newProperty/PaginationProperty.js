@@ -24,7 +24,6 @@ const PaginationProperty = (props) => {
     rangeData,
     setCurrentPage,
     setRangeData,
-    pageOptions,
     nextPage,
     previousPage,
     dataLength
@@ -49,11 +48,11 @@ const PaginationProperty = (props) => {
 
   return (
     <Flex
-      justifyContent={pageOptions?.length !== 1 ? "space-between" : "end"}
-      mt={2}
+      justifyContent={Math.ceil(dataLength / rangeData) !== 1 ? "space-between" : "end"}
+      m={2}
       alignItems="center"
     >
-      {pageOptions?.length !== 1 && (
+      {Math.ceil(dataLength / rangeData) !== 1 && (
         <Flex>
           <Tooltip label="First Page">
             <IconButton
@@ -78,7 +77,7 @@ const PaginationProperty = (props) => {
       )}
 
       <Flex alignItems="center">
-        {pageOptions?.length !== 1 && (
+        {Math.ceil(dataLength / rangeData) !== 1 && (
           <>
             <Text flexShrink="0" mr={8}>
               Page{" "}
@@ -96,7 +95,7 @@ const PaginationProperty = (props) => {
               mr={8}
               w={28}
               min={0}
-              max={pageOptions?.length}
+              max={Math.ceil(dataLength / rangeData)}
               value={gopageValue}
               onChange={(value) => handlePageChange(value)}
             >
@@ -123,7 +122,7 @@ const PaginationProperty = (props) => {
         </Select>
       </Flex>
 
-      {pageOptions?.length !== 1 && (
+      {Math.ceil(dataLength / rangeData) !== 1 && (
         <Flex>
           <Tooltip label="Next Page">
             <IconButton

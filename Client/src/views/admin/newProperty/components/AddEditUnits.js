@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { CloseIcon } from "@chakra-ui/icons";
@@ -25,29 +25,40 @@ import { toast } from "react-toastify";
 import { postApi } from "services/api";
 import * as yup from "yup";
 import { IoLogoUsd } from "react-icons/io";
+import { putApi } from "services/api";
 
 const AddEditUnits = (props) => {
-  const { isOpen, onClose, setAction } = props;
+  const { isOpen, onClose, setAction, selectedUnitType, actionType } = props;
   const param = useParams();
   const [isLoding, setIsLoding] = useState(false);
 
-  const initialValues = {
+  const [initialValues, setInitialValues] = useState({
     name: "",
     sqm: "",
     price: "",
-  };
+  });
+
   const validationSchema = yup.object({
     name: yup.string().required("Name Is required"),
-    sqm: yup.number().required("Sqm Is required").typeError("Sqm must be a number"),
-    price: yup.number().required("Price Is required").typeError("Price must be a number"),
+    sqm: yup
+      .number()
+      .required("Sqm Is required")
+      .typeError("Sqm must be a number"),
+    price: yup
+      .number()
+      .required("Price Is required")
+      .typeError("Price must be a number"),
   });
+
   const formik = useFormik({
     initialValues: initialValues,
+    enableReinitialize: true,
     validationSchema,
     onSubmit: (values) => {
-      AddData();
+      AddUpdateData();
     },
   });
+
   const {
     errors,
     touched,
@@ -55,18 +66,23 @@ const AddEditUnits = (props) => {
     handleBlur,
     handleChange,
     handleSubmit,
-    setFieldValue,
     resetForm,
   } = formik;
 
-  const AddData = async () => {
+  const AddUpdateData = async () => {
     try {
       setIsLoding(true);
-      let response = await postApi(`api/property/add-units/${param?.id}`, {
-        units: values,
-        type: "A",
-      });
-      if (response && response?.status === 200) {
+      let response;
+      if (actionType === "Edit") {
+        response = await putApi(`api/property/edit-unit/${param?.id}`, values);
+      } else {
+        response = await postApi(`api/property/add-units/${param?.id}`, {
+          units: values,
+          type: "A",
+        });
+      }
+
+      if (response && response.status === 200) {
         onClose();
         resetForm();
         setAction((pre) => !pre);
@@ -80,12 +96,16 @@ const AddEditUnits = (props) => {
     }
   };
 
+  useEffect(() => {
+    actionType === "Edit" && setInitialValues(selectedUnitType);
+  }, [selectedUnitType]);
+
   return (
     <Modal isOpen={isOpen} isCentered>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader justifyContent="space-between" display="flex">
-          Add Unit
+          {actionType === "Edit" ? "Edit" : "Add"} Unit
           <IconButton onClick={onClose} icon={<CloseIcon />} />
         </ModalHeader>
         <ModalBody>
@@ -157,7 +177,9 @@ const AddEditUnits = (props) => {
                   name="price"
                   placeholder="Enter Price"
                   fontWeight="500"
-                  borderColor={errors?.price && touched?.price ? "red.300" : null}
+                  borderColor={
+                    errors?.price && touched?.price ? "red.300" : null
+                  }
                 />
                 <InputRightElement
                   pointerEvents="none"
@@ -177,7 +199,7 @@ const AddEditUnits = (props) => {
             disabled={isLoding ? true : false}
             onClick={handleSubmit}
           >
-            {isLoding ? <Spinner /> : "Save"}
+            {isLoding ? <Spinner /> : actionType === "Edit" ? "Update" : "Save"}
           </Button>
           <Button
             sx={{

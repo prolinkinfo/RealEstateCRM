@@ -524,6 +524,18 @@ const Index = () => {
         </Card>
       )}
 
+      {listData?.length > 5 && <Card mt={3} p={2}>
+        <PaginationProperty
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          dataLength={listData?.length}
+          nextPage={nextPage}
+          previousPage={previousPage}
+          rangeData={rangeData}
+          setRangeData={setRangeData}
+        />
+      </Card>}
+
       {isOpen && (
         <Add
           propertyData={propertyData[0]}
@@ -561,17 +573,6 @@ const Index = () => {
           customFields={propertyData?.[0]?.fields || []}
         />
       )}
-      <Card mt={3} p={2}>
-        <PaginationProperty
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          dataLength={listData?.length}
-          nextPage={nextPage}
-          previousPage={previousPage}
-          rangeData={rangeData}
-          setRangeData={setRangeData}
-        />
-      </Card>
     </div>
   );
 };
