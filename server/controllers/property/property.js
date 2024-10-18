@@ -33,7 +33,6 @@ const add = async (req, res) => {
   }
 };
 
-
 const buildApartmentData = (floorCount, unitData) => {
   let apartmentData = [];
 
@@ -61,10 +60,10 @@ const addApartmentData = (oldUnits, newUnitTypeId) => {
       {
         flateName: (i + 1) * 100 + (item?.flats?.length + 1),
         status: "",
-        unitType: newUnitTypeId
-      }
-    ]
-  }))
+        unitType: newUnitTypeId,
+      },
+    ],
+  }));
 
   return newFloors;
 };
@@ -77,9 +76,9 @@ const addUnits = async (req, res) => {
     let result;
 
     if (type === "A") {
-      let newUnit = units
+      let newUnit = units;
 
-      const property = await Property.findById(id).lean();;
+      const property = await Property.findById(id).lean();
       newUnit.order = (property?.unitType?.length || 0) + 1;
       newUnit._id = new mongoose.Types.ObjectId();
 
@@ -91,25 +90,31 @@ const addUnits = async (req, res) => {
       const updatedProperty = await Property.findById(id).lean();
 
       if (updatedProperty?.units && updatedProperty?.units?.length > 0) {
-        const newUnits = addApartmentData(updatedProperty?.units, newUnit?._id)
-        await Property.updateOne(
-          { _id: id },
-          { $set: { units: newUnits } }
-        );
-
+        const newUnits = addApartmentData(updatedProperty?.units, newUnit?._id);
+        await Property.updateOne({ _id: id }, { $set: { units: newUnits } });
       } else {
-        const flates = buildApartmentData(updatedProperty?.Floor, updatedProperty?.unitType);
+        const flates = buildApartmentData(
+          updatedProperty?.Floor,
+          updatedProperty?.unitType
+        );
         result = await Property.updateOne(
           { _id: id },
           { $set: { units: flates } }
         );
       }
-
     } else if (type === "E") {
-      result = await Property.updateOne(
-        { _id: id },
-        { $set: { unitType: units } }
-      );
+
+      const unitTypeLookup = units?.reduce((acc, { _id, order }) => (acc?.[_id] = order, acc), {});
+
+      const updatedProperty = await Property.findById(id).lean()
+      
+      const updatedUnits = updatedProperty?.units?.map(unit => ({
+        ...unit,
+        flats: unit?.flats?.sort((a, b) => unitTypeLookup[a?.unitType] - unitTypeLookup[b?.unitType])
+      }));
+
+      await Property.updateOne({ _id: id }, { $set: { units: updatedUnits, unitType: units } });
+
     }
 
     res.status(200).json(result);
@@ -125,19 +130,26 @@ const changeUnitStatus = async (req, res) => {
     const { floor, unit } = req?.body;
 
     const property = await Property?.findById(id)?.lean();
-    if (!property) return res?.status(404)?.json({ error: "Property not found" });
+    if (!property)
+      return res?.status(404)?.json({ error: "Property not found" });
 
-    const selectedFloor = property?.units?.find(item => item?._id?.toString() === floor?._id?.toString());
-    if (!selectedFloor) return res?.status(404)?.json({ error: "Floor not found" });
+    const selectedFloor = property?.units?.find(
+      (item) => item?._id?.toString() === floor?._id?.toString()
+    );
+    if (!selectedFloor)
+      return res?.status(404)?.json({ error: "Floor not found" });
 
-    const flatIndex = selectedFloor?.flats?.findIndex(item => item?._id?.toString() === unit?._id?.toString());
-    if (flatIndex === -1) return res?.status(404)?.json({ error: "Flat not found" });
+    const flatIndex = selectedFloor?.flats?.findIndex(
+      (item) => item?._id?.toString() === unit?._id?.toString()
+    );
+    if (flatIndex === -1)
+      return res?.status(404)?.json({ error: "Flat not found" });
 
     selectedFloor.flats[flatIndex] = unit;
 
     const result = await Property.updateOne(
-      { _id: id, 'units._id': floor?._id },
-      { $set: { 'units.$.flats': selectedFloor?.flats } }
+      { _id: id, "units._id": floor?._id },
+      { $set: { "units.$.flats": selectedFloor?.flats } }
     );
 
     res?.status(200)?.json(result);
@@ -146,7 +158,6 @@ const changeUnitStatus = async (req, res) => {
     res?.status(400)?.json({ error: "Failed to create Property" });
   }
 };
-
 
 const addMany = async (req, res) => {
   try {
@@ -168,17 +179,24 @@ const edit = async (req, res) => {
       { $set: req.body }
     );
 
-    if (req?.body?.Floor !== undefined && req?.body?.Floor !== property?.Floor) {
+    if (
+      req?.body?.Floor !== undefined &&
+      req?.body?.Floor !== property?.Floor
+    ) {
       if (Number(property?.Floor) < Number(req?.body?.Floor)) {
-
         const flates = buildApartmentData(req?.body?.Floor, property?.unitType);
         await Property.updateOne(
           { _id: req.params.id },
-          { $push: { units: flates?.slice(Number(req?.body?.Floor) - Number(property?.Floor) - 1) } }
+          {
+            $push: {
+              units: flates?.slice(
+                Number(req?.body?.Floor) - Number(property?.Floor) - 1
+              ),
+            },
+          }
         );
-
       } else {
-        const flates = property?.units?.slice(0, req?.body?.Floor)
+        const flates = property?.units?.slice(0, req?.body?.Floor);
         await Property.updateOne(
           { _id: req.params.id },
           { $set: { units: flates } }
