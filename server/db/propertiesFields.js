@@ -99,47 +99,6 @@ const propertiesFields = [
       ]
     },
     {
-      "name": "status",
-      "label": "Status",
-      "type": "select",
-      "fixed": true,
-      "isDefault": false,
-      "editable": false,
-      "delete": false,
-      "belongsTo": null,
-      "backendType": "Mixed",
-      "isTableField": true,
-      "isView": false,
-      "options": [
-        {
-          "name": "Available",
-          "value": "Available"
-        },
-        {
-          "name": "Booked",
-          "value": "Booked"
-        },
-        {
-          "name": "Sold",
-          "value": "Sold"
-        },
-        {
-          "name": "Blocked",
-          "value": "Blocked"
-        }
-      ],
-      "validation": [
-        {
-          "message": "Invalid type value for Lead Status",
-          "formikType": "String"
-        },
-        {
-          "require": true,
-          "message": ""
-        }
-      ]
-    },
-    {
       "name": "yearBuilt",
       "label": "Year Built",
       "type": "number",
@@ -202,8 +161,8 @@ const propertiesFields = [
       "isView": false
     },
     {
-      "name": "address",
-      "label": "Address",
+      "name": "location",
+      "label": "Location",
       "type": "text",
       "fixed": true,
       "isDefault": false,

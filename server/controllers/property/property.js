@@ -161,10 +161,31 @@ const addMany = async (req, res) => {
 
 const edit = async (req, res) => {
   try {
+    let property = await Property.findById(req.params.id).lean();
+
     let result = await Property.updateOne(
       { _id: req.params.id },
       { $set: req.body }
     );
+
+    if (req?.body?.Floor !== undefined && req?.body?.Floor !== property?.Floor) {
+      if (Number(property?.Floor) < Number(req?.body?.Floor)) {
+
+        const flates = buildApartmentData(req?.body?.Floor, property?.unitType);
+        await Property.updateOne(
+          { _id: req.params.id },
+          { $push: { units: flates?.slice(Number(req?.body?.Floor) - Number(property?.Floor) - 1) } }
+        );
+
+      } else {
+        const flates = property?.units?.slice(0, req?.body?.Floor)
+        await Property.updateOne(
+          { _id: req.params.id },
+          { $set: { units: flates } }
+        );
+      }
+    }
+
     res.status(200).json(result);
   } catch (err) {
     console.error("Failed to Update Property:", err);
