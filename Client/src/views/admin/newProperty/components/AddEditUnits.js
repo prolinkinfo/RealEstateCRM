@@ -27,20 +27,28 @@ import * as yup from "yup";
 import { IoLogoUsd } from "react-icons/io";
 
 const AddEditUnits = (props) => {
-  const { isOpen, onClose, setAction } = props;
+  const { isOpen, onClose, setAction, data } = props;
   const param = useParams();
   const [isLoding, setIsLoding] = useState(false);
 
-  const initialValues = {
+  const [initialValues, setInitialValues] = useState({
     name: "",
     sqm: "",
     price: "",
-  };
+  });
+
   const validationSchema = yup.object({
     name: yup.string().required("Name Is required"),
-    sqm: yup.number().required("Sqm Is required").typeError("Sqm must be a number"),
-    price: yup.number().required("Price Is required").typeError("Price must be a number"),
+    sqm: yup
+      .number()
+      .required("Sqm Is required")
+      .typeError("Sqm must be a number"),
+    price: yup
+      .number()
+      .required("Price Is required")
+      .typeError("Price must be a number"),
   });
+
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema,
@@ -48,6 +56,7 @@ const AddEditUnits = (props) => {
       AddData();
     },
   });
+
   const {
     errors,
     touched,
@@ -55,7 +64,6 @@ const AddEditUnits = (props) => {
     handleBlur,
     handleChange,
     handleSubmit,
-    setFieldValue,
     resetForm,
   } = formik;
 
@@ -157,7 +165,9 @@ const AddEditUnits = (props) => {
                   name="price"
                   placeholder="Enter Price"
                   fontWeight="500"
-                  borderColor={errors?.price && touched?.price ? "red.300" : null}
+                  borderColor={
+                    errors?.price && touched?.price ? "red.300" : null
+                  }
                 />
                 <InputRightElement
                   pointerEvents="none"

@@ -103,18 +103,32 @@ const addUnits = async (req, res) => {
         );
       }
     } else if (type === "E") {
+      const updatedProperty = await Property.findById(id).lean();
 
-      const unitTypeLookup = units?.reduce((acc, { _id, order }) => (acc?.[_id] = order, acc), {});
+      const unitTypeLookup = units?.reduce((acc, curr) => {
+        acc[curr?._id] = curr?.order;
+        return acc;
+      }, {});
 
-      const updatedProperty = await Property.findById(id).lean()
-      
-      const updatedUnits = updatedProperty?.units?.map(unit => ({
-        ...unit,
-        flats: unit?.flats?.sort((a, b) => unitTypeLookup[a?.unitType] - unitTypeLookup[b?.unitType])
-      }));
+      const updatedUnits = updatedProperty?.units.map((unit) => {
+        const sortedFlats = [...unit?.flats].sort((a, b) => {
+          return unitTypeLookup[a?.unitType] - unitTypeLookup[b?.unitType];
+        });
 
-      await Property.updateOne({ _id: id }, { $set: { units: updatedUnits, unitType: units } });
+        return {
+          ...unit,
+          flats: unit?.flats.map((flat, index) => ({
+            ...flat,
+            status: sortedFlats?.[index]?.status,
+            unitType: sortedFlats?.[index]?.unitType,
+          })),
+        };
+      });
 
+      result = await Property.updateOne(
+        { _id: id },
+        { $set: { unitType: units, units: updatedUnits } }
+      );
     }
 
     res.status(200).json(result);
@@ -448,10 +462,10 @@ const upload = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-          "-" +
-          timestamp +
-          "." +
-          file.originalname.split(".")[1]
+            "-" +
+            timestamp +
+            "." +
+            file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -504,10 +518,10 @@ const virtualTours = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-          "-" +
-          timestamp +
-          "." +
-          file.originalname.split(".")[1]
+            "-" +
+            timestamp +
+            "." +
+            file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -560,10 +574,10 @@ const FloorPlansStorage = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-          "-" +
-          timestamp +
-          "." +
-          file.originalname.split(".")[1]
+            "-" +
+            timestamp +
+            "." +
+            file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -616,10 +630,10 @@ const PropertyDocumentsStorage = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-          "-" +
-          timestamp +
-          "." +
-          file.originalname.split(".")[1]
+            "-" +
+            timestamp +
+            "." +
+            file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
