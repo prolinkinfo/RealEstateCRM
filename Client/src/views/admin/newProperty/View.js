@@ -258,6 +258,7 @@ const View = () => {
     { Header: "Price", accessor: "price" },
     {
       Header: "Action",
+      center: true,
       cell: ({ row }) => (
         <Flex className="selectOpt">
           <Tooltip
@@ -648,6 +649,7 @@ const View = () => {
                               deleteMany={true}
                               ManageGrid={false}
                               onOpen={() => { }}
+                              addBtn={false}
                               access={emailAccess}
                             />
                           </Card>
@@ -668,6 +670,7 @@ const View = () => {
                               deleteMany={true}
                               ManageGrid={false}
                               onOpen={() => { }}
+                              addBtn={false}
                               access={callAccess}
                             />
                           </Card>

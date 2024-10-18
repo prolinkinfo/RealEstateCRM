@@ -202,6 +202,19 @@ const propertiesFields = [
       "isView": false
     },
     {
+      "name": "address",
+      "label": "Address",
+      "type": "text",
+      "fixed": true,
+      "isDefault": false,
+      "editable": false,
+      "delete": false,
+      "belongsTo": null,
+      "backendType": "Mixed",
+      "isTableField": false,
+      "isView": false
+    },
+    {
       "name": "Facility",
       "label": "Facility",
       "type": "text",
