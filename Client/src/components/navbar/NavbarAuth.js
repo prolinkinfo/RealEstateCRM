@@ -57,18 +57,18 @@ export default function AuthNavbar(props) {
   } = useDisclosure();
   // Menus
   function getLinks(routeName) {
-    let foundRoute = routes.filter(function (route) {
-      return route.items && route.name === routeName;
+    let foundRoute = routes?.filter(function (route) {
+      return route?.items && route?.name === routeName;
     });
-    return foundRoute[0].items;
+    return foundRoute[0]?.items;
   }
   function getLinksCollapse(routeName) {
-    let foundRoute = routes.filter(function (route) {
-      return route.items && route.name === routeName;
+    let foundRoute = routes?.filter(function (route) {
+      return route?.items && route?.name === routeName;
     });
 
-    let foundLinks = foundRoute[0].items.filter(function (link) {
-      return link.collapse === true;
+    let foundLinks = foundRoute[0]?.items?.filter(function (link) {
+      return link?.collapse === true;
     });
 
     return foundLinks;
@@ -91,7 +91,7 @@ export default function AuthNavbar(props) {
 
   let brand = (
     <Link
-      href={`${process.env.PUBLIC_URL}/#/`}
+      href={`${process?.env?.PUBLIC_URL}/#/`}
       target='_blank'
       display='flex'
       lineHeight='100%'
@@ -107,7 +107,7 @@ export default function AuthNavbar(props) {
       </Text>
     </Link>
   );
-  if (props.secondary === true) {
+  if (props?.secondary === true) {
     brand = (
       <Link
         minW='175px'
@@ -133,36 +133,36 @@ export default function AuthNavbar(props) {
     // navbarPosition = "fixed";
   }
   const createNftsLinks = (routes) => {
-    return routes.map((link, key) => {
+    return routes?.map((link, key) => {
       return (
         <NavLink
           key={key}
-          to={link.layout + link.path}
+          to={link?.layout + link?.path}
           style={{ maxWidth: "max-content", marginLeft: "40px" }}>
           <Text color='gray.400' fontSize='sm' fontWeight='normal'>
-            {link.name}
+            {link?.name}
           </Text>
         </NavLink>
       );
     });
   };
   const createDashboardsLinks = (routes) => {
-    return routes.map((link, key) => {
+    return routes?.map((link, key) => {
       return (
         <NavLink
           key={key}
-          to={link.layout + link.path}
+          to={link?.layout + link?.path}
           style={{ maxWidth: "max-content", marginLeft: "40px" }}>
           <Text color='gray.400' fontSize='sm' fontWeight='normal'>
-            {link.name}
+            {link?.name}
           </Text>
         </NavLink>
       );
     });
   };
   const createMainLinks = (routes) => {
-    return routes.map((link, key) => {
-      if (link.collapse === true) {
+    return routes?.map((link, key) => {
+      if (link?.collapse === true) {
         return (
           <Stack key={key} direction='column' maxW='max-content'>
             <Stack
@@ -171,10 +171,10 @@ export default function AuthNavbar(props) {
               align='center'
               cursor='default'>
               <IconBox bg='brand.500' h='30px' w='30px' me='10px'>
-                {link.icon}
+                {link?.icon}
               </IconBox>
               <Text fontWeight='bold' fontSize='md' me='auto' color={textColor}>
-                {link.name}
+                {link?.name}
               </Text>
               <Icon
                 as={GoChevronRight}
@@ -185,7 +185,7 @@ export default function AuthNavbar(props) {
               />
             </Stack>
             <Stack direction='column' bg={menuBg}>
-              {createMainLinks(link.items)}
+              {createMainLinks(link?.items)}
             </Stack>
           </Stack>
         );
@@ -193,10 +193,10 @@ export default function AuthNavbar(props) {
         return (
           <NavLink
             key={key}
-            to={link.layout + link.path}
+            to={link?.layout + link?.path}
             style={{ maxWidth: "max-content", marginLeft: "40px" }}>
             <Text color='gray.400' fontSize='sm' fontWeight='normal'>
-              {link.name}
+              {link?.name}
             </Text>
           </NavLink>
         );
@@ -204,8 +204,8 @@ export default function AuthNavbar(props) {
     });
   };
   const createAuthLinks = (routes) => {
-    return routes.map((link, key) => {
-      if (link.collapse === true) {
+    return routes?.map((link, key) => {
+      if (link?.collapse === true) {
         return (
           <Stack key={key} direction='column' my='auto' maxW='max-content'>
             <Stack
@@ -215,10 +215,10 @@ export default function AuthNavbar(props) {
               cursor='default'
               w='max-content'>
               <IconBox bg='brand.500' h='30px' w='30px' me='10px'>
-                {link.icon}
+                {link?.icon}
               </IconBox>
               <Text fontWeight='bold' fontSize='md' me='auto' color={textColor}>
-                {link.name}
+                {link?.name}
               </Text>
               <Icon
                 as={GoChevronRight}
@@ -229,7 +229,7 @@ export default function AuthNavbar(props) {
               />
             </Stack>
             <Stack direction='column' bg={menuBg}>
-              {createAuthLinks(link.items)}
+              {createAuthLinks(link?.items)}
             </Stack>
           </Stack>
         );
@@ -237,10 +237,10 @@ export default function AuthNavbar(props) {
         return (
           <NavLink
             key={key}
-            to={link.layout + link.path}
+            to={link?.layout + link?.path}
             style={{ maxWidth: "max-content", marginLeft: "40px" }}>
             <Text color='gray.400' fontSize='sm' fontWeight='normal'>
-              {link.name}
+              {link?.name}
             </Text>
           </NavLink>
         );
@@ -471,8 +471,8 @@ export default function AuthNavbar(props) {
                   />
                 </Stack>
               }
-              logoText={props.logoText}
-              secondary={props.secondary}
+              logoText={props?.logoText}
+              secondary={props?.secondary}
               routes={routes}
               {...rest}
             />

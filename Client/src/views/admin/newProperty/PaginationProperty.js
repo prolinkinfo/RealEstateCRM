@@ -34,7 +34,7 @@ const PaginationProperty = (props) => {
 
   const canPreviousPage = currentPage >= 1;
 
-  const canNextPage = currentPage < (Math.ceil(dataLength / rangeData)) - 1;
+  const canNextPage = currentPage < (Math?.ceil(dataLength / rangeData)) - 1;
 
   useEffect(() => {
     setGopageValue(currentPage + 1);
@@ -42,7 +42,7 @@ const PaginationProperty = (props) => {
 
   const handlePageChange = (value) => {
     const page = value ? Number(value) : 0; // Ensure we handle 0-based indexing for internal logic
-    if (page >= 0 && page <= Math.ceil(dataLength / rangeData)) {
+    if (page >= 0 && page <= Math?.ceil(dataLength / rangeData)) {
       setCurrentPage(page - 1);
     }
   };
@@ -87,7 +87,7 @@ const PaginationProperty = (props) => {
               </Text>{" "}
               of{" "}
               <Text fontWeight="bold" as="span">
-                {Math.ceil(dataLength / rangeData)}
+                {Math?.ceil(dataLength / rangeData)}
               </Text>
             </Text>
             <Text flexShrink="0">Go to page:</Text>
@@ -115,7 +115,7 @@ const PaginationProperty = (props) => {
             setRangeData(Number(e.target.value));
           }}
         >
-          {[5, 10, 20, 30, 40, 50].map((size) => (
+          {[5, 10, 20, 30, 40, 50]?.map((size) => (
             <option key={size} value={size}>
               Show {size}
             </option>
@@ -137,7 +137,7 @@ const PaginationProperty = (props) => {
           <Tooltip label="Last Page">
             <IconButton
               onClick={() => {
-                setCurrentPage(Math.ceil(dataLength / rangeData) - 1);
+                setCurrentPage(Math?.ceil(dataLength / rangeData) - 1);
               }}
               isDisabled={!canNextPage}
               icon={<ArrowRightIcon h={3} w={3} />}

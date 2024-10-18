@@ -102,7 +102,7 @@ const PhoneModel = (props) => {
     try {
       setIsLoding(true);
       let response = await postApi("api/phoneCall/add", values);
-      if (response.status === 200) {
+      if (response?.status === 200) {
         props.onClose();
         fetchData(1)
         setAction((pre) => !pre);
@@ -118,25 +118,25 @@ const PhoneModel = (props) => {
     values.start = props?.date;
     try {
       let result;
-      if (values.category === "Contact" && assignToContactData.length <= 0) {
+      if (values?.category === "Contact" && assignToContactData?.length <= 0) {
         result = await getApi(
-          user.role === "superAdmin"
+          user?.role === "superAdmin"
             ? "api/contact/"
-            : `api/contact/?createBy=${user._id}`
+            : `api/contact/?createBy=${user?._id}`
         );
         setAssignToContactData(result?.data);
-      } else if (values.category === "Lead" && assignToLeadData.length <= 0) {
+      } else if (values?.category === "Lead" && assignToLeadData?.length <= 0) {
         result = await getApi(
-          user.role === "superAdmin"
+          user?.role === "superAdmin"
             ? "api/lead/"
-            : `api/lead/?createBy=${user._id}`
+            : `api/lead/?createBy=${user?._id}`
         );
         setAssignToLeadData(result?.data);
       } 
         const propertyOptionData = await getApi(
-          user.role === "superAdmin"
+          user?.role === "superAdmin"
             ? "api/property"
-            : `api/property/?createBy=${user._id}`
+            : `api/property/?createBy=${user?._id}`
         );
         setAssignToPropertyData(propertyOptionData?.data);
     } catch (e) {
@@ -145,22 +145,22 @@ const PhoneModel = (props) => {
   }
   useEffect(() => {
     getAllApi()
-  }, [props?.date, values.category]);
+  }, [props?.date, values?.category]);
 
   const fetchRecipientData = async () => {
-    if (values.createByContact) {
-      let findEmail = assignToContactData.find(
-        (item) => item._id === values.createByContact
+    if (values?.createByContact) {
+      let findEmail = assignToContactData?.find(
+        (item) => item?._id === values?.createByContact
       );
       if (findEmail) {
-        setFieldValue("recipient", findEmail.phoneNumber);
+        setFieldValue("recipient", findEmail?.phoneNumber);
       }
-    } else if (values.createByLead) {
+    } else if (values?.createByLead) {
       let findEmail = assignToLeadData.find(
-        (item) => item._id === values.createByLead
+        (item) => item?._id === values?.createByLead
       );
       if (findEmail) {
-        setFieldValue("recipient", findEmail.leadPhoneNumber);
+        setFieldValue("recipient", findEmail?.leadPhoneNumber);
       }
     } else {
       setFieldValue("recipient", "");
@@ -186,7 +186,7 @@ const PhoneModel = (props) => {
 
   useEffect(() => {
     fetchRecipientData();
-  }, [values.createByContact, values.createByLead]);
+  }, [values?.createByContact, values?.createByLead]);
 
   useEffect(() => {
     fetchUsersData();
@@ -194,12 +194,12 @@ const PhoneModel = (props) => {
 
   const setValueProperty = assignToProperyData?.map((item) => ({
     ...item,
-    value: item._id,
-    label: item.name,
+    value: item?._id,
+    label: item?.name,
   }));
 
   const extractLabels = (selectedItems) => {
-    return selectedItems.map((item) => item._id);
+    return selectedItems?.map((item) => item?._id);
   };
   
   return (
@@ -245,7 +245,7 @@ const PhoneModel = (props) => {
             fieldName="property"
             setFieldValue={setFieldValue}
             selectedItems={setValueProperty?.filter((item) =>
-              values?.property?.includes(item._id)
+              values?.property?.includes(item?._id)
             )}
           />
           <Grid templateColumns="repeat(12, 1fr)" gap={3}>
@@ -265,7 +265,7 @@ const PhoneModel = (props) => {
                   setFieldValue("createByContact", "");
                   setFieldValue("createByLead", "");
                 }}
-                value={values.category}
+                value={values?.category}
               >
                 <Stack direction="row">
                   <Radio value="Contact">Contact</Radio>
@@ -274,11 +274,11 @@ const PhoneModel = (props) => {
               </RadioGroup>
               <Text mb="10px" fontSize="sm" color={"red"}>
                 {" "}
-                {errors.category && touched.category && errors.category}
+                {errors?.category && touched?.category && errors?.category}
               </Text>
             </GridItem>
             <GridItem colSpan={{ base: 12 }}>
-              {values.category === "Contact" ? (
+              {values?.category === "Contact" ? (
                 <>
                   <GridItem colSpan={{ base: 12, md: 6 }}>
                     <FormLabel
@@ -292,28 +292,28 @@ const PhoneModel = (props) => {
                     </FormLabel>
                     <Flex justifyContent={"space-between"}>
                       <Select
-                        value={values.createByContact}
+                        value={values?.createByContact}
                         name="createByContact"
                         onChange={handleChange}
                         mb={
-                          errors.createByContact && touched.createByContact
+                          errors?.createByContact && touched?.createByContact
                             ? undefined
                             : "10px"
                         }
                         fontWeight="500"
                         placeholder={"Assign To"}
                         borderColor={
-                          errors.createByContact && touched.createByContact
+                          errors?.createByContact && touched?.createByContact
                             ? "red.300"
                             : null
                         }
                       >
                         {assignToContactData?.map((item) => {
                           return (
-                            <option value={item._id} key={item._id}>
-                              {values.category === "Contact"
-                                ? `${item.fullName}`
-                                : item.leadName}
+                            <option value={item?._id} key={item?._id}>
+                              {values?.category === "Contact"
+                                ? `${item?.fullName}`
+                                : item?.leadName}
                             </option>
                           );
                         })}
@@ -327,13 +327,13 @@ const PhoneModel = (props) => {
                     </Flex>
                     <Text mb="10px" fontSize="sm" color={"red"}>
                       {" "}
-                      {errors.createByContact &&
-                        touched.createByContact &&
-                        errors.createByContact}
+                      {errors?.createByContact &&
+                        touched?.createByContact &&
+                        errors?.createByContact}
                     </Text>
                   </GridItem>
                 </>
-              ) : values.category === "Lead" ? (
+              ) : values?.category === "Lead" ? (
                 <>
                   <GridItem colSpan={{ base: 12, md: 6 }}>
                     <FormLabel
@@ -347,28 +347,28 @@ const PhoneModel = (props) => {
                     </FormLabel>
                     <Flex justifyContent={"space-between"}>
                       <Select
-                        value={values.createByLead}
+                        value={values?.createByLead}
                         name="createByLead"
                         onChange={handleChange}
                         mb={
-                          errors.createByLead && touched.createByLead
+                          errors?.createByLead && touched?.createByLead
                             ? undefined
                             : "10px"
                         }
                         fontWeight="500"
                         placeholder={"Assign To"}
                         borderColor={
-                          errors.createByLead && touched.createByLead
+                          errors?.createByLead && touched?.createByLead
                             ? "red.300"
                             : null
                         }
                       >
                         {assignToLeadData?.map((item) => {
                           return (
-                            <option value={item._id} key={item._id}>
-                              {values.category === "Contact"
-                                ? `${item.firstName} ${item.lastName}`
-                                : item.leadName}
+                            <option value={item?._id} key={item?._id}>
+                              {values?.category === "Contact"
+                                ? `${item?.firstName} ${item?.lastName}`
+                                : item?.leadName}
                             </option>
                           );
                         })}
@@ -382,9 +382,9 @@ const PhoneModel = (props) => {
                     </Flex>
                     <Text mb="10px" fontSize="sm" color={"red"}>
                       {" "}
-                      {errors.createByLead &&
-                        touched.createByLead &&
-                        errors.createByLead}
+                      {errors?.createByLead &&
+                        touched?.createByLead &&
+                        errors?.createByLead}
                     </Text>
                   </GridItem>
                 </>
@@ -405,12 +405,12 @@ const PhoneModel = (props) => {
               <Input
                 fontSize="sm"
                 disabled
-                value={values.recipient ? values.recipient : ""}
+                value={values?.recipient ? values?.recipient : ""}
                 name="recipient"
                 placeholder="Recipient"
                 fontWeight="500"
                 borderColor={
-                  errors.recipient && touched.recipient ? "red.300" : null
+                  errors?.recipient && touched?.recipient ? "red.300" : null
                 }
               />
             </GridItem>
@@ -421,23 +421,23 @@ const PhoneModel = (props) => {
                     label={`Property`}
                     items={setValueProperty}
                     selectedItems={setValueProperty?.filter((item) =>
-                      values?.property?.includes(item._id)
+                      values?.property?.includes(item?._id)
                     )}
                     onSelectedItemsChange={(changes) => {
                       const selectProperty = extractLabels(
-                        changes.selectedItems
+                        changes?.selectedItems
                       );
                       setFieldValue("property", selectProperty);
                     }}
                     name="property"
                     onChange={handleChange}
                     mb={
-                      errors.property && touched.property ? undefined : "10px"
+                      errors?.property && touched?.property ? undefined : "10px"
                     }
                     fontWeight="500"
                     placeholder={"Assign To Property"}
                     borderColor={
-                      errors.property && touched.property ? "red.300" : null
+                      errors?.property && touched?.property ? "red.300" : null
                     }
                   />
                 </Text>
@@ -450,7 +450,7 @@ const PhoneModel = (props) => {
               </Flex>
               <Text color={"red"}>
                 {" "}
-                {errors.attendes && touched.attendes && errors.attendes}
+                {errors?.attendes && touched?.attendes && errors?.attendes}
               </Text>
             </GridItem>
             <GridItem colSpan={{ base: 12, md: 6 }}>
@@ -469,7 +469,7 @@ const PhoneModel = (props) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 min={dayjs(todayTime).format("YYYY-MM-DD HH:mm")}
-                value={values.startDate}
+                value={values?.startDate}
                 name="startDate"
                 fontWeight="500"
                 borderColor={
@@ -478,7 +478,7 @@ const PhoneModel = (props) => {
               />
               <Text fontSize="sm" mb="10px" color={"red"}>
                 {" "}
-                {errors.startDate && touched.startDate && errors.startDate}
+                {errors?.startDate && touched?.startDate && errors?.startDate}
               </Text>
             </GridItem>
 
@@ -496,19 +496,19 @@ const PhoneModel = (props) => {
                 fontSize="sm"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.callDuration}
+                value={values?.callDuration}
                 name="callDuration"
                 placeholder="call Duration"
                 fontWeight="500"
                 borderColor={
-                  errors.callDuration && touched.callDuration ? "red.300" : null
+                  errors?.callDuration && touched?.callDuration ? "red.300" : null
                 }
               />
               <Text mb="10px" fontSize="sm" color={"red"}>
                 {" "}
-                {errors.callDuration &&
-                  touched.callDuration &&
-                  errors.callDuration}
+                {errors?.callDuration &&
+                  touched?.callDuration &&
+                  errors?.callDuration}
               </Text>
             </GridItem>
             <GridItem colSpan={{ base: 12 }}>
@@ -523,24 +523,24 @@ const PhoneModel = (props) => {
               </FormLabel>
               <Flex justifyContent={"space-between"}>
                 <Select
-                  value={values.salesAgent}
+                  value={values?.salesAgent}
                   name="salesAgent"
                   onChange={handleChange}
                   mb={
-                    errors.salesAgent && touched.salesAgent ? undefined : "10px"
+                    errors?.salesAgent && touched?.salesAgent ? undefined : "10px"
                   }
                   fontWeight="500"
                   placeholder={"Assign To Sales Agent"}
                   borderColor={
-                    errors.salesAgent && touched.salesAgent ? "red.300" : null
+                    errors?.salesAgent && touched?.salesAgent ? "red.300" : null
                   }
                 >
                   {assignToSalesData?.map((item) => {
                     return (
                       <option
-                        value={item._id}
-                        key={item._id}
-                      >{`${item.firstName} ${item.lastName}`}</option>
+                        value={item?._id}
+                        key={item?._id}
+                      >{`${item?.firstName} ${item?.lastName}`}</option>
                     );
                   })}
                 </Select>
@@ -553,7 +553,7 @@ const PhoneModel = (props) => {
               </Flex>
               <Text mb="10px" fontSize="sm" color={"red"}>
                 {" "}
-                {errors.salesAgent && touched.salesAgent && errors.salesAgent}
+                {errors?.salesAgent && touched?.salesAgent && errors?.salesAgent}
               </Text>
             </GridItem>
             <GridItem colSpan={{ base: 12 }}>
@@ -572,16 +572,16 @@ const PhoneModel = (props) => {
                 placeholder="Enter Call Notes"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.callNotes}
+                value={values?.callNotes}
                 name="callNotes"
                 fontWeight="500"
                 borderColor={
-                  errors.callNotes && touched.callNotes ? "red.300" : null
+                  errors?.callNotes && touched?.callNotes ? "red.300" : null
                 }
               />
               <Text mb="10px" fontSize="sm" color={"red"}>
                 {" "}
-                {errors.callNotes && touched.callNotes && errors.callNotes}
+                {errors?.callNotes && touched?.callNotes && errors?.callNotes}
               </Text>
             </GridItem>
           </Grid>

@@ -106,7 +106,7 @@ const Index = (props) => {
             Header: 'Opportunity Name', accessor: 'opportunityName', cell: (cell) => (
                 <div className="selectOpt">
                     <Text
-                        onClick={() => handleViewOpen(cell?.row?.original._id)}
+                        onClick={() => handleViewOpen(cell?.row?.original?._id)}
                         me="10px"
                         sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' }, cursor: 'pointer' }}
                         color='brand.600'
@@ -120,7 +120,7 @@ const Index = (props) => {
         },
         {
             Header: 'Account Name', accessor: 'accountName', cell: (cell) => (
-                (user.role === 'superAdmin' || accountAccess?.view) ?
+                (user?.role === 'superAdmin' || accountAccess?.view) ?
                     <div className="selectOpt">
                         <Text
                             onClick={() => navigate(cell?.row?.original.accountName !== null && `/accountView/${cell?.row?.original.accountName}`)}
@@ -485,7 +485,7 @@ const Index = (props) => {
         try {
             setIsLoding(true);
             let response = await deleteManyApi("api/opportunity/deleteMany", ids);
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 toast.success(`Opprtunities Delete successfully`)
                 setSelectedValues([]);
                 setDelete(false);
@@ -504,7 +504,7 @@ const Index = (props) => {
         setIsLoding(true)
         const result = await dispatch(fetchOpportunityData())
 
-        if (result.payload.status === 200) {
+        if (result?.payload?.status === 200) {
             setData(result?.payload?.data);
         } else {
             toast.error("Failed to fetch data", "error");

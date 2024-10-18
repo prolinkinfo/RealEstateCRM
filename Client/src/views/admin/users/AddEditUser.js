@@ -86,13 +86,13 @@ const AddEditUser = (props) => {
       try {
         setIsLoding(true);
         let response = await postApi("api/user/register", values);
-        if (response && response.status === 200) {
+        if (response && response?.status === 200) {
           resetForm();
           setAction((pre) => !pre);
           setUserAction("");
           onClose();
         } else {
-          toast.error(response.response.data?.message);
+          toast.error(response?.response?.data?.message);
         }
       } catch (e) {
         console.log(e);
@@ -103,7 +103,7 @@ const AddEditUser = (props) => {
       try {
         setIsLoding(true);
         let response = await putApi(`api/user/edit/${selectedId}`, values);
-        if (response && response.status === 200) {
+        if (response && response?.status === 200) {
           // setEdit(false)
           fetchData();
           let updatedUserData = userData; // Create a copy of userData
@@ -126,7 +126,7 @@ const AddEditUser = (props) => {
           setAction((pre) => !pre);
           onClose();
         } else {
-          toast.error(response.response.data?.message);
+          toast.error(response?.response?.data?.message);
         }
       } catch (e) {
         console.log(e);
@@ -136,7 +136,7 @@ const AddEditUser = (props) => {
     }
   };
   const extractLabels = (selectedItems) => {
-    return selectedItems.map((item) => item._id);
+    return selectedItems?.map((item) => item?._id);
   };
   const fetchRoleData = async () => {
     setIsLoding(true);
@@ -178,17 +178,17 @@ const AddEditUser = (props) => {
                 fontSize="sm"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.firstName}
+                value={values?.firstName}
                 name="firstName"
                 placeholder="firstName"
                 fontWeight="500"
                 borderColor={
-                  errors.firstName && touched.firstName ? "red.300" : null
+                  errors?.firstName && touched?.firstName ? "red.300" : null
                 }
               />
               <Text mb="10px" color={"red"}>
                 {" "}
-                {errors.firstName && touched.firstName && errors.firstName}
+                {errors?.firstName && touched?.firstName && errors?.firstName}
               </Text>
             </GridItem>
             <GridItem colSpan={{ base: 12 }}>
@@ -205,17 +205,17 @@ const AddEditUser = (props) => {
                 fontSize="sm"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.lastName}
+                value={values?.lastName}
                 name="lastName"
                 placeholder="Last Name"
                 fontWeight="500"
                 borderColor={
-                  errors.lastName && touched.lastName ? "red.300" : null
+                  errors?.lastName && touched?.lastName ? "red.300" : null
                 }
               />
               <Text mb="10px" color={"red"}>
                 {" "}
-                {errors.lastName && touched.lastName && errors.lastName}
+                {errors?.lastName && touched?.lastName && errors?.lastName}
               </Text>
             </GridItem>
             <GridItem colSpan={{ base: 12 }}>
@@ -226,19 +226,19 @@ const AddEditUser = (props) => {
                     placeholder="Type a Name"
                     name="roles"
                     items={roles}
-                    mb={errors.roles && touched.roles ? undefined : "10px"}
+                    mb={errors?.roles && touched?.roles ? undefined : "10px"}
                     className="custom-autoComplete"
                     selectedItems={roles?.filter((item) =>
-                      values?.roles?.includes(item._id)
+                      values?.roles?.includes(item?._id)
                     )}
                     onSelectedItemsChange={(changes) => {
                       const selectedLabels = extractLabels(
-                        changes.selectedItems
+                        changes?.selectedItems
                       );
                       setFieldValue("roles", selectedLabels);
                     }}
                     borderColor={
-                      errors.roles && touched.roles ? "red.300" : null
+                      errors?.roles && touched?.roles ? "red.300" : null
                     }
                   />
                 </Text>
@@ -250,7 +250,7 @@ const AddEditUser = (props) => {
                 />
               </Flex>
               <Text color={"red"}>
-                {errors.roles && touched.roles && errors.roles}
+                {errors?.roles && touched?.roles && errors?.roles}
               </Text>
             </GridItem>
             <GridItem colSpan={{ base: 12 }}>
@@ -268,18 +268,18 @@ const AddEditUser = (props) => {
                 type="email"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.username}
+                value={values?.username}
                 name="username"
                 disabled={userAction === "edit"}
                 placeholder="Email Address"
                 fontWeight="500"
                 borderColor={
-                  errors.username && touched.username ? "red.300" : null
+                  errors?.username && touched?.username ? "red.300" : null
                 }
               />
               <Text mb="10px" color={"red"}>
                 {" "}
-                {errors.username && touched.username && errors.username}
+                {errors?.username && touched?.username && errors?.username}
               </Text>
             </GridItem>
             <GridItem colSpan={{ base: 12 }}>
@@ -302,20 +302,20 @@ const AddEditUser = (props) => {
                   fontSize="sm"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  value={values.phoneNumber}
+                  value={values?.phoneNumber}
                   name="phoneNumber"
                   fontWeight="500"
                   borderColor={
-                    errors.phoneNumber && touched.phoneNumber ? "red.300" : null
+                    errors?.phoneNumber && touched?.phoneNumber ? "red.300" : null
                   }
                   placeholder="Phone number"
                   borderRadius="16px"
                 />
               </InputGroup>
               <Text mb="10px" color={"red"}>
-                {errors.phoneNumber &&
-                  touched.phoneNumber &&
-                  errors.phoneNumber}
+                {errors?.phoneNumber &&
+                  touched?.phoneNumber &&
+                  errors?.phoneNumber}
               </Text>
             </GridItem>
             {userAction !== "edit" && (
@@ -338,14 +338,14 @@ const AddEditUser = (props) => {
                     size="lg"
                     variant="auth"
                     type={show ? "text" : "password"}
-                    value={values.password}
+                    value={values?.password}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     borderColor={
-                      errors.password && touched.password ? "red.300" : null
+                      errors?.password && touched?.password ? "red.300" : null
                     }
                     className={
-                      errors.password && touched.password ? "isInvalid" : null
+                      errors?.password && touched?.password ? "isInvalid" : null
                     }
                   />
                   <InputRightElement
@@ -363,7 +363,7 @@ const AddEditUser = (props) => {
                 </InputGroup>
                 <Text mb="10px" color={"red"}>
                   {" "}
-                  {errors.password && touched.password && errors.password}
+                  {errors?.password && touched?.password && errors?.password}
                 </Text>
               </GridItem>
             )}

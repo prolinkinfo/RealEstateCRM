@@ -60,8 +60,8 @@ export default function ContactTable(props) {
     state: { pageIndex, pageSize }
   } = tableInstance;
 
-  if (pageOptions.length < gopageValue) {
-    setGopageValue(pageOptions.length)
+  if (pageOptions?.length < gopageValue) {
+    setGopageValue(pageOptions?.length)
   }
 
   const textColor = useColorModeValue("gray.500", "white");
@@ -69,15 +69,15 @@ export default function ContactTable(props) {
 
   const handleCheckboxChange = (event, value) => {
     if (type === "multi") {
-      if (event.target.checked) {
+      if (event?.target?.checked) {
         setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
       } else {
         setSelectedValues((prevSelectedValues) =>
-          prevSelectedValues.filter((selectedValue) => selectedValue !== value)
+          prevSelectedValues?.filter((selectedValue) => selectedValue !== value)
         );
       }
     } else {
-      if (event.target.checked) {
+      if (event?.target?.checked) {
         setSelectedValues(value);
       } else {
         setSelectedValues(null);
@@ -107,27 +107,27 @@ export default function ContactTable(props) {
           <Thead zIndex={1}>
             {headerGroups?.map((headerGroup, index) => (
               <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
-                {headerGroup.headers.map((column, index) => (
+                {headerGroup?.headers?.map((column, index) => (
 
                   <Th
-                    {...column.getHeaderProps(column.isSortable !== false && column.getSortByToggleProps())}
+                    {...column.getHeaderProps(column?.isSortable !== false && column?.getSortByToggleProps())}
                     pe="10px"
                     key={index}
                     borderColor={borderColor}
                   >
                     <Flex
                       align="center"
-                      justifyContent={column.center ? "center" : "start"}
+                      justifyContent={column?.center ? "center" : "start"}
                       fontSize={{ sm: "14px", lg: "16px" }}
                       color=" secondaryGray.900"
                     >
                       <span style={{ textTransform: "capitalize", marginRight: "8px" }}>
-                        {column.render("Header")}
+                        {column?.render("Header")}
                       </span>
 
-                      {column.isSortable !== false && (
+                      {column?.isSortable !== false && (
                         <span>
-                          {column.isSorted ? (column.isSortedDesc ? <FaSortDown /> : <FaSortUp />) : <FaSort />}
+                          {column?.isSorted ? (column?.isSortedDesc ? <FaSortDown /> : <FaSortUp />) : <FaSort />}
                         </span>
                       )}
                     </Flex>
@@ -152,7 +152,7 @@ export default function ContactTable(props) {
                 <Tr {...row?.getRowProps()} key={index}>
                   {row?.cells?.map((cell, index) => {
                     let data = "";
-                    if (cell?.column.Header === "#") {
+                    if (cell?.column?.Header === "#") {
                       data = (
                         <Flex align="center">
                           {type === "multi" ? <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" /> :
@@ -162,7 +162,7 @@ export default function ContactTable(props) {
                           </Text>
                         </Flex>
                       );
-                    } else if (cell?.column.Header === "Full Name") {
+                    } else if (cell?.column?.Header === "Full Name") {
                       data = (
                         <Text
                           me="10px"
@@ -173,7 +173,7 @@ export default function ContactTable(props) {
                           {cell?.value}
                         </Text>
                       );
-                    } else if (cell?.column.Header === "first Name") {
+                    } else if (cell?.column?.Header === "first Name") {
                       data = (
                         // <Link to={`/contactView/${cell?.row?.original._id}`}>
                         <Text

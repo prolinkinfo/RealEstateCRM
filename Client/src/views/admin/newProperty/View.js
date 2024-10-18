@@ -115,7 +115,7 @@ const View = () => {
         units: values,
         type: "E",
       });
-      if (response && response.status === 200) {
+      if (response && response?.status === 200) {
         setAction((pre) => !pre);
       } else {
         // toast.error(response.response.data?.message)
@@ -135,7 +135,7 @@ const View = () => {
 
     let targetIndex = type === "up" ? currentIndex - 1 : currentIndex + 1;
 
-    if (targetIndex < 0 || targetIndex >= newRows.length) return;
+    if (targetIndex < 0 || targetIndex >= newRows?.length) return;
 
     [newRows[currentIndex].order, newRows[targetIndex].order] = [
       newRows[targetIndex].order,
@@ -186,7 +186,7 @@ const View = () => {
       cell: (cell) => (
         <div className="selectOpt">
           <Text color={textColor} fontSize="sm" fontWeight="700">
-            {moment(cell?.row?.values.timestamp).format("h:mma (DD/MM)")}
+            {moment(cell?.row?.values?.timestamp).format("h:mma (DD/MM)")}
           </Text>
         </div>
       ),
@@ -246,7 +246,7 @@ const View = () => {
       cell: (cell) => (
         <div className="selectOpt">
           <Text color={textColor} fontSize="sm" fontWeight="700">
-            {moment(cell?.row?.values.timestamp).format("h:mma (DD/MM)")}
+            {moment(cell?.row?.values?.timestamp).format("h:mma (DD/MM)")}
           </Text>
         </div>
       ),
@@ -310,7 +310,7 @@ const View = () => {
 
   const fetchData = async (i) => {
     setIsLoding(true);
-    let response = await getApi("api/property/view/", param.id);
+    let response = await getApi("api/property/view/", param?.id);
     setData(response?.data?.property);
     handleSetUnitTypeList(response?.data?.property?.unitType);
     setFilteredContacts(response?.data?.filteredContacts);
@@ -345,7 +345,7 @@ const View = () => {
     try {
       setIsLoding(true);
       let response = await deleteApi("api/property/delete/", id);
-      if (response.status === 200) {
+      if (response?.status === 200) {
         setDelete(false);
         setAction((pre) => !pre);
         navigate("/properties");
@@ -392,7 +392,7 @@ const View = () => {
         `api/property/change-unit-status/${param?.id}`,
         paylaod
       );
-      if (response && response.status === 200) {
+      if (response && response?.status === 200) {
         setAction((pre) => !pre);
       }
     } catch (e) {
@@ -460,7 +460,7 @@ const View = () => {
         onClose={() => setDelete(false)}
         type="Property"
         handleDeleteData={handleDeleteProperties}
-        ids={param.id}
+        ids={param?.id}
       />
       <UnitTypeView
         isOpen={unitOpenModel}
@@ -512,7 +512,7 @@ const View = () => {
               >
                 <Flex justifyContent={"right"}>
                   <Menu>
-                    {(user.role === "superAdmin" ||
+                    {(user?.role === "superAdmin" ||
                       permission?.create ||
                       permission?.update ||
                       permission?.delete) && (
@@ -530,7 +530,7 @@ const View = () => {
                     )}
                     <MenuDivider />
                     <MenuList minWidth={2}>
-                      {(user.role === "superAdmin" || permission?.create) && (
+                      {(user?.role === "superAdmin" || permission?.create) && (
                         <MenuItem
                           alignItems={"start"}
                           color={"blue"}
@@ -540,7 +540,7 @@ const View = () => {
                           Add
                         </MenuItem>
                       )}
-                      {(user.role === "superAdmin" || permission?.update) && (
+                      {(user?.role === "superAdmin" || permission?.update) && (
                         <MenuItem
                           alignItems={"start"}
                           onClick={() => setEdit(true)}
@@ -558,7 +558,7 @@ const View = () => {
                       >
                         Print as PDF
                       </MenuItem>
-                      {(user.role === "superAdmin" || permission?.delete) && (
+                      {(user?.role === "superAdmin" || permission?.delete) && (
                         <>
                           <MenuDivider />
                           <MenuItem
@@ -727,7 +727,7 @@ const View = () => {
                 </Grid>
 
                 {(data?.units || [])?.map((floor) =>
-                  Array.isArray(floor?.flats) && floor?.flats?.length > 0 ? (
+                  Array?.isArray(floor?.flats) && floor?.flats?.length > 0 ? (
                     <Grid templateColumns="repeat(12, 1fr)" gap={3} mt={3}>
                       <GridItem rowSpan={2} colSpan={{ base: 12 }}>
                         {`${floor?.floorNumber}${getOrdinalSuffix(
@@ -900,7 +900,7 @@ const View = () => {
                                 fetchData={fetchData}
                                 isOpen={propertyPhoto}
                                 onClose={setPropertyPhoto}
-                                id={param.id}
+                                id={param?.id}
                               />
                             </Flex>
                             <HSeparator />
@@ -983,7 +983,7 @@ const View = () => {
                                 fetchData={fetchData}
                                 isOpen={virtualToursorVideos}
                                 onClose={setVirtualToursorVideos}
-                                id={param.id}
+                                id={param?.id}
                               />
                             </Flex>
                             <HSeparator />
@@ -1006,8 +1006,8 @@ const View = () => {
                                   loop
                                   style={{ margin: "0 5px" }}
                                 >
-                                  <source src={item.img} type="video/mp4" />
-                                  <source src={item.img} type="video/ogg" />
+                                  <source src={item?.img} type="video/mp4" />
+                                  <source src={item?.img} type="video/ogg" />
                                 </video>
                               ))
                             ) : (
@@ -1051,7 +1051,7 @@ const View = () => {
                                 fetchData={fetchData}
                                 isOpen={floorPlans}
                                 onClose={setFloorPlans}
-                                id={param.id}
+                                id={param?.id}
                               />
                             </Flex>
                             <HSeparator />
@@ -1068,10 +1068,10 @@ const View = () => {
                               data?.floorPlans?.length > 0 &&
                               data?.floorPlans?.map((item) => (
                                 <Image
-                                  key={item.createOn}
+                                  key={item?.createOn}
                                   width={"30%"}
                                   m={1}
-                                  src={item.img}
+                                  src={item?.img}
                                   alt="Your Image"
                                 />
                               ))
@@ -1133,7 +1133,7 @@ const View = () => {
                                 fetchData={fetchData}
                                 isOpen={propertyDocuments}
                                 onClose={setPropertyDocuments}
-                                id={param.id}
+                                id={param?.id}
                               />
                             </Flex>
                             <HSeparator />
@@ -1147,8 +1147,8 @@ const View = () => {
                             data &&
                             data?.propertyDocuments?.length > 0 &&
                             data?.propertyDocuments?.map((item) => {
-                              const parts = item.filename.split(".");
-                              const lastIndex = parts[parts.length - 1];
+                              const parts = item?.filename?.split(".");
+                              const lastIndex = parts[parts?.length - 1];
                               return (
                                 <Flex alignItems={"center"} mt="3">
                                   {lastIndex === "xlsx" && (
@@ -1189,7 +1189,7 @@ const View = () => {
                                       },
                                     }}
                                   >
-                                    {item.filename}
+                                    {item?.filename}
                                   </Text>
                                 </Flex>
                               );
@@ -1292,13 +1292,13 @@ const View = () => {
                 ? data &&
                   data?.propertyPhotos?.length > 0 &&
                   data?.propertyPhotos?.map((item) => (
-                    <a href={item.img} target="_blank">
+                    <a href={item?.img} target="_blank">
                       {" "}
                       <Image
                         width={"100%"}
                         m={1}
                         mb={4}
-                        src={item.img}
+                        src={item?.img}
                         alt="Your Image"
                       />
                     </a>
@@ -1315,8 +1315,8 @@ const View = () => {
                         loop
                         style={{ margin: " 5px" }}
                       >
-                        <source src={item.img} type="video/mp4" />
-                        <source src={item.img} type="video/ogg" />
+                        <source src={item?.img} type="video/mp4" />
+                        <source src={item?.img} type="video/ogg" />
                       </video>
                     </a>
                   ))
@@ -1324,12 +1324,12 @@ const View = () => {
                 ? data &&
                   data?.floorPlans?.length > 0 &&
                   data?.floorPlans?.map((item) => (
-                    <a href={item.img} target="_blank">
+                    <a href={item?.img} target="_blank">
                       <Image
                         width={"100%"}
                         m={1}
                         mb={4}
-                        src={item.img}
+                        src={item?.img}
                         alt="Your Image"
                       />
                     </a>
@@ -1361,8 +1361,8 @@ const View = () => {
               data &&
               data?.propertyDocuments?.length > 0 &&
               data?.propertyDocuments?.map((item) => {
-                const parts = item.filename.split(".");
-                const lastIndex = parts[parts.length - 1];
+                const parts = item?.filename?.split(".");
+                const lastIndex = parts[parts?.length - 1];
                 return (
                   <Flex alignItems={"center"} mt="3">
                     {lastIndex === "xlsx" && (
@@ -1384,7 +1384,7 @@ const View = () => {
                     <Text
                       ml={2}
                       color="green.400"
-                      onClick={() => window.open(item?.img)}
+                      onClick={() => window?.open(item?.img)}
                       cursor={"pointer"}
                       sx={{
                         "&:hover": {
@@ -1393,7 +1393,7 @@ const View = () => {
                         },
                       }}
                     >
-                      {item.filename}
+                      {item?.filename}
                     </Text>
                   </Flex>
                 );

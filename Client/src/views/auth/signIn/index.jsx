@@ -78,13 +78,13 @@ function SignIn() {
     try {
       setIsLoding(true);
       let response = await postApi("api/user/login", values, checkBox);
-      if (response && response.status === 200) {
+      if (response && response?.status === 200) {
         navigate("/superAdmin");
         toast.success("Login Successfully!");
         resetForm();
         dispatch(setUser(response?.data?.user))
       } else {
-        toast.error(response.response.data?.error);
+        toast.error(response?.response?.data?.error);
       }
     } catch (e) {
       console.log(e);
@@ -137,7 +137,7 @@ function SignIn() {
           mb={{ base: "20px", md: "auto" }}
         >
           <form onSubmit={handleSubmit}>
-            <FormControl isInvalid={errors.username && touched.username}>
+            <FormControl isInvalid={errors?.username && touched?.username}>
               <FormLabel
                 display="flex"
                 ms="4px"
@@ -152,31 +152,31 @@ function SignIn() {
                 fontSize="sm"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.username}
+                value={values?.username}
                 name="username"
                 ms={{ base: "0px", md: "0px" }}
                 type="email"
                 placeholder="mail@simmmple.com"
-                mb={errors.username && touched.username ? undefined : "24px"}
+                mb={errors?.username && touched?.username ? undefined : "24px"}
                 fontWeight="500"
                 size="lg"
                 borderColor={
-                  errors.username && touched.username ? "red.300" : null
+                  errors?.username && touched?.username ? "red.300" : null
                 }
                 className={
-                  errors.username && touched.username ? "isInvalid" : null
+                  errors?.username && touched?.username ? "isInvalid" : null
                 }
               />
-              {errors.username && touched.username && (
+              {errors?.username && touched?.username && (
                 <FormErrorMessage mb="24px">
                   {" "}
-                  {errors.username}
+                  {errors?.username}
                 </FormErrorMessage>
               )}
             </FormControl>
 
             <FormControl
-              isInvalid={errors.password && touched.password}
+              isInvalid={errors?.password && touched?.password}
               mb="24px"
             >
               <FormLabel
@@ -194,18 +194,18 @@ function SignIn() {
                   fontSize="sm"
                   placeholder="Enter Your Password"
                   name="password"
-                  mb={errors.password && touched.password ? undefined : "24px"}
-                  value={values.password}
+                  mb={errors?.password && touched?.password ? undefined : "24px"}
+                  value={values?.password}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   size="lg"
                   variant="auth"
                   type={show ? "text" : "password"}
                   borderColor={
-                    errors.password && touched.password ? "red.300" : null
+                    errors?.password && touched?.password ? "red.300" : null
                   }
                   className={
-                    errors.password && touched.password ? "isInvalid" : null
+                    errors?.password && touched?.password ? "isInvalid" : null
                   }
                 />
                 <InputRightElement display="flex" alignItems="center" mt="4px">
@@ -217,16 +217,16 @@ function SignIn() {
                   />
                 </InputRightElement>
               </InputGroup>
-              {errors.password && touched.password && (
+              {errors?.password && touched?.password && (
                 <FormErrorMessage mb="24px">
                   {" "}
-                  {errors.password}
+                  {errors?.password}
                 </FormErrorMessage>
               )}
               <Flex justifyContent="space-between" align="center" mb="24px">
                 <FormControl display="flex" alignItems="center">
                   <Checkbox
-                    onChange={(e) => setCheckBox(e.target.checked)}
+                    onChange={(e) => setCheckBox(e?.target?.checked)}
                     id="remember-login"
                     value={checkBox}
                     defaultChecked

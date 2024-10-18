@@ -45,11 +45,11 @@ const Edit = (props) => {
     const EditData = async () => {
         try {
             setIsLoding(true)
-            let response = await putApi(`api/user/edit/${props.selectedId}`, values)
-            if (response && response.status === 200) {
+            let response = await putApi(`api/user/edit/${props?.selectedId}`, values)
+            if (response && response?.status === 200) {
                 setEdit(false)
                 let updatedUserData = userData; // Create a copy of userData
-                if (user?._id === props.selectedId) {
+                if (user?._id === props?.selectedId) {
                     if (updatedUserData && typeof updatedUserData === 'object') {
                         // Create a new object with the updated firstName
                         updatedUserData = {
@@ -70,7 +70,7 @@ const Edit = (props) => {
                 fetchData()
                 props.setAction((pre) => !pre)
             } else {
-                toast.error(response.response.data?.message)
+                toast.error(response?.response?.data?.message)
             }
         } catch (e) {
             console.log(e);
@@ -100,13 +100,13 @@ const Edit = (props) => {
                             <Input
                                 fontSize='sm'
                                 onChange={handleChange} onBlur={handleBlur}
-                                value={values.firstName}
+                                value={values?.firstName}
                                 name="firstName"
                                 placeholder='firstName'
                                 fontWeight='500'
-                                borderColor={errors.firstName && touched.firstName ? "red.300" : null}
+                                borderColor={errors?.firstName && touched?.firstName ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.firstName && touched.firstName && errors.firstName}</Text>
+                            <Text mb='10px' color={'red'}> {errors?.firstName && touched?.firstName && errors?.firstName}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -115,13 +115,13 @@ const Edit = (props) => {
                             <Input
                                 fontSize='sm'
                                 onChange={handleChange} onBlur={handleBlur}
-                                value={values.lastName}
+                                value={values?.lastName}
                                 name="lastName"
                                 placeholder='Last Name'
                                 fontWeight='500'
-                                borderColor={errors.lastName && touched.lastName ? "red.300" : null}
+                                borderColor={errors?.lastName && touched?.lastName ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.lastName && touched.lastName && errors.lastName}</Text>
+                            <Text mb='10px' color={'red'}> {errors?.lastName && touched?.lastName && errors?.lastName}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -131,13 +131,13 @@ const Edit = (props) => {
                                 fontSize='sm'
                                 type='email'
                                 onChange={handleChange} onBlur={handleBlur}
-                                value={values.username}
+                                value={values?.username}
                                 name="username"
                                 placeholder='Email Address'
                                 fontWeight='500'
-                                borderColor={errors.username && touched.username ? "red.300" : null}
+                                borderColor={errors?.username && touched?.username ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.username && touched.username && errors.username}</Text>
+                            <Text mb='10px' color={'red'}> {errors?.username && touched?.username && errors?.username}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -151,13 +151,13 @@ const Edit = (props) => {
                                 <Input type="tel"
                                     fontSize='sm'
                                     onChange={handleChange} onBlur={handleBlur}
-                                    value={values.phoneNumber}
+                                    value={values?.phoneNumber}
                                     name="phoneNumber"
                                     fontWeight='500'
-                                    borderColor={errors.phoneNumber && touched.phoneNumber ? "red.300" : null}
+                                    borderColor={errors?.phoneNumber && touched?.phoneNumber ? "red.300" : null}
                                     placeholder="Phone number" borderRadius="16px" />
                             </InputGroup>
-                            <Text mb='10px' color={'red'}>{errors.phoneNumber && touched.phoneNumber && errors.phoneNumber}</Text>
+                            <Text mb='10px' color={'red'}>{errors?.phoneNumber && touched?.phoneNumber && errors?.phoneNumber}</Text>
                         </GridItem>
                     </Grid>
 

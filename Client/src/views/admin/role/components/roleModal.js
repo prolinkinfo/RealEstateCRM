@@ -89,8 +89,8 @@ function RoleModal(props) {
     state: { pageIndex, pageSize },
   } = tableInstance;
 
-  if (pageOptions.length < gopageValue) {
-    setGopageValue(pageOptions.length);
+  if (pageOptions?.length < gopageValue) {
+    setGopageValue(pageOptions?.length);
   }
 
   const userFetchData = async () => {
@@ -128,15 +128,15 @@ function RoleModal(props) {
             <Table>
               <Thead>
                 {headerGroups?.map((headerGroup, index) => (
-                  <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
+                  <Tr {...headerGroup?.getHeaderGroupProps()} key={index}>
                     {headerGroup.headers?.map((column, index) => (
                       <Th
                         sx={{ width: "10px" }}
                         key={index}
                         borderColor={borderColor}
-                        display={column.display === false && "none"}
+                        display={column?.display === false && "none"}
                       >
-                        {column.display !== false && column.render("Header")}
+                        {column?.display !== false && column?.render("Header")}
                       </Th>
                     ))}
                   </Tr>
@@ -160,7 +160,7 @@ function RoleModal(props) {
                   </Tr>
                 ) : data?.length === 0 ? (
                   <Tr>
-                    <Td colSpan={columns.length}>
+                    <Td colSpan={columns?.length}>
                       <Text
                         textAlign={"center"}
                         width="100%"
@@ -179,7 +179,7 @@ function RoleModal(props) {
                       <Tr {...row?.getRowProps()} key={i}>
                         {row?.cells?.map((cell, index) => {
                           let data = "";
-                          if (cell?.column.Header === "title") {
+                          if (cell?.column?.Header === "title") {
                             data = (
                               <Text
                                 me="10px"
@@ -190,7 +190,7 @@ function RoleModal(props) {
                                 {cell?.value}
                               </Text>
                             );
-                          } else if (cell?.column.Header === "create") {
+                          } else if (cell?.column?.Header === "create") {
                             data = (
                               <Text
                                 color={textColor}
@@ -200,7 +200,7 @@ function RoleModal(props) {
                                 {cell?.value ? 'Yes' : 'No'}
                               </Text>
                             );
-                          } else if (cell?.column.Header === "view") {
+                          } else if (cell?.column?.Header === "view") {
                             data = (
                               <Text
                                 color={textColor}
@@ -210,7 +210,7 @@ function RoleModal(props) {
                                 {cell?.value ? 'Yes' : 'No'}
                               </Text>
                             );
-                          } else if (cell?.column.Header === "update") {
+                          } else if (cell?.column?.Header === "update") {
                             data = (
                               <Text
                                 color={textColor}
@@ -220,7 +220,7 @@ function RoleModal(props) {
                                 {cell?.value ? 'Yes' : 'No'}
                               </Text>
                             );
-                          } else if (cell?.column.Header === "delete") {
+                          } else if (cell?.column?.Header === "delete") {
                             data = (
                               <Text
                                 color={textColor}
@@ -239,7 +239,7 @@ function RoleModal(props) {
                               minW={{ sm: "150px", md: "200px", lg: "auto" }}
                               borderColor="transparent"
                               sx={{
-                                display: cell?.column.Header === "#" && "none",
+                                display: cell?.column?.Header === "#" && "none",
                               }}
                             >
                               {data}

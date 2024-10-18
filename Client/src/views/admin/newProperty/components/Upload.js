@@ -25,9 +25,9 @@ export default function Upload(props) {
           w={{ base: "100%" }}
           me='36px'
           minH={200}
-          img={props.text === 'Property Photos' ? 'img' : ''}
+          img={props?.text === 'Property Photos' ? 'img' : ''}
           height={'100%'}
-          onFileSelect={props.onFileSelect}
+          onFileSelect={props?.onFileSelect}
           content={
             <Box>
               <Icon as={MdUpload} w='80px' h='80px' color={brandColor} />
@@ -51,7 +51,7 @@ export default function Upload(props) {
             textAlign='start'
             fontSize='2xl'
             mt={{ base: "20px" }}>
-            Upload {props.text}
+            Upload {props?.text}
           </Text>
           <Text
             color={textColorSecondary}

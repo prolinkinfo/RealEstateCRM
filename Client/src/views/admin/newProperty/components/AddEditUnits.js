@@ -66,12 +66,12 @@ const AddEditUnits = (props) => {
         units: values,
         type: "A",
       });
-      if (response && response.status === 200) {
+      if (response && response?.status === 200) {
         onClose();
         resetForm();
         setAction((pre) => !pre);
       } else {
-        toast.error(response.response.data?.message);
+        toast.error(response?.response?.data?.message);
       }
     } catch (e) {
       console.log(e);
