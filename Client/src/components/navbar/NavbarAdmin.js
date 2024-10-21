@@ -35,7 +35,7 @@ export default function AdminNavbar(props) {
 	let gap = '0px';
 	let size = "sm";
 	const changeNavbar = () => {
-		if (window.scrollY > 1) {
+		if (window?.scrollY > 1) {
 			setScrolled(true);
 		} else {
 			setScrolled(false);
@@ -129,11 +129,11 @@ export default function AdminNavbar(props) {
 							src={openSidebar === true ? largeLogo[0]?.logoLgImg : largeLogo[0]?.logoSmImg} // Set the source path of your image
 							alt="Logo" // Set the alt text for accessibility
 							cursor="pointer"
-							onClick={() => !props.from && setOpenSidebar(!openSidebar)}
+							onClick={() => !props?.from && setOpenSidebar(!openSidebar)}
 							userSelect="none"
 							my={2}
 						/> : <Heading my={4} style={{ width: openSidebar ? "165px" : "60px", height: '52px', objectFit: "contain" }}
-							cursor={"pointer"} onClick={() => !props.from && setOpenSidebar(!openSidebar)} userSelect={"none"}>{openSidebar === true ? "Prolink" : "Pr"}</Heading>}
+							cursor={"pointer"} onClick={() => !props?.from && setOpenSidebar(!openSidebar)} userSelect={"none"}>{openSidebar === true ? "Prolink" : "Pr"}</Heading>}
 					</Flex>
 					<Box display={{ sm: "none", xl: "flex" }} ms={openSidebar ? "" : "3"} onClick={() => setOpenSidebar(!openSidebar)} style={{ fontSize: "25px" }}>{openSidebar ? <AiOutlineMenuFold /> : <AiOutlineMenuUnfold />}</Box>
 					<Link
@@ -178,10 +178,10 @@ export default function AdminNavbar(props) {
 					<AdminNavbarLinks
 						setOpenSidebar={setOpenSidebar}
 						openSidebar={openSidebar}
-						onOpen={props.onOpen}
-						logoText={props.logoText}
-						secondary={props.secondary}
-						fixed={props.fixed}
+						onOpen={props?.onOpen}
+						logoText={props?.logoText}
+						secondary={props?.secondary}
+						fixed={props?.fixed}
 						scrolled={scrolled}
 						routes={routes}
 					/>
@@ -193,9 +193,9 @@ export default function AdminNavbar(props) {
 }
 
 AdminNavbar.propTypes = {
-	brandText: PropTypes.string,
-	variant: PropTypes.string,
-	secondary: PropTypes.bool,
-	fixed: PropTypes.bool,
-	onOpen: PropTypes.func
+	brandText: PropTypes?.string,
+	variant: PropTypes?.string,
+	secondary: PropTypes?.bool,
+	fixed: PropTypes?.bool,
+	onOpen: PropTypes?.func
 };

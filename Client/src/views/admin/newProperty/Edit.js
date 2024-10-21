@@ -12,7 +12,7 @@ import * as yup from 'yup'
 const Edit = (props) => {
     const { data } = props
     const initialFieldValues = Object.fromEntries(
-        (props?.leadData?.fields || []).map(field => [field?.name, ''])
+        (props?.leadData?.fields || [])?.map(field => [field?.name, ''])
     );
     const [initialValues, setInitialValues] = useState({
         ...initialFieldValues,
@@ -23,7 +23,7 @@ const Edit = (props) => {
 
     const formik = useFormik({
         initialValues: initialValues,
-        validationSchema: yup.object().shape(generateValidationSchema(props?.propertyData?.fields)),
+        validationSchema: yup.object()?.shape(generateValidationSchema(props?.propertyData?.fields)),
         enableReinitialize: true,
         onSubmit: (values, { resetForm }) => {
             EditData();
@@ -37,8 +37,8 @@ const Edit = (props) => {
     const EditData = async () => {
         try {
             setIsLoding(true)
-            let response = await putApi(`api/property/edit/${props?.selectedId || param.id}`, values)
-            if (response.status === 200) {
+            let response = await putApi(`api/property/edit/${props?.selectedId || param?.id}`, values)
+            if (response?.status === 200) {
                 props.onClose();
                 props.setAction((pre) => !pre)
             }
@@ -80,7 +80,7 @@ const Edit = (props) => {
 
     return (
         <div>
-            <Drawer isOpen={props.isOpen} size={props.size}>
+            <Drawer isOpen={props?.isOpen} size={props?.size}>
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerHeader alignItems={"center"} justifyContent='space-between' display='flex' >
@@ -93,7 +93,7 @@ const Edit = (props) => {
                                 <Spinner />
                             </Flex>
                             :
-                            <CustomForm moduleData={props.propertyData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
+                            <CustomForm moduleData={props?.propertyData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
                         }
                     </DrawerBody>
                     <DrawerFooter>

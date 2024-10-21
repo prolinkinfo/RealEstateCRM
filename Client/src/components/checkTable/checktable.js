@@ -163,7 +163,7 @@ const CommonCheckTable = (props) => {
     pageOptions?.length > 0 &&
     pageOptions?.length < gopageValue
   ) {
-    setGopageValue(pageOptions.length);
+    setGopageValue(pageOptions?.length);
   }
 
   const handleSearch = (results) => {
@@ -180,8 +180,8 @@ const CommonCheckTable = (props) => {
         )
       : allData?.filter((item) => {
           return tableCustomFields.every((field) => {
-            const fieldValue = values[field.name];
-            const itemValue = item[field.name];
+            const fieldValue = values[field?.name];
+            const itemValue = item[field?.name];
 
             if (field.type === "select") {
               return !fieldValue || itemValue === fieldValue;
@@ -192,8 +192,8 @@ const CommonCheckTable = (props) => {
                   itemValue.toString().includes(fieldValue.toString()))
               );
             } else if (field.type === "date") {
-              const fromDate = values[`from${field.name}`];
-              const toDate = values[`to${field.name}`];
+              const fromDate = values[`from${field?.name}`];
+              const toDate = values[`to${field?.name}`];
 
               if (!fromDate && !toDate) {
                 return true; // No date range specified
@@ -217,20 +217,20 @@ const CommonCheckTable = (props) => {
         });
 
     const getValue = tableCustomFields.reduce((result, field) => {
-      if (field.type === "date") {
-        const fromDate = values[`from${field.name}`];
-        const toDate = values[`to${field.name}`];
+      if (field?.type === "date") {
+        const fromDate = values[`from${field?.name}`];
+        const toDate = values[`to${field?.name}`];
 
         if (fromDate || toDate) {
           result.push({
-            name: [`from${field.name}`, `to${field.name}`],
+            name: [`from${field?.name}`, `to${field?.name}`],
             value: `From: ${fromDate} To: ${toDate}`,
           });
         }
-      } else if (values[field.name]) {
+      } else if (values[field?.name]) {
         result.push({
-          name: [field.name],
-          value: values[field.name],
+          name: [field?.name],
+          value: values[field?.name],
         });
       }
 
@@ -269,7 +269,7 @@ const CommonCheckTable = (props) => {
       (item) =>
         !state ||
         (item?.status &&
-          item?.status?.toLowerCase().includes(state?.toLowerCase()))
+          item?.status?.toLowerCase()?.includes(state?.toLowerCase()))
     );
     let getValue = [state || undefined].filter((value) => value);
 
@@ -323,7 +323,7 @@ const CommonCheckTable = (props) => {
     } else {
       setSelectedValues &&
         setSelectedValues((prevSelectedValues) =>
-          prevSelectedValues.filter((selectedValue) => selectedValue !== value)
+          prevSelectedValues?.filter((selectedValue) => selectedValue !== value)
         );
     }
   };
@@ -350,7 +350,7 @@ const CommonCheckTable = (props) => {
           ?.map((rec) => {
             const selectedFieldsData = {};
             csvColumns?.forEach((property) => {
-              selectedFieldsData[property.accessor] = rec[property.accessor];
+              selectedFieldsData[property?.accessor] = rec[property?.accessor];
             });
             return selectedFieldsData;
           });
@@ -403,14 +403,14 @@ const CommonCheckTable = (props) => {
   const handleRemove = (name) => {
     const filter = (getTagValues || []).filter((item) => {
       if (Array.isArray(name?.name)) {
-        return name.name?.toString() !== item.name?.toString();
+        return name?.name?.toString() !== item?.name?.toString();
       }
     });
 
     let updatedSearchValue = { ...searchValue };
     for (let key in updatedSearchValue) {
       if (updatedSearchValue.hasOwnProperty(key)) {
-        if (name.name.includes(key)) {
+        if (name?.name?.includes(key)) {
           delete updatedSearchValue[key];
         }
         if (updatedSearchValue[key] === "") {
@@ -493,8 +493,8 @@ const CommonCheckTable = (props) => {
                   dataColumn={columns}
                   onSearch={handleSearch}
                   setGetTagValues={
-                    props.setGetTagValuesOutside
-                      ? props.setGetTagValuesOutside
+                    props?.setGetTagValuesOutside
+                      ? props?.setGetTagValuesOutside
                       : setGetTagValues
                   }
                   setGopageValue={setGopageValue}
@@ -617,16 +617,16 @@ const CommonCheckTable = (props) => {
             {BackButton && BackButton}
           </GridItem>
           <HStack spacing={4} mb={2}>
-            {(getTagValues || []).map((item) => (
+            {(getTagValues || [])?.map((item) => (
               <Tag
                 size={"md"}
                 p={2}
-                key={item.value}
+                key={item?.value}
                 borderRadius="full"
                 variant="solid"
                 colorScheme="gray"
               >
-                <TagLabel>{item.value}</TagLabel>
+                <TagLabel>{item?.value}</TagLabel>
                 <TagCloseButton onClick={() => handleRemove(item)} />
               </Tag>
             ))}
@@ -667,12 +667,12 @@ const CommonCheckTable = (props) => {
                             marginRight: "8px",
                           }}
                         >
-                          {column.render("Header")}
+                          {column?.render("Header")}
                         </span>
-                        {column.isSortable !== false && (
+                        {column?.isSortable !== false && (
                           <span>
-                            {column.isSorted ? (
-                              column.isSortedDesc ? (
+                            {column?.isSorted ? (
+                              column?.isSortedDesc ? (
                                 <FaSortDown />
                               ) : (
                                 <FaSortUp />
@@ -726,8 +726,8 @@ const CommonCheckTable = (props) => {
                       {row?.cells?.map((cell, index) => {
                         let data = "";
                         columnData?.forEach((item) => {
-                          if (cell?.column.Header === item.Header) {
-                            if (item.cell && typeof item.cell === "function") {
+                          if (cell?.column.Header === item?.Header) {
+                            if (item?.cell && typeof item?.cell === "function") {
                               data = (
                                 <Flex
                                   Flex
@@ -741,9 +741,9 @@ const CommonCheckTable = (props) => {
                                     fontSize="sm"
                                     fontWeight="700"
                                   >
-                                    {item.cell(cell) === " "
+                                    {item?.cell(cell) === " "
                                       ? "-"
-                                      : item.cell(cell)}
+                                      : item?.cell(cell)}
                                   </Text>
                                 </Flex>
                               );

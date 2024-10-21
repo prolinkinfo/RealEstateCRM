@@ -28,9 +28,9 @@ const ImportModal = (props) => {
             setIsLoding(true)
             resetForm()
 
-            if (values.property) {
+            if (values?.property) {
                 onClose();
-                navigate('/propertyImport', { state: { fileData: values.property , customFields: customFields } });
+                navigate('/propertyImport', { state: { fileData: values?.property , customFields: customFields } });
             }
 
         } catch (e) {
@@ -50,8 +50,8 @@ const ImportModal = (props) => {
                 <ModalBody>
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12 }}>
-                            <CommonFileUpload count={values.property.length} onFileSelect={(file) => setFieldValue('property', file)} text={text} />
-                            <Text mb='10px' color={'red'}> {errors.property && touched.property && <>Please Select {text}</>}</Text>
+                            <CommonFileUpload count={values?.property?.length} onFileSelect={(file) => setFieldValue('property', file)} text={text} />
+                            <Text mb='10px' color={'red'}> {errors?.property && touched?.property && <>Please Select {text}</>}</Text>
                         </GridItem>
                     </Grid>
                 </ModalBody>

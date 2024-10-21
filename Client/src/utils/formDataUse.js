@@ -14,8 +14,8 @@ const FormDataUse = (values, formData) => {
         // appendFormData('createBy');
         // appendFormData('filename');
 
-        Object.entries(values).forEach(([key, value]) => {
-            formData.append(key, value);
+        Object?.entries(values)?.forEach(([key, value]) => {
+            formData?.append(key, value);
         });
 
         // Clean up function
@@ -32,10 +32,10 @@ export const commonUtils = {
     formData: (values) => {
         const formData = new FormData();
 
-        Object.entries(values).forEach(([key, value]) => {
-            formData.append(key, value);
+        Object?.entries(values)?.forEach(([key, value]) => {
+            formData?.append(key, value);
         });
-        values.files.forEach((file) => {
+        values?.files?.forEach((file) => {
             formData?.append('files', file);
         });
         return formData;

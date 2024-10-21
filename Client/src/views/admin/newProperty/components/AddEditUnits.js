@@ -72,7 +72,7 @@ const AddEditUnits = (props) => {
   const AddUpdateData = async () => {
     try {
       setIsLoding(true);
-      let response
+      let response;
       if (actionType === "Edit") {
         response = await putApi(`api/property/edit-unit/${param?.id}`, values);
       } else {
@@ -87,7 +87,7 @@ const AddEditUnits = (props) => {
         resetForm();
         setAction((pre) => !pre);
       } else {
-        toast.error(response.response.data?.message);
+        toast.error(response?.response?.data?.message);
       }
     } catch (e) {
       console.log(e);
@@ -97,8 +97,8 @@ const AddEditUnits = (props) => {
   };
 
   useEffect(() => {
-    actionType === "Edit" && setInitialValues(selectedUnitType)
-  }, [selectedUnitType])
+    actionType === "Edit" && setInitialValues(selectedUnitType);
+  }, [selectedUnitType]);
 
   return (
     <Modal isOpen={isOpen} isCentered>

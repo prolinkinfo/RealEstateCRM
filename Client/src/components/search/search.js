@@ -5,7 +5,7 @@ import { SearchIcon } from '@chakra-ui/icons';
 const CustomSearchInput = ({ allData, setSearchbox, setDisplaySearchData, searchbox, dataColumn, onSearch, setGetTagValues, setGopageValue }) => {
 
     const handleInputChange = (e) => {
-        const searchTerm = e.target.value?.toLowerCase();
+        const searchTerm = e?.target?.value?.toLowerCase();
 
         const results = allData?.filter((item) => {
             // Check if any of the specified columns contains the search term
@@ -21,11 +21,11 @@ const CustomSearchInput = ({ allData, setSearchbox, setDisplaySearchData, search
         });
 
         setSearchbox(searchTerm ? searchTerm : '');
-        setDisplaySearchData(e.target.value === "" ? false : true)
+        setDisplaySearchData(e?.target?.value === "" ? false : true)
         onSearch(results);
         setGetTagValues && setGetTagValues([]);
 
-        if (e.target.value === "" && setGopageValue) {
+        if (e?.target?.value === "" && setGopageValue) {
             setGopageValue(1);
         }
     };

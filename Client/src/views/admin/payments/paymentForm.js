@@ -28,7 +28,7 @@ export default function PaymentForm() {
 
     const addPayment = () => {
         fetch(
-            `${process.env.REACT_APP_BASE_URL}api/payment/add`,
+            `${process?.env?.REACT_APP_BASE_URL}api/payment/add`,
             {
                 method: "POST",
                 headers: {
@@ -44,7 +44,7 @@ export default function PaymentForm() {
             }
         )
             .then((res) => {
-                if (res.ok) return res.json();
+                if (res?.ok) return res.json();
                 localStorage.setItem('res', res)
                 return res.json().then((json) => Promise.reject(json));
             })

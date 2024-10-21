@@ -11,8 +11,8 @@ import * as yup from 'yup'
 const Add = (props) => {
     const [isLoding, setIsLoding] = useState(false)
 
-    const initialFieldValues = Object.fromEntries(
-        (props?.propertyData?.fields || []).map(field => [field?.name, ''])
+    const initialFieldValues = Object?.fromEntries(
+        (props?.propertyData?.fields || [])?.map(field => [field?.name, ''])
     );
 
     const initialValues = {
@@ -23,7 +23,7 @@ const Add = (props) => {
     const formik = useFormik({
         initialValues: initialValues,
         enableReinitialize: true,
-        validationSchema: yup.object().shape(generateValidationSchema(props?.propertyData?.fields)),
+        validationSchema: yup.object()?.shape(generateValidationSchema(props?.propertyData?.fields)),
 
         onSubmit: (values, { resetForm }) => {
             AddData();
@@ -37,7 +37,7 @@ const Add = (props) => {
         try {
             setIsLoding(true)
             let response = await postApi('api/form/add', { ...values, moduleId: props?.propertyData?._id })
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 props.onClose();
                 formik.resetForm();
                 props.setAction((pre) => !pre)
@@ -52,15 +52,15 @@ const Add = (props) => {
 
     return (
         <div>
-            <Drawer isOpen={props.isOpen} size={props.size}>
+            <Drawer isOpen={props?.isOpen} size={props?.size}>
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerHeader alignItems={"center"} justifyContent='space-between' display='flex' >
                         Add Property
-                        <IconButton onClick={props.onClose} icon={<CloseIcon />} />
+                        <IconButton onClick={props?.onClose} icon={<CloseIcon />} />
                     </DrawerHeader>
                     <DrawerBody>
-                        <CustomForm moduleData={props.propertyData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
+                        <CustomForm moduleData={props?.propertyData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
                     </DrawerBody>
 
 
@@ -75,7 +75,7 @@ const Add = (props) => {
                                 marginLeft: 2,
                                 textTransform: "capitalize",
                             }}
-                            onClick={props.onClose}
+                            onClick={props?.onClose}
                         >
                             Close
                         </Button>

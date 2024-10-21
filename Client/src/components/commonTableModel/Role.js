@@ -68,8 +68,8 @@ import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
       state: { pageIndex, pageSize },
     } = tableInstance;
   
-    if (pageOptions.length < gopageValue) {
-      setGopageValue(pageOptions.length);
+    if (pageOptions?.length < gopageValue) {
+      setGopageValue(pageOptions?.length);
     }
   
     const textColor = useColorModeValue("gray.500", "white");
@@ -77,18 +77,18 @@ import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
   
     const handleCheckboxChange = (event, value) => {
       if (type === "multi") {
-        if (event.target.checked) {
+        if (event?.target?.checked) {
           setSelectedValues((prevSelectedValues) => [
             ...prevSelectedValues,
             value,
           ]);
         } else {
           setSelectedValues((prevSelectedValues) =>
-            prevSelectedValues.filter((selectedValue) => selectedValue !== value)
+            prevSelectedValues?.filter((selectedValue) => selectedValue !== value)
           );
         }
       } else {
-        if (event.target.checked) {
+        if (event?.target?.checked) {
           setSelectedValues(value);
         } else {
           setSelectedValues(null);
@@ -119,12 +119,12 @@ import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
           <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
             <Thead zIndex={1}>
               {headerGroups?.map((headerGroup, index) => (
-                <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
-                  {headerGroup.headers.map((column, index) => (
+                <Tr {...headerGroup?.getHeaderGroupProps()} key={index}>
+                  {headerGroup.headers?.map((column, index) => (
                     <Th
                       {...column.getHeaderProps(
-                        column.isSortable !== false &&
-                          column.getSortByToggleProps()
+                        column?.isSortable !== false &&
+                          column?.getSortByToggleProps()
                       )}
                       pe="10px"
                       key={index}
@@ -132,7 +132,7 @@ import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
                     >
                       <Flex
                         align="center"
-                        justifyContent={column.center ? "center" : "start"}
+                        justifyContent={column?.center ? "center" : "start"}
                         fontSize={{ sm: "14px", lg: "16px" }}
                         color=" secondaryGray.900"
                       >
@@ -142,13 +142,13 @@ import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
                             marginRight: "8px",
                           }}
                         >
-                          {column.render("Header")}
+                          {column?.render("Header")}
                         </span>
   
-                        {column.isSortable !== false && (
+                        {column?.isSortable !== false && (
                           <span>
-                            {column.isSorted ? (
-                              column.isSortedDesc ? (
+                            {column?.isSorted ? (
+                              column?.isSortedDesc ? (
                                 <FaSortDown />
                               ) : (
                                 <FaSortUp />
@@ -186,14 +186,14 @@ import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
                   <Tr {...row?.getRowProps()} key={index}>
                     {row?.cells?.map((cell, index) => {
                       let data = "";
-                      if (cell?.column.Header === "#") {
+                      if (cell?.column?.Header === "#") {
                         data = (
                           <Flex align="center">
                             {type === "multi" ? (
                               <Checkbox
                                 colorScheme="brandScheme"
                                 value={selectedValues}
-                                isChecked={selectedValues.includes(cell?.value)}
+                                isChecked={selectedValues?.includes(cell?.value)}
                                 onChange={(event) =>
                                   handleCheckboxChange(event, cell?.value)
                                 }
@@ -219,7 +219,7 @@ import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
                             </Text>
                           </Flex>
                         );
-                      } else if (cell?.column.Header === "Role Name") {
+                      } else if (cell?.column?.Header === "Role Name") {
                         data = (
                           <Text
                             me="10px"
@@ -230,7 +230,7 @@ import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
                             {cell?.value}
                           </Text>
                         );
-                      } else if (cell?.column.Header === "Description") {
+                      } else if (cell?.column?.Header === "Description") {
                         data = (
                           <Text
                             me="10px"

@@ -48,7 +48,7 @@ const EmailModel = (props) => {
   const [leadModelOpen, setLeadModel] = useState(false);
   const [propertyModelOpen, setPropertyModelOpen] = useState(false);
   const [assignToProperyData, setAssignToPropertyData] = useState([]);
-  const todayTime = new Date().toISOString().split(".")[0];
+  const todayTime = new Date()?.toISOString()?.split(".")[0];
   const [data, setData] = useState([]);
   const [assignToSalesData, setAssignToSalesData] = useState([]);
   const [salesPersonsModelOpen, setSalesPersonsModelOpen] = useState(false);
@@ -119,19 +119,19 @@ const EmailModel = (props) => {
     }
   };
   const fetchRecipientData = async () => {
-    if (values.createByContact) {
+    if (values?.createByContact) {
       let findEmail = assignToContactData.find(
-        (item) => item._id === values.createByContact
+        (item) => item?._id === values?.createByContact
       );
       if (findEmail) {
-        setFieldValue("recipient", findEmail.email);
+        setFieldValue("recipient", findEmail?.email);
       }
-    } else if (values.createByLead) {
-      let findEmail = assignToLeadData.find(
-        (item) => item._id === values.createByLead
+    } else if (values?.createByLead) {
+      let findEmail = assignToLeadData?.find(
+        (item) => item?._id === values?.createByLead
       );
       if (findEmail) {
-        setFieldValue("recipient", findEmail.leadEmail);
+        setFieldValue("recipient", findEmail?.leadEmail);
       }
     } else {
       setFieldValue("recipient", "");
@@ -139,12 +139,12 @@ const EmailModel = (props) => {
   };
   useEffect(() => {
     fetchRecipientData();
-  }, [values.createByContact, values.createByLead]);
+  }, [values?.createByContact, values?.createByLead]);
 
   const fetchEmailTemp = async () => {
     setIsLoding(true);
     const result = await dispatch(fetchEmailTempData());
-    if (result.payload.status === 200) {
+    if (result?.payload?.status === 200) {
       setData(result?.payload?.data);
     } else {
       toast.error("Failed to fetch data", "error");
@@ -155,25 +155,25 @@ const EmailModel = (props) => {
     values.start = props?.date;
     try {
       let result;
-      if (values.category === "Contact" && assignToContactData.length <= 0) {
+      if (values?.category === "Contact" && assignToContactData?.length <= 0) {
         result = await getApi(
-          user.role === "superAdmin"
+          user?.role === "superAdmin"
             ? "api/contact/"
-            : `api/contact/?createBy=${user._id}`
+            : `api/contact/?createBy=${user?._id}`
         );
         setAssignToContactData(result?.data);
-      } else if (values.category === "Lead" && assignToLeadData <= 0) {
+      } else if (values?.category === "Lead" && assignToLeadData <= 0) {
         result = await getApi(
-          user.role === "superAdmin"
+          user?.role === "superAdmin"
             ? "api/lead/"
-            : `api/lead/?createBy=${user._id}`
+            : `api/lead/?createBy=${user?._id}`
         );
         setAssignToLeadData(result?.data);
       }
       const propertyOptionData = await getApi(
-        user.role === "superAdmin"
+        user?.role === "superAdmin"
           ? "api/property"
-          : `api/property/?createBy=${user._id}`
+          : `api/property/?createBy=${user?._id}`
       );
       setAssignToPropertyData(propertyOptionData?.data);
     } catch (e) {
@@ -182,7 +182,7 @@ const EmailModel = (props) => {
   };
   useEffect(() => {
     getAllApi();
-  }, [props, values.category]);
+  }, [props, values?.category]);
   const fetchUsersData = async () => {
     setIsLoding(true);
     try {
@@ -209,12 +209,12 @@ const EmailModel = (props) => {
   }, []);
   const getPropertyOptions = assignToProperyData?.map((item) => ({
     ...item,
-    value: item._id,
-    label: item.name,
+    value: item?._id,
+    label: item?.name,
   }));
 
   const extractLabels = (selectedItems) => {
-    return selectedItems.map((item) => item._id);
+    return selectedItems?.map((item) => item?._id);
   };
 
   return (
@@ -260,7 +260,7 @@ const EmailModel = (props) => {
             fieldName="property"
             setFieldValue={setFieldValue}
             selectedItems={getPropertyOptions?.filter((item) =>
-              values?.property?.includes(item._id)
+              values?.property?.includes(item?._id)
             )}
           />
           <Grid templateColumns="repeat(12, 1fr)" gap={3}>
@@ -321,10 +321,10 @@ const EmailModel = (props) => {
                       >
                         {assignToContactData?.map((item) => {
                           return (
-                            <option value={item._id} key={item._id}>
+                            <option value={item?._id} key={item?._id}>
                               {values.category === "Contact"
-                                ? `${item.fullName}`
-                                : item.leadName}
+                                ? `${item?.fullName}`
+                                : item?.leadName}
                             </option>
                           );
                         })}
@@ -338,7 +338,7 @@ const EmailModel = (props) => {
                     </Flex>
                   </GridItem>
                 </>
-              ) : values.category === "Lead" ? (
+              ) : values?.category === "Lead" ? (
                 <>
                   <GridItem colSpan={{ base: 12, md: 6 }}>
                     <FormLabel
@@ -352,28 +352,28 @@ const EmailModel = (props) => {
                     </FormLabel>
                     <Flex justifyContent={"space-between"}>
                       <Select
-                        value={values.createByLead}
+                        value={values?.createByLead}
                         name="createByLead"
                         onChange={handleChange}
                         mb={
-                          errors.createByLead && touched.createByLead
+                          errors?.createByLead && touched?.createByLead
                             ? undefined
                             : "10px"
                         }
                         fontWeight="500"
                         placeholder={"Assign To"}
                         borderColor={
-                          errors.createByLead && touched.createByLead
+                          errors?.createByLead && touched?.createByLead
                             ? "red.300"
                             : null
                         }
                       >
                         {assignToLeadData?.map((item) => {
                           return (
-                            <option value={item._id} key={item._id}>
+                            <option value={item?._id} key={item?._id}>
                               {values.category === "Contact"
-                                ? `${item.firstName} ${item.lastName}`
-                                : item.leadName}
+                                ? `${item?.firstName} ${item?.lastName}`
+                                : item?.leadName}
                             </option>
                           );
                         })}
@@ -409,12 +409,12 @@ const EmailModel = (props) => {
                 placeholder="Recipient"
                 fontWeight="500"
                 borderColor={
-                  errors.recipient && touched.recipient ? "red.300" : null
+                  errors?.recipient && touched?.recipient ? "red.300" : null
                 }
               />
               <Text mb="10px" fontSize="sm" color={"red"}>
                 {" "}
-                {errors.recipient && touched.recipient && errors.recipient}
+                {errors?.recipient && touched?.recipient && errors?.recipient}
               </Text>
             </GridItem>
             <GridItem colSpan={{ base: 12 }}>
@@ -436,12 +436,12 @@ const EmailModel = (props) => {
                     name="property"
                     onChange={handleChange}
                     mb={
-                      errors.property && touched.property ? undefined : "10px"
+                      errors?.property && touched?.property ? undefined : "10px"
                     }
                     fontWeight="500"
                     placeholder={"Assign To Property"}
                     borderColor={
-                      errors.property && touched.property ? "red.300" : null
+                      errors?.property && touched?.property ? "red.300" : null
                     }
                   />
                 </Text>
@@ -454,7 +454,7 @@ const EmailModel = (props) => {
               </Flex>
               <Text color={"red"}>
                 {" "}
-                {errors.attendes && touched.attendes && errors.attendes}
+                {errors?.attendes && touched?.attendes && errors?.attendes}
               </Text>
             </GridItem>
             <GridItem colSpan={{ base: 12 }}>
@@ -482,7 +482,7 @@ const EmailModel = (props) => {
               />
               <Text fontSize="sm" mb="10px" color={"red"}>
                 {" "}
-                {errors.startDate && touched.startDate && errors.startDate}
+                {errors?.startDate && touched?.startDate && errors?.startDate}
               </Text>
             </GridItem>
             <GridItem colSpan={{ base: 12 }}>
@@ -497,24 +497,24 @@ const EmailModel = (props) => {
               </FormLabel>
               <Flex justifyContent={"space-between"}>
                 <Select
-                  value={values.salesAgent}
+                  value={values?.salesAgent}
                   name="salesAgent"
                   onChange={handleChange}
                   mb={
-                    errors.salesAgent && touched.salesAgent ? undefined : "10px"
+                    errors?.salesAgent && touched?.salesAgent ? undefined : "10px"
                   }
                   fontWeight="500"
                   placeholder={"Assign To Sales Agent"}
                   borderColor={
-                    errors.salesAgent && touched.salesAgent ? "red.300" : null
+                    errors?.salesAgent && touched?.salesAgent ? "red.300" : null
                   }
                 >
                   {assignToSalesData?.map((item) => {
                     return (
                       <option
-                        value={item._id}
-                        key={item._id}
-                      >{`${item.firstName} ${item.lastName}`}</option>
+                        value={item?._id}
+                        key={item?._id}
+                      >{`${item?.firstName} ${item?.lastName}`}</option>
                     );
                   })}
                 </Select>
@@ -527,7 +527,7 @@ const EmailModel = (props) => {
               </Flex>
               <Text fontSize="sm" mb="10px" color={"red"}>
                 {" "}
-                {errors.salesAgent && touched.salesAgent && errors.salesAgent}
+                {errors?.salesAgent && touched?.salesAgent && errors?.salesAgent}
               </Text>
             </GridItem>
 
@@ -545,17 +545,17 @@ const EmailModel = (props) => {
                 fontSize="sm"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.subject}
+                value={values?.subject}
                 name="subject"
                 placeholder="subject"
                 fontWeight="500"
                 borderColor={
-                  errors.subject && touched.subject ? "red.300" : null
+                  errors?.subject && touched?.subject ? "red.300" : null
                 }
               />
               <Text fontSize="sm" mb="10px" color={"red"}>
                 {" "}
-                {errors.subject && touched.subject && errors.subject}
+                {errors?.subject && touched?.subject && errors?.subject}
               </Text>
             </GridItem>
             <GridItem colSpan={{ base: 12 }}>
@@ -572,7 +572,7 @@ const EmailModel = (props) => {
                 onChange={(e) => {
                   setFieldValue("type", e);
                 }}
-                value={values.type}
+                value={values?.type}
               >
                 <Stack direction="row">
                   <Radio value="message">Message</Radio>
@@ -593,12 +593,12 @@ const EmailModel = (props) => {
                     name="message"
                     fontWeight="500"
                     borderColor={
-                      errors.message && touched.message ? "red.300" : null
+                      errors?.message && touched?.message ? "red.300" : null
                     }
                   />
                   <Text fontSize="sm" mb="10px" color={"red"}>
                     {" "}
-                    {errors.message && touched.message && errors.message}
+                    {errors?.message && touched?.message && errors?.message}
                   </Text>
                 </>
               ) : (
@@ -606,7 +606,7 @@ const EmailModel = (props) => {
                   name="html"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  value={values.html}
+                  value={values?.html}
                   fontWeight="500"
                   placeholder={"Select Template"}
                 >

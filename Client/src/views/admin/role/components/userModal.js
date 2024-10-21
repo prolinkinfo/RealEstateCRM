@@ -79,17 +79,17 @@ function UserModal(props) {
     state: { pageIndex, pageSize }
   } = tableInstance;
 
-  if (pageOptions.length < gopageValue) {
-    setGopageValue(pageOptions.length)
+  if (pageOptions?.length < gopageValue) {
+    setGopageValue(pageOptions?.length)
   }
 
 
   const handleCheckboxChange = (event, value) => {
-    if (event.target.checked) {
+    if (event?.target?.checked) {
       setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
     } else {
       setSelectedValues((prevSelectedValues) =>
-        prevSelectedValues.filter((selectedValue) => selectedValue !== value)
+        prevSelectedValues?.filter((selectedValue) => selectedValue !== value)
       );
     }
   };
@@ -121,10 +121,10 @@ function UserModal(props) {
             <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
               <Thead>
                 {headerGroups?.map((headerGroup, index) => (
-                  <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
-                    {headerGroup.headers?.map((column, index) => (
+                  <Tr {...headerGroup?.getHeaderGroupProps()} key={index}>
+                    {headerGroup?.headers?.map((column, index) => (
                       <Th
-                        {...column.getHeaderProps(column.isSortable !== false && column.getSortByToggleProps())}
+                        {...column?.getHeaderProps(column?.isSortable !== false && column?.getSortByToggleProps())}
                         pe="10px"
                         key={index}
                         borderColor={borderColor}
@@ -132,18 +132,18 @@ function UserModal(props) {
 
                         <Flex
                           align="center"
-                          justifyContent={column.center ? "center" : "start"}
+                          justifyContent={column?.center ? "center" : "start"}
                           fontSize={{ sm: "14px", lg: "16px" }}
                           color=" secondaryGray.900"
                         >
                           <span style={{
                             textTransform: "capitalize",
                           }}>
-                            {column.render("Header")}
+                            {column?.render("Header")}
                           </span>
-                          {column.isSortable !== false && (
+                          {column?.isSortable !== false && (
                             <span>
-                              {column.isSorted ? (column.isSortedDesc ? <FaSortDown /> : <FaSortUp />) : <FaSort />}
+                              {column?.isSorted ? (column?.isSortedDesc ? <FaSortDown /> : <FaSortUp />) : <FaSort />}
                             </span>
                           )}
                         </Flex>
@@ -163,7 +163,7 @@ function UserModal(props) {
                   </Tr>
                   : data?.length === 0 ? (
                     <Tr>
-                      <Td colSpan={columns.length}>
+                      <Td colSpan={columns?.length}>
                         <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
                           <DataNotFound />
                         </Text>
@@ -175,7 +175,7 @@ function UserModal(props) {
                       <Tr {...row?.getRowProps()} key={i}>
                         {row?.cells?.map((cell, index) => {
                           let data = "";
-                          if (cell?.column.Header === "#") {
+                          if (cell?.column?.Header === "#") {
                             data = (
                               <Flex align="center" >
                                 <Text color={textColor} fontSize="sm" fontWeight="700">
@@ -183,7 +183,7 @@ function UserModal(props) {
                                 </Text>
                               </Flex>
                             );
-                          } else if (cell?.column.Header === "email Id") {
+                          } else if (cell?.column?.Header === "email Id") {
                             data = (
                               <Text
                                 me="10px"
@@ -194,7 +194,7 @@ function UserModal(props) {
                                 {cell?.value}
                               </Text>
                             );
-                          } else if (cell?.column.Header === "first Name") {
+                          } else if (cell?.column?.Header === "first Name") {
                             data = (
                               <Text
                                 me="10px"
@@ -205,7 +205,7 @@ function UserModal(props) {
                                 {cell?.value ? cell?.value : ' - '}
                               </Text>
                             );
-                          } else if (cell?.column.Header === "last Name") {
+                          } else if (cell?.column?.Header === "last Name") {
                             data = (
                               <Text
                                 me="10px"
@@ -216,7 +216,7 @@ function UserModal(props) {
                                 {cell?.value ? cell?.value : ' - '}
                               </Text>
                             );
-                          } else if (cell?.column.Header === "role") {
+                          } else if (cell?.column?.Header === "role") {
                             data = (
                               <Text color={textColor} fontSize="sm" fontWeight="700">
                                 {cell?.value}

@@ -105,7 +105,7 @@ const CommonCheckTable = (props) => {
     } = tableInstance;
 
     if (pageOptions && pageOptions?.length > 0 && pageOptions?.length < gopageValue) {
-        setGopageValue(pageOptions.length)
+        setGopageValue(pageOptions?.length)
     }
 
     const handleSearch = (results) => {
@@ -116,30 +116,30 @@ const CommonCheckTable = (props) => {
     const handleAdvanceSearch = (values) => {
         dispatch(setSearchValue(values))
         const searchResult = AdvanceSearch ? dispatch(getSearchData({ values: values, allData: allData, type: title })) : allData?.filter(item => {
-            return tableCustomFields.every(field => {
-                const fieldValue = values[field.name];
-                const itemValue = item[field.name];
+            return tableCustomFields?.every(field => {
+                const fieldValue = values[field?.name];
+                const itemValue = item[field?.name];
 
-                if (field.type === 'select') {
+                if (field?.type === 'select') {
                     return !fieldValue || itemValue === fieldValue;
                 }
-                else if (field.type === 'number') {
+                else if (field?.type === 'number') {
                     return (
-                        [null, undefined, ''].includes(fieldValue) ||
+                        [null, undefined, '']?.includes(fieldValue) ||
                         (itemValue !== undefined &&
-                            itemValue.toString().includes(fieldValue.toString()))
+                            itemValue.toString()?.includes(fieldValue?.toString()))
                     );
                 }
-                else if (field.type === 'date') {
-                    const fromDate = values[`from${field.name}`];
-                    const toDate = values[`to${field.name}`];
+                else if (field?.type === 'date') {
+                    const fromDate = values[`from${field?.name}`];
+                    const toDate = values[`to${field?.name}`];
 
                     if (!fromDate && !toDate) {
                         return true; // No date range specified
                     }
 
                     const timeItemDate = new Date(itemValue);
-                    const timeMomentDate = moment(timeItemDate).format('YYYY-MM-DD');
+                    const timeMomentDate = moment(timeItemDate)?.format('YYYY-MM-DD');
 
                     return (
                         (!fromDate || (timeMomentDate >= fromDate)) &&
@@ -153,21 +153,21 @@ const CommonCheckTable = (props) => {
             });
         });
 
-        const getValue = tableCustomFields.reduce((result, field) => {
-            if (field.type === 'date') {
-                const fromDate = values[`from${field.name}`];
-                const toDate = values[`to${field.name}`];
+        const getValue = tableCustomFields?.reduce((result, field) => {
+            if (field?.type === 'date') {
+                const fromDate = values[`from${field?.name}`];
+                const toDate = values[`to${field?.name}`];
 
                 if (fromDate || toDate) {
-                    result.push({
-                        name: [`from${field.name}`, `to${field.name}`],
+                    result?.push({
+                        name: [`from${field?.name}`, `to${field?.name}`],
                         value: `From: ${fromDate} To: ${toDate}`
                     })
                 }
-            } else if (values[field.name]) {
-                result.push({
-                    name: [field.name],
-                    value: values[field.name]
+            } else if (values[field?.name]) {
+                result?.push({
+                    name: [field?.name],
+                    value: values[field?.name]
                 })
             }
 
@@ -205,9 +205,9 @@ const CommonCheckTable = (props) => {
     const findStatus = () => {
         const searchResult = allData?.filter(
             (item) =>
-                (!state || (item?.status && item?.status?.toLowerCase().includes(state?.toLowerCase())))
+                (!state || (item?.status && item?.status?.toLowerCase()?.includes(state?.toLowerCase())))
         )
-        let getValue = [state || undefined].filter(value => value);
+        let getValue = [state || undefined]?.filter(value => value);
 
         dispatch(setGetTagValues(getValue))
         AdvanceSearch ? setSearchedDataOut && setSearchedDataOut(searchResult) : setSearchedData && setSearchedData(searchResult);
@@ -237,16 +237,16 @@ const CommonCheckTable = (props) => {
 
     const handleCheckboxChange = (event, value) => {
         if (selectType === "single") {
-            if (event.target.checked) {
+            if (event?.target?.checked) {
                 setSelectedValues && setSelectedValues(value);
             } else {
                 setSelectedValues();
             }
-        } else if (event.target.checked) {
+        } else if (event?.target?.checked) {
             setSelectedValues && setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
         } else {
             setSelectedValues && setSelectedValues((prevSelectedValues) =>
-                prevSelectedValues.filter((selectedValue) => selectedValue !== value)
+                prevSelectedValues?.filter((selectedValue) => selectedValue !== value)
             );
         }
 
@@ -266,14 +266,14 @@ const CommonCheckTable = (props) => {
     const downloadCsvOrExcel = async (extension, selectedIds) => {
         try {
             if (selectedIds && selectedIds?.length > 0) {
-                const selectedRecordsWithSpecificFileds = allData?.filter((rec) => selectedIds.includes(rec._id))?.map((rec) => {
+                const selectedRecordsWithSpecificFileds = allData?.filter((rec) => selectedIds?.includes(rec?._id))?.map((rec) => {
                     const selectedFieldsData = {};
                     csvColumns?.forEach((property) => {
-                        selectedFieldsData[property.accessor] = rec[property.accessor];
+                        selectedFieldsData[property?.accessor] = rec[property?.accessor];
                     });
                     return selectedFieldsData;
                 });
-                commonUtils.convertJsonToCsvOrExcel({
+                commonUtils?.convertJsonToCsvOrExcel({
                     jsonArray: selectedRecordsWithSpecificFileds,
                     csvColumns: csvColumns,
                     fileName: title || 'data',
@@ -287,7 +287,7 @@ const CommonCheckTable = (props) => {
                     });
                     return selectedFieldsData;
                 });
-                commonUtils.convertJsonToCsvOrExcel({
+                commonUtils?.convertJsonToCsvOrExcel({
                     jsonArray: AllRecordsWithSpecificFileds,
                     csvColumns: csvColumns,
                     fileName: title || 'data',
@@ -302,15 +302,15 @@ const CommonCheckTable = (props) => {
 
     const handleRemoveFromTag = (name) => {
         const filter = (getTagValues || []).filter((item) => {
-            if (Array.isArray(name?.name)) {
-                return name.name?.toString() !== item.name?.toString();
+            if (Array?.isArray(name?.name)) {
+                return name?.name?.toString() !== item.name?.toString();
             }
         });
 
         let updatedSearchValue = { ...searchValue };
         for (let key in updatedSearchValue) {
-            if (updatedSearchValue.hasOwnProperty(key)) {
-                if (name.name.includes(key)) {
+            if (updatedSearchValue?.hasOwnProperty(key)) {
+                if (name?.name?.includes(key)) {
                     delete updatedSearchValue[key];
                 }
                 if (updatedSearchValue[key] === "") {
@@ -364,7 +364,7 @@ const CommonCheckTable = (props) => {
                                     {title} (<CountUpComponent key={data?.length} targetNumber={dataLength || data?.length} />)
                                 </Text>
                             }
-                            {customSearch !== false && <CustomSearchInput setSearchbox={setSearchboxOutside ? setSearchboxOutside : setSearchbox} setDisplaySearchData={setSearchboxOutside ? props.setSearchDisplay : setDisplaySearchData} searchbox={searchboxOutside ? searchboxOutside : searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={props.setGetTagValuesOutside ? props.setGetTagValuesOutside : setGetTagValues} setGopageValue={setGopageValue} />}
+                            {customSearch !== false && <CustomSearchInput setSearchbox={setSearchboxOutside ? setSearchboxOutside : setSearchbox} setDisplaySearchData={setSearchboxOutside ? props?.setSearchDisplay : setDisplaySearchData} searchbox={searchboxOutside ? searchboxOutside : searchbox} allData={allData} dataColumn={columns} onSearch={handleSearch} setGetTagValues={props?.setGetTagValuesOutside ? props?.setGetTagValuesOutside : setGetTagValues} setGopageValue={setGopageValue} />}
                             {
                                 AdvanceSearch ? AdvanceSearch : AdvanceSearch !== false &&
                                     <Button variant="outline" colorScheme='brand' leftIcon={<SearchIcon />} mt={{ sm: "5px", md: "0" }} size="sm" onClick={() => setAdvaceSearch(true)}>Advance Search</Button>
@@ -411,16 +411,16 @@ const CommonCheckTable = (props) => {
                         {BackButton && BackButton}
                     </GridItem>
                     <HStack spacing={4} mb={2}>
-                        {(getTagValues || []).map((item) => (
+                        {(getTagValues || [])?.map((item) => (
                             <Tag
                                 size={"md"}
                                 p={2}
-                                key={item.value}
+                                key={item?.value}
                                 borderRadius='full'
                                 variant='solid'
                                 colorScheme="gray"
                             >
-                                <TagLabel>{item.value}</TagLabel>
+                                <TagLabel>{item?.value}</TagLabel>
                                 <TagCloseButton onClick={() => handleRemoveFromTag(item)} />
                             </Tag>
                         ))}
@@ -430,26 +430,26 @@ const CommonCheckTable = (props) => {
                     <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
                         <Thead zIndex={1}>
                             {headerGroups?.map((headerGroup, index) => (
-                                <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
-                                    {headerGroup.headers?.map((column, index) => (
+                                <Tr {...headerGroup?.getHeaderGroupProps()} key={index}>
+                                    {headerGroup?.headers?.map((column, index) => (
                                         <Th
-                                            {...column.getHeaderProps(column.isSortable !== false && column.getSortByToggleProps())}
+                                            {...column?.getHeaderProps(column?.isSortable !== false && column?.getSortByToggleProps())}
                                             pe="10px"
                                             key={index}
                                             borderColor={borderColor}
                                         >
                                             <Flex
                                                 align="center"
-                                                justifyContent={column.center ? "center" : "start"}
+                                                justifyContent={column?.center ? "center" : "start"}
                                                 fontSize={{ sm: "14px", lg: "16px" }}
                                                 color="secondaryGray.900"
                                             >
                                                 <span style={{ textTransform: "capitalize", marginRight: "8px" }}>
-                                                    {column.render("Header")}
+                                                    {column?.render("Header")}
                                                 </span>
-                                                {column.isSortable !== false && (
+                                                {column?.isSortable !== false && (
                                                     <span>
-                                                        {column.isSorted ? (column.isSortedDesc ? <FaSortDown /> : <FaSortUp />) : <FaSort />}
+                                                        {column?.isSorted ? (column?.isSortedDesc ? <FaSortDown /> : <FaSortUp />) : <FaSort />}
                                                     </span>
                                                 )}
                                             </Flex>
@@ -469,7 +469,7 @@ const CommonCheckTable = (props) => {
                                 </Tr>
                                 : data && data?.length === 0 || data === undefined ? (
                                     <Tr>
-                                        <Td colSpan={columns.length}>
+                                        <Td colSpan={columns?.length}>
                                             <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
                                                 <DataNotFound />
                                             </Text>
@@ -482,12 +482,12 @@ const CommonCheckTable = (props) => {
                                             {row?.cells?.map((cell, index) => {
                                                 let data = "";
                                                 columnData?.forEach((item) => {
-                                                    if (cell?.column.Header === item.Header) {
-                                                        if (item.cell && typeof item.cell === 'function') {
+                                                    if (cell?.column?.Header === item?.Header) {
+                                                        if (item?.cell && typeof item?.cell === 'function') {
                                                             data = (
                                                                 <Flex Flex align="center" justifyContent={item?.Header === 'Action' && 'center'}>
                                                                     <Text color={textColor} fontSize="sm" fontWeight="700" >
-                                                                        {item.cell(cell) === ' ' ? '-' : item.cell(cell)}
+                                                                        {item?.cell(cell) === ' ' ? '-' : item?.cell(cell)}
                                                                     </Text>
                                                                 </Flex>
                                                             );
@@ -495,7 +495,7 @@ const CommonCheckTable = (props) => {
                                                         else {
                                                             data = (
                                                                 <Flex align="center" >
-                                                                    {item.Header ===
+                                                                    {item?.Header ===
                                                                         "#" &&
                                                                         (checkBox || checkBox === undefined) && (
                                                                             <Checkbox
@@ -508,7 +508,7 @@ const CommonCheckTable = (props) => {
                                                                         )}
 
                                                                     <Text color={textColor} fontSize="sm" fontWeight="700">
-                                                                        {item.Header === "#" ? cell?.row?.index + 1 : cell?.value ? cell?.value : '-'}
+                                                                        {item?.Header === "#" ? cell?.row?.index + 1 : cell?.value ? cell?.value : '-'}
                                                                     </Text>
                                                                 </Flex>
                                                             );

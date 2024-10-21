@@ -119,7 +119,7 @@ const View = () => {
         units: values,
         type: "E",
       });
-      if (response && response.status === 200) {
+      if (response && response?.status === 200) {
         setAction((pre) => !pre);
       } else {
         // toast.error(response.response.data?.message)
@@ -132,10 +132,10 @@ const View = () => {
   };
 
   const handleEditOpen = (row) => {
-    setAddUnit(true)
-    setActionType("Edit")
-    setSelectedUnitType(row)
-  }
+    setAddUnit(true);
+    setActionType("Edit");
+    setSelectedUnitType(row);
+  };
 
   const handleChangeOrder = (row, type) => {
     const newRows = [...unitTypeList];
@@ -145,7 +145,7 @@ const View = () => {
 
     let targetIndex = type === "up" ? currentIndex - 1 : currentIndex + 1;
 
-    if (targetIndex < 0 || targetIndex >= newRows.length) return;
+    if (targetIndex < 0 || targetIndex >= newRows?.length) return;
 
     [newRows[currentIndex].order, newRows[targetIndex].order] = [
       newRows[targetIndex].order,
@@ -196,7 +196,7 @@ const View = () => {
       cell: (cell) => (
         <div className="selectOpt">
           <Text color={textColor} fontSize="sm" fontWeight="700">
-            {moment(cell?.row?.values.timestamp).format("h:mma (DD/MM)")}
+            {moment(cell?.row?.values?.timestamp).format("h:mma (DD/MM)")}
           </Text>
         </div>
       ),
@@ -256,7 +256,7 @@ const View = () => {
       cell: (cell) => (
         <div className="selectOpt">
           <Text color={textColor} fontSize="sm" fontWeight="700">
-            {moment(cell?.row?.values.timestamp).format("h:mma (DD/MM)")}
+            {moment(cell?.row?.values?.timestamp).format("h:mma (DD/MM)")}
           </Text>
         </div>
       ),
@@ -318,7 +318,7 @@ const View = () => {
             fontSize="sm"
           >
             <Button
-              color='green'
+              color="green"
               size="sm"
               onClick={() => handleEditOpen(row?.original)}
               variant="outline"
@@ -338,7 +338,7 @@ const View = () => {
 
   const fetchData = async (i) => {
     setIsLoding(true);
-    let response = await getApi("api/property/view/", param.id);
+    let response = await getApi("api/property/view/", param?.id);
     setData(response?.data?.property);
     handleSetUnitTypeList(response?.data?.property?.unitType);
     setFilteredContacts(response?.data?.filteredContacts);
@@ -373,7 +373,7 @@ const View = () => {
     try {
       setIsLoding(true);
       let response = await deleteApi("api/property/delete/", id);
-      if (response.status === 200) {
+      if (response?.status === 200) {
         setDelete(false);
         setAction((pre) => !pre);
         navigate("/properties");
@@ -420,7 +420,7 @@ const View = () => {
         `api/property/change-unit-status/${param?.id}`,
         paylaod
       );
-      if (response && response.status === 200) {
+      if (response && response?.status === 200) {
         setAction((pre) => !pre);
       }
     } catch (e) {
@@ -482,8 +482,8 @@ const View = () => {
         selectedUnitType={selectedUnitType}
         setAction={setAction}
         onClose={() => {
-          setSelectedUnitType({})
-          setAddUnit(false)
+          setSelectedUnitType({});
+          setAddUnit(false);
         }}
       />
       <Edit
@@ -499,7 +499,7 @@ const View = () => {
         onClose={() => setDelete(false)}
         type="Property"
         handleDeleteData={handleDeleteProperties}
-        ids={param.id}
+        ids={param?.id}
       />
       <UnitTypeView
         data={selectedViewUnitType}
@@ -552,25 +552,25 @@ const View = () => {
               >
                 <Flex justifyContent={"right"}>
                   <Menu>
-                    {(user.role === "superAdmin" ||
+                    {(user?.role === "superAdmin" ||
                       permission?.create ||
                       permission?.update ||
                       permission?.delete) && (
-                        <MenuButton
-                          variant="outline"
-                          size="sm"
-                          colorScheme="blackAlpha"
-                          va
-                          mr={2.5}
-                          as={Button}
-                          rightIcon={<ChevronDownIcon />}
-                        >
-                          Actions
-                        </MenuButton>
-                      )}
+                      <MenuButton
+                        variant="outline"
+                        size="sm"
+                        colorScheme="blackAlpha"
+                        va
+                        mr={2.5}
+                        as={Button}
+                        rightIcon={<ChevronDownIcon />}
+                      >
+                        Actions
+                      </MenuButton>
+                    )}
                     <MenuDivider />
                     <MenuList minWidth={2}>
-                      {(user.role === "superAdmin" || permission?.create) && (
+                      {(user?.role === "superAdmin" || permission?.create) && (
                         <MenuItem
                           alignItems={"start"}
                           color={"blue"}
@@ -580,7 +580,7 @@ const View = () => {
                           Add
                         </MenuItem>
                       )}
-                      {(user.role === "superAdmin" || permission?.update) && (
+                      {(user?.role === "superAdmin" || permission?.update) && (
                         <MenuItem
                           alignItems={"start"}
                           onClick={() => setEdit(true)}
@@ -598,7 +598,7 @@ const View = () => {
                       >
                         Print as PDF
                       </MenuItem>
-                      {(user.role === "superAdmin" || permission?.delete) && (
+                      {(user?.role === "superAdmin" || permission?.delete) && (
                         <>
                           <MenuDivider />
                           <MenuItem
@@ -693,7 +693,7 @@ const View = () => {
                               checkBox={false}
                               deleteMany={true}
                               ManageGrid={false}
-                              onOpen={() => { }}
+                              onOpen={() => {}}
                               addBtn={false}
                               access={emailAccess}
                             />
@@ -714,7 +714,7 @@ const View = () => {
                               checkBox={false}
                               deleteMany={true}
                               ManageGrid={false}
-                              onOpen={() => { }}
+                              onOpen={() => {}}
                               addBtn={false}
                               access={callAccess}
                             />
@@ -767,7 +767,7 @@ const View = () => {
                 </Grid>
 
                 {(data?.units || [])?.map((floor) =>
-                  Array.isArray(floor?.flats) && floor?.flats?.length > 0 ? (
+                  Array?.isArray(floor?.flats) && floor?.flats?.length > 0 ? (
                     <Grid templateColumns="repeat(12, 1fr)" gap={3} mt={3}>
                       <GridItem rowSpan={2} colSpan={{ base: 12 }}>
                         {`${floor?.floorNumber}`}
@@ -946,7 +946,7 @@ const View = () => {
                                 fetchData={fetchData}
                                 isOpen={propertyPhoto}
                                 onClose={setPropertyPhoto}
-                                id={param.id}
+                                id={param?.id}
                               />
                             </Flex>
                             <HSeparator />
@@ -1029,7 +1029,7 @@ const View = () => {
                                 fetchData={fetchData}
                                 isOpen={virtualToursorVideos}
                                 onClose={setVirtualToursorVideos}
-                                id={param.id}
+                                id={param?.id}
                               />
                             </Flex>
                             <HSeparator />
@@ -1052,8 +1052,8 @@ const View = () => {
                                   loop
                                   style={{ margin: "0 5px" }}
                                 >
-                                  <source src={item.img} type="video/mp4" />
-                                  <source src={item.img} type="video/ogg" />
+                                  <source src={item?.img} type="video/mp4" />
+                                  <source src={item?.img} type="video/ogg" />
                                 </video>
                               ))
                             ) : (
@@ -1097,7 +1097,7 @@ const View = () => {
                                 fetchData={fetchData}
                                 isOpen={floorPlans}
                                 onClose={setFloorPlans}
-                                id={param.id}
+                                id={param?.id}
                               />
                             </Flex>
                             <HSeparator />
@@ -1114,10 +1114,10 @@ const View = () => {
                               data?.floorPlans?.length > 0 &&
                               data?.floorPlans?.map((item) => (
                                 <Image
-                                  key={item.createOn}
+                                  key={item?.createOn}
                                   width={"30%"}
                                   m={1}
-                                  src={item.img}
+                                  src={item?.img}
                                   alt="Your Image"
                                 />
                               ))
@@ -1179,7 +1179,7 @@ const View = () => {
                                 fetchData={fetchData}
                                 isOpen={propertyDocuments}
                                 onClose={setPropertyDocuments}
-                                id={param.id}
+                                id={param?.id}
                               />
                             </Flex>
                             <HSeparator />
@@ -1193,8 +1193,8 @@ const View = () => {
                             data &&
                             data?.propertyDocuments?.length > 0 &&
                             data?.propertyDocuments?.map((item) => {
-                              const parts = item.filename.split(".");
-                              const lastIndex = parts[parts.length - 1];
+                              const parts = item?.filename?.split(".");
+                              const lastIndex = parts[parts?.length - 1];
                               return (
                                 <Flex alignItems={"center"} mt="3">
                                   {lastIndex === "xlsx" && (
@@ -1235,7 +1235,7 @@ const View = () => {
                                       },
                                     }}
                                   >
-                                    {item.filename}
+                                    {item?.filename}
                                   </Text>
                                 </Flex>
                               );
@@ -1280,38 +1280,38 @@ const View = () => {
           {(permission?.delete ||
             permission?.update ||
             user?.role === "superAdmin") && (
-              <Card mt={3}>
-                <Grid templateColumns="repeat(6, 1fr)" gap={1}>
-                  <GridItem colStart={6}>
-                    <Flex justifyContent={"right"}>
-                      {permission?.update && (
-                        <Button
-                          onClick={() => setEdit(true)}
-                          size="sm"
-                          leftIcon={<EditIcon />}
-                          mr={2.5}
-                          variant="outline"
-                          colorScheme="green"
-                        >
-                          Edit
-                        </Button>
-                      )}
-                      {permission?.delete && (
-                        <Button
-                          style={{ background: "red.800" }}
-                          size="sm"
-                          onClick={() => setDelete(true)}
-                          leftIcon={<DeleteIcon />}
-                          colorScheme="red"
-                        >
-                          Delete
-                        </Button>
-                      )}
-                    </Flex>
-                  </GridItem>
-                </Grid>
-              </Card>
-            )}
+            <Card mt={3}>
+              <Grid templateColumns="repeat(6, 1fr)" gap={1}>
+                <GridItem colStart={6}>
+                  <Flex justifyContent={"right"}>
+                    {permission?.update && (
+                      <Button
+                        onClick={() => setEdit(true)}
+                        size="sm"
+                        leftIcon={<EditIcon />}
+                        mr={2.5}
+                        variant="outline"
+                        colorScheme="green"
+                      >
+                        Edit
+                      </Button>
+                    )}
+                    {permission?.delete && (
+                      <Button
+                        style={{ background: "red.800" }}
+                        size="sm"
+                        onClick={() => setDelete(true)}
+                        leftIcon={<DeleteIcon />}
+                        colorScheme="red"
+                      >
+                        Delete
+                      </Button>
+                    )}
+                  </Flex>
+                </GridItem>
+              </Grid>
+            </Card>
+          )}
         </>
       )}
 
@@ -1326,31 +1326,31 @@ const View = () => {
             {type === "photo"
               ? "Property All Photos"
               : type === "video"
-                ? "Virtual Tours or Videos"
-                : type === "floor"
-                  ? "Floors plans"
-                  : ""}
+              ? "Virtual Tours or Videos"
+              : type === "floor"
+              ? "Floors plans"
+              : ""}
           </ModalHeader>
           <ModalCloseButton onClick={() => setDisplayPropertyPhoto(false)} />
           <ModalBody overflowY={"auto"} height={"700px"}>
             <div style={{ columns: 3 }}>
               {type === "photo"
                 ? data &&
-                data?.propertyPhotos?.length > 0 &&
-                data?.propertyPhotos?.map((item) => (
-                  <a href={item.img} target="_blank">
-                    {" "}
-                    <Image
-                      width={"100%"}
-                      m={1}
-                      mb={4}
-                      src={item.img}
-                      alt="Your Image"
-                    />
-                  </a>
-                ))
+                  data?.propertyPhotos?.length > 0 &&
+                  data?.propertyPhotos?.map((item) => (
+                    <a href={item?.img} target="_blank">
+                      {" "}
+                      <Image
+                        width={"100%"}
+                        m={1}
+                        mb={4}
+                        src={item?.img}
+                        alt="Your Image"
+                      />
+                    </a>
+                  ))
                 : type === "video"
-                  ? data &&
+                ? data &&
                   data?.virtualToursOrVideos?.length > 0 &&
                   data?.virtualToursOrVideos?.map((item) => (
                     <a href={item.img} target="_blank">
@@ -1361,26 +1361,26 @@ const View = () => {
                         loop
                         style={{ margin: " 5px" }}
                       >
-                        <source src={item.img} type="video/mp4" />
-                        <source src={item.img} type="video/ogg" />
+                        <source src={item?.img} type="video/mp4" />
+                        <source src={item?.img} type="video/ogg" />
                       </video>
                     </a>
                   ))
-                  : type === "floor"
-                    ? data &&
-                    data?.floorPlans?.length > 0 &&
-                    data?.floorPlans?.map((item) => (
-                      <a href={item.img} target="_blank">
-                        <Image
-                          width={"100%"}
-                          m={1}
-                          mb={4}
-                          src={item.img}
-                          alt="Your Image"
-                        />
-                      </a>
-                    ))
-                    : ""}
+                : type === "floor"
+                ? data &&
+                  data?.floorPlans?.length > 0 &&
+                  data?.floorPlans?.map((item) => (
+                    <a href={item?.img} target="_blank">
+                      <Image
+                        width={"100%"}
+                        m={1}
+                        mb={4}
+                        src={item?.img}
+                        alt="Your Image"
+                      />
+                    </a>
+                  ))
+                : ""}
             </div>
           </ModalBody>
           <ModalFooter>
@@ -1407,8 +1407,8 @@ const View = () => {
               data &&
               data?.propertyDocuments?.length > 0 &&
               data?.propertyDocuments?.map((item) => {
-                const parts = item.filename.split(".");
-                const lastIndex = parts[parts.length - 1];
+                const parts = item?.filename?.split(".");
+                const lastIndex = parts[parts?.length - 1];
                 return (
                   <Flex alignItems={"center"} mt="3">
                     {lastIndex === "xlsx" && (
@@ -1430,7 +1430,7 @@ const View = () => {
                     <Text
                       ml={2}
                       color="green.400"
-                      onClick={() => window.open(item?.img)}
+                      onClick={() => window?.open(item?.img)}
                       cursor={"pointer"}
                       sx={{
                         "&:hover": {
@@ -1439,7 +1439,7 @@ const View = () => {
                         },
                       }}
                     >
-                      {item.filename}
+                      {item?.filename}
                     </Text>
                   </Flex>
                 );

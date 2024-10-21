@@ -45,20 +45,20 @@ export default function Dashboard(props) {
 	}
 
 	const getRoute = () => {
-		return window.location.pathname !== '/admin/full-screen-maps';
+		return window?.location?.pathname !== '/admin/full-screen-maps';
 	};
 
 	const dynamicRoute = () => {
 		let apiData = []
 
 		route && route?.length > 0 && route?.map((item, i) => {
-			let rec = routes.find(route => route?.name === item?.moduleName)
-			if (!routes.some(route => route?.name === item?.moduleName)) {
+			let rec = routes?.find(route => route?.name === item?.moduleName)
+			if (!routes?.some(route => route?.name === item?.moduleName)) {
 
 				const newRoute = [{
 					name: item?.moduleName,
-					layout: [ROLE_PATH.superAdmin],
-					path: pathName(item.moduleName),
+					layout: [ROLE_PATH?.superAdmin],
+					path: pathName(item?.moduleName),
 					icon: item?.icon ? (
 						<img src={item?.icon} width="20px" height="20px" alt="icon" />
 					) : (
@@ -68,10 +68,10 @@ export default function Dashboard(props) {
 				},
 				{
 					name: item?.moduleName,
-					layout: [ROLE_PATH.superAdmin],
+					layout: [ROLE_PATH?.superAdmin],
 					under: item?.moduleName,
 					parentName: item?.moduleName,
-					path: `${pathName(item.moduleName)}/:id`,
+					path: `${pathName(item?.moduleName)}/:id`,
 					icon: item?.icon ? (
 						<img src={item?.icon} width="20px" height="20px" alt="icon" />
 					) : (
@@ -81,7 +81,7 @@ export default function Dashboard(props) {
 				}
 				]
 				setRoutes((pre) => [...pre, ...newRoute])
-			} else if (routes.some(route => route?.name === item?.moduleName) && rec.icon?.props?.src !== item?.icon) {
+			} else if (routes?.some(route => route?.name === item?.moduleName) && rec.icon?.props?.src !== item?.icon) {
 
 				const updatedData = routes?.map(i => {
 					if (i.name === item?.moduleName) {
@@ -91,14 +91,14 @@ export default function Dashboard(props) {
 				});
 				setRoutes(updatedData)
 			}
-			if (routes.find(route => route?.name !== item?.moduleName)) {
+			if (routes?.find(route => route?.name !== item?.moduleName)) {
 
-				if (!newRoutes.find(route => route?.name?.toLowerCase() === item?.moduleName?.toLowerCase())) {
+				if (!newRoutes?.find(route => route?.name?.toLowerCase() === item?.moduleName?.toLowerCase())) {
 
 					const newRoute = [{
 						name: item?.moduleName,
-						layout: [ROLE_PATH.superAdmin],
-						path: pathName(item.moduleName),
+						layout: [ROLE_PATH?.superAdmin],
+						path: pathName(item?.moduleName),
 						icon: item?.icon ? (
 							<img src={item?.icon} width="20px" height="20px" alt="icon" />
 						) : (
@@ -148,20 +148,20 @@ export default function Dashboard(props) {
 
 	const getActiveRoute = (routes) => {
 		let activeRoute = 'Prolink';
-		for (let i = 0; i < routes.length; i++) {
-			if (routes[i].collapse) {
-				let collapseActiveRoute = getActiveRoute(routes[i].items);
+		for (let i = 0; i < routes?.length; i++) {
+			if (routes[i]?.collapse) {
+				let collapseActiveRoute = getActiveRoute(routes[i]?.items);
 				if (collapseActiveRoute !== activeRoute) {
 					return collapseActiveRoute;
 				}
-			} else if (routes[i].category) {
-				let categoryActiveRoute = getActiveRoute(routes[i].items);
+			} else if (routes[i]?.category) {
+				let categoryActiveRoute = getActiveRoute(routes[i]?.items);
 				if (categoryActiveRoute !== activeRoute) {
 					return categoryActiveRoute;
 				}
 			} else {
-				if (window.location.href.indexOf(routes[i].path.replace("/:id", "")) !== -1) {
-					return routes[i].name;
+				if (window?.location?.href?.indexOf(routes[i]?.path?.replace("/:id", "")) !== -1) {
+					return routes[i]?.name;
 				}
 			}
 		}
@@ -186,18 +186,18 @@ export default function Dashboard(props) {
 	const under = (routes) => {
 		let activeRoute = false
 		for (let i = 0; i < routes.length; i++) {
-			if (routes[i].collapse) {
-				let collapseActiveRoute = getActiveRoute(routes[i].items);
+			if (routes[i]?.collapse) {
+				let collapseActiveRoute = getActiveRoute(routes[i]?.items);
 				if (collapseActiveRoute !== activeRoute) {
 					return collapseActiveRoute;
 				}
-			} else if (routes[i].category) {
-				let categoryActiveRoute = getActiveRoute(routes[i].items);
+			} else if (routes[i]?.category) {
+				let categoryActiveRoute = getActiveRoute(routes[i]?.items);
 				if (categoryActiveRoute !== activeRoute) {
 					return categoryActiveRoute;
 				}
 			} else {
-				if (window.location.href.indexOf(routes[i].path.replace("/:id", "")) !== -1) {
+				if (window?.location?.href?.indexOf(routes[i]?.path?.replace("/:id", "")) !== -1) {
 					return routes[i];
 				}
 			}
@@ -207,20 +207,20 @@ export default function Dashboard(props) {
 
 	const getActiveNavbar = (routes) => {
 		let activeNavbar = false;
-		for (let i = 0; i < routes.length; i++) {
-			if (routes[i].collapse) {
-				let collapseActiveNavbar = getActiveNavbar(routes[i].items);
+		for (let i = 0; i < routes?.length; i++) {
+			if (routes[i]?.collapse) {
+				let collapseActiveNavbar = getActiveNavbar(routes[i]?.items);
 				if (collapseActiveNavbar !== activeNavbar) {
 					return collapseActiveNavbar;
 				}
-			} else if (routes[i].category) {
-				let categoryActiveNavbar = getActiveNavbar(routes[i].items);
+			} else if (routes[i]?.category) {
+				let categoryActiveNavbar = getActiveNavbar(routes[i]?.items);
 				if (categoryActiveNavbar !== activeNavbar) {
 					return categoryActiveNavbar;
 				}
 			} else {
-				if (window.location.href.indexOf(routes[i].path) !== -1) {
-					return routes[i].secondary;
+				if (window?.location?.href?.indexOf(routes[i]?.path) !== -1) {
+					return routes[i]?.secondary;
 				}
 			}
 		}
@@ -228,20 +228,20 @@ export default function Dashboard(props) {
 	};
 	const getActiveNavbarText = (routes) => {
 		let activeNavbar = false;
-		for (let i = 0; i < routes.length; i++) {
-			if (routes[i].collapse) {
-				let collapseActiveNavbar = getActiveNavbarText(routes[i].items);
+		for (let i = 0; i < routes?.length; i++) {
+			if (routes[i]?.collapse) {
+				let collapseActiveNavbar = getActiveNavbarText(routes[i]?.items);
 				if (collapseActiveNavbar !== activeNavbar) {
 					return collapseActiveNavbar;
 				}
-			} else if (routes[i].category) {
-				let categoryActiveNavbar = getActiveNavbarText(routes[i].items);
+			} else if (routes[i]?.category) {
+				let categoryActiveNavbar = getActiveNavbarText(routes[i]?.items);
 				if (categoryActiveNavbar !== activeNavbar) {
 					return categoryActiveNavbar;
 				}
 			} else {
-				if (window.location.href.indexOf(routes[i].path) !== -1) {
-					return routes[i].messageNavbar;
+				if (window?.location?.href?.indexOf(routes[i]?.path) !== -1) {
+					return routes[i]?.messageNavbar;
 				}
 			}
 		}
@@ -249,18 +249,18 @@ export default function Dashboard(props) {
 	};
 
 	const getRoutes = (routes) => {
-		return routes.map((prop, key) => {
+		return routes?.map((prop, key) => {
 			// if (!prop.under && prop.layout === '/superAdmin') {
-			if (!prop.under && prop.layout?.includes(ROLE_PATH.superAdmin)) {
-				return <Route path={prop.path} element={<prop.component />} key={key} />;
-			} else if (prop.under) {
-				return <Route path={prop.path} element={<prop.component />} key={key} />
+			if (!prop?.under && prop?.layout?.includes(ROLE_PATH?.superAdmin)) {
+				return <Route path={prop?.path} element={<prop.component />} key={key} />;
+			} else if (prop?.under) {
+				return <Route path={prop?.path} element={<prop.component />} key={key} />
 			}
-			if (prop.collapse) {
-				return getRoutes(prop.items);
+			if (prop?.collapse) {
+				return getRoutes(prop?.items);
 			}
-			if (prop.category) {
-				return getRoutes(prop.items);
+			if (prop?.category) {
+				return getRoutes(prop?.items);
 			} else {
 				return null;
 			}
@@ -268,7 +268,7 @@ export default function Dashboard(props) {
 	};
 
 	useEffect(() => {
-		if (window.location.pathname === "/default") {
+		if (window?.location?.pathname === "/default") {
 			dispatch(fetchRoles(userId))
 		}
 	}, [userId]);

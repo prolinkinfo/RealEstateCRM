@@ -67,14 +67,14 @@ const Index = () => {
   const [rangeData, setRangeData] = useState(10);
 
   const nextPage = () => setCurrentPage((prev) => prev + 1);
-  const previousPage = () => setCurrentPage((prev) => Math.max(prev - 1, 0));
+  const previousPage = () => setCurrentPage((prev) => Math?.max(prev - 1, 0));
 
   const data = useSelector((state) => state?.propertyData?.data)
 
   const fetchCustomDataFields = async () => {
     setIsLoding(true);
     const result = await dispatch(fetchPropertyCustomFiled());
-    if (result.payload.status === 200) {
+    if (result?.payload?.status === 200) {
       setPropertyData(result?.payload?.data);
     } else {
       toast.error("Failed to fetch data", "error");
@@ -139,7 +139,7 @@ const Index = () => {
     };
     const tempTableColumns = [
       { Header: "#", accessor: "_id", isSortable: false, width: 10 },
-      ...(result?.payload?.data && result.payload.data.length > 0
+      ...(result?.payload?.data && result?.payload?.data?.length > 0
         ? result.payload.data[0]?.fields
           ?.filter((field) => field?.isTableField === true && field?.isView)
           ?.map((field) => ({
@@ -185,7 +185,7 @@ const Index = () => {
     try {
       setIsLoding(true);
       let response = await deleteManyApi("api/property/deleteMany", ids);
-      if (response.status === 200) {
+      if (response?.status === 200) {
         setSelectedValues([]);
         setDelete(false);
         setAction((pre) => !pre);
@@ -218,11 +218,11 @@ const Index = () => {
   }, [action, types]);
 
   const handleCheckboxChange = (event, value) => {
-    if (event.target.checked) {
+    if (event?.target?.checked) {
       setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
     } else {
       setSelectedValues((prevSelectedValues) =>
-        prevSelectedValues.filter((selectedValue) => selectedValue !== value)
+        prevSelectedValues?.filter((selectedValue) => selectedValue !== value)
       );
     }
   };
@@ -278,7 +278,7 @@ const Index = () => {
             setSearchData(data)
           }}
         />
-        {selectedValues.length > 0 && (
+        {selectedValues?.length > 0 && (
           <Button
             variant="outline"
             colorScheme="brand"
@@ -377,7 +377,7 @@ const Index = () => {
         </GridItem>
       </Grid>
       <HStack spacing={4} mb={2}>
-        {(types || []).map((item) => (
+        {(types || [])?.map((item) => (
           <Tag
             size="md"
             p={2}
@@ -412,7 +412,7 @@ const Index = () => {
                     <Checkbox
                       colorScheme="brandScheme"
                       value={selectedValues}
-                      isChecked={selectedValues.includes(item?._id)}
+                      isChecked={selectedValues?.includes(item?._id)}
                       onChange={(event) =>
                         handleCheckboxChange(event, item?._id)
                       }

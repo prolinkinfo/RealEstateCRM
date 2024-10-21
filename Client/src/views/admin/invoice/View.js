@@ -66,7 +66,7 @@ const View = (props) => {
         {
             Header: 'Contact', accessor: 'contact',
             cell: (cell) => (
-                (user.role === 'superAdmin' || contactAccess?.view) ?
+                (user?.role === 'superAdmin' || contactAccess?.view) ?
                     <div className="selectOpt">
                         <Text
                             onClick={() => navigate(cell?.row?.original?.contact !== null && `/contactView/${cell?.row?.original?.contact}`)}
@@ -89,7 +89,7 @@ const View = (props) => {
         {
             Header: 'Account', accessor: 'account',
             cell: (cell) => (
-                (user.role === 'superAdmin' || accountAccess?.view) ?
+                (user?.role === 'superAdmin' || accountAccess?.view) ?
                     <div className="selectOpt">
                         <Text
                             onClick={() => navigate(cell?.row?.original.account !== null && `/accountView/${cell?.row?.original.account}`)}
@@ -569,7 +569,7 @@ const View = (props) => {
                                         <>
                                             <Input
                                                 name="shippingState"
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
                                                 value={formik?.values?.shippingState}
                                                 borderColor={formik?.errors?.shippingState && formik?.touched?.shippingState ? "red.300" : null}
@@ -588,7 +588,7 @@ const View = (props) => {
                                         <>
                                             <Input
                                                 name="billingPostalCode"
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
                                                 value={formik?.values?.billingPostalCode}
                                                 borderColor={formik?.errors?.billingPostalCode && formik?.touched?.billingPostalCode ? "red.300" : null}
@@ -607,7 +607,7 @@ const View = (props) => {
                                         <>
                                             <Input
                                                 name="shippingPostalCode"
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
                                                 value={formik?.values?.shippingPostalCode}
                                                 borderColor={formik?.errors?.shippingPostalCode && formik?.touched?.shippingPostalCode ? "red.300" : null}
@@ -626,7 +626,7 @@ const View = (props) => {
                                         <>
                                             <Input
                                                 name="billingCountry"
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
                                                 value={formik?.values?.billingCountry}
                                                 borderColor={formik?.errors?.billingCountry && formik?.touched?.billingCountry ? "red.300" : null}
@@ -645,7 +645,7 @@ const View = (props) => {
                                         <>
                                             <Input
                                                 name="shippingCountry"
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
                                                 value={formik?.values?.shippingCountry}
                                                 borderColor={formik?.errors?.shippingCountry && formik?.touched?.shippingCountry ? "red.300" : null}

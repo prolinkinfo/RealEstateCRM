@@ -75,11 +75,11 @@ const Index = () => {
     }
 
     const handleCheckboxChange = (event, value) => {
-        if (event.target.checked) {
+        if (event?.target?.checked) {
             setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
         } else {
             setSelectedValues((prevSelectedValues) =>
-                prevSelectedValues.filter((selectedValue) => selectedValue !== value)
+                prevSelectedValues?.filter((selectedValue) => selectedValue !== value)
             );
         }
     };
@@ -90,7 +90,7 @@ const Index = () => {
                 if (ids) {
                     setIsLoding(true)
                     const response = await deleteApi('api/custom-field/module/', ids)
-                    if (response.status === 200) {
+                    if (response?.status === 200) {
                         await dispatch(fetchRouteData());
                         setDeleteModal(false)
                         fetchData()
@@ -107,7 +107,7 @@ const Index = () => {
             try {
                 setIsLoding(true)
                 let response = await deleteManyApi('api/custom-field/deleteMany-Module', selectedIds)
-                if (response.status === 200) {
+                if (response?.status === 200) {
                     await dispatch(fetchRouteData());
                     setSelectedValues([])
                     setDeleteModal(false)
@@ -127,7 +127,7 @@ const Index = () => {
     return (
         <div>
             <Flex justifyContent={"end"} mb={3}>
-                {selectedValues.length > 0 && <Button variant='outline' colorScheme='brand' color={"red"} mr={2} leftIcon={<DeleteIcon />} onClick={() => { handleDeleteOpen('', 'many') }} size='sm' >Delete</Button>}
+                {selectedValues?.length > 0 && <Button variant='outline' colorScheme='brand' color={"red"} mr={2} leftIcon={<DeleteIcon />} onClick={() => { handleDeleteOpen('', 'many') }} size='sm' >Delete</Button>}
                 <Button size='sm' variant='brand' me={1} onClick={() => handleAddOpen()} leftIcon={<AddIcon />}>Add New</Button>
                 <Button size='sm' variant='brand' onClick={() => navigate(-1)} leftIcon={<IoIosArrowBack />}> Back</Button>
             </Flex>
@@ -136,7 +136,7 @@ const Index = () => {
                     <Spinner />
                 </Flex>
             ) : (
-                moduleData && moduleData.length > 0 ? (
+                moduleData && moduleData?.length > 0 ? (
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         {moduleData && moduleData?.map((item, i) => (
 
@@ -144,7 +144,7 @@ const Index = () => {
                                 <Card>
                                     <Flex alignItems={"center"} justifyContent={"space-between"}>
                                         <Flex>
-                                            <Checkbox disabled={item.moduleName === 'Properties' || item.moduleName === 'Contacts' || item.moduleName === 'Leads'} colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(item?._id)} onChange={(event) => handleCheckboxChange(event, item?._id)} me="10px" />
+                                            <Checkbox disabled={item?.moduleName === 'Properties' || item?.moduleName === 'Contacts' || item?.moduleName === 'Leads'} colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(item?._id)} onChange={(event) => handleCheckboxChange(event, item?._id)} me="10px" />
                                             <Tooltip hasArrow label={item?.moduleName} bg='gray.200' color='gray' textTransform={"capitalize"} fontSize='sm'>
                                                 <Heading size="md" fontWeight={"500"} sx={{
                                                     textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '6rem',
@@ -157,8 +157,8 @@ const Index = () => {
                                             </Tooltip>
                                         </Flex>
                                         <Flex>
-                                            <Button size='sm' disabled={item.moduleName === 'Properties' || item.moduleName === 'Contacts' || item.moduleName === 'Leads'} variant='outline' me={2} color={'green'} onClick={() => handleEditOpen(item)}><EditIcon /></Button>
-                                            <Button size='sm' disabled={item.moduleName === 'Properties' || item.moduleName === 'Contacts' || item.moduleName === 'Leads'} variant='outline' me={2} color={'red'} onClick={() => handleDeleteOpen(item, 'one')}><DeleteIcon /></Button>
+                                            <Button size='sm' disabled={item?.moduleName === 'Properties' || item?.moduleName === 'Contacts' || item?.moduleName === 'Leads'} variant='outline' me={2} color={'green'} onClick={() => handleEditOpen(item)}><EditIcon /></Button>
+                                            <Button size='sm' disabled={item?.moduleName === 'Properties' || item?.moduleName === 'Contacts' || item?.moduleName === 'Leads'} variant='outline' me={2} color={'red'} onClick={() => handleDeleteOpen(item, 'one')}><DeleteIcon /></Button>
                                         </Flex>
                                     </Flex>
                                 </Card>
