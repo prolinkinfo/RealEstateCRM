@@ -26,8 +26,8 @@ const ReportChart = (props) => {
             endDate: moment(endDate).format('YYYY-MM-DD'),
             filter: selection
         }
-        let result = await postApi(user.role === 'superAdmin' ? 'api/reporting/index' : `api/reporting/index?sender=${user._id}`, data);
-        if (result.status === 200) {
+        let result = await postApi(user?.role === 'superAdmin' ? 'api/reporting/index' : `api/reporting/index?sender=${user?._id}`, data);
+        if (result?.status === 200) {
             setReportChart(result?.data);
         }
     }
@@ -49,17 +49,17 @@ const ReportChart = (props) => {
         }
     };
 
-    const series = Object.keys(reportChart).map((key) => {
+    const series = Object?.keys(reportChart)?.map((key) => {
         const dataSet = reportChart[key][0];
         let seriesData = [];
 
         if (dataSet?.Emails && isEmailsActive?.isActive) {
-            seriesData = seriesData.concat(
+            seriesData = seriesData?.concat(
                 dataSet?.Emails?.map((item) => ({ x: item?.date, y: item?.Emailcount }))
             );
         }
         if (dataSet?.Calls && isCallsActive?.isActive) {
-            seriesData = seriesData.concat(
+            seriesData = seriesData?.concat(
                 dataSet?.Calls?.map((item) => ({ x: item?.date, y: item?.Callcount }))
             );
         }
@@ -82,7 +82,7 @@ const ReportChart = (props) => {
         <Card>
             {!dashboard &&
                 <Box display='flex' alignItems='center' flexWrap={'wrap'} justifyContent='space-between' mb={4}>
-                    <Select value={select} onChange={(e) => setSelect(e.target.value)} size='sm' width={{ base: '100%', md: '15%' }} mb={{ base: 3, md: 'auto' }}>
+                    <Select value={select} onChange={(e) => setSelect(e?.target?.value)} size='sm' width={{ base: '100%', md: '15%' }} mb={{ base: 3, md: 'auto' }}>
                         <option value='all'>All</option>
                         <option value='EmailDetails'>Email</option>
                         <option value='outboundcall'>Call</option>

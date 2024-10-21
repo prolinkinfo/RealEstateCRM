@@ -33,7 +33,7 @@ const Call = () => {
 
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue, } = formik
 
-    if (touched.recipient && errors.createBy) {
+    if (touched?.recipient && errors?.createBy) {
 
         toast.error('Please select an authorized recipient');
         formik.resetForm();
@@ -44,9 +44,9 @@ const Call = () => {
         try {
             setIsLoding(true)
             let response = await postApi('api/phoneCall/add', values)
-            if (response.status === 200) {
+            if (response?.status === 200) {
 
-                toast.success(`Call ${values.recipient} successfully`)
+                toast.success(`Call ${values?.recipient} successfully`)
                 formik.resetForm();
             }
         } catch (e) {
@@ -59,9 +59,9 @@ const Call = () => {
 
     const fetchData = async () => {
 
-        let result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`);
+        let result = await getApi(user?.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user?._id}`);
         values.createBy = result?._id;
-        setData(result.data);
+        setData(result?.data);
     }
 
     useEffect(() => {
@@ -70,10 +70,10 @@ const Call = () => {
 
     useEffect(() => {
         data?.map((item) => {
-            let recipientExists = item?.phoneNumber === values.recipient
+            let recipientExists = item?.phoneNumber === values?.recipient
             if (recipientExists) {
-                values.createBy = item._id
-                setFieldValue('createBy', item._id)
+                values.createBy = item?._id
+                setFieldValue('createBy', item?._id)
             }
         })
     }, [values])
@@ -95,7 +95,7 @@ const Call = () => {
                     type='number'
                     onChange={handleChange}
                     onBlur={() => setTimeout(onClose, 200)}
-                    value={values.recipient}
+                    value={values?.recipient}
                     name="recipient"
                     placeholder='Recipient'
                     fontWeight='500'
@@ -104,23 +104,23 @@ const Call = () => {
                 {isOpen && values?.recipient && (
                     <List position={'relative'} border={'1px solid'} bg={'gray.100'} width={'100%'} borderRadius={'0px 0px 20px 20px'} lineHeight={1} >
                         {data?.filter((option) => {
-                            if (option && option.phoneNumber && typeof option.phoneNumber === 'number') {
-                                return option.phoneNumber.toString().includes(values.recipient.toString().toLowerCase());
+                            if (option && option?.phoneNumber && typeof option?.phoneNumber === 'number') {
+                                return option?.phoneNumber?.toString()?.includes(values?.recipient?.toString()?.toLowerCase());
                             }
                             return false;
                         }).map((option, index) => (
                             <ListItem p={3} borderBottom={'2px solid #efefef'} sx={{ '&:last-child': { borderBottom: 'none' } }} key={option?._id} cursor={'pointer'}
                                 onClick={() => {
                                     setFieldValue('createBy', option?._id)
-                                    setFieldValue('recipient', option.phoneNumber.toString())
+                                    setFieldValue('recipient', option?.phoneNumber?.toString())
                                 }}
                             >
-                                {option.phoneNumber}
+                                {option?.phoneNumber}
                             </ListItem>
                         ))}
                     </List>
                 )}
-                <Text mb='10px' color={'red'}> {errors.recipient && touched.recipient && errors.recipient}</Text>
+                <Text mb='10px' color={'red'}> {errors?.recipient && touched?.recipient && errors?.recipient}</Text>
             </GridItem>
             <GridItem colSpan={{ base: 12 }} >
                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -131,13 +131,13 @@ const Call = () => {
                     height={'20vh'}
                     resize={'none'}
                     onChange={handleChange}
-                    value={values.callNotes}
+                    value={values?.callNotes}
                     name="callNotes"
                     placeholder='callNotes'
                     fontWeight='500'
                     borderColor={errors?.callNotes && touched?.callNotes ? "red.300" : null}
                 />
-                <Text mb='10px' color={'red'}> {errors.callNotes && touched.callNotes && errors.callNotes}</Text>
+                <Text mb='10px' color={'red'}> {errors?.callNotes && touched?.callNotes && errors?.callNotes}</Text>
             </GridItem>
 
             <GridItem colSpan={{ base: 12 }} >

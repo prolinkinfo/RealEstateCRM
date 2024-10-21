@@ -28,9 +28,9 @@ const ImportModal = (props) => {
             setIsLoding(true)
             resetForm()
 
-            if (values.contact) {
+            if (values?.contact) {
                 onClose();
-                navigate('/contactImport', { state: { fileData: values.contact, customFields: customFields } });
+                navigate('/contactImport', { state: { fileData: values?.contact, customFields: customFields } });
             }
 
         } catch (e) {
@@ -50,8 +50,8 @@ const ImportModal = (props) => {
                 <ModalBody>
                     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
                         <GridItem colSpan={{ base: 12 }}>
-                            <CommonFileUpload count={values.contact.length} onFileSelect={(file) => setFieldValue('contact', file)} text={text} />
-                            <Text mb='10px' color={'red'}> {errors.contact && touched.contact && <>Please Select {text}</>}</Text>
+                            <CommonFileUpload count={values?.contact?.length} onFileSelect={(file) => setFieldValue('contact', file)} text={text} />
+                            <Text mb='10px' color={'red'}> {errors?.contact && touched?.contact && <>Please Select {text}</>}</Text>
                         </GridItem>
                     </Grid>
                 </ModalBody>

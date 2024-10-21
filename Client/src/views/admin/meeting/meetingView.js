@@ -83,25 +83,25 @@ const MeetingView = (props) => {
                                 </GridItem>
                                 <GridItem colSpan={{ base: 12, md: 6 }} >
                                     <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> attendes </Text>
-                                    {data?.related === 'Contact' && contactAccess?.view ? data?.attendes && data?.attendes.map((item) => {
+                                    {data?.related === 'Contact' && contactAccess?.view ? data?.attendes && data?.attendes?.map((item) => {
                                         return (
-                                            <Link to={`/contactView/${item._id}`}>
-                                                <Text color='brand.600' sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{item.firstName + ' ' + item.lastName}</Text>
+                                            <Link to={`/contactView/${item?._id}`}>
+                                                <Text color='brand.600' sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{item?.firstName + ' ' + item?.lastName}</Text>
                                             </Link>
                                         )
-                                    }) : data?.related === 'Lead' && leadAccess?.view ? data?.attendesLead && data?.attendesLead.map((item) => {
+                                    }) : data?.related === 'Lead' && leadAccess?.view ? data?.attendesLead && data?.attendesLead?.map((item) => {
                                         return (
-                                            <Link to={`/leadView/${item._id}`}>
-                                                <Text color='brand.600' sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{item.leadName}</Text>
+                                            <Link to={`/leadView/${item?._id}`}>
+                                                <Text color='brand.600' sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{item?.leadName}</Text>
                                             </Link>
                                         )
-                                    }) : data?.related === 'Contact' ? data?.attendes && data?.attendes.map((item) => {
+                                    }) : data?.related === 'Contact' ? data?.attendes && data?.attendes?.map((item) => {
                                         return (
-                                            <Text color='blackAlpha.900' >{item.firstName + ' ' + item.lastName}</Text>
+                                            <Text color='blackAlpha.900' >{item?.firstName + ' ' + item?.lastName}</Text>
                                         )
-                                    }) : data?.related === 'Lead' ? data?.attendesLead && data?.attendesLead.map((item) => {
+                                    }) : data?.related === 'Lead' ? data?.attendesLead && data?.attendesLead?.map((item) => {
                                         return (
-                                            <Text color='blackAlpha.900' >{item.leadName}</Text>
+                                            <Text color='blackAlpha.900' >{item?.leadName}</Text>
                                         )
                                     }) : '-'}
                                 </GridItem>

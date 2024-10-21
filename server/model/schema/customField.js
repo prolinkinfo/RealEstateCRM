@@ -54,6 +54,9 @@ const fieldsSchema = new mongoose.Schema({
         type: String,
         default: 'text'
     },
+    ref: {
+        type: String,
+    },
     fixed: {
         type: Boolean,
         default: false

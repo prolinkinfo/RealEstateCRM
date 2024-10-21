@@ -42,7 +42,7 @@ const Index = () => {
     const fetchCustomDataFields = async () => {
         setIsLoding(true);
         const result = await dispatch(fetchPropertyCustomFiled())
-        if (result.payload.status === 200) {
+        if (result?.payload?.status === 200) {
             setPropertyData(result?.payload?.data);
         } else {
             toast.error("Failed to fetch data", "error");
@@ -71,7 +71,7 @@ const Index = () => {
         const tempTableColumns = [
             { Header: "#", accessor: "_id", isSortable: false, width: 10 },
             ...(result?.payload?.data && result.payload.data.length > 0
-                ? result.payload.data[0]?.fields
+                ? result?.payload?.data[0]?.fields
                     ?.filter((field) => field?.isTableField === true && field?.isView)
                     ?.map(
                         (field) => ({
@@ -110,7 +110,7 @@ const Index = () => {
         try {
             setIsLoding(true)
             let response = await deleteManyApi('api/property/deleteMany', ids)
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 setSelectedValues([])
                 setDelete(false)
                 setAction((pre) => !pre)

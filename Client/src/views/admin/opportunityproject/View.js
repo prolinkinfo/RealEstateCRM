@@ -51,8 +51,6 @@ import CommonCheckTable from "components/reactTable/checktable";
 import moment from "moment";
 import AddEdit from "../task/components/AddEdit";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchLeadCustomFiled } from "../../../redux/slices/leadCustomFiledSlice";
-import { setUser } from "../../../redux/slices/localSlice";
 import { FaFilePdf } from "react-icons/fa";
 import html2pdf from "html2pdf.js";
 import { useFormik } from "formik";
@@ -60,6 +58,8 @@ import * as yup from "yup";
 import Editopportunityproject from "./Editopportunityproject";
 import { postApi } from "services/api";
 import { putApi } from "services/api";
+import { fetchPropertyData } from "../../../redux/slices/propertySlice.js";
+import { fetchPropertyCustomFiled } from "../../../redux/slices/propertyCustomFiledSlice.js";
 
 const View = (props) => {
   const { userAction, userData, editData, selectedId, setUserAction } = props;
@@ -71,7 +71,7 @@ const View = (props) => {
   const userName =
     typeof userData === "string" ? JSON.parse(userData) : userData;
   const textColor = useColorModeValue("gray.500", "white");
-  const [data, setData] = useState();
+  // const [data, setData] = useState();
   const [opportunitydata, setOpportunityData] = useState([]);
   const [allData, setAllData] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -83,15 +83,21 @@ const View = (props) => {
   const [editableField, setEditableField] = useState(null);
   const [useraction, setUserction] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
+  const [selectedValues, setSelectedValues] = useState();
   const [taskModel, setTaskModel] = useState(false);
+  const [propertyData, setPropertyData] = useState([]);
+  const [columns, setColumns] = useState([]);
+  const [selectedPropertyData, setSelctedPropertyData] = useState([]);
+  const propertyTableData = useSelector((state) => state?.propertyData?.data);
   const size = "lg";
 
-  const leadData = useSelector((state) => state?.leadCustomFiled?.data.data);
+  const leadData = useSelector((state) => state?.leadCustomFiled?.data?.data);
   const [permission] = HasAccess(["Opportunity Project"]);
   const fetchViewData = async () => {
     if (id) {
       const result = await getApi("api/opportunityproject/view/", id);
       setOpportunityData(result?.data);
+      setSelctedPropertyData(result?.data?.propertyOpportunityProject);
     }
   };
   const handleClick = () => {
@@ -189,7 +195,7 @@ const View = (props) => {
       cell: (cell) => (
         <div className="selectOpt">
           <Text color={textColor} fontSize="sm" fontWeight="700">
-            {moment(cell?.row?.values.timestamp).format("h:mma (DD/MM)")}
+            {moment(cell?.row?.values?.timestamp).format("h:mma (DD/MM)")}
           </Text>
         </div>
       ),
@@ -238,7 +244,7 @@ const View = (props) => {
       cell: (cell) => (
         <div className="selectOpt">
           <Text
-            onClick={() => navigate(`/view/${cell?.row?.original._id}`)}
+            onClick={() => navigate(`/view/${cell?.row?.original?._id}`)}
             me="10px"
             sx={{
               "&:hover": { color: "blue.500", textDecoration: "underline" },
@@ -259,15 +265,38 @@ const View = (props) => {
     { Header: "End Date", accessor: "end" },
   ];
 
+  const fetchCustomDataFields = async () => {
+    setIsLoding(true);
+    const result = await dispatch(fetchPropertyCustomFiled());
+    setPropertyData(result?.payload?.data);
+    const tempTableColumns = [
+      { Header: "#", accessor: "_id", isSortable: false, width: 10 },
+      ...(result?.payload?.data?.[0]?.fields || [])
+        ?.filter((field) => field?.isTableField === true)
+        ?.map((field) => ({ Header: field?.label, accessor: field?.name })),
+    ];
+    setColumns(tempTableColumns);
+    setIsLoding(false);
+  };
+
+  useEffect(async () => {
+    await dispatch(fetchPropertyData());
+    fetchCustomDataFields();
+  }, []);
+
   const handleTabChange = (index) => {
     setSelectedTab(index);
   };
+
   const generatePDF = () => {
     const element = document.getElementById("reports");
+    const hideBtn = document.getElementById("hide-btn");
     if (element) {
-      element.style.display = "block";
+      hideBtn.style.display = "none";
+      // element.style.display = "block";
       element.style.width = "100%"; // Adjust width for mobile
       element.style.height = "auto";
+      element.style.padding = "15px";
       html2pdf()
         .from(element)
         .set({
@@ -282,6 +311,8 @@ const View = (props) => {
         .save()
         .then(() => {
           element.style.display = "";
+          hideBtn.style.display = "";
+          element.style.padding = "";
         });
     } else {
       console.error("Element with ID 'reports' not found.");
@@ -291,10 +322,10 @@ const View = (props) => {
   const download = async (data) => {
     if (data) {
       let result = await getApi(`api/document/download/`, data);
-      if (result && result.status === 200) {
-        window.open(`${constant.baseUrl}api/document/download/${data}`);
+      if (result && result?.status === 200) {
+        window.open(`${constant?.baseUrl}api/document/download/${data}`);
         toast.success("file Download successful");
-      } else if (result && result.response.status === 404) {
+      } else if (result && result?.response?.status === 404) {
         toast.error("file Not Found");
       }
     }
@@ -304,7 +335,7 @@ const View = (props) => {
     try {
       setIsLoding(true);
       let response = await deleteApi("api/opportunityproject/delete/", id);
-      if (response.status === 200) {
+      if (response?.status === 200) {
         setDelete(false);
         setAction((pre) => !pre);
         navigate("/opportunityproject");
@@ -352,19 +383,19 @@ const View = (props) => {
     setFieldValue,
     resetForm,
   } = formik;
+
   const AddData = async () => {
     try {
       setIsLoding(true);
       let response = await putApi(
-        `api/opportunityproject/edit/${params.id}`,
+        `api/opportunityproject/edit/${params?.id}`,
         values
       );
-      if (response && response.status === 200) {
+      if (response && response?.status === 200) {
         setEditableField(null);
-        // setEdit(false)
         fetchViewData();
         let updatedUserData = userData; // Create a copy of userData
-        if (user?._id === params.id) {
+        if (user?._id === params?.id) {
           if (updatedUserData && typeof updatedUserData === "object") {
             // Create a new object with the updated firstName
             updatedUserData = {
@@ -380,7 +411,7 @@ const View = (props) => {
         setUserAction("");
         setAction((pre) => !pre);
       } else {
-        toast.error(response.response.data?.message);
+        toast.error(response?.response?.data?.message);
       }
     } catch (e) {
       console.log(e);
@@ -398,10 +429,12 @@ const View = (props) => {
     setEdit(false);
   };
 
+  const [contactAccess, leadAccess] = HasAccess(["Contacts", "Leads"]);
+
   return (
     <>
       {isLoding ? (
-        <Flex justifyContent={"center"} alignItems={"center"} width="100%" >
+        <Flex justifyContent={"center"} alignItems={"center"} width="100%">
           <Spinner />
         </Flex>
       ) : (
@@ -417,10 +450,15 @@ const View = (props) => {
               borderRadius: "20px",
               padding: "20px",
             }}
-            id="reports"
+            // id="reports"
           >
-            <Grid templateColumns={"repeat(2, 1fr)"} mb={3} gap={1} id="reports">
-              <GridItem colSpan={{ base: 12, md: 6 }}>
+            <Grid
+              templateColumns={"repeat(4, 1fr)"}
+              mb={3}
+              gap={1}
+              id="reports"
+            >
+              <GridItem colSpan={{ base: 4 }}>
                 <TabList
                   sx={{
                     border: "none",
@@ -440,11 +478,10 @@ const View = (props) => {
                       zIndex: "0",
                     },
                   }}
-                >
-                </TabList>
+                ></TabList>
               </GridItem>
               <GridItem
-                colSpan={{ base: 12, md: 6 }}
+                colSpan={{ base: 2, md: 4 }}
                 mt={{ sm: "3px", md: "5px" }}
               >
                 <GridItem colSpan={2}>
@@ -455,24 +492,25 @@ const View = (props) => {
                       </Heading>
                       <Flex id="hide-btn">
                         <Menu>
-                          {(user.role === "superAdmin" ||
+                          {(user?.role === "superAdmin" ||
                             permission?.create ||
                             permission?.update ||
                             permission?.delete) && (
-                              <MenuButton
-                                size="sm"
-                                variant="outline"
-                                colorScheme="blackAlpha"
-                                mr={2.5}
-                                as={Button}
-                                rightIcon={<ChevronDownIcon />}
-                              >
-                                Actions
-                              </MenuButton>
-                            )}
+                            <MenuButton
+                              size="sm"
+                              variant="outline"
+                              colorScheme="blackAlpha"
+                              mr={2.5}
+                              as={Button}
+                              rightIcon={<ChevronDownIcon />}
+                            >
+                              Actions
+                            </MenuButton>
+                          )}
                           <MenuDivider />
                           <MenuList minWidth={2}>
-                            {(user.role === "superAdmin" || permission?.create) && (
+                            {(user?.role === "superAdmin" ||
+                              permission?.create) && (
                               <MenuItem
                                 color={"blue"}
                                 onClick={() => {
@@ -486,7 +524,8 @@ const View = (props) => {
                                 Add{" "}
                               </MenuItem>
                             )}
-                            {(user.role === "superAdmin" || permission?.update) && (
+                            {(user?.role === "superAdmin" ||
+                              permission?.update) && (
                               <MenuItem
                                 onClick={() => {
                                   setUserction("edit");
@@ -507,7 +546,8 @@ const View = (props) => {
                             >
                               Print as PDF
                             </MenuItem>
-                            {(user.role === "superAdmin" || permission?.delete) && (
+                            {(user?.role === "superAdmin" ||
+                              permission?.delete) && (
                               <>
                                 <MenuDivider />
                                 <MenuItem
@@ -537,7 +577,7 @@ const View = (props) => {
                   </Box>
                 </GridItem>
               </GridItem>
-              <GridItem colSpan={{ base: 2, md: 1 }}>
+              <GridItem colSpan={{ base: 4, md: 2 }} mt={3}>
                 <Box>
                   <Text
                     fontSize="sm"
@@ -553,9 +593,9 @@ const View = (props) => {
                         id="text"
                         name="name"
                         type="text"
-                        onChange={formik.handleChange}
+                        onChange={formik?.handleChange}
                         onBlur={handleBlur}
-                        value={formik.values.name}
+                        value={formik?.values?.name}
                         borderColor={
                           formik?.errors?.name && formik?.touched?.name
                             ? "red.300"
@@ -581,7 +621,7 @@ const View = (props) => {
                   )}
                 </Box>
               </GridItem>
-              <GridItem colSpan={{ base: 2, md: 1 }}>
+              <GridItem colSpan={{ base: 4, md: 2 }} mt={3}>
                 <Box>
                   <Text
                     fontSize="sm"
@@ -598,10 +638,10 @@ const View = (props) => {
                         type="text"
                         onChange={formik.handleChange}
                         onBlur={handleBlur}
-                        value={formik.values.requirement}
+                        value={formik?.values?.requirement}
                         borderColor={
                           formik?.errors?.requirement &&
-                            formik?.touched?.requirement
+                          formik?.touched?.requirement
                             ? "red.300"
                             : null
                         }
@@ -609,9 +649,9 @@ const View = (props) => {
                       />
                       <Text mb="10px" color={"red"}>
                         {" "}
-                        {formik?.errors.requirement &&
-                          formik?.touched.requirement &&
-                          formik?.errors.requirement}
+                        {formik?.errors?.requirement &&
+                          formik?.touched?.requirement &&
+                          formik?.errors?.requirement}
                       </Text>
                     </>
                   ) : (
@@ -631,51 +671,122 @@ const View = (props) => {
                   )}
                 </Box>
               </GridItem>
+              <Grid>
+                <GridItem colSpan={{ base: 6 }} mt={3}>
+                  <Text
+                    fontSize="sm"
+                    fontWeight="bold"
+                    color={"blackAlpha.900"}
+                  >
+                    {" "}
+                    Assign To{" "}
+                  </Text>
+                  <Link
+                    to={
+                      opportunitydata?.contact
+                        ? contactAccess?.view &&
+                          `/contactView/${opportunitydata?.contact}`
+                        : leadAccess?.view &&
+                          `/leadView/${opportunitydata?.lead}`
+                    }
+                  >
+                    <Text
+                      color={
+                        opportunitydata?.category === "contact" &&
+                        (contactAccess?.view || user?.role === "superAdmin")
+                          ? "brand.600"
+                          : leadAccess?.view ||
+                            (user?.role === "superAdmin" &&
+                              opportunitydata?.category === "lead")
+                          ? "brand.600"
+                          : "blackAlpha.900"
+                      }
+                      sx={{
+                        "&:hover": {
+                          color: "blue.500",
+                          textDecoration: "underline",
+                        },
+                      }}
+                    >
+                      {opportunitydata?.setCategory
+                        ? opportunitydata?.setCategory
+                        : " - "}
+                    </Text>
+                  </Link>
+                </GridItem>
+              </Grid>
             </Grid>
           </Tabs>
 
-          {(user.role === "superAdmin" ||
+          <Card mt={3}>
+            <Grid templateColumns="repeat(2, 1fr)" gap={1}>
+              <GridItem colSpan={{ base: 12 }}>
+                <CommonCheckTable
+                  title={"Property"}
+                  isLoding={isLoding}
+                  columnData={columns ?? []}
+                  allData={selectedPropertyData ?? []}
+                  tableData={selectedPropertyData ?? []}
+                  tableCustomFields={
+                    propertyData?.[0]?.fields?.filter(
+                      (field) => field?.isTableField === true
+                    ) || []
+                  }
+                  AdvanceSearch={() => ""}
+                  ManageGrid={false}
+                  deleteMany={false}
+                  selectedValues={selectedValues}
+                  setSelectedValues={setSelectedValues}
+                  selectType="single"
+                  customSearch={false}
+                  checkBox={false}
+                />
+              </GridItem>
+            </Grid>
+          </Card>
+
+          {(user?.role === "superAdmin" ||
             permission?.update ||
             permission?.delete) && (
-              <Card mt={3}>
-                <Grid templateColumns="repeat(2, 1fr)" gap={1}>
-                  <GridItem colStart={6}>
-                    <Flex justifyContent={"right"}>
-                      {user.role === "superAdmin" || permission?.update ? (
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            setUserction("edit");
-                            onOpen();
-                          }}
-                          leftIcon={<EditIcon />}
-                          mr={2.5}
-                          variant="outline"
-                          colorScheme="green"
-                        >
-                          Edit
-                        </Button>
-                      ) : (
-                        ""
-                      )}
-                      {user.role === "superAdmin" || permission?.delete ? (
-                        <Button
-                          size="sm"
-                          style={{ background: "red.800" }}
-                          onClick={() => setDelete(true)}
-                          leftIcon={<DeleteIcon />}
-                          colorScheme="red"
-                        >
-                          Delete
-                        </Button>
-                      ) : (
-                        ""
-                      )}
-                    </Flex>
-                  </GridItem>
-                </Grid>
-              </Card>
-            )}
+            <Card mt={3}>
+              <Grid templateColumns="repeat(2, 1fr)" gap={1}>
+                <GridItem colStart={6}>
+                  <Flex justifyContent={"right"}>
+                    {user?.role === "superAdmin" || permission?.update ? (
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          setUserction("edit");
+                          onOpen();
+                        }}
+                        leftIcon={<EditIcon />}
+                        mr={2.5}
+                        variant="outline"
+                        colorScheme="green"
+                      >
+                        Edit
+                      </Button>
+                    ) : (
+                      ""
+                    )}
+                    {user?.role === "superAdmin" || permission?.delete ? (
+                      <Button
+                        size="sm"
+                        style={{ background: "red.800" }}
+                        onClick={() => setDelete(true)}
+                        leftIcon={<DeleteIcon />}
+                        colorScheme="red"
+                      >
+                        Delete
+                      </Button>
+                    ) : (
+                      ""
+                    )}
+                  </Flex>
+                </GridItem>
+              </Grid>
+            </Card>
+          )}
         </>
       )}
 
@@ -685,7 +796,7 @@ const View = (props) => {
         leadContect={splitValue?.[0]}
         onClose={setMeeting}
         from="contact"
-        id={params.id}
+        id={params?.id}
         setAction={setAction}
         view={true}
       />
@@ -694,7 +805,7 @@ const View = (props) => {
         fetchData={fetchViewData}
         leadContect={splitValue?.[0]}
         onClose={setTaskModel}
-        id={params.id}
+        id={params?.id}
         userAction={"add"}
         view={true}
       />
@@ -703,13 +814,13 @@ const View = (props) => {
         onClose={() => setDelete(false)}
         type="Opportunity Project"
         handleDeleteData={handleDeleteLead}
-        ids={params.id}
+        ids={params?.id}
       />
       <Editopportunityproject
         isOpen={isOpen}
         fetchData={fetchViewData}
         userAction={useraction}
-        selectedId={params.id}
+        selectedId={params?.id}
         onClose={onClose}
         setAction={setAction}
         moduleId={opportunitydata?.[0]?._id}

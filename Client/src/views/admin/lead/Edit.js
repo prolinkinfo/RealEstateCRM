@@ -14,7 +14,7 @@ const Edit = (props) => {
     const { data } = props;
     const [isLoding, setIsLoding] = useState(false);
     const initialFieldValues = Object.fromEntries(
-        (props?.leadData?.fields || []).map(field => [field?.name, ''])
+        (props?.leadData?.fields || [])?.map(field => [field?.name, ''])
     );
 
     const [initialValues, setInitialValues] = useState({
@@ -37,8 +37,8 @@ const Edit = (props) => {
     const EditData = async () => {
         try {
             setIsLoding(true)
-            let response = await putApi(`api/form/edit/${props?.selectedId || param.id}`, { ...values, moduleId: props.moduleId })
-            if (response.status === 200) {
+            let response = await putApi(`api/form/edit/${props?.selectedId || param?.id}`, { ...values, moduleId: props?.moduleId })
+            if (response?.status === 200) {
                 props.onClose();
                 props.setAction((pre) => !pre)
             }
@@ -81,7 +81,7 @@ const Edit = (props) => {
 
     return (
         <div>
-            <Drawer isOpen={props.isOpen} size={props.size}>
+            <Drawer isOpen={props?.isOpen} size={props?.size}>
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerHeader alignItems={"center"} justifyContent='space-between' display='flex' >
@@ -95,7 +95,7 @@ const Edit = (props) => {
                                 <Spinner />
                             </Flex>
                             :
-                            <CustomForm moduleData={props.leadData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
+                            <CustomForm moduleData={props?.leadData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
                         }
                     </DrawerBody>
 

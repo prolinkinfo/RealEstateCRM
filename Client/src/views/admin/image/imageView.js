@@ -35,7 +35,7 @@ const ImageView = (props) => {
             }
             if (type === authimg || type === logoimg || type === largelogoimg) {
                 const response = await putApi(`api/images/change-auth-logo-img/${data?._id}`, formData);
-                if (response.status === 200) {
+                if (response?.status === 200) {
                     fetchData(data?._id);
                     dispatch(fetchImage());
                     toast.success(response?.data?.message);
@@ -53,7 +53,7 @@ const ImageView = (props) => {
 
     return (
         <div>
-            <Modal onClose={props.onClose} isOpen={props.isOpen} isCentered size='xl'>
+            <Modal onClose={props?.onClose} isOpen={props?.isOpen} isCentered size='xl'>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>View Images</ModalHeader>

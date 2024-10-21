@@ -37,8 +37,8 @@ const View = (props) => {
     const [type, setType] = useState("")
     const [editableField, setEditableField] = useState(null);
     const [editableFieldName, setEditableFieldName] = useState(null);
-    const today = new Date().toISOString().split('T')[0];
-    const todayTime = new Date().toISOString().split('.')[0];
+    const today = new Date()?.toISOString()?.split('T')[0];
+    const todayTime = new Date()?.toISOString()?.split('.')[0];
     const fetchViewData = async () => {
         if (id) {
             let result = await getApi('api/opportunity/view/', id);
@@ -74,7 +74,7 @@ const View = (props) => {
     const handleDeleteOpportunities = async (ids) => {
         try {
             let response = await deleteManyApi('api/opportunities/deleteMany', ids)
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 navigate('/opportunities')
                 toast.success(`Opprtunities Delete successfully`)
                 setDeleteManyModel(false)
@@ -115,7 +115,7 @@ const View = (props) => {
                 modifiedDate: new Date()
             }
             let response = await putApi(`api/opportunity/edit/${id}`, payload)
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 fetchViewData()
                 toast.success(`${editableFieldName} Update successfully`)
             } else {
@@ -163,12 +163,12 @@ const View = (props) => {
                                                 </MenuButton>}
                                                 <MenuDivider />
                                                 <MenuList minWidth={2}>
-                                                    {(user.role === 'superAdmin' || opportunityAccess?.create) && <MenuItem onClick={() => { setEdit(true); setType("add"); formik.resetForm() }
+                                                    {(user?.role === 'superAdmin' || opportunityAccess?.create) && <MenuItem onClick={() => { setEdit(true); setType("add"); formik.resetForm() }
                                                     } alignItems={'start'} color={'blue'} icon={<AddIcon />}>Add</MenuItem>}
-                                                    {(user.role === 'superAdmin' || opportunityAccess?.update) && <MenuItem onClick={() => { setEdit(true); setType("edit") }} alignItems={'start'} icon={<EditIcon />}>Edit</MenuItem>}
+                                                    {(user?.role === 'superAdmin' || opportunityAccess?.update) && <MenuItem onClick={() => { setEdit(true); setType("edit") }} alignItems={'start'} icon={<EditIcon />}>Edit</MenuItem>}
                                                     <MenuItem onClick={generatePDF} alignItems={"start"} icon={<FaFilePdf />} display={"flex"} style={{ alignItems: "center" }}>Print as PDF</MenuItem >
 
-                                                    {(user.role === 'superAdmin' || opportunityAccess?.delete) && <>
+                                                    {(user?.role === 'superAdmin' || opportunityAccess?.delete) && <>
                                                         <MenuDivider />
                                                         <MenuItem alignItems={'start'} onClick={() => setDeleteManyModel(true)} color={'red'} icon={<DeleteIcon />}>Delete</MenuItem>
                                                     </>}
@@ -191,13 +191,13 @@ const View = (props) => {
                                                 id="text"
                                                 name="opportunityName"
                                                 type="text"
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.opportunityName}
+                                                value={formik?.values?.opportunityName}
                                                 borderColor={formik?.errors?.opportunityName && formik?.touched?.opportunityName ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.opportunityName && formik?.touched.opportunityName && formik?.errors.opportunityName}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.opportunityName && formik?.touched?.opportunityName && formik?.errors?.opportunityName}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("opportunityName", data?.opportunityName, "Opportunity Name")}>{data?.opportunityName ? data?.opportunityName : ' - '}</Text>
@@ -219,11 +219,11 @@ const View = (props) => {
                                 <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Assigned User </Text>
                                 {
                                     data?.assignUser ?
-                                        <Link to={user.role === 'superAdmin' && `/userView/${data?.assignUser}`}>
-                                            <Text color={user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900', textDecoration: user.role === 'superAdmin' ? 'underline' : 'none' } }} style={{ cursor: "pointer" }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
+                                        <Link to={user?.role === 'superAdmin' && `/userView/${data?.assignUser}`}>
+                                            <Text color={user?.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: user?.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900', textDecoration: user?.role === 'superAdmin' ? 'underline' : 'none' } }} style={{ cursor: "pointer" }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
                                         </Link>
                                         :
-                                        <Text color={user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900', textDecoration: user.role === 'superAdmin' ? 'underline' : 'none' } }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
+                                        <Text color={user?.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: user?.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900', textDecoration: user?.role === 'superAdmin' ? 'underline' : 'none' } }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
 
                                 }
                             </GridItem>
@@ -233,19 +233,19 @@ const View = (props) => {
                                     editableField === "type" ?
                                         <>
                                             <Select
-                                                value={formik?.values.type}
+                                                value={formik?.values?.type}
                                                 name="type"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                mb={formik?.errors.type && formik?.touched.type ? undefined : '10px'}
+                                                mb={formik?.errors?.type && formik?.touched?.type ? undefined : '10px'}
                                                 fontWeight='500'
                                                 placeholder={'Type'}
-                                                borderColor={formik?.errors.type && formik?.touched.type ? "red.300" : null}
+                                                borderColor={formik?.errors?.type && formik?.touched?.type ? "red.300" : null}
                                             >
                                                 <option value={"Existing Bussiness"} >Existing Bussiness</option>
                                                 <option value={"New Bussiness"} >New Bussiness</option>
                                             </Select>
-                                            <Text mb='10px' color={'red'}> {formik?.errors.type && formik?.touched.type && formik?.errors.type}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.type && formik?.touched?.type && formik?.errors?.type}</Text>
 
                                         </>
                                         :
@@ -258,14 +258,14 @@ const View = (props) => {
                                     editableField === "leadSource" ?
                                         <>
                                             <Select
-                                                value={formik?.values.leadSource}
+                                                value={formik?.values?.leadSource}
                                                 name="leadSource"
                                                 onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                mb={formik?.errors.leadSource && formik?.touched.leadSource ? undefined : '10px'}
+                                                mb={formik?.errors?.leadSource && formik?.touched?.leadSource ? undefined : '10px'}
                                                 fontWeight='500'
                                                 placeholder={'Lead Source'}
-                                                borderColor={formik?.errors.leadSource && formik?.touched.leadSource ? "red.300" : null}
+                                                borderColor={formik?.errors?.leadSource && formik?.touched?.leadSource ? "red.300" : null}
                                             >
                                                 <option value={"Cold Call"}>Cold Call</option>
                                                 <option value={"Existing Customer"}>Existing Customer</option>
@@ -281,7 +281,7 @@ const View = (props) => {
                                                 <option value={"Email"}>Email</option>
                                                 <option value={"Other"}>Other</option>
                                             </Select>
-                                            <Text mb='10px' color={'red'}> {formik.errors.leadSource && formik.touched.leadSource && formik.errors.leadSource}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.leadSource && formik?.touched?.leadSource && formik?.errors?.leadSource}</Text>
                                         </>
 
                                         :
@@ -294,18 +294,18 @@ const View = (props) => {
                                     editableField === "currency" ?
                                         <>
                                             <Select
-                                                value={formik?.values.currency}
+                                                value={formik?.values?.currency}
                                                 name="currency"
                                                 onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                mb={formik?.errors.currency && formik?.touched.currency ? undefined : '10px'}
+                                                mb={formik?.errors?.currency && formik?.touched?.currency ? undefined : '10px'}
                                                 fontWeight='500'
                                                 placeholder={'Select Currency'}
-                                                borderColor={formik?.errors.currency && formik?.touched.currency ? "red.300" : null}
+                                                borderColor={formik?.errors?.currency && formik?.touched?.currency ? "red.300" : null}
                                             >
                                                 <option value={"$"}>USD</option>
                                             </Select>
-                                            <Text mb='10px' color={'red'}> {formik?.errors.currency && formik?.touched.currency && formik?.errors.currency}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.currency && formik?.touched?.currency && formik?.errors?.currency}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("currency", data?.currency, "Currency")}>{data?.currency ? data?.currency : ' - '}</Text>
@@ -320,13 +320,13 @@ const View = (props) => {
                                                 id="text"
                                                 name="opportunityAmount"
                                                 type="number"
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.opportunityAmount}
+                                                value={formik?.values?.opportunityAmount}
                                                 autoFocus
                                                 borderColor={formik?.errors?.opportunityAmount && formik?.touched?.opportunityAmount ? "red.300" : null}
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.opportunityAmount && formik?.touched.opportunityAmount && formik?.errors.opportunityAmount}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.opportunityAmount && formik?.touched?.opportunityAmount && formik?.errors?.opportunityAmount}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("opportunityAmount", data?.opportunityAmount, "Opportunity Amount")}>{data?.opportunityAmount ? data?.opportunityAmount : ' - '}</Text>
@@ -341,9 +341,9 @@ const View = (props) => {
                                                 id="text"
                                                 name="amount"
                                                 type="number"
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.amount}
+                                                value={formik?.values?.amount}
                                                 autoFocus
                                                 borderColor={formik?.errors?.amount && formik?.touched?.amount ? "red.300" : null}
                                             />
@@ -362,16 +362,16 @@ const View = (props) => {
                                                 id="text"
                                                 name="expectedCloseDate"
                                                 type="date"
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                value={dayjs(formik.values.expectedCloseDate).format("YYYY-MM-DD")}
+                                                value={dayjs(formik?.values?.expectedCloseDate)?.format("YYYY-MM-DD")}
                                                 autoFocus
                                                 borderColor={formik?.errors?.expectedCloseDate && formik?.touched?.expectedCloseDate ? "red.300" : null}
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.expectedCloseDate && formik?.touched.expectedCloseDate && formik?.errors.expectedCloseDate}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.expectedCloseDate && formik?.touched?.expectedCloseDate && formik?.errors?.expectedCloseDate}</Text>
                                         </>
                                         :
-                                        <Text onDoubleClick={() => handleDoubleClick("expectedCloseDate", data?.expectedCloseDate, "Expected Close Date")}>{data?.expectedCloseDate ? dayjs(data?.expectedCloseDate).format("YYYY-MM-DD") : ' - '}</Text>
+                                        <Text onDoubleClick={() => handleDoubleClick("expectedCloseDate", data?.expectedCloseDate, "Expected Close Date")}>{data?.expectedCloseDate ? dayjs(data?.expectedCloseDate)?.format("YYYY-MM-DD") : ' - '}</Text>
                                 }
                             </GridItem>
                             <GridItem colSpan={{ base: 2, md: 1 }} >
@@ -383,13 +383,13 @@ const View = (props) => {
                                                 id="text"
                                                 name="nextStep"
                                                 type="text"
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.nextStep}
+                                                value={formik?.values?.nextStep}
                                                 autoFocus
                                                 borderColor={formik?.errors?.nextStep && formik?.touched?.nextStep ? "red.300" : null}
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.nextStep && formik?.touched.nextStep && formik?.errors.nextStep}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.nextStep && formik?.touched?.nextStep && formik?.errors?.nextStep}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("nextStep", data?.nextStep, "Next Step")}>{data?.nextStep ? data?.nextStep : ' - '}</Text>
@@ -401,14 +401,14 @@ const View = (props) => {
                                     editableField === "salesStage" ?
                                         <>
                                             <Select
-                                                value={formik?.values.salesStage}
+                                                value={formik?.values?.salesStage}
                                                 name="salesStage"
                                                 onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                mb={formik?.errors.salesStage && formik?.touched.salesStage ? undefined : '10px'}
+                                                mb={formik?.errors?.salesStage && formik?.touched?.salesStage ? undefined : '10px'}
                                                 fontWeight='500'
                                                 placeholder={'Sales Stage'}
-                                                borderColor={formik?.errors.salesStage && formik?.touched.salesStage ? "red.300" : null}
+                                                borderColor={formik?.errors?.salesStage && formik?.touched?.salesStage ? "red.300" : null}
                                             >
                                                 <option value={"Prospecting"}>Prospecting</option>
                                                 <option value={"Qualification"}>Qualification</option>
@@ -421,7 +421,7 @@ const View = (props) => {
                                                 <option value={"Closed/Won"}>Closed/Won</option>
                                                 <option value={"Closed/Lost"}>Closed/Lost</option>
                                             </Select>
-                                            <Text mb='10px' color={'red'}> {formik?.errors.salesStage && formik?.touched.salesStage && formik?.errors.salesStage}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.salesStage && formik?.touched?.salesStage && formik?.errors?.salesStage}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("salesStage", data?.salesStage, "Sales Stage")}>{data?.salesStage ? data?.salesStage : ' - '}</Text>
@@ -436,13 +436,13 @@ const View = (props) => {
                                                 id="text"
                                                 name="probability"
                                                 type="number"
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.probability}
+                                                value={formik?.values?.probability}
                                                 autoFocus
                                                 borderColor={formik?.errors?.probability && formik?.touched?.probability ? "red.300" : null}
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.probability && formik?.touched.probability && formik?.errors.probability}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors.probability && formik?.touched?.probability && formik?.errors?.probability}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("probability", data?.probability, "Probability")}>{data?.probability ? data?.probability : ' - '}</Text>
@@ -457,13 +457,13 @@ const View = (props) => {
                                                 id="text"
                                                 name="description"
                                                 type="text"
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.description}
+                                                value={formik?.values?.description}
                                                 autoFocus
                                                 borderColor={formik?.errors?.description && formik?.touched?.description ? "red.300" : null}
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.description && formik?.touched.description && formik?.errors.description}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.description && formik?.touched?.description && formik?.errors?.description}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("description", data?.description, "Description")}>{data?.description ? data?.description : ' - '}</Text>

@@ -28,7 +28,7 @@ const View = () => {
 
     const fetchData = async () => {
         setIsLoding(true)
-        let response = await getApi('api/meeting/view/', param.id)
+        let response = await getApi('api/meeting/view/', param?.id)
         setData(response?.data);
         setIsLoding(false)
     }
@@ -66,8 +66,8 @@ const View = () => {
     const handleDeleteMeeting = async (ids) => {
         try {
             setIsLoding(true)
-            let response = await deleteApi('api/meeting/delete/', params.id)
-            if (response.status === 200) {
+            let response = await deleteApi('api/meeting/delete/', params?.id)
+            if (response?.status === 200) {
                 setDeleteMany(false)
                 navigate(-1)
             }
@@ -142,25 +142,25 @@ const View = () => {
                                     </GridItem>
                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Attendes </Text>
-                                        {data?.related === 'Contact' && contactAccess?.view ? data?.attendes && data?.attendes.map((item) => {
+                                        {data?.related === 'Contact' && contactAccess?.view ? data?.attendes && data?.attendes?.map((item) => {
                                             return (
-                                                <Link to={`/contactView/${item._id}`}>
+                                                <Link to={`/contactView/${item?._id}`}>
                                                     <Text color='brand.600' sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{item.firstName + ' ' + item.lastName}</Text>
                                                 </Link>
                                             )
-                                        }) : data?.related === 'Lead' && leadAccess?.view ? data?.attendesLead && data?.attendesLead.map((item) => {
+                                        }) : data?.related === 'Lead' && leadAccess?.view ? data?.attendesLead && data?.attendesLead?.map((item) => {
                                             return (
-                                                <Link to={`/leadView/${item._id}`}>
+                                                <Link to={`/leadView/${item?._id}`}>
                                                     <Text color='brand.600' sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}>{item.leadName}</Text>
                                                 </Link>
                                             )
-                                        }) : data?.related === 'contact' ? data?.attendes && data?.attendes.map((item) => {
+                                        }) : data?.related === 'contact' ? data?.attendes && data?.attendes?.map((item) => {
                                             return (
-                                                <Text color='blackAlpha.900' >{item.firstName + ' ' + item.lastName}</Text>
+                                                <Text color='blackAlpha.900' >{item?.firstName + ' ' + item?.lastName}</Text>
                                             )
-                                        }) : data?.related === 'lead' ? data?.attendesLead && data?.attendesLead.map((item) => {
+                                        }) : data?.related === 'lead' ? data?.attendesLead && data?.attendesLead?.map((item) => {
                                             return (
-                                                <Text color='blackAlpha.900' >{item.leadName}</Text>
+                                                <Text color='blackAlpha.900' >{item?.leadName}</Text>
                                             )
                                         }) : '-'}
                                     </GridItem>
@@ -172,11 +172,11 @@ const View = () => {
                         </GridItem>
 
                     </Grid>
-                    {(user.role === 'superAdmin' || (permission?.update || permission?.delete)) && <Card mt={3}>
+                    {(user?.role === 'superAdmin' || (permission?.update || permission?.delete)) && <Card mt={3}>
                         <Grid templateColumns="repeat(6, 1fr)" gap={1}>
                             <GridItem colStart={6} >
                                 <Flex justifyContent={"right"}>
-                                    {(user.role === 'superAdmin' || permission?.delete) ? <Button size='sm' style={{ background: 'red.800' }} onClick={() => setDeleteMany(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button> : ''}
+                                    {(user?.role === 'superAdmin' || permission?.delete) ? <Button size='sm' style={{ background: 'red.800' }} onClick={() => setDeleteMany(true)} leftIcon={<DeleteIcon />} colorScheme="red" >Delete</Button> : ''}
                                 </Flex>
                             </GridItem>
                         </Grid>
@@ -185,7 +185,7 @@ const View = () => {
 
                 </>}
             {/* Delete model */}
-            <CommonDeleteModel isOpen={deleteMany} onClose={() => setDeleteMany(false)} type='Meetings' handleDeleteData={handleDeleteMeeting} ids={params.id} />
+            <CommonDeleteModel isOpen={deleteMany} onClose={() => setDeleteMany(false)} type='Meetings' handleDeleteData={handleDeleteMeeting} ids={params?.id} />
         </>
     );
 };

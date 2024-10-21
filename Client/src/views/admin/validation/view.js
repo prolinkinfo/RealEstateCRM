@@ -23,7 +23,7 @@ const View = (props) => {
         try {
             if (selectedId) {
                 let response = await getApi(`api/validation/view/`, selectedId)
-                setData(response.data)
+                setData(response?.data)
             }
         } catch (error) {
             console.log(error)
@@ -202,7 +202,7 @@ const View = (props) => {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
-            <Edit isOpen={editModal} onClose={handleEditClose} selectedId={props.selectedId} editdata={data} setAction={setAction} fetchData={fetchData} fetchViewData={fetchViewData} />
+            <Edit isOpen={editModal} onClose={handleEditClose} selectedId={props?.selectedId} editdata={data} setAction={setAction} fetchData={fetchData} fetchViewData={fetchViewData} />
         </div>
     )
 }

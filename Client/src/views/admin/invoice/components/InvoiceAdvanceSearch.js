@@ -61,7 +61,7 @@ const InvoiceAdvanceSearch = (props) => {
                     value: values.grandTotal
                 },
             ]
-            dispatch(setGetTagValues(getValue.filter(item => item.value)))
+            dispatch(setGetTagValues(getValue?.filter(item => item?.value)))
             setDisplaySearchData(true)
             setAdvanceSearch(false)
             resetForm();
@@ -93,7 +93,7 @@ const InvoiceAdvanceSearch = (props) => {
                                     placeholder='Enter Invoice Number'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.invoiceNumber && touched.invoiceNumber && errors.invoiceNumber}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.invoiceNumber && touched?.invoiceNumber && errors?.invoiceNumber}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
@@ -107,26 +107,26 @@ const InvoiceAdvanceSearch = (props) => {
                                     placeholder='Enter Title'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.title && touched.title && errors.title}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.title && touched?.title && errors?.title}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
                                     Status
                                 </FormLabel>
                                 <Select
-                                    value={values.status}
+                                    value={values?.status}
                                     name="status"
                                     onChange={handleChange}
-                                    mb={errors.status && touched.status ? undefined : '10px'}
+                                    mb={errors?.status && touched?.status ? undefined : '10px'}
                                     fontWeight='500'
                                     placeholder={'Status'}
-                                    borderColor={errors.status && touched.status ? "red.300" : null}
+                                    borderColor={errors?.status && touched?.status ? "red.300" : null}
                                 >
                                     <option value="Paid">Paid</option>
                                     <option value="Unpaid">Unpaid</option>
                                     <option value="Cancelled">Cancelled</option>
                                 </Select>
-                                <Text mb='10px' color={'red'}> {errors.status && touched.status && errors.status}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.status && touched?.status && errors?.status}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
@@ -140,7 +140,7 @@ const InvoiceAdvanceSearch = (props) => {
                                     placeholder='Enter Contact Name'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.contactName && touched.contactName && errors.contactName}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.contactName && touched?.contactName && errors?.contactName}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
@@ -154,7 +154,7 @@ const InvoiceAdvanceSearch = (props) => {
                                     placeholder='Enter Account Name'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.accountName && touched.accountName && errors.accountName}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.accountName && touched?.accountName && errors?.accountName}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
@@ -168,7 +168,7 @@ const InvoiceAdvanceSearch = (props) => {
                                     placeholder='Enter Grand Total'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.grandTotal && touched.grandTotal && errors.grandTotal}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.grandTotal && touched?.grandTotal && errors?.grandTotal}</Text>
                             </GridItem>
                         </Grid>
                     </ModalBody>

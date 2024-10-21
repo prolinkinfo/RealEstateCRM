@@ -41,12 +41,12 @@ const Index = (props) => {
                 <Menu isLazy  >
                     <MenuButton><CiMenuKebab /></MenuButton>
                     <MenuList minW={'fit-content'} transform={"translate(1520px, 173px);"}>
-                        {permission?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/Email/${row?.values._id}`)} icon={<ViewIcon mb={'2px'} fontSize={15} />}>View</MenuItem>}
+                        {permission?.view && <MenuItem py={2.5} color={'green'} onClick={() => navigate(`/Email/${row?.values?._id}`)} icon={<ViewIcon mb={'2px'} fontSize={15} />}>View</MenuItem>}
                         {row?.original?.createByContact && contactAccess?.view ?
-                            <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(row?.original?.createByContact && `/contactView/${row?.original.createByContact}`)} icon={row?.original.createByContact && <IoIosContact fontSize={15} />}>  {(row?.original.createByContact && contactAccess?.view) && "contact"}
+                            <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(row?.original?.createByContact && `/contactView/${row?.original.createByContact}`)} icon={row?.original?.createByContact && <IoIosContact fontSize={15} />}>  {(row?.original?.createByContact && contactAccess?.view) && "contact"}
                             </MenuItem>
                             : ''}
-                        {row?.original.createByLead && leadAccess?.view ? <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(`/leadView/${row?.original.createByLead}`)} icon={row?.original.createByLead && leadAccess?.view && <MdLeaderboard style={{ marginBottom: '4px' }} fontSize={15} />}>{row?.original.createByLead && leadAccess?.view && 'lead'}</MenuItem> : ''}
+                        {row?.original?.createByLead && leadAccess?.view ? <MenuItem width={"165px"} py={2.5} color={'black'} onClick={() => navigate(`/leadView/${row?.original.createByLead}`)} icon={row?.original?.createByLead && leadAccess?.view && <MdLeaderboard style={{ marginBottom: '4px' }} fontSize={15} />}>{row?.original?.createByLead && leadAccess?.view && 'lead'}</MenuItem> : ''}
                     </MenuList>
                 </Menu>
             </Text>
@@ -56,7 +56,7 @@ const Index = (props) => {
         { Header: "#", accessor: "_id", isSortable: false, width: 10 },
         {
             Header: "recipient", accessor: "createByName", cell: (cell) => (
-                <Link to={`/Email/${cell?.row?.values._id}`}>
+                <Link to={`/Email/${cell?.row?.values?._id}`}>
                     <Text
                         me="10px"
                         sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
@@ -72,7 +72,7 @@ const Index = (props) => {
         {
             Header: "Realeted To", accessor: 'realeted', cell: ({ row }) => (
                 <Text  >
-                    {row?.original.createByContact && contactAccess?.view ? <Link to={`/contactView/${row?.original.createByContact}`}>
+                    {row?.original?.createByContact && contactAccess?.view ? <Link to={`/contactView/${row?.original?.createByContact}`}>
                         <Text
                             me="10px"
                             sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
@@ -80,7 +80,7 @@ const Index = (props) => {
                             fontSize="sm"
                             fontWeight="700"
                         >
-                            {row?.original.createByContact && "Contact"}
+                            {row?.original?.createByContact && "Contact"}
                         </Text>
                     </Link> :
                         <Text
@@ -88,10 +88,10 @@ const Index = (props) => {
                             fontSize="sm"
                             fontWeight="700"
                         >
-                            {row?.original.createByContact && "Contact"}
+                            {row?.original?.createByContact && "Contact"}
                         </Text>}
 
-                    {leadAccess?.view && row?.original.createByLead ? <Link to={`/leadView/${row?.original.createByLead}`}>
+                    {leadAccess?.view && row?.original?.createByLead ? <Link to={`/leadView/${row?.original?.createByLead}`}>
                         <Text
                             me="10px"
                             sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
@@ -99,14 +99,14 @@ const Index = (props) => {
                             fontSize="sm"
                             fontWeight="700"
                         >
-                            {row?.original.createByLead && "Lead"}
+                            {row?.original?.createByLead && "Lead"}
                         </Text>
                     </Link> : <Text
                         me="10px"
                         fontSize="sm"
                         fontWeight="700"
                     >
-                        {row?.original.createByLead && "Lead"}
+                        {row?.original?.createByLead && "Lead"}
                     </Text>}
                 </Text>
             )
@@ -115,7 +115,7 @@ const Index = (props) => {
         {
             Header: "Created", accessor: 'created', cell: ({ row }) => (
                 <Text fontSize="sm" fontWeight="700">
-                    {moment(row?.values.timestamp).format('(DD/MM) h:mma')}
+                    {moment(row?.values?.timestamp).format('(DD/MM) h:mma')}
                 </Text>
             )
         },
@@ -139,16 +139,16 @@ const Index = (props) => {
                 }
             } else {
                 const modifiedElement = { ...element };
-                if (element.createByLead) {
+                if (element?.createByLead) {
                     modifiedElement.realeted = 'Lead';
                 }
-                if (element.createBy) {
+                if (element?.createBy) {
                     modifiedElement.realeted = 'Contact';
                 }
                 element = modifiedElement;
             }
         });
-        if (result.payload.status === 200) {
+        if (result?.payload?.status === 200) {
             setData(response);
         } else {
             toast.error("Failed to fetch data", "error");

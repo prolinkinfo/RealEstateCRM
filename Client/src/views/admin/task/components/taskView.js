@@ -36,8 +36,8 @@ const TaskView = (props) => {
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
     const [editableField, setEditableField] = useState(null);
-    const today = new Date().toISOString().split('T')[0];
-    const todayTime = new Date().toISOString().split('.')[0];
+    const today = new Date()?.toISOString()?.split('T')[0];
+    const todayTime = new Date()?.toISOString()?.split('.')[0];
     const fetchViewData = async () => {
         if (id) {
             let result = await getApi('api/task/view/', id?.event ? id?.event?._def?.extendedProps?._id : id);
@@ -73,7 +73,7 @@ const TaskView = (props) => {
     const handleDeleteTask = async (ids) => {
         try {
             let response = await deleteManyApi('api/task/deleteMany', ids)
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 navigate('/task')
                 setDeleteManyModel(false)
             }
@@ -97,7 +97,7 @@ const TaskView = (props) => {
         enableReinitialize: true,
         onSubmit: async (values, { resetForm }) => {
             let response = await putApi(`api/task/edit/${id}`, values)
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 setEditableField(null);
                 fetchViewData()
             }
@@ -137,16 +137,16 @@ const TaskView = (props) => {
                                         </Heading>
                                         <Flex id="hide-btn" >
                                             <Menu>
-                                                {(user.role === 'superAdmin' || permission?.create || permission?.update || permission?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' size="sm" va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
+                                                {(user?.role === 'superAdmin' || permission?.create || permission?.update || permission?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' size="sm" va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
                                                     Actions
                                                 </MenuButton>}
                                                 <MenuDivider />
                                                 <MenuList minWidth={2}>
-                                                    {(user.role === 'superAdmin' || permission?.create) && <MenuItem onClick={() => handleClick()} alignItems={'start'} color={'blue'} icon={<AddIcon />}>Add</MenuItem>}
-                                                    {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => setEdit(true)} alignItems={'start'} icon={<EditIcon />}>Edit</MenuItem>}
+                                                    {(user?.role === 'superAdmin' || permission?.create) && <MenuItem onClick={() => handleClick()} alignItems={'start'} color={'blue'} icon={<AddIcon />}>Add</MenuItem>}
+                                                    {(user?.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => setEdit(true)} alignItems={'start'} icon={<EditIcon />}>Edit</MenuItem>}
                                                     <MenuItem onClick={generatePDF} alignItems={"start"} icon={<FaFilePdf />} display={"flex"} style={{ alignItems: "center" }}>Print as PDF</MenuItem >
 
-                                                    {(user.role === 'superAdmin' || permission?.delete) && <>
+                                                    {(user?.role === 'superAdmin' || permission?.delete) && <>
                                                         <MenuDivider />
                                                         <MenuItem alignItems={'start'} onClick={() => setDeleteManyModel(true)} color={'red'} icon={<DeleteIcon />}>Delete</MenuItem>
                                                     </>}
@@ -169,9 +169,9 @@ const TaskView = (props) => {
                                                 id="text"
                                                 name="title"
                                                 type="text"
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.title}
+                                                value={formik?.values?.title}
                                                 borderColor={formik?.errors?.title && formik?.touched?.title ? "red.300" : null}
                                                 autoFocus
                                             />
@@ -193,24 +193,24 @@ const TaskView = (props) => {
                                             <Input
                                                 name="start"
                                                 type={data?.allDay ? 'date' : 'datetime-local'}
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                value={data.allDay === true
-                                                    ? moment(formik.values.start).format('YYYY-MM-DD')
-                                                    : moment(formik.values.start).format('YYYY-MM-DD HH:mm A')}
+                                                value={data?.allDay === true
+                                                    ? moment(formik?.values?.start).format('YYYY-MM-DD')
+                                                    : moment(formik?.values?.start).format('YYYY-MM-DD HH:mm A')}
                                                 autoFocus
                                                 borderColor={formik?.errors?.start && formik?.touched?.start ? "red.300" : null}
-                                                min={data?.allDay ? dayjs(today).format('YYYY-MM-DD') : dayjs(todayTime).format('YYYY-MM-DD HH:mm')}
+                                                min={data?.allDay ? dayjs(today)?.format('YYYY-MM-DD') : dayjs(todayTime)?.format('YYYY-MM-DD HH:mm')}
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.start && formik?.touched.start && formik?.errors.start}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.start && formik?.touched?.start && formik?.errors?.start}</Text>
 
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("start", data?.start)}>
                                             {data && data?.start ? (
-                                                data.allDay === true
-                                                    ? moment(data.start).format('DD-MM-YYYY')
-                                                    : moment(data.start).format('DD-MM-YYYY HH:mm A')
+                                                data?.allDay === true
+                                                    ? moment(data?.start)?.format('DD-MM-YYYY')
+                                                    : moment(data?.start)?.format('DD-MM-YYYY HH:mm A')
                                             ) : (
                                                 "-"
                                             )}
@@ -226,17 +226,17 @@ const TaskView = (props) => {
                                             <Input
                                                 name="end"
                                                 type={data?.allDay ? 'date' : 'datetime-local'}
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                min={formik.values.start}
-                                                value={data.allDay === true
-                                                    ? moment(formik.values.end).format('YYYY-MM-DD')
-                                                    : moment(formik.values.end).format('YYYY-MM-DD HH:mm A')}
+                                                min={formik?.values?.start}
+                                                value={data?.allDay === true
+                                                    ? moment(formik?.values?.end)?.format('YYYY-MM-DD')
+                                                    : moment(formik?.values?.end)?.format('YYYY-MM-DD HH:mm A')}
                                                 autoFocus
-                                                borderColor={formik.errors?.end && formik.touched?.end ? "red.300" : null}
+                                                borderColor={formik?.errors?.end && formik?.touched?.end ? "red.300" : null}
 
                                             />
-                                            <Text mb='10px' color={'red'}> {formik.errors.end && formik.touched.end && formik.errors.end}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.end && formik?.touched?.end && formik?.errors?.end}</Text>
                                         </>
 
                                         :
@@ -275,13 +275,13 @@ const TaskView = (props) => {
                                                 id="text"
                                                 name="description"
                                                 type="text"
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.description}
+                                                value={formik?.values?.description}
                                                 autoFocus
                                                 borderColor={formik?.errors?.description && formik?.touched?.description ? "red.300" : null}
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.description && formik?.touched.description && formik?.errors.description}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.description && formik?.touched?.description && formik?.errors?.description}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("description", data?.description)}>{data?.description ? data?.description : ' - '}</Text>
@@ -296,13 +296,13 @@ const TaskView = (props) => {
                                                 id="text"
                                                 name="notes"
                                                 type="text"
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.notes}
+                                                value={formik?.values?.notes}
                                                 autoFocus
                                                 borderColor={formik?.errors?.notes && formik?.touched?.notes ? "red.300" : null}
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.notes && formik?.touched.notes && formik?.errors.notes}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.notes && formik?.touched?.notes && formik?.errors?.notes}</Text>
 
                                         </>
                                         :

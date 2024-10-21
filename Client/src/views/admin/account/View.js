@@ -76,7 +76,7 @@ const View = (props) => {
     const handleDeleteAccount = async (ids) => {
         try {
             let response = await deleteManyApi('api/account/deleteMany', ids)
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 navigate('/account')
                 toast.success(`Account Delete successfully`)
                 setDeleteManyModel(false)
@@ -136,7 +136,7 @@ const View = (props) => {
             }
             let response = await putApi(`api/account/edit/${id}`, payload)
             setEditableField(null);
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 fetchViewData()
                 toast.success(`${editableFieldName} Update successfully`)
             } else {
@@ -176,17 +176,17 @@ const View = (props) => {
                                         </Heading>
                                         <Flex id="hide-btn" >
                                             <Menu>
-                                                {(user.role === 'superAdmin' || permission?.create || permission?.update || permission?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' size="sm" va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
+                                                {(user?.role === 'superAdmin' || permission?.create || permission?.update || permission?.delete) && <MenuButton variant="outline" colorScheme='blackAlpha' size="sm" va mr={2.5} as={Button} rightIcon={<ChevronDownIcon />}>
                                                     Actions
                                                 </MenuButton>}
                                                 <MenuDivider />
                                                 <MenuList minWidth={2}>
-                                                    {(user.role === 'superAdmin' || permission?.create) && <MenuItem onClick={() => { setEdit(true); setType("add"); formik.resetForm() }
+                                                    {(user?.role === 'superAdmin' || permission?.create) && <MenuItem onClick={() => { setEdit(true); setType("add"); formik.resetForm() }
                                                     } alignItems={'start'} color={'blue'} icon={<AddIcon />}>Add</MenuItem>}
-                                                    {(user.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => { setEdit(true); setType("edit") }} alignItems={'start'} icon={<EditIcon />}>Edit</MenuItem>}
+                                                    {(user?.role === 'superAdmin' || permission?.update) && <MenuItem onClick={() => { setEdit(true); setType("edit") }} alignItems={'start'} icon={<EditIcon />}>Edit</MenuItem>}
                                                     <MenuItem onClick={generatePDF} alignItems={"start"} icon={<FaFilePdf />} display={"flex"} style={{ alignItems: "center" }}>Print as PDF</MenuItem >
 
-                                                    {(user.role === 'superAdmin' || permission?.delete) && <>
+                                                    {(user?.role === 'superAdmin' || permission?.delete) && <>
                                                         <MenuDivider />
                                                         <MenuItem alignItems={'start'} onClick={() => setDeleteManyModel(true)} color={'red'} icon={<DeleteIcon />}>Delete</MenuItem>
                                                     </>}
@@ -211,11 +211,11 @@ const View = (props) => {
                                                 type="text"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.name}
+                                                value={formik?.values?.name}
                                                 borderColor={formik?.errors?.name && formik?.touched?.name ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.name && formik?.touched.name && formik?.errors.name}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.name && formik?.touched?.name && formik?.errors?.name}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("name", data?.name, "Account Name")}>{data?.name ? data?.name : ' - '}</Text>
@@ -231,11 +231,11 @@ const View = (props) => {
                                                 type="number"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.officePhone}
+                                                value={formik?.values?.officePhone}
                                                 borderColor={formik?.errors?.officePhone && formik?.touched?.officePhone ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.officePhone && formik?.touched.officePhone && formik?.errors.officePhone}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.officePhone && formik?.touched?.officePhone && formik?.errors?.officePhone}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("officePhone", data?.officePhone, "Office Phone")}>{data?.officePhone ? data?.officePhone : ' - '}</Text>
@@ -251,11 +251,11 @@ const View = (props) => {
                                                 type="number"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.alternatePhone}
+                                                value={formik?.values?.alternatePhone}
                                                 borderColor={formik?.errors?.alternatePhone && formik?.touched?.alternatePhone ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.alternatePhone && formik?.touched.alternatePhone && formik?.errors.alternatePhone}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.alternatePhone && formik?.touched?.alternatePhone && formik?.errors?.alternatePhone}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("alternatePhone", data?.alternatePhone, "Alternate Phone")}>{data?.alternatePhone ? data?.alternatePhone : ' - '}</Text>
@@ -271,11 +271,11 @@ const View = (props) => {
                                                 type="url"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.website}
+                                                value={formik?.values?.website}
                                                 borderColor={formik?.errors?.website && formik?.touched?.website ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.website && formik?.touched.website && formik?.errors.website}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.website && formik?.touched?.website && formik?.errors?.website}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("website", data?.website, "Website")}>{data?.website ? data?.website : ' - '}</Text>
@@ -291,11 +291,11 @@ const View = (props) => {
                                                 type="number"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.fax}
+                                                value={formik?.values?.fax}
                                                 borderColor={formik?.errors?.fax && formik?.touched?.fax ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.fax && formik?.touched.fax && formik?.errors.fax}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.fax && formik?.touched?.fax && formik?.errors?.fax}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("fax", data?.fax, "Fax")}>{data?.fax ? data?.fax : ' - '}</Text>
@@ -310,11 +310,11 @@ const View = (props) => {
                                                 name="ownership"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.ownership}
+                                                value={formik?.values?.ownership}
                                                 borderColor={formik?.errors?.ownership && formik?.touched?.ownership ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.ownership && formik?.touched.ownership && formik?.errors.ownership}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.ownership && formik?.touched?.ownership && formik?.errors?.ownership}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("ownership", data?.ownership, "Ownership")}>{data?.ownership ? data?.ownership : ' - '}</Text>
@@ -329,11 +329,11 @@ const View = (props) => {
                                                 name="emailAddress"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.emailAddress}
+                                                value={formik?.values?.emailAddress}
                                                 borderColor={formik?.errors?.emailAddress && formik?.touched?.emailAddress ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.emailAddress && formik?.touched.emailAddress && formik?.errors.emailAddress}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.emailAddress && formik?.touched?.emailAddress && formik?.errors?.emailAddress}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("emailAddress", data?.emailAddress, "Email Address")}>{data?.emailAddress ? data?.emailAddress : ' - '}</Text>
@@ -348,11 +348,11 @@ const View = (props) => {
                                                 name="nonPrimaryEmail"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.nonPrimaryEmail}
+                                                value={formik?.values?.nonPrimaryEmail}
                                                 borderColor={formik?.errors?.nonPrimaryEmail && formik?.touched?.nonPrimaryEmail ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.nonPrimaryEmail && formik?.touched.nonPrimaryEmail && formik?.errors.nonPrimaryEmail}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.nonPrimaryEmail && formik?.touched?.nonPrimaryEmail && formik?.errors?.nonPrimaryEmail}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("nonPrimaryEmail", data?.nonPrimaryEmail, "Non Primary Email")}>{data?.nonPrimaryEmail ? data?.nonPrimaryEmail : ' - '}</Text>
@@ -367,11 +367,11 @@ const View = (props) => {
                                                 name="shippingStreet"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.shippingStreet}
+                                                value={formik?.values?.shippingStreet}
                                                 borderColor={formik?.errors?.shippingStreet && formik?.touched?.shippingStreet ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.shippingStreet && formik?.touched.shippingStreet && formik?.errors.shippingStreet}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.shippingStreet && formik?.touched?.shippingStreet && formik?.errors?.shippingStreet}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("shippingStreet", data?.shippingStreet, "Shipping Street")}>{data?.shippingStreet ? data?.shippingStreet : ' - '}</Text>
@@ -386,11 +386,11 @@ const View = (props) => {
                                                 name="billingStreet"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.billingStreet}
+                                                value={formik?.values?.billingStreet}
                                                 borderColor={formik?.errors?.billingStreet && formik?.touched?.billingStreet ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.billingStreet && formik?.touched.billingStreet && formik?.errors.billingStreet}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.billingStreet && formik?.touched?.billingStreet && formik?.errors?.billingStreet}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("billingStreet", data?.billingStreet, "Billing Street")}>{data?.billingStreet ? data?.billingStreet : ' - '}</Text>
@@ -405,11 +405,11 @@ const View = (props) => {
                                                 name="shippingStreet2"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.shippingStreet2}
+                                                value={formik?.values?.shippingStreet2}
                                                 borderColor={formik?.errors?.shippingStreet2 && formik?.touched?.shippingStreet2 ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.shippingStreet2 && formik?.touched.shippingStreet2 && formik?.errors.shippingStreet2}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.shippingStreet2 && formik?.touched?.shippingStreet2 && formik?.errors?.shippingStreet2}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("shippingStreet2", data?.shippingStreet2, "Shipping Street2")}>{data?.shippingStreet2 ? data?.shippingStreet2 : ' - '}</Text>
@@ -424,11 +424,11 @@ const View = (props) => {
                                                 name="billingStreet2"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.billingStreet2}
+                                                value={formik?.values?.billingStreet2}
                                                 borderColor={formik?.errors?.billingStreet2 && formik?.touched?.billingStreet2 ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.billingStreet2 && formik?.touched.billingStreet2 && formik?.errors.billingStreet2}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.billingStreet2 && formik?.touched?.billingStreet2 && formik?.errors?.billingStreet2}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("billingStreet2", data?.billingStreet2, "Billing Street2")}>{data?.billingStreet2 ? data?.billingStreet2 : ' - '}</Text>
@@ -443,11 +443,11 @@ const View = (props) => {
                                                 name="shippingStreet3"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.shippingStreet3}
+                                                value={formik?.values?.shippingStreet3}
                                                 borderColor={formik?.errors?.shippingStreet3 && formik?.touched?.shippingStreet3 ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.shippingStreet3 && formik?.touched.shippingStreet3 && formik?.errors.shippingStreet3}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.shippingStreet3 && formik?.touched?.shippingStreet3 && formik?.errors?.shippingStreet3}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("shippingStreet3", data?.shippingStreet3, "Shipping Street3")}>{data?.shippingStreet3 ? data?.shippingStreet3 : ' - '}</Text>
@@ -462,11 +462,11 @@ const View = (props) => {
                                                 name="billingStreet3"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.billingStreet3}
+                                                value={formik?.values?.billingStreet3}
                                                 borderColor={formik?.errors?.billingStreet3 && formik?.touched?.billingStreet3 ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.billingStreet3 && formik?.touched.billingStreet3 && formik?.errors.billingStreet3}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.billingStreet3 && formik?.touched?.billingStreet3 && formik?.errors?.billingStreet3}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("billingStreet3", data?.billingStreet3, "Billing Street3")}>{data?.billingStreet3 ? data?.billingStreet3 : ' - '}</Text>
@@ -481,11 +481,11 @@ const View = (props) => {
                                                 name="shippingStreet4"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.shippingStreet4}
+                                                value={formik?.values?.shippingStreet4}
                                                 borderColor={formik?.errors?.shippingStreet4 && formik?.touched?.shippingStreet4 ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.shippingStreet4 && formik?.touched.shippingStreet4 && formik?.errors.shippingStreet4}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors.shippingStreet4 && formik?.touched?.shippingStreet4 && formik?.errors?.shippingStreet4}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("shippingStreet4", data?.shippingStreet4, "Shipping Street4")}>{data?.shippingStreet4 ? data?.shippingStreet4 : ' - '}</Text>
@@ -500,11 +500,11 @@ const View = (props) => {
                                                 name="billingStreet4"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.billingStreet4}
+                                                value={formik?.values?.billingStreet4}
                                                 borderColor={formik?.errors?.billingStreet4 && formik?.touched?.billingStreet4 ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.billingStreet4 && formik?.touched.billingStreet4 && formik?.errors.billingStreet4}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.billingStreet4 && formik?.touched?.billingStreet4 && formik?.errors?.billingStreet4}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("billingStreet4", data?.billingStreet4, "Billing Street4")}>{data?.billingStreet4 ? data?.billingStreet4 : ' - '}</Text>
@@ -519,11 +519,11 @@ const View = (props) => {
                                                 name="shippingPostalcode"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.shippingPostalcode}
+                                                value={formik?.values?.shippingPostalcode}
                                                 borderColor={formik?.errors?.shippingPostalcode && formik?.touched?.shippingPostalcode ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.shippingPostalcode && formik?.touched.shippingPostalcode && formik?.errors.shippingPostalcode}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.shippingPostalcode && formik?.touched?.shippingPostalcode && formik?.errors?.shippingPostalcode}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("shippingPostalcode", data?.shippingPostalcode, "Shipping Postal Code")}>{data?.shippingPostalcode ? data?.shippingPostalcode : ' - '}</Text>
@@ -538,11 +538,11 @@ const View = (props) => {
                                                 name="billingPostalcode"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.billingPostalcode}
+                                                value={formik?.values?.billingPostalcode}
                                                 borderColor={formik?.errors?.billingPostalcode && formik?.touched?.billingPostalcode ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.billingPostalcode && formik?.touched.billingPostalcode && formik?.errors.billingPostalcode}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.billingPostalcode && formik?.touched?.billingPostalcode && formik?.errors?.billingPostalcode}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("billingPostalcode", data?.billingPostalcode, "Billing Postal Code")}>{data?.billingPostalcode ? data?.billingPostalcode : ' - '}</Text>
@@ -558,11 +558,11 @@ const View = (props) => {
                                                 name="shippingCity"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.shippingCity}
+                                                value={formik?.values?.shippingCity}
                                                 borderColor={formik?.errors?.shippingCity && formik?.touched?.shippingCity ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.shippingCity && formik?.touched.shippingCity && formik?.errors.shippingCity}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.shippingCity && formik?.touched?.shippingCity && formik?.errors?.shippingCity}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("shippingCity", data?.shippingCity, "Shipping City")}>{data?.shippingCity ? data?.shippingCity : ' - '}</Text>
@@ -578,11 +578,11 @@ const View = (props) => {
                                                 name="billingCity"
                                                 onChange={formik.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.billingCity}
+                                                value={formik?.values?.billingCity}
                                                 borderColor={formik?.errors?.billingCity && formik?.touched?.billingCity ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.billingCity && formik?.touched.billingCity && formik?.errors.billingCity}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.billingCity && formik?.touched?.billingCity && formik?.errors?.billingCity}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("billingCity", data?.billingCity, "Billing City")}>{data?.billingCity ? data?.billingCity : ' - '}</Text>
@@ -595,13 +595,13 @@ const View = (props) => {
                                         <>
                                             <Input
                                                 name="shippingState"
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.shippingState}
+                                                value={formik?.values?.shippingState}
                                                 borderColor={formik?.errors?.shippingState && formik?.touched?.shippingState ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.shippingState && formik?.touched.shippingState && formik?.errors.shippingState}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.shippingState && formik?.touched?.shippingState && formik?.errors?.shippingState}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("shippingState", data?.shippingState, "Shipping State")}>{data?.shippingState ? data?.shippingState : ' - '}</Text>
@@ -614,13 +614,13 @@ const View = (props) => {
                                         <>
                                             <Input
                                                 name="billingState"
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.billingState}
+                                                value={formik?.values?.billingState}
                                                 borderColor={formik?.errors?.billingState && formik?.touched?.billingState ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.billingState && formik?.touched.billingState && formik?.errors.billingState}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.billingState && formik?.touched?.billingState && formik?.errors?.billingState}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("billingState", data?.billingState, "Billing State")}>{data?.billingState ? data?.billingState : ' - '}</Text>
@@ -633,13 +633,13 @@ const View = (props) => {
                                         <>
                                             <Input
                                                 name="shippingCountry"
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.shippingCountry}
+                                                value={formik?.values?.shippingCountry}
                                                 borderColor={formik?.errors?.shippingCountry && formik?.touched?.shippingCountry ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.shippingCountry && formik?.touched.shippingCountry && formik?.errors.shippingCountry}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.shippingCountry && formik?.touched?.shippingCountry && formik?.errors?.shippingCountry}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("shippingCountry", data?.shippingCountry, "Shipping Country")}>{data?.shippingCountry ? data?.shippingCountry : ' - '}</Text>
@@ -652,13 +652,13 @@ const View = (props) => {
                                         <>
                                             <Input
                                                 name="billingCountry"
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.billingCountry}
+                                                value={formik?.values?.billingCountry}
                                                 borderColor={formik?.errors?.billingCountry && formik?.touched?.billingCountry ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.billingCountry && formik?.touched.billingCountry && formik?.errors.billingCountry}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.billingCountry && formik?.touched?.billingCountry && formik?.errors?.billingCountry}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("billingCountry", data?.billingCountry, "Billing Country")}>{data?.billingCountry ? data?.billingCountry : ' - '}</Text>
@@ -670,13 +670,13 @@ const View = (props) => {
                                     editableField === "type" ?
                                         <>
                                             <Select
-                                                value={formik?.values.type}
+                                                value={formik?.values?.type}
                                                 name="type"
                                                 onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
                                                 fontWeight='500'
                                                 placeholder={'Select Type'}
-                                                borderColor={formik?.errors.type && formik?.touched.type ? "red.300" : null}
+                                                borderColor={formik?.errors?.type && formik?.touched?.type ? "red.300" : null}
                                             >
                                                 <option value="Analyst">Analyst</option>
                                                 <option value="Competitor">Competitor </option>
@@ -689,7 +689,7 @@ const View = (props) => {
                                                 <option value="Reseller">Reseller</option>
                                                 <option value="Other">Other</option>
                                             </Select>
-                                            <Text mb='10px' color={'red'}> {formik?.errors.type && formik?.touched.type && formik?.errors.type}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.type && formik?.touched?.type && formik?.errors?.type}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("type", data?.type, "Type")}>{data?.type ? data?.type : ' - '}</Text>
@@ -701,13 +701,13 @@ const View = (props) => {
                                     editableField === "industry" ?
                                         <>
                                             <Select
-                                                value={formik?.values.industry}
+                                                value={formik?.values?.industry}
                                                 name="industry"
                                                 onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
                                                 fontWeight='500'
                                                 placeholder={'Select Industry'}
-                                                borderColor={formik?.errors.industry && formik?.touched.industry ? "red.300" : null}
+                                                borderColor={formik?.errors?.industry && formik?.touched?.industry ? "red.300" : null}
                                             >
                                                 <option value="Apparel">Apparel</option>
                                                 <option value="Banking">Banking </option>
@@ -739,7 +739,7 @@ const View = (props) => {
                                                 <option value="Utilities">Utilities</option>
                                                 <option value="Other">Other</option>
                                             </Select>
-                                            <Text mb='10px' color={'red'}> {formik?.errors.industry && formik?.touched.industry && formik?.errors.industry}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.industry && formik?.touched?.industry && formik?.errors?.industry}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("industry", data?.industry, "Industry")}>{data?.industry ? data?.industry : ' - '}</Text>
@@ -756,13 +756,13 @@ const View = (props) => {
                                         <>
                                             <Input
                                                 name="SICCode"
-                                                onChange={formik.handleChange}
+                                                onChange={formik?.handleChange}
                                                 onBlur={handleBlur}
-                                                value={formik.values.SICCode}
+                                                value={formik?.values?.SICCode}
                                                 borderColor={formik?.errors?.SICCode && formik?.touched?.SICCode ? "red.300" : null}
                                                 autoFocus
                                             />
-                                            <Text mb='10px' color={'red'}> {formik?.errors.SICCode && formik?.touched.SICCode && formik?.errors.SICCode}</Text>
+                                            <Text mb='10px' color={'red'}> {formik?.errors?.SICCode && formik?.touched?.SICCode && formik?.errors?.SICCode}</Text>
                                         </>
                                         :
                                         <Text onDoubleClick={() => handleDoubleClick("SICCode", data?.SICCode, "SIC Code")}>{data?.SICCode ? data?.SICCode : ' - '}</Text>
@@ -773,11 +773,11 @@ const View = (props) => {
                                 {/* <Text>{data?.assignUserName ? data?.assignUserName : ' - '}</Text> */}
                                 {
                                     data?.assignUser ?
-                                        <Link to={user.role === 'superAdmin' && `/userView/${data?.assignUser}`}>
-                                            <Text color={user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900', textDecoration: user.role === 'superAdmin' ? 'underline' : 'none' } }} style={{ cursor: "pointer" }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
+                                        <Link to={user?.role === 'superAdmin' && `/userView/${data?.assignUser}`}>
+                                            <Text color={user?.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900', textDecoration: user.role === 'superAdmin' ? 'underline' : 'none' } }} style={{ cursor: "pointer" }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
                                         </Link>
                                         :
-                                        <Text color={user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900', textDecoration: user.role === 'superAdmin' ? 'underline' : 'none' } }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
+                                        <Text color={user?.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900'} sx={{ '&:hover': { color: user.role === 'superAdmin' ? 'blue.500' : 'blackAlpha.900', textDecoration: user.role === 'superAdmin' ? 'underline' : 'none' } }}>{data?.assignUserName ? data?.assignUserName : ' - '}</Text>
 
                                 }
                             </GridItem>

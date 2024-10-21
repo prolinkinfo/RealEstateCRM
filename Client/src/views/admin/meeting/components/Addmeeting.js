@@ -30,10 +30,10 @@ const AddMeeting = (props) => {
 
     const initialValues = {
         agenda: '',
-        attendes: props.leadContect === 'contactView' && props.id ? [props.id] : [],
-        attendesLead: props.leadContect === 'leadView' && props.id ? [props.id] : [],
+        attendes: props?.leadContect === 'contactView' && props?.id ? [props?.id] : [],
+        attendesLead: props?.leadContect === 'leadView' && props?.id ? [props?.id] : [],
         location: '',
-        related: props.leadContect === 'contactView' ? 'Contact' : props.leadContect === 'leadView' ? 'Lead' : 'None',
+        related: props?.leadContect === 'contactView' ? 'Contact' : props?.leadContect === 'leadView' ? 'Lead' : 'None',
         dateTime: '',
         notes: '',
         createBy: user?._id,
@@ -46,14 +46,15 @@ const AddMeeting = (props) => {
             AddData();
         },
     });
+
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue } = formik
 
     const AddData = async () => {
         try {
             setIsLoding(true)
-            if (values.attendes.length > 0 || values.attendesLead.length > 0) {
+            if (values?.attendes?.length > 0 || values?.attendesLead?.length > 0) {
                 let response = await postApi('api/meeting/add', values)
-                if (response.status === 200) {
+                if (response?.status === 200) {
                     formik.resetForm();
                     props.onClose();
                     fetchData(1)
@@ -73,18 +74,18 @@ const AddMeeting = (props) => {
 
     const fetchAllData = async () => {
         if (view === true) {
-            if (values.related === "Contact" && contactdata.length <= 0) {
+            if (values?.related === "Contact" && contactdata?.length <= 0) {
                 setContactData(contactList);
-            } else if (values.related === "Lead" && leaddata.length <= 0) {
+            } else if (values?.related === "Lead" && leaddata?.length <= 0) {
                 setLeadData(leadData);
             }
         } else {
             let result
-            if (values.related === "Contact" && contactdata.length <= 0) {
-                result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user._id}`)
+            if (values?.related === "Contact" && contactdata?.length <= 0) {
+                result = await getApi(user.role === 'superAdmin' ? 'api/contact/' : `api/contact/?createBy=${user?._id}`)
                 setContactData(result?.data);
-            } else if (values.related === "Lead" && leaddata.length <= 0) {
-                result = await getApi(user.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user._id}`);
+            } else if (values?.related === "Lead" && leaddata?.length <= 0) {
+                result = await getApi(user?.role === 'superAdmin' ? 'api/lead/' : `api/lead/?createBy=${user?._id}`);
                 setLeadData(result?.data);
             }
         }
@@ -92,17 +93,19 @@ const AddMeeting = (props) => {
 
     useEffect(() => {
         fetchAllData()
-    }, [props.id, values.related])
+    }, [props?.id, values?.related])
 
     const extractLabels = (selectedItems) => {
-        return selectedItems.map((item) => item._id);
+        return selectedItems?.map((item) => item?._id);
     };
 
-    const countriesWithEmailAsLabel = (values.related === "Contact" ? contactdata : leaddata)?.map((item) => ({
+    const setCondition = values?.related === "Contact" ? contactdata : leaddata;
+
+    const countriesWithEmailAsLabel = Array?.isArray(setCondition) ? setCondition?.map((item) => ({
         ...item,
-        value: item._id,
-        label: values.related === "Contact" ? item.fullName : item.leadName,
-    }));
+        value: item?._id,
+        label: values?.related === "Contact" ? item?.fullName : item?.leadName,
+    })) : [];
 
     return (
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
@@ -124,48 +127,48 @@ const AddMeeting = (props) => {
                             <Input
                                 fontSize='sm'
                                 onChange={handleChange} onBlur={handleBlur}
-                                value={values.agenda}
+                                value={values?.agenda}
                                 name="agenda"
                                 placeholder='Agenda'
                                 fontWeight='500'
-                                borderColor={errors.agenda && touched.agenda ? "red.300" : null}
+                                borderColor={errors?.agenda && touched?.agenda ? "red.300" : null}
                             />
-                            <Text fontSize='sm' mb='10px' color={'red'}> {errors.agenda && touched.agenda && errors.agenda}</Text>
+                            <Text fontSize='sm' mb='10px' color={'red'}> {errors?.agenda && touched?.agenda && errors?.agenda}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }} >
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
                                 Related To<Text color={"red"}>*</Text>
                             </FormLabel>
-                            <RadioGroup onChange={(e) => setFieldValue('related', e)} value={values.related}>
+                            <RadioGroup onChange={(e) => setFieldValue('related', e)} value={values?.related}>
                                 <Stack direction='row'>
-                                    {props.leadContect === 'contactView' && <Radio value='Contact'>Contact</Radio>}
-                                    {props.leadContect === 'leadView' && <Radio value='Lead'>Lead</Radio>}
-                                    {!props.leadContect && <> <Radio value='Contact'>Contact</Radio><Radio value='Lead'>Lead</Radio></>}
+                                    {props?.leadContect === 'contactView' && <Radio value='Contact'>Contact</Radio>}
+                                    {props?.leadContect === 'leadView' && <Radio value='Lead'>Lead</Radio>}
+                                    {!props?.leadContect && <> <Radio value='Contact'>Contact</Radio><Radio value='Lead'>Lead</Radio></>}
                                 </Stack>
                             </RadioGroup>
-                            <Text mb='10px' color={'red'} fontSize='sm'> {errors.related && touched.related && errors.related}</Text>
+                            <Text mb='10px' color={'red'} fontSize='sm'> {errors?.related && touched?.related && errors?.related}</Text>
                         </GridItem>
-                        {(values.related === "Contact" ? (contactdata?.length ?? 0) > 0 : (leaddata?.length ?? 0) > 0) && values.related &&
+                        {(values?.related === "Contact" ? (contactdata?.length ?? 0) > 0 : (leaddata?.length ?? 0) > 0) && values?.related &&
 
                             <GridItem colSpan={{ base: 12 }}>
                                 <Flex alignItems={'end'} justifyContent={'space-between'} >
                                     <Text w={'100%'} >
                                         <CUIAutoComplete
-                                            label={`Choose Preferred Attendes ${values.related === "Contact" ? "Contact" : values.related === "Lead" && "Lead"}`}
+                                            label={`Choose Preferred Attendes ${values?.related === "Contact" ? "Contact" : values?.related === "Lead" && "Lead"}`}
                                             placeholder="Type a Name"
                                             name="attendes"
                                             items={countriesWithEmailAsLabel}
                                             className='custom-autoComplete'
-                                            selectedItems={countriesWithEmailAsLabel?.filter((item) => values.related === "Contact" ? values?.attendes.includes(item._id) : values.related === "Lead" && values?.attendesLead.includes(item._id))}
+                                            selectedItems={countriesWithEmailAsLabel?.filter((item) => values?.related === "Contact" ? values?.attendes?.includes(item?._id) : values?.related === "Lead" && values?.attendesLead?.includes(item?._id))}
                                             onSelectedItemsChange={(changes) => {
-                                                const selectedLabels = extractLabels(changes.selectedItems);
-                                                values.related === "Contact" ? setFieldValue('attendes', selectedLabels) : values.related === "Lead" && setFieldValue('attendesLead', selectedLabels)
+                                                const selectedLabels = extractLabels(changes?.selectedItems);
+                                                values?.related === "Contact" ? setFieldValue('attendes', selectedLabels) : values?.related === "Lead" && setFieldValue('attendesLead', selectedLabels)
                                             }}
                                         />
                                     </Text>
-                                    <IconButton mb={6} onClick={() => values.related === "Contact" ? setContactModel(true) : values.related === "Lead" && setLeadModel(true)} fontSize='25px' icon={<LiaMousePointerSolid />} />
+                                    <IconButton mb={6} onClick={() => values?.related === "Contact" ? setContactModel(true) : values?.related === "Lead" && setLeadModel(true)} fontSize='25px' icon={<LiaMousePointerSolid />} />
                                 </Flex>
-                                <Text color={'red'}> {errors.attendes && touched.attendes && errors.attendes}</Text>
+                                <Text color={'red'}> {errors?.attendes && touched?.attendes && errors?.attendes}</Text>
                             </GridItem>
                         }
                         <GridItem colSpan={{ base: 12 }}>
@@ -175,13 +178,13 @@ const AddMeeting = (props) => {
                             <Input
                                 fontSize='sm'
                                 onChange={handleChange} onBlur={handleBlur}
-                                value={values.location}
+                                value={values?.location}
                                 name="location"
                                 placeholder='Location'
                                 fontWeight='500'
-                                borderColor={errors.location && touched.location ? "red.300" : null}
+                                borderColor={errors?.location && touched?.location ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'} fontSize='sm'> {errors.location && touched.location && errors.location}</Text>
+                            <Text mb='10px' color={'red'} fontSize='sm'> {errors?.location && touched?.location && errors?.location}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -192,13 +195,13 @@ const AddMeeting = (props) => {
                                 type='datetime-local'
                                 onChange={handleChange} onBlur={handleBlur}
                                 min={dayjs(todayTime).format('YYYY-MM-DD HH:mm')}
-                                value={values.dateTime}
+                                value={values?.dateTime}
                                 name="dateTime"
                                 placeholder='Date Time'
                                 fontWeight='500'
-                                borderColor={errors.dateTime && touched.dateTime ? "red.300" : null}
+                                borderColor={errors?.dateTime && touched?.dateTime ? "red.300" : null}
                             />
-                            <Text fontSize='sm' mb='10px' color={'red'}> {errors.dateTime && touched.dateTime && errors.dateTime}</Text>
+                            <Text fontSize='sm' mb='10px' color={'red'}> {errors?.dateTime && touched?.dateTime && errors?.dateTime}</Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 12 }}>
                             <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='500' mb='8px'>
@@ -209,12 +212,12 @@ const AddMeeting = (props) => {
                                 fontSize='sm'
                                 placeholder='Notes'
                                 onChange={handleChange} onBlur={handleBlur}
-                                value={values.notes}
+                                value={values?.notes}
                                 name="notes"
                                 fontWeight='500'
-                                borderColor={errors.notes && touched.notes ? "red.300" : null}
+                                borderColor={errors?.notes && touched?.notes ? "red.300" : null}
                             />
-                            <Text mb='10px' color={'red'}> {errors.notes && touched.notes && errors.notes}</Text>
+                            <Text mb='10px' color={'red'}> {errors?.notes && touched?.notes && errors?.notes}</Text>
                         </GridItem>
 
                     </Grid>

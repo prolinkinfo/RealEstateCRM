@@ -65,8 +65,8 @@ export default function PhoneCall(props) {
     state: { pageIndex, pageSize }
   } = tableInstance;
 
-  if (pageOptions.length < gopageValue) {
-    setGopageValue(pageOptions.length)
+  if (pageOptions?.length < gopageValue) {
+    setGopageValue(pageOptions?.length)
   }
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
@@ -86,29 +86,29 @@ export default function PhoneCall(props) {
           {title} (<CountUpComponent key={data?.length} targetNumber={data?.length} />)
         </Heading>
         {/* <Menu /> */}
-        {!props.text ? callAccess?.create && <Button onClick={() => setAddModel(true)} leftIcon={<AddIcon />} size="sm" colorScheme="gray" bg={buttonbg}>Add New</Button> : <Button onClick={() => navigate('/communication-integration')} size="sm" leftIcon={<MdOutlineMessage />} colorScheme="gray" >send text Msg</Button>}
-        <AddPhoneCall lead={props.lead} fetchData={fetchData} isOpen={addModel} onClose={setAddModel} id={param.id} />
+        {!props?.text ? callAccess?.create && <Button onClick={() => setAddModel(true)} leftIcon={<AddIcon />} size="sm" colorScheme="gray" bg={buttonbg}>Add New</Button> : <Button onClick={() => navigate('/communication-integration')} size="sm" leftIcon={<MdOutlineMessage />} colorScheme="gray" >send text Msg</Button>}
+        <AddPhoneCall lead={props?.lead} fetchData={fetchData} isOpen={addModel} onClose={setAddModel} id={param?.id} />
       </Flex>
       <Box overflowY={'auto'} className="table-container" >
         <Table  {...getTableProps()} variant='simple' color='gray.500' mb='24px'>
           <Thead >
             {headerGroups?.map((headerGroup, index) => (
-              <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
-                {headerGroup.headers.map((column, index) => (
+              <Tr {...headerGroup?.getHeaderGroupProps()} key={index}>
+                {headerGroup?.headers?.map((column, index) => (
                   <Th
-                    {...column.getHeaderProps(column.isSortable !== false && column.getSortByToggleProps())}
+                    {...column?.getHeaderProps(column?.isSortable !== false && column?.getSortByToggleProps())}
                     pe="10px"
                     key={index}
                     borderColor={borderColor}
                   >
                     <Flex
-                      justifyContent={column.center ? "center" : "start"}
+                      justifyContent={column?.center ? "center" : "start"}
                       align="center"
                       fontSize={{ sm: "14px", lg: "16px" }}
                       color="secondaryGray.900"
                     >
                       <span style={{ textTransform: "capitalize", marginRight: "8px" }}>
-                        {column.render("Header")}
+                        {column?.render("Header")}
                       </span>
                     </Flex>
                   </Th>
@@ -119,7 +119,7 @@ export default function PhoneCall(props) {
           <Tbody  {...getTableBodyProps()}>
             {data?.length === 0 && (
               <Tr>
-                <Td colSpan={columns.length}>
+                <Td colSpan={columns?.length}>
                   <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
                     <DataNotFound />
                   </Text>
@@ -130,9 +130,9 @@ export default function PhoneCall(props) {
               prepareRow(row);
               return (
                 <Tr {...row?.getRowProps()} key={index}>
-                  {row?.cells.map((cell, index) => {
+                  {row?.cells?.map((cell, index) => {
                     let data = "";
-                    if (cell?.column.Header === "sender") {
+                    if (cell?.column?.Header === "sender") {
                       data = (
                         <Flex align='center'>
                           <Text fontSize='sm'
@@ -142,10 +142,10 @@ export default function PhoneCall(props) {
                           </Text>
                         </Flex>
                       );
-                    } else if (cell?.column.Header === "recipient") {
+                    } else if (cell?.column?.Header === "recipient") {
                       data = (
                         <Flex align='center'>
-                          <Link to={props.text ? `/text-msg/${cell?.row?.original._id}` : `/phone-call/${cell?.row?.original._id}`}>
+                          <Link to={props?.text ? `/text-msg/${cell?.row?.original?._id}` : `/phone-call/${cell?.row?.original?._id}`}>
                             <Text
                               me='10px'
                               sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
@@ -157,13 +157,13 @@ export default function PhoneCall(props) {
                           </Link>
                         </Flex>
                       );
-                    } else if (cell?.column.Header === "Created") {
+                    } else if (cell?.column?.Header === "Created") {
                       data = (
                         <Text color={textColor} fontSize='sm' fontWeight='700'>
-                          {moment(cell?.row?.values.timestamp).format('h:mma (DD/MM)')}
+                          {moment(cell?.row?.values?.timestamp).format('h:mma (DD/MM)')}
                         </Text>
                       );
-                    } else if (cell?.column.Header === "time stamp") {
+                    } else if (cell?.column?.Header === "time stamp") {
                       data = (
                         <Text color={textColor} fontSize='sm' fontWeight='700'>
                           {moment(cell?.value).fromNow()}

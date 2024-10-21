@@ -1,10 +1,10 @@
 import { Image, Box } from '@chakra-ui/react'
 import React from 'react'
 
-const DataNotFound = () => {
+const DataNotFound = ({ message }) => {
     return (
         <Box display={'flex'} justifyContent={'center'} alignItems={'center'}>
-            -- No Data Found --
+            {message || "-- No Data Found --"}
         </Box>
     )
 }

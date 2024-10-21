@@ -41,7 +41,7 @@ const View = (props) => {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
-            <Edit isOpen={editModal} onClose={handleEditClose} selectedId={props.selectedId} editdata={data} setAction={setAction} fetchData={fetchData} />
+            <Edit isOpen={editModal} onClose={handleEditClose} selectedId={props?.selectedId} editdata={data} setAction={setAction} fetchData={fetchData} />
         </div>
     )
 }

@@ -13,7 +13,7 @@ const Edit = (props) => {
     const [isLoding, setIsLoding] = useState(false)
 
     const initialValues = {
-        name: editdata.name ? editdata.name : "",
+        name: editdata.name ? editdata?.name : "",
         validations: [
             {
                 require: editdata?.validations ? editdata?.validations[0]?.require : '',
@@ -49,30 +49,30 @@ const Edit = (props) => {
         validate: (values) => {
             const errors = {};
 
-            if (values?.validations && values.validations[0]?.require && !values.validations[0]?.message) {
-                errors.validations = errors.validations || [];
-                errors.validations[0] = errors.validations[0] || {};
+            if (values?.validations && values?.validations[0]?.require && !values?.validations[0]?.message) {
+                errors.validations = errors?.validations || [];
+                errors.validations[0] = errors?.validations[0] || {};
                 errors.validations[0].message = 'Message is required';
             }
-            if (values?.validations && values.validations[1]?.min && !values.validations[1]?.value) {
-                errors.validations = errors.validations || [];
-                errors.validations[1] = errors.validations[1] || {};
+            if (values?.validations && values?.validations[1]?.min && !values?.validations[1]?.value) {
+                errors.validations = errors?.validations || [];
+                errors.validations[1] = errors?.validations[1] || {};
                 errors.validations[1].value = 'Value is required';
             }
-            if (values?.validations && values.validations[2]?.max && !values.validations[2]?.value) {
-                errors.validations = errors.validations || [];
-                errors.validations[2] = errors.validations[2] || {};
+            if (values?.validations && values?.validations[2]?.max && !values?.validations[2]?.value) {
+                errors.validations = errors?.validations || [];
+                errors.validations[2] = errors?.validations[2] || {};
                 errors.validations[2].value = 'Value is required';
             }
-            if (values?.validations && values.validations[3]?.match && !values.validations[3]?.value && !values.validations[3]?.message) {
-                errors.validations = errors.validations || [];
-                errors.validations[3] = errors.validations[3] || {};
+            if (values?.validations && values?.validations[3]?.match && !values?.validations[3]?.value && !values?.validations[3]?.message) {
+                errors.validations = errors?.validations || [];
+                errors.validations[3] = errors?.validations[3] || {};
                 errors.validations[3].value = 'Value is required';
                 errors.validations[3].message = 'Meassage is required';
             }
-            if (values?.validations && values.validations[4]?.types && !values.validations[4]?.formikType) {
-                errors.validations = errors.validations || [];
-                errors.validations[4] = errors.validations[4] || {};
+            if (values?.validations && values?.validations[4]?.types && !values?.validations[4]?.formikType) {
+                errors.validations = errors?.validations || [];
+                errors.validations[4] = errors?.validations[4] || {};
                 errors.validations[4].formikType = 'FormikType is required';
             }
             return errors;
@@ -125,9 +125,9 @@ const Edit = (props) => {
                                         name="name"
                                         placeholder='Enter Name'
                                         fontWeight='500'
-                                        borderColor={errors.name && touched.name ? "red.300" : null}
+                                        borderColor={errors?.name && touched?.name ? "red.300" : null}
                                     />
-                                    <Text mb='10px' color={'red'}> {errors.name && touched.name && errors.name}</Text>
+                                    <Text mb='10px' color={'red'}> {errors?.name && touched?.name && errors?.name}</Text>
                                 </GridItem>
 
                                 <GridItem colSpan={{ base: 12 }}>
@@ -142,7 +142,7 @@ const Edit = (props) => {
                                     <Flex>
                                         <Checkbox colorScheme="brandScheme" me="10px" isChecked={values?.validations[0]?.require}
                                             onChange={(e) => {
-                                                const isChecked = e.target.checked;
+                                                const isChecked = e?.target?.checked;
                                                 setFieldValue(`validations[${0}].require`, isChecked);
                                                 setFieldValue(
                                                     'validations[0].message',
@@ -174,7 +174,7 @@ const Edit = (props) => {
                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                     <Flex>
                                         <Checkbox colorScheme="brandScheme" isChecked={values?.validations[1]?.min} onChange={(e) => {
-                                            const isChecked = e.target.checked;
+                                            const isChecked = e?.target?.checked;
                                             setFieldValue(`validations[${1}].min`, isChecked);
                                             setFieldValue(
                                                 'validations[1].message',
@@ -195,10 +195,10 @@ const Edit = (props) => {
                                         Value
                                     </FormLabel>
                                     <Input
-                                        disabled={values.validations[1].min === true ? false : true}
+                                        disabled={values?.validations[1]?.min === true ? false : true}
                                         fontSize='sm'
                                         onChange={handleChange} onBlur={handleBlur}
-                                        value={values.validations[1].value}
+                                        value={values?.validations[1]?.value}
                                         name={`validations[${1}].value`}
                                         placeholder='Enter Min Value'
                                         fontWeight='500'
@@ -211,10 +211,10 @@ const Edit = (props) => {
                                         Message
                                     </FormLabel>
                                     <Input
-                                        disabled={values.validations[1].min === true ? false : true}
+                                        disabled={values?.validations[1]?.min === true ? false : true}
                                         fontSize='sm'
                                         onChange={handleChange} onBlur={handleBlur}
-                                        value={values.validations[1].message}
+                                        value={values?.validations[1]?.message}
                                         name={`validations[${1}].message`}
                                         placeholder='Enter Min message'
                                         fontWeight='500'
@@ -223,7 +223,7 @@ const Edit = (props) => {
                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                     <Flex>
                                         <Checkbox colorScheme="brandScheme" isChecked={values?.validations[1]?.max} onChange={(e) => {
-                                            const isChecked = e.target.checked;
+                                            const isChecked = e?.target?.checked;
                                             setFieldValue(`validations[${2}].max`, isChecked);
                                             setFieldValue(
                                                 'validations[2].message',
@@ -244,10 +244,10 @@ const Edit = (props) => {
                                         Value
                                     </FormLabel>
                                     <Input
-                                        disabled={values.validations[2].max === true ? false : true}
+                                        disabled={values.validations[2]?.max === true ? false : true}
                                         fontSize='sm'
                                         onChange={handleChange} onBlur={handleBlur}
-                                        value={values.validations[2].value}
+                                        value={values.validations[2]?.value}
                                         name={`validations[${2}].value`}
                                         placeholder='Enter Max Value'
                                         fontWeight='500'
@@ -260,21 +260,21 @@ const Edit = (props) => {
                                         Message
                                     </FormLabel>
                                     <Input
-                                        disabled={values.validations[2].max === true ? false : true}
+                                        disabled={values.validations[2]?.max === true ? false : true}
                                         fontSize='sm'
                                         onChange={handleChange} onBlur={handleBlur}
-                                        value={values.validations[2].massage}
+                                        value={values?.validations[2]?.massage}
                                         name={`validations[${2}].message`}
                                         placeholder='Enter Max Message'
                                         fontWeight='500'
-                                        borderColor={errors.massage && touched.massage ? "red.300" : null}
+                                        borderColor={errors?.massage && touched?.massage ? "red.300" : null}
                                     />
                                 </GridItem>
 
                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                     <Flex>
                                         <Checkbox colorScheme="brandScheme" isChecked={values?.validations[3]?.match} me="10px" name={`validations[${3}].match`} onChange={(e) => {
-                                            const isChecked = e.target.checked;
+                                            const isChecked = e?.target?.checked;
                                             setFieldValue(`validations[${3}].match`, isChecked);
                                             setFieldValue(
                                                 'validations[3].message',
@@ -295,10 +295,10 @@ const Edit = (props) => {
                                         Value
                                     </FormLabel>
                                     <Input
-                                        disabled={values.validations[3].match === true ? false : true}
+                                        disabled={values.validations[3]?.match === true ? false : true}
                                         fontSize='sm'
                                         onChange={handleChange} onBlur={handleBlur}
-                                        value={values.validations[3].value}
+                                        value={values?.validations[3]?.value}
                                         name={`validations[${3}].value`}
                                         placeholder='Enter Max Value'
                                         fontWeight='500'
@@ -311,10 +311,10 @@ const Edit = (props) => {
                                         Message
                                     </FormLabel>
                                     <Input
-                                        disabled={values.validations[3].match === true ? false : true}
+                                        disabled={values?.validations[3]?.match === true ? false : true}
                                         fontSize='sm'
                                         onChange={handleChange} onBlur={handleBlur}
-                                        value={values.validations[3].massage}
+                                        value={values?.validations[3]?.massage}
                                         name={`validations[${3}].message`}
                                         placeholder='Enter Match Message'
                                         fontWeight='500'
@@ -325,8 +325,8 @@ const Edit = (props) => {
 
                                 <GridItem colSpan={{ base: 12, sm: 6, md: 4 }} mt={8}>
                                     <Flex>
-                                        <Checkbox colorScheme="brandScheme" isChecked={values.validations[4].types} name={`validations[${4}].types`} me="10px" onChange={(e) => {
-                                            const isChecked = e.target.checked;
+                                        <Checkbox colorScheme="brandScheme" isChecked={values?.validations[4]?.types} name={`validations[${4}].types`} me="10px" onChange={(e) => {
+                                            const isChecked = e?.target?.checked;
                                             setFieldValue(`validations[${4}].types`, isChecked);
                                             setFieldValue(
                                                 'validations[4].formikType',
@@ -349,7 +349,7 @@ const Edit = (props) => {
                                     </FormLabel>
                                     <Select
                                         disabled={values?.validations[4]?.types === true ? false : true}
-                                        value={values.validations[4].formikType}
+                                        value={values?.validations[4]?.formikType}
                                         name={`validations[${4}].formikType`}
                                         onChange={handleChange}
                                         fontWeight='500'
@@ -378,7 +378,7 @@ const Edit = (props) => {
                                         disabled={values?.validations[4]?.types === true ? false : true}
                                         fontSize='sm'
                                         onChange={handleChange} onBlur={handleBlur}
-                                        value={values.validations[4].massage}
+                                        value={values?.validations[4]?.massage}
                                         name={`validations[${3}].message`}
                                         placeholder='Enter Formik Type Message'
                                         fontWeight='500'

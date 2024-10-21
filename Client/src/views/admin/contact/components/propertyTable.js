@@ -59,19 +59,19 @@ export default function PropertyTable(props) {
     state: { pageIndex, pageSize }
   } = tableInstance;
 
-  if (pageOptions.length < gopageValue) {
-    setGopageValue(pageOptions.length)
+  if (pageOptions?.length < gopageValue) {
+    setGopageValue(pageOptions?.length)
   }
 
   const textColor = useColorModeValue("gray.500", "white");
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
 
   const handleCheckboxChange = (event, value) => {
-    if (event.target.checked) {
+    if (event?.target?.checked) {
       setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
     } else {
       setSelectedValues((prevSelectedValues) =>
-        prevSelectedValues.filter((selectedValue) => selectedValue !== value)
+        prevSelectedValues?.filter((selectedValue) => selectedValue !== value)
       );
     }
   };
@@ -89,10 +89,10 @@ export default function PropertyTable(props) {
         <Table  {...getTableProps()} variant='simple' color='gray.500' mb='24px'>
           <Thead >
             {headerGroups?.map((headerGroup, index) => (
-              <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
-                {headerGroup.headers.map((column, index) => (
+              <Tr {...headerGroup?.getHeaderGroupProps()} key={index}>
+                {headerGroup?.headers?.map((column, index) => (
                   <Th
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    {...column?.getHeaderProps(column?.getSortByToggleProps())}
                     pe='10px'
                     key={index}
                     borderColor={borderColor}>
@@ -101,7 +101,7 @@ export default function PropertyTable(props) {
                       align='center'
                       fontSize={{ sm: "14px", lg: "14px" }}
                       color="secondaryGray.900">
-                      {column.render("Header")}
+                      {column?.render("Header")}
                     </Flex>
                   </Th>
                 ))}
@@ -124,16 +124,16 @@ export default function PropertyTable(props) {
                 <Tr {...row?.getRowProps()} key={index}>
                   {row?.cells?.map((cell, index) => {
                     let data = "";
-                    if (cell?.column.Header === "#") {
+                    if (cell?.column?.Header === "#") {
                       data = (
                         <Flex align="center">
-                          <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />
+                          <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues?.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />
                           <Text color={textColor} fontSize="sm" fontWeight="700">
                             {cell?.row?.index + 1}
                           </Text>
                         </Flex>
                       );
-                    } else if (cell?.column.Header === "property Type") {
+                    } else if (cell?.column?.Header === "property Type") {
                       data = (
                         <Link to={user?.role !== 'superAdmin' ? `/propertyView/${cell?.row?.original?._id}` : `/propertyView/${cell?.row?.original?._id}`}>
                           <Text
@@ -147,7 +147,7 @@ export default function PropertyTable(props) {
                           </Text>
                         </Link>
                       );
-                    } else if (cell?.column.Header === "property Address") {
+                    } else if (cell?.column?.Header === "property Address") {
                       data = (
 
                         <Text
@@ -160,7 +160,7 @@ export default function PropertyTable(props) {
                         </Text>
 
                       );
-                    } else if (cell?.column.Header === "listing Price") {
+                    } else if (cell?.column?.Header === "listing Price") {
                       data = (
                         <Text
                           me="10px"
@@ -171,25 +171,25 @@ export default function PropertyTable(props) {
                           {cell?.value}
                         </Text>
                       );
-                    } else if (cell?.column.Header === "square Footage") {
+                    } else if (cell?.column?.Header === "square Footage") {
                       data = (
                         <Text color={textColor} fontSize="sm" fontWeight="700">
                           {cell?.value}
                         </Text>
                       );
-                    } else if (cell?.column.Header === "year Built") {
+                    } else if (cell?.column?.Header === "year Built") {
                       data = (
                         <Text color={textColor} fontSize="sm" fontWeight="700">
                           {cell?.value}
                         </Text>
                       );
-                    } else if (cell?.column.Header === "number of Bedrooms") {
+                    } else if (cell?.column?.Header === "number of Bedrooms") {
                       data = (
                         <Text color={textColor} fontSize="sm" fontWeight="700">
                           {cell?.value}
                         </Text>
                       );
-                    } else if (cell?.column.Header === "number of Bathrooms") {
+                    } else if (cell?.column?.Header === "number of Bathrooms") {
                       data = (
                         <Text color={textColor} fontSize="sm" fontWeight="700">
                           {cell?.value}

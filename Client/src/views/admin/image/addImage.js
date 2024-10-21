@@ -49,7 +49,7 @@ const AddImage = (props) => {
             if (values?.authImg || values?.logoSmImg || values?.logoLgImg) {
                 const response = await postApi('api/images/add-auth-logo-img', formData);
 
-                if (response.status === 200) {
+                if (response?.status === 200) {
                     setImageModal(false);
                     resetForm();
                     dispatch(fetchImage());

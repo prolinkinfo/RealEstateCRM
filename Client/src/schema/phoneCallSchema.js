@@ -11,8 +11,8 @@ export const phoneCallSchema = yup.object({
     startDate: yup.date().required("Start Date Is required"),
     salesAgent: yup.string().required("Assign To Sales Agent Is required"),
 }).test('createBy-or-createByLead-required', 'Recipient Is required', function (value) {
-    if (!value.createBy && !value.createByLead) {
-        return this.createError({
+    if (!value?.createBy && !value?.createByLead) {
+        return this?.createError({
             path: 'createBy',
             message: 'Recipient Is required',
         });

@@ -25,7 +25,7 @@ const View = () => {
         { Header: "Description", accessor: "description", }
     ];
     const dispatch = useDispatch()
-    const userData = useSelector(state => state.user.user)
+    const userData = useSelector(state => state?.user?.user)
 
     const userName = typeof userData === 'string' ? JSON.parse(userData) : userData
 
@@ -60,13 +60,13 @@ const View = () => {
 
     const fetchData = async () => {
         setIsLoding(true)
-        let response = await getApi('api/user/view/', param.id)
-        setData(response.data);
+        let response = await getApi('api/user/view/', param?.id)
+        setData(response?.data);
         setIsLoding(false)
     }
 
     useEffect(() => {
-        if (param.id) {
+        if (param?.id) {
             fetchData()
         }
     }, [action])
@@ -74,7 +74,7 @@ const View = () => {
     useEffect(async () => {
         setIsLoding(true);
         let result = await getApi("api/role-access");
-        setRoleData(result.data);
+        setRoleData(result?.data);
         setIsLoding(false);
     }, [])
 
@@ -83,8 +83,8 @@ const View = () => {
 
         try {
             setIsLoding(true)
-            let response = await deleteApi(`api/user/delete/`, param.id)
-            if (response.status === 200) {
+            let response = await deleteApi(`api/user/delete/`, param?.id)
+            if (response?.status === 200) {
                 setDelete(false)
                 navigate(-1)
                 setAction((pre) => !pre)
@@ -104,7 +104,7 @@ const View = () => {
                     <Spinner />
                 </Flex> : <>
                     <AddEditUser isOpen={isOpen} onClose={handleClose} data={data} selectedId={param?.id} userAction={userAction} setUserAction={setUserAction} fetchData={fetchData} />
-                    <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='User' handleDeleteData={handleDeleteClick} ids={''} selectedValues={param.id} />
+                    <CommonDeleteModel isOpen={deleteModel} onClose={() => setDelete(false)} type='User' handleDeleteData={handleDeleteClick} ids={''} selectedValues={param?.id} />
                     <GridItem colSpan={{ base: 4 }}>
                         <Heading size="lg" m={3}>
                             {data?.firstName || ""}
@@ -166,7 +166,7 @@ const View = () => {
                     {data?.role !== 'superAdmin' && <Card mt={3}>
                         <RoleTable fetchData={fetchData} columnsData={RoleColumn ?? []} roleModal={roleModal} setRoleModal={setRoleModal} tableData={data?.roles || []} title={'Role'} />
                     </Card>}
-                    <RoleModal fetchData={fetchData} isOpen={roleModal} onClose={setRoleModal} columnsData={RoleColumn ?? []} id={param.id} tableData={roleData ?? []} interestRoles={data?.roles.map((item) => item._id)} />
+                    <RoleModal fetchData={fetchData} isOpen={roleModal} onClose={setRoleModal} columnsData={RoleColumn ?? []} id={param.id} tableData={roleData ?? []} interestRoles={data?.roles?.map((item) => item?._id)} />
 
                     <Card mt={3}>
                         <Grid templateColumns="repeat(6, 1fr)" gap={1}>

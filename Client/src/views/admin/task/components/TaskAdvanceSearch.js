@@ -42,31 +42,31 @@ const TaskAdvanceSearch = (props) => {
             const getValue = [
                 {
                     name: ["title"],
-                    value: values.title
+                    value: values?.title
                 },
                 {
                     name: ["status"],
-                    value: values.status
+                    value: values?.status
                 },
                 {
                     name: ["category"],
-                    value: values.category
+                    value: values?.category
                 },
                 {
                     name: ["assignToName"],
-                    value: values.assignToName
+                    value: values?.assignToName
                 },
                 {
                     name: ["start"],
-                    value: values.start
+                    value: values?.start
                 },
                 {
                     name: ["end"],
-                    value: values.end
+                    value: values?.end
                 }
             ]
 
-            dispatch(setGetTagValues(getValue.filter(item => item.value)))
+            dispatch(setGetTagValues(getValue?.filter(item => item?.value)))
 
             setSearchedData(searchResult);
             setDisplaySearchData(true);
@@ -99,7 +99,7 @@ const TaskAdvanceSearch = (props) => {
                                     placeholder='Enter Title'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.title && touched.title && errors.title}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.title && touched?.title && errors?.title}</Text>
 
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
@@ -120,7 +120,7 @@ const TaskAdvanceSearch = (props) => {
                                     <option value='inProgress'>In Progress</option>
                                     <option value='onHold'>On Hold</option>
                                 </Select>
-                                <Text mb='10px' color={'red'}> {errors.status && touched.status && errors.status}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.status && touched?.status && errors?.status}</Text>
 
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
@@ -140,7 +140,7 @@ const TaskAdvanceSearch = (props) => {
                                     <option value='none'>None</option>
                                 </Select>
 
-                                <Text mb='10px' color={'red'}> {errors.category && touched.category && errors.category}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.category && touched?.category && errors?.category}</Text>
 
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
@@ -155,7 +155,7 @@ const TaskAdvanceSearch = (props) => {
                                     placeholder='Enter Assign To'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.assignToName && touched.assignToName && errors.assignToName}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.assignToName && touched?.assignToName && errors?.assignToName}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2} >
@@ -170,7 +170,7 @@ const TaskAdvanceSearch = (props) => {
                                     placeholder='Enter Start Date'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.start && touched.start && errors.start}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.start && touched?.start && errors?.start}</Text>
 
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
@@ -187,7 +187,7 @@ const TaskAdvanceSearch = (props) => {
                                     placeholder='Enter  End Date'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.end && touched.end && errors.end}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.end && touched?.end && errors?.end}</Text>
 
                             </GridItem>
                         </Grid>

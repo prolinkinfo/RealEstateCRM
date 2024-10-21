@@ -9,7 +9,7 @@ const Index = () => {
     const user = JSON.parse(localStorage.getItem("user"))
 
     const fetchData = async () => {
-        let result = await getApi(user?.role === 'superAdmin' ? 'api/calendar/' : `api/calendar/?createBy=${user._id}`);
+        let result = await getApi(user?.role === 'superAdmin' ? 'api/calendar/' : `api/calendar/?createBy=${user?._id}`);
         if (result?.status === 200) {
             setData(result?.data)
         }

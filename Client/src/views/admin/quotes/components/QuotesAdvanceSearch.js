@@ -40,34 +40,34 @@ const QuotesAdvanceSearch = (props) => {
             const getValue = [
                 {
                     name: ["quoteNumber"],
-                    value: values.quoteNumber
+                    value: values?.quoteNumber
                 },
                 {
                     name: ["title"],
-                    value: values.title
+                    value: values?.title
                 },
                 {
                     name: ["quoteStage"],
-                    value: values.quoteStage
+                    value: values?.quoteStage
                 },
                 {
                     name: ["contactName"],
-                    value: values.contactName
+                    value: values?.contactName
                 },
                 {
                     name: ["accountName"],
-                    value: values.accountName
+                    value: values?.accountName
                 },
                 {
                     name: ["grandTotal"],
-                    value: values.grandTotal
+                    value: values?.grandTotal
                 },
                 {
                     name: ["validUntil"],
-                    value: values.validUntil
+                    value: values?.validUntil
                 },
             ]
-            dispatch(setGetTagValues(getValue.filter(item => item.value)))
+            dispatch(setGetTagValues(getValue?.filter(item => item?.value)))
             setDisplaySearchData(true)
             setAdvanceSearch(false)
             resetForm();
@@ -99,7 +99,7 @@ const QuotesAdvanceSearch = (props) => {
                                     placeholder='Enter Quote Number'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.quoteNumber && touched.quoteNumber && errors.quoteNumber}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.quoteNumber && touched?.quoteNumber && errors?.quoteNumber}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
@@ -113,20 +113,20 @@ const QuotesAdvanceSearch = (props) => {
                                     placeholder='Enter Title'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.title && touched.title && errors.title}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.title && touched?.title && errors?.title}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
                                     Quote Stage
                                 </FormLabel>
                                 <Select
-                                    value={values.quoteStage}
+                                    value={values?.quoteStage}
                                     name="quoteStage"
                                     onChange={handleChange}
-                                    mb={errors.quoteStage && touched.quoteStage ? undefined : '10px'}
+                                    mb={errors?.quoteStage && touched?.quoteStage ? undefined : '10px'}
                                     fontWeight='500'
                                     placeholder={'Quote Stage'}
-                                    borderColor={errors.quoteStage && touched.quoteStage ? "red.300" : null}
+                                    borderColor={errors?.quoteStage && touched?.quoteStage ? "red.300" : null}
                                 >
                                     <option value="Draft" >Draft</option>
                                     <option value="Negotiation" >Negotiation</option>
@@ -137,7 +137,7 @@ const QuotesAdvanceSearch = (props) => {
                                     <option value="Closed Lost" >Closed Lost</option>
                                     <option value="Closed Dead" >Closed Dead</option>
                                 </Select>
-                                <Text mb='10px' color={'red'}> {errors.quoteStage && touched.quoteStage && errors.quoteStage}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.quoteStage && touched?.quoteStage && errors?.quoteStage}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
@@ -151,7 +151,7 @@ const QuotesAdvanceSearch = (props) => {
                                     placeholder='Enter Contact Name'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.contactName && touched.contactName && errors.contactName}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.contactName && touched?.contactName && errors?.contactName}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
@@ -165,7 +165,7 @@ const QuotesAdvanceSearch = (props) => {
                                     placeholder='Enter Account Name'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.accountName && touched.accountName && errors.accountName}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.accountName && touched?.accountName && errors?.accountName}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
@@ -179,7 +179,7 @@ const QuotesAdvanceSearch = (props) => {
                                     placeholder='Enter Grand Total'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.grandTotal && touched.grandTotal && errors.grandTotal}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.grandTotal && touched?.grandTotal && errors?.grandTotal}</Text>
                             </GridItem>
                             <GridItem colSpan={{ base: 12, md: 6 }}>
                                 <FormLabel display='flex' ms='4px' fontSize='sm' fontWeight='600' color={"#000"} mb="0" mt={2}>
@@ -193,7 +193,7 @@ const QuotesAdvanceSearch = (props) => {
                                     type='date'
                                     fontWeight='500'
                                 />
-                                <Text mb='10px' color={'red'}> {errors.validUntil && touched.validUntil && errors.validUntil}</Text>
+                                <Text mb='10px' color={'red'}> {errors?.validUntil && touched?.validUntil && errors?.validUntil}</Text>
                             </GridItem>
                         </Grid>
                     </ModalBody>

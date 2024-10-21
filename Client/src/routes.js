@@ -51,8 +51,11 @@ const InvoicesImport = React.lazy(() => import("views/admin/invoice/components/I
 const User = React.lazy(() => import("views/admin/users"));
 const UserView = React.lazy(() => import("views/admin/users/View"));
 
-const Property = React.lazy(() => import("views/admin/property"));
-const PropertyView = React.lazy(() => import("views/admin/property/View"));
+// const Property = React.lazy(() => import("views/admin/property"));
+// const PropertyView = React.lazy(() => import("views/admin/property/View"));
+// const PropertyImport = React.lazy(() => import("views/admin/property/components/PropertyImport"))
+const Property = React.lazy(() => import("views/admin/newProperty"));
+const PropertyView = React.lazy(() => import("views/admin/newProperty/View"));
 const PropertyImport = React.lazy(() => import("views/admin/property/components/PropertyImport"))
 
 const Lead = React.lazy(() => import("views/admin/lead"));
@@ -97,7 +100,7 @@ const AccountView = React.lazy(() => import("views/admin/account/View"));
 const AccountImport = React.lazy(() => import("views/admin/account/components/AccountImport"));
 const Opportunityproject = React.lazy(() => import("views/admin/opportunityproject"))
 const OpportunityView = React.lazy(() => import("views/admin/opportunityproject/View"))
-
+const OpportunityProjectImport = React.lazy(() => import("views/admin/opportunityproject/components/OpportunityprojectImport"));
 
 
 const routes = [
@@ -227,7 +230,14 @@ const routes = [
     path: "/opportunityprojectView/:id",
     component: OpportunityView,
   },
-
+  {
+    name: "Opportunity Project Import",
+    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    under: "opportunityproject",
+    parentName: "Opportunity Project",
+    path: "/opportunityProjectImport",
+    component: OpportunityProjectImport,
+  },
   // -----------------------------Account-------------------------------------
   {
     name: "Account",

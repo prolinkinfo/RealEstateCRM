@@ -42,12 +42,12 @@ const Index = () => {
     }
 
     const handleEditOpen = (item) => {
-        setselectedId(item._id)
+        setselectedId(item?._id)
         setEditData(item)
         setEdit(!editModal)
     }
     const handleViewOpen = (item) => {
-        setselectedId(item._id)
+        setselectedId(item?._id)
         setViewModal(!viewModal)
     }
     const handleViewClose = () => {
@@ -61,11 +61,11 @@ const Index = () => {
     }
 
     const handleCheckboxChange = (event, value) => {
-        if (event.target.checked) {
+        if (event?.target?.checked) {
             setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
         } else {
             setSelectedValues((prevSelectedValues) =>
-                prevSelectedValues.filter((selectedValue) => selectedValue !== value)
+                prevSelectedValues?.filter((selectedValue) => selectedValue !== value)
             );
         }
     };
@@ -82,7 +82,7 @@ const Index = () => {
                 if (id) {
                     setIsLoding(true)
                     const response = await deleteApi('api/validation/delete/', id)
-                    if (response.status === 200) {
+                    if (response?.status === 200) {
                         setDeleteMany(false)
                         fetchData()
                     }
@@ -97,7 +97,7 @@ const Index = () => {
             try {
                 setIsLoding(true)
                 let response = await deleteManyApi('api/validation/deleteMany', fieldsIds)
-                if (response.status === 200) {
+                if (response?.status === 200) {
                     setSelectedValues([])
                     setDeleteMany(false)
                     fetchData()
@@ -115,7 +115,7 @@ const Index = () => {
     return (
         <div>
             <Flex justifyContent={"end"} mb={3}>
-                {selectedValues.length > 0 && <Button variant='outline' colorScheme='brand' color={"red"} mr={2} leftIcon={<DeleteIcon />} onClick={() => handleOpenDeleteMany('', "many")} size='sm' >Delete</Button>}
+                {selectedValues?.length > 0 && <Button variant='outline' colorScheme='brand' color={"red"} mr={2} leftIcon={<DeleteIcon />} onClick={() => handleOpenDeleteMany('', "many")} size='sm' >Delete</Button>}
                 <Button size='sm' variant='brand' me={1} onClick={() => handleAddOpen()} leftIcon={<AddIcon />}>Add New</Button>
                 <Button size='sm' variant='brand' onClick={() => navigate(-1)} leftIcon={<IoIosArrowBack />}> Back</Button>
             </Flex>
@@ -125,7 +125,7 @@ const Index = () => {
                         <Card>
                             <Flex alignItems={"center"} justifyContent={"space-between"}>
                                 <Flex>
-                                    <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues.includes(item?._id)} onChange={(event) => handleCheckboxChange(event, item?._id)} me="10px" />
+                                    <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues?.includes(item?._id)} onChange={(event) => handleCheckboxChange(event, item?._id)} me="10px" />
                                     <Heading size="md" fontWeight={"500"} textTransform={"capitalize"}
                                     >{item?.name}</Heading>
                                 </Flex>
@@ -134,7 +134,7 @@ const Index = () => {
                                     <MenuList minW={'fit-content'} transform={"translate(-71px, 0px) !important;"}>
                                         <MenuItem py={2.5} alignItems={'start'} onClick={() => handleEditOpen(item)} icon={<EditIcon fontSize={15} />}>Edit</MenuItem>
                                         <MenuItem py={2.5} alignItems={'start'} color={'green'} onClick={() => handleViewOpen(item)} icon={<ViewIcon fontSize={15} />}>View</MenuItem>
-                                        <MenuItem py={2.5} alignItems={'start'} color={'red'} icon={<DeleteIcon fontSize={15} />} onClick={() => handleOpenDeleteMany(item._id, "one")}>Delete</MenuItem>
+                                        <MenuItem py={2.5} alignItems={'start'} color={'red'} icon={<DeleteIcon fontSize={15} />} onClick={() => handleOpenDeleteMany(item?._id, "one")}>Delete</MenuItem>
                                     </MenuList>
                                 </Menu>
                             </Flex>
@@ -169,7 +169,7 @@ const Index = () => {
                     </GridItem>
                 ))}
             </Grid>
-            {!validationData || validationData.length === 0 && 
+            {!validationData || validationData?.length === 0 && 
                 <Card mt='5'>
                     <Text textAlign={'center'} width="100%" color={'gray.500'} fontSize="sm" fontWeight="700">
                         <DataNotFound />
