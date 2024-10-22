@@ -43,13 +43,21 @@ const UnitTypeView = (props) => {
                 </Text>
                 <Text>{data?.unitType?.sqm ? data?.unitType?.sqm : " - "}</Text>
               </GridItem>
-              <GridItem colSpan={{ base: 12 }}>
+              <GridItem colSpan={{ base: 6 }}>
                 <Text fontSize="sm" fontWeight="bold" color="blackAlpha.900">
                   Price
                 </Text>
                 <Text display="flex" alignItems="center">
-                  {data?.unitType?.price ? data?.unitType?.price : " 0 "}{" "}
+                  {data?.unitType?.price ? data?.unitType?.price : "0"}
                   <IoLogoUsd color="gray.300" borderRadius="16px" />
+                </Text>
+              </GridItem>
+              <GridItem colSpan={{ base: 6 }}>
+                <Text fontSize="sm" fontWeight="bold" color="blackAlpha.900">
+                  Status
+                </Text>
+                <Text>
+                  {data?.unit?.status ? data?.unit?.status : "-"}
                 </Text>
               </GridItem>
             </Grid>
