@@ -73,7 +73,7 @@ export default function LeadTable(props) {
         setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
       } else {
         setSelectedValues((prevSelectedValues) =>
-          prevSelectedValues.filter((selectedValue) => selectedValue !== value)
+          prevSelectedValues?.filter((selectedValue) => selectedValue !== value)
         );
       }
     } else {
