@@ -268,6 +268,7 @@ const View = () => {
     { Header: "Name", accessor: "name" },
     { Header: "Sqm", accessor: "sqm" },
     { Header: "Price", accessor: "price" },
+    { Header: "Executive", accessor: "executive" },
     {
       Header: "Action",
       center: true,

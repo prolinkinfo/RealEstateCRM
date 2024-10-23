@@ -12,6 +12,9 @@ const unitTypeSchema = new mongoose.Schema({
     sqm: {
         type: String,
     },
+    executive:{
+        type: String,
+    },
     order: {
         type: Number,
     },

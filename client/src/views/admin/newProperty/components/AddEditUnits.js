@@ -36,6 +36,7 @@ const AddEditUnits = (props) => {
     name: "",
     sqm: "",
     price: "",
+    executive: "",
   });
 
   const validationSchema = yup.object({
@@ -48,6 +49,7 @@ const AddEditUnits = (props) => {
       .number()
       .required("Price Is required")
       .typeError("Price must be a number"),
+    executive: yup.string().required("Executive Is required"),
   });
 
   const formik = useFormik({
@@ -103,6 +105,7 @@ const AddEditUnits = (props) => {
       name: "",
       sqm: "",
       price: "",
+      executive: "",
     });
   };
 
@@ -166,6 +169,32 @@ const AddEditUnits = (props) => {
               />
               <Text mb="10px" color={"red"}>
                 {errors?.sqm && touched?.sqm && errors?.sqm}
+              </Text>
+            </GridItem>
+            <GridItem colSpan={{ base: 12 }}>
+              <FormLabel
+                display="flex"
+                ms="4px"
+                fontSize="sm"
+                fontWeight="500"
+                mb="8px"
+              >
+                Executive<Text color={"red"}>*</Text>
+              </FormLabel>
+              <Input
+                fontSize="sm"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values?.executive}
+                name="executive"
+                placeholder="Enter Executive"
+                fontWeight="500"
+                borderColor={
+                  errors?.executive && touched?.executive ? "red.300" : null
+                }
+              />
+              <Text mb="10px" color={"red"}>
+                {errors?.executive && touched?.executive && errors?.executive}
               </Text>
             </GridItem>
             <GridItem colSpan={{ base: 12 }}>
