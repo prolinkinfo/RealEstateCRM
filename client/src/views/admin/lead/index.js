@@ -134,7 +134,7 @@ const Index = () => {
     setIsLoding(true);
 
     try {
-      const result = await dispatch(fetchLeadCustomFiled());
+      const result = await dispatch(fetchLeadCustomFiled());  
       if (result?.payload?.status === 200) {
         setLeadData(result?.payload?.data);
       } else {
@@ -303,10 +303,10 @@ const Index = () => {
           : []),
       ];
 
-      setColumns(tempTableColumns);
+      setColumns(tempTableColumns || []);
       setIsLoding(false);
     } catch (error) {
-      console.error("Error fetching custom data fields:", error);
+      console?.error("Error fetching custom data fields:", error);
       toast.error("Failed to fetch data ", "error");
     }
   };
