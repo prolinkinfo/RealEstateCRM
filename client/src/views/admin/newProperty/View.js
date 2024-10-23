@@ -484,6 +484,7 @@ const View = () => {
         onClose={() => {
           setSelectedUnitType({});
           setAddUnit(false);
+          setActionType("");
         }}
       />
       <Edit

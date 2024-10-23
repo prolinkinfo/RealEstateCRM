@@ -96,6 +96,16 @@ const AddEditUnits = (props) => {
     }
   };
 
+  const handelClose = () => {
+    resetForm();
+    onClose();
+    setInitialValues({
+      name: "",
+      sqm: "",
+      price: "",
+    });
+  };
+
   useEffect(() => {
     actionType === "Edit" && setInitialValues(selectedUnitType);
   }, [selectedUnitType]);
@@ -106,7 +116,7 @@ const AddEditUnits = (props) => {
       <ModalContent>
         <ModalHeader justifyContent="space-between" display="flex">
           {actionType === "Edit" ? "Edit" : "Add"} Unit
-          <IconButton onClick={onClose} icon={<CloseIcon />} />
+          <IconButton onClick={handelClose} icon={<CloseIcon />} />
         </ModalHeader>
         <ModalBody>
           <Grid templateColumns="repeat(12, 1fr)" gap={3}>
@@ -166,7 +176,7 @@ const AddEditUnits = (props) => {
                 fontWeight="500"
                 mb="8px"
               >
-                price<Text color={"red"}>*</Text>
+                Price<Text color={"red"}>*</Text>
               </FormLabel>
               <InputGroup>
                 <Input
@@ -209,10 +219,7 @@ const AddEditUnits = (props) => {
             variant="outline"
             colorScheme="red"
             size="sm"
-            onClick={() => {
-              formik.resetForm();
-              onClose();
-            }}
+            onClick={handelClose}
           >
             Close
           </Button>
