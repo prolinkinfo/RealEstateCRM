@@ -68,6 +68,21 @@ const addApartmentData = (oldUnits, newUnitTypeId) => {
   return newFloors;
 };
 
+const deleteUnitType = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { unitTypeId } = req.body;
+    const updatedProperty = await Property.findByIdAndUpdate(
+      { _id: id },
+      { $pull: { unitType: { _id: unitTypeId } } },
+      { new: true }
+    );
+    res.status(200).json(updatedProperty);
+  } catch (error) {
+    console.error("Failed to Delete");
+  }
+};
+
 const addUnits = async (req, res) => {
   try {
     const { id } = req.params;
@@ -480,10 +495,10 @@ const upload = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-          "-" +
-          timestamp +
-          "." +
-          file.originalname.split(".")[1]
+            "-" +
+            timestamp +
+            "." +
+            file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -536,10 +551,10 @@ const virtualTours = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-          "-" +
-          timestamp +
-          "." +
-          file.originalname.split(".")[1]
+            "-" +
+            timestamp +
+            "." +
+            file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -592,10 +607,10 @@ const FloorPlansStorage = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-          "-" +
-          timestamp +
-          "." +
-          file.originalname.split(".")[1]
+            "-" +
+            timestamp +
+            "." +
+            file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -648,10 +663,10 @@ const PropertyDocumentsStorage = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-          "-" +
-          timestamp +
-          "." +
-          file.originalname.split(".")[1]
+            "-" +
+            timestamp +
+            "." +
+            file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -694,6 +709,7 @@ module.exports = {
   changeUnitStatus,
   addMany,
   editUnit,
+  deleteUnitType,
   view,
   edit,
   deleteData,

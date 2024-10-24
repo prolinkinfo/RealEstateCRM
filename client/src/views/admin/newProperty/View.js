@@ -68,6 +68,9 @@ import AddEditUnits from "./components/AddEditUnits";
 import PropertyPhoto from "./components/propertyPhoto";
 import Edit from "./Edit";
 import UnitTypeView from "./components/UnitTypeView";
+import BlockedModel from "./components/BlockedModel";
+import SoldModel from "./components/SoldModel";
+import BookedModel from "./components/BookedModel";
 
 const View = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -94,6 +97,13 @@ const View = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [unitOpenModel, setUnitOpenModel] = useState(false);
   const [selectedViewUnitType, setSelectedViewUnitType] = useState({});
+  const [deleteunitModelUnitType, setDeleteModelUnitType] = useState(false);
+  // BLOCK MODEL
+  const [blockedModelOpen, setBlockedModelOpen] = useState(false);
+  // SOlD SIDEBAR
+  const [soldopen, setSoldOpen] = useState(false);
+  // Booked sidebar
+  const [bookedOpen, setBookedOpen] = useState(false);
 
   const dispatch = useDispatch();
   const propertyData = useSelector(
@@ -134,6 +144,11 @@ const View = () => {
   const handleEditOpen = (row) => {
     setAddUnit(true);
     setActionType("Edit");
+    setSelectedUnitType(row);
+  };
+
+  const handleDeleteUnitType = (row) => {
+    setDeleteModelUnitType(true);
     setSelectedUnitType(row);
   };
 
@@ -328,6 +343,23 @@ const View = () => {
               <EditIcon />
             </Button>
           </Tooltip>
+          <Tooltip
+            hasArrow
+            label="Delete"
+            bg="gray.200"
+            color="gray"
+            textTransform="capitalize"
+            fontSize="sm"
+          >
+            <Button
+              color="red"
+              variant="outline"
+              size="sm"
+              onClick={() => handleDeleteUnitType(row?.original)}
+            >
+              <DeleteIcon />
+            </Button>
+          </Tooltip>
         </Flex>
       ),
     },
@@ -383,6 +415,17 @@ const View = () => {
       console.log(error);
     } finally {
       setIsLoding(false);
+    }
+  };
+
+  const handleDeleteUnitTypes = async () => {
+    setIsLoding(true);
+    let response = await postApi(`api/property/delete-unit-type/${param?.id}`, {
+      unitTypeId: selectedUnitType?._id,
+    });
+    if (response?.status === 200) {
+      setDeleteModelUnitType(false);
+      setAction((pre) => !pre);
     }
   };
 
@@ -496,6 +539,7 @@ const View = () => {
         propertyData={propertyData?.[0]}
         data={data}
       />
+
       <CommonDeleteModel
         isOpen={deleteModel}
         onClose={() => setDelete(false)}
@@ -503,11 +547,24 @@ const View = () => {
         handleDeleteData={handleDeleteProperties}
         ids={param?.id}
       />
+      <CommonDeleteModel
+        isOpen={deleteunitModelUnitType}
+        onClose={() => setDeleteModelUnitType(false)}
+        handleDeleteData={handleDeleteUnitTypes}
+        type="Unit Types"
+      />
       <UnitTypeView
         data={selectedViewUnitType}
         isOpen={unitOpenModel}
         onClose={() => setUnitOpenModel(false)}
       />
+      <BlockedModel
+        isOpen={blockedModelOpen}
+        onClose={() => setBlockedModelOpen(false)}
+      />
+      <SoldModel isOpen={soldopen} onClose={() => setSoldOpen(false)} />
+      <BookedModel isOpen={bookedOpen} onClose={() => setBookedOpen(false)} />
+
       {isLoding ? (
         <Flex justifyContent={"center"} alignItems={"center"} width="100%">
           <Spinner />
@@ -857,6 +914,7 @@ const View = () => {
                                         <TbStatusChange fontSize={15} mb={1} />
                                       }
                                       onClick={() => {
+                                        setBookedOpen(true);
                                         handleStatusChange(
                                           floor,
                                           item,
@@ -872,6 +930,7 @@ const View = () => {
                                         <TbStatusChange fontSize={15} mb={1} />
                                       }
                                       onClick={() => {
+                                        setSoldOpen(true);
                                         handleStatusChange(floor, item, "Sold");
                                       }}
                                     >
@@ -887,6 +946,7 @@ const View = () => {
                                           />
                                         }
                                         onClick={() => {
+                                          setBlockedModelOpen(true);
                                           handleStatusChange(
                                             floor,
                                             item,
