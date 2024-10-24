@@ -557,6 +557,7 @@ const View = () => {
         data={selectedViewUnitType}
         isOpen={unitOpenModel}
         onClose={() => setUnitOpenModel(false)}
+        unitTypeList={unitTypeList}
       />
       <BlockedModel
         isOpen={blockedModelOpen}

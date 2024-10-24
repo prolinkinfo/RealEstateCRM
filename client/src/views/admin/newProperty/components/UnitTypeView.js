@@ -8,13 +8,33 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Flex,
+  Select,
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
+import { useState, useEffect } from "react";
 import { IoLogoUsd } from "react-icons/io";
 
 const UnitTypeView = (props) => {
-  const { onClose, isOpen, data } = props;
+  const { onClose, isOpen, data, unitTypeList } = props;
+  const [selectedUnitType, setSelectedUnitType] = useState("");
+
+  const unitIdData = data?.unit?.unitType;
+  const unitTypeIdData = data?.unitType?._id;
+
+  useEffect(() => {
+    if (unitIdData === unitTypeIdData) {
+      setSelectedUnitType(unitIdData);
+    }
+    if (!data?.unitType?.name) {
+      setSelectedUnitType("");
+    }
+  }, [unitIdData, unitTypeIdData]);
+
+  const handleChange = (event) => {
+    setSelectedUnitType(event?.target?.value);
+  };
 
   return (
     <>
@@ -56,13 +76,22 @@ const UnitTypeView = (props) => {
                 <Text fontSize="sm" fontWeight="bold" color="blackAlpha.900">
                   Status
                 </Text>
-                <Text>
-                  {data?.unit?.status ? data?.unit?.status : "-"}
-                </Text>
+                <Text>{data?.unit?.status ? data?.unit?.status : "-"}</Text>
               </GridItem>
             </Grid>
           </ModalBody>
           <ModalFooter>
+            <Flex>
+              <Select
+                placeholder={"Unit Type"}
+                value={selectedUnitType}
+                onChange={handleChange}
+              >
+                {unitTypeList?.map((unitType) => {
+                  return <option value={unitType?._id}>{unitType?.name}</option>;
+                })}
+              </Select>
+            </Flex>
             <Button
               size="sm"
               sx={{
