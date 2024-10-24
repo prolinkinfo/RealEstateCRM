@@ -488,6 +488,7 @@ const View = () => {
       unit: item,
       floorName,
     });
+    console.log(data?.unitType, "data?.unitType");
   };
 
   const statusCount = data?.units?.reduce((acc, floor) => {
@@ -558,6 +559,7 @@ const View = () => {
         isOpen={unitOpenModel}
         onClose={() => setUnitOpenModel(false)}
         unitTypeList={unitTypeList}
+        setAction={setAction}
       />
       <BlockedModel
         isOpen={blockedModelOpen}

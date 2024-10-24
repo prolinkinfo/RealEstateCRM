@@ -15,11 +15,14 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { IoLogoUsd } from "react-icons/io";
+import { postApi } from "services/api";
+import { useParams } from "react-router-dom";
 
 const UnitTypeView = (props) => {
-  const { onClose, isOpen, data, unitTypeList } = props;
+  const { onClose, isOpen, data, unitTypeList, setAction } = props;
   const [selectedUnitType, setSelectedUnitType] = useState("");
 
+  const { id } = useParams();
   const unitIdData = data?.unit?.unitType;
   const unitTypeIdData = data?.unitType?._id;
 
@@ -32,8 +35,20 @@ const UnitTypeView = (props) => {
     }
   }, [unitIdData, unitTypeIdData]);
 
-  const handleChange = (event) => {
-    setSelectedUnitType(event?.target?.value);
+  const handleChange = async (event) => {
+    const newValue = event?.target?.value;
+    let response = await postApi(
+      `api/property/update-unit-type/${id}/${data?.unit?._id}/${newValue}`
+    );
+    if (response && response?.status === 200) {
+      setSelectedUnitType(newValue);
+      setAction((pre) => !pre);
+      handleCloseModel();
+    }
+  };
+
+  const handleCloseModel = () => {
+    onClose();
   };
 
   return (
@@ -88,7 +103,9 @@ const UnitTypeView = (props) => {
                 onChange={handleChange}
               >
                 {unitTypeList?.map((unitType) => {
-                  return <option value={unitType?._id}>{unitType?.name}</option>;
+                  return (
+                    <option value={unitType?._id}>{unitType?.name}</option>
+                  );
                 })}
               </Select>
             </Flex>
@@ -100,9 +117,7 @@ const UnitTypeView = (props) => {
               }}
               variant="outline"
               colorScheme="red"
-              onClick={() => {
-                onClose();
-              }}
+              onClick={handleCloseModel}
             >
               Close
             </Button>

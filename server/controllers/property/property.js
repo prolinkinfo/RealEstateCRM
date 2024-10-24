@@ -171,6 +171,23 @@ const editUnit = async (req, res) => {
   }
 };
 
+const updateUnitTypeId = async (req, res) => {
+  try {
+    const { id, unitid, newUnitType } = req.params;
+    const updatedUnitTypeId = await Property.updateOne(
+      { _id: id, "units.flats._id": unitid },
+      { $set: { "units.$[].flats.$[flat].unitType": newUnitType } },
+      {
+        arrayFilters: [{ "flat._id": unitid }], 
+        new: true,
+      }
+    );
+    res.status(200).json(updatedUnitTypeId);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const changeUnitStatus = async (req, res) => {
   try {
     const { id } = req?.params;
@@ -710,6 +727,7 @@ module.exports = {
   addMany,
   editUnit,
   deleteUnitType,
+  updateUnitTypeId,
   view,
   edit,
   deleteData,
