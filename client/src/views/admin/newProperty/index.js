@@ -36,6 +36,7 @@ import { fetchPropertyData } from "../../../redux/slices/propertySlice";
 import Add from "./Add";
 import ImportModal from "./components/ImportModal";
 import Edit from "./Edit";
+import * as XLSX from "xlsx";
 import PaginationProperty from "./PaginationProperty";
 import { BsColumnsGap } from "react-icons/bs";
 import CustomSearchInput from "components/search/search";
@@ -56,8 +57,9 @@ const Index = () => {
   const [selectedValues, setSelectedValues] = useState([]);
   const [isImportProperty, setIsImportProperty] = useState(false);
   const [types, setTypes] = useState([]);
+  const [csvColumns, setCsvColumns] = useState([]);
 
-  // search 
+  // search
   const [searchbox, setSearchbox] = useState("");
   const [searchData, setSearchData] = useState([]);
   const [displaySearchData, setDisplaySearchData] = useState(false);
@@ -69,7 +71,7 @@ const Index = () => {
   const nextPage = () => setCurrentPage((prev) => prev + 1);
   const previousPage = () => setCurrentPage((prev) => Math?.max(prev - 1, 0));
 
-  const data = useSelector((state) => state?.propertyData?.data)
+  const data = useSelector((state) => state?.propertyData?.data);
 
   const fetchCustomDataFields = async () => {
     setIsLoding(true);
@@ -137,37 +139,38 @@ const Index = () => {
         </Text>
       ),
     };
+
     const tempTableColumns = [
       { Header: "#", accessor: "_id", isSortable: false, width: 10 },
       ...(result?.payload?.data && result?.payload?.data?.length > 0
         ? result.payload.data[0]?.fields
-          ?.filter((field) => field?.isTableField === true && field?.isView)
-          ?.map((field) => ({
-            Header: field?.label,
-            accessor: field?.name,
-            cell: (cell) => (
-              <div className="selectOpt">
-                <Text
-                  onClick={() => {
-                    navigate(`/propertyView/${cell?.row?.original?._id}`);
-                  }}
-                  me="10px"
-                  sx={{
-                    "&:hover": {
-                      color: "blue.500",
-                      textDecoration: "underline",
-                    },
-                    cursor: "pointer",
-                  }}
-                  color="brand.600"
-                  fontSize="sm"
-                  fontWeight="700"
-                >
-                  {cell?.value || "-"}
-                </Text>
-              </div>
-            ),
-          })) || []
+            ?.filter((field) => field?.isTableField === true && field?.isView)
+            ?.map((field) => ({
+              Header: field?.label,
+              accessor: field?.name,
+              cell: (cell) => (
+                <div className="selectOpt">
+                  <Text
+                    onClick={() => {
+                      navigate(`/propertyView/${cell?.row?.original?._id}`);
+                    }}
+                    me="10px"
+                    sx={{
+                      "&:hover": {
+                        color: "blue.500",
+                        textDecoration: "underline",
+                      },
+                      cursor: "pointer",
+                    }}
+                    color="brand.600"
+                    fontSize="sm"
+                    fontWeight="700"
+                  >
+                    {cell?.value || "-"}
+                  </Text>
+                </div>
+              ),
+            })) || []
         : []),
       ...(result?.payload?.data?.[0]?.fields || []) // Ensure result.payload[0].fields is an array
         .filter((field) => field?.isTableField === true && !field?.isView) // Filter out fields where isTableField is true
@@ -196,7 +199,7 @@ const Index = () => {
       setIsLoding(false);
     }
   };
-
+  
   const changeStatus = (status) => {
     switch (status) {
       case "Available":
@@ -227,17 +230,85 @@ const Index = () => {
     }
   };
 
-  const listData = (displaySearchData ? searchData : data)?.filter(item => types?.length === 0 || types?.includes(item?.status));
-  const displayedData = listData.slice(currentPage * rangeData, (currentPage + 1) * rangeData);
+  const listData = (displaySearchData ? searchData : data)?.filter(
+    (item) => types?.length === 0 || types?.includes(item?.status)
+  );
+  const displayedData = listData.slice(
+    currentPage * rangeData,
+    (currentPage + 1) * rangeData
+  );
 
   const handleStatusChange = (values) => {
-    let selectedItems = [...types, values]
-    setTypes([...new Set(selectedItems)])
-  }
+    let selectedItems = [...types, values];
+    setTypes([...new Set(selectedItems)]);
+  };
   const handleRemoveTag = (value) => {
-    setTypes(pre => pre?.filter(item => item !== value))
-  }
+    setTypes((pre) => pre?.filter((item) => item !== value));
+  };
 
+  const title ="Properties";
+  const handleExportNewProperties = (extension) => {
+    selectedValues && selectedValues?.length > 0
+      ? downloadCsvOrExcel(extension, selectedValues)
+      : downloadCsvOrExcel(extension);
+  };
+  const downloadCsvOrExcel = async (extension, selectedIds) => {
+    try {
+      if (selectedIds && selectedIds?.length > 0) {
+        const selectedRecordsWithSpecificFileds = data
+          ?.filter((rec) => selectedIds.includes(rec._id))
+          ?.map((rec) => {
+            const selectedFieldsData = {};
+            columns?.forEach((property) => {
+              selectedFieldsData[property?.accessor] = rec[property?.accessor];
+            });
+            return selectedFieldsData;
+          });
+        convertJsonToCsvOrExcel(
+          selectedRecordsWithSpecificFileds,
+          columns,
+          title || "data",
+          extension
+        );
+      } else {
+        const AllRecordsWithSpecificFileds = data?.map((rec) => {
+          const selectedFieldsData = {};
+          columns?.forEach((property) => {
+            selectedFieldsData[property?.accessor] = rec[property?.accessor];
+          });
+          return selectedFieldsData;
+        });
+        convertJsonToCsvOrExcel(
+          AllRecordsWithSpecificFileds,
+          columns,
+          title || "data",
+          extension
+        );
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const convertJsonToCsvOrExcel = (
+    jsonArray,
+    csvColumns,
+    fileName,
+    extension
+  ) => {
+    const csvHeader = csvColumns?.map((col) => col?.Header);
+
+    const csvContent = [
+      csvHeader,
+      ...jsonArray?.map((row) => csvColumns?.map((col) => row[col?.accessor])),
+    ];
+
+    const ws = XLSX.utils.aoa_to_sheet(csvContent);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet 1");
+    XLSX.writeFile(wb, `${fileName}.${extension}`); // .csv, .xlsx
+    setSelectedValues([]);
+  };
   return (
     <div>
       {/* <Grid templateColumns="repeat(6, 1fr)" mb={3} gap={4}>
@@ -275,7 +346,7 @@ const Index = () => {
           allData={data}
           dataColumn={columns}
           onSearch={(data) => {
-            setSearchData(data)
+            setSearchData(data);
           }}
         />
         {selectedValues?.length > 0 && (
@@ -306,18 +377,12 @@ const Index = () => {
               Import Properties
             </MenuItem>
             <MenuDivider />
-            <MenuItem
-              width="165px"
-            //  onClick={() => handleExportLeads("csv")}
-            >
+            <MenuItem width="165px" onClick={() => handleExportNewProperties("csv")}>
               {selectedValues && selectedValues?.length > 0
                 ? "Export Selected Data as CSV"
                 : "Export as CSV"}
             </MenuItem>
-            <MenuItem
-              width="165px"
-            // onClick={() => handleExportLeads("xlsx")}
-            >
+            <MenuItem width="165px" onClick={() => handleExportNewProperties("xlsx")}>
               {selectedValues && selectedValues?.length > 0
                 ? "Export Selected Data as Excel"
                 : "Export as Excel"}
@@ -524,17 +589,19 @@ const Index = () => {
         </Card>
       )}
 
-      {listData?.length > 5 && <Card mt={3} p={2}>
-        <PaginationProperty
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          dataLength={listData?.length}
-          nextPage={nextPage}
-          previousPage={previousPage}
-          rangeData={rangeData}
-          setRangeData={setRangeData}
-        />
-      </Card>}
+      {listData?.length > 5 && (
+        <Card mt={3} p={2}>
+          <PaginationProperty
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            dataLength={listData?.length}
+            nextPage={nextPage}
+            previousPage={previousPage}
+            rangeData={rangeData}
+            setRangeData={setRangeData}
+          />
+        </Card>
+      )}
 
       {isOpen && (
         <Add

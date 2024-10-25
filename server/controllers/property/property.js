@@ -68,6 +68,21 @@ const addApartmentData = (oldUnits, newUnitTypeId) => {
   return newFloors;
 };
 
+const deleteUnitType = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { unitTypeId } = req.body;
+    const updatedProperty = await Property.findByIdAndUpdate(
+      { _id: id },
+      { $pull: { unitType: { _id: unitTypeId } } },
+      { new: true }
+    );
+    res.status(200).json(updatedProperty);
+  } catch (error) {
+    console.error("Failed to Delete");
+  }
+};
+
 const addUnits = async (req, res) => {
   try {
     const { id } = req.params;
@@ -153,6 +168,23 @@ const editUnit = async (req, res) => {
   } catch (err) {
     console.error("Failed to create Property:", err);
     res.status(400).json({ error: "Failed to create Property" });
+  }
+};
+
+const updateUnitTypeId = async (req, res) => {
+  try {
+    const { id, unitid, newUnitType } = req.params;
+    const updatedUnitTypeId = await Property.updateOne(
+      { _id: id, "units.flats._id": unitid },
+      { $set: { "units.$[].flats.$[flat].unitType": newUnitType } },
+      {
+        arrayFilters: [{ "flat._id": unitid }], 
+        new: true,
+      }
+    );
+    res.status(200).json(updatedUnitTypeId);
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -480,10 +512,10 @@ const upload = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-          "-" +
-          timestamp +
-          "." +
-          file.originalname.split(".")[1]
+            "-" +
+            timestamp +
+            "." +
+            file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -536,10 +568,10 @@ const virtualTours = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-          "-" +
-          timestamp +
-          "." +
-          file.originalname.split(".")[1]
+            "-" +
+            timestamp +
+            "." +
+            file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -592,10 +624,10 @@ const FloorPlansStorage = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-          "-" +
-          timestamp +
-          "." +
-          file.originalname.split(".")[1]
+            "-" +
+            timestamp +
+            "." +
+            file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -648,10 +680,10 @@ const PropertyDocumentsStorage = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-          "-" +
-          timestamp +
-          "." +
-          file.originalname.split(".")[1]
+            "-" +
+            timestamp +
+            "." +
+            file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -694,6 +726,8 @@ module.exports = {
   changeUnitStatus,
   addMany,
   editUnit,
+  deleteUnitType,
+  updateUnitTypeId,
   view,
   edit,
   deleteData,

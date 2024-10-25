@@ -8,13 +8,48 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Flex,
+  Select,
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
+import { useState, useEffect } from "react";
 import { IoLogoUsd } from "react-icons/io";
+import { postApi } from "services/api";
+import { useParams } from "react-router-dom";
 
 const UnitTypeView = (props) => {
-  const { onClose, isOpen, data } = props;
+  const { onClose, isOpen, data, unitTypeList, setAction } = props;
+  const [selectedUnitType, setSelectedUnitType] = useState("");
+
+  const { id } = useParams();
+  const unitIdData = data?.unit?.unitType;
+  const unitTypeIdData = data?.unitType?._id;
+
+  useEffect(() => {
+    if (unitIdData === unitTypeIdData) {
+      setSelectedUnitType(unitIdData);
+    }
+    if (!data?.unitType?.name) {
+      setSelectedUnitType("");
+    }
+  }, [unitIdData, unitTypeIdData]);
+
+  const handleChange = async (event) => {
+    const newValue = event?.target?.value;
+    let response = await postApi(
+      `api/property/update-unit-type/${id}/${data?.unit?._id}/${newValue}`
+    );
+    if (response && response?.status === 200) {
+      setSelectedUnitType(newValue);
+      setAction((pre) => !pre);
+      handleCloseModel();
+    }
+  };
+
+  const handleCloseModel = () => {
+    onClose();
+  };
 
   return (
     <>
@@ -56,13 +91,24 @@ const UnitTypeView = (props) => {
                 <Text fontSize="sm" fontWeight="bold" color="blackAlpha.900">
                   Status
                 </Text>
-                <Text>
-                  {data?.unit?.status ? data?.unit?.status : "-"}
-                </Text>
+                <Text>{data?.unit?.status ? data?.unit?.status : "-"}</Text>
               </GridItem>
             </Grid>
           </ModalBody>
           <ModalFooter>
+            <Flex>
+              <Select
+                placeholder={"Unit Type"}
+                value={selectedUnitType}
+                onChange={handleChange}
+              >
+                {unitTypeList?.map((unitType) => {
+                  return (
+                    <option value={unitType?._id}>{unitType?.name}</option>
+                  );
+                })}
+              </Select>
+            </Flex>
             <Button
               size="sm"
               sx={{
@@ -71,9 +117,7 @@ const UnitTypeView = (props) => {
               }}
               variant="outline"
               colorScheme="red"
-              onClick={() => {
-                onClose();
-              }}
+              onClick={handleCloseModel}
             >
               Close
             </Button>
