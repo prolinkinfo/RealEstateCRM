@@ -1,11 +1,12 @@
 // Chakra imports
 import {
-  Box, Flex,
+  Box,
+  Flex,
   Grid,
   GridItem,
   Icon,
   Text,
-  useColorModeValue
+  useColorModeValue,
 } from "@chakra-ui/react";
 // Custom components
 // Assets
@@ -20,45 +21,49 @@ export default function Upload(props) {
   const textColorSecondary = "gray.400";
   return (
     <Grid templateColumns="repeat(12, 1fr)" gap={2}>
-      <GridItem colSpan={{ base: 12 }} >
+      <GridItem colSpan={{ base: 12 }}>
         <Dropzone
           w={{ base: "100%" }}
-          me='36px'
+          me="36px"
           minH={200}
-          img={props?.text === 'Property Photos' ? 'img' : ''}
-          height={'100%'}
+          img={props?.text === "Property Photos" ? "img" : ""}
+          height={"100%"}
           onFileSelect={props?.onFileSelect}
           content={
             <Box>
-              <Icon as={MdUpload} w='80px' h='80px' color={brandColor} />
-              <Flex justify='center' mx='auto' mb='12px'>
-                <Text fontSize='xl' fontWeight='700' color={brandColor}>
+              <Icon as={MdUpload} w="80px" h="80px" color={brandColor} />
+              <Flex justify="center" mx="auto" mb="12px">
+                <Text fontSize="xl" fontWeight="700" color={brandColor}>
                   Upload Files
                 </Text>
               </Flex>
-              {count > 0 && <Text fontSize='sm' fontWeight='500' color='secondaryGray.500'>
-                Selected Files : {count}
-              </Text>}
+              {count > 0 && (
+                <Text fontSize="sm" fontWeight="500" color="secondaryGray.500">
+                  Selected Files : {count}
+                </Text>
+              )}
             </Box>
           }
         />
       </GridItem>
-      <GridItem colSpan={{ base: 12 }} >
-        <Flex direction='column' >
+      <GridItem colSpan={{ base: 12 }}>
+        <Flex direction="column">
           <Text
             color={textColorPrimary}
-            fontWeight='bold'
-            textAlign='start'
-            fontSize='2xl'
-            mt={{ base: "20px" }}>
+            fontWeight="bold"
+            textAlign="start"
+            fontSize="2xl"
+            mt={{ base: "20px" }}
+          >
             Upload {props?.text}
           </Text>
           <Text
             color={textColorSecondary}
-            fontSize='md'
+            fontSize="md"
             my={{ base: "auto" }}
-            mx='auto'
-            textAlign='start'>
+            mx="auto"
+            textAlign="start"
+          >
             Accepted File Types (Images files - 15MB max) only 10 files
           </Text>
         </Flex>
@@ -66,4 +71,3 @@ export default function Upload(props) {
     </Grid>
   );
 }
-

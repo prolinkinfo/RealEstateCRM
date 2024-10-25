@@ -38,7 +38,7 @@ const UnitTypeView = (props) => {
   const handleChange = async (event) => {
     const newValue = event?.target?.value;
     let response = await postApi(
-      `api/property/update-unit-type/${id}/${data?.unit?._id}/${newValue}`
+      `api/property/update-unit-type/${id}/${data?.unit?._id}/${newValue}`,
     );
     if (response && response?.status === 200) {
       setSelectedUnitType(newValue);

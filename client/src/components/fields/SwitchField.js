@@ -5,7 +5,7 @@ import {
   FormLabel,
   Switch,
   Text,
-  useColorModeValue
+  useColorModeValue,
 } from "@chakra-ui/react";
 // Custom components
 import React from "react";

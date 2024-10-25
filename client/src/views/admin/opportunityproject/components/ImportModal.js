@@ -182,9 +182,8 @@ const ImportModal = (props) => {
                 />
                 <Text mb="10px" color={"red"}>
                   {" "}
-                  {errors?.opportunityproject && touched?.opportunityproject && (
-                    <>Please Select {text}</>
-                  )}
+                  {errors?.opportunityproject &&
+                    touched?.opportunityproject && <>Please Select {text}</>}
                 </Text>
               </GridItem>
             </Grid>

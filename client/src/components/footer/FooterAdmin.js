@@ -16,7 +16,7 @@ export default function Footer() {
   const { toggleColorMode } = useColorMode();
   return (
     <Flex
-      zIndex='3'
+      zIndex="3"
       flexDirection={{
         base: "column",
         xl: "row",
@@ -25,26 +25,40 @@ export default function Footer() {
         base: "center",
         xl: "start",
       }}
-      justifyContent='space-between'
+      justifyContent="space-between"
       px={{ base: "30px", md: "50px" }}
-      pb='30px'>
+      pb="30px"
+    >
       <Text
         color={textColor}
         textAlign={{
           base: "center",
           xl: "start",
         }}
-        mb={{ base: "20px", xl: "0px" }}>
+        mb={{ base: "20px", xl: "0px" }}
+      >
         {" "}
         &copy; {1900 + new Date().getYear()}
-        <Text as='span' fontWeight='500' ms='4px'>
+        <Text as="span" fontWeight="500" ms="4px">
           <Link
-            fontWeight='500'
+            fontWeight="500"
             color={textColor}
             target="_blank"
-            href='https://prolinkinfotech.com/'> Prolink Infotech.</Link> Need help, facing issues, or looking for a new feature? Contact us for paid support and services at <Link href='mailto:alternatecrm@gmail.com' fontWeight='500'
-              color={textColor}
-              target="_blank">alternatecrm@gmail.com</Link>
+            href="https://prolinkinfotech.com/"
+          >
+            {" "}
+            Prolink Infotech.
+          </Link>{" "}
+          Need help, facing issues, or looking for a new feature? Contact us for
+          paid support and services at{" "}
+          <Link
+            href="mailto:alternatecrm@gmail.com"
+            fontWeight="500"
+            color={textColor}
+            target="_blank"
+          >
+            alternatecrm@gmail.com
+          </Link>
         </Text>
       </Text>
       {/* <List display='flex'>

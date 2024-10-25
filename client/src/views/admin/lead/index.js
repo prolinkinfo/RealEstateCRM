@@ -76,7 +76,7 @@ const Index = () => {
   const data = useSelector((state) => state?.leadData?.data);
 
   const searchedDataOut = useSelector(
-    (state) => state?.advanceSearchData?.searchResult
+    (state) => state?.advanceSearchData?.searchResult,
   );
   const payload = {
     leadStatus: location?.state,
@@ -87,7 +87,7 @@ const Index = () => {
     let result = await getApi(
       user?.role === "superAdmin"
         ? "api/lead/"
-        : `api/lead/?createBy=${user?._id}`
+        : `api/lead/?createBy=${user?._id}`,
     );
     // setData(result?.data);
     setIsLoding(false);
@@ -105,7 +105,7 @@ const Index = () => {
       setIsLoding(true);
       let response = await putApi(
         `api/lead/changeStatus/${cell?.original?._id}`,
-        { leadStatus: e?.target?.value }
+        { leadStatus: e?.target?.value },
       );
       if (response?.status === 200) {
         setAction((pre) => !pre);
@@ -134,7 +134,7 @@ const Index = () => {
     setIsLoding(true);
 
     try {
-      const result = await dispatch(fetchLeadCustomFiled());  
+      const result = await dispatch(fetchLeadCustomFiled());
       if (result?.payload?.status === 200) {
         setLeadData(result?.payload?.data);
       } else {
@@ -282,7 +282,7 @@ const Index = () => {
                         </Text>
                       </div>
                     ),
-                  }
+                  },
               ) || []
           : []),
         ...(result?.payload?.data && result?.payload?.data?.length > 0
@@ -291,7 +291,7 @@ const Index = () => {
                 (field) =>
                   field?.isTableField === true &&
                   !field?.isView &&
-                  field?.name !== "leadStatus"
+                  field?.name !== "leadStatus",
               )
               ?.map((field) => ({
                 Header: field?.label,
@@ -337,8 +337,8 @@ const Index = () => {
   useEffect(() => {
     setDataColumn(
       tableColumns?.filter((item) =>
-        selectedColumns?.find((colum) => colum?.Header === item?.Header)
-      )
+        selectedColumns?.find((colum) => colum?.Header === item?.Header),
+      ),
     );
   }, [tableColumns, selectedColumns]);
 
@@ -346,7 +346,7 @@ const Index = () => {
     if (location?.state) {
       setSearchDisplay(true);
       dispatch(
-        getSearchData({ values: payload, allData: data, type: "Leads" })
+        getSearchData({ values: payload, allData: data, type: "Leads" }),
       );
       const getValue = [
         {
@@ -374,7 +374,7 @@ const Index = () => {
               tableData={searchDisplay ? searchedDataOut : data}
               tableCustomFields={
                 leadData?.[0]?.fields?.filter(
-                  (field) => field?.isTableField === true
+                  (field) => field?.isTableField === true,
                 ) || []
               }
               access={permission}

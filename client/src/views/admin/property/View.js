@@ -98,7 +98,7 @@ const View = () => {
   const [setEmail, setEmailData] = useState([]);
   const dispatch = useDispatch();
   const propertyData = useSelector(
-    (state) => state?.propertyCustomFiled?.data?.data
+    (state) => state?.propertyCustomFiled?.data?.data,
   );
 
   const [contactData, setContactData] = useState([]);
@@ -327,8 +327,25 @@ const View = () => {
         handleDeleteData={handleDeleteProperties}
         ids={param?.id}
       />
-      <EmailModel lead={true} leadEmail={allData?.lead?.leadEmail} fetchData={fetchData} isOpen={addEmailHistory} onClose={setAddEmailHistory} id={param?.id}/>
-      <PhoneModel  viewData={allData} fetchData={fetchData} isOpen={addPhoneCall} onClose={setAddPhoneCall} setAction={setAction} data={data?.contact} id={param?.id} lead={true} LData={data}/>
+      <EmailModel
+        lead={true}
+        leadEmail={allData?.lead?.leadEmail}
+        fetchData={fetchData}
+        isOpen={addEmailHistory}
+        onClose={setAddEmailHistory}
+        id={param?.id}
+      />
+      <PhoneModel
+        viewData={allData}
+        fetchData={fetchData}
+        isOpen={addPhoneCall}
+        onClose={setAddPhoneCall}
+        setAction={setAction}
+        data={data?.contact}
+        id={param?.id}
+        lead={true}
+        LData={data}
+      />
       {isLoding ? (
         <Flex justifyContent={"center"} alignItems={"center"} width="100%">
           <Spinner />
@@ -478,7 +495,7 @@ const View = () => {
                               size={"md"}
                               tableCustomFields={
                                 contactData?.[0]?.fields?.filter(
-                                  (field) => field?.isTableField === true
+                                  (field) => field?.isTableField === true,
                                 ) || []
                               }
                               customSearch={true}
@@ -516,12 +533,9 @@ const View = () => {
                               deleteMany={true}
                               ManageGrid={false}
                               // onOpen={() => setAddEmailHistory(true)}
-                              onOpen={() => 
-                                setAddEmailHistory(true)
-                              }
+                              onOpen={() => setAddEmailHistory(true)}
                               access={emailAccess}
                             />
-                          
                           </Card>
                         </GridItem>
                       )}
@@ -543,7 +557,6 @@ const View = () => {
                               onOpen={() => setAddPhoneCall(true)}
                               access={callAccess}
                             />
-                            
                           </Card>
                         </GridItem>
                       )}
@@ -958,10 +971,10 @@ const View = () => {
             {type === "photo"
               ? "Property All Photos"
               : type === "video"
-              ? "Virtual Tours or Videos"
-              : type === "floor"
-              ? "Floors plans"
-              : ""}
+                ? "Virtual Tours or Videos"
+                : type === "floor"
+                  ? "Floors plans"
+                  : ""}
           </ModalHeader>
           <ModalCloseButton onClick={() => setDisplayPropertyPhoto(false)} />
           <ModalBody overflowY={"auto"} height={"700px"}>
@@ -982,37 +995,37 @@ const View = () => {
                     </a>
                   ))
                 : type === "video"
-                ? data &&
-                  data?.virtualToursOrVideos?.length > 0 &&
-                  data?.virtualToursOrVideos?.map((item) => (
-                    <a href={item?.img} target="_blank">
-                      <video
-                        width="380"
-                        controls
-                        autoplay
-                        loop
-                        style={{ margin: " 5px" }}
-                      >
-                        <source src={item?.img} type="video/mp4" />
-                        <source src={item?.img} type="video/ogg" />
-                      </video>
-                    </a>
-                  ))
-                : type === "floor"
-                ? data &&
-                  data?.floorPlans?.length > 0 &&
-                  data?.floorPlans?.map((item) => (
-                    <a href={item.img} target="_blank">
-                      <Image
-                        width={"100%"}
-                        m={1}
-                        mb={4}
-                        src={item.img}
-                        alt="Your Image"
-                      />
-                    </a>
-                  ))
-                : ""}
+                  ? data &&
+                    data?.virtualToursOrVideos?.length > 0 &&
+                    data?.virtualToursOrVideos?.map((item) => (
+                      <a href={item?.img} target="_blank">
+                        <video
+                          width="380"
+                          controls
+                          autoplay
+                          loop
+                          style={{ margin: " 5px" }}
+                        >
+                          <source src={item?.img} type="video/mp4" />
+                          <source src={item?.img} type="video/ogg" />
+                        </video>
+                      </a>
+                    ))
+                  : type === "floor"
+                    ? data &&
+                      data?.floorPlans?.length > 0 &&
+                      data?.floorPlans?.map((item) => (
+                        <a href={item.img} target="_blank">
+                          <Image
+                            width={"100%"}
+                            m={1}
+                            mb={4}
+                            src={item.img}
+                            alt="Your Image"
+                          />
+                        </a>
+                      ))
+                    : ""}
             </div>
           </ModalBody>
           <ModalFooter>

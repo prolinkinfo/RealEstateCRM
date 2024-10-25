@@ -107,7 +107,7 @@ const View = () => {
 
   const dispatch = useDispatch();
   const propertyData = useSelector(
-    (state) => state?.propertyCustomFiled?.data?.data
+    (state) => state?.propertyCustomFiled?.data?.data,
   );
 
   const [contactData, setContactData] = useState([]);
@@ -462,7 +462,7 @@ const View = () => {
       setIsLoding(true);
       let response = await postApi(
         `api/property/change-unit-status/${param?.id}`,
-        paylaod
+        paylaod,
       );
       if (response && response?.status === 200) {
         setAction((pre) => !pre);
@@ -718,7 +718,7 @@ const View = () => {
                               size={"md"}
                               tableCustomFields={
                                 contactData?.[0]?.fields?.filter(
-                                  (field) => field?.isTableField === true
+                                  (field) => field?.isTableField === true,
                                 ) || []
                               }
                               customSearch={true}
@@ -879,7 +879,7 @@ const View = () => {
                                     handleViewUnitType(item, {
                                       floorNumber: floor?.floorNumber,
                                       floorNumberSuffix: getOrdinalSuffix(
-                                        floor?.floorNumber
+                                        floor?.floorNumber,
                                       ),
                                     })
                                   }
@@ -905,7 +905,7 @@ const View = () => {
                                         handleStatusChange(
                                           floor,
                                           item,
-                                          "Available"
+                                          "Available",
                                         );
                                       }}
                                     >
@@ -921,7 +921,7 @@ const View = () => {
                                         handleStatusChange(
                                           floor,
                                           item,
-                                          "Booked"
+                                          "Booked",
                                         );
                                       }}
                                     >
@@ -953,7 +953,7 @@ const View = () => {
                                           handleStatusChange(
                                             floor,
                                             item,
-                                            "Blocked"
+                                            "Blocked",
                                           );
                                         }}
                                       >
@@ -980,7 +980,7 @@ const View = () => {
                         <DataNotFound />
                       </Text>
                     </Card>
-                  )
+                  ),
                 )}
               </TabPanel>
 
@@ -1391,10 +1391,10 @@ const View = () => {
             {type === "photo"
               ? "Property All Photos"
               : type === "video"
-              ? "Virtual Tours or Videos"
-              : type === "floor"
-              ? "Floors plans"
-              : ""}
+                ? "Virtual Tours or Videos"
+                : type === "floor"
+                  ? "Floors plans"
+                  : ""}
           </ModalHeader>
           <ModalCloseButton onClick={() => setDisplayPropertyPhoto(false)} />
           <ModalBody overflowY={"auto"} height={"700px"}>
@@ -1415,37 +1415,37 @@ const View = () => {
                     </a>
                   ))
                 : type === "video"
-                ? data &&
-                  data?.virtualToursOrVideos?.length > 0 &&
-                  data?.virtualToursOrVideos?.map((item) => (
-                    <a href={item.img} target="_blank">
-                      <video
-                        width="380"
-                        controls
-                        autoplay
-                        loop
-                        style={{ margin: " 5px" }}
-                      >
-                        <source src={item?.img} type="video/mp4" />
-                        <source src={item?.img} type="video/ogg" />
-                      </video>
-                    </a>
-                  ))
-                : type === "floor"
-                ? data &&
-                  data?.floorPlans?.length > 0 &&
-                  data?.floorPlans?.map((item) => (
-                    <a href={item?.img} target="_blank">
-                      <Image
-                        width={"100%"}
-                        m={1}
-                        mb={4}
-                        src={item?.img}
-                        alt="Your Image"
-                      />
-                    </a>
-                  ))
-                : ""}
+                  ? data &&
+                    data?.virtualToursOrVideos?.length > 0 &&
+                    data?.virtualToursOrVideos?.map((item) => (
+                      <a href={item.img} target="_blank">
+                        <video
+                          width="380"
+                          controls
+                          autoplay
+                          loop
+                          style={{ margin: " 5px" }}
+                        >
+                          <source src={item?.img} type="video/mp4" />
+                          <source src={item?.img} type="video/ogg" />
+                        </video>
+                      </a>
+                    ))
+                  : type === "floor"
+                    ? data &&
+                      data?.floorPlans?.length > 0 &&
+                      data?.floorPlans?.map((item) => (
+                        <a href={item?.img} target="_blank">
+                          <Image
+                            width={"100%"}
+                            m={1}
+                            mb={4}
+                            src={item?.img}
+                            alt="Your Image"
+                          />
+                        </a>
+                      ))
+                    : ""}
             </div>
           </ModalBody>
           <ModalFooter>

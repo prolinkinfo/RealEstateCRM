@@ -98,13 +98,13 @@ const CommonCheckTable = (props) => {
   const [tempSelectedColumns, setTempSelectedColumns] = useState(dataColumn); // State to track changes
 
   const searchedDataOut = useSelector(
-    (state) => state?.advanceSearchData?.searchResult
+    (state) => state?.advanceSearchData?.searchResult,
   );
   const searchValue = useSelector(
-    (state) => state?.advanceSearchData?.searchValue
+    (state) => state?.advanceSearchData?.searchValue,
   );
   const getTagValues = useSelector(
-    (state) => state?.advanceSearchData?.getTagValues
+    (state) => state?.advanceSearchData?.getTagValues,
   );
   const data = useMemo(
     () =>
@@ -119,7 +119,7 @@ const CommonCheckTable = (props) => {
           ? searchedDataOut
           : searchedData
         : allData,
-    ]
+    ],
   );
   const [manageColumns, setManageColumns] = useState(false);
   const [csvColumns, setCsvColumns] = useState([]);
@@ -138,7 +138,7 @@ const CommonCheckTable = (props) => {
     },
     useGlobalFilter,
     useSortBy,
-    usePagination
+    usePagination,
   );
 
   const {
@@ -176,7 +176,7 @@ const CommonCheckTable = (props) => {
     dispatch(setSearchValue(values));
     const searchResult = AdvanceSearch
       ? dispatch(
-          getSearchData({ values: values, allData: allData, type: title })
+          getSearchData({ values: values, allData: allData, type: title }),
         )
       : allData?.filter((item) => {
           return tableCustomFields.every((field) => {
@@ -269,7 +269,7 @@ const CommonCheckTable = (props) => {
       (item) =>
         !state ||
         (item?.status &&
-          item?.status?.toLowerCase()?.includes(state?.toLowerCase()))
+          item?.status?.toLowerCase()?.includes(state?.toLowerCase())),
     );
     let getValue = [state || undefined].filter((value) => value);
 
@@ -292,16 +292,16 @@ const CommonCheckTable = (props) => {
   const toggleColumnVisibility = (columnKey) => {
     setColumn(columnKey);
     isColumnSelected = tempSelectedColumns?.some(
-      (column) => column?.accessor === columnKey
+      (column) => column?.accessor === columnKey,
     );
     if (isColumnSelected) {
       const updatedColumns = tempSelectedColumns?.filter(
-        (column) => column?.accessor !== columnKey
+        (column) => column?.accessor !== columnKey,
       );
       setTempSelectedColumns(updatedColumns);
     } else {
       const columnToAdd = columnData?.find(
-        (column) => column?.accessor === columnKey
+        (column) => column?.accessor === columnKey,
       );
       setTempSelectedColumns([...tempSelectedColumns, columnToAdd]);
     }
@@ -323,14 +323,16 @@ const CommonCheckTable = (props) => {
     } else {
       setSelectedValues &&
         setSelectedValues((prevSelectedValues) =>
-          prevSelectedValues?.filter((selectedValue) => selectedValue !== value)
+          prevSelectedValues?.filter(
+            (selectedValue) => selectedValue !== value,
+          ),
         );
     }
   };
 
   const handleColumnClear = () => {
     isColumnSelected = selectedColumns?.some(
-      (selectedColumn) => selectedColumn?.accessor === column?.accessor
+      (selectedColumn) => selectedColumn?.accessor === column?.accessor,
     );
     setTempSelectedColumns(columnData);
     setManageColumns(!manageColumns ? !manageColumns : false);
@@ -358,7 +360,7 @@ const CommonCheckTable = (props) => {
           selectedRecordsWithSpecificFileds,
           csvColumns,
           title || "data",
-          extension
+          extension,
         );
       } else {
         const AllRecordsWithSpecificFileds = allData?.map((rec) => {
@@ -372,7 +374,7 @@ const CommonCheckTable = (props) => {
           AllRecordsWithSpecificFileds,
           csvColumns,
           title || "data",
-          extension
+          extension,
         );
       }
     } catch (e) {
@@ -384,7 +386,7 @@ const CommonCheckTable = (props) => {
     jsonArray,
     csvColumns,
     fileName,
-    extension
+    extension,
   ) => {
     const csvHeader = csvColumns?.map((col) => col?.Header);
 
@@ -649,7 +651,7 @@ const CommonCheckTable = (props) => {
                     <Th
                       {...column.getHeaderProps(
                         column.isSortable !== false &&
-                          column.getSortByToggleProps()
+                          column.getSortByToggleProps(),
                       )}
                       pe="10px"
                       key={index}
@@ -727,7 +729,10 @@ const CommonCheckTable = (props) => {
                         let data = "";
                         columnData?.forEach((item) => {
                           if (cell?.column.Header === item?.Header) {
-                            if (item?.cell && typeof item?.cell === "function") {
+                            if (
+                              item?.cell &&
+                              typeof item?.cell === "function"
+                            ) {
                               data = (
                                 <Flex
                                   Flex
@@ -756,12 +761,12 @@ const CommonCheckTable = (props) => {
                                         colorScheme="brandScheme"
                                         value={selectedValues}
                                         isChecked={selectedValues?.includes(
-                                          cell?.value
+                                          cell?.value,
                                         )}
                                         onChange={(event) =>
                                           handleCheckboxChange(
                                             event,
-                                            cell?.value
+                                            cell?.value,
                                           )
                                         }
                                         me="10px"
@@ -776,8 +781,8 @@ const CommonCheckTable = (props) => {
                                     {item.Header === "#"
                                       ? cell?.row?.index + 1
                                       : cell?.value
-                                      ? cell?.value
-                                      : "-"}
+                                        ? cell?.value
+                                        : "-"}
                                   </Text>
                                 </Flex>
                               );
@@ -844,7 +849,7 @@ const CommonCheckTable = (props) => {
                     <Checkbox
                       defaultChecked={selectedColumns?.some(
                         (selectedColumn) =>
-                          selectedColumn?.accessor === column?.accessor
+                          selectedColumn?.accessor === column?.accessor,
                       )}
                       onChange={() => toggleColumnVisibility(column?.accessor)}
                       pe={2}

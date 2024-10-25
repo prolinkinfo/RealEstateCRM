@@ -50,7 +50,7 @@ export default function PropertyTable(props) {
     },
     useGlobalFilter,
     useSortBy,
-    usePagination
+    usePagination,
   );
 
   const {
@@ -86,7 +86,9 @@ export default function PropertyTable(props) {
         ]);
       } else {
         setSelectedValues((prevSelectedValues) =>
-          prevSelectedValues?.filter((selectedValue) => selectedValue !== value)
+          prevSelectedValues?.filter(
+            (selectedValue) => selectedValue !== value,
+          ),
         );
       }
     } else {
@@ -126,7 +128,7 @@ export default function PropertyTable(props) {
                   <Th
                     {...column.getHeaderProps(
                       column?.isSortable !== false &&
-                        column?.getSortByToggleProps()
+                        column?.getSortByToggleProps(),
                     )}
                     pe="10px"
                     key={index}

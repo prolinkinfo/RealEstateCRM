@@ -199,7 +199,7 @@ const Index = () => {
       setIsLoding(false);
     }
   };
-  
+
   const changeStatus = (status) => {
     switch (status) {
       case "Available":
@@ -225,17 +225,17 @@ const Index = () => {
       setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
     } else {
       setSelectedValues((prevSelectedValues) =>
-        prevSelectedValues?.filter((selectedValue) => selectedValue !== value)
+        prevSelectedValues?.filter((selectedValue) => selectedValue !== value),
       );
     }
   };
 
   const listData = (displaySearchData ? searchData : data)?.filter(
-    (item) => types?.length === 0 || types?.includes(item?.status)
+    (item) => types?.length === 0 || types?.includes(item?.status),
   );
   const displayedData = listData.slice(
     currentPage * rangeData,
-    (currentPage + 1) * rangeData
+    (currentPage + 1) * rangeData,
   );
 
   const handleStatusChange = (values) => {
@@ -246,7 +246,7 @@ const Index = () => {
     setTypes((pre) => pre?.filter((item) => item !== value));
   };
 
-  const title ="Properties";
+  const title = "Properties";
   const handleExportNewProperties = (extension) => {
     selectedValues && selectedValues?.length > 0
       ? downloadCsvOrExcel(extension, selectedValues)
@@ -268,7 +268,7 @@ const Index = () => {
           selectedRecordsWithSpecificFileds,
           columns,
           title || "data",
-          extension
+          extension,
         );
       } else {
         const AllRecordsWithSpecificFileds = data?.map((rec) => {
@@ -282,7 +282,7 @@ const Index = () => {
           AllRecordsWithSpecificFileds,
           columns,
           title || "data",
-          extension
+          extension,
         );
       }
     } catch (e) {
@@ -294,7 +294,7 @@ const Index = () => {
     jsonArray,
     csvColumns,
     fileName,
-    extension
+    extension,
   ) => {
     const csvHeader = csvColumns?.map((col) => col?.Header);
 
@@ -377,12 +377,18 @@ const Index = () => {
               Import Properties
             </MenuItem>
             <MenuDivider />
-            <MenuItem width="165px" onClick={() => handleExportNewProperties("csv")}>
+            <MenuItem
+              width="165px"
+              onClick={() => handleExportNewProperties("csv")}
+            >
               {selectedValues && selectedValues?.length > 0
                 ? "Export Selected Data as CSV"
                 : "Export as CSV"}
             </MenuItem>
-            <MenuItem width="165px" onClick={() => handleExportNewProperties("xlsx")}>
+            <MenuItem
+              width="165px"
+              onClick={() => handleExportNewProperties("xlsx")}
+            >
               {selectedValues && selectedValues?.length > 0
                 ? "Export Selected Data as Excel"
                 : "Export as Excel"}

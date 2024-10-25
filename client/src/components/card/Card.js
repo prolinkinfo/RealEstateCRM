@@ -4,7 +4,7 @@ function Card(props) {
   const styles = useStyleConfig("Card", { variant });
 
   return (
-    <Box __css={styles} height={'100%'} {...rest}>
+    <Box __css={styles} height={"100%"} {...rest}>
       {children}
     </Box>
   );

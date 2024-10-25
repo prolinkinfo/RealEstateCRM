@@ -302,7 +302,7 @@ const View = (props) => {
         .set({
           margin: [0, 0, 0, 0],
           filename: `OpportunityProject_Details_${moment().format(
-            "DD-MM-YYYY"
+            "DD-MM-YYYY",
           )}.pdf`,
           image: { type: "jpeg", quality: 0.98 },
           html2canvas: { scale: 2, useCORS: true, allowTaint: true },
@@ -389,7 +389,7 @@ const View = (props) => {
       setIsLoding(true);
       let response = await putApi(
         `api/opportunityproject/edit/${params?.id}`,
-        values
+        values,
       );
       if (response && response?.status === 200) {
         setEditableField(null);
@@ -660,7 +660,7 @@ const View = (props) => {
                         handleDoubleClick(
                           "requirement",
                           opportunitydata?.requirement,
-                          "Opportunity Name"
+                          "Opportunity Name",
                         )
                       }
                     >
@@ -696,10 +696,10 @@ const View = (props) => {
                         (contactAccess?.view || user?.role === "superAdmin")
                           ? "brand.600"
                           : leadAccess?.view ||
-                            (user?.role === "superAdmin" &&
-                              opportunitydata?.category === "lead")
-                          ? "brand.600"
-                          : "blackAlpha.900"
+                              (user?.role === "superAdmin" &&
+                                opportunitydata?.category === "lead")
+                            ? "brand.600"
+                            : "blackAlpha.900"
                       }
                       sx={{
                         "&:hover": {
@@ -729,7 +729,7 @@ const View = (props) => {
                   tableData={selectedPropertyData ?? []}
                   tableCustomFields={
                     propertyData?.[0]?.fields?.filter(
-                      (field) => field?.isTableField === true
+                      (field) => field?.isTableField === true,
                     ) || []
                   }
                   AdvanceSearch={() => ""}

@@ -1,21 +1,19 @@
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import { constant } from "../../constant";
+import { getApi } from "services/api";
 
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { constant } from '../../constant';
-import { getApi } from 'services/api';
-
-export const fetchRouteData = createAsyncThunk('fetchRouteData', async () => {
+export const fetchRouteData = createAsyncThunk("fetchRouteData", async () => {
   try {
     const response = await getApi(`api/route/`);
     return response.data;
-} catch (error) {
+  } catch (error) {
     throw error;
-}
+  }
 });
 
-
 const routeSlice = createSlice({
-  name: 'routeData',
+  name: "routeData",
   initialState: {
     data: [],
     isLoading: false,

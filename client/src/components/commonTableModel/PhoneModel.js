@@ -34,10 +34,10 @@ import { getApi, postApi } from "services/api";
 import MultiPropertyModel from "components/commonTableModel/MultiPropertyModel";
 import { CUIAutoComplete } from "chakra-ui-autocomplete";
 import { useParams } from "react-router-dom";
-import * as yup from 'yup'
+import * as yup from "yup";
 
 const PhoneModel = (props) => {
-  const { onClose, isOpen, setAction,fetchData} = props;
+  const { onClose, isOpen, setAction, fetchData } = props;
   const [isLoding, setIsLoding] = useState(false);
   const [assignToLeadData, setAssignToLeadData] = useState([]);
   const [assignToContactData, setAssignToContactData] = useState([]);
@@ -67,7 +67,7 @@ const PhoneModel = (props) => {
     salesAgent: "", // sales person user id
   };
 
-  const validationSchema =yup.object({
+  const validationSchema = yup.object({
     sender: yup.string().required("Sender Is required"),
     recipient: yup.string().required("Recipient Is required"),
     callDuration: yup.string().required("Call Duration is required"),
@@ -78,7 +78,7 @@ const PhoneModel = (props) => {
     category: yup.string(),
     startDate: yup.date().required("Start Date Is required"),
     salesAgent: yup.string().required("Assign To Sales Agent Is required"),
-})
+  });
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema,
@@ -104,7 +104,7 @@ const PhoneModel = (props) => {
       let response = await postApi("api/phoneCall/add", values);
       if (response?.status === 200) {
         props.onClose();
-        fetchData(1)
+        fetchData(1);
         setAction((pre) => !pre);
       }
     } catch (e) {
@@ -114,7 +114,7 @@ const PhoneModel = (props) => {
     }
   };
 
-  const getAllApi = async() =>{
+  const getAllApi = async () => {
     values.start = props?.date;
     try {
       let result;
@@ -122,42 +122,42 @@ const PhoneModel = (props) => {
         result = await getApi(
           user?.role === "superAdmin"
             ? "api/contact/"
-            : `api/contact/?createBy=${user?._id}`
+            : `api/contact/?createBy=${user?._id}`,
         );
         setAssignToContactData(result?.data);
       } else if (values?.category === "Lead" && assignToLeadData?.length <= 0) {
         result = await getApi(
           user?.role === "superAdmin"
             ? "api/lead/"
-            : `api/lead/?createBy=${user?._id}`
+            : `api/lead/?createBy=${user?._id}`,
         );
         setAssignToLeadData(result?.data);
-      } 
-        const propertyOptionData = await getApi(
-          user?.role === "superAdmin"
-            ? "api/property"
-            : `api/property/?createBy=${user?._id}`
-        );
-        setAssignToPropertyData(propertyOptionData?.data);
+      }
+      const propertyOptionData = await getApi(
+        user?.role === "superAdmin"
+          ? "api/property"
+          : `api/property/?createBy=${user?._id}`,
+      );
+      setAssignToPropertyData(propertyOptionData?.data);
     } catch (e) {
       console.log(e);
     }
-  }
+  };
   useEffect(() => {
-    getAllApi()
+    getAllApi();
   }, [props?.date, values?.category]);
 
   const fetchRecipientData = async () => {
     if (values?.createByContact) {
       let findEmail = assignToContactData?.find(
-        (item) => item?._id === values?.createByContact
+        (item) => item?._id === values?.createByContact,
       );
       if (findEmail) {
         setFieldValue("recipient", findEmail?.phoneNumber);
       }
     } else if (values?.createByLead) {
       let findEmail = assignToLeadData.find(
-        (item) => item?._id === values?.createByLead
+        (item) => item?._id === values?.createByLead,
       );
       if (findEmail) {
         setFieldValue("recipient", findEmail?.leadPhoneNumber);
@@ -174,7 +174,7 @@ const PhoneModel = (props) => {
 
       let salesPersons =
         result?.data?.user?.filter((userData) =>
-          userData?.roles?.some((role) => role?.roleName === "Sales")
+          userData?.roles?.some((role) => role?.roleName === "Sales"),
         ) || [];
       setAssignToSalesData(salesPersons);
     } catch (error) {
@@ -201,7 +201,7 @@ const PhoneModel = (props) => {
   const extractLabels = (selectedItems) => {
     return selectedItems?.map((item) => item?._id);
   };
-  
+
   return (
     <Modal onClose={onClose} isOpen={isOpen} isCentered>
       <ModalOverlay />
@@ -245,7 +245,7 @@ const PhoneModel = (props) => {
             fieldName="property"
             setFieldValue={setFieldValue}
             selectedItems={setValueProperty?.filter((item) =>
-              values?.property?.includes(item?._id)
+              values?.property?.includes(item?._id),
             )}
           />
           <Grid templateColumns="repeat(12, 1fr)" gap={3}>
@@ -421,11 +421,11 @@ const PhoneModel = (props) => {
                     label={`Property`}
                     items={setValueProperty}
                     selectedItems={setValueProperty?.filter((item) =>
-                      values?.property?.includes(item?._id)
+                      values?.property?.includes(item?._id),
                     )}
                     onSelectedItemsChange={(changes) => {
                       const selectProperty = extractLabels(
-                        changes?.selectedItems
+                        changes?.selectedItems,
                       );
                       setFieldValue("property", selectProperty);
                     }}
@@ -501,7 +501,9 @@ const PhoneModel = (props) => {
                 placeholder="call Duration"
                 fontWeight="500"
                 borderColor={
-                  errors?.callDuration && touched?.callDuration ? "red.300" : null
+                  errors?.callDuration && touched?.callDuration
+                    ? "red.300"
+                    : null
                 }
               />
               <Text mb="10px" fontSize="sm" color={"red"}>
@@ -527,7 +529,9 @@ const PhoneModel = (props) => {
                   name="salesAgent"
                   onChange={handleChange}
                   mb={
-                    errors?.salesAgent && touched?.salesAgent ? undefined : "10px"
+                    errors?.salesAgent && touched?.salesAgent
+                      ? undefined
+                      : "10px"
                   }
                   fontWeight="500"
                   placeholder={"Assign To Sales Agent"}
@@ -553,7 +557,9 @@ const PhoneModel = (props) => {
               </Flex>
               <Text mb="10px" fontSize="sm" color={"red"}>
                 {" "}
-                {errors?.salesAgent && touched?.salesAgent && errors?.salesAgent}
+                {errors?.salesAgent &&
+                  touched?.salesAgent &&
+                  errors?.salesAgent}
               </Text>
             </GridItem>
             <GridItem colSpan={{ base: 12 }}>

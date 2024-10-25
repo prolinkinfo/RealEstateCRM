@@ -113,7 +113,7 @@ const Editopportunityproject = (props) => {
           result = await getApi(
             user?.role === "superAdmin"
               ? "api/contact/"
-              : `api/contact/?createBy=${user._id}`
+              : `api/contact/?createBy=${user._id}`,
           );
           setAssignToContactData(result?.data);
         } else if (
@@ -123,7 +123,7 @@ const Editopportunityproject = (props) => {
           result = await getApi(
             user?.role === "superAdmin"
               ? "api/lead/"
-              : `api/lead/?createBy=${user?._id}`
+              : `api/lead/?createBy=${user?._id}`,
           );
           setAssignToLeadData(result?.data);
         }
@@ -137,7 +137,7 @@ const Editopportunityproject = (props) => {
     const propertyOptionData = await getApi(
       user?.role === "superAdmin"
         ? "api/property"
-        : `api/property/?createBy=${user?._id}`
+        : `api/property/?createBy=${user?._id}`,
     );
     setAssignToPropertyData(propertyOptionData?.data);
   };
@@ -174,7 +174,7 @@ const Editopportunityproject = (props) => {
         setIsLoding(true);
         let response = await putApi(
           `api/opportunityproject/edit/${selectedId}`,
-          values
+          values,
         );
         if (response && response?.status === 200) {
           fetchData();
@@ -253,7 +253,7 @@ const Editopportunityproject = (props) => {
             fieldName="property"
             setFieldValue={setFieldValue}
             selectedItems={setValueProperty?.filter((item) =>
-              values?.property?.includes(item._id)
+              values?.property?.includes(item._id),
             )}
           />
 
@@ -335,8 +335,7 @@ const Editopportunityproject = (props) => {
                   setFieldValue("category", e);
                   setFieldValue("contact", null);
                   setFieldValue("lead", null);
-                }
-              }
+                }}
                 value={values?.category}
               >
                 <Stack direction="row">
@@ -357,8 +356,7 @@ const Editopportunityproject = (props) => {
               </Text>
             </GridItem>
             <GridItem colSpan={{ base: 12, md: 12 }}>
-              {values?.category === "Contact" ?
-               (
+              {values?.category === "Contact" ? (
                 <>
                   <GridItem colSpan={{ base: 12, md: 12 }}>
                     <FormLabel
@@ -412,9 +410,7 @@ const Editopportunityproject = (props) => {
                     </Text>
                   </GridItem>
                 </>
-              )
-               : values?.category === "Lead" ?
-                (
+              ) : values?.category === "Lead" ? (
                 <>
                   <GridItem colSpan={{ base: 12, md: 12 }}>
                     <FormLabel
@@ -463,12 +459,9 @@ const Editopportunityproject = (props) => {
                     </Text>
                   </GridItem>
                 </>
-              ) 
-              : 
-              (
+              ) : (
                 ""
-              )
-              }
+              )}
             </GridItem>
             <GridItem colSpan={{ base: 12 }}>
               <Flex alignItems={"end"} justifyContent={"space-between"}>
@@ -485,11 +478,11 @@ const Editopportunityproject = (props) => {
                   <CUIAutoComplete
                     items={setValueProperty}
                     selectedItems={setValueProperty?.filter((item) =>
-                      values?.property?.includes(item?._id)
+                      values?.property?.includes(item?._id),
                     )}
                     onSelectedItemsChange={(changes) => {
                       const selectProperty = extractLabels(
-                        changes?.selectedItems
+                        changes?.selectedItems,
                       );
                       setFieldValue("property", selectProperty);
                     }}

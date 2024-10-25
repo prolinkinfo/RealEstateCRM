@@ -24,7 +24,7 @@ const MultiContactModel = (props) => {
   const [contactData, setContactData] = useState([]);
   const [isLoding, setIsLoding] = useState(false);
   const dispatch = useDispatch();
-  
+
   const fetchCustomDataFields = async () => {
     setIsLoding(true);
     const result = await dispatch(fetchContactCustomFiled());
@@ -73,12 +73,16 @@ const MultiContactModel = (props) => {
             </Flex>
           ) : (
             <ContactTable
-              title={'Contacts'}
+              title={"Contacts"}
               isLoding={isLoding}
               allData={data}
               tableData={data}
               type="multi"
-              tableCustomFields={contactData?.[0]?.fields?.filter((field) => field?.isTableField === true) || []}
+              tableCustomFields={
+                contactData?.[0]?.fields?.filter(
+                  (field) => field?.isTableField === true,
+                ) || []
+              }
               selectedValues={selectedValues}
               setSelectedValues={setSelectedValues}
               columnsData={columns ?? []}
