@@ -41,6 +41,7 @@ import DataNotFound from "components/notFoundData";
 import CommonCheckTable from "components/reactTable/checktable";
 import { HSeparator } from "components/separator/Separator";
 import Spinner from "components/spinner/Spinner";
+import { saveAs } from "file-saver";
 import html2pdf from "html2pdf.js";
 import moment from "moment";
 import { useEffect, useState } from "react";
@@ -65,12 +66,12 @@ import { fetchContactCustomFiled } from "../../../redux/slices/contactCustomFile
 import { fetchPropertyCustomFiled } from "../../../redux/slices/propertyCustomFiledSlice";
 import Add from "./Add";
 import AddEditUnits from "./components/AddEditUnits";
-import PropertyPhoto from "./components/propertyPhoto";
-import Edit from "./Edit";
-import UnitTypeView from "./components/UnitTypeView";
 import BlockedModel from "./components/BlockedModel";
-import SoldModel from "./components/SoldModel";
 import BookedModel from "./components/BookedModel";
+import PropertyPhoto from "./components/propertyPhoto";
+import SoldModel from "./components/SoldModel";
+import UnitTypeView from "./components/UnitTypeView";
+import Edit from "./Edit";
 
 const View = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -488,7 +489,12 @@ const View = () => {
       unit: item,
       floorName,
     });
-    console.log(data?.unitType, "data?.unitType");
+  };
+
+  const handleGenrateOfferLetter = async () => {
+    const response = await postApi(`api/property/genrate-offer-letter/${param?.id}`);
+    const pdfBlob = new Blob([response?.data], { type: "application/pdf" });
+    saveAs(pdfBlob, "offer-letter.pdf");
   };
 
   const statusCount = data?.units?.reduce((acc, floor) => {
@@ -618,18 +624,18 @@ const View = () => {
                       permission?.create ||
                       permission?.update ||
                       permission?.delete) && (
-                      <MenuButton
-                        variant="outline"
-                        size="sm"
-                        colorScheme="blackAlpha"
-                        va
-                        mr={2.5}
-                        as={Button}
-                        rightIcon={<ChevronDownIcon />}
-                      >
-                        Actions
-                      </MenuButton>
-                    )}
+                        <MenuButton
+                          variant="outline"
+                          size="sm"
+                          colorScheme="blackAlpha"
+                          va
+                          mr={2.5}
+                          as={Button}
+                          rightIcon={<ChevronDownIcon />}
+                        >
+                          Actions
+                        </MenuButton>
+                      )}
                     <MenuDivider />
                     <MenuList minWidth={2}>
                       {(user?.role === "superAdmin" || permission?.create) && (
@@ -755,7 +761,7 @@ const View = () => {
                               checkBox={false}
                               deleteMany={true}
                               ManageGrid={false}
-                              onOpen={() => {}}
+                              onOpen={() => { }}
                               addBtn={false}
                               access={emailAccess}
                             />
@@ -776,7 +782,7 @@ const View = () => {
                               checkBox={false}
                               deleteMany={true}
                               ManageGrid={false}
-                              onOpen={() => {}}
+                              onOpen={() => { }}
                               addBtn={false}
                               access={callAccess}
                             />
@@ -872,6 +878,15 @@ const View = () => {
                                 </Tooltip>
                               </Flex>
                               <Flex alignItems="center">
+                                <Button
+                                  size="sm"
+                                  variant="solid"
+                                  onClick={() => handleGenrateOfferLetter()}
+                                  me={2}
+                                  colorScheme="red"
+                                >
+                                  <ViewIcon />
+                                </Button>
                                 <Button
                                   size="sm"
                                   variant="outline"
@@ -1345,38 +1360,38 @@ const View = () => {
           {(permission?.delete ||
             permission?.update ||
             user?.role === "superAdmin") && (
-            <Card mt={3}>
-              <Grid templateColumns="repeat(6, 1fr)" gap={1}>
-                <GridItem colStart={6}>
-                  <Flex justifyContent={"right"}>
-                    {permission?.update && (
-                      <Button
-                        onClick={() => setEdit(true)}
-                        size="sm"
-                        leftIcon={<EditIcon />}
-                        mr={2.5}
-                        variant="outline"
-                        colorScheme="green"
-                      >
-                        Edit
-                      </Button>
-                    )}
-                    {permission?.delete && (
-                      <Button
-                        style={{ background: "red.800" }}
-                        size="sm"
-                        onClick={() => setDelete(true)}
-                        leftIcon={<DeleteIcon />}
-                        colorScheme="red"
-                      >
-                        Delete
-                      </Button>
-                    )}
-                  </Flex>
-                </GridItem>
-              </Grid>
-            </Card>
-          )}
+              <Card mt={3}>
+                <Grid templateColumns="repeat(6, 1fr)" gap={1}>
+                  <GridItem colStart={6}>
+                    <Flex justifyContent={"right"}>
+                      {permission?.update && (
+                        <Button
+                          onClick={() => setEdit(true)}
+                          size="sm"
+                          leftIcon={<EditIcon />}
+                          mr={2.5}
+                          variant="outline"
+                          colorScheme="green"
+                        >
+                          Edit
+                        </Button>
+                      )}
+                      {permission?.delete && (
+                        <Button
+                          style={{ background: "red.800" }}
+                          size="sm"
+                          onClick={() => setDelete(true)}
+                          leftIcon={<DeleteIcon />}
+                          colorScheme="red"
+                        >
+                          Delete
+                        </Button>
+                      )}
+                    </Flex>
+                  </GridItem>
+                </Grid>
+              </Card>
+            )}
         </>
       )}
 
@@ -1401,50 +1416,50 @@ const View = () => {
             <div style={{ columns: 3 }}>
               {type === "photo"
                 ? data &&
-                  data?.propertyPhotos?.length > 0 &&
-                  data?.propertyPhotos?.map((item) => (
-                    <a href={item?.img} target="_blank">
-                      {" "}
-                      <Image
-                        width={"100%"}
-                        m={1}
-                        mb={4}
-                        src={item?.img}
-                        alt="Your Image"
-                      />
-                    </a>
-                  ))
+                data?.propertyPhotos?.length > 0 &&
+                data?.propertyPhotos?.map((item) => (
+                  <a href={item?.img} target="_blank">
+                    {" "}
+                    <Image
+                      width={"100%"}
+                      m={1}
+                      mb={4}
+                      src={item?.img}
+                      alt="Your Image"
+                    />
+                  </a>
+                ))
                 : type === "video"
                   ? data &&
-                    data?.virtualToursOrVideos?.length > 0 &&
-                    data?.virtualToursOrVideos?.map((item) => (
-                      <a href={item.img} target="_blank">
-                        <video
-                          width="380"
-                          controls
-                          autoplay
-                          loop
-                          style={{ margin: " 5px" }}
-                        >
-                          <source src={item?.img} type="video/mp4" />
-                          <source src={item?.img} type="video/ogg" />
-                        </video>
-                      </a>
-                    ))
+                  data?.virtualToursOrVideos?.length > 0 &&
+                  data?.virtualToursOrVideos?.map((item) => (
+                    <a href={item.img} target="_blank">
+                      <video
+                        width="380"
+                        controls
+                        autoplay
+                        loop
+                        style={{ margin: " 5px" }}
+                      >
+                        <source src={item?.img} type="video/mp4" />
+                        <source src={item?.img} type="video/ogg" />
+                      </video>
+                    </a>
+                  ))
                   : type === "floor"
                     ? data &&
-                      data?.floorPlans?.length > 0 &&
-                      data?.floorPlans?.map((item) => (
-                        <a href={item?.img} target="_blank">
-                          <Image
-                            width={"100%"}
-                            m={1}
-                            mb={4}
-                            src={item?.img}
-                            alt="Your Image"
-                          />
-                        </a>
-                      ))
+                    data?.floorPlans?.length > 0 &&
+                    data?.floorPlans?.map((item) => (
+                      <a href={item?.img} target="_blank">
+                        <Image
+                          width={"100%"}
+                          m={1}
+                          mb={4}
+                          src={item?.img}
+                          alt="Your Image"
+                        />
+                      </a>
+                    ))
                     : ""}
             </div>
           </ModalBody>

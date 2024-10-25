@@ -6,6 +6,8 @@ const { Contact } = require("../../model/schema/contact");
 const PhoneCall = require("../../model/schema/phoneCall");
 const { default: mongoose } = require("mongoose");
 const Email = require("../../model/schema/email");
+const ejs = require("ejs");
+const PDFDocument = require("pdfkit");
 
 const index = async (req, res) => {
   const query = req.query;
@@ -178,7 +180,7 @@ const updateUnitTypeId = async (req, res) => {
       { _id: id, "units.flats._id": unitid },
       { $set: { "units.$[].flats.$[flat].unitType": newUnitType } },
       {
-        arrayFilters: [{ "flat._id": unitid }], 
+        arrayFilters: [{ "flat._id": unitid }],
         new: true,
       }
     );
@@ -222,6 +224,36 @@ const changeUnitStatus = async (req, res) => {
     res?.status(400)?.json({ error: "Failed to create Property" });
   }
 };
+
+const genrateOfferLetter = async (req, res) => {
+  try {
+    const { id } = req?.params;
+
+    const templatePath = path.join(__dirname, "templates", "offerLetter.ejs");
+    const htmlContent = await ejs.renderFile(templatePath, {
+      title: "Sample PDF Document",
+      name: "John Doe",
+      items: ["Item 1", "Item 2", "Item 3"],
+    });
+
+    // Generate PDF
+    
+    doc.fontSize(25).text(htmlContent);
+    
+    doc.pipe(res); 
+    
+    doc.end();
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", "attachment; filename=generated.pdf");
+    const doc = new PDFDocument();
+  } catch (err) {
+    console?.error("Failed to create Property:", err);
+    res?.status(400)?.json({ error: "Failed to create Property" });
+  }
+};
+
+
+
 
 const addMany = async (req, res) => {
   try {
@@ -512,10 +544,10 @@ const upload = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-            "-" +
-            timestamp +
-            "." +
-            file.originalname.split(".")[1]
+          "-" +
+          timestamp +
+          "." +
+          file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -568,10 +600,10 @@ const virtualTours = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-            "-" +
-            timestamp +
-            "." +
-            file.originalname.split(".")[1]
+          "-" +
+          timestamp +
+          "." +
+          file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -624,10 +656,10 @@ const FloorPlansStorage = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-            "-" +
-            timestamp +
-            "." +
-            file.originalname.split(".")[1]
+          "-" +
+          timestamp +
+          "." +
+          file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -680,10 +712,10 @@ const PropertyDocumentsStorage = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-            "-" +
-            timestamp +
-            "." +
-            file.originalname.split(".")[1]
+          "-" +
+          timestamp +
+          "." +
+          file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -728,6 +760,7 @@ module.exports = {
   editUnit,
   deleteUnitType,
   updateUnitTypeId,
+  genrateOfferLetter,
   view,
   edit,
   deleteData,

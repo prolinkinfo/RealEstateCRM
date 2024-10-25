@@ -11,6 +11,8 @@ router.put('/edit-unit/:id', auth, property.editUnit)
 router.post('/delete-unit-type/:id', auth , property.deleteUnitType)
 router.post('/change-unit-status/:id', auth, property.changeUnitStatus)
 router.post('/addMany', auth, property.addMany)
+router.post('/genrate-offer-letter/:id', auth, property.genrateOfferLetter)
+
 router.get('/view/:id', auth, property.view)
 router.put('/edit/:id', auth, property.edit)
 router.delete('/delete/:id', auth, property.deleteData)
