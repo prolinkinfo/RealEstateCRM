@@ -35,6 +35,7 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
+import axios from "axios";
 import Card from "components/card/Card";
 import CommonDeleteModel from "components/commonDeleteModel";
 import DataNotFound from "components/notFoundData";
@@ -72,7 +73,6 @@ import PropertyPhoto from "./components/propertyPhoto";
 import SoldModel from "./components/SoldModel";
 import UnitTypeView from "./components/UnitTypeView";
 import Edit from "./Edit";
-import { FirstStepper } from "./components/bookedStepperForm/FirstStepper";
 
 const View = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -493,9 +493,35 @@ const View = () => {
   };
 
   const handleGenrateOfferLetter = async () => {
-    const response = await postApi(`api/property/genrate-offer-letter/${param?.id}`);
-    const pdfBlob = new Blob([response?.data], { type: "application/pdf" });
-    saveAs(pdfBlob, "offer-letter.pdf");
+    // const response2 = await postApi(`api/property/genrate-offer-letter/${param?.id}`);
+    // let result = await axios?.post(constant?.baseUrl + path, data, {
+    //   headers: {
+    //     Authorization:
+    //       localStorage.getItem("token") || sessionStorage.getItem("token"),
+    //   }, http://127.0.0.1:5001/api/property/genrate-offer-letter/67036e684bfa8563053391ee
+    // }); http://127.0.0.1:5000/api/property/genrate-offer-letter/67036e684bfa8563053391ee
+
+    const response = await axios.post(
+      `http://127.0.0.1:5001/api/property/genrate-offer-letter/${param?.id}`,
+      {},
+      {
+        headers: {
+          Authorization:
+            localStorage.getItem("token") || sessionStorage.getItem("token"),
+        },
+        responseType: "blob",
+      }
+    );
+    console.log(response?.data);
+    const url = window.URL.createObjectURL(new Blob([response.data], { type: "application/pdf" }));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "offer-letter.pdf"); // Name for download
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    // saveAs(pdfBlob, "offer-letter.pdf");
   };
 
   const statusCount = data?.units?.reduce((acc, floor) => {

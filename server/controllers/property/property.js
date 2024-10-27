@@ -8,6 +8,7 @@ const { default: mongoose } = require("mongoose");
 const Email = require("../../model/schema/email");
 const ejs = require("ejs");
 const PDFDocument = require("pdfkit");
+const puppeteer = require("puppeteer");
 
 const index = async (req, res) => {
   const query = req.query;
@@ -225,35 +226,58 @@ const changeUnitStatus = async (req, res) => {
   }
 };
 
+// const genrateOfferLetter = async (req, res) => {
+//   try {
+//     const { id } = req?.params;
+
+//     const templatePath = path.join(__dirname, "templates", "offerLetter.ejs");
+//     const htmlContent = await ejs.renderFile(templatePath, {
+//       title: "Sample PDF Document",
+//       name: "John Doe",
+//       items: ["Item 1", "Item 2", "Item 3"],
+//     });
+
+//     // Generate PDF
+//     const doc = new PDFDocument();
+//     doc.fontSize(16).text(htmlContent, { align: "left" });
+
+//     doc.pipe(res);
+
+//     doc.end();
+//     res.setHeader("Content-Type", "application/pdf");
+//     res.setHeader("Content-Disposition", "attachment; filename=generated.pdf");
+//   } catch (err) {
+//     console?.error("Failed to create Property:", err);
+//     res?.status(400)?.json({ error: "Failed to create Property" });
+//   }
+// };
 const genrateOfferLetter = async (req, res) => {
   try {
     const { id } = req?.params;
 
     const templatePath = path.join(__dirname, "templates", "offerLetter.ejs");
-    const htmlContent = await ejs.renderFile(templatePath, {
-      title: "Sample PDF Document",
-      name: "John Doe",
-      items: ["Item 1", "Item 2", "Item 3"],
-    });
+    const htmlContent = await ejs.renderFile(templatePath, { greeting: "Hello" });
 
-    // Generate PDF
-    
-    doc.fontSize(25).text(htmlContent);
-    
-    doc.pipe(res); 
-    
-    doc.end();
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
+    const page = await browser.newPage();
+    await page.setContent(htmlContent);
+    const pdfBuffer = await page.pdf({ format: "A4" });
+    await browser.close();
+
+    fs.writeFileSync("test.pdf", pdfBuffer);
+
     res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", "attachment; filename=generated.pdf");
-    const doc = new PDFDocument();
+    res.setHeader("Content-Disposition", "attachment; filename=offer-letter.pdf");
+    res.send(pdfBuffer);
+
   } catch (err) {
     console?.error("Failed to create Property:", err);
     res?.status(400)?.json({ error: "Failed to create Property" });
   }
 };
-
-
-
 
 const addMany = async (req, res) => {
   try {
