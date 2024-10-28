@@ -23,8 +23,6 @@ import { getApi } from "services/api";
 import * as yup from "yup";
 import ContactModel from "components/commonTableModel/ContactModel.js";
 import LeadModel from "components/commonTableModel/LeadModel";
-import MultiLeadModel from "components/commonTableModel/MultiLeadModel";
-
 import { LiaMousePointerSolid } from "react-icons/lia";
 import Card from "components/card/Card";
 import ProfileCard from "./image upload";
@@ -41,10 +39,7 @@ export const FirstStepper = (props) => {
   const [leadModel, setLeadModel] = useState(false);
   const brandColor = useColorModeValue("brand.500", "white");
 
-  console.log(isOpen, onClose, "ooooo");
-
   const { values, handleChange, handleSubmit, setFieldValue, errors, touched } = formik;
-  console.log(values, "vv");
 
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -66,31 +61,36 @@ export const FirstStepper = (props) => {
         );
         setAssignToLeadData(result?.data);
       }
-
     } catch (e) {
       console.log(e);
     }
   };
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
+
+  const handleFirstFileChange = (event) => {
+    const file = event?.target?.files[0];
+;
     if (file) {
+      setFieldValue(event?.target?.name, file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setSelectedFile(reader.result); // Set the selected file as a data URL
+        setSelectedFile(reader.result);
       };
-      reader.readAsDataURL(file); // Read the file as a data URL
+      reader.readAsDataURL(file);
     }
   };
+
   const handleSecondFileChange = (event) => {
-    const file = event.target.files[0];
+    const file = event?.target?.files[0];
     if (file) {
+      setFieldValue(event?.target?.name, file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setSecondSelectedFile(reader.result); // Set the selected file as a data URL
+        setSecondSelectedFile(reader.result)
       };
-      reader.readAsDataURL(file); // Read the file as a data URL
+      reader.readAsDataURL(file);
     }
   };
+
   useEffect(async () => {
     getAllAPi();
   }, [values?.category]);
@@ -113,7 +113,7 @@ export const FirstStepper = (props) => {
           setFieldValue={setFieldValue}
         />
         {/* <h3>Contact Info</h3> */}
-        <Grid templateColumns="repeat(12, 1fr)" gap={3}>
+        <Grid templateColumns="repeat(12, 1fr)" gap={3} onSubmit={handleSubmit}>
           <GridItem colSpan={{ base: 12, md: 6 }}>
             <FormLabel
               display="flex"
@@ -216,19 +216,22 @@ export const FirstStepper = (props) => {
           </GridItem>
           <GridItem colSpan={{ base: 12, md: 6 }}>
             <ProfileCard
+              value={values?.imagefirst}
+              name="imagefirst"
               selectedFile={selectedFile} // State variable to hold the uploaded file
-              handleFileChange={handleFileChange}
-              setFieldValue={setFieldValue} // Function to update the state
+              handleFileChange={handleFirstFileChange}
               brandColor={brandColor} // Replace with your brand color
+              id="selectedFile11"
             />
           </GridItem>
           <GridItem colSpan={{ base: 12, md: 6 }}>
-
             <ProfileCard
+              value={values?.secondimage}
+              name="secondimage"
               selectedFile={secondSelectedFile} // State variable to hold the uploaded file
               handleFileChange={handleSecondFileChange}
-              setFieldValue={setFieldValue} // Function to update the state
               brandColor={brandColor} // Replace with your brand color
+              id="secondSelectedFile"
             />
           </GridItem>
         </Grid>
