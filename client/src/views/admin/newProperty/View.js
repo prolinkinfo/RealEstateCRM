@@ -99,11 +99,11 @@ const View = () => {
   const [unitOpenModel, setUnitOpenModel] = useState(false);
   const [selectedViewUnitType, setSelectedViewUnitType] = useState({});
   const [deleteunitModelUnitType, setDeleteModelUnitType] = useState(false);
-  // BLOCK MODEL
+  const [selectedFloorItem, setSelectedFloorItem] = useState({});
+  console.log("selectedFloorItem--::", selectedFloorItem);
+
   const [blockedModelOpen, setBlockedModelOpen] = useState(false);
-  // SOlD SIDEBAR
   const [soldopen, setSoldOpen] = useState(false);
-  // Booked sidebar
   const [bookedOpen, setBookedOpen] = useState(false);
 
   const dispatch = useDispatch();
@@ -530,6 +530,7 @@ const View = () => {
         onClose={onClose}
         propertyData={propertyData?.[0]}
       />
+
       <AddEditUnits
         isOpen={addUnit}
         size={size}
@@ -542,6 +543,7 @@ const View = () => {
           setActionType("");
         }}
       />
+
       <Edit
         isOpen={edit}
         size={size}
@@ -558,12 +560,14 @@ const View = () => {
         handleDeleteData={handleDeleteProperties}
         ids={param?.id}
       />
+
       <CommonDeleteModel
         isOpen={deleteunitModelUnitType}
         onClose={() => setDeleteModelUnitType(false)}
         handleDeleteData={handleDeleteUnitTypes}
         type="Unit Types"
       />
+
       <UnitTypeView
         data={selectedViewUnitType}
         isOpen={unitOpenModel}
@@ -571,8 +575,17 @@ const View = () => {
         unitTypeList={unitTypeList}
         setAction={setAction}
       />
+
       <BlockedModel
         isOpen={blockedModelOpen}
+        clickOnYes={() => {
+          handleStatusChange(
+            selectedFloorItem?.floor,
+            selectedFloorItem?.item,
+            selectedFloorItem?.status
+          );
+          setBlockedModelOpen(false);
+        }}
         onClose={() => setBlockedModelOpen(false)}
       />
       <SoldModel isOpen={soldopen} onClose={() => setSoldOpen(false)} />
@@ -960,11 +973,11 @@ const View = () => {
                                         }
                                         onClick={() => {
                                           setBlockedModelOpen(true);
-                                          handleStatusChange(
+                                          setSelectedFloorItem({
                                             floor,
                                             item,
-                                            "Blocked"
-                                          );
+                                            status: "Blocked",
+                                          });
                                         }}
                                       >
                                         Blocked

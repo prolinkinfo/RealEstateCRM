@@ -42,7 +42,7 @@ const buildApartmentData = (floorCount, unitData) => {
   for (let i = 1; i <= floorCount; i++) {
     let floorUnits = unitData?.map((item, index) => ({
       flateName: i * 100 + (index + 1),
-      status: "",
+      status: "Available",
       unitType: item?._id,
     }));
 
@@ -62,7 +62,7 @@ const addApartmentData = (oldUnits, newUnitTypeId) => {
       ...item.flats,
       {
         flateName: (i + 1) * 100 + (item?.flats?.length + 1),
-        status: "",
+        status: "Available",
         unitType: newUnitTypeId,
       },
     ],
