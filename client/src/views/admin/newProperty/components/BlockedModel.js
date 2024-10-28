@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 
 function BlockedModel(props) {
-  const { onClose, isOpen } = props;
+  const { onClose, isOpen, clickOnYes } = props;
   return (
     <>
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
@@ -18,15 +18,13 @@ function BlockedModel(props) {
         <ModalContent>
           <ModalHeader>
             Blocked
-            {/* {`${type}`} */}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             Are You Sure To Block selected
-            {/* {`${type}`} ? */}
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="red" size="sm" type="submit" mr={2}>
+            <Button colorScheme="red" size="sm" type="submit" mr={2} onClick={clickOnYes}>
               Yes
             </Button>
             <Button variant="outline" size="sm" type="submit" onClick={onClose}>

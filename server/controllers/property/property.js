@@ -6,6 +6,9 @@ const { Contact } = require("../../model/schema/contact");
 const PhoneCall = require("../../model/schema/phoneCall");
 const { default: mongoose } = require("mongoose");
 const Email = require("../../model/schema/email");
+const ejs = require("ejs");
+const PDFDocument = require("pdfkit");
+const puppeteer = require("puppeteer");
 
 const index = async (req, res) => {
   const query = req.query;
@@ -39,7 +42,7 @@ const buildApartmentData = (floorCount, unitData) => {
   for (let i = 1; i <= floorCount; i++) {
     let floorUnits = unitData?.map((item, index) => ({
       flateName: i * 100 + (index + 1),
-      status: "",
+      status: "Available",
       unitType: item?._id,
     }));
 
@@ -59,7 +62,7 @@ const addApartmentData = (oldUnits, newUnitTypeId) => {
       ...item.flats,
       {
         flateName: (i + 1) * 100 + (item?.flats?.length + 1),
-        status: "",
+        status: "Available",
         unitType: newUnitTypeId,
       },
     ],
@@ -178,7 +181,7 @@ const updateUnitTypeId = async (req, res) => {
       { _id: id, "units.flats._id": unitid },
       { $set: { "units.$[].flats.$[flat].unitType": newUnitType } },
       {
-        arrayFilters: [{ "flat._id": unitid }], 
+        arrayFilters: [{ "flat._id": unitid }],
         new: true,
       }
     );
@@ -217,6 +220,31 @@ const changeUnitStatus = async (req, res) => {
     );
 
     res?.status(200)?.json(result);
+  } catch (err) {
+    console?.error("Failed to create Property:", err);
+    res?.status(400)?.json({ error: "Failed to create Property" });
+  }
+};
+
+const genrateOfferLetter = async (req, res) => {
+  try {
+    const templatePath = path.join(__dirname, "templates", "offerLetter.ejs");
+    const htmlContent = await ejs.renderFile(templatePath);
+
+    const browser = await puppeteer.launch({ headless: true });
+    const page = await browser.newPage();
+    await page.setContent(htmlContent);
+    const pdfBuffer = await page.pdf({ format: "A4", printBackground: true });
+    await browser.close();
+
+    // Set headers for PDF response
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=offer-letter.pdf"
+    );
+
+    res.end(pdfBuffer);
   } catch (err) {
     console?.error("Failed to create Property:", err);
     res?.status(400)?.json({ error: "Failed to create Property" });
@@ -728,6 +756,7 @@ module.exports = {
   editUnit,
   deleteUnitType,
   updateUnitTypeId,
+  genrateOfferLetter,
   view,
   edit,
   deleteData,
