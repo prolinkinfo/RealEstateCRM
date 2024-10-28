@@ -31,8 +31,6 @@ import ProfileCard from "./image upload";
 
 export const FirstStepper = (props) => {
   const { formik } = props;
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [previewImage, setPreviewImage] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [secondSelectedFile, setSecondSelectedFile] = useState(null);
   const [assignToLeadData, setAssignToLeadData] = useState([]);
@@ -41,10 +39,8 @@ export const FirstStepper = (props) => {
   const [leadModel, setLeadModel] = useState(false);
   const brandColor = useColorModeValue("brand.500", "white");
 
-  console.log(isOpen, onClose, "ooooo");
-
-  const { values, handleChange, handleSubmit, setFieldValue, errors, touched } = formik;
-  console.log(values, "vv");
+  const { values, handleChange, handleSubmit, setFieldValue, errors, touched } =
+    formik;
 
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -66,7 +62,6 @@ export const FirstStepper = (props) => {
         );
         setAssignToLeadData(result?.data);
       }
-
     } catch (e) {
       console.log(e);
     }
@@ -223,7 +218,6 @@ export const FirstStepper = (props) => {
             />
           </GridItem>
           <GridItem colSpan={{ base: 12, md: 6 }}>
-
             <ProfileCard
               selectedFile={secondSelectedFile} // State variable to hold the uploaded file
               handleFileChange={handleSecondFileChange}

@@ -73,7 +73,7 @@ const ContactModel = (props) => {
     dispatch(fetchLeadData());
     fetchCustomDataFields();
   }, []);
-  console.log(data, columns, "lead");
+
   return (
     <Modal onClose={onClose} size="full" isOpen={isOpen}>
       <ModalOverlay />

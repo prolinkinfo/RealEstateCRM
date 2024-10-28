@@ -100,7 +100,6 @@ const View = () => {
   const [selectedViewUnitType, setSelectedViewUnitType] = useState({});
   const [deleteunitModelUnitType, setDeleteModelUnitType] = useState(false);
   const [selectedFloorItem, setSelectedFloorItem] = useState({});
-  console.log("selectedFloorItem--::", selectedFloorItem);
 
   const [blockedModelOpen, setBlockedModelOpen] = useState(false);
   const [soldopen, setSoldOpen] = useState(false);
