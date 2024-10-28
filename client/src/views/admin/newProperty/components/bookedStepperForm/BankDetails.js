@@ -15,8 +15,10 @@ import {
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import React from "react";
+import { toast } from "react-toastify";
 import { LiaMousePointerSolid } from "react-icons/lia";
 import * as yup from "yup";
+import { postApi } from "services/api";
 
 export const BankDetails = (props) => {
   const { setCurrentStep, currentStep } = props;
@@ -43,11 +45,24 @@ export const BankDetails = (props) => {
     },
     validationSchema,
     onSubmit: () => {
+      submitStepperData();
       console.log(values);
     },
   });
+
   const { values, handleChange, handleSubmit, setFieldValue, errors, touched } =
     formik;
+  const submitStepperData = async () => {
+    try {
+      let response = await postApi("api/property/add-stepperdata", values);
+      if (response?.status === 200) {
+        toast.success(`Form Save successfully`);
+      }
+    } catch (e) {
+      console.log(e);
+      toast.error(`server error`);
+    }
+  };
   return (
     <>
       <Grid templateColumns="repeat(12, 1fr)" gap={3}>
@@ -226,22 +241,27 @@ export const BankDetails = (props) => {
           </Text>
         </GridItem>
       </Grid>
-      <ModalFooter>
-        <div
-          style={{
-            position: "relative",
-            top: "150px",
-            right: "0",
-          }}
+      <ModalFooter
+        style={{
+          position: "absolute",
+          bottom: "0",
+          right: "0",
+        }}
+      >
+        {/* <div> */}
+        <Button
+          variant="outline"
+          colorScheme="red"
+          mr={1}
+          onClick={() => setCurrentStep((prev) => Math.max(prev - 1, 1))}
+          disabled={currentStep === 1}
         >
-          <Button
-            onClick={() => setCurrentStep((prev) => Math.max(prev - 1, 1))}
-            disabled={currentStep === 1}
-          >
-            Previous
-          </Button>
-          <Button onClick={handleSubmit}>Submit</Button>
-        </div>
+          Previous
+        </Button>
+        <Button onClick={handleSubmit} colorScheme="brand">
+          Submit
+        </Button>
+        {/* </div> */}
       </ModalFooter>
     </>
   );

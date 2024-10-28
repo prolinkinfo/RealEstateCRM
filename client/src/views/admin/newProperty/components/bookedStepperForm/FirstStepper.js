@@ -7,30 +7,43 @@ import {
   Radio,
   RadioGroup,
   Select,
+  Input,
   Stack,
   useDisclosure,
+  Button,
+  Box,
+  Text,
+  Icon,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
+import { MdUpload } from "react-icons/md";
 import React, { useEffect, useState } from "react";
 import { getApi } from "services/api";
 import * as yup from "yup";
-import ContactModel from "components/commonTableModel/ContactModel";
+import ContactModel from "components/commonTableModel/ContactModel.js";
 import LeadModel from "components/commonTableModel/LeadModel";
+import MultiLeadModel from "components/commonTableModel/MultiLeadModel";
+
 import { LiaMousePointerSolid } from "react-icons/lia";
+import Card from "components/card/Card";
+import ProfileCard from "./image upload";
 
 export const FirstStepper = (props) => {
   const { formik } = props;
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [previewImage, setPreviewImage] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [secondSelectedFile, setSecondSelectedFile] = useState(null);
   const [assignToLeadData, setAssignToLeadData] = useState([]);
   const [assignToContactData, setAssignToContactData] = useState([]);
-  const [contactModelOpen, setContactModel] = useState(false);
-  const [leadModelOpen, setLeadModel] = useState(false);
+  const [contactModel, setContactModel] = useState(false);
+  const [leadModel, setLeadModel] = useState(false);
+  const brandColor = useColorModeValue("brand.500", "white");
 
-  const { isOpen, onClose } = useDisclosure();
   console.log(isOpen, onClose, "ooooo");
-  
-  const { values, handleChange, handleSubmit, setFieldValue, errors, touched } =
-    formik;
+
+  const { values, handleChange, handleSubmit, setFieldValue, errors, touched } = formik;
   console.log(values, "vv");
 
   const user = JSON.parse(localStorage.getItem("user"));
@@ -53,56 +66,52 @@ export const FirstStepper = (props) => {
         );
         setAssignToLeadData(result?.data);
       }
-      // else if (
-      //   (values?.category === "property" && console.log(""),
-      //   assignToProperyData.length <= 0)
-      // ) {
-      //   result = await getApi(
-      //     user?.role === "superAdmin"
-      //       ? "api/property"
-      //       : `api/property/?createBy=${user?._id}`
-      //   );
-      //   setAssignToPropertyData(result?.data);
-      // }
+
     } catch (e) {
       console.log(e);
     }
   };
-
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedFile(reader.result); // Set the selected file as a data URL
+      };
+      reader.readAsDataURL(file); // Read the file as a data URL
+    }
+  };
+  const handleSecondFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSecondSelectedFile(reader.result); // Set the selected file as a data URL
+      };
+      reader.readAsDataURL(file); // Read the file as a data URL
+    }
+  };
   useEffect(async () => {
     getAllAPi();
   }, [values?.category]);
 
-  {
-    /* Contact Model  */
-  }
-  <ContactModel
-    isOpen={contactModelOpen}
-    data={assignToContactData}
-    onClose={setContactModel}
-    fieldName="contact"
-    setFieldValue={setFieldValue}
-  />;
-  {
-    console.log(isOpen, "isOpen");
-  }
-  {
-    console.log(onClose, "onClose");
-  }
-
-  {
-    /* Lead Model  */
-  }
-  <LeadModel
-    isOpen={leadModelOpen}
-    data={assignToLeadData}
-    onClose={setLeadModel}
-    fieldName="lead"
-    setFieldValue={setFieldValue}
-  />;
   return (
     <>
       <div className="contact-info-form">
+        <ContactModel
+          isOpen={contactModel}
+          data={assignToContactData}
+          onClose={setContactModel}
+          fieldName="contact"
+          setFieldValue={setFieldValue}
+        />
+        <LeadModel
+          isOpen={leadModel}
+          data={assignToLeadData}
+          onClose={setLeadModel}
+          fieldName="lead"
+          setFieldValue={setFieldValue}
+        />
         {/* <h3>Contact Info</h3> */}
         <Grid templateColumns="repeat(12, 1fr)" gap={3}>
           <GridItem colSpan={{ base: 12, md: 6 }}>
@@ -133,17 +142,7 @@ export const FirstStepper = (props) => {
           <GridItem colSpan={{ base: 12 }}>
             {values?.category === "contact" ? (
               <>
-                {console.log("11")}
                 <GridItem colSpan={{ base: 12, md: 6 }}>
-                  <FormLabel
-                    display="flex"
-                    ms="4px"
-                    fontSize="sm"
-                    fontWeight="500"
-                    mb="8px"
-                  >
-                    Recipient (Contact)
-                  </FormLabel>
                   <Flex justifyContent={"space-between"}>
                     <Select
                       value={values?.contact}
@@ -153,7 +152,7 @@ export const FirstStepper = (props) => {
                         errors.contact && touched.contact ? undefined : "10px"
                       }
                       fontWeight="500"
-                      placeholder={"Assign To"}
+                      placeholder={"Assign To Contact"}
                       borderColor={
                         errors.contact && touched.contact ? "red.300" : null
                       }
@@ -180,17 +179,6 @@ export const FirstStepper = (props) => {
             ) : values?.category === "lead" ? (
               <>
                 <GridItem colSpan={{ base: 12, md: 6 }}>
-                  {console.log("22")}
-
-                  <FormLabel
-                    display="flex"
-                    ms="4px"
-                    fontSize="sm"
-                    fontWeight="500"
-                    mb="8px"
-                  >
-                    Recipient (Lead)
-                  </FormLabel>
                   <Flex justifyContent={"space-between"}>
                     <Select
                       value={values?.lead}
@@ -198,7 +186,7 @@ export const FirstStepper = (props) => {
                       onChange={handleChange}
                       mb={errors?.lead && touched?.lead ? undefined : "10px"}
                       fontWeight="500"
-                      placeholder={"Assign To"}
+                      placeholder={"Assign To Lead"}
                       borderColor={
                         errors?.lead && touched?.lead ? "red.300" : null
                       }
@@ -225,6 +213,23 @@ export const FirstStepper = (props) => {
             ) : (
               ""
             )}
+          </GridItem>
+          <GridItem colSpan={{ base: 12, md: 6 }}>
+            <ProfileCard
+              selectedFile={selectedFile} // State variable to hold the uploaded file
+              handleFileChange={handleFileChange}
+              setFieldValue={setFieldValue} // Function to update the state
+              brandColor={brandColor} // Replace with your brand color
+            />
+          </GridItem>
+          <GridItem colSpan={{ base: 12, md: 6 }}>
+
+            <ProfileCard
+              selectedFile={secondSelectedFile} // State variable to hold the uploaded file
+              handleFileChange={handleSecondFileChange}
+              setFieldValue={setFieldValue} // Function to update the state
+              brandColor={brandColor} // Replace with your brand color
+            />
           </GridItem>
         </Grid>
       </div>

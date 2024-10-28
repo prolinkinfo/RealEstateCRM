@@ -95,12 +95,12 @@ function BookedModel(props) {
               <div className="step-content">
                 {currentStep === 1 && (
                   <div>
-                    <FirstStepper
-                      formik={formik}
-                    />
+                    <FirstStepper formik={formik} />
                     <ModalFooter>
                       <div className="stepper-actions">
                         <Button
+                          variant="outline"
+                          colorScheme="red"
                           onClick={() =>
                             setCurrentStep((prev) => Math.max(prev - 1, 1))
                           }
@@ -109,6 +109,7 @@ function BookedModel(props) {
                           Previous
                         </Button>
                         <Button
+                          colorScheme="brand"
                           onClick={() =>
                             setCurrentStep((prev) =>
                               Math.min(prev + 1, steps.length)
@@ -134,39 +135,12 @@ function BookedModel(props) {
                   </div>
                 )}
               </div>
-              {/* <div className="stepper-actions">
-        <Button
-          onClick={() => setCurrentStep((prev) => Math.max(prev - 1, 1))}
-          disabled={currentStep === 1}
-        >
-          Previous
-        </Button>
-        <Button
-          onClick={() => setCurrentStep((prev) => Math.min(prev + 1, steps.length))}
-          disabled={currentStep === steps.length}
-        >
-          Next
-        </Button>
-      </div> */}
+            
             </div>
-            {/* <CustomForm moduleData={props?.leadData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} /> */}
+           
           </DrawerBody>
           <DrawerFooter>
-            {/* <Button sx={{ textTransform: "capitalize" }} size="sm" disabled={isLoding ? true : false} variant="brand" type="submit" onClick={handleSubmit}                        >
-                            {isLoding ? <Spinner /> : 'Save'}
-                        </Button> */}
-            {/* <Button
-              variant="outline"
-              colorScheme="red"
-              size="sm"
-              sx={{
-                marginLeft: 2,
-                textTransform: "capitalize",
-              }}
-              onClick={onClose}
-            >
-              Close
-            </Button> */}
+            
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

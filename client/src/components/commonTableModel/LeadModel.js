@@ -55,14 +55,14 @@ const ContactModel = (props) => {
         cell: ({ row }) => row.original.leadStatus,
       },
       ...(result?.payload?.data?.[0]?.fields
-        ?.filter((field) => field?.isTableField === true)
-        ?.map(
+        ?.filter(
           (field) =>
-            field?.name !== "leadStatus" && {
-              Header: field?.label,
-              accessor: field?.name,
-            },
-        ) || []),
+            field?.isTableField === true && field?.name !== "leadStatus"
+        )
+        ?.map((field) => ({
+          Header: field?.label,
+          accessor: field?.name,
+        })) || []),
     ];
 
     setColumns(tempTableColumns);
@@ -73,7 +73,7 @@ const ContactModel = (props) => {
     dispatch(fetchLeadData());
     fetchCustomDataFields();
   }, []);
-
+  console.log(data, columns, "lead");
   return (
     <Modal onClose={onClose} size="full" isOpen={isOpen}>
       <ModalOverlay />
@@ -95,7 +95,7 @@ const ContactModel = (props) => {
               tableData={data}
               tableCustomFields={
                 leadData?.[0]?.fields?.filter(
-                  (field) => field?.isTableField === true,
+                  (field) => field?.isTableField === true
                 ) || []
               }
               AdvanceSearch={() => ""}

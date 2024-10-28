@@ -47,12 +47,8 @@
   }
 
   .stepper-actions{
-    /* display: flex;
-    justify-content: center;
-    margin: auto;
-    align-items: center; */
-    position: relative;
-    top: 150px;
+    position: absolute;
+    bottom: 0;
     right: 0;
   }
 
