@@ -226,53 +226,25 @@ const changeUnitStatus = async (req, res) => {
   }
 };
 
-// const genrateOfferLetter = async (req, res) => {
-//   try {
-//     const { id } = req?.params;
-
-//     const templatePath = path.join(__dirname, "templates", "offerLetter.ejs");
-//     const htmlContent = await ejs.renderFile(templatePath, {
-//       title: "Sample PDF Document",
-//       name: "John Doe",
-//       items: ["Item 1", "Item 2", "Item 3"],
-//     });
-
-//     // Generate PDF
-//     const doc = new PDFDocument();
-//     doc.fontSize(16).text(htmlContent, { align: "left" });
-
-//     doc.pipe(res);
-
-//     doc.end();
-//     res.setHeader("Content-Type", "application/pdf");
-//     res.setHeader("Content-Disposition", "attachment; filename=generated.pdf");
-//   } catch (err) {
-//     console?.error("Failed to create Property:", err);
-//     res?.status(400)?.json({ error: "Failed to create Property" });
-//   }
-// };
 const genrateOfferLetter = async (req, res) => {
   try {
-    const { id } = req?.params;
-
     const templatePath = path.join(__dirname, "templates", "offerLetter.ejs");
-    const htmlContent = await ejs.renderFile(templatePath, { greeting: "Hello" });
+    const htmlContent = await ejs.renderFile(templatePath);
 
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    });
+    const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
     await page.setContent(htmlContent);
-    const pdfBuffer = await page.pdf({ format: "A4" });
+    const pdfBuffer = await page.pdf({ format: "A4", printBackground: true });
     await browser.close();
 
-    fs.writeFileSync("test.pdf", pdfBuffer);
-
+    // Set headers for PDF response
     res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", "attachment; filename=offer-letter.pdf");
-    res.send(pdfBuffer);
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=offer-letter.pdf"
+    );
 
+    res.end(pdfBuffer);
   } catch (err) {
     console?.error("Failed to create Property:", err);
     res?.status(400)?.json({ error: "Failed to create Property" });
@@ -568,10 +540,10 @@ const upload = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-          "-" +
-          timestamp +
-          "." +
-          file.originalname.split(".")[1]
+            "-" +
+            timestamp +
+            "." +
+            file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -624,10 +596,10 @@ const virtualTours = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-          "-" +
-          timestamp +
-          "." +
-          file.originalname.split(".")[1]
+            "-" +
+            timestamp +
+            "." +
+            file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -680,10 +652,10 @@ const FloorPlansStorage = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-          "-" +
-          timestamp +
-          "." +
-          file.originalname.split(".")[1]
+            "-" +
+            timestamp +
+            "." +
+            file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -736,10 +708,10 @@ const PropertyDocumentsStorage = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-          "-" +
-          timestamp +
-          "." +
-          file.originalname.split(".")[1]
+            "-" +
+            timestamp +
+            "." +
+            file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);

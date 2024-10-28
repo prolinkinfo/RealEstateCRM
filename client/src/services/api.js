@@ -23,6 +23,24 @@ export const postApi = async (path, data, login) => {
     return e;
   }
 };
+
+export const postApiBlob = async (path, data = {}) => {
+  try {
+    let result = await axios?.post(constant?.baseUrl + path, data, {
+      headers: {
+        Authorization:
+          localStorage.getItem("token") || sessionStorage.getItem("token"),
+      },
+      responseType: "blob",
+    });
+
+    return result;
+  } catch (e) {
+    console.error(e);
+    return e;
+  }
+};
+
 export const putApi = async (path, data, id) => {
   try {
     let result = await axios?.put(constant?.baseUrl + path, data, {
