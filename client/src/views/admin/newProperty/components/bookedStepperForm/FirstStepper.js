@@ -29,8 +29,6 @@ import ProfileCard from "./image upload";
 
 export const FirstStepper = (props) => {
   const { formik } = props;
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [previewImage, setPreviewImage] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [secondSelectedFile, setSecondSelectedFile] = useState(null);
   const [assignToLeadData, setAssignToLeadData] = useState([]);
@@ -39,7 +37,8 @@ export const FirstStepper = (props) => {
   const [leadModel, setLeadModel] = useState(false);
   const brandColor = useColorModeValue("brand.500", "white");
 
-  const { values, handleChange, handleSubmit, setFieldValue, errors, touched } = formik;
+  const { values, handleChange, handleSubmit, setFieldValue, errors, touched } =
+    formik;
 
   const user = JSON.parse(localStorage.getItem("user"));
 

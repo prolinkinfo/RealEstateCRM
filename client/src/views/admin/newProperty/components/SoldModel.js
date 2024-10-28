@@ -9,45 +9,66 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
+import UserDetailsForm from "./soldForm/UserDetailsForm";
+import { useFormik } from "formik";
 
 function SoldModel(props) {
   const { isOpen, onClose } = props;
+
+  const formik = useFormik({
+    initialValues: {
+      category: "Lead",
+    },
+    enableReinitialize: true,
+    onSubmit: (values, { resetForm }) => {
+      console.log("submit");
+    },
+  });
+
+  const { handleSubmit } = formik;
+
   return (
-    <>
-      <Drawer isOpen={isOpen}>
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerHeader
-            alignItems={"center"}
-            justifyContent="space-between"
-            display="flex"
+    <Drawer isOpen={isOpen} size="lg">
+      <DrawerOverlay />
+      <DrawerContent>
+        <DrawerHeader
+          alignItems={"center"}
+          justifyContent="space-between"
+          display="flex"
+        >
+          Sold
+          <IconButton onClick={onClose} icon={<CloseIcon />} />
+        </DrawerHeader>
+        <DrawerBody>
+          <UserDetailsForm formik={formik} />
+        </DrawerBody>
+        <DrawerFooter>
+          <Button
+            variant="outline"
+            colorScheme="red"
+            size="sm"
+            sx={{
+              marginLeft: 2,
+              textTransform: "capitalize",
+            }}
+            onClick={onClose}
           >
-            Sold
-            <IconButton onClick={onClose} icon={<CloseIcon />} />
-          </DrawerHeader>
-          <DrawerBody>
-            {/* <CustomForm moduleData={props?.leadData} values={values} setFieldValue={setFieldValue} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} /> */}
-          </DrawerBody>
-          <DrawerFooter>
-            {/* <Button sx={{ textTransform: "capitalize" }} size="sm" disabled={isLoding ? true : false} variant="brand" type="submit" onClick={handleSubmit}                        >
-                            {isLoding ? <Spinner /> : 'Save'}
-                        </Button> */}
-            <Button
-              variant="outline"
-              colorScheme="red"
-              size="sm"
-              sx={{
-                marginLeft: 2,
-                textTransform: "capitalize",
-              }}
-              onClick={onClose}
-            >
-              Close
-            </Button>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
-    </>
+            Close
+          </Button>
+          <Button
+            variant="brand"
+            size="sm"
+            sx={{
+              marginLeft: 2,
+              textTransform: "capitalize",
+            }}
+            onClick={handleSubmit}
+          >
+            Submit
+          </Button>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }
 export default SoldModel;
