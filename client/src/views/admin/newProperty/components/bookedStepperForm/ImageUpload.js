@@ -3,8 +3,16 @@ import { Box, Flex, Text, Button, Icon } from "@chakra-ui/react";
 import { MdUpload } from "react-icons/md";
 import Card from "components/card/Card";
 
-const ProfileCard = (props) => {
-  const { selectedFile, handleFileChange, brandColor, id, name } = props;
+const ImageUpload = (props) => {
+  const {
+    selectedFile,
+    handleFileChange,
+    brandColor,
+    id,
+    name,
+    label,
+    placeHolder,
+  } = props;
 
   return (
     <Card className="profile-card">
@@ -24,7 +32,7 @@ const ProfileCard = (props) => {
             <Icon as={MdUpload} w="80px" h="80px" color={brandColor} />
             <Flex justify="center" mx="auto" mb="12px">
               <Text fontSize="xl" fontWeight="700" color={brandColor}>
-                Upload Files
+                {placeHolder || "Upload Files"}
               </Text>
             </Flex>
           </Box>
@@ -42,7 +50,7 @@ const ProfileCard = (props) => {
         <div style={{ margin: "10px" }}>
           <label htmlFor={`avatar-upload-${id}`}>
             <Button as="span" variant="outlined" color="brand">
-              Upload
+              {label || "Upload"}
             </Button>
           </label>
         </div>
@@ -51,4 +59,4 @@ const ProfileCard = (props) => {
   );
 };
 
-export default ProfileCard;
+export default ImageUpload;

@@ -25,12 +25,11 @@ import ContactModel from "components/commonTableModel/ContactModel.js";
 import LeadModel from "components/commonTableModel/LeadModel";
 import { LiaMousePointerSolid } from "react-icons/lia";
 import Card from "components/card/Card";
-import ProfileCard from "./image upload";
+import ImageUpload from "./ImageUpload";
 
 export const FirstStepper = (props) => {
   const { formik } = props;
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [secondSelectedFile, setSecondSelectedFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState({});
   const [assignToLeadData, setAssignToLeadData] = useState([]);
   const [assignToContactData, setAssignToContactData] = useState([]);
   const [contactModel, setContactModel] = useState(false);
@@ -65,26 +64,14 @@ export const FirstStepper = (props) => {
     }
   };
 
-  const handleFirstFileChange = (event) => {
+  const handleFileChange = (event) => {
     const file = event?.target?.files[0];
-;
+    const fieldName = event?.target?.name;
     if (file) {
-      setFieldValue(event?.target?.name, file);
+      setFieldValue(fieldName, file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setSelectedFile(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleSecondFileChange = (event) => {
-    const file = event?.target?.files[0];
-    if (file) {
-      setFieldValue(event?.target?.name, file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSecondSelectedFile(reader.result)
+        setSelectedFile({ ...selectedFile, [fieldName]: reader?.result });
       };
       reader.readAsDataURL(file);
     }
@@ -214,23 +201,27 @@ export const FirstStepper = (props) => {
             )}
           </GridItem>
           <GridItem colSpan={{ base: 12, md: 6 }}>
-            <ProfileCard
-              value={values?.imagefirst}
-              name="imagefirst"
-              selectedFile={selectedFile} // State variable to hold the uploaded file
-              handleFileChange={handleFirstFileChange}
-              brandColor={brandColor} // Replace with your brand color
-              id="selectedFile11"
+            <ImageUpload
+              value={values?.salesManagerSign}
+              name="salesManagerSign"
+              selectedFile={selectedFile?.salesManagerSign}
+              handleFileChange={handleFileChange}
+              brandColor={brandColor}
+              placeHolder="Upload Signature"
+              label="Sales Manager"
+              id="salesManagerSign"
             />
           </GridItem>
           <GridItem colSpan={{ base: 12, md: 6 }}>
-            <ProfileCard
-              value={values?.secondimage}
-              name="secondimage"
-              selectedFile={secondSelectedFile} // State variable to hold the uploaded file
-              handleFileChange={handleSecondFileChange}
-              brandColor={brandColor} // Replace with your brand color
-              id="secondSelectedFile"
+            <ImageUpload
+              value={values?.buyerImage}
+              name="buyerImage"
+              selectedFile={selectedFile?.buyerImage}
+              handleFileChange={handleFileChange}
+              brandColor={brandColor}
+              placeHolder="Upload Signature"
+              label="Buyer"
+              id="buyerImage"
             />
           </GridItem>
         </Grid>
