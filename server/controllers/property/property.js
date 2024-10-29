@@ -229,7 +229,9 @@ const changeUnitStatus = async (req, res) => {
 const genrateOfferLetter = async (req, res) => {
   try {
     const templatePath = path.join(__dirname, "templates", "offerLetter.ejs");
-    const htmlContent = await ejs.renderFile(templatePath);
+    const htmlContent = await ejs.renderFile(templatePath, {
+      ...req?.body,
+    });
 
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
