@@ -11,118 +11,130 @@ async function getNextAutoIncrementInvoiceValue() {
   const num = await Invoices.countDocuments({});
   return num + 1;
 }
-const index = async (req, res) => {
-  query = req.query;
-  query.deleted = false;
-  const user = await User.findById(req.user.userId);
-  if (user?.role !== "superAdmin") {
-    delete query.createBy;
-    query.$or = [
-      { createBy: new mongoose.Types.ObjectId(req.user.userId) },
-      { assignUser: new mongoose.Types.ObjectId(req.user.userId) },
-    ];
-  }
+// const index = async (req, res) => {
+//   query = req.query;
+//   query.deleted = false;
+//   const user = await User.findById(req.user.userId);
+//   if (user?.role !== "superAdmin") {
+//     delete query.createBy;
+//     query.$or = [
+//       { createBy: new mongoose.Types.ObjectId(req.user.userId) },
+//       { assignUser: new mongoose.Types.ObjectId(req.user.userId) },
+//     ];
+//   }
 
+//   try {
+//     let result = await Quotes.aggregate([
+//       { $match: query },
+//       {
+//         $lookup: {
+//           from: "Contacts",
+//           localField: "contact",
+//           foreignField: "_id",
+//           as: "contactData",
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "Accounts",
+//           localField: "account",
+//           foreignField: "_id",
+//           as: "accountData",
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "User",
+//           localField: "createBy",
+//           foreignField: "_id",
+//           as: "users",
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "User",
+//           localField: "modifiedBy",
+//           foreignField: "_id",
+//           as: "modifiedByUser",
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "User",
+//           localField: "assignedTo",
+//           foreignField: "_id",
+//           as: "assignedToData",
+//         },
+//       },
+//       { $unwind: { path: "$users", preserveNullAndEmptyArrays: true } },
+//       { $unwind: { path: "$contactData", preserveNullAndEmptyArrays: true } },
+//       { $unwind: { path: "$accountData", preserveNullAndEmptyArrays: true } },
+//       {
+//         $unwind: { path: "$modifiedByUser", preserveNullAndEmptyArrays: true },
+//       },
+//       {
+//         $unwind: { path: "$assignedToData", preserveNullAndEmptyArrays: true },
+//       },
+//       { $match: { "users.deleted": false } },
+//       {
+//         $addFields: {
+//           assignUserName: {
+//             $cond: {
+//               if: "$assignUsers",
+//               then: {
+//                 $concat: [
+//                   "$assignUsers.firstName",
+//                   " ",
+//                   "$assignUsers.lastName",
+//                 ],
+//               },
+//               else: { $concat: [""] },
+//             },
+//           },
+//           createdByName: {
+//             $concat: ["$users.firstName", " ", "$users.lastName"],
+//           },
+//           modifiedUserName: {
+//             $concat: [
+//               "$modifiedByUser.firstName",
+//               " ",
+//               "$modifiedByUser.lastName",
+//             ],
+//           },
+//           contactName: {
+//             $concat: ["$contactData.firstName", " ", "$contactData.lastName"],
+//           },
+//           accountName: "$accountData.name",
+//         },
+//       },
+//       {
+//         $project: {
+//           users: 0,
+//           contactData: 0,
+//           accountData: 0,
+//           modifiedByUser: 0,
+//           assignedToData: 0,
+//         },
+//       },
+//     ]);
+//     res.send(result);
+//   } catch (error) {
+//     console.error("Error:", error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// };
+
+const index = async (req,res)=>{
   try {
-    let result = await Quotes.aggregate([
-      { $match: query },
-      {
-        $lookup: {
-          from: "Contacts",
-          localField: "contact",
-          foreignField: "_id",
-          as: "contactData",
-        },
-      },
-      {
-        $lookup: {
-          from: "Accounts",
-          localField: "account",
-          foreignField: "_id",
-          as: "accountData",
-        },
-      },
-      {
-        $lookup: {
-          from: "User",
-          localField: "createBy",
-          foreignField: "_id",
-          as: "users",
-        },
-      },
-      {
-        $lookup: {
-          from: "User",
-          localField: "modifiedBy",
-          foreignField: "_id",
-          as: "modifiedByUser",
-        },
-      },
-      {
-        $lookup: {
-          from: "User",
-          localField: "assignedTo",
-          foreignField: "_id",
-          as: "assignedToData",
-        },
-      },
-      { $unwind: { path: "$users", preserveNullAndEmptyArrays: true } },
-      { $unwind: { path: "$contactData", preserveNullAndEmptyArrays: true } },
-      { $unwind: { path: "$accountData", preserveNullAndEmptyArrays: true } },
-      {
-        $unwind: { path: "$modifiedByUser", preserveNullAndEmptyArrays: true },
-      },
-      {
-        $unwind: { path: "$assignedToData", preserveNullAndEmptyArrays: true },
-      },
-      { $match: { "users.deleted": false } },
-      {
-        $addFields: {
-          assignUserName: {
-            $cond: {
-              if: "$assignUsers",
-              then: {
-                $concat: [
-                  "$assignUsers.firstName",
-                  " ",
-                  "$assignUsers.lastName",
-                ],
-              },
-              else: { $concat: [""] },
-            },
-          },
-          createdByName: {
-            $concat: ["$users.firstName", " ", "$users.lastName"],
-          },
-          modifiedUserName: {
-            $concat: [
-              "$modifiedByUser.firstName",
-              " ",
-              "$modifiedByUser.lastName",
-            ],
-          },
-          contactName: {
-            $concat: ["$contactData.firstName", " ", "$contactData.lastName"],
-          },
-          accountName: "$accountData.name",
-        },
-      },
-      {
-        $project: {
-          users: 0,
-          contactData: 0,
-          accountData: 0,
-          modifiedByUser: 0,
-          assignedToData: 0,
-        },
-      },
-    ]);
-    res.send(result);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).send("Internal Server Error");
-  }
-};
+    const query = req.query
+    // query.deleted = false;
+    const result = await Quotes.find(query);
+    res.status(200).json(result);
+} catch (err) {
+    console.error('Failed to create :', err);
+    res.status(400).json({ err, error: 'Failed to create' });
+}
+}
 
 const add = async (req, res) => {
   try {

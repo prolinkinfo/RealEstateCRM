@@ -7,7 +7,7 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  IconButton
+  IconButton,
 } from "@chakra-ui/react";
 import { saveAs } from "file-saver";
 import { useFormik } from "formik";
@@ -34,7 +34,10 @@ function BookedModel(props) {
     }),
     yup.object({
       currency: yup.string().required("Currency is required"),
-      amount: yup.number().typeError("Amount must be a number").required("Amount is required"),
+      amount: yup
+        .number()
+        .typeError("Amount must be a number")
+        .required("Amount is required"),
       accountName: yup.string().required("Account name is required"),
       bank: yup.string().required("Bank is required"),
       branch: yup.string().required("Branch is required"),
@@ -66,11 +69,11 @@ function BookedModel(props) {
     },
     validationSchema: validationSchemas[currentStep - 1],
     validate: (values) => {
-      let errors = {}
+      let errors = {};
 
       if (!values?.lead && !values?.contact) {
-        errors.lead = "Lead or contact are required"
-        errors.contact = "Lead or contact are required"
+        errors.lead = "Lead or contact are required";
+        errors.contact = "Lead or contact are required";
       }
 
       return errors;
@@ -81,7 +84,7 @@ function BookedModel(props) {
   });
 
   const { values, handleSubmit, resetForm, validateForm } = formik;
-  console.log(formik?.errors)
+  console.log(formik?.errors);
 
   const steps = [
     {
@@ -119,7 +122,7 @@ function BookedModel(props) {
       setCurrentStep((prev) => prev + 1);
     } else {
       await validateForm();
-      handleSubmit()
+      handleSubmit();
     }
   };
 
