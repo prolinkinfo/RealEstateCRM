@@ -114,7 +114,7 @@ export const FirstStepper = (props) => {
             fontWeight="500"
             mb="8px"
           >
-            Related
+            Related <Text color={"red"}>*</Text>
           </FormLabel>
           <RadioGroup
             onChange={(e) => {
@@ -163,7 +163,7 @@ export const FirstStepper = (props) => {
               />
             </Flex>
             <Text mb="10px" fontSize="sm" color={"red"}>
-              {errors?.contact && touched?.contact && errors?.contact}
+              {touched?.contact && errors?.contact && errors?.contact}
             </Text>
           </GridItem>
         ) : values?.category === "lead" ? (
@@ -197,7 +197,7 @@ export const FirstStepper = (props) => {
               />
             </Flex>
             <Text mb="10px" fontSize="sm" color={"red"}>
-              {errors?.lead && touched?.lead && errors?.lead}
+              {touched?.lead && errors?.lead && errors?.lead}
             </Text>
           </GridItem>
         ) : (

@@ -35,33 +35,35 @@ function BookedModel(props) {
 
   const param = useParams();
 
-  const validationSchema = yup.object({
-    category: yup.string().required("Category is required"),
-    lead: yup.string(),
-    contact: yup.string(),
-    currency: yup.string().required("Currency is required"),
-    amount: yup
-      .number()
-      .typeError("Amount must be a number")
-      .required("Amount is required"),
-    accountName: yup.string().required("Account name is required"),
-    bank: yup.string().required("Bank is required"),
-    branch: yup.string().required("Branch is required"),
-    accountNumber: yup
-      .number()
-      .required("Account Number is required")
-      .typeError("Account Number must be a number"),
-    swiftCode: yup
-      .number()
-      .required("Swift code is required")
-      .typeError("Swift code must be a number"),
-  });
+  const validationSchemas = [
+    yup.object({
+      category: yup.string().required("Category is required"),
+      lead: yup.string().required("Lead is required"),
+      contact: yup.string(),
+    }),
+    yup.object({
+      currency: yup.string().required("Currency is required"),
+      amount: yup.number().typeError("Amount must be a number").required("Amount is required"),
+      accountName: yup.string().required("Account name is required"),
+      bank: yup.string().required("Bank is required"),
+      branch: yup.string().required("Branch is required"),
+      accountNumber: yup
+        .number()
+        .required("Account Number is required")
+        .typeError("Account Number must be a number"),
+      swiftCode: yup
+        .number()
+        .required("Swift code is required")
+        .typeError("Swift code must be a number"),
+    }),
+  ];
 
   const formik = useFormik({
     initialValues: {
       category: "lead",
       currency: "ksh",
       lead: "",
+      amount: "",
       contact: "",
       imagefirst: [],
       secondimage: [],
@@ -71,13 +73,14 @@ function BookedModel(props) {
       accountNumber: "",
       swiftCode: "",
     },
-    validationSchema,
+    validationSchema: validationSchemas[currentStep - 1],
     onSubmit: () => {
       submitStepperData();
     },
   });
 
-  const { values, handleSubmit, resetForm } = formik;
+  const { values, handleSubmit, resetForm, validateForm } = formik;
+
 
   const steps = [
     {
@@ -90,7 +93,7 @@ function BookedModel(props) {
     },
     {
       description: "Payment Schedule",
-      component: <BankDetails formik={formik} />,
+      component: <FirstStepper formik={formik} />,
     },
   ];
 
@@ -108,8 +111,15 @@ function BookedModel(props) {
     }
   };
 
-  const handleNext = () => {
-    setCurrentStep((prev) => prev + 1);
+  const handleNext = async () => {
+    if (formik?.isValid && formik?.dirty) {
+      formik.setTouched({});
+      formik.resetForm({ values: formik.values }); 
+      setCurrentStep((prev) => prev + 1);
+    } else {
+      await validateForm();
+      handleSubmit()
+    }
   };
 
   const handlePrevious = () => {
