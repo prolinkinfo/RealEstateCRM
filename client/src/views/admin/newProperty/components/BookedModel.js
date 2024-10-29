@@ -36,16 +36,25 @@ function BookedModel(props) {
   const param = useParams();
 
   const validationSchema = yup.object({
-    category: yup.string().required("Currency Is Required"),
+    category: yup.string().required("Category is required"),
     lead: yup.string(),
     contact: yup.string(),
-    currency: yup.string().required("Currency Is Required"),
-    amount: yup.number().typeError("Amount must be a number").required("amount Is Required"),
-    accountName: yup.string().required("Account Name Is Required"),
-    bank: yup.string().required("Bank Is Required"),
-    branch: yup.string().required("Branch Is Required"),
-    accountNumber: yup.number().required("Account Number Is Required"),
-    swiftCode: yup.number().required("swiftCode Is Required"),
+    currency: yup.string().required("Currency is required"),
+    amount: yup
+      .number()
+      .typeError("Amount must be a number")
+      .required("Amount is required"),
+    accountName: yup.string().required("Account name is required"),
+    bank: yup.string().required("Bank is required"),
+    branch: yup.string().required("Branch is required"),
+    accountNumber: yup
+      .number()
+      .required("Account Number is required")
+      .typeError("Account Number must be a number"),
+    swiftCode: yup
+      .number()
+      .required("Swift code is required")
+      .typeError("Swift code must be a number"),
   });
 
   const formik = useFormik({
@@ -72,13 +81,15 @@ function BookedModel(props) {
 
   const steps = [
     {
-      label: "First",
       description: "Contact Info",
       component: <FirstStepper formik={formik} />,
     },
     {
-      label: "Second",
       description: "Bank Details",
+      component: <BankDetails formik={formik} />,
+    },
+    {
+      description: "Payment Schedule",
       component: <BankDetails formik={formik} />,
     },
   ];
@@ -120,6 +131,7 @@ function BookedModel(props) {
               onClick={() => {
                 onClose();
                 resetForm();
+                setCurrentStep(1);
               }}
               icon={<CloseIcon />}
             />
@@ -134,7 +146,6 @@ function BookedModel(props) {
                     >
                       <div className="step-number">{index + 1}</div>
                       <div className="step-info">
-                        <h4>{step?.label}</h4>
                         <p style={{ textAlign: "center", width: "120px" }}>
                           {step?.description}
                         </p>

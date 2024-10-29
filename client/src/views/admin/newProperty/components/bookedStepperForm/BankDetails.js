@@ -141,7 +141,7 @@ export const BankDetails = (props) => {
             onBlur={handleBlur}
             value={values?.swiftCode}
             name="swiftCode"
-            placeholder="Enter swiftCode"
+            placeholder="Enter swift Code"
             fontWeight="500"
             borderColor={
               errors?.swiftCode && touched?.swiftCode ? "red.300" : null
@@ -183,6 +183,7 @@ export const BankDetails = (props) => {
               name="amount"
               onChange={handleChange}
               onBlur={handleBlur}
+              placeholder="Enter amount"
               value={values?.amount}
               borderColor={errors?.amount && touched?.amount ? "red.300" : null}
             />
