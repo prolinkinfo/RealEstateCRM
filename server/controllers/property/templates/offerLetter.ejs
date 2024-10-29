@@ -32,6 +32,7 @@
         .Address{
             line-height: 25px;
             font-size: 15px;
+            width: 120px;
         }
         .setTableThTd
          {
@@ -117,6 +118,7 @@
 
       .signature-line {
         display: flex;
+        align-content: center;
         align-items: center;
         font-family: Arial, sans-serif;
         font-size: 14px;
@@ -137,6 +139,13 @@
       .setInline{
         display: inline;
       }
+      .setImage{
+        width: 100px;
+        height: 60px;
+      }
+      .setImageAndDate{
+        padding-top: 45px;
+      }
     </style>
 </head>
 
@@ -144,20 +153,17 @@
     <!-- First Page -->
     <div class="main">
         <section>
-            LOGO
+            LOGO 
         </section>
         <section class="Address">
-            ZUQRUF DEVELOPERS,<br/>
-            P.O.BOX 100339-00100,<br/>
-             NAIROBI, KENYA
+          <%= property?.location %>
         </section>
     </div>
     <hr/>
     <h3 class="setTitle">Offer Latter</h3>
-    <h3 class="Title">Date : 06/05/2024</h3>
+    <h3 class="Title">Date : <%= currentDate %></h3>
     <h3 class="Title">Dear Adow Kuno</h3>
-    <p class="setFormet">RE: SALE OF ZUQRUF HEIGHTS 4 BEDROOM APARTMENT NUMBER A11 ON 11th FLOOR
-      IN SOUTH C APARTMENT ON L.R. NO. 209/829/17. BY ZUQRUF DEVELOPERS LIMITED.</p>
+    <p class="setFormet">RE: <%= description %></p>
     <hr />
     <p class="setFont">We are pleased to make you an offer of the above Apartment subject to the following terms and
       conditions:</p>
@@ -173,15 +179,15 @@
       </tr>
       <tr>
         <th class="setTableThTd ThTd">Property:</th>
-        <td class="setTableThTd ThTd">ZUQRUF HEIGHT SOUTH C APARTMENT</td>
+        <td class="setTableThTd ThTd"><%= property?.name %></td>
       </tr>
       <tr>
         <th class="setTableThTd ThTd">Currency:</th>
-        <td class="setTableThTd ThTd">KSH</td>
+        <td class="setTableThTd ThTd"><%= currency %></td>
       </tr>
       <tr>
         <th class="setTableThTd ThTd">Sale Price:</th>
-        <td class="setTableThTd ThTd">Fourteen Million thousand. <br> (Ksh 14,000,000.00)</td>
+        <td class="setTableThTd ThTd"><%= unitPrice %></td>
       </tr>
       <tr>
         <th class="setTableThTd ThTd">Usage:</th>
@@ -208,26 +214,21 @@
           <tr>
             <th>NO</th>
             <th>Installments START DATE</th>
-            <th>%</th>
+            <th>Per</th>
             <th>MONTHS</th>
             <th>TOTAL</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Installments Immediately</td>
-            <td>30</td>
-            <td>-</td>
-            <td>$ 37,500</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Installments Before March 2026</td>
-            <td>70</td>
-            <td>24</td>
-            <td>$ 87,500</td>
-          </tr>
+          <% installments.forEach(function(installment) { %>
+            <tr>
+              <td><%= installment.no %></td>
+              <td><%= installment.startDate %></td>
+              <td><%= installment.per %></td>
+              <td><%= installment.months %></td>
+              <td><%= installment.Total %></td>
+            </tr>
+          <% }); %>
         </tbody>
       </table>
  
@@ -239,27 +240,27 @@
         <table class="centerContain ">
           <tr>
             <td>ACCOUNT NAME:</td>
-            <td class="paddingLeft">ZUQRUF DEVELOPERS LIMITED</td>
+            <td class="paddingLeft"><%= accountName %></td>
           </tr>
           <tr>
             <td>CURRENCY: </td>
-            <td class="paddingLeft">USD</td>
+            <td class="paddingLeft"><%= currency %></td>
           </tr>
           <tr>
             <td>BANK: </td>
-            <td class="paddingLeft">NATIONAL BANK</td>
+            <td class="paddingLeft"><%= bank %></td>
           </tr>
           <tr>
             <td>BRANCH:</td>
-            <td class="paddingLeft">EASTLEIGH</td>
+            <td class="paddingLeft"><%= branch %></td>
           </tr>
           <tr>
             <td>ACCOUNT NUMBER:</td>
-            <td class="paddingLeft">02041239983200</td>
+            <td class="paddingLeft"><%= accountNumber %></td>
           </tr>
           <tr>
             <td>SWIFT CODE:</td>
-            <td class="paddingLeft">NBKEKEN</td>
+            <td class="paddingLeft"><%= swiftCode %></td>
           </tr>
         </table>
     </div> 
@@ -319,22 +320,26 @@
     <div class="titleforth">Yours Faithfully.</div>
     <div class="titleforth">ZUQRUF DEVELOPERS LIMITED.</div>
 
-    <div class="signature-line">
+    <div class="signature-line" style="display: flex; align-items: center; gap: 10px;">
       <p>Signed</p>
-      <div class="line"><img src="../../../../client/src/assets/img/fileImage/file.png"/></div>
-      <p>Date</p>
-      <div class="line"></div>
+      <div class="line"><img class="setImage"
+        src="http://127.0.0.1:5001/api/property/property-photos/download.jpg" alt="image"/> 
+        </div>
+      <p class="setImageAndDate">Date</p>
+      <div class="line setImageAndDate"><%= currentDate %></div>
     </div>
     <div>SALES MANAGER</div>
     
-    <p>I <b>ABDIWELI MOHAMED HAJI</b> </p>
+    <p>I<b>ABDIWELI MOHAMED HAJI</b></p>
     <p>Confirm my acceptance of the above terms and conditions.</p>
 
     <div class="signature-line">
       <p>Signed</p>
-      <div class="line"><img alt="Image" /></div>
-      <p>Date</p>
-      <div class="line"></div>
+      <div class="line"><img class="setImage" 
+        src="http://127.0.0.1:5001/api/property/property-photos/download.jpg" alt="Image" />
+        </div> 
+      <p class="setImageAndDate">Date</p>
+      <div class="line setImageAndDate" ><%= currentDate %></div>
     </div>
 
     <div class="footer">
