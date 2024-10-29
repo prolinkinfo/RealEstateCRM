@@ -10,7 +10,6 @@ const ProfileCard = ({
   setFieldValue,
   brandColor,
 }) => {
-  console.log(setFieldValue, "setFieldValue");
   return (
     <Card className="profile-card">
       <Box style={{ textAlign: "center" }}>

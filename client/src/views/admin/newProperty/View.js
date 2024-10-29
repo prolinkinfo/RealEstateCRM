@@ -66,10 +66,9 @@ import { fetchContactCustomFiled } from "../../../redux/slices/contactCustomFile
 import { fetchPropertyCustomFiled } from "../../../redux/slices/propertyCustomFiledSlice";
 import Add from "./Add";
 import AddEditUnits from "./components/AddEditUnits";
-import BlockedModel from "./components/BlockedModel";
 import BookedModel from "./components/BookedModel";
+import ChangeStatusModel from "./components/ChangeStatusModel";
 import PropertyPhoto from "./components/propertyPhoto";
-import SoldModel from "./components/SoldModel";
 import UnitTypeView from "./components/UnitTypeView";
 import Edit from "./Edit";
 
@@ -102,7 +101,9 @@ const View = () => {
   const [selectedFloorItem, setSelectedFloorItem] = useState({});
 
   const [blockedModelOpen, setBlockedModelOpen] = useState(false);
-  const [soldopen, setSoldOpen] = useState(false);
+  const [availableModelOpen, setAvailableModelOpen] = useState(false);
+  const [soldModelOpen, setSoldModelOpen] = useState(false);
+  // const [soldopen, setSoldOpen] = useState(false);
   const [bookedOpen, setBookedOpen] = useState(false);
 
   const dispatch = useDispatch();
@@ -575,7 +576,37 @@ const View = () => {
         setAction={setAction}
       />
 
-      <BlockedModel
+      <ChangeStatusModel
+        isOpen={availableModelOpen}
+        clickOnYes={() => {
+          handleStatusChange(
+            selectedFloorItem?.floor,
+            selectedFloorItem?.item,
+            selectedFloorItem?.status
+          );
+          setAvailableModelOpen(false);
+        }}
+        title="Available"
+        message="Are you sure to change status available?"
+        onClose={() => setAvailableModelOpen(false)}
+      />
+
+      <ChangeStatusModel
+        isOpen={soldModelOpen}
+        clickOnYes={() => {
+          handleStatusChange(
+            selectedFloorItem?.floor,
+            selectedFloorItem?.item,
+            selectedFloorItem?.status
+          );
+          setSoldModelOpen(false);
+        }}
+        title="Sold"
+        message="Are you sure to change status sold?"
+        onClose={() => setSoldModelOpen(false)}
+      />
+
+      <ChangeStatusModel
         isOpen={blockedModelOpen}
         clickOnYes={() => {
           handleStatusChange(
@@ -585,9 +616,12 @@ const View = () => {
           );
           setBlockedModelOpen(false);
         }}
+        title="Blocked"
+        message="Are you sure to change status block?"
         onClose={() => setBlockedModelOpen(false)}
       />
-      <SoldModel isOpen={soldopen} onClose={() => setSoldOpen(false)} />
+
+      {/* <SoldModel isOpen={soldopen} onClose={() => setSoldOpen(false)} /> */}
       <BookedModel isOpen={bookedOpen} onClose={() => setBookedOpen(false)} />
 
       {isLoding ? (
@@ -918,22 +952,23 @@ const View = () => {
                                     minW={"fit-content"}
                                     transform={"translate(1520px, 173px);"}
                                   >
-                                    <MenuItem
+                                    {item?.status !== "Available" && <MenuItem
                                       py={2.5}
                                       icon={
                                         <TbStatusChange fontSize={15} mb={1} />
                                       }
                                       onClick={() => {
-                                        handleStatusChange(
+                                        setAvailableModelOpen(true);
+                                        setSelectedFloorItem({
                                           floor,
                                           item,
-                                          "Available"
-                                        );
+                                          status: "Available",
+                                        });
                                       }}
                                     >
                                       Available
-                                    </MenuItem>
-                                    <MenuItem
+                                    </MenuItem>}
+                                    {!["Booked", "Sold", "Blocked"]?.includes(item?.status) && <MenuItem
                                       py={2.5}
                                       icon={
                                         <TbStatusChange fontSize={15} mb={1} />
@@ -948,20 +983,29 @@ const View = () => {
                                       }}
                                     >
                                       Booked
-                                    </MenuItem>
-                                    <MenuItem
-                                      py={2.5}
-                                      icon={
-                                        <TbStatusChange fontSize={15} mb={1} />
-                                      }
-                                      onClick={() => {
-                                        setSoldOpen(true);
-                                        handleStatusChange(floor, item, "Sold");
-                                      }}
-                                    >
-                                      Sold
-                                    </MenuItem>
-                                    {user?.role === "superAdmin" && (
+                                    </MenuItem>}
+                                    {item?.status === "Booked" && item?.status !== "Sold" && (
+                                      <MenuItem
+                                        py={2.5}
+                                        icon={
+                                          <TbStatusChange
+                                            fontSize={15}
+                                            mb={1}
+                                          />
+                                        }
+                                        onClick={() => {
+                                          setSoldModelOpen(true);
+                                          setSelectedFloorItem({
+                                            floor,
+                                            item,
+                                            status: "Sold",
+                                          });
+                                        }}
+                                      >
+                                        Sold
+                                      </MenuItem>
+                                    )}
+                                    {user?.role === "superAdmin" && item?.status !== "Blocked" && (
                                       <MenuItem
                                         py={2.5}
                                         icon={
