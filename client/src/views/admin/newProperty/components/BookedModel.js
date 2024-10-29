@@ -24,34 +24,79 @@ import { BankDetails } from "./bookedStepperForm/BankDetails";
 import { FirstStepper } from "./bookedStepperForm/FirstStepper";
 import * as yup from "yup";
 import { useFormik } from "formik";
+import { toast } from "react-toastify";
+import { postApiBlob } from "services/api";
+import { saveAs } from "file-saver";
+import { useParams } from "react-router-dom";
 
 function BookedModel(props) {
   const { isOpen, onClose } = props;
   const [currentStep, setCurrentStep] = useState(1);
-  // currentStep == 1 that show in 1 then currenStep == 2 that show in 2
+
   const steps = [
     { id: 1, label: "First", description: "Contact Info" },
     { id: 2, label: "Second", description: "Bank Details" },
   ];
+  const param = useParams();
 
   const validationSchema = yup.object({
     category: yup.string().required("Currency Is Required"),
     lead: yup.string(),
     contact: yup.string(),
+    // imagefirst: yup.array(),
+    // secondimage: yup.array(),
+    currency: yup.string().required("Currency Is Required"),
+    ksh: yup.number(),
+    usd: yup.number(),
+    accountName: yup.string().required("Account Name Is Required"),
+    bank: yup.string().required("Bank Is Required"),
+    branch: yup.string().required("Branch Is Required"),
+    accountNumber: yup.number().required("Account Number Is Required"),
+    swiftCode: yup.number().required("swiftCode Is Required"),
   });
+
   const formik = useFormik({
     initialValues: {
       category: "lead",
       lead: "",
       contact: "",
+      imagefirst: [],
+      secondimage: [],
+      currency: "",
+      accountName: "",
+      bank: "",
+      ksh: "",
+      usd: "",
+      branch: "",
+      accountNumber: "",
+      swiftCode: "",
     },
     validationSchema,
     onSubmit: () => {
-      console.log();
+      submitStepperData();
+      handleNextBtn();
     },
   });
   const { values, handleChange, handleSubmit, setFieldValue, errors, touched } =
     formik;
+
+  const handleNextBtn = () => {
+    console.log(values);
+  };
+
+  const submitStepperData = async () => {
+    try {
+      const response = await postApiBlob(
+        `api/property/genrate-offer-letter/${param?.id}`,
+        values
+      );
+      const pdfBlob = new Blob([response.data], { type: "application/pdf" });
+      saveAs(pdfBlob, "offer-letter.pdf");
+    } catch (e) {
+      console.log(e);
+      toast.error(`server error`);
+    }
+  };
 
   return (
     <>
@@ -94,11 +139,14 @@ function BookedModel(props) {
               {/* Conditional Rendering of Form Fields */}
               <div className="step-content">
                 {currentStep === 1 && (
-                  <div>
-                    <FirstStepper formik={formik} />
-                    <ModalFooter>
+                  <>
+                    <div>
+                      <FirstStepper formik={formik} />
+                    </div>
+                    <DrawerFooter>
                       <div className="stepper-actions">
                         <Button
+                          size="sm"
                           variant="outline"
                           colorScheme="red"
                           onClick={() =>
@@ -109,39 +157,66 @@ function BookedModel(props) {
                           Previous
                         </Button>
                         <Button
+                          size="sm"
                           colorScheme="brand"
-                          onClick={() =>
+                          onClick={() => {
                             setCurrentStep((prev) =>
                               Math.min(prev + 1, steps.length)
-                            )
-                          }
+                            );
+                            handleNextBtn();
+                          }}
                           disabled={currentStep === steps.length}
                         >
                           Next
                         </Button>
                       </div>
-                    </ModalFooter>
-                  </div>
+                    </DrawerFooter>
+                  </>
                 )}
                 {/* Placeholder content for other steps */}
                 {currentStep === 2 && (
-                  <div>
-                    {/* Select Date & Time */}
-                    <BankDetails
-                      setCurrentStep={setCurrentStep}
-                      currentStep={currentStep}
-                      steps={steps}
-                    />
-                  </div>
+                  <>
+                    <div>
+                      <BankDetails
+                        setCurrentStep={setCurrentStep}
+                        currentStep={currentStep}
+                        steps={steps}
+                        handleNextBtn={handleNextBtn}
+                        formik={formik}
+                      />
+                    </div>
+                    <ModalFooter
+                      style={{
+                        position: "absolute",
+                        bottom: "0",
+                        right: "0",
+                      }}
+                    >
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        colorScheme="red"
+                        mr={2}
+                        onClick={() =>
+                          setCurrentStep((prev) => Math.max(prev - 1, 1))
+                        }
+                        disabled={currentStep === 1}
+                      >
+                        Previous
+                      </Button>
+                      <Button
+                        onClick={handleSubmit}
+                        colorScheme="brand"
+                        size="sm"
+                      >
+                        Submit
+                      </Button>
+                    </ModalFooter>
+                  </>
                 )}
               </div>
-            
             </div>
-           
           </DrawerBody>
-          <DrawerFooter>
-            
-          </DrawerFooter>
         </DrawerContent>
       </Drawer>
     </>

@@ -13,56 +13,13 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { useFormik } from "formik";
 import React from "react";
-import { toast } from "react-toastify";
-import { LiaMousePointerSolid } from "react-icons/lia";
-import * as yup from "yup";
-import { postApi } from "services/api";
 
 export const BankDetails = (props) => {
-  const { setCurrentStep, currentStep } = props;
+  const { formik } = props;
 
-  const validationSchema = yup.object({
-    currency: yup.string().required("Currency Is Required"),
-    ksh: yup.string(),
-    usd: yup.string(),
-    accountName: yup.string().required("Account Name Is Required"),
-    bank: yup.string().required("Bank Is Required"),
-    branch: yup.string().required("Branch Is Required"),
-    accountNumber: yup.number().required("Account Number Is Required"),
-    swiftCode: yup.number().required("swiftCode Is Required"),
-  });
-  const formik = useFormik({
-    initialValues: {
-      ammount: "",
-      currency: "",
-      accountName: "",
-      bank: "",
-      branch: "",
-      accountNumber: "",
-      swiftCode: "",
-    },
-    validationSchema,
-    onSubmit: () => {
-      submitStepperData();
-      console.log(values);
-    },
-  });
+  const { values, handleChange, handleSubmit, setFieldValue, errors, touched } = formik;
 
-  const { values, handleChange, handleSubmit, setFieldValue, errors, touched } =
-    formik;
-  const submitStepperData = async () => {
-    try {
-      let response = await postApi("api/property/add-stepperdata", values);
-      if (response?.status === 200) {
-        toast.success(`Form Save successfully`);
-      }
-    } catch (e) {
-      console.log(e);
-      toast.error(`server error`);
-    }
-  };
   return (
     <>
       <Grid templateColumns="repeat(12, 1fr)" gap={3}>
@@ -241,28 +198,6 @@ export const BankDetails = (props) => {
           </Text>
         </GridItem>
       </Grid>
-      <ModalFooter
-        style={{
-          position: "absolute",
-          bottom: "0",
-          right: "0",
-        }}
-      >
-        {/* <div> */}
-        <Button
-          variant="outline"
-          colorScheme="red"
-          mr={1}
-          onClick={() => setCurrentStep((prev) => Math.max(prev - 1, 1))}
-          disabled={currentStep === 1}
-        >
-          Previous
-        </Button>
-        <Button onClick={handleSubmit} colorScheme="brand">
-          Submit
-        </Button>
-        {/* </div> */}
-      </ModalFooter>
     </>
   );
 };
