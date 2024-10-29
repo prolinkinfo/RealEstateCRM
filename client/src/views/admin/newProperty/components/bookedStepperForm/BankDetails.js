@@ -18,7 +18,7 @@ import React from "react";
 export const BankDetails = (props) => {
   const { formik } = props;
 
-  const { values, handleChange, handleSubmit, setFieldValue, errors, touched } = formik;
+  const { values, handleChange, setFieldValue, handleBlur, errors, touched } = formik;
 
   return (
     <>
@@ -36,6 +36,7 @@ export const BankDetails = (props) => {
           <Input
             fontSize="sm"
             onChange={handleChange}
+            onBlur={handleBlur}
             value={values?.accountName}
             name="accountName"
             placeholder="Enter Account Name"
@@ -45,7 +46,6 @@ export const BankDetails = (props) => {
             }
           />
           <Text mb="10px" color={"red"} fontSize="sm">
-            {" "}
             {errors?.accountName && touched?.accountName && errors?.accountName}
           </Text>
         </GridItem>
@@ -63,13 +63,13 @@ export const BankDetails = (props) => {
             fontSize="sm"
             onChange={handleChange}
             value={values?.bank}
+            onBlur={handleBlur}
             name="bank"
             placeholder="Enter Bank"
             fontWeight="500"
             borderColor={errors?.bank && touched?.bank ? "red.300" : null}
           />
           <Text mb="10px" color={"red"} fontSize="sm">
-            {" "}
             {errors?.bank && touched?.bank && errors?.bank}
           </Text>
         </GridItem>
@@ -86,6 +86,7 @@ export const BankDetails = (props) => {
           <Input
             fontSize="sm"
             onChange={handleChange}
+            onBlur={handleBlur}
             value={values?.branch}
             name="branch"
             placeholder="Enter Branch"
@@ -93,7 +94,6 @@ export const BankDetails = (props) => {
             borderColor={errors?.branch && touched?.branch ? "red.300" : null}
           />
           <Text mb="10px" color={"red"} fontSize="sm">
-            {" "}
             {errors?.branch && touched?.branch && errors?.branch}
           </Text>
         </GridItem>
@@ -109,6 +109,7 @@ export const BankDetails = (props) => {
           </FormLabel>
           <Input
             fontSize="sm"
+            onBlur={handleBlur}
             onChange={handleChange}
             value={values?.accountNumber}
             name="accountNumber"
@@ -119,7 +120,6 @@ export const BankDetails = (props) => {
             }
           />
           <Text mb="10px" color={"red"} fontSize="sm">
-            {" "}
             {errors?.accountNumber &&
               touched?.accountNumber &&
               errors?.accountNumber}
@@ -138,6 +138,7 @@ export const BankDetails = (props) => {
           <Input
             fontSize="sm"
             onChange={handleChange}
+            onBlur={handleBlur}
             value={values?.swiftCode}
             name="swiftCode"
             placeholder="Enter swiftCode"
@@ -147,7 +148,6 @@ export const BankDetails = (props) => {
             }
           />
           <Text mb="10px" color={"red"} fontSize="sm">
-            {" "}
             {errors?.swiftCode && touched?.swiftCode && errors?.swiftCode}
           </Text>
         </GridItem>
@@ -163,18 +163,14 @@ export const BankDetails = (props) => {
             Currency<Text color={"red"}>*</Text>
           </FormLabel>
           <RadioGroup
-            defaultValue="ksh"
             onChange={(e) => {
               setFieldValue("currency", e);
-              setFieldValue("ksh", "");
-              setFieldValue("usd", "");
             }}
-            value={values?.currency || "ksh"}
+            onBlur={handleBlur}
+            value={values?.currency}
           >
             <Stack direction="row">
-              <Radio value="ksh" defaultValue={"ksh"}>
-                KSH
-              </Radio>
+              <Radio value="ksh">KSH</Radio>
               <Radio value="usd">USD</Radio>
             </Stack>
           </RadioGroup>
@@ -184,17 +180,15 @@ export const BankDetails = (props) => {
           <Flex justifyContent={"space-between"}>
             <Input
               fontSize="sm"
-              name="currency"
+              name="amount"
               onChange={handleChange}
-              value={values?.currency}
-              borderColor={
-                errors?.currency && touched?.currency ? "red.300" : null
-              }
+              onBlur={handleBlur}
+              value={values?.amount}
+              borderColor={errors?.amount && touched?.amount ? "red.300" : null}
             />
           </Flex>
           <Text mb="10px" color={"red"} fontSize="sm">
-            {" "}
-            {errors?.currency && touched?.currency && errors?.currency}
+            {errors?.amount && touched?.amount && errors?.amount}
           </Text>
         </GridItem>
       </Grid>

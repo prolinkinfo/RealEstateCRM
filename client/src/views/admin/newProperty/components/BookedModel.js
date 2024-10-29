@@ -33,21 +33,14 @@ function BookedModel(props) {
   const { isOpen, onClose } = props;
   const [currentStep, setCurrentStep] = useState(1);
 
-  const steps = [
-    { id: 1, label: "First", description: "Contact Info" },
-    { id: 2, label: "Second", description: "Bank Details" },
-  ];
   const param = useParams();
 
   const validationSchema = yup.object({
     category: yup.string().required("Currency Is Required"),
     lead: yup.string(),
     contact: yup.string(),
-    // imagefirst: yup.array(),
-    // secondimage: yup.array(),
     currency: yup.string().required("Currency Is Required"),
-    ksh: yup.number(),
-    usd: yup.number(),
+    amount: yup.number().typeError("Amount must be a number").required("amount Is Required"),
     accountName: yup.string().required("Account Name Is Required"),
     bank: yup.string().required("Bank Is Required"),
     branch: yup.string().required("Branch Is Required"),
@@ -58,15 +51,13 @@ function BookedModel(props) {
   const formik = useFormik({
     initialValues: {
       category: "lead",
+      currency: "ksh",
       lead: "",
       contact: "",
       imagefirst: [],
       secondimage: [],
-      currency: "",
       accountName: "",
       bank: "",
-      ksh: "",
-      usd: "",
       branch: "",
       accountNumber: "",
       swiftCode: "",
@@ -74,15 +65,23 @@ function BookedModel(props) {
     validationSchema,
     onSubmit: () => {
       submitStepperData();
-      handleNextBtn();
     },
   });
-  const { values, handleChange, handleSubmit, setFieldValue, errors, touched } =
-    formik;
 
-  const handleNextBtn = () => {
-    console.log(values);
-  };
+  const { values, handleSubmit, resetForm } = formik;
+
+  const steps = [
+    {
+      label: "First",
+      description: "Contact Info",
+      component: <FirstStepper formik={formik} />,
+    },
+    {
+      label: "Second",
+      description: "Bank Details",
+      component: <BankDetails formik={formik} />,
+    },
+  ];
 
   const submitStepperData = async () => {
     try {
@@ -98,6 +97,14 @@ function BookedModel(props) {
     }
   };
 
+  const handleNext = () => {
+    setCurrentStep((prev) => prev + 1);
+  };
+
+  const handlePrevious = () => {
+    setCurrentStep((prev) => prev - 1);
+  };
+
   return (
     <>
       <Drawer isOpen={isOpen} size="lg">
@@ -109,17 +116,23 @@ function BookedModel(props) {
             display="flex"
           >
             Booked
-            <IconButton onClick={onClose} icon={<CloseIcon />} />
+            <IconButton
+              onClick={() => {
+                onClose();
+                resetForm();
+              }}
+              icon={<CloseIcon />}
+            />
           </DrawerHeader>
           <DrawerBody>
             <div className="stepper">
               <div className="stepper-wrapper">
                 {steps?.map((step, index) => (
-                  <React.Fragment key={step?.id}>
+                  <React.Fragment key={index + 1}>
                     <div
-                      className={`step ${currentStep >= step?.id ? "active" : ""}`}
+                      className={`step ${currentStep >= index + 1 ? "active" : ""}`}
                     >
-                      <div className="step-number">{step?.id}</div>
+                      <div className="step-number">{index + 1}</div>
                       <div className="step-info">
                         <h4>{step?.label}</h4>
                         <p style={{ textAlign: "center", width: "120px" }}>
@@ -127,96 +140,49 @@ function BookedModel(props) {
                         </p>
                       </div>
                     </div>
-                    {/* Add a line between steps, but not after the last step */}
                     {index !== steps.length - 1 && (
                       <div
-                        className={`step-line ${currentStep > step?.id ? "completed" : ""}`}
-                      ></div>
+                        className={`step-line ${currentStep > index + 1 ? "completed" : ""}`}
+                      />
                     )}
                   </React.Fragment>
                 ))}
               </div>
-              {/* Conditional Rendering of Form Fields */}
               <div className="step-content">
-                {currentStep === 1 && (
-                  <>
-                    <div>
-                      <FirstStepper formik={formik} />
-                    </div>
-                    <DrawerFooter>
-                      <div className="stepper-actions">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          colorScheme="red"
-                          onClick={() =>
-                            setCurrentStep((prev) => Math.max(prev - 1, 1))
-                          }
-                          disabled={currentStep === 1}
-                        >
-                          Previous
-                        </Button>
-                        <Button
-                          size="sm"
-                          colorScheme="brand"
-                          onClick={() => {
-                            setCurrentStep((prev) =>
-                              Math.min(prev + 1, steps.length)
-                            );
-                            handleNextBtn();
-                          }}
-                          disabled={currentStep === steps.length}
-                        >
-                          Next
-                        </Button>
-                      </div>
-                    </DrawerFooter>
-                  </>
-                )}
-                {/* Placeholder content for other steps */}
-                {currentStep === 2 && (
-                  <>
-                    <div>
-                      <BankDetails
-                        setCurrentStep={setCurrentStep}
-                        currentStep={currentStep}
-                        steps={steps}
-                        handleNextBtn={handleNextBtn}
-                        formik={formik}
-                      />
-                    </div>
-                    <ModalFooter
-                      style={{
-                        position: "absolute",
-                        bottom: "0",
-                        right: "0",
-                      }}
-                    >
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        colorScheme="red"
-                        mr={2}
-                        onClick={() =>
-                          setCurrentStep((prev) => Math.max(prev - 1, 1))
-                        }
-                        disabled={currentStep === 1}
-                      >
-                        Previous
-                      </Button>
-                      <Button
-                        onClick={handleSubmit}
-                        colorScheme="brand"
-                        size="sm"
-                      >
-                        Submit
-                      </Button>
-                    </ModalFooter>
-                  </>
+                {steps?.map(
+                  (step, index) => currentStep === index + 1 && step?.component
                 )}
               </div>
             </div>
           </DrawerBody>
+          <DrawerFooter>
+            <Button
+              variant="outline"
+              colorScheme="red"
+              disabled={currentStep <= 1}
+              size="sm"
+              sx={{
+                marginLeft: 2,
+                textTransform: "capitalize",
+              }}
+              onClick={handlePrevious}
+            >
+              Previous
+            </Button>
+            <Button
+              variant="brand"
+              size="sm"
+              sx={{
+                marginLeft: 2,
+                textTransform: "capitalize",
+              }}
+              onClick={
+                steps?.length === currentStep ? handleSubmit : handleNext
+              }
+            >
+              {steps?.length === currentStep ? "Submit" : "Next"}
+            </Button>
+          </DrawerFooter>
         </DrawerContent>
       </Drawer>
     </>

@@ -975,11 +975,11 @@ const View = () => {
                                       }
                                       onClick={() => {
                                         setBookedOpen(true);
-                                        handleStatusChange(
-                                          floor,
-                                          item,
-                                          "Booked"
-                                        );
+                                        // handleStatusChange(
+                                        //   floor,
+                                        //   item,
+                                        //   "Booked"
+                                        // );
                                       }}
                                     >
                                       Booked

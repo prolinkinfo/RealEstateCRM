@@ -36,8 +36,15 @@ export const FirstStepper = (props) => {
   const [leadModel, setLeadModel] = useState(false);
   const brandColor = useColorModeValue("brand.500", "white");
 
-  const { values, handleChange, handleSubmit, setFieldValue, errors, touched } =
-    formik;
+  const {
+    values,
+    handleChange,
+    handleSubmit,
+    handleBlur,
+    setFieldValue,
+    errors,
+    touched,
+  } = formik;
 
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -82,150 +89,145 @@ export const FirstStepper = (props) => {
   }, [values?.category]);
 
   return (
-    <>
-      <div className="contact-info-form">
-        <ContactModel
-          isOpen={contactModel}
-          data={assignToContactData}
-          onClose={setContactModel}
-          fieldName="contact"
-          setFieldValue={setFieldValue}
-        />
-        <LeadModel
-          isOpen={leadModel}
-          data={assignToLeadData}
-          onClose={setLeadModel}
-          fieldName="lead"
-          setFieldValue={setFieldValue}
-        />
-        {/* <h3>Contact Info</h3> */}
-        <Grid templateColumns="repeat(12, 1fr)" gap={3} onSubmit={handleSubmit}>
-          <GridItem colSpan={{ base: 12, md: 6 }}>
-            <FormLabel
-              display="flex"
-              ms="4px"
-              fontSize="sm"
-              fontWeight="500"
-              mb="8px"
-            >
-              Related
-            </FormLabel>
-            <RadioGroup
-              onChange={(e) => {
-                setFieldValue("category", e);
-                setFieldValue("contact", "");
-                setFieldValue("lead", "");
-              }}
-              value={values.category || "lead"}
-              defaultValue="lead"
-            >
-              <Stack direction="row" defaultValue={"lead"}>
-                <Radio value="contact">Contact</Radio>
-                <Radio value="lead">Lead</Radio>
-              </Stack>
-            </RadioGroup>
-          </GridItem>
+    <div className="contact-info-form">
+      <ContactModel
+        isOpen={contactModel}
+        data={assignToContactData}
+        onClose={setContactModel}
+        fieldName="contact"
+        setFieldValue={setFieldValue}
+      />
+      <LeadModel
+        isOpen={leadModel}
+        data={assignToLeadData}
+        onClose={setLeadModel}
+        fieldName="lead"
+        setFieldValue={setFieldValue}
+      />
+      {/* <h3>Contact Info</h3> */}
+      <Grid templateColumns="repeat(12, 1fr)" gap={3} onSubmit={handleSubmit}>
+        <GridItem colSpan={{ base: 12 }}>
+          <FormLabel
+            display="flex"
+            ms="4px"
+            fontSize="sm"
+            fontWeight="500"
+            mb="8px"
+          >
+            Related
+          </FormLabel>
+          <RadioGroup
+            onChange={(e) => {
+              setFieldValue("category", e);
+              setFieldValue("contact", "");
+              setFieldValue("lead", "");
+            }}
+            onBlur={handleBlur}
+            value={values.category || "lead"}
+            defaultValue="lead"
+          >
+            <Stack direction="row" defaultValue={"lead"}>
+              <Radio value="contact">Contact</Radio>
+              <Radio value="lead">Lead</Radio>
+            </Stack>
+          </RadioGroup>
+        </GridItem>
+        {values?.category === "contact" ? (
           <GridItem colSpan={{ base: 12 }}>
-            {values?.category === "contact" ? (
-              <>
-                <GridItem colSpan={{ base: 12, md: 6 }}>
-                  <Flex justifyContent={"space-between"}>
-                    <Select
-                      value={values?.contact}
-                      name="contact"
-                      onChange={handleChange}
-                      mb={
-                        errors.contact && touched.contact ? undefined : "10px"
-                      }
-                      fontWeight="500"
-                      placeholder={"Assign To Contact"}
-                      borderColor={
-                        errors.contact && touched.contact ? "red.300" : null
-                      }
-                    >
-                      {assignToContactData?.map((item) => {
-                        return (
-                          <option value={item?._id} key={item?._id}>
-                            {values?.category === "contact"
-                              ? `${item?.fullName}`
-                              : item?.leadName}
-                          </option>
-                        );
-                      })}
-                    </Select>
-                    <IconButton
-                      onClick={() => setContactModel(true)}
-                      ml={2}
-                      fontSize="25px"
-                      icon={<LiaMousePointerSolid />}
-                    />
-                  </Flex>
-                </GridItem>
-              </>
-            ) : values?.category === "lead" ? (
-              <>
-                <GridItem colSpan={{ base: 12, md: 6 }}>
-                  <Flex justifyContent={"space-between"}>
-                    <Select
-                      value={values?.lead}
-                      name="lead"
-                      onChange={handleChange}
-                      mb={errors?.lead && touched?.lead ? undefined : "10px"}
-                      fontWeight="500"
-                      placeholder={"Assign To Lead"}
-                      borderColor={
-                        errors?.lead && touched?.lead ? "red.300" : null
-                      }
-                    >
-                      {assignToLeadData?.map((item) => {
-                        return (
-                          <option value={item?._id} key={item?._id}>
-                            {values?.category === "contact"
-                              ? `${item?.firstName} ${item?.lastName}`
-                              : item?.leadName}
-                          </option>
-                        );
-                      })}
-                    </Select>
-                    <IconButton
-                      onClick={() => setLeadModel(true)}
-                      ml={2}
-                      fontSize="25px"
-                      icon={<LiaMousePointerSolid />}
-                    />
-                  </Flex>
-                </GridItem>
-              </>
-            ) : (
-              ""
-            )}
+            <Flex justifyContent={"space-between"}>
+              <Select
+                value={values?.contact}
+                onBlur={handleBlur}
+                name="contact"
+                onChange={handleChange}
+                mb={errors?.contact && touched?.contact ? undefined : "10px"}
+                fontWeight="500"
+                placeholder={"Assign To Contact"}
+                borderColor={
+                  errors?.contact && touched?.contact ? "red.300" : null
+                }
+              >
+                {assignToContactData?.map((item) => {
+                  return (
+                    <option value={item?._id} key={item?._id}>
+                      {item?.fullName}
+                    </option>
+                  );
+                })}
+              </Select>
+              <IconButton
+                onClick={() => setContactModel(true)}
+                ml={2}
+                fontSize="25px"
+                icon={<LiaMousePointerSolid />}
+              />
+            </Flex>
+            <Text mb="10px" fontSize="sm" color={"red"}>
+              {errors?.contact && touched?.contact && errors?.contact}
+            </Text>
           </GridItem>
-          <GridItem colSpan={{ base: 12, md: 6 }}>
-            <ImageUpload
-              value={values?.salesManagerSign}
-              name="salesManagerSign"
-              selectedFile={selectedFile?.salesManagerSign}
-              handleFileChange={handleFileChange}
-              brandColor={brandColor}
-              placeHolder="Upload Signature"
-              label="Sales Manager"
-              id="salesManagerSign"
-            />
+        ) : values?.category === "lead" ? (
+          <GridItem colSpan={{ base: 12 }}>
+            <Flex justifyContent={"space-between"}>
+              <Select
+                value={values?.lead}
+                onBlur={handleBlur}
+                name="lead"
+                onChange={handleChange}
+                mb={errors?.lead && touched?.lead ? undefined : "10px"}
+                fontWeight="500"
+                placeholder={"Assign To Lead"}
+                borderColor={errors?.lead && touched?.lead ? "red.300" : null}
+              >
+                {assignToLeadData?.map((item) => {
+                  return (
+                    <option value={item?._id} key={item?._id}>
+                      {values?.category === "contact"
+                        ? `${item?.firstName} ${item?.lastName}`
+                        : item?.leadName}
+                    </option>
+                  );
+                })}
+              </Select>
+              <IconButton
+                onClick={() => setLeadModel(true)}
+                ml={2}
+                fontSize="25px"
+                icon={<LiaMousePointerSolid />}
+              />
+            </Flex>
+            <Text mb="10px" fontSize="sm" color={"red"}>
+              {errors?.lead && touched?.lead && errors?.lead}
+            </Text>
           </GridItem>
-          <GridItem colSpan={{ base: 12, md: 6 }}>
-            <ImageUpload
-              value={values?.buyerImage}
-              name="buyerImage"
-              selectedFile={selectedFile?.buyerImage}
-              handleFileChange={handleFileChange}
-              brandColor={brandColor}
-              placeHolder="Upload Signature"
-              label="Buyer"
-              id="buyerImage"
-            />
-          </GridItem>
-        </Grid>
-      </div>
-    </>
+        ) : (
+          ""
+        )}
+        <GridItem colSpan={{ base: 12, md: 6 }}>
+          <ImageUpload
+            value={values?.salesManagerSign}
+            name="salesManagerSign"
+            selectedFile={selectedFile?.salesManagerSign}
+            handleFileChange={handleFileChange}
+            brandColor={brandColor}
+            placeHolder="Upload Signature"
+            label="Sales Manager"
+            id="salesManagerSign"
+          />
+        </GridItem>
+        <GridItem colSpan={{ base: 12, md: 6 }}>
+          <ImageUpload
+            value={values?.buyerImage}
+            name="buyerImage"
+            selectedFile={selectedFile?.buyerImage}
+            handleFileChange={handleFileChange}
+            brandColor={brandColor}
+            placeHolder="Upload Signature"
+            label="Buyer"
+            id="buyerImage"
+          />
+        </GridItem>
+      </Grid>
+    </div>
   );
 };
