@@ -1,3 +1,4 @@
+import { CloseIcon } from "@chakra-ui/icons";
 import {
   Button,
   Drawer,
@@ -6,28 +7,18 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  FormLabel,
-  Grid,
-  GridItem,
-  IconButton,
-  Input,
-  ModalFooter,
-  Radio,
-  RadioGroup,
-  Stack,
-  Text,
+  IconButton
 } from "@chakra-ui/react";
-import { CloseIcon } from "@chakra-ui/icons";
+import { saveAs } from "file-saver";
+import { useFormik } from "formik";
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { postApiBlob } from "services/api";
+import * as yup from "yup";
 import "../../../../assets/css/stepper.css";
 import { BankDetails } from "./bookedStepperForm/BankDetails";
 import { FirstStepper } from "./bookedStepperForm/FirstStepper";
-import * as yup from "yup";
-import { useFormik } from "formik";
-import { toast } from "react-toastify";
-import { postApiBlob } from "services/api";
-import { saveAs } from "file-saver";
-import { useParams } from "react-router-dom";
 
 function BookedModel(props) {
   const { isOpen, onClose } = props;
@@ -38,7 +29,7 @@ function BookedModel(props) {
   const validationSchemas = [
     yup.object({
       category: yup.string().required("Category is required"),
-      lead: yup.string().required("Lead is required"),
+      lead: yup.string(),
       contact: yup.string(),
     }),
     yup.object({
@@ -63,8 +54,8 @@ function BookedModel(props) {
       category: "lead",
       currency: "ksh",
       lead: "",
-      amount: "",
       contact: "",
+      amount: "",
       imagefirst: [],
       secondimage: [],
       accountName: "",
@@ -74,13 +65,23 @@ function BookedModel(props) {
       swiftCode: "",
     },
     validationSchema: validationSchemas[currentStep - 1],
+    validate: (values) => {
+      let errors = {}
+
+      if (!values?.lead && !values?.contact) {
+        errors.lead = "Lead or contact are required"
+        errors.contact = "Lead or contact are required"
+      }
+
+      return errors;
+    },
     onSubmit: () => {
       submitStepperData();
     },
   });
 
   const { values, handleSubmit, resetForm, validateForm } = formik;
-
+  console.log(formik?.errors)
 
   const steps = [
     {
@@ -114,7 +115,7 @@ function BookedModel(props) {
   const handleNext = async () => {
     if (formik?.isValid && formik?.dirty) {
       formik.setTouched({});
-      formik.resetForm({ values: formik.values }); 
+      formik.resetForm({ values: formik.values });
       setCurrentStep((prev) => prev + 1);
     } else {
       await validateForm();

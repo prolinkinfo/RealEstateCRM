@@ -7,24 +7,15 @@ import {
   Radio,
   RadioGroup,
   Select,
-  Input,
   Stack,
-  useDisclosure,
-  Button,
-  Box,
   Text,
-  Icon,
-  useColorModeValue,
+  useColorModeValue
 } from "@chakra-ui/react";
-import { useFormik } from "formik";
-import { MdUpload } from "react-icons/md";
-import React, { useEffect, useState } from "react";
-import { getApi } from "services/api";
-import * as yup from "yup";
 import ContactModel from "components/commonTableModel/ContactModel.js";
 import LeadModel from "components/commonTableModel/LeadModel";
+import { useEffect, useState } from "react";
 import { LiaMousePointerSolid } from "react-icons/lia";
-import Card from "components/card/Card";
+import { getApi } from "services/api";
 import ImageUpload from "./ImageUpload";
 
 export const FirstStepper = (props) => {
