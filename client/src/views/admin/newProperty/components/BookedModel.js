@@ -1,3 +1,4 @@
+import { CloseIcon } from "@chakra-ui/icons";
 import {
   Button,
   Drawer,
@@ -6,28 +7,18 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  FormLabel,
-  Grid,
-  GridItem,
-  IconButton,
-  Input,
-  ModalFooter,
-  Radio,
-  RadioGroup,
-  Stack,
-  Text,
+  IconButton
 } from "@chakra-ui/react";
-import { CloseIcon } from "@chakra-ui/icons";
+import { saveAs } from "file-saver";
+import { useFormik } from "formik";
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { postApiBlob } from "services/api";
+import * as yup from "yup";
 import "../../../../assets/css/stepper.css";
 import { BankDetails } from "./bookedStepperForm/BankDetails";
 import { FirstStepper } from "./bookedStepperForm/FirstStepper";
-import * as yup from "yup";
-import { useFormik } from "formik";
-import { toast } from "react-toastify";
-import { postApiBlob } from "services/api";
-import { saveAs } from "file-saver";
-import { useParams } from "react-router-dom";
 
 function BookedModel(props) {
   const { isOpen, onClose } = props;
@@ -35,27 +26,28 @@ function BookedModel(props) {
 
   const param = useParams();
 
-  const validationSchema = yup.object({
-    category: yup.string().required("Category is required"),
-    lead: yup.string(),
-    contact: yup.string(),
-    currency: yup.string().required("Currency is required"),
-    amount: yup
-      .number()
-      .typeError("Amount must be a number")
-      .required("Amount is required"),
-    accountName: yup.string().required("Account name is required"),
-    bank: yup.string().required("Bank is required"),
-    branch: yup.string().required("Branch is required"),
-    accountNumber: yup
-      .number()
-      .required("Account Number is required")
-      .typeError("Account Number must be a number"),
-    swiftCode: yup
-      .number()
-      .required("Swift code is required")
-      .typeError("Swift code must be a number"),
-  });
+  const validationSchemas = [
+    yup.object({
+      category: yup.string().required("Category is required"),
+      lead: yup.string(),
+      contact: yup.string(),
+    }),
+    yup.object({
+      currency: yup.string().required("Currency is required"),
+      amount: yup.number().typeError("Amount must be a number").required("Amount is required"),
+      accountName: yup.string().required("Account name is required"),
+      bank: yup.string().required("Bank is required"),
+      branch: yup.string().required("Branch is required"),
+      accountNumber: yup
+        .number()
+        .required("Account Number is required")
+        .typeError("Account Number must be a number"),
+      swiftCode: yup
+        .number()
+        .required("Swift code is required")
+        .typeError("Swift code must be a number"),
+    }),
+  ];
 
   const formik = useFormik({
     initialValues: {
@@ -63,6 +55,7 @@ function BookedModel(props) {
       currency: "ksh",
       lead: "",
       contact: "",
+      amount: "",
       imagefirst: [],
       secondimage: [],
       accountName: "",
@@ -71,13 +64,24 @@ function BookedModel(props) {
       accountNumber: "",
       swiftCode: "",
     },
-    validationSchema,
+    validationSchema: validationSchemas[currentStep - 1],
+    validate: (values) => {
+      let errors = {}
+
+      if (!values?.lead && !values?.contact) {
+        errors.lead = "Lead or contact are required"
+        errors.contact = "Lead or contact are required"
+      }
+
+      return errors;
+    },
     onSubmit: () => {
       submitStepperData();
     },
   });
 
-  const { values, handleSubmit, resetForm } = formik;
+  const { values, handleSubmit, resetForm, validateForm } = formik;
+  console.log(formik?.errors)
 
   const steps = [
     {
@@ -90,7 +94,7 @@ function BookedModel(props) {
     },
     {
       description: "Payment Schedule",
-      component: <BankDetails formik={formik} />,
+      component: <FirstStepper formik={formik} />,
     },
   ];
 
@@ -108,8 +112,15 @@ function BookedModel(props) {
     }
   };
 
-  const handleNext = () => {
-    setCurrentStep((prev) => prev + 1);
+  const handleNext = async () => {
+    if (formik?.isValid && formik?.dirty) {
+      formik.setTouched({});
+      formik.resetForm({ values: formik.values });
+      setCurrentStep((prev) => prev + 1);
+    } else {
+      await validateForm();
+      handleSubmit()
+    }
   };
 
   const handlePrevious = () => {

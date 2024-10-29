@@ -7,24 +7,15 @@ import {
   Radio,
   RadioGroup,
   Select,
-  Input,
   Stack,
-  useDisclosure,
-  Button,
-  Box,
   Text,
-  Icon,
-  useColorModeValue,
+  useColorModeValue
 } from "@chakra-ui/react";
-import { useFormik } from "formik";
-import { MdUpload } from "react-icons/md";
-import React, { useEffect, useState } from "react";
-import { getApi } from "services/api";
-import * as yup from "yup";
 import ContactModel from "components/commonTableModel/ContactModel.js";
 import LeadModel from "components/commonTableModel/LeadModel";
+import { useEffect, useState } from "react";
 import { LiaMousePointerSolid } from "react-icons/lia";
-import Card from "components/card/Card";
+import { getApi } from "services/api";
 import ImageUpload from "./ImageUpload";
 
 export const FirstStepper = (props) => {
@@ -114,7 +105,7 @@ export const FirstStepper = (props) => {
             fontWeight="500"
             mb="8px"
           >
-            Related
+            Related <Text color={"red"}>*</Text>
           </FormLabel>
           <RadioGroup
             onChange={(e) => {
@@ -163,7 +154,7 @@ export const FirstStepper = (props) => {
               />
             </Flex>
             <Text mb="10px" fontSize="sm" color={"red"}>
-              {errors?.contact && touched?.contact && errors?.contact}
+              {touched?.contact && errors?.contact && errors?.contact}
             </Text>
           </GridItem>
         ) : values?.category === "lead" ? (
@@ -197,7 +188,7 @@ export const FirstStepper = (props) => {
               />
             </Flex>
             <Text mb="10px" fontSize="sm" color={"red"}>
-              {errors?.lead && touched?.lead && errors?.lead}
+              {touched?.lead && errors?.lead && errors?.lead}
             </Text>
           </GridItem>
         ) : (
