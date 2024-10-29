@@ -19,10 +19,11 @@ import * as yup from "yup";
 import "../../../../assets/css/stepper.css";
 import { BankDetails } from "./bookedStepperForm/BankDetails";
 import { FirstStepper } from "./bookedStepperForm/FirstStepper";
+import PaymentSchedule from "./bookedStepperForm/PaymentSchedule";
 
 function BookedModel(props) {
   const { isOpen, onClose } = props;
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(3);
 
   const param = useParams();
 
@@ -50,6 +51,23 @@ function BookedModel(props) {
         .required("Swift code is required")
         .typeError("Swift code must be a number"),
     }),
+    yup.object({
+      installments: yup
+        .array()
+        .of(
+          yup.object({
+            no: yup.number().required(),
+            startDate: yup.date().required("Start date is required"),
+            per: yup
+              .number()
+              .max(100, "Percentage must not exceed 100")
+              .required("Percentage is required"),
+            // months: yup.number().required("Months are required"),
+            total: yup.number().required("Total is required"),
+          })
+        )
+        .min(1, "At least one installment is required"),
+    }),
   ];
 
   const formik = useFormik({
@@ -66,6 +84,15 @@ function BookedModel(props) {
       branch: "",
       accountNumber: "",
       swiftCode: "",
+      installments: [
+        {
+          no: 1,
+          startDate: "",
+          per: "",
+          months: "",
+          Total: "",
+        },
+      ],
     },
     validationSchema: validationSchemas[currentStep - 1],
     validate: (values) => {
@@ -84,7 +111,6 @@ function BookedModel(props) {
   });
 
   const { values, handleSubmit, resetForm, validateForm } = formik;
-  console.log(formik?.errors);
 
   const steps = [
     {
@@ -97,7 +123,7 @@ function BookedModel(props) {
     },
     {
       description: "Payment Schedule",
-      component: <FirstStepper formik={formik} />,
+      component: <PaymentSchedule formik={formik} />,
     },
   ];
 
