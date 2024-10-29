@@ -195,7 +195,7 @@ const CustomForm = ({
           ))}
           <>
             {moduleData?.fields
-              ?.filter((itm) => !itm?.belongsTo)
+              ?.filter((itm) => !itm?.belongsTo && !itm?.ref)
               ?.map((field, i) => (
                 <GridItem colSpan={{ base: 12, sm: 6 }} key={i}>
                   {field?.type === "check" ? (
@@ -325,7 +325,7 @@ const CustomForm = ({
       ) : (
         <>
           {moduleData?.fields
-            ?.filter((itm) => !itm?.belongsTo)
+            ?.filter((itm) => !itm?.belongsTo && !itm?.ref)
             ?.map((field, index) => (
               <GridItem colSpan={{ base: 12, sm: 6 }} key={index}>
                 {field?.type === "check" ? (

@@ -254,49 +254,49 @@ const Index = () => {
         },
         ...(result?.payload?.data && result?.payload?.data?.length > 0
           ? result?.payload?.data[0]?.fields
-              ?.filter((field) => field?.isTableField === true && field?.isView)
-              ?.map(
-                (field) =>
-                  field?.name !== "leadStatus" && {
-                    Header: field?.label,
-                    accessor: field?.name,
-                    cell: (cell) => (
-                      <div className="selectOpt">
-                        <Text
-                          onClick={() => {
-                            navigate(`/leadView/${cell?.row?.original?._id}`);
-                          }}
-                          me="10px"
-                          sx={{
-                            "&:hover": {
-                              color: "blue.500",
-                              textDecoration: "underline",
-                            },
-                            cursor: "pointer",
-                          }}
-                          color="brand.600"
-                          fontSize="sm"
-                          fontWeight="700"
-                        >
-                          {cell?.value || "-"}
-                        </Text>
-                      </div>
-                    ),
-                  },
-              ) || []
+            ?.filter((field) => field?.isTableField === true && field?.isView)
+            ?.map(
+              (field) =>
+                field?.name !== "leadStatus" && {
+                  Header: field?.label,
+                  accessor: field?.name,
+                  cell: (cell) => (
+                    <div className="selectOpt">
+                      <Text
+                        onClick={() => {
+                          navigate(`/leadView/${cell?.row?.original?._id}`);
+                        }}
+                        me="10px"
+                        sx={{
+                          "&:hover": {
+                            color: "blue.500",
+                            textDecoration: "underline",
+                          },
+                          cursor: "pointer",
+                        }}
+                        color="brand.600"
+                        fontSize="sm"
+                        fontWeight="700"
+                      >
+                        {cell?.value || "-"}
+                      </Text>
+                    </div>
+                  ),
+                },
+            ) || []
           : []),
         ...(result?.payload?.data && result?.payload?.data?.length > 0
           ? result?.payload?.data[0]?.fields
-              ?.filter(
-                (field) =>
-                  field?.isTableField === true &&
-                  !field?.isView &&
-                  field?.name !== "leadStatus",
-              )
-              ?.map((field) => ({
-                Header: field?.label,
-                accessor: field?.name,
-              })) || []
+            ?.filter(
+              (field) =>
+                field?.isTableField === true &&
+                !field?.isView &&
+                field?.name !== "leadStatus",
+            )
+            ?.map((field) => ({
+              Header: field?.label,
+              accessor: field?.name,
+            })) || []
           : []),
         ...(permission?.update || permission?.view || permission?.delete
           ? [actionHeader]

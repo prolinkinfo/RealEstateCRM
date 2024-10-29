@@ -60,7 +60,20 @@ const leadSchema = new mongoose.Schema({
 const initializeLeadSchema = async () => {
     const schemaFieldsData = await fetchSchemaFields();
     schemaFieldsData[0]?.fields?.forEach((item) => {
-        leadSchema.add({ [item.name]: item?.backendType });
+        let fieldData;
+
+        if (item.ref) {
+            fieldData = {
+                [item.name]: {
+                    type: mongoose.Schema.ObjectId,
+                    ref: item.ref
+                }
+            };
+        } else {
+            fieldData = { [item.name]: item.backendType };
+        }
+
+        leadSchema.add(fieldData);
     });
 };
 
