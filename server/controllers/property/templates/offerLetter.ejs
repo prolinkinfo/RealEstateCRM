@@ -15,6 +15,9 @@
             font-weight: bold;
             font-size: 25px;
         }
+        .setTextCenter{
+          text-align: center;
+        }
         .setFont{
             font-size: 20px;
         }
@@ -30,18 +33,115 @@
             line-height: 25px;
             font-size: 15px;
         }
-        table, th, td {
+        .setTableThTd
+         {
         border: 1px solid black;
         border-collapse: collapse;
         }
-        th, td {
+        .ThTd {
         padding: 10px;
         text-align: left;
         }
+        .Data{
+          border: 1px solid black;
+          border-collapse: collapse; 
+          text-align: left !important;
+          margin-top: -40px;
+        }
+        .setSpace{
+          padding-top: 45px;
+        }
+        .centerContain{
+          display: flex;
+          justify-content: center;
+        }
+        .paddingLeft{
+          padding-left: 15px;
+        }
+        .setPosition{
+          position: absolute;
+          right: 5%; 
+        }
+        .table {
+          border-collapse: collapse;
+          width: 100%;
+        }
+        .tableSet{
+          margin-top: -40px;
+        }
+        .table td, .table th {
+          border: 1px solid #000000;
+          padding: 8px;
+        }
+
+        .table th {
+          padding-top: 12px;
+          padding-bottom: 12px;
+          text-align: left;
+        }
+        /* Third Page Css */
+        .container {
+        width:100%;
+        margin: 0 auto;
+      }
+
+      .section {
+        margin-top: 20px;
+      }
+
+      .title {
+        margin-bottom: 10px;
+      }
+
+
+      .indent {
+        margin-left: 20px;
+      }
+      .setPadding{
+        padding-top: 20px;
+      }
+
+      /* fourth page css */
+      .containerdata {
+        margin: 0 auto;
+      }
+
+      .titleforth {
+        font-size: 20px;
+        margin-bottom: 10px;
+      }
+
+      .signature {
+        margin-top: 20px;
+      }
+
+      .signature-line {
+        display: flex;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        }
+        .signature-line p {
+        margin-right: 10px;
+        }
+        .line {
+          flex-grow: 1;
+          border-bottom: 1px solid black;
+          margin: 0 10px;
+          padding-top: 6px;
+        }
+        .footer {
+          margin-top: 20px;
+        }
+
+      .setInline{
+        display: inline;
+      }
     </style>
 </head>
 
 <body>
+    <!-- First Page -->
     <div class="main">
         <section>
             LOGO
@@ -62,39 +162,191 @@
     <p class="setFont">We are pleased to make you an offer of the above Apartment subject to the following terms and
       conditions:</p>
 
-    <table>
+    <table class="setTableThTd">
       <tr>
-        <th>Vendor:</th>
-        <td>ZUQRUF DEVELOPERS <br> P.O. Box 100339-00100 <br> NAIROBI, KENYA</td>
+        <th class="setTableThTd ThTd">Vendor:</th>
+        <td class="setTableThTd ThTd">ZUQRUF DEVELOPERS <br> P.O. Box 100339-00100 <br> NAIROBI, KENYA</td>
       </tr>
       <tr>
-        <th>Purchaser:</th>
-        <td>ADOW KUNO <br> I.D NO: 261788</td>
+        <th class="setTableThTd ThTd">Purchaser:</th>
+        <td class="setTableThTd ThTd">ADOW KUNO <br> I.D NO: 261788</td>
       </tr>
       <tr>
-        <th>Property:</th>
-        <td>ZUQRUF HEIGHT SOUTH C APARTMENT</td>
+        <th class="setTableThTd ThTd">Property:</th>
+        <td class="setTableThTd ThTd">ZUQRUF HEIGHT SOUTH C APARTMENT</td>
       </tr>
       <tr>
-        <th>Currency:</th>
-        <td>KSH</td>
+        <th class="setTableThTd ThTd">Currency:</th>
+        <td class="setTableThTd ThTd">KSH</td>
       </tr>
       <tr>
-        <th>Sale Price:</th>
-        <td>Fourteen Million thousand. <br> (Ksh 14,000,000.00)</td>
+        <th class="setTableThTd ThTd">Sale Price:</th>
+        <td class="setTableThTd ThTd">Fourteen Million thousand. <br> (Ksh 14,000,000.00)</td>
       </tr>
       <tr>
-        <th>Usage:</th>
-        <td>The Purchaser shall use the Premises for residential use only and shall not use or permit the Premises to be
+        <th class="setTableThTd ThTd">Usage:</th>
+        <td class="setTableThTd ThTd">The Purchaser shall use the Premises for residential use only and shall not use or permit the Premises to be
           used for any other purpose whatsoever.</td>
       </tr>
       <tr>
-        <th>Mode of Payment:</th>
-        <td>The payment of the purchase price will be staged as follows: <br> (a) The purchaser shall pay Three Million as
+        <th class="setTableThTd ThTd">Mode of Payment:</th>
+        <td class="setTableThTd ThTd">The payment of the purchase price will be staged as follows: <br> (a) The purchaser shall pay Three Million as
           the initial deposit for the one-unit and to be paid on or before the execution of this letter of offer.</td>
       </tr>
     </table>
+    <span style="padding-top: 30px;visibility: hidden;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione et numquam voluptas, reprehenderit asperiores fugit delectus nesciunt quaerat tenetur libero.</span><hr/>
+    <section class="setPosition">ZUQRUF DEVELOPERS- Page | 1</section>
+    <span style="padding-top: 30px;visibility: hidden;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione et numquam voluptas, reprehenderit asperiores fugit delectus nesciunt quaerat tenetur libero.</span>
 
-</body>
+    <!-- Second page -->
+
+    <h3 class="setTitle">ZUQRUF DEVELOPERS LIMITED</h3><hr />
+    <p class="setTextCenter">(b) The balance of the Purchase Price being $ 87,500 shall be paid as follows:</p>
+    
+      <table class="table">
+        <thead>
+          <tr>
+            <th>NO</th>
+            <th>Installments START DATE</th>
+            <th>%</th>
+            <th>MONTHS</th>
+            <th>TOTAL</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Installments Immediately</td>
+            <td>30</td>
+            <td>-</td>
+            <td>$ 37,500</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Installments Before March 2026</td>
+            <td>70</td>
+            <td>24</td>
+            <td>$ 87,500</td>
+          </tr>
+        </tbody>
+      </table>
+ 
+
+    
+    <table class="table">
+     
+        <p class="setTextCenter" >All payments will be made to the details provided below: - </p>
+        <table class="centerContain ">
+          <tr>
+            <td>ACCOUNT NAME:</td>
+            <td class="paddingLeft">ZUQRUF DEVELOPERS LIMITED</td>
+          </tr>
+          <tr>
+            <td>CURRENCY: </td>
+            <td class="paddingLeft">USD</td>
+          </tr>
+          <tr>
+            <td>BANK: </td>
+            <td class="paddingLeft">NATIONAL BANK</td>
+          </tr>
+          <tr>
+            <td>BRANCH:</td>
+            <td class="paddingLeft">EASTLEIGH</td>
+          </tr>
+          <tr>
+            <td>ACCOUNT NUMBER:</td>
+            <td class="paddingLeft">02041239983200</td>
+          </tr>
+          <tr>
+            <td>SWIFT CODE:</td>
+            <td class="paddingLeft">NBKEKEN</td>
+          </tr>
+        </table>
+    </div> 
+    <p><b>N.B : </b>The Purchaser shall pay the Stamp Duty, Legal Fee and all the sums in the Agreement for Sale on the signing of the same.</p>
+    <span style="padding-top: 30px;visibility: hidden;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione et numquam voluptas, reprehenderit asperiores fugit delectus nesciunt quaerat tenetur libero.</span><hr/>
+    <section class="setPosition">ZUQRUF DEVELOPERS- Page | 2</section>
+    <span style="padding-top: 30px;visibility: hidden;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione et numquam voluptas, reprehenderit asperiores fugit delectus nesciunt quaerat tenetur libero.</span>
+
+    <!-- Third Page -->
+    <h3 class="setTitle">ZUQRUF DEVELOPERS LIMITED</h3><hr />
+    <div class="container">
+
+      <div class="section">
+    
+        <div class="title"><b>Advocate:</b></div>
+        <div class="content">
+          For purposes of this transaction the Vendor's Advocate shall be: -<br>
+          IDOW & Company Advocates<br>
+          Eco Bank Towers 11th Floor<br>
+          P. O. Box 10741-00100,<br>
+          Nairobi
+        </div>
+      </div>
+    
+      <div class="section">
+      
+        <div class="title"><b>Confirmation:</b></div>
+        <div>
+          Kindly confirm your acceptance of this letter by signing the copies of this letter and returning the same to us within seven (7) days from date of this Letter of Offer together with the deposit as per the payment plan. Payment made without signing the Letter of Offer will be deemed to be an affirmation and acceptance of this Letter of Offer.<br><br>
+          Please attach herewith;
+          <div class="indent">
+            i. A copy of national Identity Card.<br>
+            ii. Copy of PIN Certificate; and<br>
+            iii. Evidence of payment of the deposit fee.
+          </div>
+        </div>
+      </div>
+    
+      <div class="section">
+      
+        <div class="title"><b>Schedule of Finishes:</b></div>
+        <div>The Schedule of Finishes shall be as per Contract Drawings and  
+          Architect’s approved drawings.
+        </div>
+      </div>
+  </div>
+    
+  <p class="setPadding">We await to hear from you.</p>
+  <span style="padding-top: 30px;visibility: hidden;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione et numquam voluptas, reprehenderit asperiores fugit delectus nesciunt quaerat tenetur libero.</span><hr/>
+  <section class="setPosition">ZUQRUF DEVELOPERS- Page | 3</section>
+  <span style="padding-top: 30px;visibility: hidden;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione et numquam voluptas, reprehenderit asperiores fugit delectus nesciunt quaerat tenetur libero.</span>
+
+
+  <!-- FOURTH PAGE -->
+  <h3 class="setTitle">ZUQRUF DEVELOPERS LIMITED</h3><hr />
+  <div class="containerdata">
+    <div class="titleforth">Yours Faithfully.</div>
+    <div class="titleforth">ZUQRUF DEVELOPERS LIMITED.</div>
+
+    <div class="signature-line">
+      <p>Signed</p>
+      <div class="line"><img src="../../../../client/src/assets/img/fileImage/file.png"/></div>
+      <p>Date</p>
+      <div class="line"></div>
+    </div>
+    <div>SALES MANAGER</div>
+    
+    <p>I <b>ABDIWELI MOHAMED HAJI</b> </p>
+    <p>Confirm my acceptance of the above terms and conditions.</p>
+
+    <div class="signature-line">
+      <p>Signed</p>
+      <div class="line"><img alt="Image" /></div>
+      <p>Date</p>
+      <div class="line"></div>
+    </div>
+
+    <div class="footer">
+      <div >Cc: IDOW & Company Advocates</div>
+      <div >Eco Bank Towers 11th Floor</div>
+      <div >P. O. Box 10741-00100,</div>
+      <div >Nairobi</div>
+    </div>
+
+    <span style="padding-top: 30px;visibility: hidden;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione et numquam voluptas, reprehenderit asperiores fugit delectus nesciunt quaerat tenetur libero.</span><hr/>
+  <section class="setPosition">ZUQRUF DEVELOPERS- Page | 4</section>
+  <span style="padding-top: 30px;visibility: hidden;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione et numquam voluptas, reprehenderit asperiores fugit delectus nesciunt quaerat tenetur libero.</span>
+</body> 
 
 </html>
