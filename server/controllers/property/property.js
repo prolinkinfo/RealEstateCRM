@@ -9,6 +9,7 @@ const Email = require("../../model/schema/email");
 const ejs = require("ejs");
 const PDFDocument = require("pdfkit");
 const puppeteer = require("puppeteer");
+const moment = require("moment");
 
 const index = async (req, res) => {
   const query = req.query;
@@ -228,9 +229,16 @@ const changeUnitStatus = async (req, res) => {
 
 const genrateOfferLetter = async (req, res) => {
   try {
+    const unitType = req?.body?.property;
+    const unitTypeId = unitType?._id;
+    const units = req.body?.property?.units;
+    const getFlats = units?.map((u) => u?.flats);
+
     const templatePath = path.join(__dirname, "templates", "offerLetter.ejs");
     const htmlContent = await ejs.renderFile(templatePath, {
       ...req?.body,
+      unitPrice: "1000",
+      currentDate: moment().format("DD/MM/yyyy"),
     });
 
     const browser = await puppeteer.launch({ headless: true });
