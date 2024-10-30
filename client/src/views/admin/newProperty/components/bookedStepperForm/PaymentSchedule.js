@@ -100,6 +100,11 @@ const PaymentSchedule = (props) => {
                         );
                       })}
                     </Select>
+                    <Text mb="10px" color={"red"}>
+                      {errors?.installments?.[i]?.title &&
+                        touched?.installments?.[i]?.title &&
+                        errors?.installments?.[i]?.title}
+                    </Text>
                   </Td>
                   <Td>
                     <Input

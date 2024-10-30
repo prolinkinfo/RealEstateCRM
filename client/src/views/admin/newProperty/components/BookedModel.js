@@ -57,6 +57,7 @@ function BookedModel(props) {
           yup.object({
             no: yup.number().required(),
             startDate: yup.date().required("Start date is required"),
+            title: yup.string().required("Title is required"),
             per: yup
               .number()
               .max(100, "Percentage must not exceed 100")

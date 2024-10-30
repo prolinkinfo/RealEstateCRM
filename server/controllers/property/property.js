@@ -1,3 +1,4 @@
+const { Lead } = require("../../model/schema/lead");
 const { Property } = require("../../model/schema/property");
 const multer = require("multer");
 const fs = require("fs");
@@ -273,8 +274,22 @@ const genrateOfferLetter = async (req, res) => {
 
     const buyerImageUrl = `${url}/api/property/offer-letter/${req?.files?.buyerImage?.[0]?.filename}`;
     const salesManagerSignUrl = `${url}/api/property/offer-letter/${req?.files?.salesManagerSign?.[0]?.filename}`;
-
     const property = await Property.findById(id).lean();
+
+    let purchaser = "";
+    if (req?.body?.lead) {
+      const lead = await Lead.findOne({
+        _id: new mongoose.Types.ObjectId(req?.body?.lead),
+      }).lean();
+      purchaser = lead?.leadName;
+    }
+    if (req?.body?.contact) {
+      const contact = await Contact.findOne({
+        _id: new mongoose.Types.ObjectId(req?.body?.contact),
+      }).lean();
+      purchaser = contact?.fullName;
+    }
+
     const unitType = property?.unitType?.find(
       (item) => item?._id?.toString() === unit?.unitType?.toString()
     );
@@ -296,6 +311,7 @@ const genrateOfferLetter = async (req, res) => {
       unitPrice: unitType?.price,
       buyerImageUrl,
       salesManagerSignUrl,
+      purchaser,
       currentDate: moment().format("DD/MM/yyyy"),
     });
 
