@@ -10,6 +10,7 @@ const ejs = require("ejs");
 const PDFDocument = require("pdfkit");
 const puppeteer = require("puppeteer");
 const moment = require("moment");
+const { Lead } = require("../../model/schema/lead");
 
 const index = async (req, res) => {
   const query = req.query;
@@ -303,6 +304,28 @@ const genrateOfferLetter = async (req, res) => {
     const page = await browser.newPage();
     await page.setContent(htmlContent);
     const pdfBuffer = await page.pdf({ format: "A4", printBackground: true });
+
+    if (req.body.lead) {
+      const lead = await Lead.findOne({
+        _id: new mongoose.Types.ObjectId(req?.body?.lead),
+      }).lean();
+
+      const contactFeild = new Contact({
+        fullName: lead.leadName,
+        email: lead.leadEmail,
+        phoneNumber: lead.leadPhoneNumber,
+        campaign: lead.leadCampaign,
+        state: lead.leadState,
+        communicationTool: lead.communicationTool,
+        listedFor: lead.listedFor,
+        interestProperty: [lead.associatedListing],
+        deleted: false,
+        createBy: req.user.userId,
+        createdDate: new Date(),
+      });
+
+      await contactFeild.save();
+    }
 
     await browser.close();
 
