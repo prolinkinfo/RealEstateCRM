@@ -22,9 +22,8 @@ import { FirstStepper } from "./bookedStepperForm/FirstStepper";
 import PaymentSchedule from "./bookedStepperForm/PaymentSchedule";
 
 function BookedModel(props) {
-  const { isOpen, onClose } = props;
+  const { isOpen, onClose, selectedFloorItem } = props;
   const [currentStep, setCurrentStep] = useState(1);
-
   const param = useParams();
 
   const validationSchemas = [
@@ -77,8 +76,6 @@ function BookedModel(props) {
       lead: "",
       contact: "",
       amount: "",
-      imagefirst: [],
-      secondimage: [],
       accountName: "",
       bank: "",
       branch: "",
@@ -106,7 +103,11 @@ function BookedModel(props) {
       return errors;
     },
     onSubmit: () => {
-      submitStepperData();
+      if (steps?.length === currentStep) {
+        submitStepperData();
+      } else {
+        setCurrentStep((prev) => prev + 1);
+      }
     },
   });
 
@@ -129,10 +130,28 @@ function BookedModel(props) {
 
   const submitStepperData = async () => {
     try {
+      const formData = new FormData();
+
+      formData?.append("unit", JSON.stringify(selectedFloorItem?.item));
+      formData?.append("floor", JSON.stringify(selectedFloorItem?.floor));
+     
+
+      Object?.keys(values)?.forEach((item) => {
+        const value = values[item];
+        formData.append(
+          item,
+          typeof value === "object" ? JSON.stringify(value) : value
+        );
+      });
+
+      formData?.append("buyerImage", values?.buyerImage);
+      formData?.append("salesManagerSign", values?.salesManagerSign);
+
       const response = await postApiBlob(
         `api/property/genrate-offer-letter/${param?.id}`,
-        values
+        formData
       );
+
       const pdfBlob = new Blob([response.data], { type: "application/pdf" });
       saveAs(pdfBlob, "offer-letter.pdf");
     } catch (e) {

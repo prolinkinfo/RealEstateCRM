@@ -18,6 +18,24 @@ const leadFields = [
     ],
   },
   {
+    name: "lrNo",
+    label: "L.R. NO. ",
+    type: "text",
+    fixed: true,
+    delete: false,
+    belongsTo: null,
+    backendType: "String",
+    editable: false,
+    isTableField: true,
+    options: [],
+    validation: [
+      {
+        require: true,
+        message: "",
+      },
+    ],
+  },
+  {
     name: "leadStatus",
     label: "Lead Status",
     type: "select",

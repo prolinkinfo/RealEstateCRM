@@ -64,7 +64,20 @@ const PaymentSchedule = (props) => {
                     <Input
                       type="date"
                       fontSize="sm"
-                      onChange={handleChange}
+                      onChange={(e) => {
+                        const currentDate = dayjs();
+                        const targetDate = dayjs(e?.target?.value);
+
+                        const months = targetDate.diff(currentDate, 'month');
+                        const days = targetDate.diff(currentDate.add(months, 'month'), 'day');
+
+                        let result = "";
+                        if (months > 0) result += `${months} month${months > 1 ? 's' : ''}, `;
+                        result += `${days} day${days > 1 ? 's' : ''}`;
+
+                        setFieldValue(`installments.[${i}].months`, result)
+                        handleChange(e)
+                      }}
                       onBlur={handleBlur}
                       min={dayjs().format("YYYY-MM-DD")}
                       name={`installments.[${i}].startDate`}
@@ -77,7 +90,7 @@ const PaymentSchedule = (props) => {
                       fontWeight="500"
                       borderColor={
                         errors?.installments?.[i]?.startDate &&
-                        touched?.installments?.[i]?.startDate
+                          touched?.installments?.[i]?.startDate
                           ? "red.300"
                           : null
                       }
@@ -101,7 +114,7 @@ const PaymentSchedule = (props) => {
                       max={100}
                       borderColor={
                         errors?.installments?.[i]?.per &&
-                        touched?.installments?.[i]?.per
+                          touched?.installments?.[i]?.per
                           ? "red.300"
                           : null
                       }
@@ -112,7 +125,7 @@ const PaymentSchedule = (props) => {
                         errors?.installments?.[i]?.per}
                     </Text>
                   </Td>
-                  <Td>{i}</Td>
+                  <Td>{values?.installments?.[i]?.months || "-"}</Td>
                   <Td>
                     <Input
                       fontSize="sm"
@@ -124,7 +137,7 @@ const PaymentSchedule = (props) => {
                       fontWeight="500"
                       borderColor={
                         errors?.installments?.[i]?.total &&
-                        touched?.installments?.[i]?.total
+                          touched?.installments?.[i]?.total
                           ? "red.300"
                           : null
                       }
