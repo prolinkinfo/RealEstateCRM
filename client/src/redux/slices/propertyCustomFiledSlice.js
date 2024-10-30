@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getApi } from "../../services/api";
 
 export const fetchPropertyCustomFiled = createAsyncThunk(
-  "fetchLeadData",
+  "fetchLeadCustomFiled",
   async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     try {
