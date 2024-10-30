@@ -21,7 +21,6 @@ const PaymentSchedule = (props) => {
   const { formik } = props;
   const { values, handleChange, setFieldValue, handleBlur, errors, touched } =
     formik;
-  console.log(errors?.installments);
 
   const handleRemoveItem = (index) => {
     setFieldValue(
@@ -32,11 +31,10 @@ const PaymentSchedule = (props) => {
 
   return (
     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
-      {/* { values?.installments?.[i]} */}
       <GridItem colSpan={{ base: 12 }}>
         <Box>
           <Table variant="simple" size="sm" mt={5} backgroundColor="#fff">
-            <Thead>
+            <Thead borderBottom="1px solid #c4c9cf">
               <Tr>
                 <Th></Th>
                 <Th>No</Th>
@@ -151,7 +149,7 @@ const PaymentSchedule = (props) => {
                           startDate: "",
                           per: "",
                           months: "",
-                          Total: "",
+                          total: "",
                         },
                       ])
                     }

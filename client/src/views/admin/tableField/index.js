@@ -295,10 +295,6 @@ const Index = () => {
                                     <BsThreeDots />
                                   </MenuButton>
                                   <MenuList minW={"fit-content"} zIndex={2}>
-                                    {/* <MenuItem
-                                                                            onClick={() => console.log(true)}
-                                                                            width={"165px"}
-                                                                        > */}
                                     <Flex alignItems="center" m={2}>
                                       <Checkbox
                                         colorScheme="brandScheme"
@@ -313,10 +309,9 @@ const Index = () => {
                                         }
                                         title="View"
                                         me="10px"
-                                      />{" "}
+                                      />
                                       Open View
                                     </Flex>
-                                    {/* </MenuItem> */}
                                   </MenuList>
                                 </Menu>
                               )}
