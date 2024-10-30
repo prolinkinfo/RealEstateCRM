@@ -7,8 +7,13 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  Flex,
+  Grid,
+  GridItem,
   IconButton,
+  Flex,
+  Select,
+  FormLabel,
+  Text,
 } from "@chakra-ui/react";
 import Spinner from "components/spinner/Spinner";
 import { useFormik } from "formik";
@@ -19,13 +24,18 @@ import { getApi } from "services/api";
 import { generateValidationSchema } from "../../../utils";
 import CustomForm from "../../../utils/customForm";
 import * as yup from "yup";
+import { LiaMousePointerSolid } from "react-icons/lia";
+import SelectPorpertyModel from "components/commonTableModel/SelectPorpertyModel";
 
 const Edit = (props) => {
   const { data } = props;
+  const user = JSON.parse(localStorage.getItem("user"));
   const [isLoding, setIsLoding] = useState(false);
   const initialFieldValues = Object.fromEntries(
-    (props?.leadData?.fields || [])?.map((field) => [field?.name, ""]),
+    (props?.leadData?.fields || [])?.map((field) => [field?.name, ""])
   );
+  const [propertyModel, setPropertyModel] = useState(false);
+  const [propertyList, setPropertyList] = useState([]);
 
   const [initialValues, setInitialValues] = useState({
     ...initialFieldValues,
@@ -59,7 +69,7 @@ const Edit = (props) => {
       setIsLoding(true);
       let response = await putApi(
         `api/form/edit/${props?.selectedId || param?.id}`,
-        { ...values, moduleId: props?.moduleId },
+        { ...values, moduleId: props?.moduleId }
       );
       if (response?.status === 200) {
         props.onClose();
@@ -72,6 +82,19 @@ const Edit = (props) => {
     }
   };
 
+  const getPropertyList = async () => {
+    let result = await getApi(
+      user?.role === "superAdmin"
+        ? "api/property"
+        : `api/property/?createBy=${user?._id}`
+    );
+
+    setPropertyList(result?.data);
+  };
+
+  useEffect(() => {
+    getPropertyList();
+  }, []);
   const handleClose = () => {
     props.onClose(false);
     props.setSelectedId && props?.setSelectedId();
@@ -134,8 +157,67 @@ const Edit = (props) => {
                 touched={touched}
               />
             )}
+            <Grid templateColumns="repeat(12, 1fr)" gap={3} mt={2}>
+              <GridItem colSpan={{ base: 12 }}>
+                <FormLabel
+                  display="flex"
+                  ms="4px"
+                  fontSize="sm"
+                  fontWeight="500"
+                  mb="8px"
+                >
+                  Associated Listing
+                </FormLabel>
+                <Flex justifyContent="space-between">
+                  <Select
+                    value={values?.associatedListing}
+                    name="associatedListing"
+                    onChange={handleChange}
+                    mb={
+                      errors?.associatedListing && touched?.associatedListing
+                        ? undefined
+                        : "10px"
+                    }
+                    fontWeight="500"
+                    placeholder="select associated listing"
+                    borderColor={
+                      errors?.associatedListing && touched?.associatedListing
+                        ? "red.300"
+                        : null
+                    }
+                  >
+                    {propertyList?.map((item) => {
+                      return (
+                        <option value={item?._id} key={item?._id}>
+                          {item?.name}
+                        </option>
+                      );
+                    })}
+                  </Select>
+                  <IconButton
+                    onClick={() => setPropertyModel(true)}
+                    ml={2}
+                    fontSize="25px"
+                    icon={<LiaMousePointerSolid />}
+                  />
+                </Flex>
+                <Text mb="10px" fontSize="sm" color={"red"}>
+                  {errors?.associatedListing &&
+                    touched?.associatedListing &&
+                    errors?.associatedListing}
+                </Text>
+              </GridItem>
+            </Grid>
           </DrawerBody>
-
+          <SelectPorpertyModel
+            onClose={() => setPropertyModel(false)}
+            isOpen={propertyModel}
+            data={propertyList}
+            isLoding={isLoding}
+            setIsLoding={setIsLoding}
+            fieldName="associatedListing"
+            setFieldValue={setFieldValue}
+          />
           <DrawerFooter>
             <Button
               sx={{ textTransform: "capitalize" }}
