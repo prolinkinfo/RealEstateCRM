@@ -333,10 +333,10 @@ const routes = [
     component: Quotes,
   },
   {
-    name: "Quotes",
+    name: "Offer Letter",
     layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-    under: "quotes",
-    parentName: "Quotes",
+    under: "Offer Letter",
+    parentName: "Offer Letter",
     path: "/quotesView/:id",
     component: QuotesView,
   },
