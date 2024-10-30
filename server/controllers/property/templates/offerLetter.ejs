@@ -265,6 +265,7 @@
       <thead>
         <tr>
           <th>NO</th>
+          <th>Title</th>
           <th>Installments START DATE</th>
           <th>Per</th>
           <th>MONTHS</th>
@@ -275,6 +276,7 @@
         <% installments.forEach(function(installment) { %>
         <tr>
           <td><%= installment.no %></td>
+          <td><%= installment.title %></td>
           <td><%= installment.startDate %></td>
           <td><%= installment.per %></td>
           <td><%= installment.months %></td>

@@ -84,6 +84,7 @@ function BookedModel(props) {
       installments: [
         {
           no: 1,
+          title: "",
           startDate: "",
           per: "",
           months: "",
@@ -134,7 +135,6 @@ function BookedModel(props) {
 
       formData?.append("unit", JSON.stringify(selectedFloorItem?.item));
       formData?.append("floor", JSON.stringify(selectedFloorItem?.floor));
-     
 
       Object?.keys(values)?.forEach((item) => {
         const value = values[item];
@@ -151,9 +151,11 @@ function BookedModel(props) {
         `api/property/genrate-offer-letter/${param?.id}`,
         formData
       );
-
-      const pdfBlob = new Blob([response.data], { type: "application/pdf" });
-      saveAs(pdfBlob, "offer-letter.pdf");
+      if (response?.status === 200) {
+        const pdfBlob = new Blob([response.data], { type: "application/pdf" });
+        saveAs(pdfBlob, "offer-letter.pdf");
+        handleClose()
+      }
     } catch (e) {
       console.log(e);
       toast.error(`server error`);
@@ -174,10 +176,15 @@ function BookedModel(props) {
   const handlePrevious = () => {
     setCurrentStep((prev) => prev - 1);
   };
+  const handleClose = () => {
+    onClose();
+    resetForm();
+    setCurrentStep(1);
+  };
 
   return (
     <>
-      <Drawer isOpen={isOpen} size="lg">
+      <Drawer isOpen={isOpen} size="xl">
         <DrawerOverlay />
         <DrawerContent>
           <DrawerHeader
@@ -186,14 +193,7 @@ function BookedModel(props) {
             display="flex"
           >
             Booked
-            <IconButton
-              onClick={() => {
-                onClose();
-                resetForm();
-                setCurrentStep(1);
-              }}
-              icon={<CloseIcon />}
-            />
+            <IconButton onClick={handleClose} icon={<CloseIcon />} />
           </DrawerHeader>
           <DrawerBody>
             <div className="stepper">

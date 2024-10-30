@@ -6,6 +6,7 @@ import {
   GridItem,
   IconButton,
   Input,
+  Select,
   Table,
   Tbody,
   Td,
@@ -37,7 +38,7 @@ const PaymentSchedule = (props) => {
             <Thead borderBottom="1px solid #c4c9cf">
               <Tr>
                 <Th></Th>
-                <Th>No</Th>
+                <Th>title</Th>
                 <Th>Start Date</Th>
                 <Th>percentage (%)</Th>
                 <Th>Months</Th>
@@ -59,7 +60,47 @@ const PaymentSchedule = (props) => {
                       />
                     )}
                   </Td>
-                  <Td>{i + 1}</Td>
+                  <Td>
+                    <Select
+                      value={values?.installments?.[i]?.title}
+                      name={`installments.[${i}].title`}
+                      onChange={handleChange}
+                      mb={
+                        errors?.installments?.[i]?.title &&
+                        touched?.installments?.[i]?.title
+                          ? undefined
+                          : "10px"
+                      }
+                      fontWeight="500"
+                      placeholder={"Title"}
+                      borderColor={
+                        errors?.installments?.[i]?.title &&
+                        touched?.installments?.[i]?.title
+                          ? "red.300"
+                          : null
+                      }
+                    >
+                      {[
+                        "Furnishing Amount",
+                        "Agreement Amount",
+                        "Down Payment",
+                        "Loan Amount",
+                        "Registration",
+                        "Service Tax",
+                        "Stamp Duty",
+                        "VAT",
+                        "Legal Charges",
+                        "Society Charges",
+                        "Maintenance Charges",
+                      ]?.map((item) => {
+                        return (
+                          <option value={item} key={item}>
+                            {item}
+                          </option>
+                        );
+                      })}
+                    </Select>
+                  </Td>
                   <Td>
                     <Input
                       type="date"
@@ -68,15 +109,19 @@ const PaymentSchedule = (props) => {
                         const currentDate = dayjs();
                         const targetDate = dayjs(e?.target?.value);
 
-                        const months = targetDate.diff(currentDate, 'month');
-                        const days = targetDate.diff(currentDate.add(months, 'month'), 'day');
+                        const months = targetDate.diff(currentDate, "month");
+                        const days = targetDate.diff(
+                          currentDate.add(months, "month"),
+                          "day"
+                        );
 
                         let result = "";
-                        if (months > 0) result += `${months} month${months > 1 ? 's' : ''}, `;
-                        result += `${days} day${days > 1 ? 's' : ''}`;
+                        if (months > 0)
+                          result += `${months} month${months > 1 ? "s" : ""}, `;
+                        result += `${days} day${days > 1 ? "s" : ""}`;
 
-                        setFieldValue(`installments.[${i}].months`, result)
-                        handleChange(e)
+                        setFieldValue(`installments.[${i}].months`, result);
+                        handleChange(e);
                       }}
                       onBlur={handleBlur}
                       min={dayjs().format("YYYY-MM-DD")}
@@ -90,7 +135,7 @@ const PaymentSchedule = (props) => {
                       fontWeight="500"
                       borderColor={
                         errors?.installments?.[i]?.startDate &&
-                          touched?.installments?.[i]?.startDate
+                        touched?.installments?.[i]?.startDate
                           ? "red.300"
                           : null
                       }
@@ -114,7 +159,7 @@ const PaymentSchedule = (props) => {
                       max={100}
                       borderColor={
                         errors?.installments?.[i]?.per &&
-                          touched?.installments?.[i]?.per
+                        touched?.installments?.[i]?.per
                           ? "red.300"
                           : null
                       }
@@ -137,7 +182,7 @@ const PaymentSchedule = (props) => {
                       fontWeight="500"
                       borderColor={
                         errors?.installments?.[i]?.total &&
-                          touched?.installments?.[i]?.total
+                        touched?.installments?.[i]?.total
                           ? "red.300"
                           : null
                       }
@@ -159,6 +204,7 @@ const PaymentSchedule = (props) => {
                         ...values?.installments,
                         {
                           no: values?.installments?.length + 1,
+                          title: "",
                           startDate: "",
                           per: "",
                           months: "",
