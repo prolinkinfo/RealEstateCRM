@@ -15,7 +15,7 @@ import {
   Select,
   Text,
 } from "@chakra-ui/react";
-import PropertyModel from "components/commonTableModel/PropertyModel";
+import SelectPorpertyModel from "components/commonTableModel/SelectPorpertyModel";
 import Spinner from "components/spinner/Spinner";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
@@ -201,7 +201,7 @@ const Add = (props) => {
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
-      <PropertyModel
+      <SelectPorpertyModel
         onClose={() => setPropertyModel(false)}
         isOpen={propertyModel}
         data={propertyList}
