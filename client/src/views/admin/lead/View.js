@@ -299,12 +299,19 @@ const View = () => {
   };
 
   const fetchData = async (i) => {
-    setIsLoding(true);
-    let response = await getApi("api/lead/view/", param?.id);
-    setData(response?.data?.lead);
-    setAllData(response?.data);
-    setIsLoding(false);
-    setSelectedTab(i);
+    try {
+      setIsLoding(true);
+      let response = await getApi("api/lead/view/", param?.id);
+      if (response.status === 200) {
+        setData(response?.data?.lead);
+        setAllData(response?.data);
+      }
+      setIsLoding(false);
+      setSelectedTab(i);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setIsLoding(false);
+    }
   };
 
   const handleDeleteLead = async (id) => {
@@ -460,12 +467,30 @@ const View = () => {
               <TabPanel pt={4} p={0}>
                 <CustomView
                   data={leadData?.[0]}
-                  fieldData={data}
+                  fieldData={data ? data : []}
                   toCamelCase={toCamelCase}
                   moduleId={leadData?.[0]?._id}
                   fetchData={fetchData}
                   id="reports"
                 />
+                <Card mt={3}>
+                  <Grid>
+                    <GridItem>
+                      <Text
+                        fontSize="sm"
+                        fontWeight="bold"
+                        color={"blackAlpha.900"}
+                      >
+                        Associated Listing
+                      </Text>
+                      <Text>
+                        {data?.associatedListing?.name
+                          ? data.associatedListing.name
+                          : " - "}
+                      </Text>
+                    </GridItem>
+                  </Grid>
+                </Card>
               </TabPanel>
               <TabPanel pt={4} p={0}>
                 <GridItem colSpan={{ base: 4 }}>

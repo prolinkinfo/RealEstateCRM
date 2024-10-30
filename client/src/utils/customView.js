@@ -298,7 +298,7 @@ const CustomView = ({
       try {
         let response = await putApi(
           editUrl ? editUrl : `api/form/edit/${param?.id}`,
-          payload,
+          payload
         );
         if (response?.status === 200) {
           setEditableField(null);
@@ -365,7 +365,9 @@ const CustomView = ({
                     <HSeparator />
                   </GridItem>
                   {data?.fields
-                    ?.filter((itm) => itm?.belongsTo === item?._id)
+                    ?.filter(
+                      (itm) => itm?.belongsTo === item?._id && !item?.ref
+                    )
                     ?.map((field) => (
                       <GridItem colSpan={{ base: 12, md: 6 }} key={field?.name}>
                         <FormControl
@@ -522,7 +524,7 @@ const CustomView = ({
                                     (fieldData[field?.name] !== undefined
                                       ? fieldData[field?.name]
                                       : "N/A"),
-                                  field?.label,
+                                  field?.label
                                 )
                               }
                             >
@@ -554,175 +556,177 @@ const CustomView = ({
                 </Heading>
                 <HSeparator />
               </GridItem>
-              {data?.fields?.map((field) => (
-                <GridItem colSpan={{ base: 12, md: 6 }} key={field?.name}>
-                  <FormControl
-                    isInvalid={
-                      formik?.errors[field?.name] &&
-                      formik?.touched[field?.name]
-                    }
-                  >
-                    <Text
-                      color={"blackAlpha.900"}
-                      fontSize="sm"
-                      fontWeight="bold"
+              {data?.fields
+                ?.filter((item) => !item?.ref)
+                ?.map((field) => (
+                  <GridItem colSpan={{ base: 12, md: 6 }} key={field?.name}>
+                    <FormControl
+                      isInvalid={
+                        formik?.errors[field?.name] &&
+                        formik?.touched[field?.name]
+                      }
                     >
-                      {field?.label}
-                    </Text>
-                    {editableField === field?.name ||
-                    formik.errors[field?.name] ? (
-                      field?.type === "select" || field?.type === "radio" ? (
-                        <Select
-                          fontSize="sm"
-                          id={field?.name}
-                          name={field?.name}
-                          onChange={formik?.handleChange}
-                          onBlur={handleBlur}
-                          value={formik?.values[field?.name] || ""}
-                          fontWeight="500"
-                          borderColor={
-                            formik?.errors[field?.name] &&
-                            formik?.touched[field?.name]
-                              ? "red.300"
-                              : null
-                          }
-                        >
-                          {field?.options?.map((option) => (
-                            <option key={option?._id} value={option?.value}>
-                              {option?.name}
-                            </option>
-                          ))}
-                        </Select>
-                      ) : field?.type === "text" ? (
-                        <Input
-                          value={formik?.values[field?.name] || ""}
-                          onChange={formik?.handleChange}
-                          onBlur={handleBlur}
-                          autoFocus
-                          borderColor={
-                            formik?.errors[field?.name] &&
-                            formik?.touched[field?.name]
-                              ? "red.300"
-                              : null
-                          }
-                          name={field?.name}
-                        />
-                      ) : field?.type === "tel" ? (
-                        <Input
-                          value={formik.values[field?.name] || ""}
-                          onChange={formik.handleChange}
-                          onBlur={handleBlur}
-                          autoFocus
-                          borderColor={
-                            formik.errors[field?.name] &&
-                            formik.touched[field?.name]
-                              ? "red.300"
-                              : null
-                          }
-                          name={field?.name}
-                        />
-                      ) : field?.type === "email" ? (
-                        <Input
-                          value={formik?.values[field?.name] || ""}
-                          onChange={formik?.handleChange}
-                          onBlur={handleBlur}
-                          autoFocus
-                          borderColor={
-                            formik?.errors[field?.name] &&
-                            formik?.touched[field?.name]
-                              ? "red.300"
-                              : null
-                          }
-                          name={field?.name}
-                        />
-                      ) : field?.type === "date" ? (
-                        <Input
-                          value={formik?.values[field?.name] || ""}
-                          onChange={formik?.handleChange}
-                          onBlur={handleBlur}
-                          autoFocus
-                          type="date"
-                          borderColor={
-                            formik?.errors[field?.name] &&
-                            formik?.touched[field?.name]
-                              ? "red.300"
-                              : null
-                          }
-                          name={field?.name}
-                        />
-                      ) : field?.type === "url" ? (
-                        <Input
-                          value={formik?.values[field?.name] || ""}
-                          onChange={formik?.handleChange}
-                          onBlur={handleBlur}
-                          autoFocus
-                          type="url"
-                          borderColor={
-                            formik?.errors[field?.name] &&
-                            formik?.touched[field?.name]
-                              ? "red.300"
-                              : null
-                          }
-                          name={field?.name}
-                        />
-                      ) : field?.type === "range" ? (
-                        <Input
-                          value={formik?.values[field?.name] || ""}
-                          onChange={formik?.handleChange}
-                          onBlur={handleBlur}
-                          autoFocus
-                          type="range"
-                          borderColor={
-                            formik?.errors[field?.name] &&
-                            formik?.touched[field?.name]
-                              ? "red.300"
-                              : null
-                          }
-                          name={field?.name}
-                        />
-                      ) : (
-                        <Input
-                          value={formik?.values[field?.name] || ""}
-                          onChange={formik?.handleChange}
-                          onBlur={handleBlur}
-                          autoFocus
-                          borderColor={
-                            formik?.errors[field?.name] &&
-                            formik?.touched[field?.name]
-                              ? "red.300"
-                              : null
-                          }
-                          name={field?.name}
-                        />
-                      )
-                    ) : (
                       <Text
                         color={"blackAlpha.900"}
                         fontSize="sm"
-                        onDoubleClick={() =>
-                          handleDoubleClick(
-                            field?.name,
-                            fieldData &&
-                              (fieldData[field?.name] !== undefined
-                                ? fieldData[field?.name]
-                                : "N/A"),
-                            field?.label,
-                          )
-                        }
+                        fontWeight="bold"
                       >
-                        {(fieldData &&
-                          (fieldData[field?.name] !== undefined
-                            ? fieldData[field?.name]
-                            : "N/A")) ||
-                          "N/A"}
+                        {field?.label}
                       </Text>
-                    )}
-                    <FormErrorMessage>
-                      {formik?.errors[field?.name]}
-                    </FormErrorMessage>
-                  </FormControl>
-                </GridItem>
-              ))}
+                      {editableField === field?.name ||
+                      formik.errors[field?.name] ? (
+                        field?.type === "select" || field?.type === "radio" ? (
+                          <Select
+                            fontSize="sm"
+                            id={field?.name}
+                            name={field?.name}
+                            onChange={formik?.handleChange}
+                            onBlur={handleBlur}
+                            value={formik?.values[field?.name] || ""}
+                            fontWeight="500"
+                            borderColor={
+                              formik?.errors[field?.name] &&
+                              formik?.touched[field?.name]
+                                ? "red.300"
+                                : null
+                            }
+                          >
+                            {field?.options?.map((option) => (
+                              <option key={option?._id} value={option?.value}>
+                                {option?.name}
+                              </option>
+                            ))}
+                          </Select>
+                        ) : field?.type === "text" ? (
+                          <Input
+                            value={formik?.values[field?.name] || ""}
+                            onChange={formik?.handleChange}
+                            onBlur={handleBlur}
+                            autoFocus
+                            borderColor={
+                              formik?.errors[field?.name] &&
+                              formik?.touched[field?.name]
+                                ? "red.300"
+                                : null
+                            }
+                            name={field?.name}
+                          />
+                        ) : field?.type === "tel" ? (
+                          <Input
+                            value={formik.values[field?.name] || ""}
+                            onChange={formik.handleChange}
+                            onBlur={handleBlur}
+                            autoFocus
+                            borderColor={
+                              formik.errors[field?.name] &&
+                              formik.touched[field?.name]
+                                ? "red.300"
+                                : null
+                            }
+                            name={field?.name}
+                          />
+                        ) : field?.type === "email" ? (
+                          <Input
+                            value={formik?.values[field?.name] || ""}
+                            onChange={formik?.handleChange}
+                            onBlur={handleBlur}
+                            autoFocus
+                            borderColor={
+                              formik?.errors[field?.name] &&
+                              formik?.touched[field?.name]
+                                ? "red.300"
+                                : null
+                            }
+                            name={field?.name}
+                          />
+                        ) : field?.type === "date" ? (
+                          <Input
+                            value={formik?.values[field?.name] || ""}
+                            onChange={formik?.handleChange}
+                            onBlur={handleBlur}
+                            autoFocus
+                            type="date"
+                            borderColor={
+                              formik?.errors[field?.name] &&
+                              formik?.touched[field?.name]
+                                ? "red.300"
+                                : null
+                            }
+                            name={field?.name}
+                          />
+                        ) : field?.type === "url" ? (
+                          <Input
+                            value={formik?.values[field?.name] || ""}
+                            onChange={formik?.handleChange}
+                            onBlur={handleBlur}
+                            autoFocus
+                            type="url"
+                            borderColor={
+                              formik?.errors[field?.name] &&
+                              formik?.touched[field?.name]
+                                ? "red.300"
+                                : null
+                            }
+                            name={field?.name}
+                          />
+                        ) : field?.type === "range" ? (
+                          <Input
+                            value={formik?.values[field?.name] || ""}
+                            onChange={formik?.handleChange}
+                            onBlur={handleBlur}
+                            autoFocus
+                            type="range"
+                            borderColor={
+                              formik?.errors[field?.name] &&
+                              formik?.touched[field?.name]
+                                ? "red.300"
+                                : null
+                            }
+                            name={field?.name}
+                          />
+                        ) : (
+                          <Input
+                            value={formik?.values[field?.name] || ""}
+                            onChange={formik?.handleChange}
+                            onBlur={handleBlur}
+                            autoFocus
+                            borderColor={
+                              formik?.errors[field?.name] &&
+                              formik?.touched[field?.name]
+                                ? "red.300"
+                                : null
+                            }
+                            name={field?.name}
+                          />
+                        )
+                      ) : (
+                        <Text
+                          color={"blackAlpha.900"}
+                          fontSize="sm"
+                          onDoubleClick={() =>
+                            handleDoubleClick(
+                              field?.name,
+                              fieldData &&
+                                (fieldData[field?.name] !== undefined
+                                  ? fieldData[field?.name]
+                                  : "N/A"),
+                              field?.label
+                            )
+                          }
+                        >
+                          {(fieldData &&
+                            (fieldData[field?.name] !== undefined
+                              ? fieldData[field?.name]
+                              : "N/A")) ||
+                            "N/A"}
+                        </Text>
+                      )}
+                      <FormErrorMessage>
+                        {formik?.errors[field?.name]}
+                      </FormErrorMessage>
+                    </FormControl>
+                  </GridItem>
+                ))}
             </Grid>
           </Card>
         </GridItem>
