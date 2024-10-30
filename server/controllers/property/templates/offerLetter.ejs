@@ -9,6 +9,7 @@
         body{
             padding: 0 40px;
             font-family: Arial, Helvetica, sans-serif;
+            box-sizing: border-box;
         }
         .setTitle{
             text-align: center;
@@ -146,6 +147,12 @@
       .setImageAndDate{
         padding-top: 45px;
       }
+      .commonBorderColor{
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 2px;
+        text-align: center;
+      }
     </style>
 </head>
 
@@ -209,24 +216,24 @@
     <h3 class="setTitle">ZUQRUF DEVELOPERS LIMITED</h3><hr />
     <p class="setTextCenter">(b) The balance of the Purchase Price being $ 87,500 shall be paid as follows:</p>
     
-      <table class="table">
-        <thead>
-          <tr>
-            <th>NO</th>
-            <th>Installments START DATE</th>
-            <th>Per</th>
-            <th>MONTHS</th>
-            <th>TOTAL</th>
+      <table class="commonBorderColor" style="width: calc(100% - 4px);height: calc(100% - 4px);">
+        <thead >
+          <tr class="commonBorderColor">
+            <th class="commonBorderColor">NO</th>
+            <th class="commonBorderColor">Installments START DATE</th>
+            <th class="commonBorderColor">Per</th>
+            <th class="commonBorderColor">MONTHS</th>
+            <th class="commonBorderColor">TOTAL</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="commonBorderColor">
           <% installments.forEach(function(installment) { %>
-            <tr>
-              <td><%= installment.no %></td>
-              <td><%= installment.startDate %></td>
-              <td><%= installment.per %></td>
-              <td><%= installment.months %></td>
-              <td><%= installment.Total %></td>
+            <tr class="commonBorderColor">
+              <td class="commonBorderColor"><%= installment.no %></td>
+              <td class="commonBorderColor"><%= installment.startDate %></td>
+              <td class="commonBorderColor"><%= installment.per %></td>
+              <td class="commonBorderColor"><%= installment.months %></td>
+              <td class="commonBorderColor"><%= installment.Total %></td>
             </tr>
           <% }); %>
         </tbody>
