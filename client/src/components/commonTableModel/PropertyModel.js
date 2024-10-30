@@ -80,7 +80,7 @@ const PropertyModel = (props) => {
                 tableData={propertyData ?? data}
                 tableCustomFields={
                   propertyData?.[0]?.fields?.filter(
-                    (field) => field?.isTableField === true
+                    (field) => field?.isTableField === true,
                   ) || []
                 }
                 AdvanceSearch={() => ""}
@@ -116,7 +116,7 @@ const PropertyModel = (props) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <MultiPropertyModel/>
+      <MultiPropertyModel />
     </>
   );
 };

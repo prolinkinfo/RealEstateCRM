@@ -41,6 +41,7 @@ import DataNotFound from "components/notFoundData";
 import CommonCheckTable from "components/reactTable/checktable";
 import { HSeparator } from "components/separator/Separator";
 import Spinner from "components/spinner/Spinner";
+import { saveAs } from "file-saver";
 import html2pdf from "html2pdf.js";
 import moment from "moment";
 import { useEffect, useState } from "react";
@@ -51,7 +52,7 @@ import { MdMoveDown, MdMoveUp } from "react-icons/md";
 import { TbStatusChange } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { deleteApi, getApi, postApi } from "services/api";
+import { deleteApi, getApi, postApi, postApiBlob } from "services/api";
 import CustomView from "utils/customView";
 import csv from "../../../assets/img/fileImage/csv.png";
 import file from "../../../assets/img/fileImage/file.png";
@@ -65,9 +66,11 @@ import { fetchContactCustomFiled } from "../../../redux/slices/contactCustomFile
 import { fetchPropertyCustomFiled } from "../../../redux/slices/propertyCustomFiledSlice";
 import Add from "./Add";
 import AddEditUnits from "./components/AddEditUnits";
+import BookedModel from "./components/BookedModel";
+import ChangeStatusModel from "./components/ChangeStatusModel";
 import PropertyPhoto from "./components/propertyPhoto";
-import Edit from "./Edit";
 import UnitTypeView from "./components/UnitTypeView";
+import Edit from "./Edit";
 
 const View = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -94,6 +97,14 @@ const View = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [unitOpenModel, setUnitOpenModel] = useState(false);
   const [selectedViewUnitType, setSelectedViewUnitType] = useState({});
+  const [deleteunitModelUnitType, setDeleteModelUnitType] = useState(false);
+  const [selectedFloorItem, setSelectedFloorItem] = useState({});
+
+  const [blockedModelOpen, setBlockedModelOpen] = useState(false);
+  const [availableModelOpen, setAvailableModelOpen] = useState(false);
+  const [soldModelOpen, setSoldModelOpen] = useState(false);
+  // const [soldopen, setSoldOpen] = useState(false);
+  const [bookedOpen, setBookedOpen] = useState(false);
 
   const dispatch = useDispatch();
   const propertyData = useSelector(
@@ -134,6 +145,11 @@ const View = () => {
   const handleEditOpen = (row) => {
     setAddUnit(true);
     setActionType("Edit");
+    setSelectedUnitType(row);
+  };
+
+  const handleDeleteUnitType = (row) => {
+    setDeleteModelUnitType(true);
     setSelectedUnitType(row);
   };
 
@@ -268,6 +284,7 @@ const View = () => {
     { Header: "Name", accessor: "name" },
     { Header: "Sqm", accessor: "sqm" },
     { Header: "Price", accessor: "price" },
+    { Header: "Executive", accessor: "executive" },
     {
       Header: "Action",
       center: true,
@@ -327,6 +344,23 @@ const View = () => {
               <EditIcon />
             </Button>
           </Tooltip>
+          <Tooltip
+            hasArrow
+            label="Delete"
+            bg="gray.200"
+            color="gray"
+            textTransform="capitalize"
+            fontSize="sm"
+          >
+            <Button
+              color="red"
+              variant="outline"
+              size="sm"
+              onClick={() => handleDeleteUnitType(row?.original)}
+            >
+              <DeleteIcon />
+            </Button>
+          </Tooltip>
         </Flex>
       ),
     },
@@ -382,6 +416,17 @@ const View = () => {
       console.log(error);
     } finally {
       setIsLoding(false);
+    }
+  };
+
+  const handleDeleteUnitTypes = async () => {
+    setIsLoding(true);
+    let response = await postApi(`api/property/delete-unit-type/${param?.id}`, {
+      unitTypeId: selectedUnitType?._id,
+    });
+    if (response?.status === 200) {
+      setDeleteModelUnitType(false);
+      setAction((pre) => !pre);
     }
   };
 
@@ -446,6 +491,16 @@ const View = () => {
     });
   };
 
+  const handleGenrateOfferLetter = async () => {
+    const response = await postApiBlob(
+      `api/property/genrate-offer-letter/${param?.id}`,
+      {}
+    );
+
+    const pdfBlob = new Blob([response.data], { type: "application/pdf" });
+    saveAs(pdfBlob, "offer-letter.pdf");
+  };
+
   const statusCount = data?.units?.reduce((acc, floor) => {
     floor?.flats?.forEach((flat) => {
       const status =
@@ -475,6 +530,7 @@ const View = () => {
         onClose={onClose}
         propertyData={propertyData?.[0]}
       />
+
       <AddEditUnits
         isOpen={addUnit}
         size={size}
@@ -484,8 +540,10 @@ const View = () => {
         onClose={() => {
           setSelectedUnitType({});
           setAddUnit(false);
+          setActionType("");
         }}
       />
+
       <Edit
         isOpen={edit}
         size={size}
@@ -494,6 +552,7 @@ const View = () => {
         propertyData={propertyData?.[0]}
         data={data}
       />
+
       <CommonDeleteModel
         isOpen={deleteModel}
         onClose={() => setDelete(false)}
@@ -501,11 +560,75 @@ const View = () => {
         handleDeleteData={handleDeleteProperties}
         ids={param?.id}
       />
+
+      <CommonDeleteModel
+        isOpen={deleteunitModelUnitType}
+        onClose={() => setDeleteModelUnitType(false)}
+        handleDeleteData={handleDeleteUnitTypes}
+        type="Unit Types"
+      />
+
       <UnitTypeView
         data={selectedViewUnitType}
         isOpen={unitOpenModel}
         onClose={() => setUnitOpenModel(false)}
+        unitTypeList={unitTypeList}
+        setAction={setAction}
       />
+
+      <ChangeStatusModel
+        isOpen={availableModelOpen}
+        clickOnYes={() => {
+          handleStatusChange(
+            selectedFloorItem?.floor,
+            selectedFloorItem?.item,
+            selectedFloorItem?.status
+          );
+          setAvailableModelOpen(false);
+        }}
+        title="Available"
+        message="Are you sure to change status available?"
+        onClose={() => setAvailableModelOpen(false)}
+      />
+
+      <ChangeStatusModel
+        isOpen={soldModelOpen}
+        clickOnYes={() => {
+          handleStatusChange(
+            selectedFloorItem?.floor,
+            selectedFloorItem?.item,
+            selectedFloorItem?.status
+          );
+          setSoldModelOpen(false);
+        }}
+        title="Sold"
+        message="Are you sure to change status sold?"
+        onClose={() => setSoldModelOpen(false)}
+      />
+
+      <ChangeStatusModel
+        isOpen={blockedModelOpen}
+        clickOnYes={() => {
+          handleStatusChange(
+            selectedFloorItem?.floor,
+            selectedFloorItem?.item,
+            selectedFloorItem?.status
+          );
+          setBlockedModelOpen(false);
+        }}
+        title="Blocked"
+        message="Are you sure to change status block?"
+        onClose={() => setBlockedModelOpen(false)}
+      />
+
+      {/* <SoldModel isOpen={soldopen} onClose={() => setSoldOpen(false)} /> */}
+      <BookedModel
+        selectedFloorItem={selectedFloorItem}
+        isOpen={bookedOpen}
+        setAction={setAction}
+        onClose={() => setBookedOpen(false)}
+      />
+
       {isLoding ? (
         <Flex justifyContent={"center"} alignItems={"center"} width="100%">
           <Spinner />
@@ -556,18 +679,18 @@ const View = () => {
                       permission?.create ||
                       permission?.update ||
                       permission?.delete) && (
-                      <MenuButton
-                        variant="outline"
-                        size="sm"
-                        colorScheme="blackAlpha"
-                        va
-                        mr={2.5}
-                        as={Button}
-                        rightIcon={<ChevronDownIcon />}
-                      >
-                        Actions
-                      </MenuButton>
-                    )}
+                        <MenuButton
+                          variant="outline"
+                          size="sm"
+                          colorScheme="blackAlpha"
+                          va
+                          mr={2.5}
+                          as={Button}
+                          rightIcon={<ChevronDownIcon />}
+                        >
+                          Actions
+                        </MenuButton>
+                      )}
                     <MenuDivider />
                     <MenuList minWidth={2}>
                       {(user?.role === "superAdmin" || permission?.create) && (
@@ -693,7 +816,7 @@ const View = () => {
                               checkBox={false}
                               deleteMany={true}
                               ManageGrid={false}
-                              onOpen={() => {}}
+                              onOpen={() => { }}
                               addBtn={false}
                               access={emailAccess}
                             />
@@ -714,7 +837,7 @@ const View = () => {
                               checkBox={false}
                               deleteMany={true}
                               ManageGrid={false}
-                              onOpen={() => {}}
+                              onOpen={() => { }}
                               addBtn={false}
                               access={callAccess}
                             />
@@ -834,48 +957,7 @@ const View = () => {
                                     minW={"fit-content"}
                                     transform={"translate(1520px, 173px);"}
                                   >
-                                    <MenuItem
-                                      py={2.5}
-                                      icon={
-                                        <TbStatusChange fontSize={15} mb={1} />
-                                      }
-                                      onClick={() => {
-                                        handleStatusChange(
-                                          floor,
-                                          item,
-                                          "Available"
-                                        );
-                                      }}
-                                    >
-                                      Available
-                                    </MenuItem>
-                                    <MenuItem
-                                      py={2.5}
-                                      icon={
-                                        <TbStatusChange fontSize={15} mb={1} />
-                                      }
-                                      onClick={() => {
-                                        handleStatusChange(
-                                          floor,
-                                          item,
-                                          "Booked"
-                                        );
-                                      }}
-                                    >
-                                      Booked
-                                    </MenuItem>
-                                    <MenuItem
-                                      py={2.5}
-                                      icon={
-                                        <TbStatusChange fontSize={15} mb={1} />
-                                      }
-                                      onClick={() => {
-                                        handleStatusChange(floor, item, "Sold");
-                                      }}
-                                    >
-                                      Sold
-                                    </MenuItem>
-                                    {user?.role === "superAdmin" && (
+                                    {item?.status !== "Available" && (
                                       <MenuItem
                                         py={2.5}
                                         icon={
@@ -885,16 +967,84 @@ const View = () => {
                                           />
                                         }
                                         onClick={() => {
-                                          handleStatusChange(
+                                          setAvailableModelOpen(true);
+                                          setSelectedFloorItem({
                                             floor,
                                             item,
-                                            "Blocked"
-                                          );
+                                            status: "Available",
+                                          });
                                         }}
                                       >
-                                        Blocked
+                                        Available
                                       </MenuItem>
                                     )}
+                                    {!["Booked", "Sold", "Blocked"]?.includes(
+                                      item?.status
+                                    ) && (
+                                        <MenuItem
+                                          py={2.5}
+                                          icon={
+                                            <TbStatusChange
+                                              fontSize={15}
+                                              mb={1}
+                                            />
+                                          }
+                                          onClick={() => {
+                                            setBookedOpen(true);
+                                            setSelectedFloorItem({
+                                              floor,
+                                              item,
+                                              status: "Booked",
+                                            });
+                                          }}
+                                        >
+                                          Booked
+                                        </MenuItem>
+                                      )}
+                                    {item?.status === "Booked" &&
+                                      item?.status !== "Sold" && (
+                                        <MenuItem
+                                          py={2.5}
+                                          icon={
+                                            <TbStatusChange
+                                              fontSize={15}
+                                              mb={1}
+                                            />
+                                          }
+                                          onClick={() => {
+                                            setSoldModelOpen(true);
+                                            setSelectedFloorItem({
+                                              floor,
+                                              item,
+                                              status: "Sold",
+                                            });
+                                          }}
+                                        >
+                                          Sold
+                                        </MenuItem>
+                                      )}
+                                    {user?.role === "superAdmin" &&
+                                      item?.status !== "Blocked" && (
+                                        <MenuItem
+                                          py={2.5}
+                                          icon={
+                                            <TbStatusChange
+                                              fontSize={15}
+                                              mb={1}
+                                            />
+                                          }
+                                          onClick={() => {
+                                            setBlockedModelOpen(true);
+                                            setSelectedFloorItem({
+                                              floor,
+                                              item,
+                                              status: "Blocked",
+                                            });
+                                          }}
+                                        >
+                                          Blocked
+                                        </MenuItem>
+                                      )}
                                   </MenuList>
                                 </Menu>
                               </Flex>
@@ -1280,38 +1430,38 @@ const View = () => {
           {(permission?.delete ||
             permission?.update ||
             user?.role === "superAdmin") && (
-            <Card mt={3}>
-              <Grid templateColumns="repeat(6, 1fr)" gap={1}>
-                <GridItem colStart={6}>
-                  <Flex justifyContent={"right"}>
-                    {permission?.update && (
-                      <Button
-                        onClick={() => setEdit(true)}
-                        size="sm"
-                        leftIcon={<EditIcon />}
-                        mr={2.5}
-                        variant="outline"
-                        colorScheme="green"
-                      >
-                        Edit
-                      </Button>
-                    )}
-                    {permission?.delete && (
-                      <Button
-                        style={{ background: "red.800" }}
-                        size="sm"
-                        onClick={() => setDelete(true)}
-                        leftIcon={<DeleteIcon />}
-                        colorScheme="red"
-                      >
-                        Delete
-                      </Button>
-                    )}
-                  </Flex>
-                </GridItem>
-              </Grid>
-            </Card>
-          )}
+              <Card mt={3}>
+                <Grid templateColumns="repeat(6, 1fr)" gap={1}>
+                  <GridItem colStart={6}>
+                    <Flex justifyContent={"right"}>
+                      {permission?.update && (
+                        <Button
+                          onClick={() => setEdit(true)}
+                          size="sm"
+                          leftIcon={<EditIcon />}
+                          mr={2.5}
+                          variant="outline"
+                          colorScheme="green"
+                        >
+                          Edit
+                        </Button>
+                      )}
+                      {permission?.delete && (
+                        <Button
+                          style={{ background: "red.800" }}
+                          size="sm"
+                          onClick={() => setDelete(true)}
+                          leftIcon={<DeleteIcon />}
+                          colorScheme="red"
+                        >
+                          Delete
+                        </Button>
+                      )}
+                    </Flex>
+                  </GridItem>
+                </Grid>
+              </Card>
+            )}
         </>
       )}
 
@@ -1326,31 +1476,30 @@ const View = () => {
             {type === "photo"
               ? "Property All Photos"
               : type === "video"
-              ? "Virtual Tours or Videos"
-              : type === "floor"
-              ? "Floors plans"
-              : ""}
+                ? "Virtual Tours or Videos"
+                : type === "floor"
+                  ? "Floors plans"
+                  : ""}
           </ModalHeader>
           <ModalCloseButton onClick={() => setDisplayPropertyPhoto(false)} />
           <ModalBody overflowY={"auto"} height={"700px"}>
             <div style={{ columns: 3 }}>
               {type === "photo"
                 ? data &&
-                  data?.propertyPhotos?.length > 0 &&
-                  data?.propertyPhotos?.map((item) => (
-                    <a href={item?.img} target="_blank">
-                      {" "}
-                      <Image
-                        width={"100%"}
-                        m={1}
-                        mb={4}
-                        src={item?.img}
-                        alt="Your Image"
-                      />
-                    </a>
-                  ))
+                data?.propertyPhotos?.length > 0 &&
+                data?.propertyPhotos?.map((item) => (
+                  <a href={item?.img} target="_blank">
+                    <Image
+                      width={"100%"}
+                      m={1}
+                      mb={4}
+                      src={item?.img}
+                      alt="Your Image"
+                    />
+                  </a>
+                ))
                 : type === "video"
-                ? data &&
+                  ? data &&
                   data?.virtualToursOrVideos?.length > 0 &&
                   data?.virtualToursOrVideos?.map((item) => (
                     <a href={item.img} target="_blank">
@@ -1366,21 +1515,21 @@ const View = () => {
                       </video>
                     </a>
                   ))
-                : type === "floor"
-                ? data &&
-                  data?.floorPlans?.length > 0 &&
-                  data?.floorPlans?.map((item) => (
-                    <a href={item?.img} target="_blank">
-                      <Image
-                        width={"100%"}
-                        m={1}
-                        mb={4}
-                        src={item?.img}
-                        alt="Your Image"
-                      />
-                    </a>
-                  ))
-                : ""}
+                  : type === "floor"
+                    ? data &&
+                    data?.floorPlans?.length > 0 &&
+                    data?.floorPlans?.map((item) => (
+                      <a href={item?.img} target="_blank">
+                        <Image
+                          width={"100%"}
+                          m={1}
+                          mb={4}
+                          src={item?.img}
+                          alt="Your Image"
+                        />
+                      </a>
+                    ))
+                    : ""}
             </div>
           </ModalBody>
           <ModalFooter>

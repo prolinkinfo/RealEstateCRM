@@ -328,25 +328,50 @@ const View = () => {
               </Card>
             </GridItem>
           </Grid>
-          
+
           <Card mt={3}>
             <Grid templateColumns="repeat(6, 1fr)" gap={1}>
-              <GridItem colSpan={{ base: 2 }}  style={{ maxWidth: '100%', width: '100%', boxSizing: 'border-box', padding: '0 10px'}}>
+              <GridItem
+                colSpan={{ base: 2 }}
+                style={{
+                  maxWidth: "100%",
+                  width: "100%",
+                  boxSizing: "border-box",
+                  padding: "0 10px",
+                }}
+              >
                 <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
                   {" "}
                   Message{" "}
                 </Text>
-                <pre style={{ whiteSpace: "pre-wrap" , display: 'flex', justifyContent: 'center',alignItems:'center', alignContent:'center' }}>
+                <pre
+                  style={{
+                    whiteSpace: "pre-wrap",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    alignContent: "center",
+                  }}
+                >
                   {data?.type === "message" ? (
                     <Text>{data?.message ? data?.message : "-"}</Text>
                   ) : (
-                    <div style={{width:'100%',display:'flex',alignContent:'center',alignItems:'center',padding:'50px 50px'}} dangerouslySetInnerHTML={{ __html: data?.html }} />
+                    <div
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        alignContent: "center",
+                        alignItems: "center",
+                        padding: "50px 50px",
+                      }}
+                      dangerouslySetInnerHTML={{ __html: data?.html }}
+                    />
                   )}
                 </pre>
               </GridItem>
             </Grid>
           </Card>
-          
+
           <Grid templateColumns="repeat(2, 1fr)" gap={1} mt={3}>
             <GridItem colSpan={{ base: 2 }}>
               <CommonCheckTable
@@ -358,7 +383,7 @@ const View = () => {
                 AdvanceSearch={false}
                 tableCustomFields={
                   data?.properties?.[0]?.fields?.filter(
-                    (field) => field?.isTableField === true
+                    (field) => field?.isTableField === true,
                   ) || []
                 }
                 addBtn={false}
@@ -371,8 +396,6 @@ const View = () => {
               />
             </GridItem>
           </Grid>
-
-
         </>
       )}
     </>

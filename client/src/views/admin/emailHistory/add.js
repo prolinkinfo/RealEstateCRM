@@ -35,6 +35,7 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { CUIAutoComplete } from "chakra-ui-autocomplete";
 import MultiPropertyModel from "components/commonTableModel/MultiPropertyModel";
+import { FirstStepper } from "../newProperty/components/bookedStepperForm/FirstStepper";
 
 const AddEmailHistory = (props) => {
   const { onClose, isOpen } = props;
@@ -228,6 +229,7 @@ const AddEmailHistory = (props) => {
             fieldName="createByLead"
             setFieldValue={setFieldValue}
           />
+          
           {/* User Model for sales person */}
           <UserModel
             onClose={() => setSalesPersonsModelOpen(false)}
@@ -487,7 +489,9 @@ const AddEmailHistory = (props) => {
                   name="salesAgent"
                   onChange={handleChange}
                   mb={
-                    errors?.salesAgent && touched?.salesAgent ? undefined : "10px"
+                    errors?.salesAgent && touched?.salesAgent
+                      ? undefined
+                      : "10px"
                   }
                   fontWeight="500"
                   placeholder={"Assign To Sales Agent"}
@@ -513,7 +517,9 @@ const AddEmailHistory = (props) => {
               </Flex>
               <Text fontSize="sm" mb="10px" color={"red"}>
                 {" "}
-                {errors?.salesAgent && touched?.salesAgent && errors?.salesAgent}
+                {errors?.salesAgent &&
+                  touched?.salesAgent &&
+                  errors?.salesAgent}
               </Text>
             </GridItem>
 

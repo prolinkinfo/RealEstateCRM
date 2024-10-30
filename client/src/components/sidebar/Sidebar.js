@@ -31,7 +31,7 @@ function Sidebar(props) {
   let variantChange = "0.2s linear";
   let shadow = useColorModeValue(
     "14px 17px 40px 4px rgba(112, 144, 176, 0.08)",
-    "unset"
+    "unset",
   );
   // Chakra Color Mode
   let sidebarBg = useColorModeValue("white", "navy.800");
@@ -39,23 +39,35 @@ function Sidebar(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   // SIDEBAR
   return (
-    <Box display={{ sm: "none", xl: "block" }} w="100%" position='fixed' minH='100%'>
+    <Box
+      display={{ sm: "none", xl: "block" }}
+      w="100%"
+      position="fixed"
+      minH="100%"
+    >
       <Box
         bg={sidebarBg}
         transition={variantChange}
         // w='280px'
-        w={openSidebar ? '280px' : "80px"}
-        h='100vh'
+        w={openSidebar ? "280px" : "80px"}
+        h="100vh"
         m={sidebarMargins}
-        minH='100%'
-        overflowX='hidden'
-        boxShadow={shadow}>
+        minH="100%"
+        overflowX="hidden"
+        boxShadow={shadow}
+      >
         <Scrollbars
           autoHide
           renderTrackVertical={renderTrack}
           renderThumbVertical={renderThumb}
-          renderView={renderView}>
-          <Content routes={routes} largeLogo={largeLogo} openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
+          renderView={renderView}
+        >
+          <Content
+            routes={routes}
+            largeLogo={largeLogo}
+            openSidebar={openSidebar}
+            setOpenSidebar={setOpenSidebar}
+          />
         </Scrollbars>
       </Box>
     </Box>
@@ -75,19 +87,25 @@ export function SidebarResponsive(props) {
   const handlesidebarClose = () => {
     // setOpenSidebar(false)
     onClose();
-  }
+  };
   return (
-    <Flex display={{ sm: "flex", xl: "none" }} alignItems='center'>
+    <Flex display={{ sm: "flex", xl: "none" }} alignItems="center">
       <Flex
         ref={btnRef}
-        w='max-content' h='max-content' onClick={() => { onOpen(); setOpenSidebar(true) }}>
+        w="max-content"
+        h="max-content"
+        onClick={() => {
+          onOpen();
+          setOpenSidebar(true);
+        }}
+      >
         <Icon
           as={IoMenuOutline}
           color={menuColor}
-          my='auto'
-          w='20px'
-          h='20px'
-          me='10px'
+          my="auto"
+          w="20px"
+          h="20px"
+          me="10px"
           _hover={{ cursor: "pointer" }}
         />
       </Flex>
@@ -96,22 +114,34 @@ export function SidebarResponsive(props) {
         isOpen={isOpen}
         onClose={handlesidebarClose}
         placement={document?.documentElement?.dir === "rtl" ? "right" : "left"}
-        finalFocusRef={btnRef}>
+        finalFocusRef={btnRef}
+      >
         <DrawerOverlay />
-        <DrawerContent boxShadow={'xl'} w='285px' maxW='285px' bg={sidebarBackgroundColor}>
+        <DrawerContent
+          boxShadow={"xl"}
+          w="285px"
+          maxW="285px"
+          bg={sidebarBackgroundColor}
+        >
           <DrawerCloseButton
-            zIndex='3'
+            zIndex="3"
             onClose={handlesidebarClose}
             _focus={{ boxShadow: "none" }}
             _hover={{ boxShadow: "none" }}
           />
-          <DrawerBody maxW='285px' px='0rem' pb='0'>
+          <DrawerBody maxW="285px" px="0rem" pb="0">
             <Scrollbars
               autoHide
               renderTrackVertical={renderTrack}
               renderThumbVertical={renderThumb}
-              renderView={renderView}>
-              <Content from={"modal"} routes={routes} openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
+              renderView={renderView}
+            >
+              <Content
+                from={"modal"}
+                routes={routes}
+                openSidebar={openSidebar}
+                setOpenSidebar={setOpenSidebar}
+              />
             </Scrollbars>
           </DrawerBody>
         </DrawerContent>

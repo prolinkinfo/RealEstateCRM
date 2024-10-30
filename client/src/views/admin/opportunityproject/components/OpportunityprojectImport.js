@@ -33,7 +33,7 @@ function OpportunityprojectImport() {
   ];
 
   const initialFieldValues = Object.fromEntries(
-    (customFields || []).map((field) => [field?.name, ""])
+    (customFields || []).map((field) => [field?.name, ""]),
   );
   const initialValues = {
     ...initialFieldValues,
@@ -45,7 +45,7 @@ function OpportunityprojectImport() {
       accessor: field?.name,
       type: field?.type,
       formikType: field?.validations?.find((obj) =>
-        obj.hasOwnProperty("formikType")
+        obj.hasOwnProperty("formikType"),
       ),
     })),
   ];
@@ -183,7 +183,7 @@ function OpportunityprojectImport() {
   useEffect(() => {
     const filterContactData = importedFileFields?.filter((field) => {
       const result = fieldsInCrm?.find(
-        (data) => field === data?.accessor || field === data?.Header
+        (data) => field === data?.accessor || field === data?.Header,
       );
       if (result) {
         setFieldValue(result?.accessor, field);
@@ -250,14 +250,15 @@ function OpportunityprojectImport() {
                     {filterContact
                       ? filterContact?.find(
                           (data) =>
-                            (item?.Header === data || item?.accessor === data) &&
-                            data
+                            (item?.Header === data ||
+                              item?.accessor === data) &&
+                            data,
                         )
                         ? filterContact?.find(
                             (data) =>
                               (item?.Header === data ||
                                 item?.accessor === data) &&
-                              data
+                              data,
                           )
                         : "Select Field In File"
                       : "Select Field In File"}

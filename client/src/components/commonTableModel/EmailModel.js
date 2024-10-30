@@ -121,14 +121,14 @@ const EmailModel = (props) => {
   const fetchRecipientData = async () => {
     if (values?.createByContact) {
       let findEmail = assignToContactData.find(
-        (item) => item?._id === values?.createByContact
+        (item) => item?._id === values?.createByContact,
       );
       if (findEmail) {
         setFieldValue("recipient", findEmail?.email);
       }
     } else if (values?.createByLead) {
       let findEmail = assignToLeadData?.find(
-        (item) => item?._id === values?.createByLead
+        (item) => item?._id === values?.createByLead,
       );
       if (findEmail) {
         setFieldValue("recipient", findEmail?.leadEmail);
@@ -159,21 +159,21 @@ const EmailModel = (props) => {
         result = await getApi(
           user?.role === "superAdmin"
             ? "api/contact/"
-            : `api/contact/?createBy=${user?._id}`
+            : `api/contact/?createBy=${user?._id}`,
         );
         setAssignToContactData(result?.data);
       } else if (values?.category === "Lead" && assignToLeadData <= 0) {
         result = await getApi(
           user?.role === "superAdmin"
             ? "api/lead/"
-            : `api/lead/?createBy=${user?._id}`
+            : `api/lead/?createBy=${user?._id}`,
         );
         setAssignToLeadData(result?.data);
       }
       const propertyOptionData = await getApi(
         user?.role === "superAdmin"
           ? "api/property"
-          : `api/property/?createBy=${user?._id}`
+          : `api/property/?createBy=${user?._id}`,
       );
       setAssignToPropertyData(propertyOptionData?.data);
     } catch (e) {
@@ -190,7 +190,7 @@ const EmailModel = (props) => {
 
       let salesPersons =
         result?.data?.user?.filter((userData) =>
-          userData?.roles?.some((role) => role?.roleName === "Sales")
+          userData?.roles?.some((role) => role?.roleName === "Sales"),
         ) || [];
       setAssignToSalesData(salesPersons);
     } catch (error) {
@@ -260,7 +260,7 @@ const EmailModel = (props) => {
             fieldName="property"
             setFieldValue={setFieldValue}
             selectedItems={getPropertyOptions?.filter((item) =>
-              values?.property?.includes(item?._id)
+              values?.property?.includes(item?._id),
             )}
           />
           <Grid templateColumns="repeat(12, 1fr)" gap={3}>
@@ -424,11 +424,11 @@ const EmailModel = (props) => {
                     label={`Property`}
                     items={getPropertyOptions}
                     selectedItems={getPropertyOptions?.filter((item) =>
-                      values?.property?.includes(item._id)
+                      values?.property?.includes(item._id),
                     )}
                     onSelectedItemsChange={(changes) => {
                       const selectProperty = extractLabels(
-                        changes.selectedItems
+                        changes.selectedItems,
                       );
                       setFieldValue("property", selectProperty);
                     }}
@@ -501,7 +501,9 @@ const EmailModel = (props) => {
                   name="salesAgent"
                   onChange={handleChange}
                   mb={
-                    errors?.salesAgent && touched?.salesAgent ? undefined : "10px"
+                    errors?.salesAgent && touched?.salesAgent
+                      ? undefined
+                      : "10px"
                   }
                   fontWeight="500"
                   placeholder={"Assign To Sales Agent"}
@@ -527,7 +529,9 @@ const EmailModel = (props) => {
               </Flex>
               <Text fontSize="sm" mb="10px" color={"red"}>
                 {" "}
-                {errors?.salesAgent && touched?.salesAgent && errors?.salesAgent}
+                {errors?.salesAgent &&
+                  touched?.salesAgent &&
+                  errors?.salesAgent}
               </Text>
             </GridItem>
 

@@ -36,6 +36,7 @@ const AddEditUnits = (props) => {
     name: "",
     sqm: "",
     price: "",
+    executive: "",
   });
 
   const validationSchema = yup.object({
@@ -48,6 +49,7 @@ const AddEditUnits = (props) => {
       .number()
       .required("Price Is required")
       .typeError("Price must be a number"),
+    executive: yup.string().required("Executive Is required"),
   });
 
   const formik = useFormik({
@@ -96,6 +98,17 @@ const AddEditUnits = (props) => {
     }
   };
 
+  const handelClose = () => {
+    resetForm();
+    onClose();
+    setInitialValues({
+      name: "",
+      sqm: "",
+      price: "",
+      executive: "",
+    });
+  };
+
   useEffect(() => {
     actionType === "Edit" && setInitialValues(selectedUnitType);
   }, [selectedUnitType]);
@@ -106,7 +119,7 @@ const AddEditUnits = (props) => {
       <ModalContent>
         <ModalHeader justifyContent="space-between" display="flex">
           {actionType === "Edit" ? "Edit" : "Add"} Unit
-          <IconButton onClick={onClose} icon={<CloseIcon />} />
+          <IconButton onClick={handelClose} icon={<CloseIcon />} />
         </ModalHeader>
         <ModalBody>
           <Grid templateColumns="repeat(12, 1fr)" gap={3}>
@@ -166,7 +179,33 @@ const AddEditUnits = (props) => {
                 fontWeight="500"
                 mb="8px"
               >
-                price<Text color={"red"}>*</Text>
+                Executive<Text color={"red"}>*</Text>
+              </FormLabel>
+              <Input
+                fontSize="sm"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values?.executive}
+                name="executive"
+                placeholder="Enter Executive"
+                fontWeight="500"
+                borderColor={
+                  errors?.executive && touched?.executive ? "red.300" : null
+                }
+              />
+              <Text mb="10px" color={"red"}>
+                {errors?.executive && touched?.executive && errors?.executive}
+              </Text>
+            </GridItem>
+            <GridItem colSpan={{ base: 12 }}>
+              <FormLabel
+                display="flex"
+                ms="4px"
+                fontSize="sm"
+                fontWeight="500"
+                mb="8px"
+              >
+                Price<Text color={"red"}>*</Text>
               </FormLabel>
               <InputGroup>
                 <Input
@@ -209,10 +248,7 @@ const AddEditUnits = (props) => {
             variant="outline"
             colorScheme="red"
             size="sm"
-            onClick={() => {
-              formik.resetForm();
-              onClose();
-            }}
+            onClick={handelClose}
           >
             Close
           </Button>

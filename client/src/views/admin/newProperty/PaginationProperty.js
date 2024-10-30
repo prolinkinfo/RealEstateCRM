@@ -26,14 +26,14 @@ const PaginationProperty = (props) => {
     setRangeData,
     nextPage,
     previousPage,
-    dataLength
+    dataLength,
   } = props;
 
   const [gopageValue, setGopageValue] = useState(currentPage + 1);
 
   const canPreviousPage = currentPage >= 1;
 
-  const canNextPage = currentPage < (Math?.ceil(dataLength / rangeData)) - 1;
+  const canNextPage = currentPage < Math?.ceil(dataLength / rangeData) - 1;
 
   useEffect(() => {
     setGopageValue(currentPage + 1);
@@ -48,7 +48,9 @@ const PaginationProperty = (props) => {
 
   return (
     <Flex
-      justifyContent={Math.ceil(dataLength / rangeData) !== 1 ? "space-between" : "end"}
+      justifyContent={
+        Math.ceil(dataLength / rangeData) !== 1 ? "space-between" : "end"
+      }
       m={2}
       alignItems="center"
     >

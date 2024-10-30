@@ -121,7 +121,7 @@ const AddEditUser = (props) => {
             localStorage.setItem("user", updatedDataString);
             // dispatch(setUser(updatedDataString));
           }
-          
+
           setUserAction("");
           setAction((pre) => !pre);
           onClose();
@@ -146,7 +146,7 @@ const AddEditUser = (props) => {
         ...item,
         value: item?._id,
         label: item?.roleName,
-      }))
+      })),
     );
     setIsLoding(false);
   };
@@ -229,11 +229,11 @@ const AddEditUser = (props) => {
                     mb={errors?.roles && touched?.roles ? undefined : "10px"}
                     className="custom-autoComplete"
                     selectedItems={roles?.filter((item) =>
-                      values?.roles?.includes(item?._id)
+                      values?.roles?.includes(item?._id),
                     )}
                     onSelectedItemsChange={(changes) => {
                       const selectedLabels = extractLabels(
-                        changes?.selectedItems
+                        changes?.selectedItems,
                       );
                       setFieldValue("roles", selectedLabels);
                     }}
@@ -306,7 +306,9 @@ const AddEditUser = (props) => {
                   name="phoneNumber"
                   fontWeight="500"
                   borderColor={
-                    errors?.phoneNumber && touched?.phoneNumber ? "red.300" : null
+                    errors?.phoneNumber && touched?.phoneNumber
+                      ? "red.300"
+                      : null
                   }
                   placeholder="Phone number"
                   borderRadius="16px"

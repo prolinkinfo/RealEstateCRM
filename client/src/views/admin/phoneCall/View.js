@@ -5,7 +5,7 @@ import {
   Grid,
   GridItem,
   Heading,
-  Text
+  Text,
 } from "@chakra-ui/react";
 import Card from "components/card/Card";
 import { HSeparator } from "components/separator/Separator";
@@ -351,7 +351,7 @@ const View = () => {
                 AdvanceSearch={false}
                 tableCustomFields={
                   data?.properties?.[0]?.fields?.filter(
-                    (field) => field?.isTableField === true
+                    (field) => field?.isTableField === true,
                   ) || []
                 }
                 addBtn={false}
@@ -364,8 +364,6 @@ const View = () => {
               />
             </GridItem>
           </Grid>
-
-         
         </>
       )}
     </>

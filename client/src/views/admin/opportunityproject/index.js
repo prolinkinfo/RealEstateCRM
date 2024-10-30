@@ -41,7 +41,7 @@ const Index = () => {
 
   const data = useSelector((state) => state?.opportunityProjectData?.data);
   const searchedDataOut = useSelector(
-    (state) => state?.advanceSearchData?.searchResult
+    (state) => state?.advanceSearchData?.searchResult,
   );
 
   const fetchData = async () => {
@@ -78,7 +78,6 @@ const Index = () => {
               >
                 Edit
               </MenuItem>
-              
             )}
             {permission?.view && (
               <MenuItem
@@ -180,7 +179,7 @@ const Index = () => {
       setIsLoding(true);
       let response = await deleteManyApi(
         `api/opportunityproject/deleteMany`,
-        selectedValues
+        selectedValues,
       );
       if (response?.status === 200) {
         setSelectedValues([]);
@@ -193,7 +192,6 @@ const Index = () => {
       setIsLoding(false);
     }
   };
-
 
   return (
     <div>
@@ -211,7 +209,7 @@ const Index = () => {
               tableData={searchDisplay ? searchedDataOut : data}
               tableCustomFields={
                 opportunityproject?.[0]?.fields?.filter(
-                  (field) => field?.isTableField === true
+                  (field) => field?.isTableField === true,
                 ) || []
               }
               access={permission}

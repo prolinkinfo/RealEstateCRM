@@ -1,3 +1,4 @@
+const { Lead } = require("../../model/schema/lead");
 const { Property } = require("../../model/schema/property");
 const multer = require("multer");
 const fs = require("fs");
@@ -6,6 +7,10 @@ const { Contact } = require("../../model/schema/contact");
 const PhoneCall = require("../../model/schema/phoneCall");
 const { default: mongoose } = require("mongoose");
 const Email = require("../../model/schema/email");
+const ejs = require("ejs");
+const PDFDocument = require("pdfkit");
+const puppeteer = require("puppeteer");
+const moment = require("moment");
 
 const index = async (req, res) => {
   const query = req.query;
@@ -39,7 +44,7 @@ const buildApartmentData = (floorCount, unitData) => {
   for (let i = 1; i <= floorCount; i++) {
     let floorUnits = unitData?.map((item, index) => ({
       flateName: i * 100 + (index + 1),
-      status: "",
+      status: "Available",
       unitType: item?._id,
     }));
 
@@ -59,13 +64,28 @@ const addApartmentData = (oldUnits, newUnitTypeId) => {
       ...item.flats,
       {
         flateName: (i + 1) * 100 + (item?.flats?.length + 1),
-        status: "",
+        status: "Available",
         unitType: newUnitTypeId,
       },
     ],
   }));
 
   return newFloors;
+};
+
+const deleteUnitType = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { unitTypeId } = req.body;
+    const updatedProperty = await Property.findByIdAndUpdate(
+      { _id: id },
+      { $pull: { unitType: { _id: unitTypeId } } },
+      { new: true }
+    );
+    res.status(200).json(updatedProperty);
+  } catch (error) {
+    console.error("Failed to Delete");
+  }
 };
 
 const addUnits = async (req, res) => {
@@ -156,26 +176,51 @@ const editUnit = async (req, res) => {
   }
 };
 
+const updateUnitTypeId = async (req, res) => {
+  try {
+    const { id, unitid, newUnitType } = req.params;
+    const updatedUnitTypeId = await Property.updateOne(
+      { _id: id, "units.flats._id": unitid },
+      { $set: { "units.$[].flats.$[flat].unitType": newUnitType } },
+      {
+        arrayFilters: [{ "flat._id": unitid }],
+        new: true,
+      }
+    );
+    res.status(200).json(updatedUnitTypeId);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const findPropertyAndFloor = async (id, floor, unit) => {
+  const property = await Property?.findById(id)?.lean();
+  if (!property) return { error: "Property not found" };
+
+  const selectedFloor = property?.units?.find(
+    (item) => item?._id?.toString() === floor?._id?.toString()
+  );
+  if (!selectedFloor) return { error: "Floor not found" };
+
+  const flatIndex = selectedFloor?.flats?.findIndex(
+    (item) => item?._id?.toString() === unit?._id?.toString()
+  );
+  if (flatIndex === -1) return { error: "Flat not found" };
+
+  return { selectedFloor, flatIndex };
+};
+
 const changeUnitStatus = async (req, res) => {
   try {
     const { id } = req?.params;
     const { floor, unit } = req?.body;
 
-    const property = await Property?.findById(id)?.lean();
-    if (!property)
-      return res?.status(404)?.json({ error: "Property not found" });
-
-    const selectedFloor = property?.units?.find(
-      (item) => item?._id?.toString() === floor?._id?.toString()
+    const { selectedFloor, flatIndex, error } = await findPropertyAndFloor(
+      id,
+      floor,
+      unit
     );
-    if (!selectedFloor)
-      return res?.status(404)?.json({ error: "Floor not found" });
-
-    const flatIndex = selectedFloor?.flats?.findIndex(
-      (item) => item?._id?.toString() === unit?._id?.toString()
-    );
-    if (flatIndex === -1)
-      return res?.status(404)?.json({ error: "Flat not found" });
+    if (error) return res?.status(404)?.json({ error });
 
     selectedFloor.flats[flatIndex] = unit;
 
@@ -185,6 +230,150 @@ const changeUnitStatus = async (req, res) => {
     );
 
     res?.status(200)?.json(result);
+  } catch (err) {
+    console?.error("Failed to create Property:", err);
+    res?.status(400)?.json({ error: "Failed to create Property" });
+  }
+};
+
+const offerLetterStorage = multer({
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      const uploadDir = "uploads/offer-letter";
+      fs.mkdirSync(uploadDir, { recursive: true });
+      cb(null, uploadDir);
+    },
+    filename: function (req, file, cb) {
+      const uploadDir = "uploads/offer-letter";
+      const filePath = path.join(uploadDir, file.originalname);
+
+      // Check if the file already exists in the destination directory
+      if (fs.existsSync(filePath)) {
+        // For example, you can append a timestamp to the filename to make it unique
+        const timestamp = Date.now() + Math.floor(Math.random() * 90);
+        cb(
+          null,
+          file.originalname.split(".")[0] +
+            "-" +
+            timestamp +
+            "." +
+            file.originalname.split(".")[1]
+        );
+      } else {
+        cb(null, file.originalname);
+      }
+    },
+  }),
+});
+
+const getOrdinalSuffix = (number) => {
+  const suffix = ["th", "st", "nd", "rd"][number % 10] || "th";
+  return number % 100 === 11 || number % 100 === 12 || number % 100 === 13
+    ? "th"
+    : suffix;
+};
+
+const genrateOfferLetter = async (req, res) => {
+  try {
+    const { id } = req?.params;
+    let unit = JSON?.parse(req?.body?.unit);
+    unit.status = "Booked";
+    const floor = JSON?.parse(req?.body?.floor);
+    const url = req.protocol + "://" + req.get("host");
+
+    const buyerImageUrl = `${url}/api/property/offer-letter/${req?.files?.buyerImage?.[0]?.filename}`;
+    const salesManagerSignUrl = `${url}/api/property/offer-letter/${req?.files?.salesManagerSign?.[0]?.filename}`;
+    const property = await Property.findById(id).lean();
+
+    let purchaser = "";
+    if (req?.body?.lead) {
+      const lead = await Lead.findOne({
+        _id: new mongoose.Types.ObjectId(req?.body?.lead),
+      }).lean();
+      purchaser = lead?.leadName;
+    }
+    if (req?.body?.contact) {
+      const contact = await Contact.findOne({
+        _id: new mongoose.Types.ObjectId(req?.body?.contact),
+      }).lean();
+      purchaser = contact?.fullName;
+    }
+
+    const unitType = property?.unitType?.find(
+      (item) => item?._id?.toString() === unit?.unitType?.toString()
+    );
+
+    let description = `SALE OF ${property?.name} ${
+      unitType?.name
+    } APARTMENT NUMBER ${unit?.flateName} ON ${
+      floor?.floorNumber
+    }${getOrdinalSuffix(floor?.floorNumber)} FLOOR IN ${
+      property?.location
+    } APARTMENT ON L.R. NO. ${property?.lrNo || "-"}. `;
+
+    const templatePath = path.join(__dirname, "templates", "offerLetter.ejs");
+    const htmlContent = await ejs.renderFile(templatePath, {
+      ...req?.body,
+      property,
+      installments: JSON?.parse(req?.body?.installments),
+      description: description,
+      unitPrice: unitType?.price,
+      buyerImageUrl,
+      salesManagerSignUrl,
+      purchaser,
+      currentDate: moment().format("DD/MM/yyyy"),
+    });
+
+    const browser = await puppeteer.launch({ headless: true });
+    const page = await browser.newPage();
+    await page.setContent(htmlContent);
+    const pdfBuffer = await page.pdf({ format: "A4", printBackground: true });
+
+    const { selectedFloor, flatIndex, error } = await findPropertyAndFloor(
+      id,
+      floor,
+      unit
+    );
+    if (error) return res?.status(404)?.json({ error });
+
+    selectedFloor.flats[flatIndex] = unit;
+
+    await Property.updateOne(
+      { _id: id, "units._id": floor?._id },
+      { $set: { "units.$.flats": selectedFloor?.flats } }
+    );
+
+    if (req.body.lead) {
+      const lead = await Lead.findOne({
+        _id: new mongoose.Types.ObjectId(req?.body?.lead),
+      }).lean();
+
+      const contactFeild = new Contact({
+        fullName: lead?.leadName,
+        email: lead?.leadEmail,
+        phoneNumber: lead?.leadPhoneNumber,
+        campaign: lead?.leadCampaign,
+        state: lead?.leadState,
+        communicationTool: lead?.communicationTool,
+        listedFor: lead?.listedFor,
+        interestProperty: [lead?.associatedListing],
+        deleted: false,
+        createBy: req?.user?.userId,
+        createdDate: new Date(),
+      });
+
+      await contactFeild.save();
+    }
+
+    await browser.close();
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=offer-letter.pdf"
+    );
+
+    res.end(pdfBuffer);
   } catch (err) {
     console?.error("Failed to create Property:", err);
     res?.status(400)?.json({ error: "Failed to create Property" });
@@ -221,9 +410,7 @@ const edit = async (req, res) => {
           { _id: req.params.id },
           {
             $push: {
-              units: flates?.slice(
-                Number(req?.body?.Floor) - Number(property?.Floor) - 1
-              ),
+              units: flates?.slice(property?.Floor),
             },
           }
         );
@@ -480,10 +667,10 @@ const upload = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-          "-" +
-          timestamp +
-          "." +
-          file.originalname.split(".")[1]
+            "-" +
+            timestamp +
+            "." +
+            file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -536,10 +723,10 @@ const virtualTours = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-          "-" +
-          timestamp +
-          "." +
-          file.originalname.split(".")[1]
+            "-" +
+            timestamp +
+            "." +
+            file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -592,10 +779,10 @@ const FloorPlansStorage = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-          "-" +
-          timestamp +
-          "." +
-          file.originalname.split(".")[1]
+            "-" +
+            timestamp +
+            "." +
+            file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -648,10 +835,10 @@ const PropertyDocumentsStorage = multer({
         cb(
           null,
           file.originalname.split(".")[0] +
-          "-" +
-          timestamp +
-          "." +
-          file.originalname.split(".")[1]
+            "-" +
+            timestamp +
+            "." +
+            file.originalname.split(".")[1]
         );
       } else {
         cb(null, file.originalname);
@@ -693,7 +880,11 @@ module.exports = {
   addUnits,
   changeUnitStatus,
   addMany,
+  offerLetterStorage,
   editUnit,
+  deleteUnitType,
+  updateUnitTypeId,
+  genrateOfferLetter,
   view,
   edit,
   deleteData,

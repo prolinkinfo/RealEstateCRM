@@ -16,10 +16,10 @@ export default extendTheme(
   badgeStyles, // badge styles
   buttonStyles, // button styles
   linkStyles, // link styles
-  progressStyles, // progress styles  
+  progressStyles, // progress styles
   sliderStyles, // slider styles
   inputStyles, // input styles
   textareaStyles, // textarea styles
   switchStyles, // switch styles
-  CardComponent // card component
+  CardComponent, // card component
 );

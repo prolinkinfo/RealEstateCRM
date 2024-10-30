@@ -12,27 +12,28 @@ export default function FixedPlugin(props) {
   return (
     <Button
       {...rest}
-      h='60px'
-      w='60px'
-      zIndex='99'
+      h="60px"
+      w="60px"
+      zIndex="99"
       bg={bgButton}
-      position='fixed'
-      variant='no-effects'
+      position="fixed"
+      variant="no-effects"
       left={document.documentElement.dir === "rtl" ? "35px" : ""}
       right={document.documentElement.dir === "rtl" ? "" : "35px"}
-      bottom='30px'
-      border='1px solid'
-      borderColor='#6A53FF'
-      borderRadius='50px'
+      bottom="30px"
+      border="1px solid"
+      borderColor="#6A53FF"
+      borderRadius="50px"
       onClick={toggleColorMode}
-      display='flex'
-      p='0px'
-      align='center'
-      justify='center'>
+      display="flex"
+      p="0px"
+      align="center"
+      justify="center"
+    >
       <Icon
-        h='24px'
-        w='24px'
-        color='white'
+        h="24px"
+        w="24px"
+        color="white"
         as={colorMode === "light" ? IoMdMoon : IoMdSunny}
       />
     </Button>

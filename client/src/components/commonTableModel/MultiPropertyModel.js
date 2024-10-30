@@ -18,7 +18,8 @@ import { GiClick } from "react-icons/gi";
 import { useDispatch } from "react-redux";
 
 const MultiPropertyModel = (props) => {
-  const { onClose, isOpen, fieldName, setFieldValue, data, selectedItems } = props;
+  const { onClose, isOpen, fieldName, setFieldValue, data, selectedItems } =
+    props;
   const propertyIndex = selectedItems?.map((item) => item?._id);
 
   const [selectedValues, setSelectedValues] = useState(propertyIndex);
@@ -85,7 +86,7 @@ const MultiPropertyModel = (props) => {
               type="multi"
               tableCustomFields={
                 contactData?.[0]?.fields?.filter(
-                  (field) => field?.isTableField === true
+                  (field) => field?.isTableField === true,
                 ) || []
               }
               selectedValues={selectedValues}

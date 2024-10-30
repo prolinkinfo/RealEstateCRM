@@ -1,13 +1,15 @@
 import {
-  Box, Checkbox,
-  Flex, Table,
+  Box,
+  Checkbox,
+  Flex,
+  Table,
   Tbody,
   Td,
   Text,
   Th,
   Thead,
   Tr,
-  useColorModeValue
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useMemo } from "react";
 import {
@@ -25,21 +27,23 @@ import { Link } from "react-router-dom";
 import DataNotFound from "components/notFoundData";
 
 export default function PropertyTable(props) {
-  const { columnsData, tableData, title, selectedValues, setSelectedValues } = props;
+  const { columnsData, tableData, title, selectedValues, setSelectedValues } =
+    props;
 
   const columns = useMemo(() => columnsData, [columnsData]);
   const data = useMemo(() => tableData, [tableData]);
-  const user = JSON.parse(localStorage.getItem("user"))
-  const [gopageValue, setGopageValue] = useState()
+  const user = JSON.parse(localStorage.getItem("user"));
+  const [gopageValue, setGopageValue] = useState();
 
   const tableInstance = useTable(
     {
-      columns, data,
-      initialState: { pageIndex: 0 }
+      columns,
+      data,
+      initialState: { pageIndex: 0 },
     },
     useGlobalFilter,
     useSortBy,
-    usePagination
+    usePagination,
   );
 
   const {
@@ -56,11 +60,11 @@ export default function PropertyTable(props) {
     nextPage,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize }
+    state: { pageIndex, pageSize },
   } = tableInstance;
 
   if (pageOptions?.length < gopageValue) {
-    setGopageValue(pageOptions?.length)
+    setGopageValue(pageOptions?.length);
   }
 
   const textColor = useColorModeValue("gray.500", "white");
@@ -71,36 +75,37 @@ export default function PropertyTable(props) {
       setSelectedValues((prevSelectedValues) => [...prevSelectedValues, value]);
     } else {
       setSelectedValues((prevSelectedValues) =>
-        prevSelectedValues?.filter((selectedValue) => selectedValue !== value)
+        prevSelectedValues?.filter((selectedValue) => selectedValue !== value),
       );
     }
   };
 
-
   return (
     <Card
-      direction='column'
-      w='100%'
-      px='0px'
-      style={{ border: '1px solid gray.200' }
-      }
-      overflowX={{ sm: "scroll", lg: "hidden" }}>
-      <Box overflowY={'auto'} className="table-container-property" >
-        <Table  {...getTableProps()} variant='simple' color='gray.500' mb='24px'>
-          <Thead >
+      direction="column"
+      w="100%"
+      px="0px"
+      style={{ border: "1px solid gray.200" }}
+      overflowX={{ sm: "scroll", lg: "hidden" }}
+    >
+      <Box overflowY={"auto"} className="table-container-property">
+        <Table {...getTableProps()} variant="simple" color="gray.500" mb="24px">
+          <Thead>
             {headerGroups?.map((headerGroup, index) => (
               <Tr {...headerGroup?.getHeaderGroupProps()} key={index}>
                 {headerGroup?.headers?.map((column, index) => (
                   <Th
                     {...column?.getHeaderProps(column?.getSortByToggleProps())}
-                    pe='10px'
+                    pe="10px"
                     key={index}
-                    borderColor={borderColor}>
+                    borderColor={borderColor}
+                  >
                     <Flex
-                      justify='space-between'
-                      align='center'
+                      justify="space-between"
+                      align="center"
                       fontSize={{ sm: "14px", lg: "14px" }}
-                      color="secondaryGray.900">
+                      color="secondaryGray.900"
+                    >
                       {column?.render("Header")}
                     </Flex>
                   </Th>
@@ -108,11 +113,17 @@ export default function PropertyTable(props) {
               </Tr>
             ))}
           </Thead>
-          <Tbody  {...getTableBodyProps()}>
+          <Tbody {...getTableBodyProps()}>
             {data?.length === 0 && (
               <Tr>
                 <Td colSpan={columns.length}>
-                  <Text textAlign={'center'} width="100%" color={textColor} fontSize="sm" fontWeight="700">
+                  <Text
+                    textAlign={"center"}
+                    width="100%"
+                    color={textColor}
+                    fontSize="sm"
+                    fontWeight="700"
+                  >
                     <DataNotFound />
                   </Text>
                 </Td>
@@ -127,19 +138,42 @@ export default function PropertyTable(props) {
                     if (cell?.column?.Header === "#") {
                       data = (
                         <Flex align="center">
-                          <Checkbox colorScheme="brandScheme" value={selectedValues} isChecked={selectedValues?.includes(cell?.value)} onChange={(event) => handleCheckboxChange(event, cell?.value)} me="10px" />
-                          <Text color={textColor} fontSize="sm" fontWeight="700">
+                          <Checkbox
+                            colorScheme="brandScheme"
+                            value={selectedValues}
+                            isChecked={selectedValues?.includes(cell?.value)}
+                            onChange={(event) =>
+                              handleCheckboxChange(event, cell?.value)
+                            }
+                            me="10px"
+                          />
+                          <Text
+                            color={textColor}
+                            fontSize="sm"
+                            fontWeight="700"
+                          >
                             {cell?.row?.index + 1}
                           </Text>
                         </Flex>
                       );
                     } else if (cell?.column?.Header === "property Type") {
                       data = (
-                        <Link to={user?.role !== 'superAdmin' ? `/propertyView/${cell?.row?.original?._id}` : `/propertyView/${cell?.row?.original?._id}`}>
+                        <Link
+                          to={
+                            user?.role !== "superAdmin"
+                              ? `/propertyView/${cell?.row?.original?._id}`
+                              : `/propertyView/${cell?.row?.original?._id}`
+                          }
+                        >
                           <Text
                             me="10px"
-                            sx={{ '&:hover': { color: 'blue.500', textDecoration: 'underline' } }}
-                            color='brand.600'
+                            sx={{
+                              "&:hover": {
+                                color: "blue.500",
+                                textDecoration: "underline",
+                              },
+                            }}
+                            color="brand.600"
                             fontSize="sm"
                             fontWeight="700"
                           >
@@ -149,7 +183,6 @@ export default function PropertyTable(props) {
                       );
                     } else if (cell?.column?.Header === "property Address") {
                       data = (
-
                         <Text
                           me="10px"
                           color={textColor}
@@ -158,7 +191,6 @@ export default function PropertyTable(props) {
                         >
                           {cell?.value}
                         </Text>
-
                       );
                     } else if (cell?.column?.Header === "listing Price") {
                       data = (
@@ -202,7 +234,8 @@ export default function PropertyTable(props) {
                         key={index}
                         fontSize={{ sm: "14px" }}
                         minW={{ sm: "150px", md: "200px", lg: "auto" }}
-                        borderColor='transparent'>
+                        borderColor="transparent"
+                      >
                         {data}
                       </Td>
                     );
@@ -214,8 +247,22 @@ export default function PropertyTable(props) {
         </Table>
       </Box>
 
-      {data?.length > 5 && <Pagination gotoPage={gotoPage} gopageValue={gopageValue} setGopageValue={setGopageValue} pageCount={pageCount} canPreviousPage={canPreviousPage} previousPage={previousPage} canNextPage={canNextPage} pageOptions={pageOptions} setPageSize={setPageSize} nextPage={nextPage} pageSize={pageSize} pageIndex={pageIndex} />}
-
-    </Card >
+      {data?.length > 5 && (
+        <Pagination
+          gotoPage={gotoPage}
+          gopageValue={gopageValue}
+          setGopageValue={setGopageValue}
+          pageCount={pageCount}
+          canPreviousPage={canPreviousPage}
+          previousPage={previousPage}
+          canNextPage={canNextPage}
+          pageOptions={pageOptions}
+          setPageSize={setPageSize}
+          nextPage={nextPage}
+          pageSize={pageSize}
+          pageIndex={pageIndex}
+        />
+      )}
+    </Card>
   );
 }
