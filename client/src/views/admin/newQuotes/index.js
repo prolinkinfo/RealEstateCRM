@@ -90,8 +90,17 @@ const Index = (props) => {
     {
       Header: "Property",
       accessor: "property",
+      cell: (cell) => (
+        <Text fontSize="sm" fontWeight="700">
+          {cell?.value?.name}
+        </Text>
+      ),
     },
-    { Header: "Time", accessor: "time" },
+    {
+      Header: "Time",
+      accessor: "createdDate",
+      cell: (cell) => <div>{moment(cell?.value).format("YYYY-MM-DD")}</div>,
+    },
 
     // ...(permission?.update || permission?.view || permission?.delete
     //   ? [actionHeader]
@@ -580,12 +589,13 @@ const Index = (props) => {
   return (
     <div>
       <CommonCheckTable
-        title={"Quotes"}
+        title={"Offer Letter"}
         isLoding={isLoding}
         columnData={tableColumns ?? []}
         // dataColumn={dataColumn ?? []}
         allData={data ?? []}
         tableData={data}
+        checkBox={false}
         searchDisplay={displaySearchData}
         setSearchDisplay={setDisplaySearchData}
         searchedDataOut={searchedData}

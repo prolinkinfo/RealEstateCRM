@@ -124,17 +124,20 @@ async function getNextAutoIncrementInvoiceValue() {
 //   }
 // };
 
-const index = async (req,res)=>{
+const index = async (req, res) => {
   try {
-    const query = req.query
-    // query.deleted = false;
-    const result = await Quotes.find(query);
+    const query = req.query;
+    query.deleted = false;
+    const result = await Quotes.find(query)
+      .populate("lead")
+      .populate("contact")
+      .populate("property");
     res.status(200).json(result);
-} catch (err) {
-    console.error('Failed to create :', err);
-    res.status(400).json({ err, error: 'Failed to create' });
-}
-}
+  } catch (err) {
+    console.error("Failed to create :", err);
+    res.status(400).json({ err, error: "Failed to create" });
+  }
+};
 
 const add = async (req, res) => {
   try {

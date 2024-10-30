@@ -29,6 +29,7 @@ const Quotes = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Properties",
   },
+  category: String,
   salesManagerSign: String,
   buyerImage: String,
   accountName: String,

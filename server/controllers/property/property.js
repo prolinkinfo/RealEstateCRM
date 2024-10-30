@@ -11,6 +11,7 @@ const ejs = require("ejs");
 const PDFDocument = require("pdfkit");
 const puppeteer = require("puppeteer");
 const moment = require("moment");
+const quotes = require("../../model/schema/quotes");
 
 const index = async (req, res) => {
   const query = req.query;
@@ -275,7 +276,6 @@ const genrateOfferLetter = async (req, res) => {
     const buyerImageUrl = `${url}/api/property/offer-letter/${req?.files?.buyerImage?.[0]?.filename}`;
     const salesManagerSignUrl = `${url}/api/property/offer-letter/${req?.files?.salesManagerSign?.[0]?.filename}`;
     const property = await Property.findById(id).lean();
-
     let purchaser = "";
     if (req?.body?.lead) {
       const lead = await Lead.findOne({
@@ -284,7 +284,7 @@ const genrateOfferLetter = async (req, res) => {
       purchaser = lead?.leadName;
     }
     if (req?.body?.contact) {
-      const contact = await Contact.findOne({
+      const contact = await Contact?.findOne({
         _id: new mongoose.Types.ObjectId(req?.body?.contact),
       }).lean();
       purchaser = contact?.fullName;
@@ -343,7 +343,31 @@ const genrateOfferLetter = async (req, res) => {
     }
 
     await browser.close();
+    let offerLatterFeiledPayload = {
+      category: req.body.category,
+      accountName: req?.body?.accountName,
+      bank: req?.body?.bank,
+      branch: req?.body?.branch,
+      accountNumber: req?.body?.accountNumber,
+      swiftCode: req?.body?.swiftCode,
+      salesManagerSign: req?.body?.salesManagerSign,
+      buyerImage: req?.body?.buyerImage,
+      description: req?.body?.description,
+      unitPrice: req?.body?.unitPrice,
+      amount: req?.body?.amount,
+      property: id,
+      installments: JSON.parse(req?.body?.installments),
+      createBy: req?.user?.userId,
+    };
 
+    if (offerLatterFeiledPayload?.category === "lead") {
+      offerLatterFeiledPayload.lead = req?.body?.lead;
+    } else if (offerLatterFeiledPayload?.category === "contact") {
+      offerLatterFeiledPayload.contact = req?.body?.contact;
+    }
+
+    const offerLatterFeild = new quotes(offerLatterFeiledPayload);
+    await offerLatterFeild.save();
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
