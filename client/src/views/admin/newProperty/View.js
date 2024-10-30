@@ -625,6 +625,7 @@ const View = () => {
       <BookedModel
         selectedFloorItem={selectedFloorItem}
         isOpen={bookedOpen}
+        setAction={setAction}
         onClose={() => setBookedOpen(false)}
       />
 
