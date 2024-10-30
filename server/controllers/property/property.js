@@ -194,26 +194,34 @@ const updateUnitTypeId = async (req, res) => {
   }
 };
 
+const findPropertyAndFloor = async (id, floor, unit) => {
+  const property = await Property?.findById(id)?.lean();
+  if (!property) return { error: "Property not found" };
+
+  const selectedFloor = property?.units?.find(
+    (item) => item?._id?.toString() === floor?._id?.toString()
+  );
+  if (!selectedFloor) return { error: "Floor not found" };
+
+  const flatIndex = selectedFloor?.flats?.findIndex(
+    (item) => item?._id?.toString() === unit?._id?.toString()
+  );
+  if (flatIndex === -1) return { error: "Flat not found" };
+
+  return { selectedFloor, flatIndex };
+};
+
 const changeUnitStatus = async (req, res) => {
   try {
     const { id } = req?.params;
     const { floor, unit } = req?.body;
 
-    const property = await Property?.findById(id)?.lean();
-    if (!property)
-      return res?.status(404)?.json({ error: "Property not found" });
-
-    const selectedFloor = property?.units?.find(
-      (item) => item?._id?.toString() === floor?._id?.toString()
+    const { selectedFloor, flatIndex, error } = await findPropertyAndFloor(
+      id,
+      floor,
+      unit
     );
-    if (!selectedFloor)
-      return res?.status(404)?.json({ error: "Floor not found" });
-
-    const flatIndex = selectedFloor?.flats?.findIndex(
-      (item) => item?._id?.toString() === unit?._id?.toString()
-    );
-    if (flatIndex === -1)
-      return res?.status(404)?.json({ error: "Flat not found" });
+    if (error) return res?.status(404)?.json({ error });
 
     selectedFloor.flats[flatIndex] = unit;
 
@@ -269,7 +277,8 @@ const getOrdinalSuffix = (number) => {
 const genrateOfferLetter = async (req, res) => {
   try {
     const { id } = req?.params;
-    const unit = JSON?.parse(req?.body?.unit);
+    let unit = JSON?.parse(req?.body?.unit);
+    unit.status = "Booked";
     const floor = JSON?.parse(req?.body?.floor);
     const url = req.protocol + "://" + req.get("host");
 
@@ -320,22 +329,36 @@ const genrateOfferLetter = async (req, res) => {
     await page.setContent(htmlContent);
     const pdfBuffer = await page.pdf({ format: "A4", printBackground: true });
 
+    const { selectedFloor, flatIndex, error } = await findPropertyAndFloor(
+      id,
+      floor,
+      unit
+    );
+    if (error) return res?.status(404)?.json({ error });
+
+    selectedFloor.flats[flatIndex] = unit;
+
+    await Property.updateOne(
+      { _id: id, "units._id": floor?._id },
+      { $set: { "units.$.flats": selectedFloor?.flats } }
+    );
+
     if (req.body.lead) {
       const lead = await Lead.findOne({
         _id: new mongoose.Types.ObjectId(req?.body?.lead),
       }).lean();
 
       const contactFeild = new Contact({
-        fullName: lead.leadName,
-        email: lead.leadEmail,
-        phoneNumber: lead.leadPhoneNumber,
-        campaign: lead.leadCampaign,
-        state: lead.leadState,
-        communicationTool: lead.communicationTool,
-        listedFor: lead.listedFor,
-        interestProperty: [lead.associatedListing],
+        fullName: lead?.leadName,
+        email: lead?.leadEmail,
+        phoneNumber: lead?.leadPhoneNumber,
+        campaign: lead?.leadCampaign,
+        state: lead?.leadState,
+        communicationTool: lead?.communicationTool,
+        listedFor: lead?.listedFor,
+        interestProperty: [lead?.associatedListing],
         deleted: false,
-        createBy: req.user.userId,
+        createBy: req?.user?.userId,
         createdDate: new Date(),
       });
 
@@ -411,9 +434,7 @@ const edit = async (req, res) => {
           { _id: req.params.id },
           {
             $push: {
-              units: flates?.slice(
-                Number(req?.body?.Floor) - Number(property?.Floor) - 1
-              ),
+              units: flates?.slice(property?.Floor),
             },
           }
         );

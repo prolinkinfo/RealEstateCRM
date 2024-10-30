@@ -22,7 +22,7 @@ import { FirstStepper } from "./bookedStepperForm/FirstStepper";
 import PaymentSchedule from "./bookedStepperForm/PaymentSchedule";
 
 function BookedModel(props) {
-  const { isOpen, onClose, selectedFloorItem } = props;
+  const { isOpen, onClose, selectedFloorItem, setAction } = props;
   const [currentStep, setCurrentStep] = useState(1);
   const param = useParams();
 
@@ -155,7 +155,8 @@ function BookedModel(props) {
       if (response?.status === 200) {
         const pdfBlob = new Blob([response.data], { type: "application/pdf" });
         saveAs(pdfBlob, "offer-letter.pdf");
-        handleClose()
+        handleClose();
+        setAction((pre) => !pre);
       }
     } catch (e) {
       console.log(e);
