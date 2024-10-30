@@ -11,7 +11,6 @@ const ejs = require("ejs");
 const PDFDocument = require("pdfkit");
 const puppeteer = require("puppeteer");
 const moment = require("moment");
-const { Lead } = require("../../model/schema/lead");
 
 const index = async (req, res) => {
   const query = req.query;
