@@ -387,9 +387,7 @@ const edit = async (req, res) => {
           { _id: req.params.id },
           {
             $push: {
-              units: flates?.slice(
-                Number(req?.body?.Floor) - Number(property?.Floor) - 1
-              ),
+              units: flates?.slice(property?.Floor),
             },
           }
         );
