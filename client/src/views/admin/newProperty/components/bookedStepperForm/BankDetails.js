@@ -18,7 +18,8 @@ import React from "react";
 export const BankDetails = (props) => {
   const { formik } = props;
 
-  const { values, handleChange, setFieldValue, handleBlur, errors, touched } = formik;
+  const { values, handleChange, setFieldValue, handleBlur, errors, touched } =
+    formik;
 
   return (
     <>
@@ -174,6 +175,17 @@ export const BankDetails = (props) => {
               <Radio value="usd">USD</Radio>
             </Stack>
           </RadioGroup>
+        </GridItem>
+        <GridItem colSpan={{ base: 12 }}>
+          {" "}
+          <Button
+            // onClick={() => handleClick()}
+            size="sm"
+            variant="brand"
+            // leftIcon={<AddIcon />}
+          >
+            Add New
+          </Button>
         </GridItem>
 
         <GridItem colSpan={{ base: 12 }}>

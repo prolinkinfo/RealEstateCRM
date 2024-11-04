@@ -491,16 +491,6 @@ const View = () => {
     });
   };
 
-  const handleGenrateOfferLetter = async () => {
-    const response = await postApiBlob(
-      `api/property/genrate-offer-letter/${param?.id}`,
-      {}
-    );
-
-    const pdfBlob = new Blob([response.data], { type: "application/pdf" });
-    saveAs(pdfBlob, "offer-letter.pdf");
-  };
-
   const statusCount = data?.units?.reduce((acc, floor) => {
     floor?.flats?.forEach((flat) => {
       const status =
@@ -621,7 +611,6 @@ const View = () => {
         onClose={() => setBlockedModelOpen(false)}
       />
 
-      {/* <SoldModel isOpen={soldopen} onClose={() => setSoldOpen(false)} /> */}
       <BookedModel
         selectedFloorItem={selectedFloorItem}
         isOpen={bookedOpen}
