@@ -24,6 +24,8 @@ import PaymentSchedule from "./bookedStepperForm/PaymentSchedule";
 function BookedModel(props) {
   const { isOpen, onClose, selectedFloorItem, setAction } = props;
   const [currentStep, setCurrentStep] = useState(1);
+  const [assignToLeadData, setAssignToLeadData] = useState([]);
+  const [assignToContactData, setAssignToContactData] = useState([]);
   const param = useParams();
 
   const validationSchemas = [
@@ -118,11 +120,25 @@ function BookedModel(props) {
   const steps = [
     {
       description: "Contact Info",
-      component: <FirstStepper formik={formik} />,
+      component: (
+        <FirstStepper
+          formik={formik}
+          assignToLeadData={assignToLeadData}
+          setAssignToLeadData={setAssignToLeadData}
+          assignToContactData={assignToContactData}
+          setAssignToContactData={setAssignToContactData}
+        />
+      ),
     },
     {
       description: "Bank Details",
-      component: <BankDetails formik={formik} />,
+      component: (
+        <BankDetails
+          formik={formik}
+          assignToLeadData={assignToLeadData}
+          assignToContactData={assignToContactData}
+        />
+      ),
     },
     {
       description: "Payment Schedule",

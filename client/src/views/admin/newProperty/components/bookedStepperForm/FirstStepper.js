@@ -9,7 +9,7 @@ import {
   Select,
   Stack,
   Text,
-  useColorModeValue
+  useColorModeValue,
 } from "@chakra-ui/react";
 import ContactModel from "components/commonTableModel/ContactModel.js";
 import LeadModel from "components/commonTableModel/LeadModel";
@@ -19,10 +19,15 @@ import { getApi } from "services/api";
 import ImageUpload from "./ImageUpload";
 
 export const FirstStepper = (props) => {
-  const { formik } = props;
+  const {
+    formik,
+    assignToLeadData,
+    setAssignToLeadData,
+    assignToContactData,
+    setAssignToContactData,
+  } = props;
   const [selectedFile, setSelectedFile] = useState({});
-  const [assignToLeadData, setAssignToLeadData] = useState([]);
-  const [assignToContactData, setAssignToContactData] = useState([]);
+
   const [contactModel, setContactModel] = useState(false);
   const [leadModel, setLeadModel] = useState(false);
   const brandColor = useColorModeValue("brand.500", "white");

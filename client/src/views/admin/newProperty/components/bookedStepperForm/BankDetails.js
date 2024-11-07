@@ -14,17 +14,111 @@ import {
   Text,
 } from "@chakra-ui/react";
 import React from "react";
+import { FaFilePdf } from "react-icons/fa";
+import html2pdf from "html2pdf.js";
+import moment from "moment";
 
 export const BankDetails = (props) => {
-  const { formik } = props;
+  const { formik, assignToLeadData, assignToContactData } = props;
 
-  const { values, handleChange, setFieldValue, handleBlur, errors, touched } =
-    formik;
+  const {
+    values,
+    handleChange,
+    setFieldValue,
+    handleBlur,
+    errors,
+    touched,
+    isValid,
+    dirty,
+  } = formik;
+
+  const findLeadName = assignToLeadData?.find(
+    (item) => item?._id === values?.lead
+  );
+
+  const findContactName = assignToContactData?.find(
+    (item) => item?._id === values?.contact
+  );
+
+  const downloadRecipient = () => {
+    const element = document.getElementById("recipient");
+    const hideBtn = document.getElementById("hide-btn");
+
+    if (element) {
+      element.style.paddingTop = "50px";
+      element.style.display = "block";
+      hideBtn.style.display = "none";
+
+      const originalContent = element.innerHTML;
+      element.innerHTML += `
+      <style>
+        table {
+          width: 80%;
+          border-collapse: collapse;
+          margin: auto;
+        }
+        td {
+        padding: 5px 5px 20px 5px;
+        border: 1px solid #ccc;
+        text-align: left;
+        }
+        </style>
+        <table>
+        <tr>
+          <td><b>Name:</b></td>
+          <td>${findLeadName?.leadName || findContactName?.fullName}</td>
+        </tr>
+        <tr>
+          <td><b>Account Name:</b></td>
+          <td>${values?.accountName}</td>
+        </tr>
+        <tr>
+          <td><b>Branch:</b></td>
+          <td> ${values?.branch}</td>
+        </tr>
+        <tr>
+          <td><b>Account Number:</b></td>
+          <td>${values?.accountNumber}</td>
+        </tr>
+        <tr>
+          <td><b>SwiftCode:</b></td>
+          <td> ${values?.swiftCode}</td>
+        </tr>
+        <tr>
+          <td><b>Currency:</b></td>
+          <td> ${values?.currency}</td>
+        </tr>
+        <tr>
+          <td><b>Ammount:</b></td>
+          <td>${values?.amount}</td>
+        </tr>
+        </table>
+      `;
+      html2pdf()
+        .from(element)
+        .set({
+          margin: [0, 0, 0, 0],
+          filename: `Bank_Details_${moment().format("DD-MM-YYYY")}.pdf`,
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true, allowTaint: true },
+          jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+        })
+        .save()
+        .then(() => {
+          element.style.paddingTop = "0px";
+          hideBtn.style.display = "";
+          element.innerHTML = originalContent;
+        });
+    } else {
+      console.error("Bank Details Not Found");
+    }
+  };
 
   return (
     <>
       <Grid templateColumns="repeat(12, 1fr)" gap={3}>
         <GridItem colSpan={{ base: 6 }}>
+          <Text id="recipient"></Text>
           <FormLabel
             display="flex"
             ms="4px"
@@ -32,13 +126,15 @@ export const BankDetails = (props) => {
             fontWeight="500"
             mb="8px"
           >
-            Account Name<Text color={"red"}>*</Text>
+            Account Name
+            <Text color={"red"}>*</Text>
           </FormLabel>
           <Input
             fontSize="sm"
             onChange={handleChange}
             onBlur={handleBlur}
             value={values?.accountName}
+            id="accountName"
             name="accountName"
             placeholder="Enter Account Name"
             fontWeight="500"
@@ -176,17 +272,6 @@ export const BankDetails = (props) => {
             </Stack>
           </RadioGroup>
         </GridItem>
-        <GridItem colSpan={{ base: 12 }}>
-          {" "}
-          <Button
-            // onClick={() => handleClick()}
-            size="sm"
-            variant="brand"
-            // leftIcon={<AddIcon />}
-          >
-            Add New
-          </Button>
-        </GridItem>
 
         <GridItem colSpan={{ base: 12 }}>
           <Flex justifyContent={"space-between"}>
@@ -203,6 +288,20 @@ export const BankDetails = (props) => {
           <Text mb="10px" color={"red"} fontSize="sm">
             {errors?.amount && touched?.amount && errors?.amount}
           </Text>
+        </GridItem>
+        <GridItem colSpan={{ base: 12 }}>
+          {" "}
+          <Button
+            onClick={() => downloadRecipient()}
+            size="sm"
+            id="hide-btn"
+            variant="outline"
+            colorScheme="brand"
+            disabled={!isValid || !dirty}
+            leftIcon={<FaFilePdf />}
+          >
+            Download Recipient
+          </Button>
         </GridItem>
       </Grid>
     </>

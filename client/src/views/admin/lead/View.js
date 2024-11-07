@@ -77,6 +77,8 @@ const View = () => {
   // const [leadData, setLeadData] = useState([])
   const [selectedTab, setSelectedTab] = useState(0);
   const [taskModel, setTaskModel] = useState(false);
+  const [userData, setUserData] = useState([]);
+  const [selectedId, setSelectedId] = useState("");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -86,7 +88,17 @@ const View = () => {
   const [addPhoneCall, setAddPhoneCall] = useState(false);
 
   const leadData = useSelector((state) => state?.leadCustomFiled?.data.data);
+  const findUser = userData?.find((user) => user?._id === data?.assignUser);
 
+  useEffect(() => {
+    fetchUserDetails();
+  }, []);
+
+  const fetchUserDetails = async () => {
+    let result = await getApi("api/user/");
+    setUserData(result?.data?.user);
+  };
+  
   const [
     permission,
     taskPermission,
@@ -266,7 +278,6 @@ const View = () => {
       element.style.display = "block";
       element.style.width = "100%"; // Adjust width for mobile
       element.style.height = "auto";
-      // setTimeout(() => {
       html2pdf()
         .from(element)
         .set({
@@ -280,7 +291,6 @@ const View = () => {
         .then(() => {
           element.style.display = "";
         });
-      // }, 500);
     } else {
       console.error("Element with ID 'reports' not found.");
     }
@@ -417,9 +427,13 @@ const View = () => {
                           Add
                         </MenuItem>
                       )}
+
                       {(user?.role === "superAdmin" || permission?.update) && (
                         <MenuItem
-                          onClick={() => setEdit(true)}
+                          onClick={() => {
+                            setEdit(true);
+                            setSelectedId(param.id);
+                          }}
                           alignItems={"start"}
                           icon={<EditIcon />}
                         >
@@ -474,8 +488,8 @@ const View = () => {
                   id="reports"
                 />
                 <Card mt={3}>
-                  <Grid>
-                    <GridItem>
+                  <Grid templateColumns="repeat(12, 1fr)">
+                    <GridItem colSpan={{ base: 6 }}>
                       <Text
                         fontSize="sm"
                         fontWeight="bold"
@@ -487,6 +501,18 @@ const View = () => {
                         {data?.associatedListing?.name
                           ? data.associatedListing.name
                           : " - "}
+                      </Text>
+                    </GridItem>
+                    <GridItem colSpan={{ base: 6 }}>
+                      <Text
+                        fontSize="sm"
+                        fontWeight="bold"
+                        color={"blackAlpha.900"}
+                      >
+                        Assign to User
+                      </Text>
+                      <Text>
+                        {findUser?.firstName} {findUser?.lastName}
                       </Text>
                     </GridItem>
                   </Grid>
@@ -837,15 +863,17 @@ const View = () => {
           setAction={setAction}
         />
       )}
-      <Edit
-        isOpen={edit}
-        size={size}
-        onClose={setEdit}
-        leadData={leadData?.[0]}
-        setAction={setAction}
-        moduleId={leadData?.[0]?._id}
-        data={data}
-      />
+      {edit && (
+        <Edit
+          isOpen={edit}
+          size={size}
+          onClose={setEdit}
+          leadData={leadData?.[0]}
+          setAction={setAction}
+          moduleId={leadData?.[0]?._id}
+          data={data}
+        />
+      )}
       <AddMeeting
         fetchData={fetchData}
         isOpen={addMeeting}
