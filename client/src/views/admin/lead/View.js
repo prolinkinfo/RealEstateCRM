@@ -98,7 +98,7 @@ const View = () => {
     let result = await getApi("api/user/");
     setUserData(result?.data?.user);
   };
-  
+
   const [
     permission,
     taskPermission,
@@ -883,6 +883,7 @@ const View = () => {
         id={param.id}
         setAction={setAction}
         view={true}
+        leadName={data}
       />
       <AddEdit
         isOpen={taskModel}

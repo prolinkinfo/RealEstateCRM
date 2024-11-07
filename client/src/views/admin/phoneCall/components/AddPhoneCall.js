@@ -27,7 +27,9 @@ import { getApi, postApi } from "services/api";
 import UserModel from "components/commonTableModel/UserModel";
 
 const AddPhoneCall = (props) => {
-  const { onClose, isOpen, fetchData, setAction, cData, LData } = props;
+  const { onClose, isOpen, viewData, fetchData, setAction, cData, LData } =
+    props;
+
   const [isLoding, setIsLoding] = useState(false);
   const todayTime = new Date().toISOString().split(".")[0];
   const user = JSON.parse(localStorage.getItem("user"));
@@ -126,7 +128,7 @@ const AddPhoneCall = (props) => {
 
       let salesPersons =
         result?.data?.user?.filter((userData) =>
-          userData?.roles?.some((role) => role?.roleName === "Sales"),
+          userData?.roles?.some((role) => role?.roleName === "Sales")
         ) || [];
       setAssignToSalesData(salesPersons);
     } catch (error) {
@@ -138,19 +140,23 @@ const AddPhoneCall = (props) => {
 
   const fetchDataR = async () => {
     if (LData && LData?._id && props?.lead === true) {
-      setFieldValue("recipient", LData?.leadPhoneNumber);
+      setFieldValue(
+        "recipient",
+        LData?.leadPhoneNumber || viewData?.lead?.leadMobile
+      );
       setFieldValue("createByLead", props?.id);
-      values.recipient = LData.leadPhoneNumber;
+      values.recipient = LData?.leadPhoneNumber || viewData?.lead?.leadMobile;
     } else if (cData && cData?._id && props?.lead !== true) {
       setFieldValue("recipient", cData?.phoneNumber);
       setFieldValue("createByContact", props?.id);
       values.recipient = cData?.phoneNumber;
     }
   };
+
   useEffect(() => {
     fetchDataR();
     fetchUsersData();
-  }, [props?.id, cData, LData]);
+  }, [props?.id, cData, LData, viewData]);
 
   return (
     <Modal onClose={onClose} isOpen={isOpen} isCentered>

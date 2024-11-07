@@ -33,7 +33,8 @@ import { MeetingSchema } from "schema";
 import { getApi, postApi } from "services/api";
 
 const AddMeeting = (props) => {
-  const { onClose, isOpen, setAction, from, fetchData, view } = props;
+  const { onClose, isOpen, setAction, from, fetchData, view, leadName } = props;
+
   const [leaddata, setLeadData] = useState([]);
   const [contactdata, setContactData] = useState([]);
   const [isLoding, setIsLoding] = useState(false);
@@ -82,6 +83,8 @@ const AddMeeting = (props) => {
     setFieldValue,
   } = formik;
 
+  const findLeadName = leaddata?.find((item) => item?.leadName === leadName?.leadName);
+ 
   const AddData = async () => {
     try {
       setIsLoding(true);
@@ -116,14 +119,14 @@ const AddMeeting = (props) => {
         result = await getApi(
           user.role === "superAdmin"
             ? "api/contact/"
-            : `api/contact/?createBy=${user?._id}`,
+            : `api/contact/?createBy=${user?._id}`
         );
         setContactData(result?.data);
       } else if (values?.related === "Lead" && leaddata?.length <= 0) {
         result = await getApi(
           user?.role === "superAdmin"
             ? "api/lead/"
-            : `api/lead/?createBy=${user?._id}`,
+            : `api/lead/?createBy=${user?._id}`
         );
         setLeadData(result?.data);
       }
@@ -147,6 +150,10 @@ const AddMeeting = (props) => {
         label: values?.related === "Contact" ? item?.fullName : item?.leadName,
       }))
     : [];
+
+  if (values?.related === "Lead ") {
+    setFieldValue("attendesLead", leadName?.leadName);
+  }
 
   return (
     <Modal onClose={onClose} isOpen={isOpen} isCentered>
@@ -253,16 +260,22 @@ const AddMeeting = (props) => {
                             values?.related === "Contact"
                               ? values?.attendes?.includes(item?._id)
                               : values?.related === "Lead" &&
-                                values?.attendesLead?.includes(item?._id),
+                                values?.attendesLead?.includes(item?._id)
                         )}
                         onSelectedItemsChange={(changes) => {
                           const selectedLabels = extractLabels(
-                            changes?.selectedItems,
+                            changes?.selectedItems
                           );
                           values?.related === "Contact"
                             ? setFieldValue("attendes", selectedLabels)
                             : values?.related === "Lead" &&
                               setFieldValue("attendesLead", selectedLabels);
+                              if (findLeadName) {
+                                setFieldValue("attendesLead",findLeadName?.leadName);
+                              }
+                          // if (values?.related ===  leadName?.leadName) {
+                          //   setFieldValue("attendesLead", leadName?.leadName);
+                          // }
                         }}
                       />
                     </Text>
