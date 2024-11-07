@@ -74,7 +74,7 @@ function BookedModel(props) {
 
   const formik = useFormik({
     initialValues: {
-      category: "lead",
+      category: "contact",
       currency: "ksh",
       lead: "",
       contact: "",
@@ -100,8 +100,8 @@ function BookedModel(props) {
       let errors = {};
 
       if (!values?.lead && !values?.contact) {
-        errors.lead = "Lead or contact are required";
-        errors.contact = "Lead or contact are required";
+        // errors.lead = "Lead or contact are required";
+        errors.contact = "Contact are required";
       }
 
       return errors;
