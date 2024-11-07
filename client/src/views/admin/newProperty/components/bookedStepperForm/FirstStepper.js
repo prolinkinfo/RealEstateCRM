@@ -116,53 +116,53 @@ export const FirstStepper = (props) => {
             onChange={(e) => {
               setFieldValue("category", e);
               setFieldValue("contact", "");
-              setFieldValue("lead", "");
+              // setFieldValue("lead", "");
             }}
             onBlur={handleBlur}
-            value={values.category || "lead"}
-            defaultValue="lead"
+            value={values.category || "contact"}
+            defaultValue="contact"
           >
             <Stack direction="row" defaultValue={"lead"}>
               <Radio value="contact">Contact</Radio>
-              <Radio value="lead">Lead</Radio>
+              {/* <Radio value="lead">Lead</Radio> */}
             </Stack>
           </RadioGroup>
         </GridItem>
-        {values?.category === "contact" ? (
-          <GridItem colSpan={{ base: 12 }}>
-            <Flex justifyContent={"space-between"}>
-              <Select
-                value={values?.contact}
-                onBlur={handleBlur}
-                name="contact"
-                onChange={handleChange}
-                mb={errors?.contact && touched?.contact ? undefined : "10px"}
-                fontWeight="500"
-                placeholder={"Assign To Contact"}
-                borderColor={
-                  errors?.contact && touched?.contact ? "red.300" : null
-                }
-              >
-                {assignToContactData?.map((item) => {
-                  return (
-                    <option value={item?._id} key={item?._id}>
-                      {item?.fullName}
-                    </option>
-                  );
-                })}
-              </Select>
-              <IconButton
-                onClick={() => setContactModel(true)}
-                ml={2}
-                fontSize="25px"
-                icon={<LiaMousePointerSolid />}
-              />
-            </Flex>
-            <Text mb="10px" fontSize="sm" color={"red"}>
-              {touched?.contact && errors?.contact && errors?.contact}
-            </Text>
-          </GridItem>
-        ) : values?.category === "lead" ? (
+        {/* {values?.category === "contact" ? ( */}
+        <GridItem colSpan={{ base: 12 }}>
+          <Flex justifyContent={"space-between"}>
+            <Select
+              value={values?.contact}
+              onBlur={handleBlur}
+              name="contact"
+              onChange={handleChange}
+              mb={errors?.contact && touched?.contact ? undefined : "10px"}
+              fontWeight="500"
+              placeholder={"Assign To Contact"}
+              borderColor={
+                errors?.contact && touched?.contact ? "red.300" : null
+              }
+            >
+              {assignToContactData?.map((item) => {
+                return (
+                  <option value={item?._id} key={item?._id}>
+                    {item?.fullName}
+                  </option>
+                );
+              })}
+            </Select>
+            <IconButton
+              onClick={() => setContactModel(true)}
+              ml={2}
+              fontSize="25px"
+              icon={<LiaMousePointerSolid />}
+            />
+          </Flex>
+          <Text mb="10px" fontSize="sm" color={"red"}>
+            {touched?.contact && errors?.contact && errors?.contact}
+          </Text>
+        </GridItem>
+        {/* ) : values?.category === "lead" ? (
           <GridItem colSpan={{ base: 12 }}>
             <Flex justifyContent={"space-between"}>
               <Select
@@ -198,7 +198,7 @@ export const FirstStepper = (props) => {
           </GridItem>
         ) : (
           ""
-        )}
+        )} */}
         <GridItem colSpan={{ base: 12, md: 6 }}>
           <ImageUpload
             value={values?.salesManagerSign}
