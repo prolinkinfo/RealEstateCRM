@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const OpportunityProject = require("../../model/schema/opportunityproject");
 const propertyData = require("../../model/schema/property");
+
 const index = async (req, res) => {
   const query = req.query;
   query.deleted = false;
