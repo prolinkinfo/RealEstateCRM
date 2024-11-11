@@ -29,7 +29,7 @@ const PaymentSchedule = (props) => {
       values?.installments?.filter((item, i) => i !== index)
     );
   };
-
+  
   return (
     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
       <GridItem colSpan={{ base: 12 }}>
@@ -108,11 +108,10 @@ const PaymentSchedule = (props) => {
                       name={`installments.[${i}].title`}
                       placeholder="Title"
                       fontWeight="500"
-                      type="number"
                       max={100}
                       borderColor={
                         errors?.installments?.[i]?.title &&
-                          touched?.installments?.[i]?.title
+                        touched?.installments?.[i]?.title
                           ? "red.300"
                           : null
                       }
@@ -157,7 +156,7 @@ const PaymentSchedule = (props) => {
                       fontWeight="500"
                       borderColor={
                         errors?.installments?.[i]?.startDate &&
-                          touched?.installments?.[i]?.startDate
+                        touched?.installments?.[i]?.startDate
                           ? "red.300"
                           : null
                       }
@@ -181,7 +180,7 @@ const PaymentSchedule = (props) => {
                       max={100}
                       borderColor={
                         errors?.installments?.[i]?.per &&
-                          touched?.installments?.[i]?.per
+                        touched?.installments?.[i]?.per
                           ? "red.300"
                           : null
                       }
@@ -204,7 +203,7 @@ const PaymentSchedule = (props) => {
                       fontWeight="500"
                       borderColor={
                         errors?.installments?.[i]?.total &&
-                          touched?.installments?.[i]?.total
+                        touched?.installments?.[i]?.total
                           ? "red.300"
                           : null
                       }

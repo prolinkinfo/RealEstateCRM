@@ -27,8 +27,8 @@ const add = async (req, res) => {
         await result.save();
         res.status(200).json(result);
     } catch (err) {
-        console.error("Failed to create Quotes:", err);
-        res.status(400).json({ error: "Failed to create Quotes : ", err });
+        console.error("Failed to add BankDetails:", err);
+        res.status(400).json({ error: "Failed to add BankDetails: ", err });
     }
 };
 

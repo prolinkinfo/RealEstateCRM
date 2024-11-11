@@ -27,10 +27,14 @@ import * as yup from "yup";
 import UserModel from "components/commonTableModel/UserModel";
 import { LiaMousePointerSolid } from "react-icons/lia";
 import SelectPorpertyModel from "components/commonTableModel/SelectPorpertyModel";
+// import { fetchLeadData } from "redux/slices/leadSlice";
+import { fetchLeadData } from "../../../redux/slices/leadSlice";
+import { useDispatch } from "react-redux";
 
 const Edit = (props) => {
   const { data } = props;
   const user = JSON.parse(localStorage.getItem("user"));
+  const dispatch = useDispatch();
   const [isLoding, setIsLoding] = useState(false);
   const initialFieldValues = Object.fromEntries(
     (props?.leadData?.fields || [])?.map((field) => [field?.name, ""])
@@ -76,6 +80,7 @@ const Edit = (props) => {
       if (response?.status === 200) {
         props.onClose();
         props.setAction((pre) => !pre);
+        dispatch(fetchLeadData());
       }
     } catch (e) {
       console.log(e);

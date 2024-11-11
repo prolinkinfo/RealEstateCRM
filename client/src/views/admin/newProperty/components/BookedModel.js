@@ -26,6 +26,8 @@ function BookedModel(props) {
   const [currentStep, setCurrentStep] = useState(1);
   const [assignToLeadData, setAssignToLeadData] = useState([]);
   const [assignToContactData, setAssignToContactData] = useState([]);
+  const [selectedRecord, setSelectedRecord] = useState(null);
+
   const param = useParams();
 
   const validationSchemas = [
@@ -134,6 +136,8 @@ function BookedModel(props) {
       description: "Bank Details",
       component: (
         <BankDetails
+          selectedRecord={selectedRecord}
+          setSelectedRecord={setSelectedRecord}
           formik={formik}
           assignToLeadData={assignToLeadData}
           assignToContactData={assignToContactData}

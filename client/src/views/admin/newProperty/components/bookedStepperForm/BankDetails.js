@@ -2,24 +2,38 @@ import {
   Button,
   Flex,
   FormLabel,
+  Box,
   Grid,
   GridItem,
-  IconButton,
   Input,
-  ModalFooter,
   Radio,
   RadioGroup,
-  Select,
+  useDisclosure,
   Stack,
   Text,
 } from "@chakra-ui/react";
-import React from "react";
-import { FaFilePdf } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import Card from "components/card/Card";
+import { FaFilePdf, FaSave } from "react-icons/fa";
 import html2pdf from "html2pdf.js";
 import moment from "moment";
+import { postApi, getApi } from "services/api";
+import { Tooltip } from "@chakra-ui/react";
+import BankDetailsModel from "./BankDetailsModel";
 
 export const BankDetails = (props) => {
-  const { formik, assignToLeadData, assignToContactData } = props;
+  const {
+    formik,
+    assignToLeadData,
+    assignToContactData,
+    setSelectedRecord,
+    selectedRecord,
+  } = props;
+  const { onOpen, isOpen, onClose } = useDisclosure();
+  const [bankAllDetails, setBankAllDetails] = useState([]);
+  const initialLimit = 5;
+  const [visibleCount, setVisibleCount] = useState(initialLimit);
+  const [bankDetailsModel, setBankDetailsModel] = useState(false);
 
   const {
     values,
@@ -114,8 +128,95 @@ export const BankDetails = (props) => {
     }
   };
 
+  const getBankDetails = async () => {
+    try {
+      const response = await getApi("api/bank-details");
+      setBankAllDetails(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getBankDetails();
+  }, []);
+
+  const saveBankDetails = async (bankDetails) => {
+    try {
+      await postApi("api/bank-details/add", bankDetails);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleRadioChange = (selectedId) => {
+    const record = bankAllDetails?.data?.find(
+      (item) => item?._id === selectedId
+    );
+    setSelectedRecord(record);
+    if (record) {
+      setFieldValue("accountNumber", record?.accountNumber);
+      setFieldValue("accountName", record?.accountName);
+      setFieldValue("bank", record?.bank);
+      setFieldValue("branch", record?.branch);
+      setFieldValue("swiftCode", record?.swiftCode);
+    }
+  };
+
   return (
     <>
+      <Grid templateColumns="repeat(12, 1fr)" gap={3} mb={3}>
+        {bankAllDetails?.data?.length > 0 ? (
+          bankAllDetails?.data?.slice(0, visibleCount)?.map((item, index) => (
+            <GridItem key={index} colSpan={{ base: 2, sm: 3, md: 4, lg: 2 }}>
+              <Card style={{ background: "#F9F9F9" }}>
+                <RadioGroup
+                  onChange={handleRadioChange}
+                  value={selectedRecord?._id}
+                >
+                  <Box display="flex" alignItems="center">
+                    <Radio value={item?._id} mr={2} />
+                    <Text fontWeight="bold">{item?.accountName}</Text>
+                  </Box>
+                </RadioGroup>
+                <Tooltip label={item?.accountNumber} hasArrow>
+                  <Text style={{ width: "100px" }}>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    {item?.accountNumber?.toString()?.length > 6
+                      ? item?.accountNumber?.toString()?.slice(0, 6) + "..."
+                      : item?.accountNumber}
+                  </Text>
+                </Tooltip>
+              </Card>
+            </GridItem>
+          ))
+        ) : (
+          <Text>{""}</Text>
+        )}
+
+        {visibleCount < bankAllDetails?.data?.length && (
+          <GridItem
+            colSpan={{ base: 2 }}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Button
+              onClick={() => setBankDetailsModel(true)}
+              style={{
+                padding: "25px 20px",
+                backgroundColor: "#F9F9F9",
+                borderRadius: "15px",
+                marginTop: "20px",
+              }}
+            >
+              View More
+            </Button>
+          </GridItem>
+        )}
+      </Grid>
+
       <Grid templateColumns="repeat(12, 1fr)" gap={3}>
         <GridItem colSpan={{ base: 6 }}>
           <Text id="recipient"></Text>
@@ -289,7 +390,11 @@ export const BankDetails = (props) => {
             {errors?.amount && touched?.amount && errors?.amount}
           </Text>
         </GridItem>
-        <GridItem colSpan={{ base: 12 }}>
+        <GridItem
+          colSpan={{ base: 6 }}
+          display={"flex"}
+          justifyContent={"flex-start"}
+        >
           {" "}
           <Button
             onClick={() => downloadRecipient()}
@@ -303,6 +408,31 @@ export const BankDetails = (props) => {
             Download Recipient
           </Button>
         </GridItem>
+        <GridItem
+          colSpan={{ base: 6 }}
+          display={"flex"}
+          justifyContent={"flex-end"}
+        >
+          <Button
+            onClick={() => saveBankDetails(values)}
+            size="sm"
+            id="hide-btn"
+            variant="outline"
+            disabled={!isValid || !dirty}
+            colorScheme="brand"
+            leftIcon={<FaSave />}
+          >
+            Save Bank Details
+          </Button>
+        </GridItem>
+        <BankDetailsModel
+          isOpen={bankDetailsModel}
+          onClose={() => setBankDetailsModel(false)}
+          bankAllDetails={bankAllDetails}
+          selectedRecord={selectedRecord}
+          setSelectedRecord={setSelectedRecord}
+          setFieldValue={setFieldValue}
+        />
       </Grid>
     </>
   );

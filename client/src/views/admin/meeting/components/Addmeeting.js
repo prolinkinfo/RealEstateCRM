@@ -42,7 +42,10 @@ const AddMeeting = (props) => {
   const [leadModelOpen, setLeadModel] = useState(false);
   const todayTime = new Date().toISOString().split(".")[0];
   const leadData = useSelector((state) => state?.leadData?.data);
-
+  const [setCondition, setSetCondition] = useState([]);
+  const [countriesWithEmailAsLabel, setCountriesWithEmailAsLabel] = useState(
+    []
+  );
   const user = JSON.parse(localStorage.getItem("user"));
 
   const contactList = useSelector((state) => state?.contactData?.data);
@@ -83,8 +86,10 @@ const AddMeeting = (props) => {
     setFieldValue,
   } = formik;
 
-  const findLeadName = leaddata?.find((item) => item?.leadName === leadName?.leadName);
- 
+  const findLeadName = leaddata?.find(
+    (item) => item?.leadName === leadName?.leadName
+  );
+
   const AddData = async () => {
     try {
       setIsLoding(true);
@@ -141,19 +146,20 @@ const AddMeeting = (props) => {
     return selectedItems?.map((item) => item?._id);
   };
 
-  const setCondition = values?.related === "Contact" ? contactdata : leaddata;
-
-  const countriesWithEmailAsLabel = Array?.isArray(setCondition)
-    ? setCondition?.map((item) => ({
-        ...item,
-        value: item?._id,
-        label: values?.related === "Contact" ? item?.fullName : item?.leadName,
-      }))
-    : [];
-
-  if (values?.related === "Lead ") {
-    setFieldValue("attendesLead", leadName?.leadName);
-  }
+  useEffect(() => {
+    const conditionData =
+      values?.related === "Contact" ? contactdata : leadData;
+    setSetCondition(conditionData);
+    const mappedCountries = Array?.isArray(conditionData)
+      ? conditionData?.map((item) => ({
+          ...item,
+          value: item?._id,
+          label:
+            values?.related === "Contact" ? item?.fullName : item?.leadName,
+        }))
+      : [];
+    setCountriesWithEmailAsLabel(mappedCountries);
+  }, [leadData, values?.related, contactdata]);
 
   return (
     <Modal onClose={onClose} isOpen={isOpen} isCentered>
@@ -270,12 +276,6 @@ const AddMeeting = (props) => {
                             ? setFieldValue("attendes", selectedLabels)
                             : values?.related === "Lead" &&
                               setFieldValue("attendesLead", selectedLabels);
-                              if (findLeadName) {
-                                setFieldValue("attendesLead",findLeadName?.leadName);
-                              }
-                          // if (values?.related ===  leadName?.leadName) {
-                          //   setFieldValue("attendesLead", leadName?.leadName);
-                          // }
                         }}
                       />
                     </Text>
