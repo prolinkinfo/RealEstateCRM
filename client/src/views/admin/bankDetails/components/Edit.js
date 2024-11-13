@@ -21,21 +21,24 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getApi, putApi } from "services/api";
 import * as yup from "yup";
+import View from "../View";
 
 const Edit = (props) => {
   const param = useParams();
-  const { getBankDetails } = props;
-  const findName = getBankDetails?.find(
-    (item) => item?._id === props?.selectedId
-  );
+  const [bankEditData, setBankEditData] = useState([]);
+  const fetchViewData = async () => {
+    const result = await getApi("api/bank-details/view/", props?.selectedId);
+    setBankEditData(result?.data);
+  };
+
   const [isLoding, setIsLoding] = useState(false);
 
   const initialValues = {
-    accountName: findName?.accountName || "",
-    accountNumber: findName?.accountNumber || "",
-    bank: findName?.bank || "",
-    branch: findName?.branch || "",
-    swiftCode: findName?.swiftCode || "",
+    accountName: bankEditData?.accountName || "",
+    accountNumber: bankEditData?.accountNumber || "",
+    bank: bankEditData?.bank || "",
+    branch: bankEditData?.branch || "",
+    swiftCode: bankEditData?.swiftCode || "",
   };
 
   const validationSchema = yup.object({
@@ -64,6 +67,7 @@ const Edit = (props) => {
     handleSubmit,
     setFieldValue,
   } = formik;
+
   const EditData = async () => {
     try {
       setIsLoding(true);
@@ -86,29 +90,11 @@ const Edit = (props) => {
     props.onClose(false);
     props.setSelectedId && props?.setSelectedId();
   };
-  let response;
 
-  //   const fetchData = async () => {
-  //     if (data) {
-  //       setInitialValues((prev) => ({ ...prev, ...data }));
-  //     } else if (props?.selectedId || param?.id) {
-  //       try {
-  //         setIsLoding(true);
-  //         response = await getApi(
-  //           "api/contact/view/",
-  //           props?.selectedId ? props?.selectedId : param?.id,
-  //         );
-  //         setInitialValues((prev) => ({ ...prev, ...response?.data?.contact }));
-  //       } catch (e) {
-  //         console.error(e);
-  //       } finally {
-  //         setIsLoding(false);
-  //       }
-  //     }
-  //   };
-  //   useEffect(() => {
-  //     fetchData();
-  //   }, [props?.selectedId, data]);
+  useEffect(() => {
+    fetchViewData();
+  }, [props?.selectedId, props?.isOpen]);
+
   return (
     <div>
       <Drawer isOpen={props?.isOpen} size={props?.size}>

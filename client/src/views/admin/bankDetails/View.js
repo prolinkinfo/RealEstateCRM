@@ -15,7 +15,6 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
-  Tab,
   TabList,
   TabPanel,
   TabPanels,
@@ -24,99 +23,56 @@ import {
   Input,
   Text,
   VStack,
-  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import FolderTreeView from "components/FolderTreeView/folderTreeView";
 import Card from "components/card/Card";
 import { HSeparator } from "components/separator/Separator";
 import Spinner from "components/spinner/Spinner";
-import { constant } from "constant";
 import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
-import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getApi } from "services/api";
-import PhoneCall from "../contact/components/phonCall";
-import AddEmailHistory from "../emailHistory/components/AddEmail";
-import AddMeeting from "../meeting/components/Addmeeting";
-import AddPhoneCall from "../phoneCall/components/AddPhoneCall";
+import { getApi , putApi } from "services/api";
 import { HasAccess } from "../../../redux/accessUtils";
-import DataNotFound from "components/notFoundData";
-import CustomView from "utils/customView";
-import AddDocumentModal from "utils/addDocumentModal";
 import CommonDeleteModel from "components/commonDeleteModel";
-import { deleteApi } from "services/api";
-import CommonCheckTable from "components/reactTable/checktable";
 import moment from "moment";
-import AddEdit from "../task/components/AddEdit";
-import { useDispatch, useSelector } from "react-redux";
 import { FaFilePdf } from "react-icons/fa";
 import html2pdf from "html2pdf.js";
 import { useFormik } from "formik";
 import * as yup from "yup";
-// import Editopportunityproject from "./Editopportunityproject";
-import { postApi } from "services/api";
-import { putApi } from "services/api";
-import { fetchPropertyData } from "../../../redux/slices/propertySlice.js";
-import { fetchPropertyCustomFiled } from "../../../redux/slices/propertyCustomFiledSlice.js";
-import { fetchBankData } from "../../../redux/slices/bankDetailsSlice.js";
 import Add from "./components/Add";
 import Edit from "./components/Edit";
 import { deleteManyApi } from "services/api";
 
 const View = (props) => {
   const {
-    userAction,
     userData,
-    editData,
-    selectedId,
-    setUserAction,
-    getBankDetails,
   } = props;
+
   const params = useParams();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = params;
   const user = JSON.parse(localStorage.getItem("user"));
-  const userName =
-    typeof userData === "string" ? JSON.parse(userData) : userData;
-  const textColor = useColorModeValue("gray.500", "white");
-  // const [data, setData] = useState();
-  const [opportunitydata, setOpportunityData] = useState([]);
   const [bankDataDetails, setBankDetails] = useState();
-  // const [bankData, setBankData] = useState([]);
-  const [allData, setAllData] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [edit, setEdit] = useState(false);
   const [deleteModel, setDelete] = useState(false);
   const [isLoding, setIsLoding] = useState(false);
-  const [addMeeting, setMeeting] = useState(false);
   const [action, setAction] = useState(false);
   const [editableField, setEditableField] = useState(null);
-  const [useraction, setUserction] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
-  const [selectedValues, setSelectedValues] = useState();
-  const [selectedPropertyData, setSelctedPropertyData] = useState([]);
-  const propertyTableData = useSelector((state) => state?.propertyData?.data);
-  const size = "lg";
-  const bankDetails = useSelector((state) => state?.bankData?.data);
 
-  useEffect(async () => {
-    await dispatch(fetchBankData());
-  }, [edit, deleteModel, onOpen , action]);
 
   const [permission] = HasAccess(["Bank Details"]);
+
   const fetchViewData = async () => {
     if (id) {
       const result = await getApi("api/bank-details/view/", id);
       setBankDetails(result?.data);
-      setSelctedPropertyData(result?.data?.propertyOpportunityProject);
     }
   };
 
   const handleClick = () => {
-    setUserction("add");
     onOpen();
   };
 
@@ -129,7 +85,6 @@ const View = (props) => {
     setEditableField(fieldName);
   };
 
-
   const handleTabChange = (index) => {
     setSelectedTab(index);
   };
@@ -138,10 +93,8 @@ const View = (props) => {
       setIsLoding(true);
       let response = await deleteManyApi("api/bank-details/deleteMany", [ids]);
       if (response?.status === 200) {
-        setSelectedValues([]);
         setDelete(false);
-        setAction((pre) => !pre);
-        navigate("/bank-details")
+        navigate("/bank-details");
       }
       setIsLoding(false);
     } catch (error) {
@@ -180,20 +133,6 @@ const View = (props) => {
     }
   };
 
-  const download = async (data) => {
-    if (data) {
-      let result = await getApi(`api/document/download/`, data);
-      if (result && result?.status === 200) {
-        window.open(`${constant?.baseUrl}api/document/download/${data}`);
-        toast.success("file Download successful");
-      } else if (result && result?.response?.status === 404) {
-        toast.error("file Not Found");
-      }
-    }
-  };
-
-  const firstValue = Object?.values(params)[0];
-  const splitValue = firstValue?.split("/");
   const initialValues = {
     accountName: bankDataDetails?.accountName || "",
     accountNumber: bankDataDetails?.accountNumber || "",
@@ -217,15 +156,8 @@ const View = (props) => {
       AddData();
     },
   });
-  const {
-    errors,
-    touched,
-    values,
-    handleChange,
-    handleSubmit,
-    setFieldValue,
-    resetForm,
-  } = formik;
+
+  const {values} = formik;
 
   const AddData = async () => {
     try {
@@ -250,7 +182,6 @@ const View = (props) => {
           localStorage.setItem("user", updatedDataString);
         }
         onClose();
-        setUserAction("");
         setAction((pre) => !pre);
       } else {
         toast.error(response?.response?.data?.message);
@@ -348,7 +279,6 @@ const View = (props) => {
                               <MenuItem
                                 color={"blue"}
                                 onClick={() => {
-                                  // onOpen(); setUserAction('add'),
                                   handleClick();
                                 }}
                                 alignItems={"start"}
@@ -362,7 +292,6 @@ const View = (props) => {
                               permission?.update) && (
                               <MenuItem
                                 onClick={() => {
-                                  setUserction("edit");
                                   setEdit(true);
                                 }}
                                 alignItems={"start"}
@@ -422,8 +351,9 @@ const View = (props) => {
                     Account Name{" "}
                   </Text>
 
-                  <>
-                    {/* <Input
+                  {editableField === "accountName" ? (
+                    <>
+                      <Input
                         id="text"
                         name="accountName"
                         type="text"
@@ -431,26 +361,28 @@ const View = (props) => {
                         onBlur={handleBlur}
                         value={formik?.values?.accountName}
                         borderColor={
-                          formik?.errors?.accountName &&
-                          formik?.touched?.accountName
+                          formik?.errors?.accountName && formik?.touched?.accountName
                             ? "red.300"
                             : null
                         }
                         autoFocus
-                      /> */}
-                    {/* <Text mb="10px" color={"red"}>
+                      />
+                      <Text mb="10px" color={"red"}>
                         {" "}
                         {formik?.errors.accountName &&
                           formik?.touched.accountName &&
                           formik?.errors.accountName}
-                      </Text> */}
-                  </>
-
-                  <Text>
-                    {bankDataDetails?.accountName
-                      ? bankDataDetails?.accountName
-                      : " - "}
-                  </Text>
+                      </Text>
+                    </>
+                  ) : (
+                    <Text
+                      onDoubleClick={() =>
+                        handleDoubleClick("accountName", bankDataDetails?.accountName)
+                      }
+                    >
+                      {bankDataDetails?.accountName ? bankDataDetails?.accountName : " - "}
+                    </Text>
+                  )}
                 </Box>
               </GridItem>
               <GridItem colSpan={{ base: 4, md: 2 }} mt={3}>
@@ -462,17 +394,17 @@ const View = (props) => {
                   >
                     Account Number{" "}
                   </Text>
-
-                  {/* <Input
+                  {editableField === "accountNumber" ? (
+                    <>
+                      <Input
                         id="text"
                         name="accountNumber"
                         type="text"
-                        onChange={formik.handleChange}
+                        onChange={formik?.handleChange}
                         onBlur={handleBlur}
                         value={formik?.values?.accountNumber}
                         borderColor={
-                          formik?.errors?.accountNumber &&
-                          formik?.touched?.accountNumber
+                          formik?.errors?.accountNumber && formik?.touched?.accountNumber
                             ? "red.300"
                             : null
                         }
@@ -480,25 +412,20 @@ const View = (props) => {
                       />
                       <Text mb="10px" color={"red"}>
                         {" "}
-                        {formik?.errors?.accountNumber &&
-                          formik?.touched?.accountNumber &&
-                          formik?.errors?.accountNumber}
+                        {formik?.errors.accountNumber &&
+                          formik?.touched.accountNumber &&
+                          formik?.errors.accountNumber}
                       </Text>
                     </>
                   ) : (
                     <Text
                       onDoubleClick={() =>
-                        handleDoubleClick(
-                          "accountNumber",
-                          bankDataDetails?.accountNumber
-                        )
+                        handleDoubleClick("accountNumber", bankDataDetails?.accountNumber)
                       }
-                    > */}
-                  <Text>
-                    {bankDataDetails?.accountNumber
-                      ? bankDataDetails?.accountNumber
-                      : " - "}
-                  </Text>
+                    >
+                      {bankDataDetails?.accountNumber ? bankDataDetails?.accountNumber : " - "}
+                    </Text>
+                  )}
                 </Box>
               </GridItem>
               <GridItem colSpan={{ base: 4, md: 2 }} mt={3}>
@@ -511,11 +438,13 @@ const View = (props) => {
                     Bank{" "}
                   </Text>
 
-                  {/* <Input
+                  {editableField === "bank" ? (
+                    <>
+                      <Input
                         id="text"
                         name="bank"
                         type="text"
-                        onChange={formik.handleChange}
+                        onChange={formik?.handleChange}
                         onBlur={handleBlur}
                         value={formik?.values?.bank}
                         borderColor={
@@ -527,13 +456,21 @@ const View = (props) => {
                       />
                       <Text mb="10px" color={"red"}>
                         {" "}
-                        {formik?.errors?.bank &&
-                          formik?.touched?.bank &&
-                          formik?.errors?.bank}
-                      </Text> */}
-                  <Text>
-                    {bankDataDetails?.bank ? bankDataDetails?.bank : " - "}
-                  </Text>
+                        {formik?.errors.bank &&
+                          formik?.touched.bank &&
+                          formik?.errors.bank}
+                      </Text>
+                    </>
+                  ) : (
+                    <Text
+                      onDoubleClick={() =>
+                        handleDoubleClick("bank", bankDataDetails?.bank)
+                      }
+                    >
+                      {bankDataDetails?.bank ? bankDataDetails?.bank : " - "}
+                    </Text>
+                  )}
+
                 </Box>
               </GridItem>
               <GridItem colSpan={{ base: 4, md: 2 }} mt={3}>
@@ -545,12 +482,13 @@ const View = (props) => {
                   >
                     Branch{" "}
                   </Text>
-
-                  {/* <Input
+                  {editableField === "branch" ? (
+                    <>
+                      <Input
                         id="text"
                         name="branch"
                         type="text"
-                        onChange={formik.handleChange}
+                        onChange={formik?.handleChange}
                         onBlur={handleBlur}
                         value={formik?.values?.branch}
                         borderColor={
@@ -562,13 +500,20 @@ const View = (props) => {
                       />
                       <Text mb="10px" color={"red"}>
                         {" "}
-                        {formik?.errors?.branch &&
-                          formik?.touched?.branch &&
-                          formik?.errors?.branch}
-                      </Text> */}
-                  <Text>
-                    {bankDataDetails?.branch ? bankDataDetails?.branch : " - "}
-                  </Text>
+                        {formik?.errors.branch &&
+                          formik?.touched.branch &&
+                          formik?.errors.branch}
+                      </Text>
+                    </>
+                  ) : (
+                    <Text
+                      onDoubleClick={() =>
+                        handleDoubleClick("branch", bankDataDetails?.branch)
+                      }
+                    >
+                      {bankDataDetails?.branch ? bankDataDetails?.branch : " - "}
+                    </Text>
+                  )}
                 </Box>
               </GridItem>
               <GridItem colSpan={{ base: 4, md: 2 }} mt={3}>
@@ -581,16 +526,17 @@ const View = (props) => {
                     swiftCode{" "}
                   </Text>
 
-                  {/* <Input
+                  {editableField === "swiftCode" ? (
+                    <>
+                      <Input
                         id="text"
                         name="swiftCode"
                         type="text"
-                        onChange={formik.handleChange}
+                        onChange={formik?.handleChange}
                         onBlur={handleBlur}
                         value={formik?.values?.swiftCode}
                         borderColor={
-                          formik?.errors?.swiftCode &&
-                          formik?.touched?.swiftCode
+                          formik?.errors?.swiftCode && formik?.touched?.swiftCode
                             ? "red.300"
                             : null
                         }
@@ -598,15 +544,20 @@ const View = (props) => {
                       />
                       <Text mb="10px" color={"red"}>
                         {" "}
-                        {formik?.errors?.swiftCode &&
-                          formik?.touched?.swiftCode &&
-                          formik?.errors?.swiftCode}
-                      </Text> */}
-                  <Text>
-                    {bankDataDetails?.swiftCode
-                      ? bankDataDetails?.swiftCode
-                      : " - "}
-                  </Text>
+                        {formik?.errors.swiftCode &&
+                          formik?.touched.swiftCode &&
+                          formik?.errors.swiftCode}
+                      </Text>
+                    </>
+                  ) : (
+                    <Text
+                      onDoubleClick={() =>
+                        handleDoubleClick("swiftCode", bankDataDetails?.swiftCode)
+                      }
+                    >
+                      {bankDataDetails?.swiftCode ? bankDataDetails?.swiftCode : " - "}
+                    </Text>
+                  )}
                 </Box>
               </GridItem>
               <Grid></Grid>
@@ -624,7 +575,6 @@ const View = (props) => {
                       <Button
                         size="sm"
                         onClick={() => {
-                          setUserction("edit");
                           setEdit(true);
                         }}
                         leftIcon={<EditIcon />}
@@ -660,7 +610,6 @@ const View = (props) => {
       <Add
         isOpen={isOpen}
         size={"lg"}
-        bankData={bankDetails}
         onClose={onClose}
         setAction={setAction}
         action={action}
@@ -668,12 +617,9 @@ const View = (props) => {
       <Edit
         isOpen={edit}
         size={"lg"}
-        // contactData={tableColumns}
         selectedId={params?.id}
-        // setSelectedId={setSelectedId}
         onClose={setEdit}
         setAction={setAction}
-        getBankDetails={bankDetails}
       />
       <CommonDeleteModel
         isOpen={deleteModel}
@@ -682,36 +628,6 @@ const View = (props) => {
         handleDeleteData={handleDeleteBankDetais}
         ids={params?.id}
       />
-      {/* 
-      <AddMeeting
-        fetchData={fetchViewData}
-        isOpen={addMeeting}
-        leadContect={splitValue?.[0]}
-        onClose={setMeeting}
-        from="contact"
-        id={params?.id}
-        setAction={setAction}
-        view={true}
-      />
-      <AddEdit
-        isOpen={taskModel}
-        fetchData={fetchViewData}
-        leadContect={splitValue?.[0]}
-        onClose={setTaskModel}
-        id={params?.id}
-        userAction={"add"}
-        view={true}
-      />
-      <Editopportunityproject
-        isOpen={isOpen}
-        fetchData={fetchViewData}
-        userAction={useraction}
-        selectedId={params?.id}
-        onClose={onClose}
-        setAction={setAction}
-        moduleId={opportunitydata?.[0]?._id}
-        data={opportunitydata}
-      /> */}
     </>
   );
 };

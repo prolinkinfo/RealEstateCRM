@@ -22,7 +22,6 @@ import {
   PhoneIcon,
 } from "@chakra-ui/icons";
 
-import View from "./View";
 import { CiMenuKebab } from "react-icons/ci";
 import CommonDeleteModel from "components/commonDeleteModel";
 import { deleteManyApi } from "services/api";
@@ -38,14 +37,10 @@ const BankDetails = () => {
   const navigate = useNavigate();
   const [isLoding, setIsLoding] = useState(false);
   const [action, setAction] = useState(false);
-  const [getBankDetails, setGetBankDetails] = useState([]);
   const [selectedValues, setSelectedValues] = useState([]);
   const [selectedId, setSelectedId] = useState();
-  const [bankData, setBankData] = useState([]);
-  const [deleteMany, setDeleteMany] = useState(false);
   const [edit, setEdit] = useState(false);
   const [deleteModel, setDelete] = useState(false);
-  // const [selectedId, setSelectedId] = useState();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const bankAllData = useSelector((state) => state?.bankData?.data);
 
@@ -53,10 +48,8 @@ const BankDetails = () => {
     await dispatch(fetchBankData());
   }, [deleteModel, edit, isOpen]);
 
-  const [permission, emailAccess, callAccess] = HasAccess([
-    "BankDetails",
-    "Emails",
-    "Calls",
+  const [permission] = HasAccess([
+    "BankDetails"
   ]);
 
   const handleDeleteBankDetais = async (ids) => {
@@ -150,7 +143,7 @@ const BankDetails = () => {
       ? [actionHeader]
       : []),
   ];
-  
+
   return (
     <>
       <CommonCheckTable
@@ -194,7 +187,6 @@ const BankDetails = () => {
         setSelectedId={setSelectedId}
         onClose={setEdit}
         setAction={setAction}
-        getBankDetails={bankAllData}
       />
     </>
   );

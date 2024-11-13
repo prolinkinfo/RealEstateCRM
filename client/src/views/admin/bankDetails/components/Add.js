@@ -30,7 +30,7 @@ const Add = (props) => {
     branch: "",
     swiftCode: "",
   };
-  
+
   const validationSchema = yup.object({
     accountName: yup.string().required("AccountName Is required"),
     accountNumber: yup.number().required("AccountNumber Is required"),
@@ -43,7 +43,7 @@ const Add = (props) => {
     validationSchema,
     onSubmit: () => {
       AddData();
-    }
+    },
   });
 
   const {
@@ -58,10 +58,11 @@ const Add = (props) => {
   const AddData = async () => {
     try {
       setIsLoding(true);
-      let response = await postApi("api/bank-details/add",values);
+      let response = await postApi("api/bank-details/add", values);
       if (response?.status === 200) {
         props.onClose();
         props.setAction((pre) => !pre);
+        formik.resetForm();
       }
     } catch (e) {
       console.log(e);
