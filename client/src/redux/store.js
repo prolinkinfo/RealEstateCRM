@@ -22,6 +22,8 @@ import accountSlice from "./slices/accountSlice";
 import quotesSlice from "./slices/quotesSlice";
 import invoicesSlice from "./slices/invoicesSlice";
 import opportunityProjectSlice from "./slices/opportunityprojectSlice";
+import getBankSlice from "./slices/bankDetailsSlice"
+
 const middleware = (getDefaultMiddleware) => {
   return getDefaultMiddleware({
     serializableCheck: false,
@@ -72,6 +74,7 @@ export const store = configureStore({
     quotesData: quotesSlice,
     invoicesData: invoicesSlice,
     opportunityProjectData: opportunityProjectSlice,
+    bankData : getBankSlice
   },
   middleware,
 });

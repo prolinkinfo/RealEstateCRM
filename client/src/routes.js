@@ -10,7 +10,7 @@ import {
 // icon
 import React from "react";
 import { AiFillFolderOpen, AiOutlineMail } from "react-icons/ai";
-import { FaCalendarAlt, FaRupeeSign, FaTasks, FaWpforms } from "react-icons/fa";
+import { FaCalendarAlt, FaRupeeSign, FaTasks, FaWpforms , FaPiggyBank} from "react-icons/fa";
 import { LuBuilding2 } from "react-icons/lu";
 import { PiPhoneCallBold } from "react-icons/pi";
 import { FaCreativeCommonsBy } from "react-icons/fa";
@@ -71,6 +71,8 @@ const PropertyImport = React.lazy(
   () => import("views/admin/property/components/PropertyImport")
 );
 
+const BankDetails = React.lazy(()=>import("views/admin/bankDetails/BankDetails.js"))
+const BankDetailsView = React.lazy(()=> import("views/admin/bankDetails/View.js"))
 const Lead = React.lazy(() => import("views/admin/lead"));
 const LeadView = React.lazy(() => import("views/admin/lead/View"));
 const LeadImport = React.lazy(
@@ -197,6 +199,7 @@ const routes = [
     path: "/contactImport",
     component: ContactImport,
   },
+
   // ------------- Property Routes ------------------------
   {
     name: "Properties",
@@ -386,6 +389,22 @@ const routes = [
   //   icon: <Icon as={GiSatelliteCommunication} width='20px' height='20px' color='inherit' />,
   //   component: Communication,
   // },
+    //---------------Bank Details Route----------------------
+    {
+      name: "Bank Details",
+      layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+      path: "/bank-details",
+      icon: <Icon as={FaPiggyBank} width="20px" height="20px" color="inherit" />,
+      component: BankDetails,
+    },
+    {
+      name: "Bank Details",
+      layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+      under: "bankDetails",
+      parentName: "Bank Details",
+      path: "/bankDetailsview/:id",
+      component: BankDetailsView,
+    },
   // ------------- Task Routes ------------------------
   {
     name: "Tasks",

@@ -32,4 +32,46 @@ const add = async (req, res) => {
     }
 };
 
-module.exports = { index, add };
+const edit = async (req, res) => {
+    try {
+        let result = await BankDetails.updateOne(
+            { _id: req.params.id },
+            { $set: req.body }
+        );
+        res.status(200).json(result);
+    } catch (err) {
+        console.error('Failed to Update BankDetails:', err);
+        res.status(400).json({ error: 'Failed to Update BankDetails' });
+    }
+}
+
+const view = async (req, res) => {
+    try {
+        let result = await BankDetails.findOne({ _id: req.params.id })
+        if (!result) return res.status(404).json({ message: "no Data Found." })
+        res.status(200).json(result)
+    } catch (err) {
+        console.error('Failed :', err);
+        res.status(400).json({ err, error: 'Failed ' });
+    }
+}
+
+const deleteData = async (req, res) => {
+    try {
+        const bankDetails = await BankDetails.findByIdAndUpdate(req.params.id, { deleted: true });
+        res.status(200).json({ message: "done", bankDetails })
+    } catch (err) {
+        res.status(404).json({ message: "error", err })
+    }
+}
+
+const deleteMany = async (req, res) => {
+    try {
+        const bankDetails = await BankDetails.updateMany({ _id: { $in: req.body } }, { $set: { deleted: true } });
+        res.status(200).json({ message: "done", bankDetails })
+    } catch (err) {
+        res.status(404).json({ message: "error", err })
+    }
+}
+
+module.exports = { index, add , deleteMany , deleteData , edit ,view};
