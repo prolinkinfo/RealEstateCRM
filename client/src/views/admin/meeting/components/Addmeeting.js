@@ -33,7 +33,8 @@ import { MeetingSchema } from "schema";
 import { getApi, postApi } from "services/api";
 
 const AddMeeting = (props) => {
-  const { onClose, isOpen, setAction, from, fetchData, view } = props;
+  const { onClose, isOpen, setAction, from, fetchData, view, leadName } = props;
+
   const [leaddata, setLeadData] = useState([]);
   const [contactdata, setContactData] = useState([]);
   const [isLoding, setIsLoding] = useState(false);
@@ -41,7 +42,10 @@ const AddMeeting = (props) => {
   const [leadModelOpen, setLeadModel] = useState(false);
   const todayTime = new Date().toISOString().split(".")[0];
   const leadData = useSelector((state) => state?.leadData?.data);
-
+  const [setCondition, setSetCondition] = useState([]);
+  const [countriesWithEmailAsLabel, setCountriesWithEmailAsLabel] = useState(
+    []
+  );
   const user = JSON.parse(localStorage.getItem("user"));
 
   const contactList = useSelector((state) => state?.contactData?.data);
@@ -82,6 +86,10 @@ const AddMeeting = (props) => {
     setFieldValue,
   } = formik;
 
+  const findLeadName = leaddata?.find(
+    (item) => item?.leadName === leadName?.leadName
+  );
+
   const AddData = async () => {
     try {
       setIsLoding(true);
@@ -116,14 +124,14 @@ const AddMeeting = (props) => {
         result = await getApi(
           user.role === "superAdmin"
             ? "api/contact/"
-            : `api/contact/?createBy=${user?._id}`,
+            : `api/contact/?createBy=${user?._id}`
         );
         setContactData(result?.data);
       } else if (values?.related === "Lead" && leaddata?.length <= 0) {
         result = await getApi(
           user?.role === "superAdmin"
             ? "api/lead/"
-            : `api/lead/?createBy=${user?._id}`,
+            : `api/lead/?createBy=${user?._id}`
         );
         setLeadData(result?.data);
       }
@@ -138,15 +146,20 @@ const AddMeeting = (props) => {
     return selectedItems?.map((item) => item?._id);
   };
 
-  const setCondition = values?.related === "Contact" ? contactdata : leaddata;
-
-  const countriesWithEmailAsLabel = Array?.isArray(setCondition)
-    ? setCondition?.map((item) => ({
-        ...item,
-        value: item?._id,
-        label: values?.related === "Contact" ? item?.fullName : item?.leadName,
-      }))
-    : [];
+  useEffect(() => {
+    const conditionData =
+      values?.related === "Contact" ? contactdata : leadData;
+    setSetCondition(conditionData);
+    const mappedCountries = Array?.isArray(conditionData)
+      ? conditionData?.map((item) => ({
+          ...item,
+          value: item?._id,
+          label:
+            values?.related === "Contact" ? item?.fullName : item?.leadName,
+        }))
+      : [];
+    setCountriesWithEmailAsLabel(mappedCountries);
+  }, [leadData, values?.related, contactdata]);
 
   return (
     <Modal onClose={onClose} isOpen={isOpen} isCentered>
@@ -253,11 +266,11 @@ const AddMeeting = (props) => {
                             values?.related === "Contact"
                               ? values?.attendes?.includes(item?._id)
                               : values?.related === "Lead" &&
-                                values?.attendesLead?.includes(item?._id),
+                                values?.attendesLead?.includes(item?._id)
                         )}
                         onSelectedItemsChange={(changes) => {
                           const selectedLabels = extractLabels(
-                            changes?.selectedItems,
+                            changes?.selectedItems
                           );
                           values?.related === "Contact"
                             ? setFieldValue("attendes", selectedLabels)

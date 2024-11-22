@@ -24,19 +24,25 @@ import { getApi } from "services/api";
 import { generateValidationSchema } from "../../../utils";
 import CustomForm from "../../../utils/customForm";
 import * as yup from "yup";
+import UserModel from "components/commonTableModel/UserModel";
 import { LiaMousePointerSolid } from "react-icons/lia";
 import SelectPorpertyModel from "components/commonTableModel/SelectPorpertyModel";
+// import { fetchLeadData } from "redux/slices/leadSlice";
+import { fetchLeadData } from "../../../redux/slices/leadSlice";
+import { useDispatch } from "react-redux";
 
 const Edit = (props) => {
   const { data } = props;
   const user = JSON.parse(localStorage.getItem("user"));
+  const dispatch = useDispatch();
   const [isLoding, setIsLoding] = useState(false);
   const initialFieldValues = Object.fromEntries(
     (props?.leadData?.fields || [])?.map((field) => [field?.name, ""])
   );
   const [propertyModel, setPropertyModel] = useState(false);
   const [propertyList, setPropertyList] = useState([]);
-
+  const [userModel, setUserModel] = useState(false);
+  const [userData, setUserData] = useState([]);
   const [initialValues, setInitialValues] = useState({
     ...initialFieldValues,
     createBy: JSON.parse(localStorage.getItem("user"))._id,
@@ -68,12 +74,13 @@ const Edit = (props) => {
     try {
       setIsLoding(true);
       let response = await putApi(
-        `api/form/edit/${props?.selectedId || param?.id}`,
+        `api/form/edit/${param?.id || props?.selectedId}`,
         { ...values, moduleId: props?.moduleId }
       );
       if (response?.status === 200) {
         props.onClose();
         props.setAction((pre) => !pre);
+        dispatch(fetchLeadData());
       }
     } catch (e) {
       console.log(e);
@@ -95,6 +102,7 @@ const Edit = (props) => {
   useEffect(() => {
     getPropertyList();
   }, []);
+
   const handleClose = () => {
     props.onClose(false);
     props.setSelectedId && props?.setSelectedId();
@@ -104,14 +112,21 @@ const Edit = (props) => {
   let response;
   const fetchData = async () => {
     if (data) {
-      setInitialValues((prev) => ({ ...prev, ...data }));
+      setInitialValues((prev) => ({
+        ...prev,
+        ...data,
+        associatedListing: data?.associatedListing?._id,
+      }));
     } else if (props?.selectedId) {
-      // } else if (props?.selectedId || param.id) {
       try {
         setIsLoding(true);
         response = await getApi("api/lead/view/", props?.selectedId);
         let editData = response?.data?.lead;
-        setInitialValues((prev) => ({ ...prev, ...editData }));
+        setInitialValues((prev) => ({
+          ...prev,
+          ...editData,
+          associatedListing: editData?.associatedListing?._id,
+        }));
       } catch (e) {
         console.error(e);
       } finally {
@@ -123,6 +138,15 @@ const Edit = (props) => {
   useEffect(() => {
     fetchData();
   }, [props?.selectedId, data]);
+
+  useEffect(() => {
+    fetchUserDetails();
+  }, []);
+
+  const fetchUserDetails = async () => {
+    let result = await getApi("api/user/");
+    setUserData(result?.data?.user);
+  };
 
   return (
     <div>
@@ -170,21 +194,11 @@ const Edit = (props) => {
                 </FormLabel>
                 <Flex justifyContent="space-between">
                   <Select
-                    value={values?.associatedListing}
+                    value={values?.associatedListing || ""}
                     name="associatedListing"
                     onChange={handleChange}
-                    mb={
-                      errors?.associatedListing && touched?.associatedListing
-                        ? undefined
-                        : "10px"
-                    }
                     fontWeight="500"
                     placeholder="select associated listing"
-                    borderColor={
-                      errors?.associatedListing && touched?.associatedListing
-                        ? "red.300"
-                        : null
-                    }
                   >
                     {propertyList?.map((item) => {
                       return (
@@ -201,11 +215,43 @@ const Edit = (props) => {
                     icon={<LiaMousePointerSolid />}
                   />
                 </Flex>
-                <Text mb="10px" fontSize="sm" color={"red"}>
-                  {errors?.associatedListing &&
-                    touched?.associatedListing &&
-                    errors?.associatedListing}
-                </Text>
+              </GridItem>
+            </Grid>
+
+            <Grid templateColumns="repeat(12, 1fr)" gap={3} mt={2}>
+              <GridItem colSpan={{ base: 12 }}>
+                <FormLabel
+                  display="flex"
+                  ms="4px"
+                  fontSize="sm"
+                  fontWeight="500"
+                  mb="8px"
+                >
+                  Assign to User
+                </FormLabel>
+                <Flex justifyContent="space-between">
+                  <Select
+                    value={values?.assignUser}
+                    name="assignUser"
+                    onChange={handleChange}
+                    fontWeight="500"
+                    placeholder="select user"
+                  >
+                    {userData?.map((item) => {
+                      return (
+                        <option value={item?._id} key={item?._id}>
+                          {item?.firstName} {item?.lastName}
+                        </option>
+                      );
+                    })}
+                  </Select>
+                  <IconButton
+                    onClick={() => setUserModel(true)}
+                    ml={2}
+                    fontSize="25px"
+                    icon={<LiaMousePointerSolid />}
+                  />
+                </Flex>
               </GridItem>
             </Grid>
           </DrawerBody>
@@ -217,6 +263,15 @@ const Edit = (props) => {
             setIsLoding={setIsLoding}
             fieldName="associatedListing"
             setFieldValue={setFieldValue}
+          />
+          <UserModel
+            onClose={() => setUserModel(false)}
+            isOpen={userModel}
+            fieldName={"assignUser"}
+            setFieldValue={setFieldValue}
+            data={userData}
+            isLoding={isLoding}
+            setIsLoding={setIsLoding}
           />
           <DrawerFooter>
             <Button

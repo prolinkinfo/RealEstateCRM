@@ -271,6 +271,40 @@ const leadFields = [
     ],
   },
   {
+    name: "assignUser",
+    label: "Assign to User",
+    type: "select",
+    fixed: true,
+    isDefault: false,
+    editable: false,
+    delete: false,
+    ref: "User",
+    belongsTo: null,
+    backendType: "Mixed",
+    isTableField: false,
+    isView: false,
+    options: [
+      {
+        name: "From Project 1",
+        value: "From Project 1",
+      },
+      {
+        name: "Project 2",
+        value: "Project 2",
+      },
+      {
+        name: "Project 3",
+        value: "Project 3",
+      },
+    ],
+    validation: [
+      {
+        require: false,
+        message: "",
+      },
+    ],
+  },
+  {
     name: "leadMessage",
     label: "Lead Message",
     type: "text",

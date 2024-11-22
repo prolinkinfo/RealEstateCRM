@@ -24,6 +24,10 @@ import PaymentSchedule from "./bookedStepperForm/PaymentSchedule";
 function BookedModel(props) {
   const { isOpen, onClose, selectedFloorItem, setAction } = props;
   const [currentStep, setCurrentStep] = useState(1);
+  const [assignToLeadData, setAssignToLeadData] = useState([]);
+  const [assignToContactData, setAssignToContactData] = useState([]);
+  const [selectedRecord, setSelectedRecord] = useState(null);
+
   const param = useParams();
 
   const validationSchemas = [
@@ -72,7 +76,7 @@ function BookedModel(props) {
 
   const formik = useFormik({
     initialValues: {
-      category: "lead",
+      category: "contact",
       currency: "ksh",
       lead: "",
       contact: "",
@@ -98,8 +102,8 @@ function BookedModel(props) {
       let errors = {};
 
       if (!values?.lead && !values?.contact) {
-        errors.lead = "Lead or contact are required";
-        errors.contact = "Lead or contact are required";
+        // errors.lead = "Lead or contact are required";
+        errors.contact = "Contact are required";
       }
 
       return errors;
@@ -118,11 +122,27 @@ function BookedModel(props) {
   const steps = [
     {
       description: "Contact Info",
-      component: <FirstStepper formik={formik} />,
+      component: (
+        <FirstStepper
+          formik={formik}
+          assignToLeadData={assignToLeadData}
+          setAssignToLeadData={setAssignToLeadData}
+          assignToContactData={assignToContactData}
+          setAssignToContactData={setAssignToContactData}
+        />
+      ),
     },
     {
       description: "Bank Details",
-      component: <BankDetails formik={formik} />,
+      component: (
+        <BankDetails
+          selectedRecord={selectedRecord}
+          setSelectedRecord={setSelectedRecord}
+          formik={formik}
+          assignToLeadData={assignToLeadData}
+          assignToContactData={assignToContactData}
+        />
+      ),
     },
     {
       description: "Payment Schedule",

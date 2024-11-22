@@ -29,7 +29,7 @@ const PaymentSchedule = (props) => {
       values?.installments?.filter((item, i) => i !== index)
     );
   };
-
+  
   return (
     <Grid templateColumns="repeat(12, 1fr)" gap={3}>
       <GridItem colSpan={{ base: 12 }}>
@@ -61,13 +61,13 @@ const PaymentSchedule = (props) => {
                     )}
                   </Td>
                   <Td>
-                    <Select
+                    {/* <Select
                       value={values?.installments?.[i]?.title}
                       name={`installments.[${i}].title`}
                       onChange={handleChange}
                       mb={
                         errors?.installments?.[i]?.title &&
-                        touched?.installments?.[i]?.title
+                          touched?.installments?.[i]?.title
                           ? undefined
                           : "10px"
                       }
@@ -75,7 +75,7 @@ const PaymentSchedule = (props) => {
                       placeholder={"Title"}
                       borderColor={
                         errors?.installments?.[i]?.title &&
-                        touched?.installments?.[i]?.title
+                          touched?.installments?.[i]?.title
                           ? "red.300"
                           : null
                       }
@@ -99,7 +99,23 @@ const PaymentSchedule = (props) => {
                           </option>
                         );
                       })}
-                    </Select>
+                    </Select> */}
+                    <Input
+                      fontSize="sm"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values?.installments?.[i]?.title}
+                      name={`installments.[${i}].title`}
+                      placeholder="Title"
+                      fontWeight="500"
+                      max={100}
+                      borderColor={
+                        errors?.installments?.[i]?.title &&
+                        touched?.installments?.[i]?.title
+                          ? "red.300"
+                          : null
+                      }
+                    />
                     <Text mb="10px" color={"red"}>
                       {errors?.installments?.[i]?.title &&
                         touched?.installments?.[i]?.title &&

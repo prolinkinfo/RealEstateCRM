@@ -34,10 +34,21 @@ import { putApi } from "services/api";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import { HasAccess } from "../../../../redux/accessUtils";
+import View from "views/admin/lead/View";
 
 const AddEdit = (props) => {
-  const { onClose, isOpen, fetchData, userAction, setAction, id, view, data } =
-    props;
+  const {
+    onClose,
+    isOpen,
+    fetchData,
+    userAction,
+    setAction,
+    viewData,
+    id,
+    view,
+    data,
+  } = props;
+
   const [isChecked, setIsChecked] = useState(false);
   const userId = JSON.parse(localStorage.getItem("user"))?._id;
   const [assignToLeadData, setAssignToLeadData] = useState([]);
@@ -121,6 +132,7 @@ const AddEdit = (props) => {
           formik.resetForm();
           onClose();
           fetchData(1);
+          setAction((pre) => !pre);
         }
       } catch (e) {
         console.log(e);
@@ -155,6 +167,7 @@ const AddEdit = (props) => {
       }
     }
   };
+
   const fetchTaskData = async () => {
     if (id) {
       try {
@@ -227,7 +240,7 @@ const AddEdit = (props) => {
           result = await getApi(
             user.role === "superAdmin"
               ? "api/contact/"
-              : `api/contact/?createBy=${user._id}`,
+              : `api/contact/?createBy=${user._id}`
           );
           setAssignToContactData(result?.data);
         } else if (
@@ -237,7 +250,7 @@ const AddEdit = (props) => {
           result = await getApi(
             user?.role === "superAdmin"
               ? "api/lead/"
-              : `api/lead/?createBy=${user._id}`,
+              : `api/lead/?createBy=${user._id}`
           );
           setAssignToLeadData(result?.data);
         }
@@ -246,11 +259,12 @@ const AddEdit = (props) => {
       }
     }
   }, [props, values?.category]);
+
   useEffect(() => {
     if (userAction === "edit" || data) {
       fetchTaskData();
     }
-    fetchTaskData();
+    // fetchTaskData();
   }, [userAction, id, data]);
 
   return (

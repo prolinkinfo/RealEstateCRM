@@ -52,6 +52,7 @@ import { MdMoveDown, MdMoveUp } from "react-icons/md";
 import { TbStatusChange } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { MdBlock } from "react-icons/md";
 import { deleteApi, getApi, postApi, postApiBlob } from "services/api";
 import CustomView from "utils/customView";
 import csv from "../../../assets/img/fileImage/csv.png";
@@ -491,16 +492,6 @@ const View = () => {
     });
   };
 
-  const handleGenrateOfferLetter = async () => {
-    const response = await postApiBlob(
-      `api/property/genrate-offer-letter/${param?.id}`,
-      {}
-    );
-
-    const pdfBlob = new Blob([response.data], { type: "application/pdf" });
-    saveAs(pdfBlob, "offer-letter.pdf");
-  };
-
   const statusCount = data?.units?.reduce((acc, floor) => {
     floor?.flats?.forEach((flat) => {
       const status =
@@ -621,7 +612,6 @@ const View = () => {
         onClose={() => setBlockedModelOpen(false)}
       />
 
-      {/* <SoldModel isOpen={soldopen} onClose={() => setSoldOpen(false)} /> */}
       <BookedModel
         selectedFloorItem={selectedFloorItem}
         isOpen={bookedOpen}
@@ -1028,7 +1018,7 @@ const View = () => {
                                         <MenuItem
                                           py={2.5}
                                           icon={
-                                            <TbStatusChange
+                                            <MdBlock
                                               fontSize={15}
                                               mb={1}
                                             />
