@@ -32,7 +32,7 @@ import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getApi , putApi } from "services/api";
+import { getApi, putApi } from "services/api";
 import { HasAccess } from "../../../redux/accessUtils";
 import CommonDeleteModel from "components/commonDeleteModel";
 import moment from "moment";
@@ -44,11 +44,7 @@ import Add from "./components/Add";
 import Edit from "./components/Edit";
 import { deleteManyApi } from "services/api";
 
-const View = (props) => {
-  const {
-    userData,
-  } = props;
-
+const View = () => {
   const params = useParams();
   const navigate = useNavigate();
   const { id } = params;
@@ -61,7 +57,6 @@ const View = (props) => {
   const [action, setAction] = useState(false);
   const [editableField, setEditableField] = useState(null);
   const [selectedTab, setSelectedTab] = useState(0);
-
 
   const [permission] = HasAccess(["Bank Details"]);
 
@@ -88,6 +83,7 @@ const View = (props) => {
   const handleTabChange = (index) => {
     setSelectedTab(index);
   };
+
   const handleDeleteBankDetais = async (ids) => {
     try {
       setIsLoding(true);
@@ -109,8 +105,7 @@ const View = (props) => {
     const hideBtn = document.getElementById("hide-btn");
     if (element) {
       hideBtn.style.display = "none";
-      // element.style.display = "block";
-      element.style.width = "100%"; // Adjust width for mobile
+      element.style.width = "100%";
       element.style.height = "auto";
       element.style.padding = "15px";
       html2pdf()
@@ -157,7 +152,7 @@ const View = (props) => {
     },
   });
 
-  const {values} = formik;
+  const { values } = formik;
 
   const AddData = async () => {
     try {
@@ -168,19 +163,6 @@ const View = (props) => {
       );
       if (response && response?.status === 200) {
         setEditableField(null);
-        let updatedUserData = userData; // Create a copy of userData
-        if (user?._id === params?.id) {
-          if (updatedUserData && typeof updatedUserData === "object") {
-            // Create a new object with the updated firstName
-            updatedUserData = {
-              ...updatedUserData,
-              Name: values?.name,
-              Requirement: values?.requirement,
-            };
-          }
-          const updatedDataString = JSON.stringify(updatedUserData);
-          localStorage.setItem("user", updatedDataString);
-        }
         onClose();
         setAction((pre) => !pre);
       } else {
@@ -215,7 +197,6 @@ const View = (props) => {
               borderRadius: "20px",
               padding: "20px",
             }}
-            // id="reports"
           >
             <Grid
               templateColumns={"repeat(4, 1fr)"}
@@ -361,7 +342,8 @@ const View = (props) => {
                         onBlur={handleBlur}
                         value={formik?.values?.accountName}
                         borderColor={
-                          formik?.errors?.accountName && formik?.touched?.accountName
+                          formik?.errors?.accountName &&
+                          formik?.touched?.accountName
                             ? "red.300"
                             : null
                         }
@@ -377,10 +359,15 @@ const View = (props) => {
                   ) : (
                     <Text
                       onDoubleClick={() =>
-                        handleDoubleClick("accountName", bankDataDetails?.accountName)
+                        handleDoubleClick(
+                          "accountName",
+                          bankDataDetails?.accountName
+                        )
                       }
                     >
-                      {bankDataDetails?.accountName ? bankDataDetails?.accountName : " - "}
+                      {bankDataDetails?.accountName
+                        ? bankDataDetails?.accountName
+                        : " - "}
                     </Text>
                   )}
                 </Box>
@@ -404,7 +391,8 @@ const View = (props) => {
                         onBlur={handleBlur}
                         value={formik?.values?.accountNumber}
                         borderColor={
-                          formik?.errors?.accountNumber && formik?.touched?.accountNumber
+                          formik?.errors?.accountNumber &&
+                          formik?.touched?.accountNumber
                             ? "red.300"
                             : null
                         }
@@ -420,10 +408,15 @@ const View = (props) => {
                   ) : (
                     <Text
                       onDoubleClick={() =>
-                        handleDoubleClick("accountNumber", bankDataDetails?.accountNumber)
+                        handleDoubleClick(
+                          "accountNumber",
+                          bankDataDetails?.accountNumber
+                        )
                       }
                     >
-                      {bankDataDetails?.accountNumber ? bankDataDetails?.accountNumber : " - "}
+                      {bankDataDetails?.accountNumber
+                        ? bankDataDetails?.accountNumber
+                        : " - "}
                     </Text>
                   )}
                 </Box>
@@ -470,7 +463,6 @@ const View = (props) => {
                       {bankDataDetails?.bank ? bankDataDetails?.bank : " - "}
                     </Text>
                   )}
-
                 </Box>
               </GridItem>
               <GridItem colSpan={{ base: 4, md: 2 }} mt={3}>
@@ -511,7 +503,9 @@ const View = (props) => {
                         handleDoubleClick("branch", bankDataDetails?.branch)
                       }
                     >
-                      {bankDataDetails?.branch ? bankDataDetails?.branch : " - "}
+                      {bankDataDetails?.branch
+                        ? bankDataDetails?.branch
+                        : " - "}
                     </Text>
                   )}
                 </Box>
@@ -536,7 +530,8 @@ const View = (props) => {
                         onBlur={handleBlur}
                         value={formik?.values?.swiftCode}
                         borderColor={
-                          formik?.errors?.swiftCode && formik?.touched?.swiftCode
+                          formik?.errors?.swiftCode &&
+                          formik?.touched?.swiftCode
                             ? "red.300"
                             : null
                         }
@@ -552,10 +547,15 @@ const View = (props) => {
                   ) : (
                     <Text
                       onDoubleClick={() =>
-                        handleDoubleClick("swiftCode", bankDataDetails?.swiftCode)
+                        handleDoubleClick(
+                          "swiftCode",
+                          bankDataDetails?.swiftCode
+                        )
                       }
                     >
-                      {bankDataDetails?.swiftCode ? bankDataDetails?.swiftCode : " - "}
+                      {bankDataDetails?.swiftCode
+                        ? bankDataDetails?.swiftCode
+                        : " - "}
                     </Text>
                   )}
                 </Box>

@@ -1,27 +1,15 @@
 import React, { useEffect, useState } from "react";
 import CommonCheckTable from "components/reactTable/checktable";
-import { getApi } from "services/api";
 import { HasAccess } from "../../../redux/accessUtils";
 import {
-  Grid,
-  GridItem,
   Text,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
   useDisclosure,
-  Select,
 } from "@chakra-ui/react";
-
-import {
-  DeleteIcon,
-  ViewIcon,
-  EditIcon,
-  EmailIcon,
-  PhoneIcon,
-} from "@chakra-ui/icons";
-
+import { DeleteIcon, ViewIcon, EditIcon } from "@chakra-ui/icons";
 import { CiMenuKebab } from "react-icons/ci";
 import CommonDeleteModel from "components/commonDeleteModel";
 import { deleteManyApi } from "services/api";
@@ -32,7 +20,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const BankDetails = () => {
-  const title = "Bank Details";
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isLoding, setIsLoding] = useState(false);
@@ -44,13 +31,15 @@ const BankDetails = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const bankAllData = useSelector((state) => state?.bankData?.data);
 
-  useEffect(async () => {
+  const getAllBankDataFromRedux = async () => {
     await dispatch(fetchBankData());
+  };
+
+  useEffect(() => {
+    getAllBankDataFromRedux();
   }, [deleteModel, edit, isOpen]);
 
-  const [permission] = HasAccess([
-    "BankDetails"
-  ]);
+  const [permission] = HasAccess(["Bank Details"]);
 
   const handleDeleteBankDetais = async (ids) => {
     try {
@@ -74,7 +63,7 @@ const BankDetails = () => {
     accessor: "action",
     isSortable: false,
     center: true,
-    cell: ({ row, i }) => (
+    cell: ({ row }) => (
       <Text fontSize="md" fontWeight="900" textAlign={"center"}>
         <Menu isLazy>
           <MenuButton>
@@ -147,7 +136,7 @@ const BankDetails = () => {
   return (
     <>
       <CommonCheckTable
-        title={title}
+        title={"Bank Details"}
         isLoding={isLoding}
         columnData={tableColumns ?? []}
         allData={bankAllData || []}
