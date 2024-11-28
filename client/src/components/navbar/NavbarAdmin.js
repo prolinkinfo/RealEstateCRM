@@ -16,6 +16,8 @@ import { AiOutlineMenuUnfold } from "react-icons/ai";
 import { AiOutlineMenuFold } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchImage } from "../../redux/slices/imageSlice";
+import logo from "../../assets/img/ZUQRUF LOGO.png";
+import longLogo from "../../assets/img/ZUQRUF LOGO sides.png";
 
 export default function AdminNavbar(props) {
   const [scrolled, setScrolled] = useState(false);
@@ -45,8 +47,8 @@ export default function AdminNavbar(props) {
   let navbarFilter = "none";
   let navbarBackdrop = "blur(20px)";
   let navbarShadow = "none";
-  let navbarBg = useColorModeValue("#fff", "rgba(11,20,55,0.5)");
-  let navbarBorder = "transparent";
+  let navbarBg = useColorModeValue("#c0562140;", "#c0562140;");
+  let navbarBorder = "white";
   let secondaryMargin = "-9px";
   let paddingX = "15px";
   let gap = "0px";
@@ -168,19 +170,20 @@ export default function AdminNavbar(props) {
                 my={2}
               />
             ) : (
-              <Heading
-                my={4}
-                style={{
-                  width: openSidebar ? "165px" : "60px",
-                  height: "52px",
-                  objectFit: "contain",
-                }}
-                cursor={"pointer"}
-                onClick={() => !props?.from && setOpenSidebar(!openSidebar)}
-                userSelect={"none"}
-              >
-                {openSidebar === true ? "Prolink" : "Pr"}
-              </Heading>
+                <Image
+                  style={{
+                    width: openSidebar ? "165px" : "60px",
+                    height: "60px",
+                    objectFit: "contain",
+                  }}
+                  src={openSidebar ? longLogo : logo}
+                  alt={openSidebar ? "ZUQRUF Developer" : "ZUQRUF"}
+                  onClick={() => !props?.from && setOpenSidebar(!openSidebar)}
+                  cursor="pointer"
+                  userSelect="none"
+                  my={2}
+                  mx="auto"
+                />
             )}
           </Flex>
           <Box
@@ -202,9 +205,18 @@ export default function AdminNavbar(props) {
                 my={2}
               />
             ) : (
-              <Heading my={4} cursor={"pointer"} userSelect={"none"}>
-                {openSidebar === true ? "Prolink" : "Pr"}
-              </Heading>
+                <Image
+                  style={{
+                    width: openSidebar ? "165px" : "60px",
+                    height: "60px",
+                    objectFit: "contain",
+                  }}
+                  src={openSidebar ? longLogo : logo}
+                  alt={openSidebar ? "ZUQRUF Full Logo" : "ZUQRUF Short Logo"}
+                  cursor="pointer"
+                  userSelect="none"
+                  my={2}
+                />
             )}
           </Link>
 
