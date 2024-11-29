@@ -7,7 +7,6 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  Flex,
   FormLabel,
   Grid,
   GridItem,
@@ -21,11 +20,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getApi, putApi } from "services/api";
 import * as yup from "yup";
-import View from "../View";
 
 const Edit = (props) => {
   const param = useParams();
   const [bankEditData, setBankEditData] = useState([]);
+  
   const fetchViewData = async () => {
     const result = await getApi("api/bank-details/view/", props?.selectedId);
     setBankEditData(result?.data);
@@ -53,9 +52,9 @@ const Edit = (props) => {
     initialValues: initialValues,
     enableReinitialize: true,
     validationSchema,
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: () => {
       EditData();
-    },
+    }
   });
 
   const {
@@ -65,7 +64,6 @@ const Edit = (props) => {
     handleBlur,
     handleChange,
     handleSubmit,
-    setFieldValue,
   } = formik;
 
   const EditData = async () => {
@@ -93,7 +91,7 @@ const Edit = (props) => {
 
   useEffect(() => {
     fetchViewData();
-  }, [props?.selectedId, props?.isOpen]);
+  }, [props?.selectedId , props?.isOpen]);
 
   return (
     <div>

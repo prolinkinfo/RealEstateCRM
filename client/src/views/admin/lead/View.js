@@ -302,7 +302,7 @@ const View = () => {
       ),
     },
   ];
-  console.log(allData)
+  
   const handleTabChange = (index) => {
     setSelectedTab(index);
   };

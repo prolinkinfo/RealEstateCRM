@@ -38,6 +38,7 @@ const Add = (props) => {
     branch: yup.string().required("Branch Is required"),
     swiftCode: yup.number().required("SwiftCode Is required"),
   });
+  
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema,
@@ -53,8 +54,8 @@ const Add = (props) => {
     handleBlur,
     handleChange,
     handleSubmit,
-    setFieldValue,
   } = formik;
+
   const AddData = async () => {
     try {
       setIsLoding(true);

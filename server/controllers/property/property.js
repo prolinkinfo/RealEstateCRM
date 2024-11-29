@@ -8,7 +8,6 @@ const PhoneCall = require("../../model/schema/phoneCall");
 const { default: mongoose } = require("mongoose");
 const Email = require("../../model/schema/email");
 const ejs = require("ejs");
-const PDFDocument = require("pdfkit");
 const puppeteer = require("puppeteer");
 const moment = require("moment");
 const quotes = require("../../model/schema/quotes");
@@ -312,7 +311,17 @@ const genrateOfferLetter = async (req, res) => {
     } APARTMENT ON L.R. NO. ${property?.lrNo || "-"}. `;
 
     const templatePath = path.join(__dirname, "templates", "offerLetter.ejs");
-    const htmlContent = await ejs.renderFile(templatePath, {
+
+    const footerTemplate = `
+        <hr style="border: 1px solid #000; margin: 0;">
+      <div style="font-size: 15px; text-align: center; width: 100%; margin-top: 5px;">
+        <div style="border-top: 2px solid #000; margin-bottom: 5px; padding-top: 5px;">
+          <span style="font-weight: bold;">ZUQRUF DEVELOPERS</span>
+        </div>
+        <span style="font-size: 12px;">Page <span class="pageNumber"></span> / <span class="totalPages"></span></span>
+      </div>`;
+
+    const htmlContnet = await ejs.renderFile(templatePath, {
       ...req?.body,
       property,
       installments: JSON?.parse(req?.body?.installments),
@@ -320,20 +329,28 @@ const genrateOfferLetter = async (req, res) => {
       unitPrice: unitType?.price,
       buyerImageUrl,
       salesManagerSignUrl,
+      footerContain: "",
       purchaser,
       currentDate: moment().format("DD/MM/yyyy"),
     });
-
+    
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
-    await page.setContent(htmlContent);
-    const pdfBuffer = await page.pdf({ format: "A4", printBackground: true });
+    await page.setContent(htmlContnet, { waitUntil: "load" });
+
+    const pdfBuffer = await page.pdf({
+      format: "A4",
+      printBackground: true,
+      displayHeaderFooter: true,
+      footerTemplate: footerTemplate,
+    });
 
     const { selectedFloor, flatIndex, error } = await findPropertyAndFloor(
       id,
       floor,
       unit
     );
+
     if (error) return res?.status(404)?.json({ error });
 
     selectedFloor.flats[flatIndex] = unit;
@@ -366,6 +383,7 @@ const genrateOfferLetter = async (req, res) => {
     }
 
     await browser.close();
+
     let offerLatterFeiledPayload = {
       category: req.body.category,
       accountName: req?.body?.accountName,
