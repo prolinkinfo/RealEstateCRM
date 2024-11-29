@@ -11,6 +11,7 @@ const ejs = require("ejs");
 const puppeteer = require("puppeteer");
 const moment = require("moment");
 const quotes = require("../../model/schema/quotes");
+require('dotenv').config();
 
 const index = async (req, res) => {
   const query = req.query;
@@ -283,6 +284,8 @@ const genrateOfferLetter = async (req, res) => {
 
     const buyerImageUrl = `${url}/api/property/offer-letter/${req?.files?.buyerImage?.[0]?.filename}`;
     const salesManagerSignUrl = `${url}/api/property/offer-letter/${req?.files?.salesManagerSign?.[0]?.filename}`;
+    const logo = `${process.env.BASE_URL}api/property/images/ZUQRUF_LOGO.png`;
+
     const property = await Property.findById(id).lean();
     let purchaser = "";
     if (req?.body?.lead) {
@@ -328,6 +331,7 @@ const genrateOfferLetter = async (req, res) => {
       description: description,
       unitPrice: unitType?.price,
       buyerImageUrl,
+      logo : logo,
       salesManagerSignUrl,
       footerContain: "",
       purchaser,
