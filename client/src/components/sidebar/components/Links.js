@@ -16,15 +16,15 @@ import {
 export function SidebarLinks(props) {
   //   Chakra color mode
   let location = useLocation();
-  let activeColor = useColorModeValue("brand.600", "white");
+  let activeColor = useColorModeValue("orange.600", "orange.400");
   let inactiveColor = useColorModeValue(
     "secondaryGray.600",
-    "secondaryGray.600",
+    "secondaryGray.600"
   );
-  let activeIcon = useColorModeValue("brand.600", "white");
-  let textColor = useColorModeValue("secondaryGray.500", "white");
+  let activeIcon = useColorModeValue("orange.600", "orange.400");
+  let textColor = useColorModeValue("black", "black");
   let brandColor = useColorModeValue("brand.500", "brand.400");
-  let sidebarBgColor = useColorModeValue("gray.200", "brand.200");
+  let sidebarBgColor = useColorModeValue("#ffffffa8;", "#ffffffa8;");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const user = JSON.parse(localStorage.getItem("user"));
@@ -82,9 +82,15 @@ export function SidebarLinks(props) {
               </Box>
             )}
             {route.icon ? (
+              // border bottom
               <Box
                 backgroundColor={
                   activeRoute(route?.path?.toLowerCase()) ? sidebarBgColor : ""
+                }
+                borderBottom={
+                  activeRoute(route?.path?.toLowerCase())
+                    ? `2px solid ${useColorModeValue("#c05621", "#c05621")}`
+                    : "none"
                 }
                 ps={"25px"}
                 pb={"6px"}
@@ -150,6 +156,11 @@ export function SidebarLinks(props) {
                             ? activeIcon
                             : textColor
                         }
+                        borderBottom={
+                          activeRoute(route?.path?.toLowerCase())
+                            ? `2px solid ${useColorModeValue("orange.600", "orange.400")}`
+                            : "none"
+                        }
                         me="18px"
                       >
                         {route?.icon}
@@ -188,6 +199,11 @@ export function SidebarLinks(props) {
                       activeRoute(route?.path?.toLowerCase())
                         ? "bold"
                         : "normal"
+                    }
+                    borderBottom={
+                      activeRoute(route?.path?.toLowerCase())
+                        ? `5px solid ${useColorModeValue("orange.600", "orange.400")}`
+                        : "none"
                     }
                   >
                     {route?.name}

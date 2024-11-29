@@ -31,10 +31,12 @@ function Sidebar(props) {
   let variantChange = "0.2s linear";
   let shadow = useColorModeValue(
     "14px 17px 40px 4px rgba(112, 144, 176, 0.08)",
-    "unset",
+    "unset"
   );
   // Chakra Color Mode
-  let sidebarBg = useColorModeValue("white", "navy.800");
+  // let sidebarBg = useColorModeValue("white", "navy.800");
+  let sidebarBg = useColorModeValue("#c0562140;","#c0562140;");
+
   let sidebarMargins = "0px";
   const { isOpen, onOpen, onClose } = useDisclosure();
   // SIDEBAR
