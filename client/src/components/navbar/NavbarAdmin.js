@@ -16,8 +16,8 @@ import { AiOutlineMenuUnfold } from "react-icons/ai";
 import { AiOutlineMenuFold } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchImage } from "../../redux/slices/imageSlice";
-import logo from "../../assets/img/ZUQRUF LOGO.png";
-import longLogo from "../../assets/img/ZUQRUF LOGO sides.png";
+import logo from "../../assets/img/ZUQRUF_LOGO.png";
+import longLogo from "../../assets/img/ZUQRUF_LOGO_sides.png";
 
 export default function AdminNavbar(props) {
   const [scrolled, setScrolled] = useState(false);

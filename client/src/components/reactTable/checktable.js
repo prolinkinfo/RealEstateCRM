@@ -850,7 +850,14 @@ const CommonCheckTable = (props) => {
             </ModalBody>
             <ModalFooter>
               <Button
-                colorScheme="brand"
+                // colorScheme="brand"
+                sx={{
+                  bg: "#c05621",
+                  _hover: {
+                    bg: "#eb9971",
+                  },
+                }}
+                color="#fff"
                 mr={2}
                 onClick={() => {
                   setColumns([...tempSelectedColumns]);

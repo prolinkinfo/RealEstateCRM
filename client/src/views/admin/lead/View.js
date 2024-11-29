@@ -651,7 +651,7 @@ const View = () => {
                               >
                                 <Button
                                   size="sm"
-                                  colorScheme="brand"
+                                  colorScheme="orange"
                                   variant="outline"
                                   display="flex"
                                   justifyContant="end"
@@ -708,7 +708,7 @@ const View = () => {
                               >
                                 <Button
                                   size="sm"
-                                  colorScheme="brand"
+                                  colorScheme="orange"
                                   variant="outline"
                                   display="flex"
                                   justifyContant="end"
@@ -765,7 +765,7 @@ const View = () => {
                               >
                                 <Button
                                   size="sm"
-                                  colorScheme="brand"
+                                  colorScheme="orange"
                                   variant="outline"
                                   display="flex"
                                   justifyContant="end"
@@ -823,7 +823,7 @@ const View = () => {
                                 }}
                               >
                                 <Button
-                                  colorScheme="brand"
+                                  colorScheme="orange"
                                   size="sm"
                                   variant="outline"
                                   display="flex"

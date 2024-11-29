@@ -808,7 +808,7 @@ const View = () => {
                                 }}
                               >
                                 <Button
-                                  colorScheme="brand"
+                                  colorScheme="orange"
                                   variant="outline"
                                   size="sm"
                                   display="flex"
@@ -865,7 +865,7 @@ const View = () => {
                                 }}
                               >
                                 <Button
-                                  colorScheme="brand"
+                                  colorScheme="orange"
                                   variant="outline"
                                   size="sm"
                                   display="flex"
@@ -922,7 +922,7 @@ const View = () => {
                                 }}
                               >
                                 <Button
-                                  colorScheme="brand"
+                                  colorScheme="orange"
                                   variant="outline"
                                   size="sm"
                                   display="flex"
@@ -979,7 +979,7 @@ const View = () => {
                                 }}
                               >
                                 <Button
-                                  colorScheme="brand"
+                                  colorScheme="orange"
                                   size="sm"
                                   variant="outline"
                                   display="flex"
@@ -1036,7 +1036,7 @@ const View = () => {
                                 }}
                               >
                                 <Button
-                                  colorScheme="brand"
+                                  colorScheme="orange"
                                   size="sm"
                                   variant="outline"
                                   display="flex"
@@ -1093,7 +1093,7 @@ const View = () => {
                                 }}
                               >
                                 <Button
-                                  colorScheme="brand"
+                                  colorScheme="orange"
                                   size="sm"
                                   variant="outline"
                                   display="flex"
