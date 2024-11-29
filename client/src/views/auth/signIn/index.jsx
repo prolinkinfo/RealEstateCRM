@@ -10,8 +10,11 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  Grid,
+  GridItem,
   Heading,
   Icon,
+  Image,
   Input,
   InputGroup,
   InputRightElement,
@@ -32,6 +35,8 @@ import Spinner from "components/spinner/Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchImage } from "../../../redux/slices/imageSlice";
 import { setUser } from "../../../redux/slices/localSlice";
+import longLogo from "../../../assets/img/ZUQRUF_LOGO_sides.png";
+
 
 function SignIn() {
   // Chakra color mode
@@ -94,24 +99,34 @@ function SignIn() {
   };
 
   return (
-    <DefaultAuth
-      illustrationBackground={image?.length > 0 && image[0]?.authImg}
-      image={image?.length > 0 && image[0]?.authImg}
-    >
+
+<DefaultAuth
+  illustrationBackground={image?.length > 0 && image[0]?.authImg}
+  image={image?.length > 0 && image[0]?.authImg}
+>
+  <Grid
+    templateColumns={{ base: "1fr", lg: "repeat(2, 1fr)" }}
+    gap={6}
+    alignItems="center"
+    justifyContent="space-evenly"
+    w="100%"
+    maxW="1200px"
+    mx="auto"
+    px={{ base: "20px", lg: "40px" }}
+    py={{ base: "40px", lg: "14vh" }}
+    h="100%"
+  >
+    {/* Left Side: Form Content */}
+    <GridItem>
       <Flex
-        maxW={{ base: "100%", md: "max-content" }}
+        direction="column"
         w="100%"
-        mx={{ base: "auto", lg: "0px" }}
-        me="auto"
-        h="fit-content"
-        alignItems="start"
-        justifyContent="center"
-        mb={{ base: "30px", md: "60px" }}
-        px={{ base: "25px", md: "0px" }}
-        mt={{ base: "40px", md: "14vh" }}
-        flexDirection="column"
+        background="transparent"
+        borderRadius="15px"
+        maxWidth="420px"
+        mx="auto"
       >
-        <Box me="auto">
+        <Box mb="20px">
           <Heading color={textColor} fontSize="36px" mb="10px">
             Sign In
           </Heading>
@@ -125,148 +140,138 @@ function SignIn() {
             Enter your email and password to sign in!
           </Text>
         </Box>
-        <Flex
-          zIndex="2"
-          direction="column"
-          w={{ base: "100%", md: "420px" }}
-          maxW="100%"
-          background="transparent"
-          borderRadius="15px"
-          mx={{ base: "auto", lg: "unset" }}
-          me="auto"
-          mb={{ base: "20px", md: "auto" }}
-        >
-          <form onSubmit={handleSubmit}>
-            <FormControl isInvalid={errors?.username && touched?.username}>
-              <FormLabel
-                display="flex"
-                ms="4px"
-                fontSize="sm"
-                fontWeight="500"
-                color={textColor}
-                mb="8px"
-              >
-                Email<Text color={brandStars}>*</Text>
-              </FormLabel>
+        <form onSubmit={handleSubmit}>
+          <FormControl isInvalid={errors?.username && touched?.username} mb="24px">
+            <FormLabel
+              display="flex"
+              ms="4px"
+              fontSize="sm"
+              fontWeight="500"
+              color={textColor}
+              mb="8px"
+            >
+              Email<Text color={brandStars}>*</Text>
+            </FormLabel>
+            <Input
+              fontSize="sm"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values?.username}
+              name="username"
+              type="email"
+              placeholder="mail@simmmple.com"
+              size="lg"
+              borderColor={
+                errors?.username && touched?.username ? "red.300" : null
+              }
+              className={
+                errors?.username && touched?.username ? "isInvalid" : null
+              }
+            />
+            {errors?.username && touched?.username && (
+              <FormErrorMessage>{errors?.username}</FormErrorMessage>
+            )}
+          </FormControl>
+
+          <FormControl isInvalid={errors?.password && touched?.password} mb="24px">
+            <FormLabel
+              ms="4px"
+              fontSize="sm"
+              fontWeight="500"
+              color={textColor}
+              display="flex"
+            >
+              Password<Text color={brandStars}>*</Text>
+            </FormLabel>
+            <InputGroup size="md">
               <Input
                 fontSize="sm"
+                placeholder="Enter Your Password"
+                name="password"
+                value={values?.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values?.username}
-                name="username"
-                ms={{ base: "0px", md: "0px" }}
-                type="email"
-                placeholder="mail@simmmple.com"
-                mb={errors?.username && touched?.username ? undefined : "24px"}
-                fontWeight="500"
                 size="lg"
+                type={show ? "text" : "password"}
                 borderColor={
-                  errors?.username && touched?.username ? "red.300" : null
+                  errors?.password && touched?.password ? "red.300" : null
                 }
                 className={
-                  errors?.username && touched?.username ? "isInvalid" : null
+                  errors?.password && touched?.password ? "isInvalid" : null
                 }
               />
-              {errors?.username && touched?.username && (
-                <FormErrorMessage mb="24px">
-                  {" "}
-                  {errors?.username}
-                </FormErrorMessage>
-              )}
-            </FormControl>
-
-            <FormControl
-              isInvalid={errors?.password && touched?.password}
-              mb="24px"
-            >
-              <FormLabel
-                ms="4px"
-                fontSize="sm"
-                fontWeight="500"
-                color={textColor}
-                display="flex"
-              >
-                Password<Text color={brandStars}>*</Text>
-              </FormLabel>
-              <InputGroup size="md">
-                <Input
-                  isRequired={true}
-                  fontSize="sm"
-                  placeholder="Enter Your Password"
-                  name="password"
-                  mb={errors?.password && touched?.password ? undefined : "24px"}
-                  value={values?.password}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  size="lg"
-                  variant="auth"
-                  type={show ? "text" : "password"}
-                  borderColor={
-                    errors?.password && touched?.password ? "red.300" : null
-                  }
-                  className={
-                    errors?.password && touched?.password ? "isInvalid" : null
-                  }
+              <InputRightElement display="flex" alignItems="center">
+                <Icon
+                  color={textColorSecondary}
+                  _hover={{ cursor: "pointer" }}
+                  as={show ? RiEyeCloseLine : MdOutlineRemoveRedEye}
+                  onClick={showPass}
                 />
-                <InputRightElement display="flex" alignItems="center" mt="4px">
-                  <Icon
-                    color={textColorSecondary}
-                    _hover={{ cursor: "pointer" }}
-                    as={show ? RiEyeCloseLine : MdOutlineRemoveRedEye}
-                    onClick={showPass}
-                  />
-                </InputRightElement>
-              </InputGroup>
-              {errors?.password && touched?.password && (
-                <FormErrorMessage mb="24px">
-                  {" "}
-                  {errors?.password}
-                </FormErrorMessage>
-              )}
-              <Flex justifyContent="space-between" align="center" mb="24px">
-                <FormControl display="flex" alignItems="center">
-                  <Checkbox
-                    onChange={(e) => setCheckBox(e?.target?.checked)}
-                    id="remember-login"
-                    value={checkBox}
-                    defaultChecked
-                    colorScheme="brandScheme"
-                    me="10px"
-                  />
-                  <FormLabel
-                    htmlFor="remember-login"
-                    mb="0"
-                    fontWeight="normal"
-                    color={textColor}
-                    fontSize="sm"
-                  >
-                    Keep me logged in
-                  </FormLabel>
-                </FormControl>
-              </Flex>
+              </InputRightElement>
+            </InputGroup>
+            {errors?.password && touched?.password && (
+              <FormErrorMessage>{errors?.password}</FormErrorMessage>
+            )}
+          </FormControl>
 
-              <Flex
-                justifyContent="space-between"
-                align="center"
-                mb="24px"
-              ></Flex>
-              <Button
+          <Flex justifyContent="space-between" align="center" mb="24px">
+            <FormControl display="flex" alignItems="center">
+              <Checkbox
+                onChange={(e) => setCheckBox(e?.target?.checked)}
+                id="remember-login"
+                value={checkBox}
+                defaultChecked
+                colorScheme="brandScheme"
+                me="10px"
+              />
+              <FormLabel
+                htmlFor="remember-login"
+                mb="0"
+                fontWeight="normal"
+                color={textColor}
                 fontSize="sm"
-                variant="brand"
-                fontWeight="500"
-                w="100%"
-                h="50"
-                type="submit"
-                mb="24px"
-                disabled={isLoding ? true : false}
               >
-                {isLoding ? <Spinner /> : "Sign In"}
-              </Button>
+                Keep me logged in
+              </FormLabel>
             </FormControl>
-          </form>
-        </Flex>
+          </Flex>
+
+          <Button
+            fontSize="sm"
+            variant="brand"
+            fontWeight="500"
+            w="100%"
+            h="50px"
+            type="submit"
+            isLoading={isLoding}
+            loadingText="Signing In"
+          >
+            Sign In
+          </Button>
+        </form>
       </Flex>
-    </DefaultAuth>
+    </GridItem>
+
+    {/* Right Side: Image */}
+    <GridItem>
+      <Flex
+        w="100%"
+        h="100%"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Image
+          src={longLogo}
+          alt="Logo"
+          w={{ base: "80%", lg: "100%" }}
+          maxW="400px"
+          objectFit="contain"
+        />
+      </Flex>
+    </GridItem>
+  </Grid>
+</DefaultAuth>
+
   );
 }
 
