@@ -480,7 +480,7 @@ const View = (props) => {
                   }}
                 ></TabList>
               </GridItem>
-              <GridItem
+              <GridItem 
                 colSpan={{ base: 2, md: 4 }}
                 mt={{ sm: "3px", md: "5px" }}
               >

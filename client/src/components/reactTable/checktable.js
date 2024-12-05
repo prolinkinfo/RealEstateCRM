@@ -497,7 +497,8 @@ const CommonCheckTable = (props) => {
                 : AdvanceSearch !== false && (
                     <Button
                       variant="outline"
-                      colorScheme="brand"
+                      // colorScheme="brand"
+                      colorScheme="orange"
                       leftIcon={<SearchIcon />}
                       mt={{ sm: "5px", md: "0" }}
                       size="sm"

@@ -59,7 +59,7 @@ const OpprtunityAdvanceSearch = (props) => {
     onSubmit: (values, { resetForm }) => {
       dispatch(setSearchValue(values));
       dispatch(
-        getSearchData({ values: values, allData: allData, type: "Opprtunity" }),
+        getSearchData({ values: values, allData: allData, type: "Opprtunity" })
       );
       // const searchResult = allData?.filter(
       //     (item) =>
@@ -293,10 +293,12 @@ const OpprtunityAdvanceSearch = (props) => {
           <ModalFooter>
             <Button
               size="sm"
-              variant="brand"
+              variant="outline"
+              colorScheme="green"
               mr={2}
               onClick={handleSubmit}
-              disabled={isLoding || !dirty ? true : false}
+              disabled={isLoding ? true : false}
+              // disabled={isLoding || !dirty ? true : false}
             >
               {isLoding ? <Spinner /> : "Search"}
             </Button>

@@ -33,10 +33,10 @@ const Add = (props) => {
 
   const validationSchema = yup.object({
     accountName: yup.string().required("AccountName Is required"),
-    accountNumber: yup.number().required("AccountNumber Is required"),
+    accountNumber: yup.number().required("AccountNumber Is required").typeError('Must Be Number'),
     bank: yup.string().required("Bank Is required"),
     branch: yup.string().required("Branch Is required"),
-    swiftCode: yup.number().required("SwiftCode Is required"),
+    swiftCode: yup.number().required("SwiftCode Is required").typeError('Must Be Number'),
   });
   
   const formik = useFormik({

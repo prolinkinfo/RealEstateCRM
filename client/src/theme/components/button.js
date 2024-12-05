@@ -23,11 +23,11 @@ export const buttonStyles = {
           // bg: mode("orange.500", "orange.300")(props),
           color: "white",
           _focus: {
-            bg: mode("#ed9f79" , "#ed9f79")(props),
-         // bg: mode("orange.500", "orange.400")(props),
+            bg: mode("#ed9f79", "#ed9f79")(props),
+            // bg: mode("orange.500", "orange.400")(props),
           },
           _active: {
-            bg: mode("#c0562140;" , "#c0562140;")(props),
+            bg: mode("#c0562140;", "#c0562140;")(props),
           },
           _hover: {
             bg: mode("#eb9971", "#eb9971")(props),
