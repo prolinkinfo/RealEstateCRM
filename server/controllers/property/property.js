@@ -421,8 +421,8 @@ const genrateOfferLetter = async (req, res) => {
 
     res.end(pdfBuffer);
   } catch (err) {
-    console?.error("Failed to create Property:", err);
-    res?.status(400)?.json({ error: "Failed to create Property" });
+    console?.error("Failed to create Genrate Offer Letter:", err);
+    res?.status(400)?.json({ error: "Failed to create Genrate Offer Letter" });
   }
 };
 
