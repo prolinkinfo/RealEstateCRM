@@ -57,7 +57,6 @@ const BankDetails = () => {
       setIsLoding(false);
     }
   };
-
   const actionHeader = {
     Header: "Action",
     accessor: "action",
@@ -79,7 +78,7 @@ const BankDetails = () => {
                 icon={<EditIcon fontSize={15} mb={1} />}
                 onClick={() => {
                   setEdit(true);
-                  setSelectedId(row?.values?._id);
+                  setSelectedId(row?.original?._id);
                 }}
               >
                 Edit
@@ -117,7 +116,6 @@ const BankDetails = () => {
       </Text>
     ),
   };
-
   const tableColumns = [
     { Header: "#", accessor: "_id", isSortable: false, width: 10 },
     {
@@ -132,7 +130,7 @@ const BankDetails = () => {
       ? [actionHeader]
       : []),
   ];
-
+  
   return (
     <>
       <CommonCheckTable
@@ -173,7 +171,7 @@ const BankDetails = () => {
         size={"lg"}
         contactData={tableColumns}
         selectedId={selectedId}
-        setSelectedId={setSelectedId}
+        // setSelectedId={setSelectedId}
         onClose={setEdit}
         setAction={setAction}
       />

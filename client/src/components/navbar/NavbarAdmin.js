@@ -48,7 +48,7 @@ export default function AdminNavbar(props) {
   let navbarBackdrop = "blur(20px)";
   let navbarShadow = "none";
   let navbarBg = useColorModeValue("#c0562140;", "#c0562140;");
-  let navbarBorder = "white";
+  // let navbarBorder = "white";
   let secondaryMargin = "-9px";
   let paddingX = "15px";
   let gap = "0px";
@@ -65,13 +65,13 @@ export default function AdminNavbar(props) {
       position={navbarPosition}
       boxShadow={navbarShadow}
       bg={navbarBg}
-      borderColor={navbarBorder}
+      // borderColor={navbarBorder}
       filter={navbarFilter}
       backdropFilter={navbarBackdrop}
       backgroundPosition="center"
       backgroundSize="cover"
       // borderRadius='16px'
-      borderWidth="1.5px"
+      // borderWidth="1.5px"
       borderStyle="solid"
       zIndex={1}
       transitionDelay="0s, 0s, 0s, 0s"

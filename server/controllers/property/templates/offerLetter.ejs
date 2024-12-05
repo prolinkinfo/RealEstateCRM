@@ -174,13 +174,18 @@
         padding: 2px;
         text-align: center;
       }
+      .setLogoImg{
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+      }
     </style>
   </head>
 
   <body>
     <!-- First Page -->
     <div class="main">
-      <section>LOGO</section>
+      <section><img class="setLogoImg" src="<%= logo %>" alt="Logo" /></section>
       <section class="Address"><%= property?.location %></section>
     </div>
     <hr />

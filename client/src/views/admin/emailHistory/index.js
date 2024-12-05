@@ -278,7 +278,7 @@ const Index = (props) => {
         AdvanceSearch={
           <Button
             variant="outline"
-            colorScheme="brand"
+            colorScheme="orange"
             leftIcon={<SearchIcon />}
             mt={{ sm: "5px", md: "0" }}
             size="sm"

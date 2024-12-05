@@ -24,12 +24,6 @@ import * as yup from "yup";
 const Edit = (props) => {
   const param = useParams();
   const [bankEditData, setBankEditData] = useState([]);
-  
-  const fetchViewData = async () => {
-    const result = await getApi("api/bank-details/view/", props?.selectedId);
-    setBankEditData(result?.data);
-  };
-
   const [isLoding, setIsLoding] = useState(false);
 
   const initialValues = {
@@ -42,10 +36,16 @@ const Edit = (props) => {
 
   const validationSchema = yup.object({
     accountName: yup.string().required("AccountName Is required"),
-    accountNumber: yup.number().required("AccountNumber Is required"),
+    accountNumber: yup
+      .number()
+      .required("AccountNumber Is required")
+      .typeError("Must Be Number"),
     bank: yup.string().required("Bank Is required"),
     branch: yup.string().required("Branch Is required"),
-    swiftCode: yup.number().required("SwiftCode Is required"),
+    swiftCode: yup
+      .number()
+      .required("SwiftCode Is required")
+      .typeError("Must Be Number"),
   });
 
   const formik = useFormik({
@@ -54,17 +54,22 @@ const Edit = (props) => {
     validationSchema,
     onSubmit: () => {
       EditData();
-    }
+    },
   });
 
-  const {
-    errors,
-    touched,
-    values,
-    handleBlur,
-    handleChange,
-    handleSubmit,
-  } = formik;
+  const { errors, touched, values, handleBlur, handleChange, handleSubmit } =
+    formik;
+
+  const fetchViewData = async () => {
+    const result = await getApi("api/bank-details/view/", props?.selectedId);
+    setBankEditData(result?.data);
+  };
+
+  useEffect(() => {
+    if(props?.selectedId){
+      fetchViewData();
+    }
+  }, [props?.selectedId]);
 
   const EditData = async () => {
     try {
@@ -73,7 +78,7 @@ const Edit = (props) => {
         `api/bank-details/edit/${props?.selectedId || param?.id}`,
         values
       );
-      if (response?.status === 200) {
+      if (response?.status === 200){
         props?.onClose();
         props?.setAction((pre) => !pre);
       }
@@ -88,10 +93,6 @@ const Edit = (props) => {
     props.onClose(false);
     props.setSelectedId && props?.setSelectedId();
   };
-
-  useEffect(() => {
-    fetchViewData();
-  }, [props?.selectedId , props?.isOpen]);
 
   return (
     <div>

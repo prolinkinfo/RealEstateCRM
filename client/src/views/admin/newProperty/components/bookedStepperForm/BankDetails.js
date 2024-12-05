@@ -144,6 +144,7 @@ export const BankDetails = (props) => {
   const saveBankDetails = async (bankDetails) => {
     try {
       await postApi("api/bank-details/add", bankDetails);
+      getBankDetails()
     } catch (error) {
       console.log(error);
     }

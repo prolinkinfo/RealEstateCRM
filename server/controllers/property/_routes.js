@@ -57,6 +57,7 @@ router.use(
 );
 router.use("/offer-letter", express.static("uploads/offer-letter"));
 router.use("/floor-plans", express.static("uploads/Property/floor-plans"));
+router.use('/images',express.static("image"));
 router.use(
   "/virtual-tours-or-videos",
   express.static("uploads/Property/virtual-tours-or-videos")

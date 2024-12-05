@@ -173,92 +173,92 @@ const View = (props) => {
             <Grid gap={4}>
               <GridItem colSpan={2}>
                 <Box>
-                  <Box display={"flex"} justifyContent={"space-between"}>
-                    <Flex id="hide-btn">
+                  <Box display={"flex"} justifyContent={"space-between"} >
                       <Heading size="md" mb={3}>
                         Opportunities Details
                       </Heading>
-                      <Menu>
-                        {(user.role === "superAdmin" ||
-                          opportunityAccess?.create ||
-                          opportunityAccess?.update ||
-                          opportunityAccess?.delete) && (
-                          <MenuButton
-                            variant="outline"
-                            colorScheme="blackAlpha"
-                            size="sm"
-                            va
-                            mr={2.5}
-                            as={Button}
-                            rightIcon={<ChevronDownIcon />}
-                          >
-                            Actions
-                          </MenuButton>
-                        )}
-                        <MenuDivider />
-                        <MenuList minWidth={2}>
-                          {(user?.role === "superAdmin" ||
-                            opportunityAccess?.create) && (
-                            <MenuItem
-                              onClick={() => {
-                                setEdit(true);
-                                setType("add");
-                                formik.resetForm();
-                              }}
-                              alignItems={"start"}
-                              color={"blue"}
-                              icon={<AddIcon />}
-                            >
-                              Add
-                            </MenuItem>
-                          )}
-                          {(user?.role === "superAdmin" ||
-                            opportunityAccess?.update) && (
-                            <MenuItem
-                              onClick={() => {
-                                setEdit(true);
-                                setType("edit");
-                              }}
-                              alignItems={"start"}
-                              icon={<EditIcon />}
-                            >
-                              Edit
-                            </MenuItem>
-                          )}
-                          <MenuItem
-                            onClick={generatePDF}
-                            alignItems={"start"}
-                            icon={<FaFilePdf />}
-                            display={"flex"}
-                            style={{ alignItems: "center" }}
-                          >
-                            Print as PDF
-                          </MenuItem>
-
-                          {(user?.role === "superAdmin" ||
+                    <Flex id="hide-btn">
+                        <Menu>
+                          {(user.role === "superAdmin" ||
+                            opportunityAccess?.create ||
+                            opportunityAccess?.update ||
                             opportunityAccess?.delete) && (
-                            <>
-                              <MenuDivider />
-                              <MenuItem
-                                alignItems={"start"}
-                                onClick={() => setDeleteManyModel(true)}
-                                color={"red"}
-                                icon={<DeleteIcon />}
-                              >
-                                Delete
-                              </MenuItem>
-                            </>
+                            <MenuButton
+                              variant="outline"
+                              colorScheme="blackAlpha"
+                              size="sm"
+                              va
+                              mr={2.5}
+                              as={Button}
+                              rightIcon={<ChevronDownIcon />}
+                            >
+                              Actions
+                            </MenuButton>
                           )}
-                        </MenuList>
-                      </Menu>
-                      <Button
-                        leftIcon={<IoIosArrowBack />}
-                        size="sm"
-                        variant="brand"
-                        onClick={() => navigate(-1)}
-                      >
-                        Back
-                      </Button>
+                          <MenuDivider />
+                          <MenuList minWidth={2}>
+                            {(user?.role === "superAdmin" ||
+                              opportunityAccess?.create) && (
+                              <MenuItem
+                                onClick={() => {
+                                  setEdit(true);
+                                  setType("add");
+                                  formik.resetForm();
+                                }}
+                                alignItems={"start"}
+                                color={"blue"}
+                                icon={<AddIcon />}
+                              >
+                                Add
+                              </MenuItem>
+                            )}
+                            {(user?.role === "superAdmin" ||
+                              opportunityAccess?.update) && (
+                              <MenuItem
+                                onClick={() => {
+                                  setEdit(true);
+                                  setType("edit");
+                                }}
+                                alignItems={"start"}
+                                icon={<EditIcon />}
+                              >
+                                Edit
+                              </MenuItem>
+                            )}
+                            <MenuItem
+                              onClick={generatePDF}
+                              alignItems={"start"}
+                              icon={<FaFilePdf />}
+                              display={"flex"}
+                              style={{ alignItems: "center" }}
+                            >
+                              Print as PDF
+                            </MenuItem>
+
+                            {(user?.role === "superAdmin" ||
+                              opportunityAccess?.delete) && (
+                              <>
+                                <MenuDivider />
+                                <MenuItem
+                                  alignItems={"start"}
+                                  onClick={() => setDeleteManyModel(true)}
+                                  color={"red"}
+                                  icon={<DeleteIcon />}
+                                >
+                                  Delete
+                                </MenuItem>
+                              </>
+                            )}
+                          </MenuList>
+                        </Menu>
+                        <Button
+                          leftIcon={<IoIosArrowBack />}
+                          size="sm"
+                          variant="brand"
+                          onClick={() => navigate(-1)}
+                        >
+                          Back
+                        </Button>
                     </Flex>
                   </Box>
                   <HSeparator />
