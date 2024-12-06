@@ -11,7 +11,7 @@ const ejs = require("ejs");
 const puppeteer = require("puppeteer");
 const moment = require("moment");
 const quotes = require("../../model/schema/quotes");
-require('dotenv').config();
+require("dotenv").config();
 
 const index = async (req, res) => {
   const query = req.query;
@@ -331,14 +331,23 @@ const genrateOfferLetter = async (req, res) => {
       description: description,
       unitPrice: unitType?.price,
       buyerImageUrl,
-      logo : logo,
+      logo: logo,
       salesManagerSignUrl,
       footerContain: "",
       purchaser,
       currentDate: moment().format("DD/MM/yyyy"),
     });
-    
-    const browser = await puppeteer.launch({ headless: true });
+
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-gpu",
+        "--disable-software-rasterizer",
+      ],
+    });
     const page = await browser.newPage();
     await page.setContent(htmlContnet, { waitUntil: "load" });
 
