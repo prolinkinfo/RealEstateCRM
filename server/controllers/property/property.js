@@ -340,7 +340,7 @@ const genrateOfferLetter = async (req, res) => {
 
     const browser = await puppeteer.launch({
       headless: true,
-      executablePath: "~/chromium/chrome-linux/chrome",
+      executablePath: "/home/master_symkgkmzzz/chromium/chrome-linux/chrome",
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",
