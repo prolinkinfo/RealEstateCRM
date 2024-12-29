@@ -1,0 +1,322 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap");
+
+:root {
+  --light-yellow-bg: #fbf4dd;
+  --light-yellow-color: #a37f08;
+  --light-yellow-border: #a37f08;
+
+  --light-red-bg: #ffeeeb;
+  --light-red-color: #db5436;
+  --light-red-border: #db5436;
+
+  --light-green-bg: #eaf9e6;
+  --light-green-color: #4d8f3a;
+  --light-green-border: #4d8f3a;
+
+  --light-blue-bg: #ebf5ff;
+  --light-blue-color: #1f7eeb;
+  --light-blue-border: #1f7eeb;
+
+  --light-purpule-bg: #eee7fc;
+  --light-purpule-color: #7038db;
+  --light-purpule-border: #7038db;
+}
+
+body {
+  font-family: "DM Sans", sans-serif;
+}
+
+option {
+  color: black;
+}
+
+* {
+  letter-spacing: 0.3px;
+  outline: none;
+}
+
+::-webkit-scrollbar {
+  height: 4px !important;
+  width: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #b9b9b9;
+  border-radius: 20px;
+}
+
+.css-70fard,
+.apexcharts-toolbar {
+  z-index: 0 !important;
+}
+
+.fc-bg-event {
+  opacity: 1 !important;
+}
+
+.p0 {
+  margin-top: 0;
+}
+
+/* TABLE  */
+.table-container {
+  min-height: 23vh;
+  max-height: 23vh;
+  overflow-y: auto;
+}
+
+.table-container thead {
+  border-bottom: 1px solid black;
+  box-shadow: -2px 0px 4px -2px #5c5d5efa;
+  position: sticky;
+  top: 0;
+  height: 25px;
+  background: #ffffff;
+}
+
+.table-container-property {
+  min-height: auto;
+  max-height: 68vh;
+  overflow-y: auto;
+}
+
+.css-efk3t2 {
+  max-height: 15rem !important;
+  overflow-y: scroll !important;
+}
+
+.table-container-property thead {
+  position: sticky;
+  top: 0;
+  height: 25px;
+  background: #ffffff;
+  border-bottom: 1px solid black;
+  box-shadow: -2px 0px 4px -2px #5c5d5efa;
+}
+
+.table-fix-container {
+  min-height: 63vh;
+  max-height: 63vh;
+  overflow-y: auto;
+}
+
+.small-table-fix-container {
+  min-height: 15vh;
+  max-height: 63vh;
+  overflow-y: auto;
+}
+
+.table-fix-container thead {
+  border-bottom: 1px solid black;
+  box-shadow: -2px 0px 4px -2px #5c5d5efa;
+  position: sticky;
+  top: 0;
+  height: 25px;
+  background: #ffffff;
+}
+
+.importTable {
+  min-height: auto;
+  max-height: 82vh;
+  overflow-y: auto;
+}
+
+.tableData {
+  padding: 10px !important;
+}
+
+/* .leadRow td {
+  border-bottom: 1px solid #e2e8f0;
+} */
+
+.datePickerBorder {
+  border: 1px solid #e2e8f0;
+  padding: 0 5px;
+  border-radius: 5px;
+  margin: 0 10px !important;
+}
+
+.imageCard {
+  position: relative;
+  overflow: hidden;
+  margin-right: 12px;
+  /* height: 200px;
+  width: 400px; */
+}
+
+.imageContent {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #00000096;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+}
+
+.imageCard:hover .imageContent {
+  opacity: 1;
+}
+
+.EditDelete {
+  display: none;
+}
+
+.CustomFieldName {
+  border-bottom: 1px solid rgba(128, 128, 128, 0.705);
+}
+
+.CustomFieldName:hover .EditDelete {
+  display: block;
+}
+
+.pending {
+  background-color: var(--light-yellow-bg) !important;
+  color: var(--light-yellow-color) !important;
+  border: 1px solid var(--light-yellow-border) !important;
+}
+
+.onHold {
+  background-color: var(--light-red-bg) !important;
+  color: var(--light-red-color) !important;
+  border: 1px solid var(--light-red-border) !important;
+}
+
+.completed {
+  background-color: var(--light-green-bg) !important;
+  color: var(--light-green-color) !important;
+  border: 1px solid var(--light-green-border) !important;
+}
+
+.toDo {
+  background-color: var(--light-blue-bg) !important;
+  color: var(--light-blue-color) !important;
+  border: 1px solid var(--light-blue-border) !important;
+}
+
+.inProgress {
+  background-color: var(--light-purpule-bg) !important;
+  color: var(--light-purpule-color) !important;
+  border: 1px solid var(--light-purpule-border) !important;
+}
+
+.light-yellow {
+  background-color: var(--light-yellow-bg) !important;
+  color: var(--light-yellow-color) !important;
+  border: 1px solid var(--light-yellow-border) !important;
+}
+
+.light-red {
+  background-color: var(--light-red-bg) !important;
+  color: var(--light-red-color) !important;
+  border: 1px solid var(--light-red-border) !important;
+}
+
+.light-green {
+  background-color: var(--light-green-bg) !important;
+  color: var(--light-green-color) !important;
+  border: 1px solid var(--light-green-border) !important;
+}
+
+.light-blue {
+  background-color: var(--light-blue-bg) !important;
+  color: var(--light-blue-color) !important;
+  border: 1px solid var(--light-blue-border) !important;
+}
+
+.light-purpule {
+  background-color: var(--light-purpule-bg) !important;
+  color: var(--light-purpule-color) !important;
+  border: 1px solid var(--light-purpule-border) !important;
+}
+
+.chakra-checkbox[disabled] .chakra-checkbox__control {
+  background-color: #dcdee0 !important;
+  border: 2px solid #d1d1d1;
+}
+
+/* Invoice.css */
+.invoice-container {
+  width: 100%;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #000;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+.invoice-container2 {
+  width: 50%;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #000;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 24px;
+  color: orange;
+}
+
+.invoice-details {
+  text-align: right;
+}
+
+.address-section {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.address {
+  width: 45%;
+  margin-top: 20px;
+}
+
+.invoice-info {
+  margin-top: 20px;
+}
+
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.invoice-table th,
+.invoice-table td {
+  border: 1px solid #000;
+  padding: 5px;
+  text-align: center;
+}
+
+.totals {
+  margin-top: 20px;
+  display: flex;
+  justify-content: end;
+}
+
+.totals > div {
+  margin-bottom: 5px;
+}
+
+.net-amount {
+  font-weight: bold;
+}
+
+.footer {
+  margin-top: 20px;
+  text-align: center;
+  font-style: italic;
+}

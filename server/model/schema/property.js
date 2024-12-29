@@ -1,9 +1,38 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const fetchSchemaFields = async () => {
-    const CustomFieldModel = mongoose.model('CustomField');
+    const CustomFieldModel = mongoose.model("CustomField");
     return await CustomFieldModel.find({ moduleName: "Properties" });
 };
+
+const unitTypeSchema = new mongoose.Schema({
+    name: {
+        type: String,
+    },
+    sqm: {
+        type: String,
+    },
+    executive:{
+        type: String,
+    },
+    order: {
+        type: Number,
+    },
+    price: {
+        type: String,
+    },
+});
+
+const flatSchema = new mongoose.Schema({
+    flateName: { type: Number },
+    status: { type: String },
+    unitType: { type: String },
+});
+
+const floorSchema = new mongoose.Schema({
+    floorNumber: { type: Number },
+    flats: [flatSchema],
+});
 
 const propertySchema = new mongoose.Schema({
     // //1. basicPropertyInformation:
@@ -49,21 +78,29 @@ const propertySchema = new mongoose.Schema({
     // contractorsOrServiceProviders: String,
     // //8. Property Notes and Comments:
     // internalNotesOrComments: String,
+    unitType: {
+        type: [unitTypeSchema],
+        default: [],
+    },
+    units: {
+        type: [floorSchema],
+        default: [],
+    },
     deleted: {
         type: Boolean,
         default: false,
     },
     updatedDate: {
         type: Date,
-        default: Date.now
+        default: Date.now,
     },
     createdDate: {
         type: Date,
     },
     createBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
+        ref: "User",
+        required: true,
     },
 });
 
@@ -74,5 +111,5 @@ const initializePropertySchema = async () => {
     });
 };
 
-const Property = mongoose.model('Properties', propertySchema, 'Properties');
+const Property = mongoose.model("Properties", propertySchema, "Properties");
 module.exports = { Property, initializePropertySchema };
