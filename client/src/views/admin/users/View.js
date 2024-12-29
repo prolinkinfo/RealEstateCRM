@@ -125,6 +125,7 @@ const View = () => {
             data={data}
             selectedId={param?.id}
             userAction={userAction}
+            setAction={setAction}
             setUserAction={setUserAction}
             fetchData={fetchData}
           />

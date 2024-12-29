@@ -27,11 +27,11 @@ import React, { useEffect, useState } from "react";
 import { LiaMousePointerSolid } from "react-icons/lia";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { userSchema } from "schema";
-import { getApi } from "services/api";
-import { putApi } from "services/api";
-import { postApi } from "services/api";
+import { getApi, postApi, putApi } from "services/api";
+import { setUser } from "../../../redux/slices/localSlice";
 
 const AddEditUser = (props) => {
   const {
@@ -51,6 +51,7 @@ const AddEditUser = (props) => {
   const [roleModelOpen, setRoleModelOpen] = useState(false);
   const [assignToRoleData, setAssignToRoleData] = useState([]);
   const showPass = () => setShow(!show);
+  const dispatch = useDispatch();
 
   const initialValues = {
     firstName: userAction === "add" ? "" : data?.firstName,
@@ -106,8 +107,8 @@ const AddEditUser = (props) => {
         if (response && response?.status === 200) {
           // setEdit(false)
           fetchData();
-          let updatedUserData = userData; // Create a copy of userData
           if (user?._id === selectedId) {
+            let updatedUserData = data; // Create a copy of userData
             if (updatedUserData && typeof updatedUserData === "object") {
               // Create a new object with the updated firstName
               updatedUserData = {
@@ -116,10 +117,9 @@ const AddEditUser = (props) => {
                 lastName: values?.lastName,
               };
             }
-
             const updatedDataString = JSON.stringify(updatedUserData);
             localStorage.setItem("user", updatedDataString);
-            // dispatch(setUser(updatedDataString));
+            dispatch(setUser(updatedDataString));
           }
 
           setUserAction("");
@@ -146,7 +146,7 @@ const AddEditUser = (props) => {
         ...item,
         value: item?._id,
         label: item?.roleName,
-      })),
+      }))
     );
     setIsLoding(false);
   };
@@ -229,11 +229,11 @@ const AddEditUser = (props) => {
                     mb={errors?.roles && touched?.roles ? undefined : "10px"}
                     className="custom-autoComplete"
                     selectedItems={roles?.filter((item) =>
-                      values?.roles?.includes(item?._id),
+                      values?.roles?.includes(item?._id)
                     )}
                     onSelectedItemsChange={(changes) => {
                       const selectedLabels = extractLabels(
-                        changes?.selectedItems,
+                        changes?.selectedItems
                       );
                       setFieldValue("roles", selectedLabels);
                     }}
@@ -379,7 +379,7 @@ const AddEditUser = (props) => {
             setIsLoding={setIsLoding}
             fieldName="roles"
             setFieldValue={setFieldValue}
-            // columnsData={columns ?? []}
+          // columnsData={columns ?? []}
           />
         </ModalBody>
         <ModalFooter>
