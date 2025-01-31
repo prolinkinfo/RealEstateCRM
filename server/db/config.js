@@ -78,7 +78,7 @@ const connectDB = async (DATABASE_URL, DATABASE) => {
         await createNewModule({ body: { moduleName: 'Properties', fields: propertiesFields, headings: [], isDefault: true } }, mockRes);
 
         // Create default role
-        await createNewRole({ body: defaultRole }, mockRes);
+        // await createNewRole({ body: defaultRole }, mockRes);
 
         /*  */
         await initializedSchemas();

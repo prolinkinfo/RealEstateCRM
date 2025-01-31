@@ -62,14 +62,14 @@ const InvoicesImport = React.lazy(
 const User = React.lazy(() => import("views/admin/users"));
 const UserView = React.lazy(() => import("views/admin/users/View"));
 
-// const Property = React.lazy(() => import("views/admin/property"));
-// const PropertyView = React.lazy(() => import("views/admin/property/View"));
-// const PropertyImport = React.lazy(() => import("views/admin/property/components/PropertyImport"))
-const Property = React.lazy(() => import("views/admin/newProperty"));
-const PropertyView = React.lazy(() => import("views/admin/newProperty/View"));
-const PropertyImport = React.lazy(
-  () => import("views/admin/property/components/PropertyImport")
-);
+const Property = React.lazy(() => import("views/admin/property"));
+const PropertyView = React.lazy(() => import("views/admin/property/View"));
+const PropertyImport = React.lazy(() => import("views/admin/property/components/PropertyImport"))
+// const Property = React.lazy(() => import("views/admin/newProperty"));
+// const PropertyView = React.lazy(() => import("views/admin/newProperty/View"));
+// const PropertyImport = React.lazy(
+//   () => import("views/admin/property/components/PropertyImport")
+// );
 
 const BankDetails = React.lazy(()=>import("views/admin/bankDetails/BankDetails.js"))
 const BankDetailsView = React.lazy(()=> import("views/admin/bankDetails/View.js"))
@@ -253,31 +253,31 @@ const routes = [
     component: OpportunitiesImport,
   },
   //------------------------------Opportunity project-------------------------
-  {
-    name: "Opportunity Project",
-    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-    path: "/opportunityproject",
-    icon: (
-      <Icon as={FaDiagramProject} width="20px" height="20px" color="inherit" />
-    ),
-    component: Opportunityproject,
-  },
-  {
-    name: "Opportunity Project",
-    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-    under: "opportunityproject",
-    parentName: "Opportunity Project",
-    path: "/opportunityprojectView/:id",
-    component: OpportunityView,
-  },
-  {
-    name: "Opportunity Project Import",
-    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-    under: "opportunityproject",
-    parentName: "Opportunity Project",
-    path: "/opportunityProjectImport",
-    component: OpportunityProjectImport,
-  },
+  // {
+  //   name: "Opportunity Project",
+  //   layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+  //   path: "/opportunityproject",
+  //   icon: (
+  //     <Icon as={FaDiagramProject} width="20px" height="20px" color="inherit" />
+  //   ),
+  //   component: Opportunityproject,
+  // },
+  // {
+  //   name: "Opportunity Project",
+  //   layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+  //   under: "opportunityproject",
+  //   parentName: "Opportunity Project",
+  //   path: "/opportunityprojectView/:id",
+  //   component: OpportunityView,
+  // },
+  // {
+  //   name: "Opportunity Project Import",
+  //   layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+  //   under: "opportunityproject",
+  //   parentName: "Opportunity Project",
+  //   path: "/opportunityProjectImport",
+  //   component: OpportunityProjectImport,
+  // },
   // -----------------------------Account-------------------------------------
   {
     name: "Account",
@@ -326,32 +326,32 @@ const routes = [
     component: AccountImport,
   },
   // --------------- Quotes Routes --------------------
-  {
-    name: "Offer Letter",
-    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-    path: "/offerletter",
-    icon: (
-      <Icon as={BsBlockquoteRight} width="20px" height="20px" color="inherit" />
-    ),
-    component: Quotes,
-  },
-  {
-    name: "Offer Letter",
-    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-    under: "Offer Letter",
-    parentName: "Offer Letter",
-    path: "/quotesView/:id",
-    component: QuotesView,
-  },
-  {
-    name: "Quotes Import",
-    layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-    both: true,
-    under: "quotes",
-    parentName: "Quotes",
-    path: "/quotesImport",
-    component: QuotesImport,
-  },
+  // {
+  //   name: "Offer Letter",
+  //   layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+  //   path: "/offerletter",
+  //   icon: (
+  //     <Icon as={BsBlockquoteRight} width="20px" height="20px" color="inherit" />
+  //   ),
+  //   component: Quotes,
+  // },
+  // {
+  //   name: "Offer Letter",
+  //   layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+  //   under: "Offer Letter",
+  //   parentName: "Offer Letter",
+  //   path: "/quotesView/:id",
+  //   component: QuotesView,
+  // },
+  // {
+  //   name: "Quotes Import",
+  //   layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+  //   both: true,
+  //   under: "quotes",
+  //   parentName: "Quotes",
+  //   path: "/quotesImport",
+  //   component: QuotesImport,
+  // },
   // --------------- Invoices Routes --------------------
   {
     name: "Invoices",
@@ -390,21 +390,21 @@ const routes = [
   //   component: Communication,
   // },
     //---------------Bank Details Route----------------------
-    {
-      name: "Bank Details",
-      layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-      path: "/bank-details",
-      icon: <Icon as={FaPiggyBank} width="20px" height="20px" color="inherit" />,
-      component: BankDetails,
-    },
-    {
-      name: "Bank Details",
-      layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
-      under: "bankDetails",
-      parentName: "Bank Details",
-      path: "/bankDetailsview/:id",
-      component: BankDetailsView,
-    },
+    // {
+    //   name: "Bank Details",
+    //   layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    //   path: "/bank-details",
+    //   icon: <Icon as={FaPiggyBank} width="20px" height="20px" color="inherit" />,
+    //   component: BankDetails,
+    // },
+    // {
+    //   name: "Bank Details",
+    //   layout: [ROLE_PATH.superAdmin, ROLE_PATH.user],
+    //   under: "bankDetails",
+    //   parentName: "Bank Details",
+    //   path: "/bankDetailsview/:id",
+    //   component: BankDetailsView,
+    // },
   // ------------- Task Routes ------------------------
   {
     name: "Tasks",
