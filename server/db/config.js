@@ -59,6 +59,7 @@ const connectDB = async (DATABASE_URL, DATABASE) => {
         //     await db.collection(collectionName).drop();
         //     console.log(`Collection ${collectionName} deleted successfully.`);
         // }
+
         await initializedSchemas();
 
         /* this was temporary  */
