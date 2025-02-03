@@ -12,6 +12,11 @@ export const userSchema = yup.object({
     .required("Phone Number is Required"),
   username: yup
     .string()
+    .trim()
     .email("Email must be a valid email")
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      "Email must follow standard email format"
+    )
     .required("Email Is required"),
 });

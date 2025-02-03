@@ -25,7 +25,7 @@ import Spinner from "components/spinner/Spinner";
 import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getApi , putApi} from "services/api";
+import { getApi, putApi } from "services/api";
 import Add from "./Add";
 import Edit from "./Edit";
 import RoleTable from "./components/roleTable";
@@ -69,7 +69,7 @@ const View = () => {
   const [userAction, setUserAction] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [editableField, setEditableField] = useState(null);
-  
+
   const size = "lg";
 
   const handleOpen = (type) => {
@@ -117,15 +117,24 @@ const View = () => {
   };
 
   const handleBlur = (e) => {
-    formik.handleSubmit();
-    toast.success("User Updated Successfully");
+    formik.handleBlur(e);
+    if (formik.isValid && formik.dirty) {
+      if (formik.errors.username) {
+        toast.error("Invalid email format. Please correct it.");
+      } else {
+        formik.handleSubmit();
+        toast.success("User Updated Successfully");
+      }
+    } else {
+      toast.error("Please fix the errors before submitting");
+    }
   };
 
   const initialValues = {
-    firstName:  data?.firstName,
-    lastName:  data?.lastName,
-    username:  data?.username,
-    phoneNumber:  data?.phoneNumber,
+    firstName: data?.firstName,
+    lastName: data?.lastName,
+    username: data?.username,
+    phoneNumber: data?.phoneNumber,
   };
 
   const id = window.location.pathname.split("/").pop();
@@ -291,7 +300,6 @@ const View = () => {
                     {data?.firstName ? data?.firstName : " - "}
                   </Text>
                 )}
-                {/* <Text>{data?.firstName ? data?.firstName : " - "}</Text> */}
               </GridItem>
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
@@ -330,7 +338,6 @@ const View = () => {
                     {data?.lastName ? data?.lastName : " - "}
                   </Text>
                 )}
-                {/* <Text>{data?.lastName ? data?.lastName : " - "}</Text> */}
               </GridItem>
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
@@ -346,7 +353,8 @@ const View = () => {
                       onBlur={handleBlur}
                       value={formik?.values?.phoneNumber}
                       borderColor={
-                        formik?.errors?.phoneNumber && formik?.touched?.phoneNumber
+                        formik?.errors?.phoneNumber &&
+                        formik?.touched?.phoneNumber
                           ? "red.300"
                           : null
                       }
@@ -368,7 +376,6 @@ const View = () => {
                     {data?.phoneNumber ? data?.phoneNumber : " - "}
                   </Text>
                 )}
-                {/* <Text>{data?.phoneNumber ? data?.phoneNumber : " - "}</Text> */}
               </GridItem>
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
@@ -400,14 +407,20 @@ const View = () => {
                   </>
                 ) : (
                   <Text
-                    onDoubleClick={() =>
-                      handleDoubleClick("username", data?.username)
-                    }
+                    onDoubleClick={() => {
+                      if (
+                        formik?.values?.username &&
+                        !formik?.errors?.username
+                      ) {
+                        handleDoubleClick("username", data?.username);
+                      } else {
+                        toast.error("Invalid email format. Cannot edit.");
+                      }
+                    }}
                   >
                     {data?.username ? data?.username : " - "}
                   </Text>
                 )}
-                {/* <Text>{data?.username ? data?.username : " - "}</Text> */}
               </GridItem>
             </Grid>
           </Card>

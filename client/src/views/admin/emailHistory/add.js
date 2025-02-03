@@ -66,8 +66,7 @@ const AddEmailHistory = (props) => {
     startDate: "",
     type: "message",
     html: "",
-    category : "Contact",
-    // category: "contact",
+    category: "Contact",
     // assignTo: '',
     // assignToLead: '',
     createBy: user?._id,
@@ -230,7 +229,7 @@ const AddEmailHistory = (props) => {
             fieldName="createByLead"
             setFieldValue={setFieldValue}
           />
-          
+
           {/* User Model for sales person */}
           <UserModel
             onClose={() => setSalesPersonsModelOpen(false)}

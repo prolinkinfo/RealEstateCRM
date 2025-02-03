@@ -24,7 +24,6 @@ const index = async (req, res) => {
             "Contacts",
             "Properties",
             "Opportunities",
-            "Opportunity Project",
             "Account",
             "Quotes",
             "Invoices",

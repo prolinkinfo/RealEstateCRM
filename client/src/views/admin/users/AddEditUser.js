@@ -272,7 +272,6 @@ const AddEditUser = (props) => {
                 onBlur={handleBlur}
                 value={values?.username}
                 name="username"
-                disabled={userAction === "edit"}
                 placeholder="Email Address"
                 fontWeight="500"
                 borderColor={

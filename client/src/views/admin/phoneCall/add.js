@@ -57,8 +57,7 @@ const AddPhoneCall = (props) => {
     createByLead: "",
     property: "",
     startDate: "",
-    category : "Contact",
-    // category: "contact",
+    category: "Contact",
     // assignTo: '',
     // assignToLead: '',
     createBy: user?._id,
@@ -104,14 +103,14 @@ const AddPhoneCall = (props) => {
         result = await getApi(
           user?.role === "superAdmin"
             ? "api/contact/"
-            : `api/contact/?createBy=${user._id}`,
+            : `api/contact/?createBy=${user._id}`
         );
         setAssignToContactData(result?.data);
       } else if (values?.category === "Lead" && assignToLeadData?.length <= 0) {
         result = await getApi(
           user?.role === "superAdmin"
             ? "api/lead/"
-            : `api/lead/?createBy=${user?._id}`,
+            : `api/lead/?createBy=${user?._id}`
         );
         setAssignToLeadData(result?.data);
       } else if (
@@ -121,7 +120,7 @@ const AddPhoneCall = (props) => {
         result = await getApi(
           user?.role === "superAdmin"
             ? "api/property"
-            : `api/property/?createBy=${user?._id}`,
+            : `api/property/?createBy=${user?._id}`
         );
         setAssignToPropertyData(result?.data);
       }
@@ -133,14 +132,14 @@ const AddPhoneCall = (props) => {
   const fetchRecipientData = async () => {
     if (values?.createByContact) {
       let findEmail = assignToContactData?.find(
-        (item) => item?._id === values?.createByContact,
+        (item) => item?._id === values?.createByContact
       );
       if (findEmail) {
         setFieldValue("recipient", findEmail?.phoneNumber);
       }
     } else if (values?.createByLead) {
       let findEmail = assignToLeadData?.find(
-        (item) => item?._id === values?.createByLead,
+        (item) => item?._id === values?.createByLead
       );
       if (findEmail) {
         setFieldValue("recipient", findEmail?.leadPhoneNumber);
@@ -157,7 +156,7 @@ const AddPhoneCall = (props) => {
 
       let salesPersons =
         result?.data?.user?.filter((userData) =>
-          userData?.roles?.some((role) => role?.roleName === "Sales"),
+          userData?.roles?.some((role) => role?.roleName === "Sales")
         ) || [];
       setAssignToSalesData(salesPersons);
     } catch (error) {
@@ -402,11 +401,11 @@ const AddPhoneCall = (props) => {
                     label={`Property`}
                     items={setValueProperty}
                     selectedItems={setValueProperty?.filter((item) =>
-                      values?.property?.includes(item?._id),
+                      values?.property?.includes(item?._id)
                     )}
                     onSelectedItemsChange={(changes) => {
                       const selectProperty = extractLabels(
-                        changes?.selectedItems,
+                        changes?.selectedItems
                       );
                       setFieldValue("property", selectProperty);
                     }}
