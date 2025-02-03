@@ -16,6 +16,7 @@ import {
   MenuItem,
   MenuList,
   Text,
+  Input,
   useDisclosure,
 } from "@chakra-ui/react";
 import Card from "components/card/Card";
@@ -24,16 +25,19 @@ import Spinner from "components/spinner/Spinner";
 import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getApi } from "services/api";
+import { getApi , putApi} from "services/api";
 import Add from "./Add";
 import Edit from "./Edit";
 import RoleTable from "./components/roleTable";
 import RoleModal from "./components/roleModal";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../../redux/slices/localSlice";
+import { userSchema } from "schema";
 import CommonDeleteModel from "components/commonDeleteModel";
 import { deleteApi } from "services/api";
 import AddEditUser from "./AddEditUser";
+import { useFormik } from "formik";
+import { toast } from "react-toastify";
 
 const View = () => {
   const RoleColumn = [
@@ -64,7 +68,8 @@ const View = () => {
   const [action, setAction] = useState(false);
   const [userAction, setUserAction] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-
+  const [editableField, setEditableField] = useState(null);
+  
   const size = "lg";
 
   const handleOpen = (type) => {
@@ -109,6 +114,38 @@ const View = () => {
     } finally {
       setIsLoding(false);
     }
+  };
+
+  const handleBlur = (e) => {
+    formik.handleSubmit();
+    toast.success("User Updated Successfully");
+  };
+
+  const initialValues = {
+    firstName:  data?.firstName,
+    lastName:  data?.lastName,
+    username:  data?.username,
+    phoneNumber:  data?.phoneNumber,
+  };
+
+  const id = window.location.pathname.split("/").pop();
+
+  const formik = useFormik({
+    initialValues: initialValues,
+    validationSchema: userSchema,
+    enableReinitialize: true,
+    onSubmit: async (values, { resetForm }) => {
+      let response = await putApi(`api/user/edit/${id}`, values);
+      if (response?.status === 200) {
+        setEditableField(null);
+        fetchData();
+      }
+    },
+  });
+
+  const handleDoubleClick = (fieldName, value) => {
+    formik.setFieldValue(fieldName, value);
+    setEditableField(fieldName);
   };
 
   return (
@@ -222,27 +259,155 @@ const View = () => {
                   {" "}
                   First Name{" "}
                 </Text>
-                <Text>{data?.firstName ? data?.firstName : " - "}</Text>
+                {editableField === "firstName" ? (
+                  <>
+                    <Input
+                      id="text"
+                      name="firstName"
+                      type="text"
+                      onChange={formik?.handleChange}
+                      onBlur={handleBlur}
+                      value={formik?.values?.firstName}
+                      borderColor={
+                        formik?.errors?.firstName && formik?.touched?.firstName
+                          ? "red.300"
+                          : null
+                      }
+                      autoFocus
+                    />
+                    <Text mb="10px" color={"red"}>
+                      {" "}
+                      {formik?.errors.firstName &&
+                        formik?.touched.firstName &&
+                        formik?.errors.firstName}
+                    </Text>
+                  </>
+                ) : (
+                  <Text
+                    onDoubleClick={() =>
+                      handleDoubleClick("firstName", data?.firstName)
+                    }
+                  >
+                    {data?.firstName ? data?.firstName : " - "}
+                  </Text>
+                )}
+                {/* <Text>{data?.firstName ? data?.firstName : " - "}</Text> */}
               </GridItem>
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
                   {" "}
                   Last Name{" "}
                 </Text>
-                <Text>{data?.lastName ? data?.lastName : " - "}</Text>
+                {editableField === "lastName" ? (
+                  <>
+                    <Input
+                      id="text"
+                      name="lastName"
+                      type="text"
+                      onChange={formik?.handleChange}
+                      onBlur={handleBlur}
+                      value={formik?.values?.lastName}
+                      borderColor={
+                        formik?.errors?.lastName && formik?.touched?.lastName
+                          ? "red.300"
+                          : null
+                      }
+                      autoFocus
+                    />
+                    <Text mb="10px" color={"red"}>
+                      {" "}
+                      {formik?.errors.lastName &&
+                        formik?.touched.lastName &&
+                        formik?.errors.lastName}
+                    </Text>
+                  </>
+                ) : (
+                  <Text
+                    onDoubleClick={() =>
+                      handleDoubleClick("lastName", data?.lastName)
+                    }
+                  >
+                    {data?.lastName ? data?.lastName : " - "}
+                  </Text>
+                )}
+                {/* <Text>{data?.lastName ? data?.lastName : " - "}</Text> */}
               </GridItem>
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
                   Phone Number
                 </Text>
-                <Text>{data?.phoneNumber ? data?.phoneNumber : " - "}</Text>
+                {editableField === "phoneNumber" ? (
+                  <>
+                    <Input
+                      id="text"
+                      name="phoneNumber"
+                      type="text"
+                      onChange={formik?.handleChange}
+                      onBlur={handleBlur}
+                      value={formik?.values?.phoneNumber}
+                      borderColor={
+                        formik?.errors?.phoneNumber && formik?.touched?.phoneNumber
+                          ? "red.300"
+                          : null
+                      }
+                      autoFocus
+                    />
+                    <Text mb="10px" color={"red"}>
+                      {" "}
+                      {formik?.errors.phoneNumber &&
+                        formik?.touched.phoneNumber &&
+                        formik?.errors.phoneNumber}
+                    </Text>
+                  </>
+                ) : (
+                  <Text
+                    onDoubleClick={() =>
+                      handleDoubleClick("phoneNumber", data?.phoneNumber)
+                    }
+                  >
+                    {data?.phoneNumber ? data?.phoneNumber : " - "}
+                  </Text>
+                )}
+                {/* <Text>{data?.phoneNumber ? data?.phoneNumber : " - "}</Text> */}
               </GridItem>
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
                   {" "}
                   User Email{" "}
                 </Text>
-                <Text>{data?.username ? data?.username : " - "}</Text>
+                {editableField === "username" ? (
+                  <>
+                    <Input
+                      id="text"
+                      name="username"
+                      type="text"
+                      onChange={formik?.handleChange}
+                      onBlur={handleBlur}
+                      value={formik?.values?.username}
+                      borderColor={
+                        formik?.errors?.username && formik?.touched?.username
+                          ? "red.300"
+                          : null
+                      }
+                      autoFocus
+                    />
+                    <Text mb="10px" color={"red"}>
+                      {" "}
+                      {formik?.errors.username &&
+                        formik?.touched.username &&
+                        formik?.errors.username}
+                    </Text>
+                  </>
+                ) : (
+                  <Text
+                    onDoubleClick={() =>
+                      handleDoubleClick("username", data?.username)
+                    }
+                  >
+                    {data?.username ? data?.username : " - "}
+                  </Text>
+                )}
+                {/* <Text>{data?.username ? data?.username : " - "}</Text> */}
               </GridItem>
             </Grid>
           </Card>

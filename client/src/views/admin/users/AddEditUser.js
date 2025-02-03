@@ -218,41 +218,43 @@ const AddEditUser = (props) => {
                 {errors?.lastName && touched?.lastName && errors?.lastName}
               </Text>
             </GridItem>
-            <GridItem colSpan={{ base: 12 }}>
-              <Flex alignItems={"end"} justifyContent={"space-between"}>
-                <Text w={"100%"}>
-                  <CUIAutoComplete
-                    label={`Choose Role`}
-                    placeholder="Type a Name"
-                    name="roles"
-                    items={roles}
-                    mb={errors?.roles && touched?.roles ? undefined : "10px"}
-                    className="custom-autoComplete"
-                    selectedItems={roles?.filter((item) =>
-                      values?.roles?.includes(item?._id)
-                    )}
-                    onSelectedItemsChange={(changes) => {
-                      const selectedLabels = extractLabels(
-                        changes?.selectedItems
-                      );
-                      setFieldValue("roles", selectedLabels);
-                    }}
-                    borderColor={
-                      errors?.roles && touched?.roles ? "red.300" : null
-                    }
+            {!(userAction === "edit" && data?.role === "superAdmin") && (
+              <GridItem colSpan={{ base: 12 }}>
+                <Flex alignItems={"end"} justifyContent={"space-between"}>
+                  <Text w={"100%"}>
+                    <CUIAutoComplete
+                      label={`Choose Role`}
+                      placeholder="Type a Name"
+                      name="roles"
+                      items={roles}
+                      mb={errors?.roles && touched?.roles ? undefined : "10px"}
+                      className="custom-autoComplete"
+                      selectedItems={roles?.filter((item) =>
+                        values?.roles?.includes(item?._id)
+                      )}
+                      onSelectedItemsChange={(changes) => {
+                        const selectedLabels = extractLabels(
+                          changes?.selectedItems
+                        );
+                        setFieldValue("roles", selectedLabels);
+                      }}
+                      borderColor={
+                        errors?.roles && touched?.roles ? "red.300" : null
+                      }
+                    />
+                  </Text>
+                  <IconButton
+                    mb={6}
+                    onClick={() => setRoleModelOpen(true)}
+                    fontSize="25px"
+                    icon={<LiaMousePointerSolid />}
                   />
+                </Flex>
+                <Text color={"red"}>
+                  {errors?.roles && touched?.roles && errors?.roles}
                 </Text>
-                <IconButton
-                  mb={6}
-                  onClick={() => setRoleModelOpen(true)}
-                  fontSize="25px"
-                  icon={<LiaMousePointerSolid />}
-                />
-              </Flex>
-              <Text color={"red"}>
-                {errors?.roles && touched?.roles && errors?.roles}
-              </Text>
-            </GridItem>
+              </GridItem>
+            )}
             <GridItem colSpan={{ base: 12 }}>
               <FormLabel
                 display="flex"
