@@ -502,55 +502,6 @@ const AddPhoneCall = (props) => {
                 fontWeight="500"
                 mb="8px"
               >
-                Assign To Sales Agent <Text color={"red"}>*</Text>
-              </FormLabel>
-              <Flex justifyContent={"space-between"}>
-                <Select
-                  value={values?.salesAgent}
-                  name="salesAgent"
-                  onChange={handleChange}
-                  mb={
-                    errors?.salesAgent && touched?.salesAgent
-                      ? undefined
-                      : "10px"
-                  }
-                  fontWeight="500"
-                  placeholder={"Assign To Sales Agent"}
-                  borderColor={
-                    errors?.salesAgent && touched?.salesAgent ? "red.300" : null
-                  }
-                >
-                  {assignToSalesData?.map((item) => {
-                    return (
-                      <option
-                        value={item._id}
-                        key={item._id}
-                      >{`${item.firstName} ${item.lastName}`}</option>
-                    );
-                  })}
-                </Select>
-                <IconButton
-                  onClick={() => setSalesPersonsModelOpen(true)}
-                  ml={2}
-                  fontSize="25px"
-                  icon={<LiaMousePointerSolid />}
-                />
-              </Flex>
-              <Text mb="10px" fontSize="sm" color={"red"}>
-                {" "}
-                {errors?.salesAgent &&
-                  touched?.salesAgent &&
-                  errors?.salesAgent}
-              </Text>
-            </GridItem>
-            <GridItem colSpan={{ base: 12 }}>
-              <FormLabel
-                display="flex"
-                ms="4px"
-                fontSize="sm"
-                fontWeight="500"
-                mb="8px"
-              >
                 Call Notes
               </FormLabel>
               <Textarea
