@@ -62,7 +62,7 @@ const AddMeeting = (props) => {
         ? "Contact"
         : props?.leadContect === "leadView"
           ? "Lead"
-          : "None",
+          : "Contact",
     dateTime: "",
     notes: "",
     createBy: user?._id,

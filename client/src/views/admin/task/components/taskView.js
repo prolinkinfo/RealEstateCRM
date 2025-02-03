@@ -72,6 +72,7 @@ const TaskView = (props) => {
       setData(result?.data);
     }
   };
+
   const generatePDF = () => {
     setLoading(true);
     const element = document.getElementById("reports");
@@ -117,6 +118,7 @@ const TaskView = (props) => {
     notes: data?.notes,
     start: data?.start,
     end: data?.end,
+    category:data?.category
   };
 
   const formik = useFormik({
@@ -286,7 +288,39 @@ const TaskView = (props) => {
                   {" "}
                   Task Related To{" "}
                 </Text>
-                <Text>{data?.category ? data?.category : " - "}</Text>
+                {editableField === "category" ? (
+                  <>
+                    <Input
+                      id="text"
+                      name="category"
+                      type="text"
+                      onChange={formik?.handleChange}
+                      onBlur={handleBlur}
+                      value={formik?.values?.category}
+                      borderColor={
+                        formik?.errors?.category && formik?.touched?.category
+                          ? "red.300"
+                          : null
+                      }
+                      autoFocus
+                    />
+                    <Text mb="10px" color={"red"}>
+                      {" "}
+                      {formik?.errors.category &&
+                        formik?.touched.category &&
+                        formik?.errors.category}
+                    </Text>
+                  </>
+                ) : (
+                  <Text
+                    onDoubleClick={() =>
+                      handleDoubleClick("category", data?.category)
+                    }
+                  >
+                    {data?.category ? data?.category : " - "}
+                  </Text>
+                )}
+                {/* <Text>{data?.category ? data?.category : " - "}</Text> */}
               </GridItem>
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>

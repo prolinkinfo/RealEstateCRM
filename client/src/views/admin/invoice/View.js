@@ -68,7 +68,7 @@ const View = (props) => {
   const [editableFieldName, setEditableFieldName] = useState(null);
   const today = new Date()?.toISOString()?.split("T")[0];
   const todayTime = new Date()?.toISOString()?.split(".")[0];
-
+  
   const quotesColumns = [
     {
       Header: "Quote Number",
@@ -454,7 +454,39 @@ const View = (props) => {
                   {" "}
                   Quote Number
                 </Text>
-                <Text>{data?.quoteNumber ? data?.quoteNumber : " - "}</Text>
+                {editableField === "quoteNumber" ? (
+                  <>
+                    <Input
+                      id="text"
+                      name="quoteNumber"
+                      type="text"
+                      onChange={formik.handleChange}
+                      onBlur={handleBlur}
+                      value={formik?.values?.quoteNumber}
+                      borderColor={
+                        formik?.errors?.quoteNumber && formik?.touched?.quoteNumber
+                          ? "red.300"
+                          : null
+                      }
+                      autoFocus
+                    />
+                    <Text mb="10px" color={"red"}>
+                      {" "}
+                      {formik?.errors.quoteNumber &&
+                        formik?.touched.quoteNumber &&
+                        formik?.errors.quoteNumber}
+                    </Text>
+                  </>
+                ) : (
+                  <Text
+                    onDoubleClick={() =>
+                      handleDoubleClick("quoteNumber", data?.quoteNumber)
+                    }
+                  >
+                    {data?.quoteNumber ? data?.quoteNumber : " - "}
+                  </Text>
+                )}
+                {/* <Text>{data?.quoteNumber ? data?.quoteNumber : " - "}</Text> */}
               </GridItem>
 
               <GridItem colSpan={{ base: 2, md: 1 }}>
