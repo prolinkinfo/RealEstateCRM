@@ -51,7 +51,7 @@ const View = (props) => {
   const user = JSON.parse(localStorage.getItem("user"));
 
   const [invoiceAccess, accountAccess, contactAccess, quotesAccess] = HasAccess(
-    ["Invoices", "Account", "Contacts", "Quotes"],
+    ["Invoices", "Account", "Contacts", "Quotes"]
   );
 
   const [data, setData] = useState();
@@ -108,7 +108,7 @@ const View = (props) => {
               onClick={() =>
                 navigate(
                   cell?.row?.original?.contact !== null &&
-                    `/contactView/${cell?.row?.original?.contact}`,
+                    `/contactView/${cell?.row?.original?.contact}`
                 )
               }
               me="10px"
@@ -143,7 +143,7 @@ const View = (props) => {
               onClick={() =>
                 navigate(
                   cell?.row?.original.account !== null &&
-                    `/accountView/${cell?.row?.original.account}`,
+                    `/accountView/${cell?.row?.original.account}`
                 )
               }
               me="10px"
@@ -471,7 +471,7 @@ const View = (props) => {
                       onChange={formik.handleChange}
                       onBlur={handleBlur}
                       value={dayjs(formik?.values?.quoteDate).format(
-                        "YYYY-MM-DD",
+                        "YYYY-MM-DD"
                       )}
                       borderColor={
                         formik?.errors?.quoteDate && formik?.touched?.quoteDate
@@ -493,7 +493,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "quoteDate",
                         data?.quoteDate,
-                        "Quote Date",
+                        "Quote Date"
                       )
                     }
                   >
@@ -517,7 +517,7 @@ const View = (props) => {
                       onChange={formik.handleChange}
                       onBlur={handleBlur}
                       value={dayjs(formik?.values?.dueDate).format(
-                        "YYYY-MM-DD",
+                        "YYYY-MM-DD"
                       )}
                       borderColor={
                         formik?.errors?.dueDate && formik?.touched?.dueDate
@@ -559,7 +559,7 @@ const View = (props) => {
                       onChange={formik.handleChange}
                       onBlur={handleBlur}
                       value={dayjs(formik?.values?.invoiceDate).format(
-                        "YYYY-MM-DD",
+                        "YYYY-MM-DD"
                       )}
                       borderColor={
                         formik?.errors?.invoiceDate &&
@@ -582,7 +582,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "invoiceDate",
                         data?.invoiceDate,
-                        "Invoice Date",
+                        "Invoice Date"
                       )
                     }
                   >
@@ -673,7 +673,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "description",
                         data?.description,
-                        "Description",
+                        "Description"
                       )
                     }
                     style={{ width: "300px" }}
@@ -859,7 +859,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "billingStreet",
                         data?.billingStreet,
-                        "Billing Street",
+                        "Billing Street"
                       )
                     }
                   >
@@ -899,7 +899,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "shippingStreet",
                         data?.shippingStreet,
-                        "Shipping Street",
+                        "Shipping Street"
                       )
                     }
                   >
@@ -940,7 +940,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "billingCity",
                         data?.billingCity,
-                        "Billing City",
+                        "Billing City"
                       )
                     }
                   >
@@ -980,7 +980,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "shippingCity",
                         data?.shippingCity,
-                        "Shipping City",
+                        "Shipping City"
                       )
                     }
                   >
@@ -1020,7 +1020,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "billingState",
                         data?.billingState,
-                        "Billing State",
+                        "Billing State"
                       )
                     }
                   >
@@ -1060,7 +1060,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "shippingState",
                         data?.shippingState,
-                        "Shipping State",
+                        "Shipping State"
                       )
                     }
                   >
@@ -1100,7 +1100,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "billingPostalCode",
                         data?.billingPostalCode,
-                        "Billing Postal Code",
+                        "Billing Postal Code"
                       )
                     }
                   >
@@ -1140,7 +1140,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "shippingPostalCode",
                         data?.shippingPostalCode,
-                        "Shipping Postal Code",
+                        "Shipping Postal Code"
                       )
                     }
                   >
@@ -1182,7 +1182,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "billingCountry",
                         data?.billingCountry,
-                        "Billing Country",
+                        "Billing Country"
                       )
                     }
                   >
@@ -1222,7 +1222,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "shippingCountry",
                         data?.shippingCountry,
-                        "Shipping Country",
+                        "Shipping Country"
                       )
                     }
                   >
@@ -1277,23 +1277,21 @@ const View = (props) => {
         </GridItem>
       </Grid>
       {quotesAccess?.view && (
-        <GridItem colSpan={{ base: 12, md: 6 }}>
-          <Card overflow={"scroll"}>
-            <CommonCheckTable
-              title={"Quotes"}
-              isLoding={isLoding}
-              columnData={quotesColumns ?? []}
-              allData={quotesData ?? []}
-              tableData={quotesData ?? []}
-              AdvanceSearch={false}
-              tableCustomFields={[]}
-              checkBox={false}
-              deleteMany={true}
-              ManageGrid={false}
-              access={false}
-            />
-          </Card>
-        </GridItem>
+        <Card overflow={"scroll"} mt={3}>
+          <CommonCheckTable
+            title={"Quotes"}
+            isLoding={isLoding}
+            columnData={quotesColumns ?? []}
+            allData={quotesData ?? []}
+            tableData={quotesData ?? []}
+            AdvanceSearch={false}
+            tableCustomFields={[]}
+            checkBox={false}
+            deleteMany={true}
+            ManageGrid={false}
+            access={false}
+          />
+        </Card>
       )}
       {(invoiceAccess?.update ||
         invoiceAccess?.delete ||
