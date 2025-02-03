@@ -445,7 +445,6 @@ const View = (props) => {
                     {data?.invoiceNumber ? data?.invoiceNumber : " - "}
                   </Text>
                 )}
-                {/* <Text>{data?.invoiceNumber ? data?.invoiceNumber : " - "}</Text> */}
               </GridItem>
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
@@ -524,7 +523,6 @@ const View = (props) => {
                     {data?.quoteNumber ? data?.quoteNumber : " - "}
                   </Text>
                 )}
-                {/* <Text>{data?.quoteNumber ? data?.quoteNumber : " - "}</Text> */}
               </GridItem>
 
               <GridItem colSpan={{ base: 2, md: 1 }}>
@@ -1373,7 +1371,6 @@ const View = (props) => {
                     {`${data?.currency}${data?.discount ? data?.discount : "0"}`}
                   </Text>
                 )}
-                {/* <Text>{`${data?.currency}${data?.discount || "0"}`}</Text> */}
               </GridItem>
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
@@ -1411,7 +1408,6 @@ const View = (props) => {
                     {`${data?.currency}${data?.subtotal ? data?.subtotal : "0"}`}
                   </Text>
                 )}
-                {/* <Text>{`${data?.currency}${data?.subtotal ? data?.subtotal : "0"}`}</Text> */}
               </GridItem>
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
@@ -1450,7 +1446,6 @@ const View = (props) => {
                   </Text>
                 )}
 
-                {/* <>{`${data?.currency}${data?.shipping ? data?.shipping : "0"}`}</> */}
               </GridItem>
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
@@ -1531,7 +1526,6 @@ const View = (props) => {
                     {`${data?.currency}${(parseFloat(data?.tax) || 0).toFixed(2)}`}
                   </Text>
                 )}
-                {/* <Text>{`${data?.currency}${data?.tax ? data?.tax : "0"}`}</Text> */}
               </GridItem>
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
@@ -1574,7 +1568,6 @@ const View = (props) => {
                     {`${data?.currency}${(parseFloat(data?.grandTotal) || 0).toFixed(2)}`}
                   </Text>
                 )}
-                {/* <Text>{`${data?.currency}${data?.grandTotal ? data?.grandTotal : "0"}`}</Text> */}
               </GridItem>
             </Grid>
           </Card>
