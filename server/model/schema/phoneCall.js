@@ -27,10 +27,6 @@ const phoneCall = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  salesAgent: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  },
   timestamp: {
     type: Date,
     default: Date.now,

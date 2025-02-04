@@ -10,7 +10,6 @@ export const phoneCallSchema = yup
     createByLead: yup.string(),
     category: yup.string(),
     startDate: yup.date().required("Start Date Is required"),
-    salesAgent: yup.string().required("Assign To Sales Agent Is required"),
   })
   .test(
     "createBy-or-createByLead-required",

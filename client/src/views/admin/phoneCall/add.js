@@ -43,6 +43,7 @@ const AddPhoneCall = (props) => {
   const [leadModelOpen, setLeadModel] = useState(false);
   const [propertyModelOpen, setPropertyModelOpen] = useState(false);
   const [assignToProperyData, setAssignToPropertyData] = useState([]);
+
   const [assignToSalesData, setAssignToSalesData] = useState([]);
   const [salesPersonsModelOpen, setSalesPersonsModelOpen] = useState(false);
   const [columns, setColumns] = useState([]);
@@ -55,14 +56,12 @@ const AddPhoneCall = (props) => {
     callNotes: "",
     createByContact: "",
     createByLead: "",
-    property: "",
+    property: [],
     startDate: "",
     category: "Contact",
-    // assignTo: '',
-    // assignToLead: '',
     createBy: user?._id,
-    salesAgent: "", // sales person user id
   };
+
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: phoneCallSchema,
@@ -71,6 +70,7 @@ const AddPhoneCall = (props) => {
       resetForm();
     },
   });
+  
   const {
     errors,
     touched,
@@ -80,6 +80,7 @@ const AddPhoneCall = (props) => {
     handleSubmit,
     setFieldValue,
   } = formik;
+
   const AddData = async () => {
     try {
       setIsLoding(true);
@@ -113,17 +114,14 @@ const AddPhoneCall = (props) => {
             : `api/lead/?createBy=${user?._id}`
         );
         setAssignToLeadData(result?.data);
-      } else if (
-        (values?.category === "property" && console.log(""),
-        assignToProperyData?.length <= 0)
-      ) {
-        result = await getApi(
-          user?.role === "superAdmin"
-            ? "api/property"
-            : `api/property/?createBy=${user?._id}`
-        );
-        setAssignToPropertyData(result?.data);
       }
+
+      result = await getApi(
+        user?.role === "superAdmin"
+          ? "api/property"
+          : `api/property/?createBy=${user?._id}`
+      );
+      setAssignToPropertyData(result?.data);
     } catch (e) {
       console.log(e);
     }
@@ -205,16 +203,6 @@ const AddPhoneCall = (props) => {
             onClose={setLeadModel}
             fieldName="createByLead"
             setFieldValue={setFieldValue}
-          />
-          {/* User Model for sales person */}
-          <UserModel
-            onClose={() => setSalesPersonsModelOpen(false)}
-            isOpen={salesPersonsModelOpen}
-            fieldName={"salesAgent"}
-            setFieldValue={setFieldValue}
-            data={assignToSalesData}
-            isLoding={isLoding}
-            setIsLoding={setIsLoding}
           />
           {/*Property Model*/}
           <MultiPropertyModel
@@ -407,19 +395,13 @@ const AddPhoneCall = (props) => {
                       const selectProperty = extractLabels(
                         changes?.selectedItems
                       );
-                      setFieldValue("property", selectProperty);
+                      setFieldValue("property", selectProperty || "");
                     }}
                     value={values?.property}
                     name="property"
                     onChange={handleChange}
-                    mb={
-                      errors?.property && touched?.property ? undefined : "10px"
-                    }
                     fontWeight="500"
                     placeholder={"Assign To Property"}
-                    borderColor={
-                      errors?.property && touched?.property ? "red.300" : null
-                    }
                   />
                 </Text>
                 <IconButton
@@ -429,10 +411,6 @@ const AddPhoneCall = (props) => {
                   icon={<LiaMousePointerSolid />}
                 />
               </Flex>
-              <Text color={"red"}>
-                {" "}
-                {errors?.attendes && touched?.attendes && errors?.attendes}
-              </Text>
             </GridItem>
             <GridItem colSpan={{ base: 12, md: 6 }}>
               <FormLabel
