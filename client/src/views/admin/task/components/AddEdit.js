@@ -52,6 +52,7 @@ const AddEdit = (props) => {
   const [isChecked, setIsChecked] = useState(false);
   const userId = JSON.parse(localStorage.getItem("user"))?._id;
   const [assignToLeadData, setAssignToLeadData] = useState([]);
+
   const [assignToContactData, setAssignToContactData] = useState([]);
   const user = JSON.parse(localStorage.getItem("user"));
   const [isLoding, setIsLoding] = useState(false);
@@ -442,7 +443,7 @@ const AddEdit = (props) => {
                           return (
                             <option value={item?._id} key={item?._id}>
                               {values?.category === "Contact"
-                                ? `${item?.firstName} ${item?.lastName}`
+                                ? `${item?.fullName}`
                                 : item?.leadName}
                             </option>
                           );
