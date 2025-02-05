@@ -413,7 +413,7 @@ const View = (props) => {
                     <Input
                       id="text"
                       name="invoiceNumber"
-                      type="number"
+                      type="text"
                       onChange={formik.handleChange}
                       onBlur={handleBlur}
                       value={formik?.values?.invoiceNumber}
@@ -495,7 +495,7 @@ const View = (props) => {
                     <Input
                       id="text"
                       name="quoteNumber"
-                      type="number"
+                      type="text"
                       onChange={formik.handleChange}
                       onBlur={handleBlur}
                       value={formik?.values?.quoteNumber}
@@ -1445,7 +1445,6 @@ const View = (props) => {
                     {`${data?.currency}${data?.shipping ? data?.shipping : "0"}`}
                   </Text>
                 )}
-
               </GridItem>
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>

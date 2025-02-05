@@ -67,7 +67,7 @@ const TaskView = (props) => {
     if (id) {
       let result = await getApi(
         "api/task/view/",
-        id?.event ? id?.event?._def?.extendedProps?._id : id,
+        id?.event ? id?.event?._def?.extendedProps?._id : id
       );
       setData(result?.data);
     }
@@ -118,7 +118,7 @@ const TaskView = (props) => {
     notes: data?.notes,
     start: data?.start,
     end: data?.end,
-    category:data?.category
+    category: data?.category,
   };
 
   const formik = useFormik({
@@ -288,39 +288,7 @@ const TaskView = (props) => {
                   {" "}
                   Task Related To{" "}
                 </Text>
-                {editableField === "category" ? (
-                  <>
-                    <Input
-                      id="text"
-                      name="category"
-                      type="text"
-                      onChange={formik?.handleChange}
-                      onBlur={handleBlur}
-                      value={formik?.values?.category}
-                      borderColor={
-                        formik?.errors?.category && formik?.touched?.category
-                          ? "red.300"
-                          : null
-                      }
-                      autoFocus
-                    />
-                    <Text mb="10px" color={"red"}>
-                      {" "}
-                      {formik?.errors.category &&
-                        formik?.touched.category &&
-                        formik?.errors.category}
-                    </Text>
-                  </>
-                ) : (
-                  <Text
-                    onDoubleClick={() =>
-                      handleDoubleClick("category", data?.category)
-                    }
-                  >
-                    {data?.category ? data?.category : " - "}
-                  </Text>
-                )}
-                {/* <Text>{data?.category ? data?.category : " - "}</Text> */}
+                <Text>{data?.category ? data?.category : " - "}</Text>
               </GridItem>
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
@@ -338,7 +306,7 @@ const TaskView = (props) => {
                         data?.allDay === true
                           ? moment(formik?.values?.start).format("YYYY-MM-DD")
                           : moment(formik?.values?.start).format(
-                              "YYYY-MM-DD HH:mm A",
+                              "YYYY-MM-DD HH:mm A"
                             )
                       }
                       autoFocus
@@ -368,8 +336,8 @@ const TaskView = (props) => {
                   >
                     {data && data?.start
                       ? data?.allDay === true
-                        ? moment(data?.start)?.format("DD-MM-YYYY")
-                        : moment(data?.start)?.format("DD-MM-YYYY HH:mm A")
+                        ? dayjs(data?.start)?.format("DD-MM-YYYY")
+                        : dayjs(data?.start)?.format("DD-MM-YYYY hh:mm A")
                       : "-"}
                   </Text>
                 )}
@@ -391,7 +359,7 @@ const TaskView = (props) => {
                         data?.allDay === true
                           ? moment(formik?.values?.end)?.format("YYYY-MM-DD")
                           : moment(formik?.values?.end)?.format(
-                              "YYYY-MM-DD HH:mm A",
+                              "YYYY-MM-DD HH:mm A"
                             )
                       }
                       autoFocus
@@ -413,8 +381,8 @@ const TaskView = (props) => {
                     onDoubleClick={() => handleDoubleClick("end", data?.end)}
                   >
                     {data?.allDay === true
-                      ? moment(data?.end).format("DD-MM-YYYY")
-                      : moment(data?.end).format("DD-MM-YYYY HH:mm A")}
+                      ? dayjs(data?.end)?.format("DD-MM-YYYY")
+                      : dayjs(data?.end)?.format("DD-MM-YYYY hh:mm A")}
                   </Text>
                 )}
               </GridItem>

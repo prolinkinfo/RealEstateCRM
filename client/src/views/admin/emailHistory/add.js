@@ -122,21 +122,22 @@ const AddEmailHistory = (props) => {
             : `api/lead/?createBy=${user?._id}`
         );
         setAssignToLeadData(result?.data);
-      } else if (
-        (values?.category === "property" && console.log(""),
-        assignToProperyData.length <= 0)
-      ) {
-        result = await getApi(
-          user?.role === "superAdmin"
-            ? "api/property"
-            : `api/property/?createBy=${user?._id}`
-        );
-        setAssignToPropertyData(result?.data);
       }
+      // else if (
+      //   (values?.category === "property" && console.log(""),
+      //   assignToProperyData.length <= 0)
+      // ) {
+      result = await getApi(
+        user?.role === "superAdmin"
+          ? "api/property"
+          : `api/property/?createBy=${user?._id}`
+      );
+      setAssignToPropertyData(result?.data);
+      // }
     } catch (e) {
       console.log(e);
     }
-  }, [props, values?.category]);
+  }, []);
 
   const fetchRecipientData = async () => {
     if (values?.createByContact) {
