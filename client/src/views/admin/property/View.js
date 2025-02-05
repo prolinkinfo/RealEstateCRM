@@ -252,6 +252,7 @@ const View = () => {
     setIsLoding(false);
     setSelectedTab(i);
   };
+
   const generatePDF = () => {
     const element = document.getElementById("reports");
     if (element) {
@@ -327,15 +328,15 @@ const View = () => {
         handleDeleteData={handleDeleteProperties}
         ids={param?.id}
       />
-      <EmailModel
+      {setEmail && <EmailModel
         lead={true}
         leadEmail={allData?.lead?.leadEmail}
         fetchData={fetchData}
         isOpen={addEmailHistory}
         onClose={setAddEmailHistory}
         id={param?.id}
-      />
-      <PhoneModel
+      />}
+      {phoneCall && <PhoneModel
         viewData={allData}
         fetchData={fetchData}
         isOpen={addPhoneCall}
@@ -345,7 +346,7 @@ const View = () => {
         id={param?.id}
         lead={true}
         LData={data}
-      />
+      />}
       {isLoding ? (
         <Flex justifyContent={"center"} alignItems={"center"} width="100%">
           <Spinner />

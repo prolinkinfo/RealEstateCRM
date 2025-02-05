@@ -133,20 +133,28 @@ const PhoneModel = (props) => {
         );
         setAssignToLeadData(result?.data);
       }
-      const propertyOptionData = await getApi(
-        user?.role === "superAdmin"
-          ? "api/property"
-          : `api/property/?createBy=${user?._id}`,
-      );
-      setAssignToPropertyData(propertyOptionData?.data);
     } catch (e) {
       console.log(e);
     }
   };
+
+  const getPropertyData = async () => {
+    const propertyOptionData = await getApi(
+      user?.role === "superAdmin"
+        ? "api/property"
+        : `api/property/?createBy=${user?._id}`,
+    );
+    setAssignToPropertyData(propertyOptionData?.data);
+  }
+
+  useEffect(()=>{
+    getPropertyData()
+  },[])
+
   useEffect(() => {
     getAllApi();
   }, [props?.date, values?.category]);
-
+  
   const fetchRecipientData = async () => {
     if (values?.createByContact) {
       let findEmail = assignToContactData?.find(
@@ -189,7 +197,7 @@ const PhoneModel = (props) => {
   }, [values?.createByContact, values?.createByLead]);
 
   useEffect(() => {
-    fetchUsersData();
+      fetchUsersData();
   }, []);
 
   const setValueProperty = assignToProperyData?.map((item) => ({
