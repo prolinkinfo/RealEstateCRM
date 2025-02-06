@@ -405,50 +405,12 @@ const View = (props) => {
 
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
-                  {" "}
                   Invoice Number{" "}
                 </Text>
-                {editableField === "invoiceNumber" ? (
-                  <>
-                    <Input
-                      id="text"
-                      name="invoiceNumber"
-                      type="text"
-                      onChange={formik.handleChange}
-                      onBlur={handleBlur}
-                      value={formik?.values?.invoiceNumber}
-                      borderColor={
-                        formik?.errors?.invoiceNumber &&
-                        formik?.touched?.invoiceNumber
-                          ? "red.300"
-                          : null
-                      }
-                      autoFocus
-                    />
-                    <Text mb="10px" color={"red"}>
-                      {" "}
-                      {formik?.errors.invoiceNumber &&
-                        formik?.touched.invoiceNumber &&
-                        formik?.errors.invoiceNumber}
-                    </Text>
-                  </>
-                ) : (
-                  <Text
-                    onDoubleClick={() =>
-                      handleDoubleClick(
-                        "invoiceNumber",
-                        data?.invoiceNumber,
-                        "Invoice Number"
-                      )
-                    }
-                  >
-                    {data?.invoiceNumber ? data?.invoiceNumber : " - "}
-                  </Text>
-                )}
+                <Text>{data?.invoiceNumber ? data?.invoiceNumber : " - "}</Text>
               </GridItem>
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
-                  {" "}
                   Title{" "}
                 </Text>
                 {editableField === "title" ? (
@@ -468,7 +430,6 @@ const View = (props) => {
                       autoFocus
                     />
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors.title &&
                         formik?.touched.title &&
                         formik?.errors.title}
@@ -487,7 +448,6 @@ const View = (props) => {
 
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
-                  {" "}
                   Quote Number
                 </Text>
                 {editableField === "quoteNumber" ? (
@@ -508,7 +468,6 @@ const View = (props) => {
                       autoFocus
                     />
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors.quoteNumber &&
                         formik?.touched.quoteNumber &&
                         formik?.errors.quoteNumber}
@@ -527,7 +486,6 @@ const View = (props) => {
 
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
-                  {" "}
                   Quote Date{" "}
                 </Text>
                 {editableField === "quoteDate" ? (
@@ -549,7 +507,6 @@ const View = (props) => {
                       autoFocus
                     />
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors.quoteDate &&
                         formik?.touched.quoteDate &&
                         formik?.errors.quoteDate}
@@ -573,7 +530,6 @@ const View = (props) => {
               </GridItem>
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
-                  {" "}
                   Due Date
                 </Text>
                 {editableField === "dueDate" ? (
@@ -595,7 +551,6 @@ const View = (props) => {
                       autoFocus
                     />
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors?.dueDate &&
                         formik?.touched.dueDate &&
                         formik?.errors?.dueDate}
@@ -615,7 +570,6 @@ const View = (props) => {
               </GridItem>
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
-                  {" "}
                   Invoice Date
                 </Text>
                 {editableField === "invoiceDate" ? (
@@ -638,7 +592,6 @@ const View = (props) => {
                       autoFocus
                     />
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors?.invoiceDate &&
                         formik?.touched.invoiceDate &&
                         formik?.errors?.invoiceDate}
@@ -689,7 +642,6 @@ const View = (props) => {
                       <option value="Cancelled">Cancelled</option>
                     </Select>
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors?.status &&
                         formik?.touched.status &&
                         formik?.errors?.status}
@@ -729,7 +681,6 @@ const View = (props) => {
                       }
                     />
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors?.description &&
                         formik?.touched?.description &&
                         formik?.errors?.description}
@@ -842,7 +793,6 @@ const View = (props) => {
               </GridItem>
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
-                  {" "}
                   Assigned To
                 </Text>
                 {data?.assignedTo ? (
@@ -915,7 +865,6 @@ const View = (props) => {
                       autoFocus
                     />
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors?.billingStreet &&
                         formik?.touched?.billingStreet &&
                         formik?.errors?.billingStreet}
@@ -955,7 +904,6 @@ const View = (props) => {
                       autoFocus
                     />
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors.shippingStreet &&
                         formik?.touched.shippingStreet &&
                         formik?.errors.shippingStreet}
@@ -996,7 +944,6 @@ const View = (props) => {
                       autoFocus
                     />
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors?.billingCity &&
                         formik?.touched.billingCity &&
                         formik?.errors?.billingCity}
@@ -1036,7 +983,6 @@ const View = (props) => {
                       autoFocus
                     />
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors.shippingCity &&
                         formik?.touched.shippingCity &&
                         formik?.errors.shippingCity}
@@ -1076,7 +1022,6 @@ const View = (props) => {
                       autoFocus
                     />
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors?.billingState &&
                         formik?.touched?.billingState &&
                         formik?.errors.billingState}
@@ -1116,7 +1061,6 @@ const View = (props) => {
                       autoFocus
                     />
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors?.shippingState &&
                         formik?.touched.shippingState &&
                         formik?.errors.shippingState}
@@ -1156,7 +1100,6 @@ const View = (props) => {
                       autoFocus
                     />
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors.billingPostalCode &&
                         formik?.touched.billingPostalCode &&
                         formik?.errors.billingPostalCode}
@@ -1196,7 +1139,6 @@ const View = (props) => {
                       autoFocus
                     />
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors.shippingPostalCode &&
                         formik?.touched.shippingPostalCode &&
                         formik?.errors.shippingPostalCode}
@@ -1238,7 +1180,6 @@ const View = (props) => {
                       autoFocus
                     />
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors.billingCountry &&
                         formik?.touched.billingCountry &&
                         formik?.errors.billingCountry}
@@ -1278,7 +1219,6 @@ const View = (props) => {
                       autoFocus
                     />
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors.shippingCountry &&
                         formik?.touched.shippingCountry &&
                         formik?.errors.shippingCountry}
@@ -1319,7 +1259,6 @@ const View = (props) => {
                       autoFocus
                     />
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors.total &&
                         formik?.touched.total &&
                         formik?.errors.total}
@@ -1356,7 +1295,6 @@ const View = (props) => {
                       autoFocus
                     />
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors.discount &&
                         formik?.touched.discount &&
                         formik?.errors.discount}
@@ -1393,7 +1331,6 @@ const View = (props) => {
                       autoFocus
                     />
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors.subtotal &&
                         formik?.touched.subtotal &&
                         formik?.errors.subtotal}
@@ -1430,7 +1367,6 @@ const View = (props) => {
                       autoFocus
                     />
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors.shipping &&
                         formik?.touched.shipping &&
                         formik?.errors.shipping}
@@ -1468,7 +1404,6 @@ const View = (props) => {
                       autoFocus
                     />
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors.shippingTax &&
                         formik?.touched.shippingTax &&
                         formik?.errors.shippingTax}
@@ -1510,7 +1445,6 @@ const View = (props) => {
                       autoFocus
                     />
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors.tax &&
                         formik?.touched.tax &&
                         formik?.errors.tax}
@@ -1548,7 +1482,6 @@ const View = (props) => {
                       autoFocus
                     />
                     <Text mb="10px" color={"red"}>
-                      {" "}
                       {formik?.errors.grandTotal &&
                         formik?.touched.grandTotal &&
                         formik?.errors.grandTotal}
