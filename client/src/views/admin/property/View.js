@@ -98,7 +98,7 @@ const View = () => {
   const [setEmail, setEmailData] = useState([]);
   const dispatch = useDispatch();
   const propertyData = useSelector(
-    (state) => state?.propertyCustomFiled?.data?.data,
+    (state) => state?.propertyCustomFiled?.data?.data
   );
 
   const [contactData, setContactData] = useState([]);
@@ -328,15 +328,17 @@ const View = () => {
         handleDeleteData={handleDeleteProperties}
         ids={param?.id}
       />
-      {setEmail && <EmailModel
+
+      <EmailModel
         lead={true}
         leadEmail={allData?.lead?.leadEmail}
         fetchData={fetchData}
         isOpen={addEmailHistory}
         onClose={setAddEmailHistory}
         id={param?.id}
-      />}
-      {phoneCall && <PhoneModel
+      />
+
+      <PhoneModel
         viewData={allData}
         fetchData={fetchData}
         isOpen={addPhoneCall}
@@ -346,7 +348,8 @@ const View = () => {
         id={param?.id}
         lead={true}
         LData={data}
-      />}
+      />
+
       {isLoding ? (
         <Flex justifyContent={"center"} alignItems={"center"} width="100%">
           <Spinner />
@@ -496,7 +499,7 @@ const View = () => {
                               size={"md"}
                               tableCustomFields={
                                 contactData?.[0]?.fields?.filter(
-                                  (field) => field?.isTableField === true,
+                                  (field) => field?.isTableField === true
                                 ) || []
                               }
                               customSearch={true}
