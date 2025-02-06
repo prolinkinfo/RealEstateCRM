@@ -54,13 +54,18 @@ const leadFields = [
     fixed: true,
     delete: false,
     belongsTo: null,
+    editable: false,
     backendType: "String",
     isTableField: true,
     options: [],
     validation: [
       {
         require: true,
-        message: "",
+        message: "Enter Valid Email",
+      },
+      {
+        formikType: "email",
+        message: "Enter valid email",
       },
     ],
   },
@@ -80,7 +85,21 @@ const leadFields = [
     validation: [
       {
         require: true,
-        message: "",
+        message: "Enter Valid Lead Mobile",
+      },
+      // {
+      //   min: true,
+      //   value: 10,
+      //   message: "Please enter valid number",
+      // },
+      // {
+      //   max: true,
+      //   value: 10,
+      //   message: "Please enter valid number",
+      // },
+      {
+        message: "Please enter valid number",
+        formikType: "number",
       },
     ],
   },

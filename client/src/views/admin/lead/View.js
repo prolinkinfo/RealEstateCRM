@@ -271,38 +271,73 @@ const View = () => {
   const tableColumns = [
     { Header: "Type", accessor: "type" },
     {
-      Header: "Last Communication", accessor: "lastCommunicationDate", cell: (cell) => (
+      Header: "Last Communication",
+      accessor: "lastCommunicationDate",
+      cell: (cell) => (
         <div className="selectOpt">
           <Text color={textColor} fontSize="sm" fontWeight="700">
-            {cell?.row?.values.lastCommunicationDate ? moment(cell?.row?.values.lastCommunicationDate).format("DD-MM-YYYY hh:mm A") : "-"}
+            {cell?.row?.values.lastCommunicationDate
+              ? moment(cell?.row?.values.lastCommunicationDate).format(
+                  "DD-MM-YYYY hh:mm A"
+                )
+              : "-"}
           </Text>
-          {
-            cell?.row?.values.lastCommunicationDate &&
-            <Text color={"white"} fontSize="sm" fontWeight="700" style={{ border: "1px solid", borderRadius: "5px", padding: "5px", }} className="completed">
-              {moment(cell?.row?.values.lastCommunicationDate, "YYYYMMDD").fromNow()}
+          {cell?.row?.values.lastCommunicationDate && (
+            <Text
+              color={"white"}
+              fontSize="sm"
+              fontWeight="700"
+              style={{
+                border: "1px solid",
+                borderRadius: "5px",
+                padding: "5px",
+              }}
+              className="completed"
+            >
+              {moment(
+                cell?.row?.values.lastCommunicationDate,
+                "YYYYMMDD"
+              ).fromNow()}
             </Text>
-          }
+          )}
         </div>
       ),
     },
     {
-      Header: "Scheduled Communication", accessor: "scheduledCommunicationDate", cell: (cell) => (
+      Header: "Scheduled Communication",
+      accessor: "scheduledCommunicationDate",
+      cell: (cell) => (
         <div className="selectOpt">
           <Text color={textColor} fontSize="sm" fontWeight="700">
-            {cell?.row?.values.scheduledCommunicationDate ? moment(cell?.row?.values.scheduledCommunicationDate).format("DD-MM-YYYY hh:mm A") : "-"}
+            {cell?.row?.values.scheduledCommunicationDate
+              ? moment(cell?.row?.values.scheduledCommunicationDate).format(
+                  "DD-MM-YYYY hh:mm A"
+                )
+              : "-"}
           </Text>
-          {
-            cell?.row?.values.scheduledCommunicationDate &&
-            <Text color={"white"} fontSize="sm" fontWeight="700" style={{ border: "1px solid", borderRadius: "5px", padding: "5px" }} className="pending">
-              {moment(cell?.row?.values.scheduledCommunicationDate, "YYYYMMDD").fromNow()}
+          {cell?.row?.values.scheduledCommunicationDate && (
+            <Text
+              color={"white"}
+              fontSize="sm"
+              fontWeight="700"
+              style={{
+                border: "1px solid",
+                borderRadius: "5px",
+                padding: "5px",
+              }}
+              className="pending"
+            >
+              {moment(
+                cell?.row?.values.scheduledCommunicationDate,
+                "YYYYMMDD"
+              ).fromNow()}
             </Text>
-
-          }
+          )}
         </div>
       ),
     },
   ];
-  
+
   const handleTabChange = (index) => {
     setSelectedTab(index);
   };
@@ -387,41 +422,42 @@ const View = () => {
   const splitValue = firstValue?.split("/");
 
   const getCommunicationDates = (data, dateField) => {
-    if (!Array.isArray(data)) return { lastCommunicationDate: null, scheduledCommunicationDate: null };
+    if (!Array.isArray(data))
+      return { lastCommunicationDate: null, scheduledCommunicationDate: null };
 
     const currentDate = new Date();
 
     const pastDates = data
-      .filter(item => new Date(item[dateField]) < currentDate)
+      .filter((item) => new Date(item[dateField]) < currentDate)
       .sort((a, b) => new Date(b[dateField]) - new Date(a[dateField]));
 
     const futureDates = data
-      .filter(item => new Date(item[dateField]) > currentDate)
+      .filter((item) => new Date(item[dateField]) > currentDate)
       .sort((a, b) => new Date(a[dateField]) - new Date(b[dateField]));
 
     return {
       lastCommunicationDate: pastDates[0]?.[dateField] || null,
-      scheduledCommunicationDate: futureDates[0]?.[dateField] || null
+      scheduledCommunicationDate: futureDates[0]?.[dateField] || null,
     };
   };
 
   const consolidatedData = [
     {
       type: "Email",
-      ...getCommunicationDates(allData?.Email, "startDate")
+      ...getCommunicationDates(allData?.Email, "startDate"),
     },
     {
       type: "Call",
-      ...getCommunicationDates(allData?.phoneCall, "startDate")
+      ...getCommunicationDates(allData?.phoneCall, "startDate"),
     },
     {
       type: "Task",
-      ...getCommunicationDates(allData?.task, "start")
+      ...getCommunicationDates(allData?.task, "start"),
     },
     {
       type: "Meeting",
-      ...getCommunicationDates(allData?.meeting, "dateTime")
-    }
+      ...getCommunicationDates(allData?.meeting, "dateTime"),
+    },
   ];
 
   return (
@@ -476,17 +512,17 @@ const View = () => {
                       permission?.create ||
                       permission?.update ||
                       permission?.delete) && (
-                        <MenuButton
-                          size="sm"
-                          variant="outline"
-                          colorScheme="blackAlpha"
-                          mr={2.5}
-                          as={Button}
-                          rightIcon={<ChevronDownIcon />}
-                        >
-                          Actions
-                        </MenuButton>
-                      )}
+                      <MenuButton
+                        size="sm"
+                        variant="outline"
+                        colorScheme="blackAlpha"
+                        mr={2.5}
+                        as={Button}
+                        rightIcon={<ChevronDownIcon />}
+                      >
+                        Actions
+                      </MenuButton>
+                    )}
                     <MenuDivider />
                     <MenuList minWidth={2}>
                       {(user?.role === "superAdmin" || permission?.create) && (
@@ -901,69 +937,64 @@ const View = () => {
           {(user?.role === "superAdmin" ||
             permission?.update ||
             permission?.delete) && (
-              <Card mt={3}>
-                <Grid templateColumns="repeat(6, 1fr)" gap={1}>
-                  <GridItem colStart={6}>
-                    <Flex justifyContent={"right"}>
-                      {user?.role === "superAdmin" || permission?.update ? (
-                        <Button
-                          size="sm"
-                          onClick={() => setEdit(true)}
-                          leftIcon={<EditIcon />}
-                          mr={2.5}
-                          variant="outline"
-                          colorScheme="green"
-                        >
-                          Edit
-                        </Button>
-                      ) : (
-                        ""
-                      )}
-                      {user?.role === "superAdmin" || permission?.delete ? (
-                        <Button
-                          size="sm"
-                          style={{ background: "red.800" }}
-                          onClick={() => setDelete(true)}
-                          leftIcon={<DeleteIcon />}
-                          colorScheme="red"
-                        >
-                          Delete
-                        </Button>
-                      ) : (
-                        ""
-                      )}
-                    </Flex>
-                  </GridItem>
-                </Grid>
-              </Card>
-            )}
+            <Card mt={3}>
+              <Grid templateColumns="repeat(6, 1fr)" gap={1}>
+                <GridItem colStart={6}>
+                  <Flex justifyContent={"right"}>
+                    {user?.role === "superAdmin" || permission?.update ? (
+                      <Button
+                        size="sm"
+                        onClick={() => setEdit(true)}
+                        leftIcon={<EditIcon />}
+                        mr={2.5}
+                        variant="outline"
+                        colorScheme="green"
+                      >
+                        Edit
+                      </Button>
+                    ) : (
+                      ""
+                    )}
+                    {user?.role === "superAdmin" || permission?.delete ? (
+                      <Button
+                        size="sm"
+                        style={{ background: "red.800" }}
+                        onClick={() => setDelete(true)}
+                        leftIcon={<DeleteIcon />}
+                        colorScheme="red"
+                      >
+                        Delete
+                      </Button>
+                    ) : (
+                      ""
+                    )}
+                  </Flex>
+                </GridItem>
+              </Grid>
+            </Card>
+          )}
         </>
-      )
-      }
-      {
-        isOpen && (
-          <Add
-            isOpen={isOpen}
-            size={size}
-            onClose={onClose}
-            leadData={leadData?.[0]}
-            setAction={setAction}
-          />
-        )
-      }
-      {
-        edit && (
-          <Edit
-            isOpen={edit}
-            size={size}
-            onClose={setEdit}
-            leadData={leadData?.[0]}
-            setAction={setAction}
-            moduleId={leadData?.[0]?._id}
-            data={data}
-          />
-        )
-      }
+      )}
+      {isOpen && (
+        <Add
+          isOpen={isOpen}
+          size={size}
+          onClose={onClose}
+          leadData={leadData?.[0]}
+          setAction={setAction}
+        />
+      )}
+      {edit && (
+        <Edit
+          isOpen={edit}
+          size={size}
+          onClose={setEdit}
+          leadData={leadData?.[0]}
+          setAction={setAction}
+          moduleId={leadData?.[0]?._id}
+          data={data}
+        />
+      )}
       <AddMeeting
         fetchData={fetchData}
         isOpen={addMeeting}
