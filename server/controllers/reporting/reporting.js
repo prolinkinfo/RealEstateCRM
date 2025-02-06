@@ -125,7 +125,7 @@ const lineChart = async (req, res) => {
                 });
                 acc[existingPermissionIndex] = updatedPermission;
             } else {
-                acc.push(permission);
+                !["Documents"]?.includes && acc.push(permission);
             }
         });
         return acc;
