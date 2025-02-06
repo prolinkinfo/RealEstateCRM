@@ -127,7 +127,7 @@ const AddEdit = (props) => {
     handleSubmit,
     setFieldValue,
   } = formik;
-  console.log(errors);
+
   const fetchData = async () => {
     setIsLoding(true);
     let result = await getApi("api/user/");

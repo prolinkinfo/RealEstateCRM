@@ -78,14 +78,7 @@ const propertySchema = new mongoose.Schema({
     // contractorsOrServiceProviders: String,
     // //8. Property Notes and Comments:
     // internalNotesOrComments: String,
-    unitType: {
-        type: [unitTypeSchema],
-        default: [],
-    },
-    units: {
-        type: [floorSchema],
-        default: [],
-    },
+    
     deleted: {
         type: Boolean,
         default: false,
