@@ -98,7 +98,7 @@ const View = () => {
   const [setEmail, setEmailData] = useState([]);
   const dispatch = useDispatch();
   const propertyData = useSelector(
-    (state) => state?.propertyCustomFiled?.data?.data,
+    (state) => state?.propertyCustomFiled?.data?.data
   );
 
   const [contactData, setContactData] = useState([]);
@@ -252,6 +252,7 @@ const View = () => {
     setIsLoding(false);
     setSelectedTab(i);
   };
+
   const generatePDF = () => {
     const element = document.getElementById("reports");
     if (element) {
@@ -327,6 +328,7 @@ const View = () => {
         handleDeleteData={handleDeleteProperties}
         ids={param?.id}
       />
+
       <EmailModel
         lead={true}
         leadEmail={allData?.lead?.leadEmail}
@@ -335,6 +337,7 @@ const View = () => {
         onClose={setAddEmailHistory}
         id={param?.id}
       />
+
       <PhoneModel
         viewData={allData}
         fetchData={fetchData}
@@ -346,6 +349,7 @@ const View = () => {
         lead={true}
         LData={data}
       />
+
       {isLoding ? (
         <Flex justifyContent={"center"} alignItems={"center"} width="100%">
           <Spinner />
@@ -495,7 +499,7 @@ const View = () => {
                               size={"md"}
                               tableCustomFields={
                                 contactData?.[0]?.fields?.filter(
-                                  (field) => field?.isTableField === true,
+                                  (field) => field?.isTableField === true
                                 ) || []
                               }
                               customSearch={true}

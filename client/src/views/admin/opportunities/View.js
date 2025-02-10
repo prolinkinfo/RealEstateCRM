@@ -173,11 +173,11 @@ const View = (props) => {
             <Grid gap={4}>
               <GridItem colSpan={2}>
                 <Box>
-                  <Box display={"flex"} justifyContent={"space-between"}>
-                    <Flex id="hide-btn">
-                      <Heading size="md" mb={3}>
-                        Opportunities Details
-                      </Heading>
+                  <Flex justifyContent={"space-between"} id="hide-btn">
+                    <Heading size="md" mb={3}>
+                      Opportunities Details
+                    </Heading>
+                    <Box>
                       <Menu>
                         {(user.role === "superAdmin" ||
                           opportunityAccess?.create ||
@@ -195,7 +195,6 @@ const View = (props) => {
                             Actions
                           </MenuButton>
                         )}
-                        <MenuDivider />
                         <MenuList minWidth={2}>
                           {(user?.role === "superAdmin" ||
                             opportunityAccess?.create) && (
@@ -259,8 +258,8 @@ const View = (props) => {
                       >
                         Back
                       </Button>
-                    </Flex>
-                  </Box>
+                    </Box>
+                  </Flex>
                   <HSeparator />
                 </Box>
               </GridItem>

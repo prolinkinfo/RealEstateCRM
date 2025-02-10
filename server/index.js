@@ -4,9 +4,8 @@ const route = require('./controllers/route');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-
-const port = 5001
-require('dotenv').config()
+require("dotenv").config();
+const port = process.env.PORT || 5001;
 
 const fs = require('fs');
 const path = require('path');

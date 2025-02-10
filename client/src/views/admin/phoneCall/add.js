@@ -70,7 +70,7 @@ const AddPhoneCall = (props) => {
       resetForm();
     },
   });
-  
+
   const {
     errors,
     touched,
@@ -395,11 +395,14 @@ const AddPhoneCall = (props) => {
                       const selectProperty = extractLabels(
                         changes?.selectedItems
                       );
-                      setFieldValue("property", selectProperty || "");
+                      setFieldValue("property", selectProperty || []);
                     }}
                     value={values?.property}
                     name="property"
                     onChange={handleChange}
+                    borderColor={
+                      errors?.property && touched?.property ? "red.300" : null
+                    }
                     fontWeight="500"
                     placeholder={"Assign To Property"}
                   />
@@ -410,6 +413,10 @@ const AddPhoneCall = (props) => {
                   fontSize="25px"
                   icon={<LiaMousePointerSolid />}
                 />
+                <Text fontSize="sm" mb="10px" color={"red"}>
+                  {" "}
+                  {errors?.property && touched?.property && errors?.property}
+                </Text>
               </Flex>
             </GridItem>
             <GridItem colSpan={{ base: 12, md: 6 }}>

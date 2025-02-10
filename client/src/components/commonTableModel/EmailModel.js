@@ -140,7 +140,7 @@ const EmailModel = (props) => {
   useEffect(() => {
     fetchRecipientData();
   }, [values?.createByContact, values?.createByLead]);
-
+  
   const fetchEmailTemp = async () => {
     setIsLoding(true);
     const result = await dispatch(fetchEmailTempData());
@@ -151,6 +151,7 @@ const EmailModel = (props) => {
     }
     setIsLoding(false);
   };
+
   const getAllApi = async () => {
     values.start = props?.date;
     try {
@@ -174,6 +175,20 @@ const EmailModel = (props) => {
       console.log(e);
     }
   };
+  
+  const getPropertyData =  async () => {
+    const propertyOptionData = await getApi(
+      user?.role === "superAdmin"
+        ? "api/property"
+        : `api/property/?createBy=${user?._id}`,
+    );
+    setAssignToPropertyData(propertyOptionData?.data);
+  }
+
+  useEffect(()=>{
+    getPropertyData()
+  },[])
+
   useEffect(() => {
     getAllApi();
   }, [props, values?.category]);

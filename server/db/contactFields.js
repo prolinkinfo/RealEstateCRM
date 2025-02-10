@@ -32,6 +32,10 @@ const contactFields = [
         require: true,
         message: "",
       },
+      {
+        formikType: "email",
+        message: "Enter valid email",
+      },
     ],
   },
   {
@@ -48,6 +52,20 @@ const contactFields = [
       {
         require: true,
         message: "",
+      },
+      {
+        min: true,
+        value: 10,
+        message: "Please enter valid number",
+      },
+      {
+        max: true,
+        value: 10,
+        message: "Please enter valid number",
+      },
+      {
+        message: "Please enter valid number",
+        formikType: "number",
       },
     ],
   },
