@@ -1,9 +1,7 @@
 const mongoose = require("mongoose");
 
 const typeValidator = (val) => {
-    const allowedTypes = ['String', 'Number', 'RegExp', 'Date']
-    const isValidType = allowedTypes.some(type => val instanceof mongoose.Schema.Types[type]);
-    return isValidType;
+    return typeof val === 'string' || typeof val === 'number' || val instanceof Date || val instanceof RegExp;
 }
 
 const validationSchema = new mongoose.Schema({

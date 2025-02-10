@@ -87,16 +87,16 @@ const leadFields = [
         require: true,
         message: "Enter Valid Lead Mobile",
       },
-      // {
-      //   min: true,
-      //   value: 10,
-      //   message: "Please enter valid number",
-      // },
-      // {
-      //   max: true,
-      //   value: 10,
-      //   message: "Please enter valid number",
-      // },
+      {
+        min: true,
+        value: 10,
+        message: "Please enter valid number",
+      },
+      {
+        max: true,
+        value: 10,
+        message: "Please enter valid number",
+      },
       {
         message: "Please enter valid number",
         formikType: "number",
