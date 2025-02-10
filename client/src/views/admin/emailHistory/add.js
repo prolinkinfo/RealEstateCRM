@@ -70,7 +70,6 @@ const AddEmailHistory = (props) => {
     // assignTo: '',
     // assignToLead: '',
     createBy: user?._id,
-    salesAgent: "", // sales person user id
   };
   const formik = useFormik({
     initialValues: initialValues,
@@ -104,7 +103,8 @@ const AddEmailHistory = (props) => {
       setIsLoding(false);
     }
   };
-  useEffect(async () => {
+
+  const getAllApi = async () => {
     values.start = props?.date;
     try {
       let result;
@@ -115,7 +115,7 @@ const AddEmailHistory = (props) => {
             : `api/contact/?createBy=${user?._id}`
         );
         setAssignToContactData(result?.data);
-      } else if (values?.category === "Lead" && assignToLeadData <= 0) {
+      } else if (values?.category === "Lead" && assignToLeadData?.length <= 0) {
         result = await getApi(
           user?.role === "superAdmin"
             ? "api/lead/"
@@ -123,20 +123,21 @@ const AddEmailHistory = (props) => {
         );
         setAssignToLeadData(result?.data);
       }
-      // else if (
-      //   (values?.category === "property" && console.log(""),
-      //   assignToProperyData.length <= 0)
-      // ) {
-      result = await getApi(
-        user?.role === "superAdmin"
-          ? "api/property"
-          : `api/property/?createBy=${user?._id}`
-      );
-      setAssignToPropertyData(result?.data);
-      // }
     } catch (e) {
       console.log(e);
     }
+  };
+  useEffect(() => {
+    getAllApi();
+  }, [props, values?.category]);
+
+  useEffect(async () => {
+    const propertyOptionData = await getApi(
+      user?.role === "superAdmin"
+        ? "api/property"
+        : `api/property/?createBy=${user?._id}`
+    );
+    setAssignToPropertyData(propertyOptionData?.data);
   }, []);
 
   const fetchRecipientData = async () => {
@@ -472,55 +473,6 @@ const AddEmailHistory = (props) => {
               <Text fontSize="sm" mb="10px" color={"red"}>
                 {" "}
                 {errors?.startDate && touched?.startDate && errors?.startDate}
-              </Text>
-            </GridItem>
-            <GridItem colSpan={{ base: 12 }}>
-              <FormLabel
-                display="flex"
-                ms="4px"
-                fontSize="sm"
-                fontWeight="500"
-                mb="8px"
-              >
-                Assign To Sales Agent <Text color={"red"}>*</Text>
-              </FormLabel>
-              <Flex justifyContent={"space-between"}>
-                <Select
-                  value={values?.salesAgent}
-                  name="salesAgent"
-                  onChange={handleChange}
-                  mb={
-                    errors?.salesAgent && touched?.salesAgent
-                      ? undefined
-                      : "10px"
-                  }
-                  fontWeight="500"
-                  placeholder={"Assign To Sales Agent"}
-                  borderColor={
-                    errors?.salesAgent && touched?.salesAgent ? "red.300" : null
-                  }
-                >
-                  {assignToSalesData?.map((item) => {
-                    return (
-                      <option
-                        value={item?._id}
-                        key={item?._id}
-                      >{`${item?.firstName} ${item?.lastName}`}</option>
-                    );
-                  })}
-                </Select>
-                <IconButton
-                  onClick={() => setSalesPersonsModelOpen(true)}
-                  ml={2}
-                  fontSize="25px"
-                  icon={<LiaMousePointerSolid />}
-                />
-              </Flex>
-              <Text fontSize="sm" mb="10px" color={"red"}>
-                {" "}
-                {errors?.salesAgent &&
-                  touched?.salesAgent &&
-                  errors?.salesAgent}
               </Text>
             </GridItem>
 

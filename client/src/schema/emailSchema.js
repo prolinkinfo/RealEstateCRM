@@ -13,7 +13,6 @@ export const emailSchema = yup
     startDate: yup.date().required("Start Date Is required"),
     createBy: yup.string(),
     createByLead: yup.string(),
-    salesAgent: yup.string().required("Assign To Sales Agent Is required"),
   })
   .test(
     "createBy-or-createByLead-required",
@@ -25,5 +24,5 @@ export const emailSchema = yup
           message: "Recipient Is required",
         });
       }
-    },
+    }
   );

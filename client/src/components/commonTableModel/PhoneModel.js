@@ -60,11 +60,10 @@ const PhoneModel = (props) => {
     createByLead: "",
     property: [id],
     startDate: "",
-    category: "contact",
+    category: "Contact",
     // assignTo: '',
     // assignToLead: '',
     createBy: user?._id,
-    salesAgent: "", // sales person user id
   };
 
   const validationSchema = yup.object({
@@ -77,7 +76,6 @@ const PhoneModel = (props) => {
     createByLead: yup.string(),
     category: yup.string(),
     startDate: yup.date().required("Start Date Is required"),
-    salesAgent: yup.string().required("Assign To Sales Agent Is required"),
   });
   const formik = useFormik({
     initialValues: initialValues,
@@ -122,21 +120,21 @@ const PhoneModel = (props) => {
         result = await getApi(
           user?.role === "superAdmin"
             ? "api/contact/"
-            : `api/contact/?createBy=${user?._id}`,
+            : `api/contact/?createBy=${user?._id}`
         );
         setAssignToContactData(result?.data);
       } else if (values?.category === "Lead" && assignToLeadData?.length <= 0) {
         result = await getApi(
           user?.role === "superAdmin"
             ? "api/lead/"
-            : `api/lead/?createBy=${user?._id}`,
+            : `api/lead/?createBy=${user?._id}`
         );
         setAssignToLeadData(result?.data);
       }
       const propertyOptionData = await getApi(
         user?.role === "superAdmin"
           ? "api/property"
-          : `api/property/?createBy=${user?._id}`,
+          : `api/property/?createBy=${user?._id}`
       );
       setAssignToPropertyData(propertyOptionData?.data);
     } catch (e) {
@@ -146,18 +144,25 @@ const PhoneModel = (props) => {
   useEffect(() => {
     getAllApi();
   }, [props?.date, values?.category]);
-
+  useEffect(async () => {
+    const propertyOptionData = await getApi(
+      user?.role === "superAdmin"
+        ? "api/property"
+        : `api/property/?createBy=${user?._id}`
+    );
+    setAssignToPropertyData(propertyOptionData?.data);
+  }, []);
   const fetchRecipientData = async () => {
     if (values?.createByContact) {
       let findEmail = assignToContactData?.find(
-        (item) => item?._id === values?.createByContact,
+        (item) => item?._id === values?.createByContact
       );
       if (findEmail) {
         setFieldValue("recipient", findEmail?.phoneNumber);
       }
     } else if (values?.createByLead) {
       let findEmail = assignToLeadData.find(
-        (item) => item?._id === values?.createByLead,
+        (item) => item?._id === values?.createByLead
       );
       if (findEmail) {
         setFieldValue("recipient", findEmail?.leadPhoneNumber);
@@ -174,7 +179,7 @@ const PhoneModel = (props) => {
 
       let salesPersons =
         result?.data?.user?.filter((userData) =>
-          userData?.roles?.some((role) => role?.roleName === "Sales"),
+          userData?.roles?.some((role) => role?.roleName === "Sales")
         ) || [];
       setAssignToSalesData(salesPersons);
     } catch (error) {
@@ -245,7 +250,7 @@ const PhoneModel = (props) => {
             fieldName="property"
             setFieldValue={setFieldValue}
             selectedItems={setValueProperty?.filter((item) =>
-              values?.property?.includes(item?._id),
+              values?.property?.includes(item?._id)
             )}
           />
           <Grid templateColumns="repeat(12, 1fr)" gap={3}>
@@ -421,11 +426,11 @@ const PhoneModel = (props) => {
                     label={`Property`}
                     items={setValueProperty}
                     selectedItems={setValueProperty?.filter((item) =>
-                      values?.property?.includes(item?._id),
+                      values?.property?.includes(item?._id)
                     )}
                     onSelectedItemsChange={(changes) => {
                       const selectProperty = extractLabels(
-                        changes?.selectedItems,
+                        changes?.selectedItems
                       );
                       setFieldValue("property", selectProperty);
                     }}
@@ -513,55 +518,7 @@ const PhoneModel = (props) => {
                   errors?.callDuration}
               </Text>
             </GridItem>
-            <GridItem colSpan={{ base: 12 }}>
-              <FormLabel
-                display="flex"
-                ms="4px"
-                fontSize="sm"
-                fontWeight="500"
-                mb="8px"
-              >
-                Assign To Sales Agent <Text color={"red"}>*</Text>
-              </FormLabel>
-              <Flex justifyContent={"space-between"}>
-                <Select
-                  value={values?.salesAgent}
-                  name="salesAgent"
-                  onChange={handleChange}
-                  mb={
-                    errors?.salesAgent && touched?.salesAgent
-                      ? undefined
-                      : "10px"
-                  }
-                  fontWeight="500"
-                  placeholder={"Assign To Sales Agent"}
-                  borderColor={
-                    errors?.salesAgent && touched?.salesAgent ? "red.300" : null
-                  }
-                >
-                  {assignToSalesData?.map((item) => {
-                    return (
-                      <option
-                        value={item?._id}
-                        key={item?._id}
-                      >{`${item?.firstName} ${item?.lastName}`}</option>
-                    );
-                  })}
-                </Select>
-                <IconButton
-                  onClick={() => setSalesPersonsModelOpen(true)}
-                  ml={2}
-                  fontSize="25px"
-                  icon={<LiaMousePointerSolid />}
-                />
-              </Flex>
-              <Text mb="10px" fontSize="sm" color={"red"}>
-                {" "}
-                {errors?.salesAgent &&
-                  touched?.salesAgent &&
-                  errors?.salesAgent}
-              </Text>
-            </GridItem>
+
             <GridItem colSpan={{ base: 12 }}>
               <FormLabel
                 display="flex"
