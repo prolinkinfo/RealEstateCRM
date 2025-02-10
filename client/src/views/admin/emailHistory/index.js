@@ -78,7 +78,7 @@ const Index = (props) => {
                 onClick={() =>
                   navigate(
                     row?.original?.createByContact &&
-                      `/contactView/${row?.original.createByContact}`,
+                      `/contactView/${row?.original.createByContact}`
                   )
                 }
                 icon={
@@ -127,7 +127,7 @@ const Index = (props) => {
     { Header: "#", accessor: "_id", isSortable: false, width: 10 },
     {
       Header: "recipient",
-      accessor: "createByName",
+      accessor: (row) => row.contactName || row.createByName,
       cell: (cell) => (
         <Link to={`/Email/${cell?.row?.values?._id}`}>
           <Text

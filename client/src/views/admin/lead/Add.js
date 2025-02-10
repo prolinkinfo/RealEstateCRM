@@ -40,10 +40,11 @@ const Add = (props) => {
   const initialFieldValues = Object.fromEntries(
     (props?.leadData?.fields || [])?.map((field) => [field?.name, ""])
   );
+
   const initialValues = {
     ...initialFieldValues,
-    associatedListing: "",
-    assignUser: "",
+    associatedListing: initialFieldValues?.associatedListing || "",
+    assignUser: initialFieldValues?.assignUser || "",
     createBy: JSON.parse(localStorage.getItem("user"))?._id,
   };
 
@@ -81,10 +82,24 @@ const Add = (props) => {
   const AddData = async () => {
     try {
       setIsLoding(true);
-      let response = await postApi("api/form/add", {
-        ...values,
+
+      const filteredValues = Object.fromEntries(
+        Object.entries(values).filter(
+          ([key, value]) =>
+            (key === "associatedListing" && value !== "") ||
+            (key !== "associatedListing" &&
+              value !== "" &&
+              value !== undefined &&
+              value !== null)
+        )
+      );
+
+      let payload = {
+        ...filteredValues,
         moduleId: props?.leadData?._id,
-      });
+      };
+
+      let response = await postApi("api/form/add", payload);
       if (response?.status === 200) {
         props.onClose();
         formik.resetForm();

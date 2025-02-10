@@ -158,7 +158,7 @@ const View = (props) => {
   };
   useEffect(() => {
     fetchViewData();
-  }, [id, edit]);
+  }, []);
 
   return (
     <div>
@@ -299,7 +299,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "opportunityName",
                         data?.opportunityName,
-                        "Opportunity Name",
+                        "Opportunity Name"
                       )
                     }
                   >
@@ -512,7 +512,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "leadSource",
                         data?.leadSource,
-                        "Lead Source",
+                        "Lead Source"
                       )
                     }
                   >
@@ -598,7 +598,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "opportunityAmount",
                         data?.opportunityAmount,
-                        "Opportunity Amount",
+                        "Opportunity Amount"
                       )
                     }
                   >
@@ -658,7 +658,7 @@ const View = (props) => {
                       onChange={formik?.handleChange}
                       onBlur={handleBlur}
                       value={dayjs(formik?.values?.expectedCloseDate)?.format(
-                        "YYYY-MM-DD",
+                        "YYYY-MM-DD"
                       )}
                       autoFocus
                       borderColor={
@@ -681,7 +681,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "expectedCloseDate",
                         data?.expectedCloseDate,
-                        "Expected Close Date",
+                        "Expected Close Date"
                       )
                     }
                   >
@@ -790,7 +790,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "salesStage",
                         data?.salesStage,
-                        "Sales Stage",
+                        "Sales Stage"
                       )
                     }
                   >
@@ -833,7 +833,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "probability",
                         data?.probability,
-                        "Probability",
+                        "Probability"
                       )
                     }
                   >
@@ -876,7 +876,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "description",
                         data?.description,
-                        "Description",
+                        "Description"
                       )
                     }
                   >

@@ -181,8 +181,8 @@ const View = () => {
                       {" "}
                       Create From{" "}
                     </Text>
-                    {data?.createBy ? (
-                      <Link to={`/contactView/${data?.createBy}`}>
+                    {data?.createByContact ? (
+                      <Link to={`/contactView/${data?.createByContact}`}>
                         <Text
                           color={
                             contactAccess?.view ? "brand.600" : "blackAlpha.900"
@@ -198,7 +198,7 @@ const View = () => {
                             },
                           }}
                         >
-                          {data?.createByName ? data?.createByName : " - "}
+                          {data?.contactName ? data?.contactName : " - "}
                         </Text>
                       </Link>
                     ) : (

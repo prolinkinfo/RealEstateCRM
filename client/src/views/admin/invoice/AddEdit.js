@@ -80,12 +80,12 @@ const AddEdit = (props) => {
   const [isOpenPreview, setIsOpenPreview] = useState(false);
 
   const opportunityList = useSelector(
-    (state) => state?.opportunityData?.data?.data,
+    (state) => state?.opportunityData?.data?.data
   );
   const accountList = useSelector((state) => state?.accountData?.data?.data);
   const contactList = useSelector((state) => state?.contactData?.data);
   const largeLogo = useSelector((state) =>
-    state?.images?.images?.filter((item) => item?.isActive === true),
+    state?.images?.images?.filter((item) => item?.isActive === true)
   );
 
   const initialValues = {
@@ -234,7 +234,7 @@ const AddEdit = (props) => {
     const totalAmount = items?.reduce((sum, item) => sum + item?.amount, 0);
     const totalDiscount = items?.reduce(
       (sum, item) => sum + item?.totalDiscount,
-      0,
+      0
     );
     const netAmount = Number(totalAmount) - Number(totalDiscount);
     return { totalAmount, netAmount, discount: totalDiscount };
@@ -737,10 +737,9 @@ const AddEdit = (props) => {
                         {contactList?.length > 0 &&
                           contactList?.map((item) => {
                             return (
-                              <option
-                                value={item?._id}
-                                key={item?._id}
-                              >{`${item?.firstName} ${item?.lastName}`}</option>
+                              <option value={item?._id} key={item?._id}>
+                                {item?.fullName}
+                              </option>
                             );
                           })}
                       </Select>
@@ -1184,7 +1183,7 @@ const AddEdit = (props) => {
                                       handleChangeCalculation(
                                         index,
                                         "productName",
-                                        e.target.value,
+                                        e.target.value
                                       )
                                     }
                                     size="sm"
@@ -1200,7 +1199,7 @@ const AddEdit = (props) => {
                                       handleChangeCalculation(
                                         index,
                                         "qty",
-                                        Number(e.target.value),
+                                        Number(e.target.value)
                                       )
                                     }
                                     size="sm"
@@ -1216,7 +1215,7 @@ const AddEdit = (props) => {
                                       handleChangeCalculation(
                                         index,
                                         "rate",
-                                        Number(e.target.value),
+                                        Number(e.target.value)
                                       )
                                     }
                                     size="sm"
@@ -1232,7 +1231,7 @@ const AddEdit = (props) => {
                                       handleChangeCalculation(
                                         index,
                                         "discount",
-                                        Number(e.target.value),
+                                        Number(e.target.value)
                                       )
                                     }
                                     size="sm"
@@ -1244,7 +1243,7 @@ const AddEdit = (props) => {
                                       handleChangeCalculation(
                                         index,
                                         "discountType",
-                                        e.target.value,
+                                        e.target.value
                                       );
                                     }}
                                     size="sm"
