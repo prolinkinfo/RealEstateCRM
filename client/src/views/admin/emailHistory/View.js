@@ -181,8 +181,8 @@ const View = () => {
                       {" "}
                       Create From{" "}
                     </Text>
-                    {data?.createBy ? (
-                      <Link to={`/contactView/${data?.createBy}`}>
+                    {data?.createByContact ? (
+                      <Link to={`/contactView/${data?.createByContact}`}>
                         <Text
                           color={
                             contactAccess?.view ? "brand.600" : "blackAlpha.900"
@@ -198,7 +198,7 @@ const View = () => {
                             },
                           }}
                         >
-                          {data?.createByName ? data?.createByName : " - "}
+                          {data?.contactName ? data?.contactName : " - "}
                         </Text>
                       </Link>
                     ) : (
@@ -302,28 +302,6 @@ const View = () => {
                     </Text>
                     <Text>{data?.subject ? data?.subject : " - "}</Text>
                   </GridItem>
-                  <GridItem colSpan={{ base: 2 }}>
-                    <Text
-                      fontSize="sm"
-                      fontWeight="bold"
-                      color={"blackAlpha.900"}
-                    >
-                      {" "}
-                      Sales Agent{" "}
-                    </Text>
-                    <Text>
-                      {data?.salesAgentName ? data?.salesAgentName : " - "}
-                    </Text>
-                  </GridItem>
-                  {/* <GridItem colSpan={{ base: 2 }} >
-                                        <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Message </Text>
-                                        {
-                                            data?.type === "message" ?
-                                                <Text>{data?.message ? data?.message : '-'}</Text>
-                                                :
-                                                <div dangerouslySetInnerHTML={{ __html: data?.html }} />
-                                        }
-                                    </GridItem> */}
                 </Grid>
               </Card>
             </GridItem>
@@ -383,7 +361,7 @@ const View = () => {
                 AdvanceSearch={false}
                 tableCustomFields={
                   data?.properties?.[0]?.fields?.filter(
-                    (field) => field?.isTableField === true,
+                    (field) => field?.isTableField === true
                   ) || []
                 }
                 addBtn={false}

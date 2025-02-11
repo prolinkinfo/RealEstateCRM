@@ -158,7 +158,7 @@ const View = (props) => {
   };
   useEffect(() => {
     fetchViewData();
-  }, [id, edit]);
+  }, []);
 
   return (
     <div>

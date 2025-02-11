@@ -708,7 +708,7 @@ const AddEdit = (props) => {
                   Status
                 </FormLabel>
                 <Select
-                  onChange={(e) => setFieldValue("status", e?.target?.value)}
+                  onChange={(e) => setFieldValue("status", e?.target?.valueEmail )}
                   value={values?.status}
                   style={{ fontSize: "14px" }}
                 >

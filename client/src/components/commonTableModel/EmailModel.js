@@ -67,7 +67,8 @@ const EmailModel = (props) => {
     type: "message",
     html: "",
     createBy: user?._id,
-    salesAgent: "", // sales person user id
+    createBy: user?._id,
+    category: "Contact",
   };
   const validationSchema = yup.object({
     sender: yup.string().required("Sender Is required"),
@@ -82,7 +83,6 @@ const EmailModel = (props) => {
     startDate: yup.date().required("Start Date Is required"),
     createBy: yup.string(),
     createByLead: yup.string(),
-    salesAgent: yup.string().required("Assign To Sales Agent Is required"),
   });
   const formik = useFormik({
     initialValues: initialValues,
@@ -121,14 +121,14 @@ const EmailModel = (props) => {
   const fetchRecipientData = async () => {
     if (values?.createByContact) {
       let findEmail = assignToContactData.find(
-        (item) => item?._id === values?.createByContact,
+        (item) => item?._id === values?.createByContact
       );
       if (findEmail) {
         setFieldValue("recipient", findEmail?.email);
       }
     } else if (values?.createByLead) {
       let findEmail = assignToLeadData?.find(
-        (item) => item?._id === values?.createByLead,
+        (item) => item?._id === values?.createByLead
       );
       if (findEmail) {
         setFieldValue("recipient", findEmail?.leadEmail);
@@ -160,14 +160,14 @@ const EmailModel = (props) => {
         result = await getApi(
           user?.role === "superAdmin"
             ? "api/contact/"
-            : `api/contact/?createBy=${user?._id}`,
+            : `api/contact/?createBy=${user?._id}`
         );
         setAssignToContactData(result?.data);
       } else if (values?.category === "Lead" && assignToLeadData <= 0) {
         result = await getApi(
           user?.role === "superAdmin"
             ? "api/lead/"
-            : `api/lead/?createBy=${user?._id}`,
+            : `api/lead/?createBy=${user?._id}`
         );
         setAssignToLeadData(result?.data);
       }
@@ -192,6 +192,15 @@ const EmailModel = (props) => {
   useEffect(() => {
     getAllApi();
   }, [props, values?.category]);
+
+  useEffect(async () => {
+    const propertyOptionData = await getApi(
+      user?.role === "superAdmin"
+        ? "api/property"
+        : `api/property/?createBy=${user?._id}`
+    );
+    setAssignToPropertyData(propertyOptionData?.data);
+  }, []);
   const fetchUsersData = async () => {
     setIsLoding(true);
     try {
@@ -199,7 +208,7 @@ const EmailModel = (props) => {
 
       let salesPersons =
         result?.data?.user?.filter((userData) =>
-          userData?.roles?.some((role) => role?.roleName === "Sales"),
+          userData?.roles?.some((role) => role?.roleName === "Sales")
         ) || [];
       setAssignToSalesData(salesPersons);
     } catch (error) {
@@ -269,7 +278,7 @@ const EmailModel = (props) => {
             fieldName="property"
             setFieldValue={setFieldValue}
             selectedItems={getPropertyOptions?.filter((item) =>
-              values?.property?.includes(item?._id),
+              values?.property?.includes(item?._id)
             )}
           />
           <Grid templateColumns="repeat(12, 1fr)" gap={3}>
@@ -433,11 +442,11 @@ const EmailModel = (props) => {
                     label={`Property`}
                     items={getPropertyOptions}
                     selectedItems={getPropertyOptions?.filter((item) =>
-                      values?.property?.includes(item._id),
+                      values?.property?.includes(item._id)
                     )}
                     onSelectedItemsChange={(changes) => {
                       const selectProperty = extractLabels(
-                        changes.selectedItems,
+                        changes.selectedItems
                       );
                       setFieldValue("property", selectProperty);
                     }}
@@ -492,55 +501,6 @@ const EmailModel = (props) => {
               <Text fontSize="sm" mb="10px" color={"red"}>
                 {" "}
                 {errors?.startDate && touched?.startDate && errors?.startDate}
-              </Text>
-            </GridItem>
-            <GridItem colSpan={{ base: 12 }}>
-              <FormLabel
-                display="flex"
-                ms="4px"
-                fontSize="sm"
-                fontWeight="500"
-                mb="8px"
-              >
-                Assign To Sales Agent <Text color={"red"}>*</Text>
-              </FormLabel>
-              <Flex justifyContent={"space-between"}>
-                <Select
-                  value={values?.salesAgent}
-                  name="salesAgent"
-                  onChange={handleChange}
-                  mb={
-                    errors?.salesAgent && touched?.salesAgent
-                      ? undefined
-                      : "10px"
-                  }
-                  fontWeight="500"
-                  placeholder={"Assign To Sales Agent"}
-                  borderColor={
-                    errors?.salesAgent && touched?.salesAgent ? "red.300" : null
-                  }
-                >
-                  {assignToSalesData?.map((item) => {
-                    return (
-                      <option
-                        value={item?._id}
-                        key={item?._id}
-                      >{`${item?.firstName} ${item?.lastName}`}</option>
-                    );
-                  })}
-                </Select>
-                <IconButton
-                  onClick={() => setSalesPersonsModelOpen(true)}
-                  ml={2}
-                  fontSize="25px"
-                  icon={<LiaMousePointerSolid />}
-                />
-              </Flex>
-              <Text fontSize="sm" mb="10px" color={"red"}>
-                {" "}
-                {errors?.salesAgent &&
-                  touched?.salesAgent &&
-                  errors?.salesAgent}
               </Text>
             </GridItem>
 

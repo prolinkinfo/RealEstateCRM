@@ -1,5 +1,5 @@
-const Task = require('../../model/schema/task')
-const mongoose = require('mongoose');
+const Task = require("../../model/schema/task");
+const mongoose = require("mongoose");
 
 const index = async (req, res) => {
   query = req.query;
@@ -13,42 +13,50 @@ const index = async (req, res) => {
       { $match: query },
       {
         $lookup: {
-                    from: 'Contacts',
-                    localField: 'assignTo',
-                    foreignField: '_id',
-                    as: 'contact'
-                }
+          from: "Contacts",
+          localField: "assignTo",
+          foreignField: "_id",
+          as: "contact",
+        },
       },
       {
         $lookup: {
-                    from: 'Leads', // Assuming this is the collection name for 'leads'
-                    localField: 'assignToLead',
-                    foreignField: '_id',
-                    as: 'Lead'
-                }
+          from: "Leads", // Assuming this is the collection name for 'leads'
+          localField: "assignToLead",
+          foreignField: "_id",
+          as: "Lead",
+        },
       },
       {
         $lookup: {
-                    from: 'User',
-                    localField: 'createBy',
-                    foreignField: '_id',
-                    as: 'users'
-                }
+          from: "User",
+          localField: "createBy",
+          foreignField: "_id",
+          as: "users",
+        },
       },
-            { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
-            { $unwind: { path: '$contact', preserveNullAndEmptyArrays: true } },
-            { $unwind: { path: '$Lead', preserveNullAndEmptyArrays: true } },
-            { $match: { 'users.deleted': false } },
+      { $unwind: { path: "$users", preserveNullAndEmptyArrays: true } },
+      { $unwind: { path: "$contact", preserveNullAndEmptyArrays: true } },
+      { $unwind: { path: "$Lead", preserveNullAndEmptyArrays: true } },
+      { $match: { "users.deleted": false } },
       {
         $addFields: {
           assignToName: {
             $cond: {
-                            if: '$contact',
-                            then: { $concat: ['$contact.title', ' ', '$contact.firstName', ' ', '$contact.lastName'] },
-                            else: { $concat: ['$Lead.leadName'] }
-                        }
+              if: "$contact",
+              then: {
+                $concat: [
+                  "$contact.title",
+                  " ",
+                  "$contact.firstName",
+                  " ",
+                  "$contact.lastName",
+                ],
+              },
+              else: { $concat: ["$Lead.leadName"] },
+            },
           },
-                }
+        },
       },
       { $project: { users: 0, contact: 0, Lead: 0 } },
     ]);
@@ -185,10 +193,7 @@ const changeStatus = async (req, res) => {
   try {
     const { status } = req.body;
 
-        await Task.updateOne(
-            { _id: req.params.id },
-            { $set: { status: status } }
-        );
+    await Task.updateOne({ _id: req.params.id }, { $set: { status: status } });
 
         let response = await Task.findOne({ _id: req.params.id })
     res.status(200).json(response);
@@ -206,76 +211,99 @@ const view = async (req, res) => {
       { $match: { _id: response._id } },
       {
         $lookup: {
-                    from: 'Contacts',
-                    localField: 'assignTo',
-                    foreignField: '_id',
-                    as: 'contact'
-                }
+          from: "Contacts",
+          localField: "assignTo",
+          foreignField: "_id",
+          as: "contact",
+        },
       },
       {
         $lookup: {
-                    from: 'Leads', // Assuming this is the collection name for 'leads'
-                    localField: 'assignToLead',
-                    foreignField: '_id',
-                    as: 'Lead'
-                }
+          from: "Leads", // Assuming this is the collection name for 'leads'
+          localField: "assignToLead",
+          foreignField: "_id",
+          as: "Lead",
+        },
       },
       {
         $lookup: {
-                    from: 'User',
-                    localField: 'createBy',
-                    foreignField: '_id',
-                    as: 'users'
-                }
+          from: "User",
+          localField: "createBy",
+          foreignField: "_id",
+          as: "users",
+        },
       },
-            { $unwind: { path: '$contact', preserveNullAndEmptyArrays: true } },
-            { $unwind: { path: '$users', preserveNullAndEmptyArrays: true } },
-            { $unwind: { path: '$Lead', preserveNullAndEmptyArrays: true } },
+      { $unwind: { path: "$contact", preserveNullAndEmptyArrays: true } },
+      { $unwind: { path: "$users", preserveNullAndEmptyArrays: true } },
+      { $unwind: { path: "$Lead", preserveNullAndEmptyArrays: true } },
       {
         $addFields: {
           assignToName: {
             $cond: {
-                            if: '$contact',
-                            then: { $concat: ['$contact.title', ' ', '$contact.firstName', ' ', '$contact.lastName'] },
-                            else: { $concat: ['$Lead.leadName'] }
-                        }
+              if: { $gt: [{ $type: "$contact" }, "missing"] },
+              then: {
+                $concat: [
+                  "$contact.title",
+                  " ",
+                  "$contact.firstName",
+                  " ",
+                  "$contact.lastName",
+                ],
+              },
+              else: { $concat: ["$Lead.leadName"] },
+            },
           },
-                    createByName: '$users.username',
-                }
+          contactName: "$contact.fullName",
+          createByName: "$users.username",
+        },
       },
       { $project: { contact: 0, users: 0, Lead: 0 } },
-        ])
+    ]);
     res.status(200).json(result[0]);
-
   } catch (err) {
-        console.log('Error:', err);
+    console.log("Error:", err);
     res.status(400).json({ Error: err });
   }
-}
+};
 
 const deleteData = async (req, res) => {
   try {
-        const result = await Task.findByIdAndUpdate(req.params.id, { deleted: true });
-        res.status(200).json({ message: "done", result })
+    const result = await Task.findByIdAndUpdate(req.params.id, {
+      deleted: true,
+    });
+    res.status(200).json({ message: "done", result });
   } catch (err) {
-        res.status(404).json({ message: "error", err })
+    res.status(404).json({ message: "error", err });
   }
-}
+};
 
 const deleteMany = async (req, res) => {
   try {
-        const result = await Task.updateMany({ _id: { $in: req.body } }, { $set: { deleted: true } });
+    const result = await Task.updateMany(
+      { _id: { $in: req.body } },
+      { $set: { deleted: true } }
+    );
 
     if (result?.matchedCount > 0 && result?.modifiedCount > 0) {
-            return res.status(200).json({ message: "Tasks Removed successfully", result });
-        }
-        else {
-            return res.status(404).json({ success: false, message: "Failed to remove tasks" })
+      return res
+        .status(200)
+        .json({ message: "Tasks Removed successfully", result });
+    } else {
+      return res
+        .status(404)
+        .json({ success: false, message: "Failed to remove tasks" });
     }
-
   } catch (err) {
     return res.status(404).json({ success: false, message: "error", err });
   }
-}
+};
 
-module.exports = { index, add, edit, view, deleteData, changeStatus, deleteMany }
+module.exports = {
+  index,
+  add,
+  edit,
+  view,
+  deleteData,
+  changeStatus,
+  deleteMany,
+};

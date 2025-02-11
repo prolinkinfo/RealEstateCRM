@@ -172,55 +172,44 @@ const View = () => {
                       {" "}
                       Create to{" "}
                     </Text>
-                    {data?.createBy ? (
-                      <Link
-                        to={
-                          contactAccess?.view &&
-                          `/contactView/${data?.createBy}`
-                        }
-                      >
+                    {data?.createByContact ? (
+                      contactAccess?.view ? (
+                        <Link to={`/contactView/${data?.createByContact}`}>
+                          <Text
+                            color="blue.500"
+                            sx={{
+                              "&:hover": {
+                                color: "blue.500",
+                                textDecoration: "underline",
+                              },
+                            }}
+                          >
+                            {data?.contactName || " - "}
+                          </Text>
+                        </Link>
+                      ) : (
+                        <Text color="blackAlpha.900">
+                          {data?.contactName || " - "}
+                        </Text>
+                      )
+                    ) : data?.createByLead && leadAccess?.view ? (
+                      <Link to={`/leadView/${data?.createByLead}`}>
                         <Text
-                          color={
-                            contactAccess?.view ? "blue.500" : "blackAlpha.900"
-                          }
+                          color="blue.500"
                           sx={{
                             "&:hover": {
-                              color: contactAccess?.view
-                                ? "blue.500"
-                                : "blackAlpha.900",
-                              textDecoration: contactAccess?.view
-                                ? "underline"
-                                : "none",
+                              color: "blue.500",
+                              textDecoration: "underline",
                             },
                           }}
                         >
-                          {data?.createByName ? data?.createByName : " - "}
+                          {data?.createByName || " - "}
                         </Text>
                       </Link>
                     ) : (
-                      <Link
-                        to={
-                          leadAccess?.view && `/leadView/${data?.createByLead}`
-                        }
-                      >
-                        <Text
-                          color={
-                            leadAccess?.view ? "blue.500" : "blackAlpha.900"
-                          }
-                          sx={{
-                            "&:hover": {
-                              color: leadAccess?.view
-                                ? "blue.500"
-                                : "blackAlpha.900",
-                              textDecoration: leadAccess?.view
-                                ? "underline"
-                                : "none",
-                            },
-                          }}
-                        >
-                          {data?.createByName ? data?.createByName : " - "}
-                        </Text>
-                      </Link>
+                      <Text color="blackAlpha.900">
+                        {data?.createByName || " - "}
+                      </Text>
                     )}
                   </GridItem>
                   <GridItem colSpan={{ base: 2, md: 1 }}>
@@ -351,7 +340,7 @@ const View = () => {
                 AdvanceSearch={false}
                 tableCustomFields={
                   data?.properties?.[0]?.fields?.filter(
-                    (field) => field?.isTableField === true,
+                    (field) => field?.isTableField === true
                   ) || []
                 }
                 addBtn={false}
