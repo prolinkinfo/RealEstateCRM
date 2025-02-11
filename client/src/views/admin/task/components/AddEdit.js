@@ -46,7 +46,7 @@ const AddEdit = (props) => {
     viewData,
     id,
     view,
-    data,
+    edit,
   } = props;
 
   const [isChecked, setIsChecked] = useState(false);
@@ -57,6 +57,7 @@ const AddEdit = (props) => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [isLoding, setIsLoding] = useState(false);
   const [contactModelOpen, setContactModel] = useState(false);
+  const [taskData, setTaskData] = useState();
   const [leadModelOpen, setLeadModel] = useState(false);
   const leadData = useSelector((state) => state?.leadData?.data);
 
@@ -68,28 +69,42 @@ const AddEdit = (props) => {
   const contactData = useSelector((state) => state?.contactData?.data);
 
   const initialValues = {
-    title: "",
+    title: userAction === "edit" ? taskData?.title : "",
     category:
-      props?.leadContect === "contactView"
-        ? "Contact"
-        : props?.leadContect === "leadView"
-          ? "Lead"
-          : "None",
-    description: "",
-    notes: "",
-    assignTo: props?.leadContect === "contactView" && id ? id : "",
-    assignToLead: props?.leadContect === "leadView" && id ? id : "",
-    reminder: "",
-    start: "",
-    end: "",
-    backgroundColor: "",
-    borderColor: "#ffffff",
-    textColor: "",
-    allDay: false,
-    display: "",
-    url: "",
+      userAction === "edit"
+        ? taskData?.category
+        : props?.leadContect === "contactView"
+          ? "Contact"
+          : props?.leadContect === "leadView"
+            ? "Lead"
+            : "None",
+    description: userAction === "edit" ? taskData?.description : "",
+    notes: userAction === "edit" ? taskData?.notes : "",
+    assignTo:
+      userAction === "edit"
+        ? taskData?.assignTo
+        : props?.leadContect === "contactView" && id
+          ? id
+          : "",
+    assignToLead:
+      userAction === "edit"
+        ? taskData?.assignToLead
+        : props?.leadContect === "leadView" && id
+          ? id
+          : "",
+    reminder: userAction === "edit" ? taskData?.reminder : "",
+    start: userAction === "edit" ? taskData?.start : "",
+    end: userAction === "edit" ? taskData?.end : "",
+    backgroundColor: userAction === "edit" ? taskData?.backgroundColor : "",
+    borderColor: userAction === "edit" ? taskData?.borderColor : "#ffffff",
+    status: userAction === "edit" ? taskData?.status : "todo",
+    textColor: userAction === "edit" ? taskData?.textColor : "",
+    allDay: userAction === "edit" ? taskData?.allDay : false,
+    display: userAction === "edit" ? taskData?.display : "",
+    url: userAction === "edit" ? taskData?.url : "",
     createBy: userId,
   };
+  const startDate = userAction === "edit" ? taskData?.start : "";
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -112,11 +127,21 @@ const AddEdit = (props) => {
     resetForm,
   } = formik;
 
+  const fetchViewData = async () => {
+    if (id) {
+      let result = await getApi("api/task/view/", id);
+      setTaskData(result?.data);
+    }
+  };
+
+  useEffect(() => {
+    fetchViewData();
+  }, [id, edit]);
+
   const AddData = async () => {
     if (userAction === "add") {
       try {
         setIsLoding(true);
-
         if (values?.start) {
           values.start = values?.allDay
             ? moment(values?.start)?.format("YYYY-MM-DD")
@@ -157,8 +182,9 @@ const AddEdit = (props) => {
 
         let response = await putApi(`api/task/edit/${id}`, values);
         if (response?.status === 200) {
-          formik.resetForm();
           onClose();
+          formik.resetForm();
+          fetchData();
           setAction((pre) => !pre);
         }
       } catch (e) {
@@ -166,58 +192,6 @@ const AddEdit = (props) => {
       } finally {
         setIsLoding(false);
       }
-    }
-  };
-
-  const fetchTaskData = async () => {
-    if (id) {
-      try {
-        setIsLoding(true);
-        let result = await getApi("api/task/view/", id);
-        setFieldValue("title", result?.data?.title);
-        setFieldValue("category", result?.data?.category);
-        setFieldValue("description", result?.data?.description);
-        setFieldValue("notes", result?.data?.notes);
-        setFieldValue("assignTo", result?.data?.assignTo);
-        setFieldValue("reminder", result?.data?.reminder);
-        setFieldValue("start", result?.data?.start);
-        setFieldValue("end", result?.data?.end);
-        setFieldValue("backgroundColor", result?.data?.backgroundColor);
-        setFieldValue("borderColor", result?.data?.borderColor);
-        setFieldValue("textColor", result?.data?.textColor);
-        setFieldValue("display", result?.data?.display);
-        setFieldValue("url", result?.data?.url);
-        setFieldValue("status", result?.data?.status);
-        setFieldValue("assignToLead", result?.data?.assignToLead);
-        // setFieldValue('allDay', result?.data?.allDay === 'Yes' ? 'Yes' : 'No')
-        setFieldValue("allDay", result?.data?.allDay);
-
-        // setIsChecked(result?.data?.allDay === 'Yes' ? true : false)
-      } catch (e) {
-        console.log(e);
-      } finally {
-        setIsLoding(false);
-      }
-    } else if (data) {
-      setFieldValue("title", data?.title);
-      setFieldValue("category", data?.category);
-      setFieldValue("description", data?.description);
-      setFieldValue("notes", data?.notes);
-      setFieldValue("assignTo", data?.assignTo);
-      setFieldValue("reminder", data?.reminder);
-      setFieldValue("start", data?.start);
-      setFieldValue("end", data?.end);
-      setFieldValue("backgroundColor", data?.backgroundColor);
-      setFieldValue("borderColor", data?.borderColor);
-      setFieldValue("textColor", data?.textColor);
-      setFieldValue("display", data?.display);
-      setFieldValue("url", data?.url);
-      setFieldValue("status", data?.status);
-      setFieldValue("assignToLead", data?.assignToLead);
-      setFieldValue("allDay", data?.allDay === "Yes" ? "Yes" : "No");
-      setFieldValue("allDay", data?.allDay);
-
-      // setIsChecked(data?.allDay === 'Yes' ? true : false)
     }
   };
 
@@ -261,12 +235,10 @@ const AddEdit = (props) => {
     }
   }, [props, values?.category]);
 
-  useEffect(() => {
-    if (userAction === "edit" || data) {
-      fetchTaskData();
-    }
-    // fetchTaskData();
-  }, [userAction, id, data]);
+  const handleCancel = () => {
+    formik.resetForm();
+    onClose();
+  };
 
   return (
     <Modal isOpen={isOpen} size={"xl"}>
@@ -275,7 +247,7 @@ const AddEdit = (props) => {
         <ModalHeader justifyContent="space-between" display="flex">
           {userAction === "add" ? "Create Task" : "Edit Task"}
 
-          <IconButton onClick={() => onClose(false)} icon={<CloseIcon />} />
+          <IconButton onClick={() => handleCancel()} icon={<CloseIcon />} />
         </ModalHeader>
         <ModalBody overflowY={"auto"} height={"700px"}>
           {/* Contact Model  */}
@@ -556,12 +528,12 @@ const AddEdit = (props) => {
                   }
                   value={
                     values?.allDay
-                      ? (values?.start &&
-                          dayjs(values?.start).format("YYYY-MM-DD")) ||
-                        null
-                      : (values?.start &&
-                          dayjs(values?.start).format("YYYY-MM-DD HH:mm")) ||
-                        null
+                      ? values?.start
+                        ? dayjs(values?.start).format("YYYY-MM-DD")
+                        : startDate
+                      : values?.start
+                        ? dayjs(values?.start).format("YYYY-MM-DD HH:mm")
+                        : startDate
                   }
                   name="start"
                   fontWeight="500"
@@ -792,10 +764,7 @@ const AddEdit = (props) => {
             colorScheme="red"
             size="sm"
             ml={2}
-            onClick={() => {
-              onClose(false);
-              resetForm();
-            }}
+            onClick={handleCancel}
           >
             Close
           </Button>

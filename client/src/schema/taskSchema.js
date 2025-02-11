@@ -8,7 +8,15 @@ export const TaskSchema = yup.object({
   // assignTo: yup.string(),
   // assignToLead: yup.string(),
   reminder: yup.string(),
-  start: yup.string().required("Start Date Is required"),
+  start: yup
+    .string()
+    .test("required-if-add", "Start Date is required", function (value) {
+      const { userAction } = this.options.context || {};
+      if (userAction === "add" && !value) {
+        return false;
+      }
+      return true;
+    }),
   end: yup.string(),
   backgroundColor: yup.string(),
   borderColor: yup.string(),

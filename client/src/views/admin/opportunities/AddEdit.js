@@ -89,7 +89,7 @@ const AddEdit = (props) => {
         onClose();
         toast.success(`Opprtunities Update successfully`);
         formik.resetForm();
-        // setAction((pre) => !pre)
+        setAction((pre) => !pre);
       }
     } catch (e) {
       console.log(e);

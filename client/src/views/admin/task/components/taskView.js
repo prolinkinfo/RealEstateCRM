@@ -56,7 +56,7 @@ const TaskView = (props) => {
   const [data, setData] = useState();
   const { onOpen, onClose } = useDisclosure();
   const [edit, setEdit] = useState(false);
-  const [deleteModel, setDelete] = useState(false);
+  const [type, setType] = useState("");
   const [deleteManyModel, setDeleteManyModel] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -145,9 +145,6 @@ const TaskView = (props) => {
     fetchViewData();
   }, [id, edit]);
 
-  const handleClick = () => {
-    onOpen();
-  };
   return (
     <div>
       <Grid templateColumns="repeat(4, 1fr)" gap={3} id="reports">
@@ -188,7 +185,11 @@ const TaskView = (props) => {
                           {(user?.role === "superAdmin" ||
                             permission?.create) && (
                             <MenuItem
-                              onClick={() => handleClick()}
+                              onClick={() => {
+                                setEdit(true);
+                                setType("add");
+                                formik.resetForm();
+                              }}
                               alignItems={"start"}
                               color={"blue"}
                               icon={<AddIcon />}
@@ -199,7 +200,10 @@ const TaskView = (props) => {
                           {(user?.role === "superAdmin" ||
                             permission?.update) && (
                             <MenuItem
-                              onClick={() => setEdit(true)}
+                              onClick={() => {
+                                setEdit(true);
+                                setType("edit");
+                              }}
                               alignItems={"start"}
                               icon={<EditIcon />}
                             >
@@ -380,9 +384,15 @@ const TaskView = (props) => {
                   <Text
                     onDoubleClick={() => handleDoubleClick("end", data?.end)}
                   >
-                    {data?.allDay === true
-                      ? dayjs(data?.end)?.format("DD-MM-YYYY")
-                      : dayjs(data?.end)?.format("DD-MM-YYYY hh:mm A")}
+                    {data?.end
+                      ? data?.allDay === true
+                        ? dayjs(data?.end).isValid()
+                          ? dayjs(data?.end).format("DD-MM-YYYY")
+                          : ""
+                        : dayjs(data?.end).isValid()
+                          ? dayjs(data?.end).format("DD-MM-YYYY hh:mm A")
+                          : ""
+                      : "-"}
                   </Text>
                 )}
               </GridItem>
@@ -542,7 +552,10 @@ const TaskView = (props) => {
                 {(permission?.update || user?.role === "superAdmin") && (
                   <Button
                     size="sm"
-                    onClick={() => setEdit(true)}
+                    onClick={() => {
+                      setEdit(true);
+                      setType("edit");
+                    }}
                     leftIcon={<EditIcon />}
                     mr={2.5}
                     variant="outline"
@@ -567,12 +580,14 @@ const TaskView = (props) => {
           </Grid>
         </Card>
       )}
+
       <AddEdit
         isOpen={edit}
         onClose={() => setEdit(false)}
         viewClose={onClose}
         id={id?.event ? id?.event?._def?.extendedProps?._id : id}
-        userAction={"edit"}
+        userAction={type}
+        edit={edit}
       />
       <CommonDeleteModel
         isOpen={deleteManyModel}
