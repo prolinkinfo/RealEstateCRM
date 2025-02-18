@@ -341,6 +341,7 @@ const View = () => {
   const handleTabChange = (index) => {
     setSelectedTab(index);
   };
+
   const generatePDF = () => {
     const element = document.getElementById("reports");
     if (element) {
