@@ -133,9 +133,12 @@ const TaskView = (props) => {
       }
     },
   });
+
   const handleDoubleClick = (fieldName, value) => {
-    formik.setFieldValue(fieldName, value);
-    setEditableField(fieldName);
+    if (permission?.update) {
+      formik.setFieldValue(fieldName, value);
+      setEditableField(fieldName);
+    }
   };
 
   const handleBlur = (e) => {

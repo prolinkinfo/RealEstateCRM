@@ -25,6 +25,7 @@ import { documentSchema } from "schema";
 import { deleteApi, getApi } from "services/api";
 import Upload from "./component/Upload";
 import { postApi } from "services/api";
+import { HasAccess } from "../../../redux/accessUtils";
 
 const Index = () => {
   const [data, setData] = useState([]);
@@ -38,7 +39,7 @@ const Index = () => {
     let result = await getApi(
       user?.role === "superAdmin"
         ? "api/document"
-        : `api/document?createBy=${user?._id}`,
+        : `api/document?createBy=${user?._id}`
     );
     setData(result?.data);
     setIsLoding(false);
@@ -69,6 +70,7 @@ const Index = () => {
     resetForm,
   } = formik;
   const navigate = useNavigate();
+  const [permission] = HasAccess(["Document"]);
 
   const download = async (data) => {
     if (data) {
@@ -153,7 +155,7 @@ const Index = () => {
                       <FolderTreeView
                         download={download}
                         setLinkDocument={setLinkDocument}
-                        deleteFile={deleteFile}
+                        deleteFile={permission?.delete ?? deleteFile}
                         data={file}
                         name={file.fileName}
                         isFile
@@ -195,7 +197,7 @@ const Index = () => {
                 data?.filter((option) =>
                   option?.folderName
                     ?.toLowerCase()
-                    ?.includes(values?.folderName?.toLowerCase()),
+                    ?.includes(values?.folderName?.toLowerCase())
                 )?.length > 0 && (
                   <List
                     position={"relative"}
@@ -209,7 +211,7 @@ const Index = () => {
                       ?.filter((option) =>
                         option?.folderName
                           ?.toLowerCase()
-                          ?.includes(values?.folderName?.toLowerCase()),
+                          ?.includes(values?.folderName?.toLowerCase())
                       )
                       ?.map((option, index) => (
                         <ListItem

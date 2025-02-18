@@ -270,6 +270,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { generateValidationSchema } from "utils";
 import { toast } from "react-toastify";
+import { HasAccess } from "../redux/accessUtils";
 
 const CustomView = ({
   data,
@@ -300,6 +301,7 @@ const CustomView = ({
           editUrl ? editUrl : `api/form/edit/${param?.id}`,
           payload
         );
+        console.log(response,"response")
         if (response?.status === 200) {
           setEditableField(null);
           toast.success(`${editableFieldName} Update successfully`);
@@ -312,10 +314,18 @@ const CustomView = ({
     },
   });
 
+  const [permission, contactAccess, leadAccess] = HasAccess([
+    "Properties",
+    "Contacts",
+    "Leads",
+  ]);
+
   const handleDoubleClick = (fieldName, value, lable) => {
-    formik?.setFieldValue(fieldName, value);
-    setEditableField(fieldName);
-    setEditableFieldName(lable);
+    if (permission?.update || contactAccess?.update || leadAccess?.update) {
+      formik?.setFieldValue(fieldName, value);
+      setEditableField(fieldName);
+      setEditableFieldName(lable);
+    }
   };
 
   const handleBlur = (e) => {

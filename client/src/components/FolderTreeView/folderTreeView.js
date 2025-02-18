@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 import Delete from "views/admin/document/component/Delete";
 import LinkModel from "views/admin/document/component/LinkModel";
 import { CiMenuKebab } from "react-icons/ci";
+import { HasAccess } from "../../redux/accessUtils";
 
 const FolderTreeView = ({
   data,
@@ -54,6 +55,7 @@ const FolderTreeView = ({
     setDelete(true);
     setId(data);
   };
+  const [permission] = HasAccess(["Document"]);
 
   const handleLinkClick = (data) => {
     setLinkModel(true);
@@ -149,7 +151,7 @@ const FolderTreeView = ({
                   >
                     Download
                   </MenuItem>
-                  {!from && (
+                  {!from && permission?.delete && (
                     <MenuItem
                       alignItems={"start"}
                       pr={10}

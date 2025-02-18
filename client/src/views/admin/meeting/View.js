@@ -233,6 +233,7 @@ const View = () => {
                       {" "}
                       Attendes{" "}
                     </Text>
+
                     {data?.related === "Contact" && contactAccess?.view
                       ? data?.attendes &&
                         data?.attendes?.map((item) => {
@@ -247,7 +248,7 @@ const View = () => {
                                   },
                                 }}
                               >
-                                {item.firstName + " " + item.lastName}
+                                {item?.fullName}
                               </Text>
                             </Link>
                           );

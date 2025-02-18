@@ -33,7 +33,7 @@ function InvoiceImport() {
   ];
 
   const initialFieldValues = Object?.fromEntries(
-    (customFields || [])?.map((field) => [field?.name, ""]),
+    (customFields || [])?.map((field) => [field?.name, ""])
   );
   const initialValues = {
     ...initialFieldValues,
@@ -45,7 +45,7 @@ function InvoiceImport() {
       accessor: field?.name,
       type: field?.type,
       formikType: field?.validations?.find((obj) =>
-        obj.hasOwnProperty("formikType"),
+        obj.hasOwnProperty("formikType")
       ),
     })),
   ];
@@ -185,7 +185,7 @@ function InvoiceImport() {
   useEffect(() => {
     const filterContactData = importedFileFields?.filter((field) => {
       const result = fieldsInCrm?.find(
-        (data) => field === data?.accessor || field === data?.Header,
+        (data) => field === data?.accessor || field === data?.Header
       );
       if (result) {
         setFieldValue(result?.accessor, field);
@@ -205,7 +205,7 @@ function InvoiceImport() {
           fontWeight="700"
           mb="20px"
         >
-          Import Quotes
+          Import Invoices
         </Text>
         <Grid
           templateColumns="repeat(12, 1fr)"
@@ -254,13 +254,13 @@ function InvoiceImport() {
                           (data) =>
                             (item?.Header === data ||
                               item?.accessor === data) &&
-                            data,
+                            data
                         )
                         ? filterContact?.find(
                             (data) =>
                               (item?.Header === data ||
                                 item?.accessor === data) &&
-                              data,
+                              data
                           )
                         : "Select Field In File"
                       : "Select Field In File"}

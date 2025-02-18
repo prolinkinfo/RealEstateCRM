@@ -135,7 +135,11 @@ const AddEdit = (props) => {
         onClose();
         toast.success(`Invoice Save successfully`);
         formik.resetForm();
-        setAction((pre) => !pre);
+        if (typeof setAction === "function") {
+          setAction((pre) => !pre);
+        } else {
+          console.warn("setAction is not a function");
+        }
       }
     } catch (e) {
       console.log(e);

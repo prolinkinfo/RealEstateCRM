@@ -64,6 +64,9 @@ const View = (props) => {
   const [editableFieldName, setEditableFieldName] = useState(null);
   const today = new Date()?.toISOString()?.split("T")[0];
   const todayTime = new Date()?.toISOString()?.split(".")[0];
+
+  const [permission] = HasAccess(["Opportunities"]);
+
   const fetchViewData = async () => {
     if (id) {
       let result = await getApi("api/opportunity/view/", id);
@@ -148,17 +151,20 @@ const View = (props) => {
     },
   });
   const handleDoubleClick = (fieldName, value, name) => {
-    formik.setFieldValue(fieldName, value);
-    setEditableField(fieldName);
-    setEditableFieldName(name);
+    if (permission?.update) {
+      formik.setFieldValue(fieldName, value);
+      setEditableField(fieldName);
+      setEditableFieldName(name);
+    }
   };
 
   const handleBlur = (e) => {
     formik.handleSubmit();
   };
+
   useEffect(() => {
     fetchViewData();
-  }, []);
+  }, [id, edit]);
 
   return (
     <div>
@@ -354,18 +360,47 @@ const View = (props) => {
                   </Text>
                 )}
               </GridItem>
-              <GridItem colSpan={{ base: 2, md: 1 }}>
-                <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
-                  {" "}
-                  Assigned User{" "}
-                </Text>
-                {data?.assignUser ? (
-                  <Link
-                    to={
-                      user?.role === "superAdmin" &&
-                      `/userView/${data?.assignUser}`
-                    }
+              {user.role === "superAdmin" && (
+                <GridItem colSpan={{ base: 2, md: 1 }}>
+                  <Text
+                    fontSize="sm"
+                    fontWeight="bold"
+                    color={"blackAlpha.900"}
                   >
+                    {" "}
+                    Assigned User{" "}
+                  </Text>
+                  {data?.assignUser ? (
+                    <Link
+                      to={
+                        user?.role === "superAdmin" &&
+                        `/userView/${data?.assignUser}`
+                      }
+                    >
+                      <Text
+                        color={
+                          user?.role === "superAdmin"
+                            ? "blue.500"
+                            : "blackAlpha.900"
+                        }
+                        sx={{
+                          "&:hover": {
+                            color:
+                              user?.role === "superAdmin"
+                                ? "blue.500"
+                                : "blackAlpha.900",
+                            textDecoration:
+                              user?.role === "superAdmin"
+                                ? "underline"
+                                : "none",
+                          },
+                        }}
+                        style={{ cursor: "pointer" }}
+                      >
+                        {data?.assignUserName ? data?.assignUserName : " - "}
+                      </Text>
+                    </Link>
+                  ) : (
                     <Text
                       color={
                         user?.role === "superAdmin"
@@ -382,33 +417,12 @@ const View = (props) => {
                             user?.role === "superAdmin" ? "underline" : "none",
                         },
                       }}
-                      style={{ cursor: "pointer" }}
                     >
                       {data?.assignUserName ? data?.assignUserName : " - "}
                     </Text>
-                  </Link>
-                ) : (
-                  <Text
-                    color={
-                      user?.role === "superAdmin"
-                        ? "blue.500"
-                        : "blackAlpha.900"
-                    }
-                    sx={{
-                      "&:hover": {
-                        color:
-                          user?.role === "superAdmin"
-                            ? "blue.500"
-                            : "blackAlpha.900",
-                        textDecoration:
-                          user?.role === "superAdmin" ? "underline" : "none",
-                      },
-                    }}
-                  >
-                    {data?.assignUserName ? data?.assignUserName : " - "}
-                  </Text>
-                )}
-              </GridItem>
+                  )}
+                </GridItem>
+              )}
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <Text fontSize="sm" fontWeight="bold" color={"blackAlpha.900"}>
                   Type
@@ -990,6 +1004,7 @@ const View = (props) => {
         viewClose={onClose}
         selectedId={id?.event ? id?.event?._def?.extendedProps?._id : id}
         type={type}
+        edit={edit}
       />
       <CommonDeleteModel
         isOpen={deleteManyModel}

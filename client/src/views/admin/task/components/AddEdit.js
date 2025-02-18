@@ -133,7 +133,6 @@ const AddEdit = (props) => {
       setTaskData(result?.data);
     }
   };
-
   useEffect(() => {
     fetchViewData();
   }, [id, edit]);
@@ -708,7 +707,9 @@ const AddEdit = (props) => {
                   Status
                 </FormLabel>
                 <Select
-                  onChange={(e) => setFieldValue("status", e?.target?.valueEmail )}
+                  onChange={(e) =>
+                    setFieldValue("status", e?.target?.valueEmail)
+                  }
                   value={values?.status}
                   style={{ fontSize: "14px" }}
                 >

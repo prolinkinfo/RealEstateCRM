@@ -298,6 +298,10 @@ const View = () => {
     fetchCustomDataFields();
   }, []);
 
+  useEffect(() => {
+    fetchData();
+  }, [edit]);
+
   const [permission, emailAccess, callAccess] = HasAccess([
     "Properties",
     "Contacts",

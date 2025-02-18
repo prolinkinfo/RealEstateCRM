@@ -33,8 +33,6 @@ const AddPhoneCall = (props) => {
   const [isLoding, setIsLoding] = useState(false);
   const todayTime = new Date().toISOString().split(".")[0];
   const user = JSON.parse(localStorage.getItem("user"));
-  const [assignToSalesData, setAssignToSalesData] = useState([]);
-  const [salesPersonsModelOpen, setSalesPersonsModelOpen] = useState(false);
 
   const initialValues = {
     sender: user?._id,
@@ -120,23 +118,6 @@ const AddPhoneCall = (props) => {
   //     }
   // }
 
-  const fetchUsersData = async () => {
-    setIsLoding(true);
-    try {
-      let result = await getApi("api/user/");
-
-      let salesPersons =
-        result?.data?.user?.filter((userData) =>
-          userData?.roles?.some((role) => role?.roleName === "Sales")
-        ) || [];
-      setAssignToSalesData(salesPersons);
-    } catch (error) {
-      console.error("Failed to fetch users data:", error);
-    } finally {
-      setIsLoding(false);
-    }
-  };
-
   const fetchDataR = async () => {
     if (LData && LData?._id && props?.lead === true) {
       setFieldValue(
@@ -154,7 +135,6 @@ const AddPhoneCall = (props) => {
 
   useEffect(() => {
     fetchDataR();
-    fetchUsersData();
   }, [props?.id, cData, LData, viewData]);
 
   return (
@@ -164,17 +144,6 @@ const AddPhoneCall = (props) => {
         <ModalHeader>Add Call </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          {/* User Model for sales person */}
-          <UserModel
-            onClose={() => setSalesPersonsModelOpen(false)}
-            isOpen={salesPersonsModelOpen}
-            fieldName={"salesAgent"}
-            setFieldValue={setFieldValue}
-            data={assignToSalesData}
-            isLoding={isLoding}
-            setIsLoding={setIsLoding}
-          />
-
           <Grid templateColumns="repeat(12, 1fr)" gap={3}>
             <GridItem colSpan={{ base: 12 }}>
               <FormLabel

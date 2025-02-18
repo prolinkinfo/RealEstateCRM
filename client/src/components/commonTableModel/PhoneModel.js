@@ -45,8 +45,6 @@ const PhoneModel = (props) => {
   const [leadModelOpen, setLeadModel] = useState(false);
   const [propertyModelOpen, setPropertyModelOpen] = useState(false);
   const [assignToProperyData, setAssignToPropertyData] = useState([]);
-  const [assignToSalesData, setAssignToSalesData] = useState([]);
-  const [salesPersonsModelOpen, setSalesPersonsModelOpen] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"));
   const todayTime = new Date().toISOString().split(".")[0];
   const { id } = useParams();
@@ -181,30 +179,9 @@ const PhoneModel = (props) => {
     }
   };
 
-  const fetchUsersData = async () => {
-    setIsLoding(true);
-    try {
-      let result = await getApi("api/user/");
-
-      let salesPersons =
-        result?.data?.user?.filter((userData) =>
-          userData?.roles?.some((role) => role?.roleName === "Sales")
-        ) || [];
-      setAssignToSalesData(salesPersons);
-    } catch (error) {
-      console.error("Failed to fetch users data:", error);
-    } finally {
-      setIsLoding(false);
-    }
-  };
-
   useEffect(() => {
     fetchRecipientData();
   }, [values?.createByContact, values?.createByLead]);
-
-  useEffect(() => {
-      fetchUsersData();
-  }, []);
 
   const setValueProperty = assignToProperyData?.map((item) => ({
     ...item,
@@ -238,16 +215,6 @@ const PhoneModel = (props) => {
             onClose={setLeadModel}
             fieldName="createByLead"
             setFieldValue={setFieldValue}
-          />
-          {/* User Model for sales person */}
-          <UserModel
-            onClose={() => setSalesPersonsModelOpen(false)}
-            isOpen={salesPersonsModelOpen}
-            fieldName={"salesAgent"}
-            setFieldValue={setFieldValue}
-            data={assignToSalesData}
-            isLoding={isLoding}
-            setIsLoding={setIsLoding}
           />
           {/*Property Model*/}
           <MultiPropertyModel

@@ -358,7 +358,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "officePhone",
                         data?.officePhone,
-                        "Office Phone",
+                        "Office Phone"
                       )
                     }
                   >
@@ -399,7 +399,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "alternatePhone",
                         data?.alternatePhone,
-                        "Alternate Phone",
+                        "Alternate Phone"
                       )
                     }
                   >
@@ -510,7 +510,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "ownership",
                         data?.ownership,
-                        "Ownership",
+                        "Ownership"
                       )
                     }
                   >
@@ -550,7 +550,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "emailAddress",
                         data?.emailAddress,
-                        "Email Address",
+                        "Email Address"
                       )
                     }
                   >
@@ -590,7 +590,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "nonPrimaryEmail",
                         data?.nonPrimaryEmail,
-                        "Non Primary Email",
+                        "Non Primary Email"
                       )
                     }
                   >
@@ -630,7 +630,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "shippingStreet",
                         data?.shippingStreet,
-                        "Shipping Street",
+                        "Shipping Street"
                       )
                     }
                   >
@@ -670,7 +670,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "billingStreet",
                         data?.billingStreet,
-                        "Billing Street",
+                        "Billing Street"
                       )
                     }
                   >
@@ -710,7 +710,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "shippingStreet2",
                         data?.shippingStreet2,
-                        "Shipping Street2",
+                        "Shipping Street2"
                       )
                     }
                   >
@@ -750,7 +750,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "billingStreet2",
                         data?.billingStreet2,
-                        "Billing Street2",
+                        "Billing Street2"
                       )
                     }
                   >
@@ -790,7 +790,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "shippingStreet3",
                         data?.shippingStreet3,
-                        "Shipping Street3",
+                        "Shipping Street3"
                       )
                     }
                   >
@@ -830,7 +830,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "billingStreet3",
                         data?.billingStreet3,
-                        "Billing Street3",
+                        "Billing Street3"
                       )
                     }
                   >
@@ -870,7 +870,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "shippingStreet4",
                         data?.shippingStreet4,
-                        "Shipping Street4",
+                        "Shipping Street4"
                       )
                     }
                   >
@@ -910,7 +910,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "billingStreet4",
                         data?.billingStreet4,
-                        "Billing Street4",
+                        "Billing Street4"
                       )
                     }
                   >
@@ -950,7 +950,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "shippingPostalcode",
                         data?.shippingPostalcode,
-                        "Shipping Postal Code",
+                        "Shipping Postal Code"
                       )
                     }
                   >
@@ -992,7 +992,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "billingPostalcode",
                         data?.billingPostalcode,
-                        "Billing Postal Code",
+                        "Billing Postal Code"
                       )
                     }
                   >
@@ -1032,7 +1032,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "shippingCity",
                         data?.shippingCity,
-                        "Shipping City",
+                        "Shipping City"
                       )
                     }
                   >
@@ -1072,7 +1072,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "billingCity",
                         data?.billingCity,
-                        "Billing City",
+                        "Billing City"
                       )
                     }
                   >
@@ -1112,7 +1112,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "shippingState",
                         data?.shippingState,
-                        "Shipping State",
+                        "Shipping State"
                       )
                     }
                   >
@@ -1152,7 +1152,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "billingState",
                         data?.billingState,
-                        "Billing State",
+                        "Billing State"
                       )
                     }
                   >
@@ -1192,7 +1192,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "shippingCountry",
                         data?.shippingCountry,
-                        "Shipping Country",
+                        "Shipping Country"
                       )
                     }
                   >
@@ -1232,7 +1232,7 @@ const View = (props) => {
                       handleDoubleClick(
                         "billingCountry",
                         data?.billingCountry,
-                        "Billing Country",
+                        "Billing Country"
                       )
                     }
                   >
@@ -1598,6 +1598,7 @@ const View = (props) => {
         viewClose={onClose}
         selectedId={id?.event ? id?.event?._def?.extendedProps?._id : id}
         type={type}
+        edit={edit}
       />
       <CommonDeleteModel
         isOpen={deleteManyModel}

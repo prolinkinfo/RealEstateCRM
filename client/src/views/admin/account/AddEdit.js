@@ -34,7 +34,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAccountData } from "../../../redux/slices/accountSlice";
 
 const AddEdit = (props) => {
-  const { isOpen, size, onClose, type, setAction, selectedId } = props;
+  const { isOpen, size, onClose, type, setAction, selectedId, edit } = props;
   const [isLoding, setIsLoding] = useState(false);
   const [userModel, setUserModel] = useState(false);
   const [accountModel, setAccountModel] = useState(false);
@@ -94,7 +94,11 @@ const AddEdit = (props) => {
         onClose();
         toast.success(`Account Save successfully`);
         formik.resetForm();
-        setAction((pre) => !pre);
+        if (typeof setAction === "function") {
+          setAction((pre) => !pre);
+        } else {
+          console.warn("setAction is not a function");
+        }
       }
     } catch (e) {
       console.log(e);
@@ -112,6 +116,14 @@ const AddEdit = (props) => {
         toast.success(`Account Update successfully`);
         formik.resetForm();
         // setAction((pre) => !pre)
+        if (!isLoding) {
+          fetchAccountDetails();
+        }
+        if (typeof setAction === "function") {
+          setAction((pre) => !pre);
+        } else {
+          console.warn("setAction is not a function");
+        }
       }
     } catch (e) {
       console.log(e);

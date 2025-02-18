@@ -73,9 +73,15 @@ const Edit = (props) => {
   const EditData = async () => {
     try {
       setIsLoding(true);
+      let payload = { ...values, moduleId: props?.moduleId };
+
+      if (!payload.assignUser) {
+        delete payload.assignUser;
+      }
+
       let response = await putApi(
         `api/form/edit/${param?.id || props?.selectedId}`,
-        { ...values, moduleId: props?.moduleId }
+        payload
       );
       if (response?.status === 200) {
         props.onClose();
@@ -217,43 +223,42 @@ const Edit = (props) => {
                 </Flex>
               </GridItem>
             </Grid>
-
-            <Grid templateColumns="repeat(12, 1fr)" gap={3} mt={2}>
-              <GridItem colSpan={{ base: 12 }}>
-                <FormLabel
-                  display="flex"
-                  ms="4px"
-                  fontSize="sm"
-                  fontWeight="500"
-                  mb="8px"
-                >
-                  Assign to User
-                </FormLabel>
-                <Flex justifyContent="space-between">
-                  <Select
-                    value={values?.assignUser}
-                    name="assignUser"
-                    onChange={handleChange}
+            {user?.role !== "user" && (
+              <Grid templateColumns="repeat(12, 1fr)" gap={3} mt={2}>
+                <GridItem colSpan={{ base: 12 }}>
+                  <FormLabel
+                    display="flex"
+                    ms="4px"
+                    fontSize="sm"
                     fontWeight="500"
-                    placeholder="select user"
+                    mb="8px"
                   >
-                    {userData?.map((item) => {
-                      return (
+                    Assign to User
+                  </FormLabel>
+                  <Flex justifyContent="space-between">
+                    <Select
+                      value={values?.assignUser}
+                      name="assignUser"
+                      onChange={handleChange}
+                      fontWeight="500"
+                      placeholder="select user"
+                    >
+                      {userData?.map((item) => (
                         <option value={item?._id} key={item?._id}>
                           {item?.firstName} {item?.lastName}
                         </option>
-                      );
-                    })}
-                  </Select>
-                  <IconButton
-                    onClick={() => setUserModel(true)}
-                    ml={2}
-                    fontSize="25px"
-                    icon={<LiaMousePointerSolid />}
-                  />
-                </Flex>
-              </GridItem>
-            </Grid>
+                      ))}
+                    </Select>
+                    <IconButton
+                      onClick={() => setUserModel(true)}
+                      ml={2}
+                      fontSize="25px"
+                      icon={<LiaMousePointerSolid />}
+                    />
+                  </Flex>
+                </GridItem>
+              </Grid>
+            )}
           </DrawerBody>
           <SelectPorpertyModel
             onClose={() => setPropertyModel(false)}

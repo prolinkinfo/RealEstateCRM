@@ -141,7 +141,7 @@ const Index = (props) => {
               onClick={() =>
                 navigate(
                   cell?.row?.original.accountName !== null &&
-                    `/accountView/${cell?.row?.original.accountName}`,
+                    `/accountView/${cell?.row?.original.accountName}`
                 )
               }
               me="10px"
@@ -603,10 +603,10 @@ const Index = (props) => {
         setGetTagValues={setGetTagValuesOutside}
         setSearchbox={setSearchboxOutside}
       />
-
       <AddEdit
         isOpen={isOpen}
         size={"lg"}
+        fetchData={fetchData}
         onClose={onClose}
         setAction={setAction}
         type={type}

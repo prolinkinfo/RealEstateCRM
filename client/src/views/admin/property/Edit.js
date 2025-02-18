@@ -63,6 +63,7 @@ const Edit = (props) => {
       );
       if (response?.status === 200) {
         props.onClose();
+        fetchData();
         props.setAction((pre) => !pre);
       }
     } catch (e) {

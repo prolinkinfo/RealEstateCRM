@@ -68,7 +68,7 @@ export const generateValidationSchema = (fields) => {
 
     let fieldValidation;
     let formikValidation = field?.validation?.find((obj) =>
-      obj?.hasOwnProperty("formikType"),
+      obj?.hasOwnProperty("formikType")
     );
     let fieldFormikType = formikValidation?.formikType?.toLowerCase();
 
@@ -102,7 +102,8 @@ export const generateValidationSchema = (fields) => {
       field?.validation?.forEach((validationRule) => {
         if (validationRule?.require) {
           fieldValidation = fieldValidation?.required(
-            validationRule?.message || "This field is required",
+            console.log(validationRule?.message, "message"),
+            validationRule?.message || "This field is required"
           );
         }
         if (validationRule.min) {
@@ -111,7 +112,7 @@ export const generateValidationSchema = (fields) => {
             validationRule?.message ||
               (fieldFormikType === "date"
                 ? "Date is too small"
-                : "Value is too small"),
+                : "Value is too small")
           );
         }
         if (validationRule.max) {
@@ -120,13 +121,13 @@ export const generateValidationSchema = (fields) => {
             validationRule?.message ||
               (fieldFormikType === "date"
                 ? "Date is too large"
-                : "Value is too large"),
+                : "Value is too large")
           );
         }
         if (validationRule.match) {
           fieldValidation = fieldValidation?.matches(
             new RegExp(validationRule?.match),
-            validationRule?.message || "Value does not match the pattern",
+            validationRule?.message || "Value does not match the pattern"
           );
         }
         if (validationRule?.formikType && validationRule?.message) {
@@ -134,7 +135,16 @@ export const generateValidationSchema = (fields) => {
         }
       });
     }
+    if (field.name === "leadMobile") {
+      fieldValidation = yup
+        .string()
+        .trim()
+        .matches(/^\d{10}$/, "Please enter a valid 10-digit mobile number")
+        .required("Mobile number is required");
 
+      acc[field.name] = fieldValidation;
+      return acc;
+    }
     return {
       ...acc,
       [field.name]: fieldValidation,

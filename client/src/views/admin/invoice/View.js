@@ -286,9 +286,11 @@ const View = (props) => {
     },
   });
   const handleDoubleClick = (fieldName, value, name) => {
-    formik.setFieldValue(fieldName, value);
-    setEditableField(fieldName);
-    setEditableFieldName(name);
+    if (invoiceAccess?.update) {
+      formik.setFieldValue(fieldName, value);
+      setEditableField(fieldName);
+      setEditableFieldName(name);
+    }
   };
 
   const handleBlur = (e) => {

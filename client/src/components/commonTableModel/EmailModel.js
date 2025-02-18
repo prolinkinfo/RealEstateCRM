@@ -50,8 +50,6 @@ const EmailModel = (props) => {
   const [assignToProperyData, setAssignToPropertyData] = useState([]);
   const todayTime = new Date()?.toISOString()?.split(".")[0];
   const [data, setData] = useState([]);
-  const [assignToSalesData, setAssignToSalesData] = useState([]);
-  const [salesPersonsModelOpen, setSalesPersonsModelOpen] = useState(false);
   const dispatch = useDispatch();
   const { id } = useParams();
 
@@ -66,7 +64,6 @@ const EmailModel = (props) => {
     property: [id],
     type: "message",
     html: "",
-    createBy: user?._id,
     createBy: user?._id,
     category: "Contact",
   };
@@ -140,7 +137,7 @@ const EmailModel = (props) => {
   useEffect(() => {
     fetchRecipientData();
   }, [values?.createByContact, values?.createByLead]);
-  
+
   const fetchEmailTemp = async () => {
     setIsLoding(true);
     const result = await dispatch(fetchEmailTempData());
@@ -175,19 +172,19 @@ const EmailModel = (props) => {
       console.log(e);
     }
   };
-  
-  const getPropertyData =  async () => {
+
+  const getPropertyData = async () => {
     const propertyOptionData = await getApi(
       user?.role === "superAdmin"
         ? "api/property"
-        : `api/property/?createBy=${user?._id}`,
+        : `api/property/?createBy=${user?._id}`
     );
     setAssignToPropertyData(propertyOptionData?.data);
-  }
+  };
 
-  useEffect(()=>{
-    getPropertyData()
-  },[])
+  useEffect(() => {
+    getPropertyData();
+  }, []);
 
   useEffect(() => {
     getAllApi();
@@ -201,30 +198,11 @@ const EmailModel = (props) => {
     );
     setAssignToPropertyData(propertyOptionData?.data);
   }, []);
-  const fetchUsersData = async () => {
-    setIsLoding(true);
-    try {
-      let result = await getApi("api/user/");
-
-      let salesPersons =
-        result?.data?.user?.filter((userData) =>
-          userData?.roles?.some((role) => role?.roleName === "Sales")
-        ) || [];
-      setAssignToSalesData(salesPersons);
-    } catch (error) {
-      console.error("Failed to fetch users data:", error);
-    } finally {
-      setIsLoding(false);
-    }
-  };
 
   useEffect(() => {
     if (values?.type === "template") fetchEmailTemp();
   }, [values?.type]);
 
-  useEffect(() => {
-    fetchUsersData();
-  }, []);
   const getPropertyOptions = assignToProperyData?.map((item) => ({
     ...item,
     value: item?._id,
@@ -257,16 +235,6 @@ const EmailModel = (props) => {
             onClose={setLeadModel}
             fieldName="createByLead"
             setFieldValue={setFieldValue}
-          />
-          {/* User Model for sales person */}
-          <UserModel
-            onClose={() => setSalesPersonsModelOpen(false)}
-            isOpen={salesPersonsModelOpen}
-            fieldName={"salesAgent"}
-            setFieldValue={setFieldValue}
-            data={assignToSalesData}
-            isLoding={isLoding}
-            setIsLoding={setIsLoding}
           />
           {/* Property Model */}
           <MultiPropertyModel

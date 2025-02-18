@@ -205,57 +205,59 @@ const Add = (props) => {
                 </Text>
               </GridItem>
             </Grid>
-            <Grid templateColumns="repeat(12, 1fr)" gap={3} mt={2}>
-              <GridItem colSpan={{ base: 12 }}>
-                <FormLabel
-                  display="flex"
-                  ms="4px"
-                  fontSize="sm"
-                  fontWeight="500"
-                  mb="8px"
-                >
-                  Assign to User
-                </FormLabel>
-                <Flex justifyContent="space-between">
-                  <Select
-                    value={values?.assignUser}
-                    name="assignUser"
-                    onChange={handleChange}
-                    mb={
-                      errors?.assignUser && touched?.assignUser
-                        ? undefined
-                        : "10px"
-                    }
+            {user?.role !== "user" && (
+              <Grid templateColumns="repeat(12, 1fr)" gap={3} mt={2}>
+                <GridItem colSpan={{ base: 12 }}>
+                  <FormLabel
+                    display="flex"
+                    ms="4px"
+                    fontSize="sm"
                     fontWeight="500"
-                    placeholder="select user"
-                    borderColor={
-                      errors?.assignUser && touched?.assignUser
-                        ? "red.300"
-                        : null
-                    }
+                    mb="8px"
                   >
-                    {data?.map((item) => {
-                      return (
-                        <option value={item?._id} key={item?._id}>
-                          {item?.firstName} {item?.lastName}
-                        </option>
-                      );
-                    })}
-                  </Select>
-                  <IconButton
-                    onClick={() => setUserModel(true)}
-                    ml={2}
-                    fontSize="25px"
-                    icon={<LiaMousePointerSolid />}
-                  />
-                </Flex>
-                <Text mb="10px" fontSize="sm" color={"red"}>
-                  {errors?.assignUser &&
-                    touched?.assignUser &&
-                    errors?.assignUser}
-                </Text>
-              </GridItem>
-            </Grid>
+                    Assign to User
+                  </FormLabel>
+                  <Flex justifyContent="space-between">
+                    <Select
+                      value={values?.assignUser}
+                      name="assignUser"
+                      onChange={handleChange}
+                      mb={
+                        errors?.assignUser && touched?.assignUser
+                          ? undefined
+                          : "10px"
+                      }
+                      fontWeight="500"
+                      placeholder="select user"
+                      borderColor={
+                        errors?.assignUser && touched?.assignUser
+                          ? "red.300"
+                          : null
+                      }
+                    >
+                      {data?.map((item) => {
+                        return (
+                          <option value={item?._id} key={item?._id}>
+                            {item?.firstName} {item?.lastName}
+                          </option>
+                        );
+                      })}
+                    </Select>
+                    <IconButton
+                      onClick={() => setUserModel(true)}
+                      ml={2}
+                      fontSize="25px"
+                      icon={<LiaMousePointerSolid />}
+                    />
+                  </Flex>
+                  <Text mb="10px" fontSize="sm" color={"red"}>
+                    {errors?.assignUser &&
+                      touched?.assignUser &&
+                      errors?.assignUser}
+                  </Text>
+                </GridItem>
+              </Grid>
+            )}
           </DrawerBody>
           <DrawerFooter>
             <Button

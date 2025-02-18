@@ -34,7 +34,7 @@ import AccountModel from "../../../components/commonTableModel/AccountModel";
 import { HasAccess } from "../../../redux/accessUtils";
 
 const AddEdit = (props) => {
-  const { isOpen, size, onClose, type, setAction, selectedId } = props;
+  const { isOpen, size, onClose, type, setAction, selectedId, edit } = props;
   const [isLoding, setIsLoding] = useState(false);
   const [userModel, setUserModel] = useState(false);
   const [accountModel, setAccountModel] = useState(false);
@@ -72,7 +72,12 @@ const AddEdit = (props) => {
         onClose();
         toast.success(`Opprtunities Save successfully`);
         formik.resetForm();
-        setAction((pre) => !pre);
+        fetchData(1);
+        if (typeof setAction === "function") {
+          setAction((pre) => !pre);
+        } else {
+          console.warn("setAction is not a function");
+        }
       }
     } catch (e) {
       console.log(e);
@@ -89,11 +94,19 @@ const AddEdit = (props) => {
         onClose();
         toast.success(`Opprtunities Update successfully`);
         formik.resetForm();
-        setAction((pre) => !pre);
+        fetchData();
+        fetchTaskData();
+        if (typeof setAction === "function") {
+          setAction((pre) => !pre);
+        } else {
+          console.warn("setAction is not a function");
+        }
       }
     } catch (e) {
-      console.log(e);
-      toast.error(`server error`);
+      if (e) {
+        console.log(e);
+        toast.error(`server error`);
+      }
     } finally {
       setIsLoding(false);
     }
@@ -136,7 +149,7 @@ const AddEdit = (props) => {
   };
 
   const fetchTaskData = async () => {
-    if (type === "edit") {
+    if (selectedId) {
       try {
         setIsLoding(true);
         let result = await getApi("api/opportunity/view/", selectedId);
@@ -152,12 +165,12 @@ const AddEdit = (props) => {
   };
 
   useEffect(() => {
-    if (user?.role === "superAdmin") fetchData();
-  }, []);
-
-  useEffect(() => {
     if (type === "edit") fetchTaskData();
   }, [type, selectedId]);
+
+  useEffect(() => {
+    if (user?.role === "superAdmin") fetchData();
+  }, []);
 
   return (
     <div>

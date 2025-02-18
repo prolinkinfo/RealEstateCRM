@@ -30,7 +30,6 @@ import { toast } from "react-toastify";
 import { emailSchema } from "schema";
 import { postApi, getApi } from "services/api";
 import { fetchEmailTempData } from "../../../../redux/slices/emailTempSlice";
-import UserModel from "components/commonTableModel/UserModel";
 
 const AddEmailHistory = (props) => {
   const { onClose, isOpen, fetchData, setAction } = props;
@@ -38,8 +37,6 @@ const AddEmailHistory = (props) => {
   const [isLoding, setIsLoding] = useState(false);
   const todayTime = new Date()?.toISOString()?.split(".")[0];
   const [data, setData] = useState([]);
-  const [assignToSalesData, setAssignToSalesData] = useState([]);
-  const [salesPersonsModelOpen, setSalesPersonsModelOpen] = useState(false);
   const dispatch = useDispatch();
 
   const initialValues = {
@@ -101,30 +98,9 @@ const AddEmailHistory = (props) => {
     setIsLoding(false);
   };
 
-  const fetchUsersData = async () => {
-    setIsLoding(true);
-    try {
-      let result = await getApi("api/user/");
-
-      let salesPersons =
-        result?.data?.user?.filter((userData) =>
-          userData?.roles?.some((role) => role?.roleName === "Sales")
-        ) || [];
-      setAssignToSalesData(salesPersons);
-    } catch (error) {
-      console.error("Failed to fetch users data:", error);
-    } finally {
-      setIsLoding(false);
-    }
-  };
-
   useEffect(() => {
     if (values?.type === "template") fetchEmailTemp();
   }, [values?.type]);
-
-  useEffect(() => {
-    fetchUsersData();
-  }, []);
 
   // useEffect(() => {
   //    if (props.id && props.lead !== true) {
@@ -141,17 +117,6 @@ const AddEmailHistory = (props) => {
         <ModalHeader>Send Email </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          {/* User Model for sales person */}
-          <UserModel
-            onClose={() => setSalesPersonsModelOpen(false)}
-            isOpen={salesPersonsModelOpen}
-            fieldName={"salesAgent"}
-            setFieldValue={setFieldValue}
-            data={assignToSalesData}
-            isLoding={isLoding}
-            setIsLoding={setIsLoding}
-          />
-
           <Grid templateColumns="repeat(12, 1fr)" gap={3}>
             <GridItem colSpan={{ base: 12 }}>
               <FormLabel
