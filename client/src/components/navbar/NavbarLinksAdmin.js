@@ -1,10 +1,8 @@
 // Chakra Imports
 import {
   Avatar,
-  Button,
   Flex,
   Icon,
-  Image,
   Menu,
   MenuButton,
   MenuItem,
@@ -14,45 +12,38 @@ import {
 } from "@chakra-ui/react";
 // Custom Components
 import { ItemContent } from "components/menu/ItemContent";
-import { SearchBar } from "components/navbar/searchBar/SearchBar";
 import { SidebarResponsive } from "components/sidebar/Sidebar";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 // Assets
-import { MdInfoOutline, MdNotificationsNone } from "react-icons/md";
+import { MdNotificationsNone } from "react-icons/md";
 import { FaEthereum } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
-import { getApi } from "services/api";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import jwtDecode from "jwt-decode";
-import { ThemeEditor } from "./ThemeEditor";
-import FixedPlugin from "components/fixedPlugin/FixedPlugin";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 export default function HeaderLinks(props) {
   const { secondary, setOpenSidebar, openSidebar, routes } = props;
   // Chakra Color Mode
-  const navbarIcon = useColorModeValue("gray.400", "white");
+  const navbarIcon = useColorModeValue("gray.600", "white");
   let menuBg = useColorModeValue("white", "navy.800");
   const textColor = useColorModeValue("secondaryGray.900", "white");
-  const textColorBrand = useColorModeValue("brand.700", "brand.400");
+  const textColorBrand = useColorModeValue("brand.600", "brand.300");
   const ethColor = useColorModeValue("gray.700", "white");
   const borderColor = useColorModeValue("#E6ECFA", "rgba(135, 140, 189, 0.3)");
   const ethBg = useColorModeValue("secondaryGray.300", "navy.900");
   const ethBox = useColorModeValue("white", "navy.800");
-  const shadow = useColorModeValue(
-    "14px 17px 40px 4px rgba(112, 144, 176, 0.18)",
-    "14px 17px 40px 4px rgba(112, 144, 176, 0.06)",
-  );
+  const shadow = useColorModeValue("0px 18px 45px rgba(15, 23, 42, 0.12)", "none");
+  const actionBg = useColorModeValue("white", "whiteAlpha.100");
+  const actionBorder = useColorModeValue("gray.200", "whiteAlpha.200");
   // const borderButton = useColorModeValue('secondaryGray.500', 'whiteAlpha.200');
 
   // const [loginUser, setLoginUser] = useState();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const userData = useSelector((state) => state?.user?.user);
 
   const data = typeof userData === "string" ? JSON.parse(userData) : userData;
   const user = data?.firstName + " " + data?.lastName;
-  const userId = JSON.parse(localStorage.getItem("user"))?._id;
   const loginUser = useSelector((state) => state?.user?.user);
 
   const [isLogoutScheduled, setIsLogoutScheduled] = useState(false);
@@ -102,12 +93,12 @@ export default function HeaderLinks(props) {
       alignItems="center"
       justifyContent={"end"}
       flexDirection="row"
-      bg={menuBg}
+      bg="transparent"
       flexWrap={secondary ? { base: "wrap", md: "nowrap" } : "unset"}
-      p="6px"
-      mt={2.5}
-      borderRadius="30px"
-      boxShadow={shadow}
+      p="0"
+      mt="0"
+      borderRadius="18px"
+      gap="10px"
     >
       {/* <SearchBar
 				mb={secondary ? { base: "10px", md: "unset" } : "unset"}
@@ -158,14 +149,20 @@ export default function HeaderLinks(props) {
 
       <Menu>
         <MenuButton p="0px">
-          <Icon
-            mt="6px"
-            as={MdNotificationsNone}
-            color={navbarIcon}
-            w="18px"
-            h="18px"
-            me="10px"
-          />
+          <Flex
+            align="center"
+            justify="center"
+            w="40px"
+            h="40px"
+            borderRadius="14px"
+            bg={actionBg}
+            border="1px solid"
+            borderColor={actionBorder}
+            transition="all 0.18s ease"
+            _hover={{ transform: "translateY(-1px)", borderColor: "brand.200" }}
+          >
+            <Icon as={MdNotificationsNone} color={navbarIcon} w="18px" h="18px" />
+          </Flex>
         </MenuButton>
         <MenuList
           boxShadow={shadow}
@@ -226,10 +223,13 @@ export default function HeaderLinks(props) {
             _hover={{ cursor: "pointer" }}
             color="white"
             name={user || "Prolink Infotech"}
-            bg="#11047A"
+            bg="brand.600"
             size="sm"
             w="40px"
             h="40px"
+            border="2px solid"
+            borderColor={actionBg}
+            boxShadow="0px 8px 18px rgba(15, 23, 42, 0.12)"
           />
         </MenuButton>
         <MenuList
@@ -253,14 +253,14 @@ export default function HeaderLinks(props) {
               textTransform={"capitalize"}
               color={textColor}
             >
-              👋&nbsp; Hey, {user}
+              Hey, {user}
             </Text>
           </Flex>
 
           <Flex flexDirection="column" p="10px">
             <MenuItem
-              _hover={{ bg: "none" }}
-              _focus={{ bg: "none" }}
+              _hover={{ bg: "gray.50" }}
+              _focus={{ bg: "gray.50" }}
               borderRadius="8px"
               px="14px"
             >
@@ -271,8 +271,8 @@ export default function HeaderLinks(props) {
 
             {loginUser?.role === "superAdmin" && (
               <MenuItem
-                _hover={{ bg: "none" }}
-                _focus={{ bg: "none" }}
+                _hover={{ bg: "gray.50" }}
+                _focus={{ bg: "gray.50" }}
                 borderRadius="8px"
                 px="14px"
               >
@@ -282,8 +282,8 @@ export default function HeaderLinks(props) {
               </MenuItem>
             )}
             <MenuItem
-              _hover={{ bg: "none" }}
-              _focus={{ bg: "none" }}
+              _hover={{ bg: "gray.50" }}
+              _focus={{ bg: "gray.50" }}
               borderRadius="8px"
               px="14px"
             >
@@ -302,9 +302,9 @@ export default function HeaderLinks(props) {
 							<Text fontSize="sm">Newsletter Settings</Text>
 						</MenuItem> */}
             <MenuItem
-              _hover={{ bg: "none" }}
+              _hover={{ bg: "red.50" }}
               onClick={logOut}
-              _focus={{ bg: "none" }}
+              _focus={{ bg: "red.50" }}
               color="red.400"
               borderRadius="8px"
               px="14px"

@@ -1,355 +1,757 @@
-// Chakra imports
 import {
+  Alert,
+  AlertIcon,
+  Badge,
+  Box,
+  Button,
   Flex,
-  Heading,
-  Icon,
-  IconButton,
-  SimpleGrid,
-  useColorModeValue,
   Grid,
   GridItem,
-  Progress,
-  Box,
+  Heading,
+  HStack,
+  Icon,
+  SimpleGrid,
+  Skeleton,
+  SkeletonText,
+  Stack,
   Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
-// Assets
-// Custom components
-import { ViewIcon } from "@chakra-ui/icons";
-import Card from "components/card/Card";
-import MiniStatistics from "components/card/MiniStatistics";
-import IconBox from "components/icons/IconBox";
-import { HSeparator } from "components/separator/Separator";
-import { useEffect, useState } from "react";
-import { LuBuilding2 } from "react-icons/lu";
-import { MdAddTask, MdContacts, MdLeaderboard } from "react-icons/md";
+import { useEffect, useMemo, useState } from "react";
+import {
+  MdAdd,
+  MdArrowForward,
+  MdCalendarToday,
+  MdEventAvailable,
+  MdHomeWork,
+  MdPeopleAlt,
+  MdWarningAmber,
+} from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { getApi } from "services/api";
-import ReportChart from "../reports/components/reportChart";
-import Chart from "components/charts/LineChart.js";
-import { HasAccess } from "../../../redux/accessUtils";
-import PieChart from "components/charts/PieChart";
-import CountUpComponent from "../../../../src/components/countUpComponent/countUpComponent";
-import Spinner from 'components/spinner/Spinner';
-import { useSelector } from "react-redux";
 
-export default function UserReports() {
-  // Chakra Color Mode
-  const brandColor = useColorModeValue("brand.500", "white");
-  const boxBg = useColorModeValue("secondaryGray.300", "whiteAlpha.100");
-  const user = JSON.parse(localStorage.getItem("user"));
-  const [isLoding, setIsLoding] = useState(false);
+const normalizeList = (response, keys = []) => {
+  const data = response?.data;
 
-  const [allData, setAllData] = useState([]);
-  const [data, setData] = useState([]);
-  const navigate = useNavigate();
-  const modules = useSelector((state) => state?.modules?.data)
-  const [contactsView, taskView, leadView, proprtyView] = HasAccess(["Contacts", "Tasks", "Leads", "Properties"]);
+  if (Array.isArray(data)) return data;
+  if (Array.isArray(data?.data)) return data.data;
 
-  const fetchData = async () => {
-    let responseData = await getApi(user?.role === 'superAdmin' ? `api/status/` : `api/status/?createBy=${user?._id}`);
-    setAllData(responseData?.data?.data);
+  for (const key of keys) {
+    if (Array.isArray(data?.[key])) return data[key];
+    if (Array.isArray(data?.data?.[key])) return data.data[key];
+  }
+
+  return [];
+};
+
+const numberValue = (value) => {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+
+const formatNumber = (value) =>
+  new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 }).format(
+    numberValue(value),
+  );
+
+const formatDate = (value) => {
+  if (!value) return "--";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "--";
+  return new Intl.DateTimeFormat(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(date);
+};
+
+const startOfDay = (date = new Date()) => {
+  const next = new Date(date);
+  next.setHours(0, 0, 0, 0);
+  return next;
+};
+
+const normalizeStatus = (value) => String(value || "").toLowerCase();
+
+const isSameDay = (value, target = new Date()) => {
+  const date = startOfDay(new Date(value));
+  return !Number.isNaN(date.getTime()) && date.getTime() === startOfDay(target).getTime();
+};
+
+const isUpcoming = (reservation) => {
+  const checkIn = startOfDay(new Date(reservation?.checkInDate));
+  return !Number.isNaN(checkIn.getTime()) && checkIn >= startOfDay();
+};
+
+const statusMeta = (status) => {
+  const normalized = normalizeStatus(status);
+  const labels = {
+    inquiry: "Inquiry",
+    tentative: "Tentative",
+    confirmed: "Confirmed",
+    checked_in: "Checked In",
+    checked_out: "Checked Out",
+    cancelled: "Cancelled",
+    no_show: "No Show",
+  };
+  const colors = {
+    inquiry: "blue",
+    tentative: "yellow",
+    confirmed: "green",
+    checked_in: "purple",
+    checked_out: "gray",
+    cancelled: "red",
+    no_show: "red",
   };
 
-
-  const fetchProgressChart = async () => {
-    setIsLoding(true);
-    let result = await getApi(user?.role === 'superAdmin' ? 'api/reporting/line-chart' : `api/reporting/line-chart?createBy=${user?._id}`);
-    if (result && result?.status === 200) {
-      setData(result?.data)
-    }
-    setIsLoding(false);
-  }
-  useEffect(() => {
-    fetchProgressChart()
-  }, [])
-
-
-  const findModuleData = (title) => {
-    const filterData = data?.find(item => item?.name === title)
-    return filterData?.length || 0
-  }
-
-  const findLeadStatus = (title) => {
-    const filterData = allData?.leadData?.filter(item => item?.leadStatus === title)
-    return filterData?.length || 0
-  }
-  const findTaskStatus = (title) => {
-    const filterData = allData?.taskData?.filter(item => item?.status === title)
-    return filterData?.length || 0
-  }
-
-  const leadModule = modules?.find(({ moduleName }) => moduleName === "Leads")
-  const contactModule = modules?.find(({ moduleName }) => moduleName === "Contacts")
-  const propertiesModule = modules?.find(({ moduleName }) => moduleName === "Properties")
-  const tasksModule = modules?.find(({ moduleName }) => moduleName === "Tasks")
-  const reportModule = modules?.find(({ moduleName }) => moduleName === "Reporting and Analytics")
-  const emailModule = modules?.find(({ moduleName }) => moduleName === "Emails")
-  const callModule = modules?.find(({ moduleName }) => moduleName === "Calls")
-
-  const taskStatus = [
-    {
-      name: "Completed",
-      status: 'completed',
-      length: findTaskStatus('completed'),
-      color: "#4d8f3a"
-    },
-    {
-      name: "Pending",
-      status: 'pending',
-      length: findTaskStatus('pending'),
-      color: "#a37f08"
-    },
-    {
-      name: "In Progress",
-      status: 'inProgress',
-      length: findTaskStatus('inProgress'),
-      color: "#7038db"
-    },
-    {
-      name: "Todo",
-      status: 'todo',
-      length: findTaskStatus('todo'),
-      color: "#1f7eeb"
-    },
-    {
-      name: "On Hold",
-      status: 'onHold',
-      length: findTaskStatus('onHold'),
-      color: "#DB5436"
-    },
-  ]
-  const navigateTo = {
-    Lead: '/lead',
-    Contact: '/contacts',
-    Meeting: '/metting',
-    Call: '/phone-call',
-    Task: '/task',
-    Email: '/email',
-    Property: '/properties',
+  return {
+    label: labels[normalized] || status || "Unknown",
+    colorScheme: colors[normalized] || "gray",
   };
+};
 
-  useEffect(() => {
-    fetchData();
-  }, [user?._id]);
+const getUnitName = (reservation) =>
+  reservation?.unit?.unitName ||
+  reservation?.rentalUnit?.unitName ||
+  reservation?.unitName ||
+  reservation?.unit?.name ||
+  "Unassigned unit";
+
+const getGuestName = (reservation) =>
+  reservation?.guest?.firstName ||
+  reservation?.guest?.name ||
+  reservation?.contact?.firstName ||
+  reservation?.contact?.name ||
+  reservation?.guestName ||
+  "Guest not set";
+
+const cardProps = {
+  border: "1px solid",
+  borderRadius: "20px",
+  boxShadow: "0px 20px 50px rgba(15, 23, 42, 0.07)",
+};
+
+function KpiCard({ label, value, helper, icon, tone = "brand" }) {
+  const cardBg = useColorModeValue("white", "navy.800");
+  const borderColor = useColorModeValue("gray.200", "whiteAlpha.200");
+  const labelColor = useColorModeValue("gray.500", "secondaryGray.500");
+  const valueColor = useColorModeValue("gray.900", "white");
+  const iconBg = useColorModeValue(`${tone}.50`, "whiteAlpha.100");
+  const iconColor = useColorModeValue(`${tone}.600`, `${tone}.200`);
+  const accentColor = useColorModeValue(`${tone}.500`, `${tone}.300`);
+  const subtleBg = useColorModeValue(
+    "linear-gradient(180deg, #ffffff 0%, #fbfcff 100%)",
+    "linear-gradient(180deg, rgba(17,28,68,0.98) 0%, rgba(11,20,48,0.98) 100%)",
+  );
 
   return (
-    <>
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} gap="20px" mb="20px">
-        {(taskView?.create || taskView?.update || taskView?.delete || taskView?.view) && (tasksModule?.isActive) &&
-          <MiniStatistics
-            onClick={() => navigate("/task")}
-            startContent={
-              <IconBox
-                w="56px"
-                h="56px"
-                bg="linear-gradient(90deg, #4481EB 0%, #04BEFE 100%)"
-                icon={<Icon w="28px" h="28px" as={MdAddTask} color="white" />}
-              />
-            }
-            name="Tasks"
-            value={findModuleData("Tasks")}
-          />}
-        {(contactsView?.create || contactsView?.update || contactsView?.delete || contactsView?.view) && (contactModule?.isActive) &&
-          < MiniStatistics
-            onClick={() => navigate("/contacts")}
-            startContent={
-              <IconBox
-                w="56px"
-                h="56px"
-                bg={boxBg}
-                icon={
-                  <Icon w="32px" h="32px" as={MdContacts} color={brandColor} />
-                }
-              />
-            }
-            name="Contacts"
-            value={findModuleData("Contacts")}
-          />}
-        {(leadView?.create || leadView?.update || leadView?.delete || leadView?.view) && (leadModule?.isActive) &&
-          <MiniStatistics
-            onClick={() => navigate("/lead")}
-            startContent={
-              <IconBox
-                w="56px"
-                h="56px"
-                bg={boxBg}
-                icon={
-                  <Icon w="32px" h="32px" as={MdLeaderboard} color={brandColor} />
-                }
-              />
-            }
-            name="Leads"
-            value={findModuleData("Leads")}
-          />}
-        {(proprtyView?.create || proprtyView?.update || proprtyView?.delete || proprtyView?.view) && (propertiesModule?.isActive) &&
-          <MiniStatistics
-            onClick={() => navigate("/properties")}
-            startContent={
-              <IconBox
-                w="56px"
-                h="56px"
-                bg={boxBg}
-                icon={
-                  <Icon w="32px" h="32px" as={LuBuilding2} color={brandColor} />
-                }
-              />
-            }
-            name="Property"
-            value={findModuleData("Properties")}
-          />}
-      </SimpleGrid>
+    <Box
+      bg={subtleBg || cardBg}
+      borderColor={borderColor}
+      p="20px"
+      position="relative"
+      overflow="hidden"
+      {...cardProps}
+    >
+      <Box
+        position="absolute"
+        top="0"
+        left="0"
+        right="0"
+        h="3px"
+        bg={accentColor}
+        opacity="0.88"
+      />
+      <Flex justify="space-between" align="flex-start" gap="16px">
+        <Box>
+          <Text color={labelColor} fontSize="sm" fontWeight="700">
+            {label}
+          </Text>
+          <Heading color={valueColor} size="lg" mt="8px">
+            {value}
+          </Heading>
+          <Text color={labelColor} fontSize="xs" fontWeight="600" mt="8px">
+            {helper}
+          </Text>
+        </Box>
+        <Flex
+          align="center"
+          justify="center"
+          w="44px"
+          h="44px"
+          borderRadius="14px"
+          bg={iconBg}
+          color={iconColor}
+          flexShrink="0"
+        >
+          <Icon as={icon} w="22px" h="22px" />
+        </Flex>
+      </Flex>
+    </Box>
+  );
+}
 
-      <Grid Grid templateColumns="repeat(12, 1fr)" gap={3} >
-        {
-          (emailModule?.isActive || callModule?.isActive) &&
-          <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
-            <Card>
-              <Flex mb={3} alignItems={"center"} justifyContent={"space-between"}>
-                <Heading size="md">{(emailModule?.isActive && callModule?.isActive) ? "Email and Call" : emailModule?.isActive ? "Email" : callModule?.isActive ? "Call" : ""} Report</Heading>
-                {
-                  reportModule?.isActive &&
-                  <IconButton
-                    color={"green.500"}
-                    onClick={() => navigate("/reporting-analytics")}
-                    aria-label="Call Fred"
-                    borderRadius="10px"
-                    size="md"
-                    icon={<ViewIcon />}
-                  />
-                }
-              </Flex>
-              <HSeparator />
-              <ReportChart dashboard={"dashboard"} />
-            </Card>
-          </GridItem>
-        }
-        <GridItem rowSpan={2} colSpan={{ base: 12, md: 6 }}>
-          <Card>
-            <Flex mb={5} alignItems={"center"} justifyContent={"space-between"}>
-              <Heading size="md">Module Data Report</Heading>
+function SectionCard({ title, helper, action, children }) {
+  const cardBg = useColorModeValue("white", "navy.800");
+  const borderColor = useColorModeValue("gray.200", "whiteAlpha.200");
+  const mutedText = useColorModeValue("gray.500", "secondaryGray.500");
 
-            </Flex>
-            <Box mb={3}>
-              <HSeparator />
-            </Box>
-            <Chart dashboard={"dashboard"} data={data} />
-          </Card>
-        </GridItem>
-      </Grid>
-      <SimpleGrid gap="20px" columns={{
-        base: 1, md: leadView?.view && taskView?.view ? 2 : 2, lg:
-          leadView?.view && taskView?.view ? 3 : 2
-      }} my="20px">
+  return (
+    <Box bg={cardBg} borderColor={borderColor} p="22px" h="100%" {...cardProps}>
+      <Flex justify="space-between" align="flex-start" gap="16px" mb="18px">
+        <Box>
+          <Heading size="sm">{title}</Heading>
+          {helper && (
+            <Text color={mutedText} fontSize="sm" mt="6px">
+              {helper}
+            </Text>
+          )}
+        </Box>
+        {action}
+      </Flex>
+      {children}
+    </Box>
+  );
+}
 
-        {
-          data && data.length > 0 &&
-          <Card >
-            <Heading size="md" pb={3}>Statistics</Heading>
-            {
-              !isLoding ?
-                data && data.length > 0 && data?.map((item, i) => (
-                  <>
-                    <Box border={"1px solid #e5e5e5"} p={2} m={1} cursor={'pointer'} key={i} onClick={() => navigate(navigateTo[item.name])}>
-                      <Flex justifyContent={"space-between"}>
-                        <Text fontSize="sm" fontWeight={600} pb={2}>{item?.name}</Text>
-                        <Text fontSize="sm" fontWeight={600} pb={2}><CountUpComponent targetNumber={item?.length} /></Text>
-                      </Flex>
-                      <Progress
-                        colorScheme={item?.color}
-                        size='xs' value={item?.length} width={"100%"} />
-                    </Box>
-                  </>
+function EmptyState({ title, description, actionLabel, onAction, icon = MdCalendarToday }) {
+  const mutedText = useColorModeValue("gray.500", "secondaryGray.500");
+  const emptyBg = useColorModeValue("white", "whiteAlpha.50");
+  const borderColor = useColorModeValue("gray.200", "whiteAlpha.200");
+  const iconBg = useColorModeValue("brand.50", "whiteAlpha.100");
 
-                )) : <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}><Spinner /></div>
-            }
-          </Card>
-        }
+  return (
+    <Flex
+      direction="column"
+      align="center"
+      justify="center"
+      textAlign="center"
+      border="1px dashed"
+      borderColor={borderColor}
+      bg={emptyBg}
+      borderRadius="18px"
+      py="34px"
+      px="22px"
+      minH="180px"
+    >
+      <Flex
+        align="center"
+        justify="center"
+        w="50px"
+        h="50px"
+        borderRadius="16px"
+        bg={iconBg}
+        color="brand.500"
+        mb="14px"
+      >
+        <Icon as={icon} w="24px" h="24px" />
+      </Flex>
+      <Heading size="sm">{title}</Heading>
+      <Text color={mutedText} fontSize="sm" mt="8px" maxW="360px">
+        {description}
+      </Text>
+      {actionLabel && (
+        <Button
+          mt="18px"
+          size="sm"
+          colorScheme="brand"
+          leftIcon={<Icon as={MdAdd} />}
+          onClick={onAction}
+        >
+          {actionLabel}
+        </Button>
+      )}
+    </Flex>
+  );
+}
 
-        {leadView?.view && (leadModule?.isActive) && <Card>
-          <Heading size="md" pb={2}>Lead Statistics</Heading>
-          {(leadView?.view) &&
-            <Grid templateColumns="repeat(12, 1fr)" gap={2}>
-              <GridItem colSpan={{ base: 12, md: 6 }}>
-                <Box backgroundColor={"#ebf5ff"}
-                  borderRadius={"10px"}
-                  cursor={"pointer"}
-                  onClick={() => navigate('/lead')}
-                  p={2} m={1} textAlign={"center"}>
-                  <Heading size="sm" pb={3} color={"#1f7eeb"}>Total Leads </Heading>
-                  <Text fontWeight={600} color={"#1f7eeb"}><CountUpComponent targetNumber={allData?.leadData?.length || 0} /> </Text>
-                </Box>
-              </GridItem>
-              <GridItem colSpan={{ base: 12, md: 6 }}>
-                <Box backgroundColor={"#eaf9e6"}
-                  borderRadius={"10px"}
-                  cursor={"pointer"}
-                  onClick={() => navigate('/lead', { state: 'active' })}
-                  p={2} m={1} textAlign={"center"}>
-                  <Heading size="sm" pb={3} color={"#43882f"} >Active Leads </Heading>
-                  <Text fontWeight={600} color={"#43882f"}><CountUpComponent targetNumber={findLeadStatus("active")} /></Text>
-                </Box>
-              </GridItem>
-              <GridItem colSpan={{ base: 12, md: 6 }}>
-                <Box backgroundColor={"#fbf4dd"}
-                  onClick={() => navigate('/lead', { state: 'pending' })}
-                  borderRadius={"10px"}
-                  cursor={"pointer"}
-                  p={2} m={1} textAlign={"center"}>
-                  <Heading size="sm" pb={3} color={"#a37f08"}>Pending Leads</Heading>
-                  <Text fontWeight={600} color={"#a37f08"}><CountUpComponent targetNumber={findLeadStatus("pending")} /></Text>
-                </Box>
-              </GridItem>
+function ReservationRow({ reservation }) {
+  const textColor = useColorModeValue("gray.900", "white");
+  const mutedText = useColorModeValue("gray.500", "secondaryGray.500");
+  const borderColor = useColorModeValue("gray.100", "whiteAlpha.100");
+  const status = statusMeta(reservation?.status);
 
-              <GridItem colSpan={{ base: 12, md: 6 }}>
-                <Box backgroundColor={"#ffeeeb"}
-                  borderRadius={"10px"}
-                  cursor={"pointer"}
-                  onClick={() => navigate('/lead', { state: 'sold' })}
-                  p={2} m={1} textAlign={"center"}>
-                  <Heading size="sm" pb={3} color={"#d6401d"}>Sold Leads </Heading>
-                  <Text fontWeight={600} color={"#d6401d"}><CountUpComponent targetNumber={findLeadStatus("sold")} /></Text>
-                </Box>
-              </GridItem>
-            </Grid>
-          }
-          <Flex justifyContent={"center"}  >
-            <PieChart leadData={allData?.leadData} />
-          </Flex>
+  return (
+    <Flex
+      py="14px"
+      borderBottom="1px solid"
+      borderColor={borderColor}
+      align={{ base: "flex-start", md: "center" }}
+      justify="space-between"
+      gap="16px"
+      direction={{ base: "column", md: "row" }}
+    >
+      <Box>
+        <Text color={textColor} fontWeight="800" fontSize="sm">
+          {reservation?.reservationCode || "Reservation"}
+        </Text>
+        <Text color={mutedText} fontSize="xs" fontWeight="600" mt="4px">
+          {getUnitName(reservation)} - {getGuestName(reservation)}
+        </Text>
+      </Box>
+      <HStack spacing="10px" flexWrap="wrap">
+        <Text color={mutedText} fontSize="xs" fontWeight="700">
+          {formatDate(reservation?.checkInDate)} to {formatDate(reservation?.checkOutDate)}
+        </Text>
+        <Badge colorScheme={status.colorScheme} borderRadius="10px" px="9px" py="4px">
+          {status.label}
+        </Badge>
+      </HStack>
+    </Flex>
+  );
+}
 
-        </Card>}
+function AttentionUnit({ unit }) {
+  const textColor = useColorModeValue("gray.900", "white");
+  const mutedText = useColorModeValue("gray.500", "secondaryGray.500");
+  const status = normalizeStatus(unit?.status);
+  const hasRate = numberValue(unit?.baseNightlyRate) > 0;
 
-        {taskView?.view && (tasksModule?.isActive) && <Card >
-          <Heading size="md" pb={3}>Task Statistics</Heading>
-          <Grid templateColumns="repeat(12, 1fr)" gap={2} mb={2}>
-            <GridItem colSpan={{ base: 12 }}>
-              <Box backgroundColor={"#ebf5ff"}
-                onClick={() => navigate('/task')}
-                borderRadius={"10px"} cursor={'pointer'}
-                p={2} m={1} textAlign={"center"}>
-                <Heading size="sm" pb={3} color={"#1f7eeb"}>Total Tasks </Heading>
-                <Text fontWeight={600} color={"#1f7eeb"}><CountUpComponent targetNumber={allData?.taskData?.length || 0} /></Text>
+  return (
+    <Flex align="center" justify="space-between" gap="14px" py="10px">
+      <Box>
+        <Text color={textColor} fontWeight="800" fontSize="sm">
+          {unit?.unitName || unit?.name || "Rental unit"}
+        </Text>
+        <Text color={mutedText} fontSize="xs" fontWeight="600" mt="4px">
+          {unit?.unitCode || "No code"} {hasRate ? "" : "- No nightly rate"}
+        </Text>
+      </Box>
+      <Badge
+        colorScheme={status === "maintenance" ? "orange" : status === "inactive" ? "red" : "gray"}
+        borderRadius="10px"
+        px="9px"
+        py="4px"
+      >
+        {unit?.status || "Needs review"}
+      </Badge>
+    </Flex>
+  );
+}
+
+export default function Dashboard() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [reservations, setReservations] = useState([]);
+  const [rentalUnits, setRentalUnits] = useState([]);
+  const [owners, setOwners] = useState([]);
+
+  const pageBg = useColorModeValue("transparent", "navy.900");
+  const headerBg = useColorModeValue(
+    "linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(239,246,255,0.84) 52%, rgba(240,253,250,0.76) 100%)",
+    "linear-gradient(135deg, rgba(17,28,68,0.98) 0%, rgba(11,20,48,0.95) 100%)",
+  );
+  const borderColor = useColorModeValue("gray.200", "whiteAlpha.200");
+  const mutedText = useColorModeValue("gray.500", "secondaryGray.500");
+  const headerAccent = useColorModeValue("brand.500", "brand.300");
+  const headerChipBg = useColorModeValue("whiteAlpha.800", "whiteAlpha.100");
+  const headerChipColor = useColorModeValue("gray.700", "white");
+
+  const fetchDashboardData = async () => {
+    setLoading(true);
+    setError("");
+
+    const [reservationResponse, rentalUnitResponse, ownerResponse] = await Promise.all([
+      getApi("api/reservation"),
+      getApi("api/rental-unit"),
+      getApi("api/owner"),
+    ]);
+
+    const failedResponse = [reservationResponse, rentalUnitResponse, ownerResponse].find(
+      (response) => response?.response || (response?.status && response.status >= 400),
+    );
+
+    if (failedResponse) {
+      const status = failedResponse?.response?.status || failedResponse?.status;
+      setError(
+        status === 401 || status === 403
+          ? "Dashboard data is protected. Please sign in again and retry."
+          : "Dashboard data could not be loaded right now. Please check the backend connection and try again.",
+      );
+      setLoading(false);
+      return;
+    }
+
+    setReservations(normalizeList(reservationResponse, ["reservations", "reservation"]));
+    setRentalUnits(normalizeList(rentalUnitResponse, ["rentalUnits", "rentalUnit", "units"]));
+    setOwners(normalizeList(ownerResponse, ["owners", "owner"]));
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  const dashboardStats = useMemo(() => {
+    const confirmedReservations = reservations.filter(
+      (reservation) => normalizeStatus(reservation?.status) === "confirmed",
+    );
+    const activeReservations = reservations.filter(
+      (reservation) => !["cancelled", "no_show"].includes(normalizeStatus(reservation?.status)),
+    );
+    const upcomingReservations = activeReservations
+      .filter(isUpcoming)
+      .sort((a, b) => new Date(a?.checkInDate) - new Date(b?.checkInDate));
+    const todayCheckIns = activeReservations.filter((reservation) =>
+      isSameDay(reservation?.checkInDate),
+    );
+    const todayCheckOuts = activeReservations.filter((reservation) =>
+      isSameDay(reservation?.checkOutDate),
+    );
+    const unitsRequiringAttention = rentalUnits.filter((unit) => {
+      const status = normalizeStatus(unit?.status);
+      return status === "maintenance" || status === "inactive" || numberValue(unit?.baseNightlyRate) <= 0;
+    });
+    const availableUnits = rentalUnits.filter((unit) =>
+      ["active", "available"].includes(normalizeStatus(unit?.status)),
+    );
+    const outstandingBalance = activeReservations.reduce((sum, reservation) => {
+      if (reservation?.balanceDue !== undefined && reservation?.balanceDue !== null) {
+        return sum + Math.max(numberValue(reservation.balanceDue), 0);
+      }
+      return sum + Math.max(
+        numberValue(reservation?.totalAmount) - numberValue(reservation?.depositPaid),
+        0,
+      );
+    }, 0);
+    const recentReservations = [...reservations]
+      .sort(
+        (a, b) =>
+          new Date(b?.createdAt || b?.updatedAt || b?.checkInDate) -
+          new Date(a?.createdAt || a?.updatedAt || a?.checkInDate),
+      )
+      .slice(0, 5);
+
+    return {
+      confirmedReservations,
+      upcomingReservations,
+      todayCheckIns,
+      todayCheckOuts,
+      unitsRequiringAttention,
+      availableUnits,
+      outstandingBalance,
+      recentReservations,
+    };
+  }, [reservations, rentalUnits]);
+
+  const quickActions = [
+    { label: "Add Reservation", path: "/reservations" },
+    { label: "Add Rental Unit", path: "/rental-units" },
+    { label: "Add Owner", path: "/owners" },
+  ];
+
+  if (loading) {
+    return (
+      <Box bg={pageBg}>
+        <Skeleton height="170px" borderRadius="22px" mb="22px" />
+        <SimpleGrid columns={{ base: 1, md: 2, xl: 4 }} spacing="18px" mb="22px">
+          {[...Array(7)].map((_, index) => (
+            <Skeleton key={index} height="138px" borderRadius="18px" />
+          ))}
+        </SimpleGrid>
+        <Grid templateColumns="repeat(12, 1fr)" gap="18px">
+          {[...Array(4)].map((_, index) => (
+            <GridItem key={index} colSpan={{ base: 12, xl: index === 0 ? 7 : 5 }}>
+              <Box p="22px" border="1px solid" borderColor={borderColor} borderRadius="18px">
+                <SkeletonText noOfLines={5} spacing="4" />
               </Box>
             </GridItem>
-          </Grid>
-          {taskStatus && taskStatus.length > 0 && taskStatus?.map((item, i) => (
-            <Box my={1.5} key={i}>
-              {/* <Flex justifyContent={"space-between"} cursor={'pointer'} onClick={() => navigate('/task', { state: item.status })} alignItems={"center"} padding={4} backgroundColor={"#0b0b0b17"} borderRadius={"10px"}> */}
-              <Flex justifyContent={"space-between"} cursor={'pointer'} alignItems={"center"} padding={4} backgroundColor={"#0b0b0b17"} borderRadius={"10px"}>
-                <Flex alignItems={"center"}>
-                  <Box height={"18px"} width={"18px"} lineHeight={"18px"} textAlign={"center"} border={`1px solid ${item.color}`} display={"flex"} justifyContent={"center"} alignItems={"center"} borderRadius={"50%"} margin={"0 auto"} >
-                    <Box backgroundColor={`${item.color}`} height={"10px"} width={"10px"} borderRadius={"50%"}></Box>
-                  </Box>
-
-                  <Text ps={2} fontWeight={"bold"} color={`${item.color}`}>{item.name}</Text>
-
-                </Flex>
-                <Box fontWeight={"bold"} color={`${item.color}`}><CountUpComponent targetNumber={item?.length} /></Box>
-              </Flex>
-            </Box>
           ))}
-        </Card>}
+        </Grid>
+      </Box>
+    );
+  }
+
+  return (
+    <Box bg={pageBg}>
+      <Flex
+        bg={headerBg}
+        border="1px solid"
+        borderColor={borderColor}
+        borderRadius="24px"
+        boxShadow="0px 24px 60px rgba(15, 23, 42, 0.08)"
+        p={{ base: "22px", md: "30px" }}
+        mb="22px"
+        direction={{ base: "column", xl: "row" }}
+        align={{ base: "flex-start", xl: "center" }}
+        justify="space-between"
+        gap="20px"
+        position="relative"
+        overflow="hidden"
+      >
+        <Box
+          position="absolute"
+          left="0"
+          top="0"
+          bottom="0"
+          w="5px"
+          bg={headerAccent}
+        />
+        <Box>
+          <Text color={headerAccent} fontSize="sm" fontWeight="900" mb="8px">
+            Rental Property Management CRM
+          </Text>
+          <Heading size="lg" letterSpacing="0">
+            Dashboard
+          </Heading>
+          <Text color={mutedText} fontSize="md" mt="8px" maxW="620px">
+            Overview of reservations, units, owners, and upcoming activity.
+          </Text>
+          <HStack spacing="10px" flexWrap="wrap" mt="16px">
+            <Badge bg={headerChipBg} color={headerChipColor} borderRadius="999px" px="10px" py="5px">
+              {dashboardStats.todayCheckIns.length} check-ins today
+            </Badge>
+            <Badge bg={headerChipBg} color={headerChipColor} borderRadius="999px" px="10px" py="5px">
+              {dashboardStats.todayCheckOuts.length} check-outs today
+            </Badge>
+            <Badge bg={headerChipBg} color={headerChipColor} borderRadius="999px" px="10px" py="5px">
+              {dashboardStats.unitsRequiringAttention.length} units need review
+            </Badge>
+          </HStack>
+        </Box>
+        <HStack spacing="10px" flexWrap="wrap">
+          {quickActions.map((action) => (
+            <Button
+              key={action.path}
+              colorScheme={action.label === "Add Reservation" ? "brand" : "gray"}
+              variant={action.label === "Add Reservation" ? "solid" : "outline"}
+              leftIcon={<Icon as={MdAdd} />}
+              onClick={() => navigate(action.path)}
+            >
+              {action.label}
+            </Button>
+          ))}
+        </HStack>
+      </Flex>
+
+      {error && (
+        <Alert status="warning" borderRadius="16px" mb="22px">
+          <AlertIcon />
+          {error}
+        </Alert>
+      )}
+
+      <SimpleGrid columns={{ base: 1, md: 2, xl: 4 }} spacing="18px" mb="22px">
+        <KpiCard
+          label="Total Reservations"
+          value={formatNumber(reservations.length)}
+          helper="All bookings in the system"
+          icon={MdCalendarToday}
+          tone="blue"
+        />
+        <KpiCard
+          label="Confirmed Reservations"
+          value={formatNumber(dashboardStats.confirmedReservations.length)}
+          helper="Confirmed stays only"
+          icon={MdEventAvailable}
+          tone="green"
+        />
+        <KpiCard
+          label="Upcoming Check-ins"
+          value={formatNumber(dashboardStats.upcomingReservations.length)}
+          helper="Active reservations from today forward"
+          icon={MdArrowForward}
+          tone="purple"
+        />
+        <KpiCard
+          label="Outstanding Balance"
+          value={formatNumber(dashboardStats.outstandingBalance)}
+          helper="Open balance from active bookings"
+          icon={MdWarningAmber}
+          tone="orange"
+        />
+        <KpiCard
+          label="Total Rental Units"
+          value={formatNumber(rentalUnits.length)}
+          helper="Bookable inventory records"
+          icon={MdHomeWork}
+          tone="brand"
+        />
+        <KpiCard
+          label="Available Units"
+          value={formatNumber(dashboardStats.availableUnits.length)}
+          helper="Units marked active or available"
+          icon={MdEventAvailable}
+          tone="green"
+        />
+        <KpiCard
+          label="Owners"
+          value={formatNumber(owners.length)}
+          helper="Owners connected to inventory"
+          icon={MdPeopleAlt}
+          tone="blue"
+        />
       </SimpleGrid>
 
-    </>
+      {(reservations.length === 0 || rentalUnits.length === 0 || owners.length === 0) && (
+        <SimpleGrid columns={{ base: 1, lg: 3 }} spacing="18px" mb="22px">
+          {reservations.length === 0 && (
+            <EmptyState
+              title="No reservations yet"
+              description="Create the first booking to start tracking stays, deposits, balances, and upcoming activity."
+              actionLabel="Add Reservation"
+              onAction={() => navigate("/reservations")}
+              icon={MdCalendarToday}
+            />
+          )}
+          {rentalUnits.length === 0 && (
+            <EmptyState
+              title="No rental units yet"
+              description="Add rentable apartments, villas, chalets, studios, or other units before creating reservations."
+              actionLabel="Add Rental Unit"
+              onAction={() => navigate("/rental-units")}
+              icon={MdHomeWork}
+            />
+          )}
+          {owners.length === 0 && (
+            <EmptyState
+              title="No owners yet"
+              description="Add owners to manage payout details and connect units to their ownership records."
+              actionLabel="Add Owner"
+              onAction={() => navigate("/owners")}
+              icon={MdPeopleAlt}
+            />
+          )}
+        </SimpleGrid>
+      )}
+
+      <Grid templateColumns="repeat(12, 1fr)" gap="18px">
+        <GridItem colSpan={{ base: 12, xl: 6 }}>
+          <SectionCard
+            title="Today's Check-ins"
+            helper="Reservations scheduled to start today."
+            action={
+              <Button size="sm" variant="ghost" onClick={() => navigate("/reservations")}>
+                View all
+              </Button>
+            }
+          >
+            {dashboardStats.todayCheckIns.length > 0 ? (
+              dashboardStats.todayCheckIns
+                .slice(0, 5)
+                .map((reservation) => (
+                  <ReservationRow key={reservation?._id || reservation?.reservationCode} reservation={reservation} />
+                ))
+            ) : (
+              <EmptyState
+                title="No check-ins today"
+                description="Confirmed and active reservations starting today will appear here."
+                icon={MdEventAvailable}
+              />
+            )}
+          </SectionCard>
+        </GridItem>
+
+        <GridItem colSpan={{ base: 12, xl: 6 }}>
+          <SectionCard
+            title="Today's Check-outs"
+            helper="Reservations scheduled to end today."
+            action={
+              <Button size="sm" variant="ghost" onClick={() => navigate("/reservations")}>
+                View all
+              </Button>
+            }
+          >
+            {dashboardStats.todayCheckOuts.length > 0 ? (
+              dashboardStats.todayCheckOuts
+                .slice(0, 5)
+                .map((reservation) => (
+                  <ReservationRow key={reservation?._id || reservation?.reservationCode} reservation={reservation} />
+                ))
+            ) : (
+              <EmptyState
+                title="No check-outs today"
+                description="Active reservations ending today will appear here."
+                icon={MdArrowForward}
+              />
+            )}
+          </SectionCard>
+        </GridItem>
+
+        <GridItem colSpan={{ base: 12, xl: 7 }}>
+          <SectionCard
+            title="Upcoming Reservations"
+            helper="The next active bookings by check-in date."
+            action={
+              <Button
+                size="sm"
+                colorScheme="brand"
+                rightIcon={<Icon as={MdArrowForward} />}
+                onClick={() => navigate("/reservations")}
+              >
+                Reservations
+              </Button>
+            }
+          >
+            {dashboardStats.upcomingReservations.length > 0 ? (
+              dashboardStats.upcomingReservations
+                .slice(0, 6)
+                .map((reservation) => (
+                  <ReservationRow key={reservation?._id || reservation?.reservationCode} reservation={reservation} />
+                ))
+            ) : (
+              <EmptyState
+                title="No upcoming reservations"
+                description="Upcoming inquiry, tentative, confirmed, or in-house reservations will appear here."
+                actionLabel="Add Reservation"
+                onAction={() => navigate("/reservations")}
+                icon={MdCalendarToday}
+              />
+            )}
+          </SectionCard>
+        </GridItem>
+
+        <GridItem colSpan={{ base: 12, xl: 5 }}>
+          <SectionCard
+            title="Units Requiring Attention"
+            helper="Inactive, maintenance, or missing nightly-rate records."
+            action={
+              <Button size="sm" variant="ghost" onClick={() => navigate("/rental-units")}>
+                Units
+              </Button>
+            }
+          >
+            {dashboardStats.unitsRequiringAttention.length > 0 ? (
+              <Stack spacing="4px">
+                {dashboardStats.unitsRequiringAttention.slice(0, 6).map((unit) => (
+                  <AttentionUnit key={unit?._id || unit?.unitCode} unit={unit} />
+                ))}
+              </Stack>
+            ) : (
+              <EmptyState
+                title="Inventory looks healthy"
+                description="Units with maintenance, inactive status, or missing base rates will be listed here."
+                icon={MdHomeWork}
+              />
+            )}
+          </SectionCard>
+        </GridItem>
+
+        <GridItem colSpan={{ base: 12 }}>
+          <SectionCard
+            title="Recent Reservations"
+            helper="Latest booking activity across the rental operation."
+            action={
+              <Button size="sm" variant="outline" onClick={fetchDashboardData}>
+                Refresh
+              </Button>
+            }
+          >
+            {dashboardStats.recentReservations.length > 0 ? (
+              dashboardStats.recentReservations.map((reservation) => (
+                <ReservationRow key={reservation?._id || reservation?.reservationCode} reservation={reservation} />
+              ))
+            ) : (
+              <EmptyState
+                title="No recent reservations"
+                description="New and updated reservations will appear here after bookings are created."
+                icon={MdCalendarToday}
+              />
+            )}
+          </SectionCard>
+        </GridItem>
+      </Grid>
+    </Box>
   );
 }

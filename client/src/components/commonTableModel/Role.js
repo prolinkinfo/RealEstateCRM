@@ -177,7 +177,7 @@ export default function RoleTable(props) {
                     fontSize="sm"
                     fontWeight="700"
                   >
-                    -- No Data Found --
+                    No records yet
                   </Text>
                 </Td>
               </Tr>

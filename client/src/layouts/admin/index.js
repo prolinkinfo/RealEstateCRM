@@ -1,5 +1,5 @@
 // Chakra imports
-import { Portal, Box, useDisclosure, Flex, Icon } from "@chakra-ui/react";
+import { Portal, Box, useDisclosure, Flex, Icon, useColorModeValue } from "@chakra-ui/react";
 import Footer from "components/footer/FooterAdmin.js";
 // Layout components
 import Navbar from "components/navbar/NavbarAdmin.js";
@@ -30,7 +30,7 @@ export default function Dashboard(props) {
   // states and functions
   const [fixed] = useState(false);
   const [toggleSidebar, setToggleSidebar] = useState(false);
-  const [openSidebar, setOpenSidebar] = useState(false);
+  const [openSidebar, setOpenSidebar] = useState(true);
   // const user = JSON.parse(localStorage.getItem("user"))
   const userId = JSON.parse(localStorage.getItem("user"))?._id;
 
@@ -220,6 +220,11 @@ export default function Dashboard(props) {
   const largeLogo = useSelector((state) =>
     state?.images?.images?.filter((item) => item?.isActive === true),
   );
+  const appBg = useColorModeValue("#F7F9FC", "navy.900");
+  const contentBg = useColorModeValue(
+    "linear-gradient(180deg, #F7F9FC 0%, #F3F6FA 100%)",
+    "navy.900",
+  );
 
   const under = (routes) => {
     let activeRoute = false;
@@ -323,7 +328,7 @@ export default function Dashboard(props) {
   const { onOpen } = useDisclosure();
   document.documentElement.dir = "ltr";
   return (
-    <Box>
+    <Box bg={appBg} minH="100vh">
       <Box>
         <SidebarContext.Provider
           value={{
@@ -351,16 +356,17 @@ export default function Dashboard(props) {
               base: "100%",
               xl:
                 openSidebar === true
-                  ? "calc( 100% - 300px )"
-                  : "calc( 100% - 88px )",
+                  ? "calc( 100% - 318px )"
+                  : "calc( 100% - 112px )",
             }}
             maxWidth={{
               base: "100%",
               xl:
                 openSidebar === true
-                  ? "calc( 100% - 300px )"
-                  : "calc( 100% - 88px )",
+                  ? "calc( 100% - 318px )"
+                  : "calc( 100% - 112px )",
             }}
+            bg={contentBg}
             transition="all 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1)"
             transitionDuration=".2s, .2s, .35s"
             transitionProperty="top, bottom, width"
@@ -384,16 +390,14 @@ export default function Dashboard(props) {
                 />
               </Box>
             </Portal>
-            <Box pt={{ base: "150px", md: "95px", xl: "95px" }}>
+            <Box pt={{ base: "112px", md: "104px", xl: "110px" }}>
               {getRoute() ? (
                 <Box
                   mx="auto"
-                  pe="20px"
+                  px={{ base: "16px", md: "24px", xl: "24px" }}
                   minH="84vh"
-                  pt="50px"
-                  style={{
-                    padding: openSidebar ? "8px 20px 8px 0px" : "8px 20px",
-                  }}
+                  pt={{ base: "10px", md: "18px" }}
+                  maxW="1600px"
                 >
                   <Suspense
                     fallback={

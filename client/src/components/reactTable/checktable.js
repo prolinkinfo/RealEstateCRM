@@ -89,6 +89,10 @@ const CommonCheckTable = (props) => {
     customSearch,
     addBtn,
     exportColumn,
+    emptyTitle,
+    emptyMessage,
+    emptyActionLabel,
+    onEmptyAction,
   } = props;
   const { dataLength } = props;
   const { handleSearchType } = props;
@@ -685,29 +689,32 @@ const CommonCheckTable = (props) => {
                 <Tr>
                   <Td colSpan={columns?.length}>
                     <Flex
+                      direction="column"
                       justifyContent={"center"}
                       alignItems={"center"}
                       width="100%"
                       color={textColor}
                       fontSize="sm"
                       fontWeight="700"
+                      minH="150px"
+                      gap="10px"
                     >
                       <Spinner />
+                      <Text color="secondaryGray.600" fontSize="sm" fontWeight="600">
+                        Loading records...
+                      </Text>
                     </Flex>
                   </Td>
                 </Tr>
               ) : (data && data?.length === 0) || data === undefined ? (
                 <Tr>
                   <Td colSpan={columns?.length}>
-                    <Text
-                      textAlign={"center"}
-                      width="100%"
-                      color={textColor}
-                      fontSize="sm"
-                      fontWeight="700"
-                    >
-                      <DataNotFound />
-                    </Text>
+                    <DataNotFound
+                      title={emptyTitle}
+                      message={emptyMessage}
+                      actionLabel={emptyActionLabel}
+                      onAction={onEmptyAction}
+                    />
                   </Td>
                 </Tr>
               ) : (

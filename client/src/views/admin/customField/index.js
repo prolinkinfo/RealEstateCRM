@@ -375,7 +375,7 @@ const CustomField = () => {
                       my="7"
                       fontWeight="700"
                     >
-                      -- No Data Found --
+                      No records yet
                     </Text>
                   ) : (
                     <Grid templateColumns="repeat(12, 1fr)" gap={3} mt={5}>
@@ -599,7 +599,7 @@ const CustomField = () => {
                           my="7"
                           fontWeight="700"
                         >
-                          -- No Data Found --
+                          No records yet
                         </Text>
                       ) : (
                         <Grid templateColumns="repeat(12, 1fr)" gap={3} mt={5}>

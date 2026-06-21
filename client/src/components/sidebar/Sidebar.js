@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 // chakra imports
 import {
@@ -14,12 +14,6 @@ import {
   DrawerCloseButton,
 } from "@chakra-ui/react";
 import Content from "components/sidebar/components/Content";
-import {
-  renderThumb,
-  renderTrack,
-  renderView,
-} from "components/scrollbar/Scrollbar";
-import { Scrollbars } from "react-custom-scrollbars-2";
 import PropTypes from "prop-types";
 
 // Assets
@@ -30,13 +24,13 @@ function Sidebar(props) {
 
   let variantChange = "0.2s linear";
   let shadow = useColorModeValue(
-    "14px 17px 40px 4px rgba(112, 144, 176, 0.08)",
+    "0px 18px 50px rgba(15, 23, 42, 0.08)",
     "unset",
   );
   // Chakra Color Mode
-  let sidebarBg = useColorModeValue("white", "navy.800");
-  let sidebarMargins = "0px";
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  let sidebarBg = useColorModeValue("rgba(255, 255, 255, 0.96)", "navy.800");
+  let borderColor = useColorModeValue("rgba(226, 232, 240, 0.9)", "whiteAlpha.200");
+  let sidebarMargins = "12px";
   // SIDEBAR
   return (
     <Box
@@ -49,26 +43,24 @@ function Sidebar(props) {
         bg={sidebarBg}
         transition={variantChange}
         // w='280px'
-        w={openSidebar ? "280px" : "80px"}
-        h="100vh"
+        w={openSidebar ? "286px" : "88px"}
+        h="calc(100vh - 24px)"
         m={sidebarMargins}
-        minH="100%"
-        overflowX="hidden"
+        overflow="hidden"
+        border="1px solid"
+        borderColor={borderColor}
+        borderRadius="24px"
         boxShadow={shadow}
+        backdropFilter="blur(18px)"
+        display="flex"
+        flexDirection="column"
       >
-        <Scrollbars
-          autoHide
-          renderTrackVertical={renderTrack}
-          renderThumbVertical={renderThumb}
-          renderView={renderView}
-        >
-          <Content
-            routes={routes}
-            largeLogo={largeLogo}
-            openSidebar={openSidebar}
-            setOpenSidebar={setOpenSidebar}
-          />
-        </Scrollbars>
+        <Content
+          routes={routes}
+          largeLogo={largeLogo}
+          openSidebar={openSidebar}
+          setOpenSidebar={setOpenSidebar}
+        />
       </Box>
     </Box>
   );
@@ -77,7 +69,10 @@ function Sidebar(props) {
 // FUNCTIONS
 export function SidebarResponsive(props) {
   let sidebarBackgroundColor = useColorModeValue("white", "navy.800");
-  let menuColor = useColorModeValue("gray.400", "white");
+  let menuColor = useColorModeValue("gray.700", "white");
+  let menuBg = useColorModeValue("white", "navy.800");
+  let menuBorder = useColorModeValue("gray.200", "whiteAlpha.200");
+  let menuShadow = useColorModeValue("0px 8px 20px rgba(15, 23, 42, 0.06)", "none");
   // // SIDEBAR
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
@@ -92,8 +87,15 @@ export function SidebarResponsive(props) {
     <Flex display={{ sm: "flex", xl: "none" }} alignItems="center">
       <Flex
         ref={btnRef}
-        w="max-content"
-        h="max-content"
+        w="40px"
+        h="40px"
+        align="center"
+        justify="center"
+        borderRadius="14px"
+        bg={menuBg}
+        border="1px solid"
+        borderColor={menuBorder}
+        boxShadow={menuShadow}
         onClick={() => {
           onOpen();
           setOpenSidebar(true);
@@ -105,7 +107,6 @@ export function SidebarResponsive(props) {
           my="auto"
           w="20px"
           h="20px"
-          me="10px"
           _hover={{ cursor: "pointer" }}
         />
       </Flex>
@@ -122,6 +123,9 @@ export function SidebarResponsive(props) {
           w="285px"
           maxW="285px"
           bg={sidebarBackgroundColor}
+          borderRightRadius="24px"
+          maxH="100vh"
+          overflow="hidden"
         >
           <DrawerCloseButton
             zIndex="3"
@@ -129,20 +133,20 @@ export function SidebarResponsive(props) {
             _focus={{ boxShadow: "none" }}
             _hover={{ boxShadow: "none" }}
           />
-          <DrawerBody maxW="285px" px="0rem" pb="0">
-            <Scrollbars
-              autoHide
-              renderTrackVertical={renderTrack}
-              renderThumbVertical={renderThumb}
-              renderView={renderView}
-            >
-              <Content
-                from={"modal"}
-                routes={routes}
-                openSidebar={openSidebar}
-                setOpenSidebar={setOpenSidebar}
-              />
-            </Scrollbars>
+          <DrawerBody
+            maxW="285px"
+            px="0rem"
+            pb="0"
+            display="flex"
+            flexDirection="column"
+            overflow="hidden"
+          >
+            <Content
+              from={"modal"}
+              routes={routes}
+              openSidebar={openSidebar}
+              setOpenSidebar={setOpenSidebar}
+            />
           </DrawerBody>
         </DrawerContent>
       </Drawer>

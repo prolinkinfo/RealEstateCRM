@@ -30,6 +30,12 @@ const accountRoute = require("./account/_routes")
 const invoicesRoute = require("./invoices/_routes")
 const opportunitiesproject = require("./opportunityproject/_router")
 const bankDetailsRoute = require("./bankDetails/_routes")
+const ownerRoute = require("./owner/_routes")
+const rentalUnitRoute = require("./rentalUnit/_routes")
+const reservationRoute = require("./reservation/_routes")
+const paymentRecordRoute = require("./paymentRecord/_routes")
+const seasonalRateRoute = require("./seasonalRate/_routes")
+const availabilityBlockRoute = require("./availabilityBlock/_routes")
 
 //Api`s
 router.use('/contact', contactRoute);
@@ -64,4 +70,10 @@ router.use("/quotes", quotesRoute);
 router.use("/invoices", invoicesRoute);
 router.use("/account", accountRoute);
 router.use("/opportunityproject",opportunitiesproject)
+router.use("/owner", ownerRoute)
+router.use("/rental-unit", rentalUnitRoute)
+router.use("/reservation", reservationRoute)
+router.use("/rental-payment", paymentRecordRoute)
+router.use("/seasonal-rate", seasonalRateRoute)
+router.use("/availability-block", availabilityBlockRoute)
 module.exports = router;

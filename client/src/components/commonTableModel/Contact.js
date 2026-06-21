@@ -179,7 +179,7 @@ export default function ContactTable(props) {
                     fontSize="sm"
                     fontWeight="700"
                   >
-                    -- No Data Found --
+                    No records yet
                   </Text>
                 </Td>
               </Tr>

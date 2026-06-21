@@ -3,18 +3,13 @@ import React from "react";
 import {
   Flex,
   Link,
-  List,
-  ListItem,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
 
 export default function Footer() {
-  let textColor = useColorModeValue("blue.700", "white");
-  let linkColor = useColorModeValue(
-    { base: "gray.400", lg: "gray.400" },
-    "gray.400",
-  );
+  let textColor = useColorModeValue("gray.500", "gray.400");
+  let linkColor = useColorModeValue("gray.600", "gray.300");
   return (
     <Flex
       zIndex="3"
@@ -28,34 +23,33 @@ export default function Footer() {
       }}
       justifyContent="space-between"
       px={{ base: "30px", md: "0px" }}
-      pb="30px"
+      pb="22px"
     >
       <Text
         color={textColor}
+        fontSize="xs"
+        fontWeight="600"
         textAlign={{
           base: "center",
           xl: "start",
         }}
-        mb={{ base: "20px", lg: "0px" }}
+        mb={{ base: "8px", lg: "0px" }}
       >
-        {" "}
-        &copy; {1900 + new Date().getYear()}
-        <Text as="span" fontWeight="500" ms="4px">
+        &copy; {1900 + new Date().getYear()}{" "}
+        <Text as="span" fontWeight="600" ms="4px">
           <Link
-            fontWeight="500"
+            fontWeight="700"
             color={textColor}
             target="_blank"
             href="https://prolinkinfotech.com/"
           >
-            {" "}
             Prolink Infotech.
           </Link>{" "}
-          Need help, facing issues, or looking for a new feature? Contact us for
-          paid support and services at{" "}
+          Support:{" "}
           <Link
             href="mailto:alternatecrm@gmail.com"
-            fontWeight="500"
-            color={textColor}
+            fontWeight="700"
+            color={linkColor}
             target="_blank"
           >
             alternatecrm@gmail.com

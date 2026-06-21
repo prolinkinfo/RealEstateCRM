@@ -179,7 +179,7 @@ export default function PropertyTable(props) {
                     fontSize="sm"
                     fontWeight="700"
                   >
-                    -- No Data Found --
+                    No records yet
                   </Text>
                 </Td>
               </Tr>

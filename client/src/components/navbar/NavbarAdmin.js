@@ -14,8 +14,6 @@ import { useEffect, useState } from "react";
 
 import { AiOutlineMenuUnfold } from "react-icons/ai";
 import { AiOutlineMenuFold } from "react-icons/ai";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchImage } from "../../redux/slices/imageSlice";
 
 export default function AdminNavbar(props) {
   const [scrolled, setScrolled] = useState(false);
@@ -39,18 +37,25 @@ export default function AdminNavbar(props) {
     routes,
   } = props;
   // Here are all the props that may change depending on navbar's type or state.(secondary, variant, scrolled)
-  let mainText = useColorModeValue("navy.700", "white");
-  let secondaryText = useColorModeValue("gray.700", "white");
+  let mainText = useColorModeValue("gray.900", "white");
+  let secondaryText = useColorModeValue("gray.500", "secondaryGray.500");
   let navbarPosition = "fixed";
   let navbarFilter = "none";
   let navbarBackdrop = "blur(20px)";
-  let navbarShadow = "none";
-  let navbarBg = useColorModeValue("#fff", "rgba(11,20,55,0.5)");
-  let navbarBorder = "transparent";
-  let secondaryMargin = "-9px";
-  let paddingX = "15px";
+  let navbarShadow = useColorModeValue(
+    scrolled
+      ? "0px 18px 45px rgba(15, 23, 42, 0.1)"
+      : "0px 10px 30px rgba(15, 23, 42, 0.06)",
+    "none",
+  );
+  let navbarBg = useColorModeValue("rgba(255, 255, 255, 0.9)", "rgba(11,20,55,0.72)");
+  let navbarBorder = useColorModeValue("rgba(226, 232, 240, 0.9)", "whiteAlpha.200");
+  let secondaryMargin = "0px";
+  let paddingX = "18px";
   let gap = "0px";
-  let size = "sm";
+  let toggleBg = useColorModeValue("white", "whiteAlpha.100");
+  const pageTitle = under?.sidebarName || brandText;
+  const sectionLabel = under?.separator || "Workspace";
   const changeNavbar = () => {
     if (window?.scrollY > 1) {
       setScrolled(true);
@@ -68,42 +73,42 @@ export default function AdminNavbar(props) {
       backdropFilter={navbarBackdrop}
       backgroundPosition="center"
       backgroundSize="cover"
-      // borderRadius='16px'
-      borderWidth="1.5px"
+      borderRadius={{ base: "0px", xl: "22px" }}
+      borderWidth="1px"
       borderStyle="solid"
-      zIndex={1}
+      zIndex={10}
       transitionDelay="0s, 0s, 0s, 0s"
       transitionDuration=" 0.25s, 0.25s, 0.25s, 0s"
       transition-property="box-shadow, background-color, filter, border"
       transitionTimingFunction="linear, linear, linear, linear"
       alignItems={{ xl: "center" }}
       display={secondary ? "block" : "flex"}
-      minH="75px"
-      justifyContent={{ xl: "center" }}
+      minH={{ base: "76px", md: "78px" }}
+      justifyContent={{ xl: "space-between" }}
       lineHeight="25.6px"
-      mx="auto"
+      mx={{ base: "0px", xl: "12px" }}
       mt={secondaryMargin}
       pb="6px"
       right={{ base: "0px" }}
       // right={{ base: '12px', md: '30px', lg: '30px', xl: '30px' }}
       px={{
         sm: paddingX,
-        md: "10px",
+        md: "18px",
       }}
       ps={{
-        xl: "12px",
+        xl: "18px",
       }}
       pt="8px"
-      top={{ base: "0px" }}
+      top={{ base: "0px", xl: "12px" }}
       w={{
         base: "100vw",
+        xl: openSidebar ? "calc(100vw - 322px)" : "calc(100vw - 124px)",
         // base: 'calc(100vw - 0%)',
         // md: 'calc(100vw - 0%)',
         // lg: 'calc(100vw - 0%)',
         // xl: openSidebar === true ? 'calc(100vw - 286px)' : 'calc(100vw - 80px)',
         // '2xl': openSidebar === true ? 'calc(100vw - 286px)' : 'calc(100vw - 80px)'
       }}
-      sx={{ boxShadow: "14px 17px 40px 4px rgba(112, 144, 176, 0.08)" }}
     >
       <Flex
         w="100%"
@@ -117,80 +122,29 @@ export default function AdminNavbar(props) {
         <Box
           //  mb={{ sm: '8px', md: '10px' }}
           //  pt="15px"
-          display={"flex"}
-          alignItems={"center"}
+          display="flex"
+          alignItems="center"
+          minW="0"
         >
-          {/*
-					<Breadcrumb>
-						<BreadcrumbItem color={secondaryText} fontSize='sm' mb='5px'>
-							<BreadcrumbLink as={rrd.Link} to='/admin/default' color={secondaryText}>
-								<AiTwotoneHome />
-							</BreadcrumbLink>
-						</BreadcrumbItem>
-
-						{under?.under && <BreadcrumbItem color={secondaryText} fontSize='sm' mb='5px'>
-							<BreadcrumbLink as={rrd.Link} to={`${under.both === true ? '' : under.layout + '/'}${under.under}`} color={secondaryText}>
-								{under.parentName}
-							</BreadcrumbLink>
-						</BreadcrumbItem>}
-
-
-						<BreadcrumbItem color={secondaryText} fontSize='sm' mb='5px'>
-							<BreadcrumbLink as={rrd.Link} to='#' color={secondaryText}>
-								{brandText}
-							</BreadcrumbLink>
-						</BreadcrumbItem>
-
-					</Breadcrumb>
-					*/}
           <Flex
-            me={openSidebar ? "" : "5"}
-            mx={openSidebar ? "14" : "1"}
             display={{ sm: "none", xl: "flex" }}
-          >
-            {(largeLogo && largeLogo[0]?.logoLgImg) ||
-            (largeLogo && largeLogo[0]?.logoSmImg) ? (
-              <Image
-                style={{
-                  width: openSidebar ? "165px" : "60px",
-                  height: "52px",
-                  objectFit: "contain",
-                }}
-                src={
-                  openSidebar === true
-                    ? largeLogo[0]?.logoLgImg
-                    : largeLogo[0]?.logoSmImg
-                } // Set the source path of your image
-                alt="Logo" // Set the alt text for accessibility
-                cursor="pointer"
-                onClick={() => !props?.from && setOpenSidebar(!openSidebar)}
-                userSelect="none"
-                my={2}
-              />
-            ) : (
-              <Heading
-                my={4}
-                style={{
-                  width: openSidebar ? "165px" : "60px",
-                  height: "52px",
-                  objectFit: "contain",
-                }}
-                cursor={"pointer"}
-                onClick={() => !props?.from && setOpenSidebar(!openSidebar)}
-                userSelect={"none"}
-              >
-                {openSidebar === true ? "Prolink" : "Pr"}
-              </Heading>
-            )}
-          </Flex>
-          <Box
-            display={{ sm: "none", xl: "flex" }}
-            ms={openSidebar ? "" : "3"}
+            align="center"
+            justify="center"
+            w="42px"
+            h="42px"
+            borderRadius="14px"
+            border="1px solid"
+            borderColor={navbarBorder}
+            color={mainText}
+            bg={toggleBg}
             onClick={() => setOpenSidebar(!openSidebar)}
-            style={{ fontSize: "25px" }}
+            cursor="pointer"
+            me="14px"
+            transition="all 0.18s ease"
+            _hover={{ transform: "translateY(-1px)", boxShadow: "0px 8px 18px rgba(15, 23, 42, 0.08)" }}
           >
             {openSidebar ? <AiOutlineMenuFold /> : <AiOutlineMenuUnfold />}
-          </Box>
+          </Flex>
           <Link color={mainText} display={{ sm: "flex", xl: "none" }}>
             {largeLogo && largeLogo[0]?.logoLgImg ? (
               <Image
@@ -208,29 +162,28 @@ export default function AdminNavbar(props) {
             )}
           </Link>
 
-          <Link
-            color={mainText}
-            href="#"
-            pt="2px"
-            bg="inherit"
-            ps="30px"
-            display={{ sm: "none", xl: "flex" }}
-            borderRadius="inherit"
-            fontWeight="bold"
-            fontSize="34px"
-            textTransform={"capitalize"}
-            _hover={{ color: { mainText } }}
-            _active={{
-              bg: "inherit",
-              transform: "none",
-              borderColor: "transparent",
-            }}
-            _focus={{
-              boxShadow: "none",
-            }}
-          >
-            {brandText}
-          </Link>
+          <Box minW="0" ps={{ base: "10px", xl: "0" }}>
+            <Text
+              color={secondaryText}
+              fontSize="xs"
+              fontWeight="700"
+              letterSpacing="0.08em"
+              textTransform="uppercase"
+              mb="3px"
+            >
+              {sectionLabel}
+            </Text>
+            <Heading
+              color={mainText}
+              fontSize={{ base: "xl", md: "2xl" }}
+              lineHeight="1.1"
+              fontWeight="800"
+              textTransform="capitalize"
+              noOfLines={1}
+            >
+              {pageTitle}
+            </Heading>
+          </Box>
         </Box>
         <Box ms="auto" w={{ sm: "100%", md: "unset" }}>
           <AdminNavbarLinks
