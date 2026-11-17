@@ -7,7 +7,7 @@ const auth = (req, res, next) => {
         res.status(401).json({ message: "Authentication failed , Token missing" });
     }
     try {
-        const decode = jwt.verify(token, 'secret_key')
+        const decode = jwt.verify(token, process.env.JWT_SECRET)
         req.user = decode
         next();
     } catch (err) {
